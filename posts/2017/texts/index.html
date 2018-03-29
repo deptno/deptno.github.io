@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="deptno, bglee" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="기획자 디자이너, 퍼블리셔와의 협업시 문구 변경으로 인한 피로를 덜기 위해 ID 기반의 문구 관리">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Texts 구현">
+<meta property="og:url" content="http://blog.bglee.me/posts/2017/texts/index.html">
+<meta property="og:site_name" content="봉로그">
+<meta property="og:description" content="기획자 디자이너, 퍼블리셔와의 협업시 문구 변경으로 인한 피로를 덜기 위해 ID 기반의 문구 관리">
+<meta property="og:locale" content="ko">
+<meta property="og:image" content="https://lh3.googleusercontent.com/t_LQOLOXJ64l4zi05A_-By3QDDo7FIvWREe9meD6ZCuAUBlv8Y-DwyvzvShtR1v192sdYwfvgGG8e4S5pEsuAksPuyPj6MTBZBZvHvZIvMkyFH2j2I6_A4VIeZ3GOKyGigOg0dID1VQpXYTDkIDNJ_fFzjH39iPbM7p08KX1UWhOT02uU0yR0RK-3lH8obg57t9sohm4OUZVa-skdrOWh1U_qM_yKAiGhhkUIFBFAjCvdpmmiQIGk-zWX2MpVMHqkTDDbF9wyp87m2PbYegL5SuNTibFrYVTnRHfeCS8cA1uV7skajLXVK9cMuoKbSgyjMQAM3ZQ_kiaez78tvMz03tKKxtghcf4oyQHkHD3OIx15HdJad3W48oJxTBkyPO9DvR7r7dRVT4mGw70Tx1dZcYog6YeWPzXMCXl6SgO37QP3raxZMpkgbhWy5kzhbSmE-uIigUHUyiEo9gLhOwsVNwW1pzW9-LP4HDuwO7XGeVTep9SAaPCAIs4_SfiLwM3L0BoEPpxPPY7MBd-6FkofxblJsf_uset1CHbpT2xqUG2CHKO8Q79YJqgte5I34JK6mj42S89EDRO0lbg3VG769NRsbWuCLT4GWagjHJw5gpkdsvkC0xpszdilkBUprqzqy27ZbJti2I4VtBx53qlUOCDTKQdW_TN9NyH=w1139-h410-no">
+<meta property="og:updated_time" content="2018-03-29T06:03:19.633Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Texts 구현">
+<meta name="twitter:description" content="기획자 디자이너, 퍼블리셔와의 협업시 문구 변경으로 인한 피로를 덜기 위해 ID 기반의 문구 관리">
+<meta name="twitter:image" content="https://lh3.googleusercontent.com/t_LQOLOXJ64l4zi05A_-By3QDDo7FIvWREe9meD6ZCuAUBlv8Y-DwyvzvShtR1v192sdYwfvgGG8e4S5pEsuAksPuyPj6MTBZBZvHvZIvMkyFH2j2I6_A4VIeZ3GOKyGigOg0dID1VQpXYTDkIDNJ_fFzjH39iPbM7p08KX1UWhOT02uU0yR0RK-3lH8obg57t9sohm4OUZVa-skdrOWh1U_qM_yKAiGhhkUIFBFAjCvdpmmiQIGk-zWX2MpVMHqkTDDbF9wyp87m2PbYegL5SuNTibFrYVTnRHfeCS8cA1uV7skajLXVK9cMuoKbSgyjMQAM3ZQ_kiaez78tvMz03tKKxtghcf4oyQHkHD3OIx15HdJad3W48oJxTBkyPO9DvR7r7dRVT4mGw70Tx1dZcYog6YeWPzXMCXl6SgO37QP3raxZMpkgbhWy5kzhbSmE-uIigUHUyiEo9gLhOwsVNwW1pzW9-LP4HDuwO7XGeVTep9SAaPCAIs4_SfiLwM3L0BoEPpxPPY7MBd-6FkofxblJsf_uset1CHbpT2xqUG2CHKO8Q79YJqgte5I34JK6mj42S89EDRO0lbg3VG769NRsbWuCLT4GWagjHJw5gpkdsvkC0xpszdilkBUprqzqy27ZbJti2I4VtBx53qlUOCDTKQdW_TN9NyH=w1139-h410-no">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '작성자'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.bglee.me/posts/2017/texts/"/>
+
+
+
+
+
+  <title>Texts 구현 | 봉로그</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-74859643-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="ko">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">봉로그</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">do 봉지니어링 | 기술 관련된 글 포스팅은 앞으로 <a href="https://medium.com/@deptno">medium.com/@deptno</a>에 포스팅합니다.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            홈
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            아카이브
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            카테고리
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            태그
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-github">
+          <a href="https://github.com/deptno" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github-alt"></i> <br />
+            
+            깃헙
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://www.bglee.me" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            이봉
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.bglee.me/posts/2017/texts/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="deptno@gmail.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="봉로그">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Texts 구현</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">작성일</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-08T00:00:00+09:00">
+                2017-05-08
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Updated at&#58;</span>
+              
+              <time title="Updated at" itemprop="dateModified" datetime="2018-03-29T15:03:19+09:00">
+                2018-03-29
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dev/" itemprop="url" rel="index">
+                    <span itemprop="name">dev</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dev/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/2017/texts/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/2017/texts/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+              <div class="post-description">
+                  기획자 디자이너, 퍼블리셔와의 협업시 문구 변경으로 인한 피로를 덜기 위해 ID 기반의 문구 관리
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1><span id="texts-구현"> 구현</span></h1><p><img src="https://lh3.googleusercontent.com/t_LQOLOXJ64l4zi05A_-By3QDDo7FIvWREe9meD6ZCuAUBlv8Y-DwyvzvShtR1v192sdYwfvgGG8e4S5pEsuAksPuyPj6MTBZBZvHvZIvMkyFH2j2I6_A4VIeZ3GOKyGigOg0dID1VQpXYTDkIDNJ_fFzjH39iPbM7p08KX1UWhOT02uU0yR0RK-3lH8obg57t9sohm4OUZVa-skdrOWh1U_qM_yKAiGhhkUIFBFAjCvdpmmiQIGk-zWX2MpVMHqkTDDbF9wyp87m2PbYegL5SuNTibFrYVTnRHfeCS8cA1uV7skajLXVK9cMuoKbSgyjMQAM3ZQ_kiaez78tvMz03tKKxtghcf4oyQHkHD3OIx15HdJad3W48oJxTBkyPO9DvR7r7dRVT4mGw70Tx1dZcYog6YeWPzXMCXl6SgO37QP3raxZMpkgbhWy5kzhbSmE-uIigUHUyiEo9gLhOwsVNwW1pzW9-LP4HDuwO7XGeVTep9SAaPCAIs4_SfiLwM3L0BoEPpxPPY7MBd-6FkofxblJsf_uset1CHbpT2xqUG2CHKO8Q79YJqgte5I34JK6mj42S89EDRO0lbg3VG769NRsbWuCLT4GWagjHJw5gpkdsvkC0xpszdilkBUprqzqy27ZbJti2I4VtBx53qlUOCDTKQdW_TN9NyH=w1139-h410-no" alt="" title="texts image"></p>
+<blockquote>
+<p>기획자 디자이너, 퍼블리셔와의 협업시 문구 변경으로 인한 피로를 덜기 위해 ID기반의 문구 관리를 앱</p>
+</blockquote>
+<h2><span id="동기">동기</span></h2><ul>
+<li>부동산 계열에서 일을 하다보니 너무많은 term이 존재한다.</li>
+<li>사소한 문구 변경이 데일리로 일어난다.</li>
+<li>퍼블리셔 쪽에서도 html에 대한 이력관리를 원한다.</li>
+<li>문구 변경과 markup의 변경이 구분되지 않는다.</li>
+<li>react로 퍼블리싱하지 않는 이상 태그를 그대로 사용하지 못하므로 daily diff이슈가 존재한다.</li>
+<li>여러 곳에서 동일하게 쓰이는 문구 변경이 일어난 경우 diff에 혼란이 있다.</li>
+</ul>
+<h2><span id="개발">개발</span></h2><blockquote>
+<p>일단 퍼블리셔 쪽에서 <code>ID</code>를 사용하용하여 퍼블리싱 할 수 있게 끔 하는 것을 최우선으로 했다.</p>
+</blockquote>
+<ul>
+<li>독립적으로 사용할 수 있도록 <a href="https://www.serverless.com" target="_blank" rel="noopener">serverless</a>를 통해 DB까지 한번에 deploy한다.</li>
+<li>backend 엔드포인트만 사용자 별로 바꾸면 되니까 fe는 직접 만들어서 배포했다. <strong><a href="https://texts.surge.sh" target="_blank" rel="noopener">Texts</a></strong></li>
+</ul>
+<h2><span id="운영">운영</span></h2><h3><span id="기획스트링-관리-주체">기획(스트링 관리 주체)</span></h3><ul>
+<li><a href="https://texts.surge.sh" target="_blank" rel="noopener">https://texts.surge.sh</a>?endpoint=https://[BACKEND_ENDPOINT] 접속</li>
+<li>스트링 마음껏 만들고 잘 됬으면 deploy한다.</li>
+</ul>
+<h3><span id="퍼블리셔">퍼블리셔</span></h3><ul>
+<li>퍼블리셔 쪽에서는 <code>&lt;div data-text-id=&quot;TEXT_ID&quot;/&gt;</code>와 같은 형식으로 퍼블리싱을 할 수 있게한다.</li>
+<li>퍼블리셔는 눈으로 이를 확인할 수 있어야하므로 이를 치환해주는 태그를 서비스해준다. <strong><a href="https://texts-translator.surge.sh" title="texts" target="_blank" rel="noopener">Texts Translator</a></strong></li>
+<li>퍼블리셔가 동적인 동작을 위해 <code>jQuery</code>태그를 심듯이 심어주면 동적으로 확인이 가능해준다.</li>
+</ul>
+<h3><span id="개발">개발</span></h3><ul>
+<li>개발 버전에서는 퍼블리셔와 같이 태그를 심어서 스트링 관리주체가 변경하는 것을 즉각적으로 확인할 수 있게끔 한다. </li>
+<li>프로덕션 릴리즈시에 아래 형식으로 저장해서 CI빌드시에 넣으면된다.</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ http post https://[END_POINT]/json &gt; language_ko.json</span><br></pre></td></tr></table></figure>
+<h2><span id="todos">todos</span></h2><ul>
+<li>퍼블리셔쪽에 구문 변경으로 인한 스트레스에서 벗어나고 싶지않냐고 설득한다.</li>
+<li>기획자분이 스트링을 관리할 수 있도록 제안하고 설득한다.</li>
+</ul>
+<h2><span id="히스토리">히스토리</span></h2><ul>
+<li>표준을 이용할 수 있게 끔 <code>Intl</code>을 붙이려고 디자이너쪽에서 태그를 어떻게 사용하게 해야할지 감이 오지 않아 뒤로 미뤘다.</li>
+</ul>
+<h2><span id="장점">장점</span></h2><ul>
+<li>퍼블에서도 모델을 분리한다.</li>
+<li>모델, 디자인, 컨트롤의 물리적인 관리주체(부서)가 명확해 진다.</li>
+</ul>
+<h2><span id="단점">단점</span></h2><ul>
+<li>서비스가 아니라 aws 설치 형태라 결국 나만의…</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      <h1 class="post-button text-center">
+        기술 관련된 글 포스팅은 앞으로 <a href="https://medium.com/@deptno">medium.com/@deptno</a>에 포스팅합니다.
+      </h1>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2017/next-js/" rel="next" title="Next.js">
+                <i class="fa fa-chevron-left"></i> Next.js
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2017/typescript-redux-connect/" rel="prev" title="TypeScript와 Redux connect">
+                TypeScript와 Redux connect <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            목차
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            흝어보기
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">deptno@gmail.com</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-name">포스트</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">카테고리</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">태그</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/deptno" target="_blank" title="Github">
+                    
+                      <i class="fa fa-fw fa-github"></i>Github</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"> 구현</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">동기</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">개발</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.</span> <span class="nav-text">운영</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.1.</span> <span class="nav-text">기획(스트링 관리 주체)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.2.</span> <span class="nav-text">퍼블리셔</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.3.3.</span> <span class="nav-text">개발</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.4.</span> <span class="nav-text">todos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.5.</span> <span class="nav-text">히스토리</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.6.</span> <span class="nav-text">장점</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.7.</span> <span class="nav-text">단점</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">deptno@gmail.com</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count"></span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://deptno.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://blog.bglee.me/posts/2017/texts/';
+          this.page.identifier = 'posts/2017/texts/';
+          this.page.title = 'Texts 구현';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://deptno.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

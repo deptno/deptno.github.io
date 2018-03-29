@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="맥북 셋업,맥북 개발 환경 설정,osx 개발 환경,맥북 설정," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="맥 북을 처음 쓴다면 꼭 이대로 하길 바라며 쓰는 글">
+<meta name="keywords" content="맥북 셋업,맥북 개발 환경 설정,osx 개발 환경,맥북 설정">
+<meta property="og:type" content="article">
+<meta property="og:title" content="맥북 설정">
+<meta property="og:url" content="http://blog.bglee.me/posts/2016/osx/index.html">
+<meta property="og:site_name" content="봉로그">
+<meta property="og:description" content="맥 북을 처음 쓴다면 꼭 이대로 하길 바라며 쓰는 글">
+<meta property="og:locale" content="ko">
+<meta property="og:image" content="https://lh3.googleusercontent.com/So-FYJm3xdz10SDnxpKhrms-eYwNF81RSQVXHHV4AVVXlplEOm9LyYDgeKLgb9rvzzTisExzJuKknZD6Qj4WQGZLgWfjQnYJhEgQw14ZuQUkMskfJ9mrBCw3R2lrVIsCx5IxQPh2kbO7zEoRHJvNf0BBWUNxifwppISFT3EKqGKIRP8UDMn4ebmHqxcRFoUUVm_zN08VKce_G3QVyFXYOJEuCwZIM1TrYCBA_kFmfooStWLKmSiWSvMRb30KQXvObwWCAQOii7bAeMAIpsZWARjf2JBiFOB51ZIrZcyR2R8rauFAb77GMc6IocZ-V1JwA75UcIAA3YRnMuLY4p9OmlrYwB2T7fE93Zvvx6hndY3bnoU3s6SK94mBC5mctwWczq7hulxfOnF1PdEf0kbZ4ios_wuvj0_6dfbAwu_sW_qqCKX78gx5TqVPwgdhlysXazeAYYyf_NlBXg3rj3hLziViTXbVlXxXVkaeyGU-ldgse3p40bYUmkrtZRHfMQVJ34GW2nRoBfVxEZuFns8QMTF16kYxwzjLq_tEYO-_nM3ePUd-2ELlwl-K8ySroRjA_CqdPB8h227wfP8hcX8np-z6aFoLa9RfwhHvcxvI__EKRWdP2w=w666-h294-no">
+<meta property="og:image" content="https://lh3.googleusercontent.com/WV3JTj-_JPHRPLRuEESw6v5WI8dGOQGnpcWFcOqj1nWox1moJ_YGhz9m47-Ke8AYfWDyD1iZLIRurm7EACfVg4NnD6xyKqBvzFACly0eNVrT06bNtlT48MlNcPCTtCHXv3qA2hTcEHFnfkXRYAWWN4N_6PIbHmKCehm3yqoQmwvyLYRq5jRJskBmi-utSri-_1JdG5MKH75hHJrtn6KAQrGBJDk1_RGkKF6NnNGImTFnOrDB_vTiARJA1DRC7Fz4fgUHUFfKE23iOpvKvicNs4q1ZQpaEpzTKJbYN0VFkTw-1sfRAS3ObLeYij91j2AfRfC-vnBupKynrm4uk5aAMNuLFlCys7DHFXhldzsxzFsyBTCCpkSVUz6Vvc9xMEz3WHNmVH01ixVXjtLv7cUVuJhzM1aakYhzj2-HMD8PjXcjCwTbRG3HR3VOGgu57Wl-Uj4sKr6dMqe9j9uduoXu_XJ_vVunU3XTAXLvttuU62EAfGumfG6Z627pdVzcmr8ItKfxIrC6Z4OFUBDdVbibgT0oVbsT6owL1b0p9TVIbvHzalG7Hs5BC-A0MAiZUNtDIq3sg9CcUn3FEc--Qr2X9aPx6si8gQDR1zpVyTp5W1SvJd-5PQ=w663-h181-no">
+<meta property="og:image" content="https://lh3.googleusercontent.com/hRuW7aeOPac5zV0_lGFfw8iPuSL7OmZ29WOVrHQOrXvVrAxcbc4n9PaxsAMSVjIFnCcpE8XRfu7WlFGCRILPh1ogfW6pGvsZ9Qrv7fOMjReo-KESfO5wZzJTXU3jWYG3QE3_a_TyVhKnaG6jML6TUHEt3HbmJ-f3-U5qk6Xq832pWjwrikSeErJVYPU1QkHvUUc_SHRbFYDA9Y5-cF597jr5my3iABV3pyz9WhkeGskOJqScth2-v96isV1oLa7pKlmMV1xQ4QzFy27qAVj8wPQGrjfDcAWn3eurq7KONKD2S5dTUeqADWQc7qsONJ1d66Uiu7h87e4nWLIkwJqgNWi9Qkr7t4jm5jSRxwIqJ1duBwDIXxWK8LOu1btXfgBaUoMlJqUZvZodBswLcHPnNsSAutUXv1aBn_zTOrVnbJ_rny8o4HX9tAQOoKXFw4VU9JclR0volcY9FfnpSQ2PdutWIv7Rc3p90YrE54Aim8ENDxt9lhbcvZ90dUntBtC_Y7oFXYXyjeOx7ENMT948Ays5U8UK-CsKm7K_49KypyHMm-Wxa7ma0KbdKLnMefuyJg5SvAqsjheWbXUkTwwCchYOeGv0LJQP7yFb7xgN7V82xuyauQ=w666-h517-no">
+<meta property="og:image" content="https://lh3.googleusercontent.com/Tg7NUpTwiKcDNX7LncGqJM7smxCku7aWbnDEy6ek1UE2hLDAROy39G4BS-okf4ZdGcc9ZWQrHEx7rcH8IY_xZcJrZBeAVAvbp7QP9UBBajOs3jCkTmmO7C2H6PD06szXMo_bLotnvlPfsCi3kgAKXd68zbwqzem8bmcfjf_qeZHOVAbqXrWlVFU-UoaA7ZpmH0nLXV3RPoe6U7JAZpOk9OHzHrLx4A1W3nvcWIFziHdEpDNB003rgZWns5DqvjBhKFjyGG3BCfU8NeLj82Nqh7OKlABqxBl29JqD4DOTR0fM5PCPj0GLEhU20G9bg99Flr0H1aB0jX8Fi_-qiZXxne-iEIIWUNxsrysyw4EyBD-gQcHnvaPZOLjLsBc1MRBtQaS-Lpo4hXe2-Hmn3_QpjCKcVVIBKno-6dwt9rNJJcBKng6EoxA-epOS3jvcqhwZaUmWowBx2RVwPDXA5f2lT6u9p4WZLBVeeY5HbNFk9eEzjwbSrNoKHYtOLQNkTforpYbhJqrVwausZqttrFe_k-HYpXdCSYEGz7vWon3_R8mhfYpVvz6ax9ST0Zc6MrA-yXno4OzR4_Af8dPC2UzSvKieih_CUzyo1Lgw4-PgbU8RtZshHQ=w667-h514-no">
+<meta property="og:image" content="https://lh3.googleusercontent.com/M-wLIecAqfenmyM1Ag9tvZcKhqGjeOp869O5fO8TWPFUIjtWs_DaKBmxQKfNKo-Cwupcvoz0i64qrrFfRCSghIOlhTx6uHSw-C7r0vLu7rt_xYbG7lYb-nmN_PBiGv-qAhuO5Fi9Vhzbi4796kkUqZNbhvHBqDBrvw2PTW-tOAeujT_Va3pdH2Km4LQW-JlmPmBpL0m9B6hc9ZUdj_5l9dFivEpw-CNal_Nwy7cRc7FImZ2xzgvjCFB_2X7q_6CfWNmF4YQLv3a_L7t0uTf7cTRJjv6sq9O7mg6bbRCSsn3kze9RVpjvIvl-Syt9ngBK6M0i7G-VeqHrc4CqRSwrEynMZgqeQNxT2HgO8C_YFaETHzoOHOoSgiMMiV9xVbPNoi9WZCAZ-HPaiYXxrMlzcJ3_2oaJJmQQkEQjkQNRQ_k_uySUCJ4dj3KsCZVGuyUKMnQQ6RkXnE43a8UK2gfLWWTuHHXcCYbMptI255AdYCQS1MEv2XDL6Y-dc__iqEg2YPtvYBr7x6JPvcmqjXeTpPUC9Sf8_ZeMC09K2hAqO_K1utcYnPeV19SJdd0XMASdm-RRDJJvA8rLxLx1wIdO4idhUPJQxsV7AI45T08OmULZ_RHAzA=w669-h514-no">
+<meta property="og:updated_time" content="2018-03-29T06:03:19.631Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="맥북 설정">
+<meta name="twitter:description" content="맥 북을 처음 쓴다면 꼭 이대로 하길 바라며 쓰는 글">
+<meta name="twitter:image" content="https://lh3.googleusercontent.com/So-FYJm3xdz10SDnxpKhrms-eYwNF81RSQVXHHV4AVVXlplEOm9LyYDgeKLgb9rvzzTisExzJuKknZD6Qj4WQGZLgWfjQnYJhEgQw14ZuQUkMskfJ9mrBCw3R2lrVIsCx5IxQPh2kbO7zEoRHJvNf0BBWUNxifwppISFT3EKqGKIRP8UDMn4ebmHqxcRFoUUVm_zN08VKce_G3QVyFXYOJEuCwZIM1TrYCBA_kFmfooStWLKmSiWSvMRb30KQXvObwWCAQOii7bAeMAIpsZWARjf2JBiFOB51ZIrZcyR2R8rauFAb77GMc6IocZ-V1JwA75UcIAA3YRnMuLY4p9OmlrYwB2T7fE93Zvvx6hndY3bnoU3s6SK94mBC5mctwWczq7hulxfOnF1PdEf0kbZ4ios_wuvj0_6dfbAwu_sW_qqCKX78gx5TqVPwgdhlysXazeAYYyf_NlBXg3rj3hLziViTXbVlXxXVkaeyGU-ldgse3p40bYUmkrtZRHfMQVJ34GW2nRoBfVxEZuFns8QMTF16kYxwzjLq_tEYO-_nM3ePUd-2ELlwl-K8ySroRjA_CqdPB8h227wfP8hcX8np-z6aFoLa9RfwhHvcxvI__EKRWdP2w=w666-h294-no">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '작성자'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.bglee.me/posts/2016/osx/"/>
+
+
+
+
+
+  <title>맥북 설정 | 봉로그</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-74859643-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="ko">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">봉로그</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">do 봉지니어링 | 기술 관련된 글 포스팅은 앞으로 <a href="https://medium.com/@deptno">medium.com/@deptno</a>에 포스팅합니다.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            홈
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            아카이브
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            카테고리
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            태그
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-github">
+          <a href="https://github.com/deptno" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github-alt"></i> <br />
+            
+            깃헙
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://www.bglee.me" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            이봉
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.bglee.me/posts/2016/osx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="deptno@gmail.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="봉로그">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">맥북 설정</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">작성일</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-28T00:00:00+09:00">
+                2016-07-28
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Updated at&#58;</span>
+              
+              <time title="Updated at" itemprop="dateModified" datetime="2018-03-29T15:03:19+09:00">
+                2018-03-29
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/setup/" itemprop="url" rel="index">
+                    <span itemprop="name">setup</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/2016/osx/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/2016/osx/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+              <div class="post-description">
+                  맥 북을 처음 쓴다면 꼭 이대로 하길 바라며 쓰는 글
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>맥북 때문에 겁먹은 동지들을 위해 씀.<br>이 글의 대상은 일반인과 (프론트엔드)개발자를 모두 포함한다.</p>
+</blockquote>
+<p>맥을 받으면 <code>App Store</code>에 가서 OS 부터 업데이트를 시작한다.<br>그 동안 만약에 키보드랑 마우스를 받았는데 <code>Apple</code> 이 안찍혀있으면 어차피 방해되므로 몰래 버리도록 한다.<br>시스템 환경설정에 들어간다. 키보드 부터 설정해야한다.</p>
+<h2><span id="키보드-설정">키보드 설정</span></h2><p>키보드 설정은 시스템 환경설정을 통해 진입하면 된다.</p>
+<blockquote>
+<p><code>^</code> 이건 <code>ctrl</code> <code>\-</code> 이런식으로 생긴건 <code>alt</code> 꽃무니같은 건 <code>command</code> 키다.</p>
+</blockquote>
+<p>캡쳐하기 귀찮아서 키보드로 쳤다…</p>
+<p><img src="https://lh3.googleusercontent.com/So-FYJm3xdz10SDnxpKhrms-eYwNF81RSQVXHHV4AVVXlplEOm9LyYDgeKLgb9rvzzTisExzJuKknZD6Qj4WQGZLgWfjQnYJhEgQw14ZuQUkMskfJ9mrBCw3R2lrVIsCx5IxQPh2kbO7zEoRHJvNf0BBWUNxifwppISFT3EKqGKIRP8UDMn4ebmHqxcRFoUUVm_zN08VKce_G3QVyFXYOJEuCwZIM1TrYCBA_kFmfooStWLKmSiWSvMRb30KQXvObwWCAQOii7bAeMAIpsZWARjf2JBiFOB51ZIrZcyR2R8rauFAb77GMc6IocZ-V1JwA75UcIAA3YRnMuLY4p9OmlrYwB2T7fE93Zvvx6hndY3bnoU3s6SK94mBC5mctwWczq7hulxfOnF1PdEf0kbZ4ios_wuvj0_6dfbAwu_sW_qqCKX78gx5TqVPwgdhlysXazeAYYyf_NlBXg3rj3hLziViTXbVlXxXVkaeyGU-ldgse3p40bYUmkrtZRHfMQVJ34GW2nRoBfVxEZuFns8QMTF16kYxwzjLq_tEYO-_nM3ePUd-2ELlwl-K8ySroRjA_CqdPB8h227wfP8hcX8np-z6aFoLa9RfwhHvcxvI__EKRWdP2w=w666-h294-no" alt=""><br><img src="https://lh3.googleusercontent.com/WV3JTj-_JPHRPLRuEESw6v5WI8dGOQGnpcWFcOqj1nWox1moJ_YGhz9m47-Ke8AYfWDyD1iZLIRurm7EACfVg4NnD6xyKqBvzFACly0eNVrT06bNtlT48MlNcPCTtCHXv3qA2hTcEHFnfkXRYAWWN4N_6PIbHmKCehm3yqoQmwvyLYRq5jRJskBmi-utSri-_1JdG5MKH75hHJrtn6KAQrGBJDk1_RGkKF6NnNGImTFnOrDB_vTiARJA1DRC7Fz4fgUHUFfKE23iOpvKvicNs4q1ZQpaEpzTKJbYN0VFkTw-1sfRAS3ObLeYij91j2AfRfC-vnBupKynrm4uk5aAMNuLFlCys7DHFXhldzsxzFsyBTCCpkSVUz6Vvc9xMEz3WHNmVH01ixVXjtLv7cUVuJhzM1aakYhzj2-HMD8PjXcjCwTbRG3HR3VOGgu57Wl-Uj4sKr6dMqe9j9uduoXu_XJ_vVunU3XTAXLvttuU62EAfGumfG6Z627pdVzcmr8ItKfxIrC6Z4OFUBDdVbibgT0oVbsT6owL1b0p9TVIbvHzalG7Hs5BC-A0MAiZUNtDIq3sg9CcUn3FEc--Qr2X9aPx6si8gQDR1zpVyTp5W1SvJd-5PQ=w663-h181-no" alt=""></p>
+<ul>
+<li><code>키보드</code> <code>모든 F1, F2 등의 키를 표준 기능 키로 사용</code> 설정</li>
+<li><code>단축키</code> <code>입력 소스</code> <code>입력 메뉴에서 다음 소스 선택</code> <strong>*</strong>만** 설정</li>
+<li><code>단축키</code> <code>Spotlight</code> <code>Spotlight 검색 보기</code> <code>^스페이스</code> 로 설정</li>
+</ul>
+<p>이거면 우리는 키보드를 사용할 수 있게 된다.</p>
+<p>다음은 터치패드다.</p>
+<h2><span id="터치-패드-설정">터치 패드 설정</span></h2><p>터치 패드 설정은 시스템 환경설정을 통해 진입하면 된다.</p>
+<p><img src="https://lh3.googleusercontent.com/hRuW7aeOPac5zV0_lGFfw8iPuSL7OmZ29WOVrHQOrXvVrAxcbc4n9PaxsAMSVjIFnCcpE8XRfu7WlFGCRILPh1ogfW6pGvsZ9Qrv7fOMjReo-KESfO5wZzJTXU3jWYG3QE3_a_TyVhKnaG6jML6TUHEt3HbmJ-f3-U5qk6Xq832pWjwrikSeErJVYPU1QkHvUUc_SHRbFYDA9Y5-cF597jr5my3iABV3pyz9WhkeGskOJqScth2-v96isV1oLa7pKlmMV1xQ4QzFy27qAVj8wPQGrjfDcAWn3eurq7KONKD2S5dTUeqADWQc7qsONJ1d66Uiu7h87e4nWLIkwJqgNWi9Qkr7t4jm5jSRxwIqJ1duBwDIXxWK8LOu1btXfgBaUoMlJqUZvZodBswLcHPnNsSAutUXv1aBn_zTOrVnbJ_rny8o4HX9tAQOoKXFw4VU9JclR0volcY9FfnpSQ2PdutWIv7Rc3p90YrE54Aim8ENDxt9lhbcvZ90dUntBtC_Y7oFXYXyjeOx7ENMT948Ays5U8UK-CsKm7K_49KypyHMm-Wxa7ma0KbdKLnMefuyJg5SvAqsjheWbXUkTwwCchYOeGv0LJQP7yFb7xgN7V82xuyauQ=w666-h517-no" alt=""><br><img src="https://lh3.googleusercontent.com/Tg7NUpTwiKcDNX7LncGqJM7smxCku7aWbnDEy6ek1UE2hLDAROy39G4BS-okf4ZdGcc9ZWQrHEx7rcH8IY_xZcJrZBeAVAvbp7QP9UBBajOs3jCkTmmO7C2H6PD06szXMo_bLotnvlPfsCi3kgAKXd68zbwqzem8bmcfjf_qeZHOVAbqXrWlVFU-UoaA7ZpmH0nLXV3RPoe6U7JAZpOk9OHzHrLx4A1W3nvcWIFziHdEpDNB003rgZWns5DqvjBhKFjyGG3BCfU8NeLj82Nqh7OKlABqxBl29JqD4DOTR0fM5PCPj0GLEhU20G9bg99Flr0H1aB0jX8Fi_-qiZXxne-iEIIWUNxsrysyw4EyBD-gQcHnvaPZOLjLsBc1MRBtQaS-Lpo4hXe2-Hmn3_QpjCKcVVIBKno-6dwt9rNJJcBKng6EoxA-epOS3jvcqhwZaUmWowBx2RVwPDXA5f2lT6u9p4WZLBVeeY5HbNFk9eEzjwbSrNoKHYtOLQNkTforpYbhJqrVwausZqttrFe_k-HYpXdCSYEGz7vWon3_R8mhfYpVvz6ax9ST0Zc6MrA-yXno4OzR4_Af8dPC2UzSvKieih_CUzyo1Lgw4-PgbU8RtZshHQ=w667-h514-no" alt=""><br><img src="https://lh3.googleusercontent.com/M-wLIecAqfenmyM1Ag9tvZcKhqGjeOp869O5fO8TWPFUIjtWs_DaKBmxQKfNKo-Cwupcvoz0i64qrrFfRCSghIOlhTx6uHSw-C7r0vLu7rt_xYbG7lYb-nmN_PBiGv-qAhuO5Fi9Vhzbi4796kkUqZNbhvHBqDBrvw2PTW-tOAeujT_Va3pdH2Km4LQW-JlmPmBpL0m9B6hc9ZUdj_5l9dFivEpw-CNal_Nwy7cRc7FImZ2xzgvjCFB_2X7q_6CfWNmF4YQLv3a_L7t0uTf7cTRJjv6sq9O7mg6bbRCSsn3kze9RVpjvIvl-Syt9ngBK6M0i7G-VeqHrc4CqRSwrEynMZgqeQNxT2HgO8C_YFaETHzoOHOoSgiMMiV9xVbPNoi9WZCAZ-HPaiYXxrMlzcJ3_2oaJJmQQkEQjkQNRQ_k_uySUCJ4dj3KsCZVGuyUKMnQQ6RkXnE43a8UK2gfLWWTuHHXcCYbMptI255AdYCQS1MEv2XDL6Y-dc__iqEg2YPtvYBr7x6JPvcmqjXeTpPUC9Sf8_ZeMC09K2hAqO_K1utcYnPeV19SJdd0XMASdm-RRDJJvA8rLxLx1wIdO4idhUPJQxsV7AI45T08OmULZ_RHAzA=w669-h514-no" alt=""></p>
+<p>체크 박스아래에 <code>세 손가락으로 탭하기</code>등도 설정메뉴이므로 동일 하게 설정한다.<br>그럼 클릭이 아닌 탭으로 클릭동작을 수행할 수 있고 두 손가락으로 우클릭이 가능해진다.<br>네 손가락으로 스와이프를 하면 바탕화면간 이동이 가능해진다. 설정 메뉴 자체가 튜토리얼이니 유심히 보도록 한다. 중요하다.</p>
+<h2><span id="손쉬운-사용">손쉬운 사용</span></h2><p>손쉬운 사용도 시스템 환경설정을 통해 진입한다.</p>
+<ul>
+<li><code>마우스와 트랙패드</code> <code>트랙패드 옵션...</code> <code>관성사용</code> 체크 <code>세 손가락으로 드래그하기</code> 체크</li>
+</ul>
+<p>이제는 손가락 3개로 드래그가 가능해져서 마우스가 필요 없어진다.</p>
+<h2><span id="프로그램-설치">프로그램 설치</span></h2><ul>
+<li>일만 하면 우울하니까 <code>카카오톡</code> 설치한다.</li>
+</ul>
+<hr>
+<blockquote>
+<p>여기서 부턴 개발자를 위한 코스다.</p>
+</blockquote>
+<ul>
+<li>요즘은 보통 쓰는 <code>Slack</code> 설치한다.</li>
+<li>개발자니까 터미널은 있어야한다. <a href="https://www.iterm2.com/version3.html" target="_blank" rel="noopener">iTerm</a>을 설치한다.</li>
+<li>FE 개발자니까 <a href="https://www.google.com/chrome/" target="_blank" rel="noopener">Chrome</a>, <a href="https://www.jetbrains.com/webstorm/" target="_blank" rel="noopener">WebStorm</a> 설치한다.</li>
+<li>에디터 하나는 필요하니까 리듬에 맞춰 하나 선택한다.<ul>
+<li>neovim - <a href="http://blog.bglee.me/posts/2016/nvim/">설정 포스트</a></li>
+<li>vs code</li>
+<li>atom</li>
+</ul>
+</li>
+</ul>
+<h2><span id="개발-환경-셋업">개발 환경 셋업</span></h2><p>이제 터미널도 생겼고 개발 프로그램들도 설치했으니 필요한 환경들을 셋업한다.</p>
+<h2><span id="git">Git</span></h2><p>git은 터미널에서 <code>git</code>이라고 치면 라이센스 어쩌고 나오게 된다 그걸 설치하면된다.</p>
+<h2><span id="터미널-환경-설정">터미널 환경 설정</span></h2><p>ohmyzsh - <a href="http://blog.bglee.me/posts/2016/ohmyzsh/">설정 포스트</a> 을 설치하면 터미널에서 git status를 별다른 명령어 없이 바로 설정할 수 있다.</p>
+<h2><span id="패키지-매니저-설치">패키지 매니저 설치</span></h2><p>debian의 <code>apt-get</code>이 있다면 여긴 <a href="http://brew.sh/index_ko.html" target="_blank" rel="noopener">brew</a>가 있다.<br>링크를 타고 가서 설치 스크립트를 복사해서 터미널에 붙이면된다.</p>
+<ul>
+<li>brew search [package name]</li>
+<li>brew install [package name]</li>
+</ul>
+<p>개인적으로는 neovim을 에디터로 쓰므로 그에 따른 플러그인 환경을 셋업하다보면 대충 다음정도는 바로 깔아줘야한다. history에서 발췌한 몇가지는 아래와 같다.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">brew install node</span><br><span class="line">brew install git-flow-avh</span><br><span class="line">brew install tree</span><br><span class="line">brew install python3</span><br></pre></td></tr></table></figure>
+<p>이제 <code>node</code> 설치됐으니 <code>npm</code>을 통해 필요로 하는 셋업을 해주면된다.</p>
+<h2><span id="생활-유틸리티">생활 유틸리티</span></h2><ul>
+<li><a href="https://github.com/fikovnik/ShiftIt" target="_blank" rel="noopener">Shiftit</a> - open source로 키보드로 창 이동을 하게 해준다. <code>Windows</code> 유저였다면 <code>Window + 방향키</code> 느낌이라고 생각하면된다.</li>
+<li>Numbers - 애플 버전 스프레드 시트다. 회사 생활하려면 엑셀은 열얼봐야한다.</li>
+<li><a href="http://www.videolan.org/vlc/download-macosx.html" target="_blank" rel="noopener">vlc</a> - open source movie player. 가끔 개발을 위해 미디어 포맷을 확인한다거나(?) 생각없이 버그 잡으면서 영상 틀어놀때 필요하다.</li>
+<li>yoink - 드래그로 파일 이동시에 워크스페이스(바탕화면 하나)를 넘어가는 경우에 발생하는 짜증을 감소시켜준다. 유료다.</li>
+</ul>
+<hr>
+<p>이제 코드를 짜면 된다.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/맥북-셋업/" rel="tag"># 맥북 셋업</a>
+          
+            <a href="/tags/맥북-개발-환경-설정/" rel="tag"># 맥북 개발 환경 설정</a>
+          
+            <a href="/tags/osx-개발-환경/" rel="tag"># osx 개발 환경</a>
+          
+            <a href="/tags/맥북-설정/" rel="tag"># 맥북 설정</a>
+          
+        </div>
+      
+
+      
+      
+      <h1 class="post-button text-center">
+        기술 관련된 글 포스팅은 앞으로 <a href="https://medium.com/@deptno">medium.com/@deptno</a>에 포스팅합니다.
+      </h1>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2016/book-pro-react/" rel="next" title="React.js 프로 리액트">
+                <i class="fa fa-chevron-left"></i> React.js 프로 리액트
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2016/vim-node-plugin/" rel="prev" title="vim node plugin">
+                vim node plugin <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            목차
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            흝어보기
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">deptno@gmail.com</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-name">포스트</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">카테고리</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">태그</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/deptno" target="_blank" title="Github">
+                    
+                      <i class="fa fa-fw fa-github"></i>Github</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">키보드 설정</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">터치 패드 설정</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">손쉬운 사용</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">프로그램 설치</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">개발 환경 셋업</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">터미널 환경 설정</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">패키지 매니저 설치</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">생활 유틸리티</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">deptno@gmail.com</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count"></span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://deptno.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://blog.bglee.me/posts/2016/osx/';
+          this.page.identifier = 'posts/2016/osx/';
+          this.page.title = '맥북 설정';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://deptno.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

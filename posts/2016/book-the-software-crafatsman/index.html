@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="소프트웨어 장인,프로페셔널리즘,실용주의,자부심,애자일,xp," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="소프트웨어 장인 정신을 읽고난 후기">
+<meta name="keywords" content="소프트웨어 장인,프로페셔널리즘,실용주의,자부심,애자일,xp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="book-the-software-crafatsman">
+<meta property="og:url" content="http://blog.bglee.me/posts/2016/book-the-software-crafatsman/index.html">
+<meta property="og:site_name" content="봉로그">
+<meta property="og:description" content="소프트웨어 장인 정신을 읽고난 후기">
+<meta property="og:locale" content="ko">
+<meta property="og:updated_time" content="2018-03-29T06:03:19.623Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="book-the-software-crafatsman">
+<meta name="twitter:description" content="소프트웨어 장인 정신을 읽고난 후기">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '작성자'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.bglee.me/posts/2016/book-the-software-crafatsman/"/>
+
+
+
+
+
+  <title>book-the-software-crafatsman | 봉로그</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-74859643-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="ko">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">봉로그</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">do 봉지니어링 | 기술 관련된 글 포스팅은 앞으로 <a href="https://medium.com/@deptno">medium.com/@deptno</a>에 포스팅합니다.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            홈
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            아카이브
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            카테고리
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            태그
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-github">
+          <a href="https://github.com/deptno" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github-alt"></i> <br />
+            
+            깃헙
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="https://www.bglee.me" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            이봉
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.bglee.me/posts/2016/book-the-software-crafatsman/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="deptno@gmail.com">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="봉로그">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">book-the-software-crafatsman</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">작성일</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-16T00:00:00+09:00">
+                2016-05-16
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Updated at&#58;</span>
+              
+              <time title="Updated at" itemprop="dateModified" datetime="2018-03-29T15:03:19+09:00">
+                2018-03-29
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dev/" itemprop="url" rel="index">
+                    <span itemprop="name">dev</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dev/ts/" itemprop="url" rel="index">
+                    <span itemprop="name">ts</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/posts/2016/book-the-software-crafatsman/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="posts/2016/book-the-software-crafatsman/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  
+                </span>
+              
+            </div>
+          
+
+          
+              <div class="post-description">
+                  소프트웨어 장인 정신을 읽고난 후기
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>ISBN: 979011086659-48-9 93560</p>
+</blockquote>
+<h2><span id="목차">목차</span></h2><pre><code>* 1부: 이념과 태도
+    * 21세기의 소프트웨어 개발
+    * 애자일
+    * 소프트웨어 장인정신
+    * 소프트웨어 장인의 태도
+    * 영웅, 선의 그리고 프로페셔널리즘
+    * 동작하는 소프트웨어
+    * 기술적 실행 관례
+    * 길고긴 여정
+* 2부: 완전한 전환
+    * 인재 채용
+    * 소프투웨어 장인 면접하기
+    * 잘못된 면접 방식
+    * 낮은 사기의 대가
+    * 배움의 문화
+    * 기술적 변화의 실행
+    * 실용주의 장인정신
+    * 소프트웨어 장인으로서의 커리어
+</code></pre><hr>
+<p>이 책은 소프트웨어 장인정신이라 칭하는 개발자가 가져야할 태도에 관한 책이다. 공감가는 부분이 꽤 있었고 도움이 되는 부분도 있었다.</p>
+<p>소프트웨어 장인(이하 장인)은 엘리트나 슈퍼 개발자를 칭하지 않는다. 장인정신을 가진 개발자를 말한다. 주니어개발자도 장인이 될 수 있다. 장인 정신의 핵심은 열정이다. 열정이 있기 때문에 장인은 일을 일로만 바라보지 않는다. 즐거워야하고 그 즐거움을 나누고 싶기에 이를 전파한다. 이 열정은 다른 개발자도 장인이 되고자 하는 의지를 불태워 장인 파이를 키우고 종국적으론 소프트웨어 산업 전반의 역량을 향상시켜 사회에 기여하게 된다.</p>
+<p>장인들은 열정이 있기 때문에 스스로 공부하고 이를 전파하고자 하는데 이에 대해 사회적인 가로막힘이 현실적으로 존재한다. 경직된 조직 문화, 연봉, 근무 시간, 환경 여러가지 요소가 있을 수 있는데 이에 대한 타개 방법을 프로페셔널리즘에 입각해서 풀고 있다. 개발자가 위에서 시키는 일만 하는 사람이 아니기 위해선 비즈니스를 이해해야하며 스스로 결정하고 책임을 지는 태도로 임해야한다. 침체에 빠진 조직을 구하기도 하며 구할 수 없을때는 떠나기도 해야한다. 저자는 5년이상 일한 기업이 없다고 적고 있다. 우리는 프로페셔널이기 때문에 단지 사람이나 이 기업이 마음에 든다고해서 영원히 있을 수 없고 자신의 커리와 회사의 이해가 맞을 때 우리는 함께 할 수 있다.</p>
+<p>말도 안되는 인원과 일정이 주어지는 프로젝트에서 우리는 안된다고 의사를 전할 수 있어야하며(단순히 우리의 매니저가 아닌 마케팅 담당자 등에) 이를 영웅이 되고자하는 마음으로 푸는 프로페셔널하지 못한 결정을 하면안된다. 이건 개인을 위해서도 회사를 위해서도 옳지 못한 행위라는 것을 인지해야한다.</p>
+<p>채용과 면접에 관해서도 나오는데 이 부분이 재밌다. 공감이 되어 기억에 남는 부분들을 적어본다.</p>
+<p>채용과 관련해서는 장인을 찾기 위한 방법이 기재되어 있다. 장인에게 중요한건 단순 연봉이 아니기 때문에 이들을 찾기 위해서는 채용 공고부터 다시 써야한다. 일반적인 채용공고로는 장인을 꼬실 수도, 과한 오버스펙 공고로는 장인 풀 자체를 줄여 뽑을 수 없게 된다. 장인을 찾기 위한 몇가지 방법을 제시했는데</p>
+<h3><span id="장인을-찾기-위한-그물망">장인을 찾기 위한 그물망</span></h3><pre><code>* Github 계정
+* 블로그
+* 오픈 소스 활동
+* 기술 커뮤니티나 사용자 그룹 활동 내역
+* 펫 프로젝트 내용
+* 트위터 계정
+* 좋아하는 기술서적 목록
+* 참석했거나 발표했던 콘퍼런스
+</code></pre><p>위와 같다. 개인적으로 성향등을 고려하였을 때 우선순위를 두자면</p>
+<pre><code>* Github 계정
+* 블로그
+* 기술 커뮤니티나 사용자 그룹 활동 내역
+</code></pre><p>위 정도가 맞을 것 같다. 코드나 오픈 소스 활동등이 그대로 오픈되는 Github 계정은 말할 것도 없고 블로그 또한 자신의 지식을 공유하겠다는 큰 의지표현이라 볼 수 있다(물론 블로그 글을 통해 장인정신이 있는지를 잘 봐야한다). 펫 프로젝트는 개인 프로젝트를 말하는 것으로 보이고 오픈 소스 활동 또한 Github 계정을 통해 모두 노출된다. 기술 커뮤니티에서의 활동 내역은 장인을 찾는데 도움이 될 것 같다. 하지만 트위터의 리트윗충(개인 블로그니 막말한다)이나 페이스북 커뮤니티에는 매우 낮은 수준의 글에도 따봉충이 따르는 경우가 있기 때문에 주의를 요한다. 회사에 다니면 컨퍼러스 참여에 한계가 올텐데 이 부분에 대한 우리나라 회사의 문화(일반화의 오류 일지도?)를 생각했을 때는 컨퍼런스충을 잘 걸러야 장인을 찾을 수 있을 것으로 보인다.</p>
+<h3><span id="면접-질문">면접 질문</span></h3><pre><code>* 수수께기 문제를 내어 면접자를 바보로 만들어선안된다.
+    * 버스안에 골프공이 몇개 들어가냐같은 잘문으로 뭘 판단하려는 건지 전혀 모르겠다.
+* 코딩
+    * 손으로 코딩문제를 풀게한다.
+        * 글씨체를 테스트 하는 것인가? 굳이 왜 나쁜 환경에서 문제를 내는 것인가.
+    * 인터넷을 못하게 한다.
+        * 왜?
+    * 알고리즘 문제를 낸다.
+        공부해도 잊혀진다. 내 기억력을 테스트 하려는 것인가? 알고리즘은 답이 나와있는 문제다. 인터넷에 공유되어 있다. 이런 문제에 대한 답은. 직군에 따라서는 알고리즘 문제가 나오는 것도 이해한다.
+</code></pre><p>소프트웨어 장인정신은 애자일, 린, XP등과 맥락을 함께 하는 점이 꽤 된다 소프트웨어 장인정신은 실행관례로써 XP를 지지한다. XP를 지지하는 만큼 책 전반에 걸쳐 TDD에 대한 언급이 상당히 많으며 페어프로그래밍을 하라고 하고 있다.</p>
+<p>사실 경험적으로도 레거시 코드를 가지고 요구사항과 일정이 빡빡한 프로젝트를 만나게 되면 TDD의 중요성을 느끼게 된다. 프론트엔드 테스트 자동화가 쉽지 않은데 테스트 코드 위주로 코드를 짜지 않으면 추후 리펙토링 때 히스토리 운운하며 사이드 이펙트 날 까봐 아무 것도 건드리지 못하고 예외처리의 예외처리를 해서 코드량이 익스포넨셜하게 증가하는 매직이 일어나게 된다.</p>
+<hr>
+<p>많은면에서 생각이 비슷해서 놀랬다. 회사와 장인은 서로 계약관계로 서로를 평가하고 서로 이해관계가 맞아야한다. 이외에도 기술적으로 장인이 되기 위한 글도 있고 해서 지금 앞이 보이지 않거나 뭔가 막혀 있다고 생각하면 생각을 열어 줄 수 있는 기회를 얻을 수 있을 지도 모르겠다.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/소프트웨어-장인/" rel="tag"># 소프트웨어 장인</a>
+          
+            <a href="/tags/프로페셔널리즘/" rel="tag"># 프로페셔널리즘</a>
+          
+            <a href="/tags/실용주의/" rel="tag"># 실용주의</a>
+          
+            <a href="/tags/자부심/" rel="tag"># 자부심</a>
+          
+            <a href="/tags/애자일/" rel="tag"># 애자일</a>
+          
+            <a href="/tags/xp/" rel="tag"># xp</a>
+          
+        </div>
+      
+
+      
+      
+      <h1 class="post-button text-center">
+        기술 관련된 글 포스팅은 앞으로 <a href="https://medium.com/@deptno">medium.com/@deptno</a>에 포스팅합니다.
+      </h1>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2016/git/" rel="next" title="Git">
+                <i class="fa fa-chevron-left"></i> Git
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2016/async:await/" rel="prev" title="Promise || Async/Await">
+                Promise || Async/Await <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            목차
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            흝어보기
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">deptno@gmail.com</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-name">포스트</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">카테고리</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">93</span>
+                  <span class="site-state-item-name">태그</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/deptno" target="_blank" title="Github">
+                    
+                      <i class="fa fa-fw fa-github"></i>Github</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">목차</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">장인을 찾기 위한 그물망</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.2.</span> <span class="nav-text">면접 질문</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">deptno@gmail.com</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count"></span>
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://deptno.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://blog.bglee.me/posts/2016/book-the-software-crafatsman/';
+          this.page.identifier = 'posts/2016/book-the-software-crafatsman/';
+          this.page.title = 'book-the-software-crafatsman';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://deptno.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
