@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.bglee.me/"/>
-  <updated>2018-08-18T04:23:19.912Z</updated>
+  <updated>2018-08-19T09:05:11.338Z</updated>
   <id>http://blog.bglee.me/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>웹스톰 서버리스 디버깅 설정</title>
+    <link href="http://blog.bglee.me/posts/2018/webstorm-debug-serverless/"/>
+    <id>http://blog.bglee.me/posts/2018/webstorm-debug-serverless/</id>
+    <published>2018-08-19T09:05:11.000Z</published>
+    <updated>2018-08-19T09:05:11.338Z</updated>
+    
+    <content type="html"><![CDATA[<h2><span id="웹스톰webstorm">웹스톰(Webstorm)</span></h2><p>IDE로 웹스톰을 사용하고 있다. 대단히 만족하는 프로그램 중에 하나로 딱히 세팅할게 없는게 장점 중 하나다. 그런데 디버깅에선 그렇지 않다.</p><h2><span id="디버깅-세팅">디버깅 세팅</span></h2><p>서버리스를 디버깅함에 있어 <code>npm scripts</code> 를 주로 사용하게 되는데 서버리스 오프라인에서는 디버그 모드가 동작하지 않는다. 세팅하기가 귀찮아서 그러려니 하고 살고 있었는데 반복적인 작업을 하게 되어 이 부분을 세팅하고 기록으로 남긴다.</p><h4><span id="npm-스크립트">NPM 스크립트</span></h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"start"</span>: <span class="string">"serverless offline --port 3001"</span>,</span><br><span class="line">    <span class="attr">"test"</span>: <span class="string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><code>package.json</code> 은 보통 위와 같이 설정한데 풀 스택으로 작업을 할때는 3000 포트가 겹치기 때문에 포트 인자를 줘서 바꾼다.</p><blockquote><p><span class="github-emoji" title="information_desk_person" data-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f481.png?v8">&#x1f481;</span> <code>-p 3001</code> 하면 <code>this.options.prefix.startsWith is not a function</code> 이 따위 에러가 나게 되니 조심하자. <code>-p</code> 옵션은 포트가 아닌 프리픽스에 대한 옵션이다.</p></blockquote><h3><span id="npm-스크립트에서는-디버그가-동작하지-않는다">NPM 스크립트에서는 디버그가 동작하지 않는다.</span></h3><p>이 부분이 살짝 놀라웠는데 여튼 안되는거다. <code>npm scripts</code> 대신 직접 환경을 구성해야한다. 구성 자체는 간단하니 따라서 세팅하도록 한다.</p><h4><span id="디버그-메뉴-진입">디버그 메뉴 진입</span></h4><p>메뉴 진입은 우상단의 툴바나 메뉴바에서 찾아 들어가면된다.</p><p><img src="debug-toolbar.png" alt="debug-toolbar"></p><p><img src="debug-menu.png" alt="debug-menu"></p><h4><span id="설정">설정</span></h4><p><img src="debug-settings.png" alt="debug-settings"></p><p>메뉴에 진입하면 나오는 화면이다. 왼쪽에서 <code>+</code> 를 눌러 <code>Node.js</code> 를 선택한뒤 이미지와 같이 설정을 해주면된다. 이름은 알아보기 편한 놈으로 정한다.</p><ul><li><strong>Working directory:</strong> <code>package.json</code> 이 존재하는 루트 프로젝트에 있으면된다.</li><li><strong>JavaScript file: </strong>실행은 <code>serverless</code> 를 통해서 진행되므로 이에 대한 경로를 설정하면 된다. 난 로컬 설치를 했기 때문에 <code>node_modules/.bin/serverless</code> 를 참조한다. 글로벌을 통해서 관리하는 사람은 터미널에서 <code>which serverless</code> 를 통해 나오는 경로를 넣어주면된다.</li><li><strong>Application parameters:</strong> <code>offline</code> 이면 충분하다. 포트를 변경하기 위해 난 <code>--port 3001</code> 을 추가적으로 입력했다.</li></ul><h2><span id="디버깅">디버깅</span></h2><p><img src="debug-toolbar.png" alt="debug-toolbar"></p><p>버전업이 되면서 아이콘이 좀 플랫하게 바꼈는데 여튼 맨 오른쪽이 디버그 아이콘이다.</p><p><img src="breakpoint.png" alt="breakpoint"></p><p>웹에서 디버깅과 마찬가지로 <code>debugger</code> 와 브레이크 포인트가 둘다 작동한다 브레이크 포인트는 <code>CMD + F8</code> 를 통해 라인에 대해서 토글이 가능하다.</p><h3><span id="http-request">HTTP Request</span></h3><blockquote><p><span class="github-emoji" title="information_desk_person" data-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f481.png?v8">&#x1f481;</span>웹스톰은 <strong>Restful API Client</strong> 를 자체적으로 가지고 있지만 개인적으론 불편해서 다른 클라이언트도 잘 안쓴다. <code>.http</code> 파일을 이용하면 편하게 HTTP 요청을 <strong>코드로 관리</strong> 가 가능하다.</p></blockquote><p>프로젝트(디렉토리) 뷰에 <code>HTTP Request</code> 파일을 추가하자.</p><p><img src="create-http.png" alt="create-http"></p><p>그럼 친절하게 스니펫 까지 적힌 파일이 생성된다.</p><p><img src="webstorm-debugging.gif" alt="webstorm-debugging"></p><p>보는 바와 같이 결과도 신택스 하이라이팅을 해준다. <span class="github-emoji" title="hand" data-src="https://assets-cdn.github.com/images/icons/emoji/unicode/270b.png?v8">&#x270b;</span></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2&gt;&lt;span id=&quot;웹스톰webstorm&quot;&gt;웹스톰(Webstorm)&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;IDE로 웹스톰을 사용하고 있다. 대단히 만족하는 프로그램 중에 하나로 딱히 세팅할게 없는게 장점 중 하나다. 그런데 디버깅에선 그렇지 않다.&lt;/p&gt;&lt;h
+      
+    
+    </summary>
+    
+    
+      <category term="webstorm" scheme="http://blog.bglee.me/tags/webstorm/"/>
+    
+      <category term="debug" scheme="http://blog.bglee.me/tags/debug/"/>
+    
+      <category term="serverless" scheme="http://blog.bglee.me/tags/serverless/"/>
+    
+      <category term="debugging" scheme="http://blog.bglee.me/tags/debugging/"/>
+    
+      <category term="serverless-offline" scheme="http://blog.bglee.me/tags/serverless-offline/"/>
+    
+  </entry>
   
   <entry>
     <title>AWS AppSync, Amplify를 이용한 IAM 롤 기반의 풀스택 GraphQL 프로젝트 구현</title>
@@ -165,9 +196,9 @@
     
       <category term="서평" scheme="http://blog.bglee.me/tags/%EC%84%9C%ED%8F%89/"/>
     
-      <category term="스타트업" scheme="http://blog.bglee.me/tags/%EC%8A%A4%ED%83%80%ED%8A%B8%EC%97%85/"/>
-    
       <category term="창업" scheme="http://blog.bglee.me/tags/%EC%B0%BD%EC%97%85/"/>
+    
+      <category term="스타트업" scheme="http://blog.bglee.me/tags/%EC%8A%A4%ED%83%80%ED%8A%B8%EC%97%85/"/>
     
       <category term="마케팅" scheme="http://blog.bglee.me/tags/%EB%A7%88%EC%BC%80%ED%8C%85/"/>
     
@@ -194,9 +225,9 @@
     </summary>
     
     
-      <category term="스타트업" scheme="http://blog.bglee.me/tags/%EC%8A%A4%ED%83%80%ED%8A%B8%EC%97%85/"/>
-    
       <category term="창업" scheme="http://blog.bglee.me/tags/%EC%B0%BD%EC%97%85/"/>
+    
+      <category term="스타트업" scheme="http://blog.bglee.me/tags/%EC%8A%A4%ED%83%80%ED%8A%B8%EC%97%85/"/>
     
       <category term="노무" scheme="http://blog.bglee.me/tags/%EB%85%B8%EB%AC%B4/"/>
     
@@ -223,13 +254,13 @@
     </summary>
     
     
-      <category term="권도균의 스타트업 경영 수업" scheme="http://blog.bglee.me/tags/%EA%B6%8C%EB%8F%84%EA%B7%A0%EC%9D%98-%EC%8A%A4%ED%83%80%ED%8A%B8%EC%97%85-%EA%B2%BD%EC%98%81-%EC%88%98%EC%97%85/"/>
-    
       <category term="서평" scheme="http://blog.bglee.me/tags/%EC%84%9C%ED%8F%89/"/>
     
-      <category term="경영" scheme="http://blog.bglee.me/tags/%EA%B2%BD%EC%98%81/"/>
-    
       <category term="스타트업" scheme="http://blog.bglee.me/tags/%EC%8A%A4%ED%83%80%ED%8A%B8%EC%97%85/"/>
+    
+      <category term="권도균의 스타트업 경영 수업" scheme="http://blog.bglee.me/tags/%EA%B6%8C%EB%8F%84%EA%B7%A0%EC%9D%98-%EC%8A%A4%ED%83%80%ED%8A%B8%EC%97%85-%EA%B2%BD%EC%98%81-%EC%88%98%EC%97%85/"/>
+    
+      <category term="경영" scheme="http://blog.bglee.me/tags/%EA%B2%BD%EC%98%81/"/>
     
   </entry>
   
@@ -254,11 +285,11 @@
     
       <category term="서평" scheme="http://blog.bglee.me/tags/%EC%84%9C%ED%8F%89/"/>
     
+      <category term="창업" scheme="http://blog.bglee.me/tags/%EC%B0%BD%EC%97%85/"/>
+    
       <category term="스타트업" scheme="http://blog.bglee.me/tags/%EC%8A%A4%ED%83%80%ED%8A%B8%EC%97%85/"/>
     
       <category term="장병규의 스타트업 한국" scheme="http://blog.bglee.me/tags/%EC%9E%A5%EB%B3%91%EA%B7%9C%EC%9D%98-%EC%8A%A4%ED%83%80%ED%8A%B8%EC%97%85-%ED%95%9C%EA%B5%AD/"/>
-    
-      <category term="창업" scheme="http://blog.bglee.me/tags/%EC%B0%BD%EC%97%85/"/>
     
   </entry>
   
@@ -450,28 +481,6 @@
   </entry>
   
   <entry>
-    <title>Next.js</title>
-    <link href="http://blog.bglee.me/posts/2017/next-js/"/>
-    <id>http://blog.bglee.me/posts/2017/next-js/</id>
-    <published>2017-05-07T15:00:00.000Z</published>
-    <updated>2018-03-29T06:03:19.630Z</updated>
-    
-    <content type="html"><![CDATA[<h1><span id="nextjs">Next.js</span></h1><p>현재 회사의 <a href="https://www.rsquare.co.kr" target="_blank" rel="noopener">고객사이트</a>를 <a href="https://zeit.co/blog/next2" title="next.js" target="_blank" rel="noopener">next.js</a>와 <a href="https://www.typescriptlang.org/" title="typescript" target="_blank" rel="noopener">typescript</a> 기반으로 2017-04-10 일 기준으로 배포되었다. 간단하게 소개를 하고자 한다.</p><h2><span id="nextjs">next.js</span></h2><blockquote><p><a href="https://zeit.co/blog/next2" title="next.js" target="_blank" rel="noopener">next.js</a>는 node.js, <a href="https://facebook.github.io/react/" title="react.js" target="_blank" rel="noopener">react</a>기반의 유니버살 렌더링을 지원하는 프레임웍이다. 첫 접속시에는 서버로부터 첫 페이지를 구동하기 위한 청크를 가져가게되며 한번 접속한 페이지에 대해서는 데이터 청크가 있으므로 SPA와 같이 동작하게 된다.</p></blockquote><h3><span id="라우팅">라우팅</span></h3><p>라우팅은 기본설정으로 <code>pages/</code> 디렉토리가 루트가 된다. 기본 라우팅은 <code>index.html</code>에 매칭되는 <code>index.js</code>가 된다.</p><p>디렉토리 구조가 그대로 서비스 라우팅에 매칭되기 때문에 특별히 할 일이 없어서 빠른 속도로 개발을 시작할 수 있다.</p><p>그럼 html에 해당하는 template은 어디서 제어하는가?</p><h4><span id="pages_documentjs">pages/_document.js</span></h4><p><code>_document.js</code>는 <code>index.html</code>의 템플릿에 해당하는 정보를 내려주는 리엑트 컴포넌트로 시그니쳐가 <code>React.Component</code>의 상속이 아닌 <code>next/document</code> 패키지의 Document 컴포넌트를 상속해서 만들게 된다. 자세한건 문서를 참조한다.</p><h4><span id="pages_errorjs">pages/_error.js</span></h4><p>SSR이 지원되기때문에 데이터를 서버에서 미리 패칭하여 내릴 수 있다. 이런 경우를 포함해서 예외처리가 제대로 되지 않은 경우 <code>500</code>에러를 내리게 되는데 그에 대한 에러 <code>status</code>를 받아 그에 맞는 화면을 내릴 수 있다. <code>_document.js</code>와는 달리 <code>React.Component</code>를 상속한다.</p><h3><span id="api">api</span></h3><p>next.js에서는 리액트 컴포넌트를 내릴때 특수한 <code>static</code> 메서드를 정의할 수 있는데 이 함수는 서버와 클라이언트 모두에서 사용되며 서버일 경우와 클라이언트일 경우에 대한 분기를 여기서 정할 수 있다. 이를 통해서 서버인 경우에 대한 처리, 클라이언트에 대한 처리를 추가할 수 있다.</p><h4><span id="getinitialprops">getInitialProps()</span></h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> Index <span class="keyword">extends</span> React.Component&lt;<span class="literal">null</span>, <span class="literal">null</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> store: Store&lt;RSquareStore&gt;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> getInitialProps(&#123;req&#125;) &#123;</span><br><span class="line">        <span class="keyword">const</span> server = !!req;</span><br><span class="line">        <span class="keyword">const</span> store  = <span class="keyword">await</span> storeCreator(reducer, <span class="literal">null</span>, server);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">await</span> store.dispatch(getCatalogue());</span><br><span class="line">        &#125; <span class="keyword">catch</span>(ex) &#123;&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">const</span> initialState = store.getState();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> &#123;initialState, server, catalogue: initialState.themes.catalogue&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>(<span class="params">props</span>) &#123;</span><br><span class="line">        <span class="keyword">super</span>(props);</span><br><span class="line">        <span class="keyword">this</span>.store = storeCreator(reducer, props.initialState, props.server);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;Provider store=&#123;<span class="keyword">this</span>.store&#125;&gt;</span><br><span class="line">                &lt;Layout&gt;</span><br><span class="line">                    &lt;Head&gt;</span><br><span class="line">                        &lt;title&gt;&#123;<span class="string">`SEO_TEXT`</span>&#125;&lt;<span class="regexp">/title&gt;</span></span><br><span class="line"><span class="regexp">                    &lt;/</span>Head&gt;</span><br><span class="line">                    &lt;Home catalogue=&#123;<span class="keyword">this</span>.props.catalogue&#125;/&gt;</span><br><span class="line">                &lt;<span class="regexp">/Layout&gt;</span></span><br><span class="line"><span class="regexp">            &lt;/</span>Provider&gt;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>단순한 구현은 위와 같다. 구조에는 redux가 쓰였으며 이를 위해 스토어를 생성해서 내리고 있는 걸 볼 수 있다. <code>&lt;Head&gt;</code>컴포넌트도 보이는데 <code>helmet</code> 역할로 헤더쪽으로 자식 태그들을 펌핑해준다. 동적으로 바껴야하는 메타태그들을 여기서 처리하면 된다.</p><h3><span id="pros">pros</span></h3><ul><li>라우팅이 정형화된 디렉토리 구조로 되어 있기 때문에 직관적이다.</li><li>API가 적다.</li><li>유니버설 렌더링의 지원한다.</li></ul><h3><span id="cons">cons</span></h3><ul><li>표준으로 자리잡았다 싶은 기존의 리액트용 라이브러리들과 함께 사용하려면 커스텀 셋업이 필요하다.</li></ul><p>###</p>]]></content>
-    
-    <summary type="html">
-    
-      react SSR 을 지원하는 next.js의 사용법을 간단히 소개한다.
-    
-    </summary>
-    
-      <category term="dev" scheme="http://blog.bglee.me/categories/dev/"/>
-    
-      <category term="js" scheme="http://blog.bglee.me/categories/dev/js/"/>
-    
-    
-  </entry>
-  
-  <entry>
     <title>Texts 구현</title>
     <link href="http://blog.bglee.me/posts/2017/texts/"/>
     <id>http://blog.bglee.me/posts/2017/texts/</id>
@@ -483,6 +492,28 @@
     <summary type="html">
     
       기획자 디자이너, 퍼블리셔와의 협업시 문구 변경으로 인한 피로를 덜기 위해 ID 기반의 문구 관리
+    
+    </summary>
+    
+      <category term="dev" scheme="http://blog.bglee.me/categories/dev/"/>
+    
+      <category term="js" scheme="http://blog.bglee.me/categories/dev/js/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Next.js</title>
+    <link href="http://blog.bglee.me/posts/2017/next-js/"/>
+    <id>http://blog.bglee.me/posts/2017/next-js/</id>
+    <published>2017-05-07T15:00:00.000Z</published>
+    <updated>2018-03-29T06:03:19.630Z</updated>
+    
+    <content type="html"><![CDATA[<h1><span id="nextjs">Next.js</span></h1><p>현재 회사의 <a href="https://www.rsquare.co.kr" target="_blank" rel="noopener">고객사이트</a>를 <a href="https://zeit.co/blog/next2" title="next.js" target="_blank" rel="noopener">next.js</a>와 <a href="https://www.typescriptlang.org/" title="typescript" target="_blank" rel="noopener">typescript</a> 기반으로 2017-04-10 일 기준으로 배포되었다. 간단하게 소개를 하고자 한다.</p><h2><span id="nextjs">next.js</span></h2><blockquote><p><a href="https://zeit.co/blog/next2" title="next.js" target="_blank" rel="noopener">next.js</a>는 node.js, <a href="https://facebook.github.io/react/" title="react.js" target="_blank" rel="noopener">react</a>기반의 유니버살 렌더링을 지원하는 프레임웍이다. 첫 접속시에는 서버로부터 첫 페이지를 구동하기 위한 청크를 가져가게되며 한번 접속한 페이지에 대해서는 데이터 청크가 있으므로 SPA와 같이 동작하게 된다.</p></blockquote><h3><span id="라우팅">라우팅</span></h3><p>라우팅은 기본설정으로 <code>pages/</code> 디렉토리가 루트가 된다. 기본 라우팅은 <code>index.html</code>에 매칭되는 <code>index.js</code>가 된다.</p><p>디렉토리 구조가 그대로 서비스 라우팅에 매칭되기 때문에 특별히 할 일이 없어서 빠른 속도로 개발을 시작할 수 있다.</p><p>그럼 html에 해당하는 template은 어디서 제어하는가?</p><h4><span id="pages_documentjs">pages/_document.js</span></h4><p><code>_document.js</code>는 <code>index.html</code>의 템플릿에 해당하는 정보를 내려주는 리엑트 컴포넌트로 시그니쳐가 <code>React.Component</code>의 상속이 아닌 <code>next/document</code> 패키지의 Document 컴포넌트를 상속해서 만들게 된다. 자세한건 문서를 참조한다.</p><h4><span id="pages_errorjs">pages/_error.js</span></h4><p>SSR이 지원되기때문에 데이터를 서버에서 미리 패칭하여 내릴 수 있다. 이런 경우를 포함해서 예외처리가 제대로 되지 않은 경우 <code>500</code>에러를 내리게 되는데 그에 대한 에러 <code>status</code>를 받아 그에 맞는 화면을 내릴 수 있다. <code>_document.js</code>와는 달리 <code>React.Component</code>를 상속한다.</p><h3><span id="api">api</span></h3><p>next.js에서는 리액트 컴포넌트를 내릴때 특수한 <code>static</code> 메서드를 정의할 수 있는데 이 함수는 서버와 클라이언트 모두에서 사용되며 서버일 경우와 클라이언트일 경우에 대한 분기를 여기서 정할 수 있다. 이를 통해서 서버인 경우에 대한 처리, 클라이언트에 대한 처리를 추가할 수 있다.</p><h4><span id="getinitialprops">getInitialProps()</span></h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> Index <span class="keyword">extends</span> React.Component&lt;<span class="literal">null</span>, <span class="literal">null</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> store: Store&lt;RSquareStore&gt;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> getInitialProps(&#123;req&#125;) &#123;</span><br><span class="line">        <span class="keyword">const</span> server = !!req;</span><br><span class="line">        <span class="keyword">const</span> store  = <span class="keyword">await</span> storeCreator(reducer, <span class="literal">null</span>, server);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">await</span> store.dispatch(getCatalogue());</span><br><span class="line">        &#125; <span class="keyword">catch</span>(ex) &#123;&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">const</span> initialState = store.getState();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> &#123;initialState, server, catalogue: initialState.themes.catalogue&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>(<span class="params">props</span>) &#123;</span><br><span class="line">        <span class="keyword">super</span>(props);</span><br><span class="line">        <span class="keyword">this</span>.store = storeCreator(reducer, props.initialState, props.server);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;Provider store=&#123;<span class="keyword">this</span>.store&#125;&gt;</span><br><span class="line">                &lt;Layout&gt;</span><br><span class="line">                    &lt;Head&gt;</span><br><span class="line">                        &lt;title&gt;&#123;<span class="string">`SEO_TEXT`</span>&#125;&lt;<span class="regexp">/title&gt;</span></span><br><span class="line"><span class="regexp">                    &lt;/</span>Head&gt;</span><br><span class="line">                    &lt;Home catalogue=&#123;<span class="keyword">this</span>.props.catalogue&#125;/&gt;</span><br><span class="line">                &lt;<span class="regexp">/Layout&gt;</span></span><br><span class="line"><span class="regexp">            &lt;/</span>Provider&gt;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>단순한 구현은 위와 같다. 구조에는 redux가 쓰였으며 이를 위해 스토어를 생성해서 내리고 있는 걸 볼 수 있다. <code>&lt;Head&gt;</code>컴포넌트도 보이는데 <code>helmet</code> 역할로 헤더쪽으로 자식 태그들을 펌핑해준다. 동적으로 바껴야하는 메타태그들을 여기서 처리하면 된다.</p><h3><span id="pros">pros</span></h3><ul><li>라우팅이 정형화된 디렉토리 구조로 되어 있기 때문에 직관적이다.</li><li>API가 적다.</li><li>유니버설 렌더링의 지원한다.</li></ul><h3><span id="cons">cons</span></h3><ul><li>표준으로 자리잡았다 싶은 기존의 리액트용 라이브러리들과 함께 사용하려면 커스텀 셋업이 필요하다.</li></ul><p>###</p>]]></content>
+    
+    <summary type="html">
+    
+      react SSR 을 지원하는 next.js의 사용법을 간단히 소개한다.
     
     </summary>
     
@@ -540,26 +571,6 @@
       <category term="pwa" scheme="http://blog.bglee.me/tags/pwa/"/>
     
       <category term="amp" scheme="http://blog.bglee.me/tags/amp/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>2016년 12월</title>
-    <link href="http://blog.bglee.me/posts/2016/2016-12/"/>
-    <id>http://blog.bglee.me/posts/2016/2016-12/</id>
-    <published>2016-12-04T10:58:37.000Z</published>
-    <updated>2018-03-29T06:03:19.620Z</updated>
-    
-    <content type="html"><![CDATA[<p>벌써 12월이다. 미션들이 여러개가 떨어져서 이래저래 공부와 삽질을 하면서 11월 한달을 보냈다. 한달에 한번 포스팅할 시간도 없어서 정리를 하고간다.</p><h2><span id="독서">독서</span></h2><ul><li>클로저 시작하기 - 기본 개념과 7주 훈련 프로그램</li><li>빠른 모바일 앱 개발을 위한 React Native</li><li>디스커버리 Go</li></ul><p>예전에는 정독을 목표로 책을 펴고 <strong>서문</strong>부터 읽어나갔었는데 출퇴근 시간을 아껴서 공부하다보니 실무에 쓰일 수 있는 부분을 먼저 읽기위해 <strong>목차</strong>를 읽고 고급 내용을 다루는 뒷 부분을 나중에 읽게 되었다.</p><p>11월 중순 부로 서버까지 커버해야하는 상황이 오면서 회사에서 쓰이는 언어인 클로저(이전에도 한번 읽긴 했었다.)와 <strong>Go</strong>를 공부해야하는 상황인데 기존에 인계 받은 것 중에는 <strong>루비 온 레일즈</strong>도 존재한다.</p><h2><span id="블로그">블로그</span></h2><p>서브 도메인을 구현했다. 이제까지 블로그가 집에서 굴리는 작은 서버를 통해 서비스되고 있었는데 이를 나스로 옮겨 잘 사용하고 있었는데 조카들이 와서 전원을 뽑아 놓는 바람에 이틀 정도 서비스가 중단되는 것을 계기로 깃헙 페이지를 통해 서비스를 제공하면서 도메인도 <strong><a href="http://blog.bglee.me">http://blog.bglee.me</a></strong>로 옮겼다.</p><h2><span id="next">Next</span></h2><p>공부에 치이는 상황에서 주어진 시간을 최대한 활용하고 추후의 빠른 개발 및 데브옵스를 위해서 기존 API 서버의 <strong>GraphQL</strong> 프록시를 도전하기도 했고 앱에 대한 니즈 또한 존재해 리액트 네이티브를 공부했다. 시간이 얼마 없기 때문에 <strong>GraphQL</strong>은 드랍했고 메인 프로젝트의 일정을 맞추기 위해 주니어들과 함께 다시 <strong>FrontEnd</strong> 코드를 작성중에 있다.</p><p>웹 서빙을 위해 EC2, ECS, S3 static hosting 여러가지를 해왔는데 각각의 장단점이 있고 Serverless 스택 또한 러닝커브가 있지만 한번 구현이 완료되면 안정성과 비용 절감이 이루어지는 만큼 이 부분이 다음 타겟이 될 것 같다. 첫 시도는 주어진 시간의 한계로 친구에게 맡긴 상황인데 이 부분이 잘 해결되었으면 한다.<br>ㅏ</p>]]></content>
-    
-    <summary type="html">
-    
-      벌써 12월이다. 미션들이 여러개가 떨어져서 이래저래 공부와 삽질을 하면서 11월 한달을 보냈다. 한달에 한번 포스팅할 시간도 없어서 정리를 하고간다.
-    
-    </summary>
-    
-      <category term="summary" scheme="http://blog.bglee.me/categories/summary/"/>
-    
     
   </entry>
   
