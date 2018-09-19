@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.bglee.me/"/>
-  <updated>2018-09-16T04:45:16.546Z</updated>
+  <updated>2018-09-19T09:23:40.936Z</updated>
   <id>http://blog.bglee.me/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>babel@7-typescript</title>
+    <link href="http://blog.bglee.me/posts/2018/babel-7-typescript/"/>
+    <id>http://blog.bglee.me/posts/2018/babel-7-typescript/</id>
+    <published>2018-09-19T09:23:40.000Z</published>
+    <updated>2018-09-19T09:23:40.936Z</updated>
+    
+    <content type="html"><![CDATA[<h2><span id="babel7-x2764-typescript">Babel@7 <span class="github-emoji" title="heart" data-src="https://assets-cdn.github.com/images/icons/emoji/unicode/2764.png?v8">&#x2764;</span> TypeScript</span></h2><p>바벨 7.0이 나오면서 타입스크립트의 빌드 환경변화가 생겼고, 긍정적이다. 기존의 버전업과는 꽤나 다른 철학적(혹은 디자인) 차이가 있어 적어본다. 미니멀한 <strong>babel@7</strong> + TypeScript 의 조합을 만들어보면서 정리하도록 한다.</p><h3><span id="babel7">Babel@7</span></h3><p>바벨은 오랫동안 내가 피해 왔던 시리즈 빌드 시리즈중 하나인데 <strong>7.0</strong>에 와서는 그 컨셉에 변화가 있었다. 디테일하게는 능력상의 무리가 있고 가볍게 설명하자면 바벨은 이제 타입스크립트 프리셋을 추가함으로써 <strong>flow</strong> 와 마찬가지로 타입관련 코드를 모두 스트립(삭제) 한다. 그리고 순수 바벨로만 컴파일(트랜스파일)을 하게 된다.</p><p>기존에는 웹팩과 함께 먹이려면 웹팩에서 로더를 통해 <strong>타입스크립트를 자바스크립트로 변환</strong> 후 다시 바벨을 통하게되는데 기본적으로는 타입스크립트 컴파일러(<code>tsc</code>)는 자바스크립트 컴파일 기능을 가지고 있다. 헌데 <code>css</code> 임포트와 같은 특수 구문 로드등 여러가지 복잡성이 얽히면서 내 제어를 벗어나 버렸고 그냥 받아들였다. 내가 아는 사실은 바벨을 걷어낼 수는 없다는 것 정도다.</p><p>헌데 이번 <strong>7.0</strong> 에서는 그냥 바벨은 타입스크립트를 벗겨내고 자체적으로 빌드를 하며 타입스크립트는 빌드 과정이 아닌 외부에서 타입 어시스트를 받는 컨셉이다. <code>tsconfig.json</code> 의 <code>noEmit: true</code> 설정을 통해 <code>.js</code>를 생성하지 않으면서 타입 어시스트만 받고 실제 빌드는 바벨이 담당한다. 때문에 오류가 있어도 바벨은 무시하고 빌드를 하게 되며 타입스크립트에 대한 롤은 그 외부로 남겨진다. 종속성이 떨어지므로 당연히 유연성이 더 높다.</p><h3><span id="preset-패러다임">Preset 패러다임</span></h3><p>지금 빌드에서는 프리셋이 패러다임이다. 기존과 프리셋 빌드 패러다임이 어떻게 다른가를 이해하는 것은 지금 이 방향이 올바른가에 대한 판단할 기회를 제공하니 알아볼 만한 주제다. 대충 내 감으로 느낀 것이기 때문에 실제와는 다를 수 있으나 그 부분은 “이 사람 틀렸네?” 하고 넘어갈 문제로 보인다 어쨋든 무엇이 다른가 얘기해 보겠다.</p><p>프리셋을 보는 방향에는 두가지가 있다. 하나는 투박한 단어 선택이지만 <strong>입력 값</strong>의 선택 이고 하나는 <strong>출력 값</strong>에 대한 정의다.</p><h4><span id="입력-값">입력 값</span></h4><p><strong>기존</strong>의 빌드 방식은 바벨에 사용하고자 하는 기능들을 추가해야했다. 예를들어 <code>{...spread}</code> 와 같은 구문을 사용하기 위해서는 <code>spread</code> 어쩌고하는 플러그인등을 빌드 환경에 추가로 인스톨 하면서 사용하는 것이다. 여기에 나중엔 프리셋이 등장한다 아마 이런 것이었던 것으로 기억한다. <code>preset-stage-0</code> 스펙이 되기 전까지 실험적 기능, 안정화, 실제로 스펙에 포함되기 위한 마무리 단계 등이 존재하는데 이를 프리셋으로 묶어서 이를 사용하는 것이다.</p><p>이렇게 되면 스펙을 이루는 개별적인 기능을 임포트하는 수고를 덜 수 있다. 이는 어느정도 제공되고 있었고 <code>post-css</code> 또한 이러한 방식으로 전환되고 있다.</p><h4><span id="출력-값">출력 값</span></h4><p>출력 프리셋에 대한 이해는 <code>node</code> 가 이해를 도울 수 있을 것이라 생각된다. 입력값에 스펙 얘기를 했었는데 타입스크립트에서는 출력에 대한 타겟 스펙을 정할 수 있다.</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"compilerOptions"</span>: &#123;</span><br><span class="line">    <span class="attr">"target"</span>: <span class="string">"es2018"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><code>es2018</code>, <code>es2017</code>, <code>es2016</code> 뭐 여러 타겟이 있는데 실제와는 괴리가 있다. AWS에 람다를 배포한다고 생각해보자. AWS는 근래에 들어서야 <code>node8.10</code>을 런타임으로 지원하기 시작했다.</p><p><strong>“어?”</strong> 타겟을 뭘로 지정해야하는지 알 수가 없다. 그래서 대충 잘돌아가는 옛날 컨피그를 사용한다. 네이티브로 지원되는 기능도 코드를 통해 돌리게 되는 비효율과 가독성의 저하를 가져온다. 좀 더 도전을 해본 사람이라면 <a href="https://node.green" target="_blank" rel="noopener">https://node.green</a> 과 같은 곳에서 정보를 얻어 그에 맞게 타겟을 지정할 수도 있다. 그런데 여럿이 작성하는 코드에 무엇이 존재하는지 어찌 일일이 파악하겠는가?</p><p>그래서 바벨에서는 타겟(출력) 프리셋을 지정할 수 있다. 아까도 말했듯이 이제 컴파일은 바벨이 혼자 책임지는 구조다. <code>es2015</code>로 컴파일해줘가 아니라 타겟을 <strong>노드 버전으로 명시</strong>한다.</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const presets = [</span><br><span class="line">  &apos;@babel/preset-typescript&apos;,</span><br><span class="line">  [&apos;@babel/preset-env&apos;, &#123;targets: &#123;node: &apos;8.10&apos;&#125;&#125;]</span><br><span class="line">]</span><br></pre></td></tr></table></figure><p>AWS는 <code>node8.10</code> 런타임을 지원하므로 이제 고민없이 바벨에게 최적화된 빌드가 떨어지겠거니 기대할 수 있게 됐다.</p><h2><span id="️-핸즈온">👷‍♂️ 핸즈온</span></h2><p>이런걸 핸즈온이라고 하는 것 같아 따라 붙여봤다. <span class="github-emoji" title="kissing_smiling_eyes" data-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f619.png?v8">&#x1f619;</span></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir babel-typescript</span><br><span class="line">yarn init -y -p</span><br><span class="line">yarn add -D @babel/cli @babel/core @babel/preset-env @babel/preset-typescript typescript</span><br></pre></td></tr></table></figure><p>그럼 <code>package.json</code> 파일과 디펜던시들이 인스톨 됐으니 <code>index.ts</code> 파일을 생성하자</p><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> (pkg: Package = &#123;version: <span class="string">"0.0.1"</span>&#125;) =&gt; pkg.version</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> Package &#123;</span><br><span class="line">  versionsss: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>그럼 이번엔 <code>babel.config.js</code> 파일을 생성할 차례다.</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  presets: [</span><br><span class="line">    <span class="string">'@babel/preset-typescript'</span>,</span><br><span class="line">    [</span><br><span class="line">      <span class="string">'@babel/preset-env'</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        targets: &#123;</span><br><span class="line">          node: <span class="string">'8.10'</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>이제 설정을 모두 했으니 컴파일을 해보자.</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">npx babel index.ts</span><br><span class="line"><span class="string">"use strict"</span>;</span><br><span class="line"></span><br><span class="line">Object.defineProperty(exports, <span class="string">"__esModule"</span>, &#123;</span><br><span class="line">  value: <span class="literal">true</span></span><br><span class="line">&#125;);</span><br><span class="line">exports.default = void 0;</span><br><span class="line"></span><br><span class="line">var _default = (pkg = &#123;</span><br><span class="line">  version: <span class="string">"0.0.1"</span></span><br><span class="line">&#125;) =&gt; pkg.version;</span><br><span class="line"></span><br><span class="line">exports.default = _default;</span><br></pre></td></tr></table></figure><p>결과도 확인했다. 참고로 <code>-o</code> 옵션을 통해서 결과 파일명을 지정할 수 있다. 매우 잘된다.</p><h3><span id="흠-x1f914">흠… <span class="github-emoji" title="thinking" data-src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f914.png?v8">&#x1f914;</span></span></h3><p><code>index.ts</code> 파일에서 인터페이스를 선언할때 의도적으로 오타를 냈었다.</p><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">versionsss: <span class="built_in">string</span></span><br></pre></td></tr></table></figure><p>이 부분이다. 바벨은 그런거 모르고 타입스크립트 관련한 코드는 그냥 삭제하고 빌드한다. 타입과 관련된 어시스트는 타입스크립트가 처리해야한다.</p><p>그럼 타입스크트를 활용하기 위해 조금 더 가보자. <code>tsconfig.json</code> 파일을 생성하도록 하자.</p><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"compilerOptions"</span>: &#123;</span><br><span class="line">    <span class="string">"target"</span>: <span class="string">"es2018"</span>,</span><br><span class="line">    <span class="string">"noEmit"</span>: <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>설정은 대충 최신 스펙을 반영하기 위해 <code>es2018</code> 을 타겟으로 했다. 중요한 포인트는 <code>noEmit</code> 이다. 이를 통해 타입스크립트는 타입체킹만을 하며 실제로 빌드에선 제외시킨다.</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">tsc</span><br><span class="line">index.ts:1:33 - error TS2322: Type <span class="string">'&#123; version: string; &#125;'</span> is not assignable to <span class="built_in">type</span> <span class="string">'Package'</span>.</span><br><span class="line">  Object literal may only specify known properties, and <span class="string">'version'</span> does not exist <span class="keyword">in</span> <span class="built_in">type</span> <span class="string">'Package'</span>.</span><br><span class="line"></span><br><span class="line">1 <span class="built_in">export</span> default (pkg: Package = &#123;version: <span class="string">"0.0.1"</span>&#125;) =&gt; pkg.version</span><br><span class="line">                                  ~~~~~~~~~~~~~~~~</span><br><span class="line"></span><br><span class="line">index.ts:1:59 - error TS2339: Property <span class="string">'version'</span> does not exist on <span class="built_in">type</span> <span class="string">'Package'</span>.</span><br><span class="line"></span><br><span class="line">1 <span class="built_in">export</span> default (pkg: Package = &#123;version: <span class="string">"0.0.1"</span>&#125;) =&gt; pkg.version</span><br><span class="line">                                                            ~~~~~~~</span><br></pre></td></tr></table></figure><p>대충 위와 같은 에러가 날 것이다. 이를 통해 타입 체킹은 테스트 했고 <code>versionsss</code> 에서 <del>sss</del> 를 삭제하고 다시 <code>tsc</code> 를 실행한다. 그럼 아무 에러가 표시되지 않고 <code>js</code> 파일 또한 생성되지 않는다.</p><p>이제 타입스크립트를 통해서 어시스트만을 받고 빌드관련 설정은 바벨로 이관되어 깔끔하게 분리되어 서로의 역할을 한다.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2&gt;&lt;span id=&quot;babel7-x2764-typescript&quot;&gt;Babel@7 &lt;span class=&quot;github-emoji&quot; title=&quot;heart&quot; data-src=&quot;https://assets-cdn.github.com/images/icons
+      
+    
+    </summary>
+    
+    
+      <category term="babel7" scheme="http://blog.bglee.me/tags/babel7/"/>
+    
+      <category term="babel@7" scheme="http://blog.bglee.me/tags/babel-7/"/>
+    
+      <category term="typescript" scheme="http://blog.bglee.me/tags/typescript/"/>
+    
+      <category term="preset-typescript" scheme="http://blog.bglee.me/tags/preset-typescript/"/>
+    
+  </entry>
   
   <entry>
     <title>서버리스 프레임웍의 관리 이슈</title>
@@ -161,9 +190,9 @@
     
       <category term="aws" scheme="http://blog.bglee.me/tags/aws/"/>
     
-      <category term="cognito" scheme="http://blog.bglee.me/tags/cognito/"/>
-    
       <category term="dynamodb" scheme="http://blog.bglee.me/tags/dynamodb/"/>
+    
+      <category term="cognito" scheme="http://blog.bglee.me/tags/cognito/"/>
     
       <category term="amplify" scheme="http://blog.bglee.me/tags/amplify/"/>
     
@@ -196,9 +225,9 @@
     </summary>
     
     
-      <category term="react" scheme="http://blog.bglee.me/tags/react/"/>
-    
       <category term="typescript" scheme="http://blog.bglee.me/tags/typescript/"/>
+    
+      <category term="react" scheme="http://blog.bglee.me/tags/react/"/>
     
       <category term="monorepo" scheme="http://blog.bglee.me/tags/monorepo/"/>
     
@@ -405,9 +434,9 @@
     </summary>
     
     
-      <category term="typora" scheme="http://blog.bglee.me/tags/typora/"/>
-    
       <category term="hexo" scheme="http://blog.bglee.me/tags/hexo/"/>
+    
+      <category term="typora" scheme="http://blog.bglee.me/tags/typora/"/>
     
       <category term="typora image" scheme="http://blog.bglee.me/tags/typora-image/"/>
     
@@ -569,28 +598,6 @@
       <category term="dev" scheme="http://blog.bglee.me/categories/dev/"/>
     
       <category term="ts" scheme="http://blog.bglee.me/categories/dev/ts/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Texts 구현</title>
-    <link href="http://blog.bglee.me/posts/2017/texts/"/>
-    <id>http://blog.bglee.me/posts/2017/texts/</id>
-    <published>2017-05-07T15:00:00.000Z</published>
-    <updated>2018-03-29T06:03:19.633Z</updated>
-    
-    <content type="html"><![CDATA[<h1><span id="texts-구현"> 구현</span></h1><p><img src="https://lh3.googleusercontent.com/t_LQOLOXJ64l4zi05A_-By3QDDo7FIvWREe9meD6ZCuAUBlv8Y-DwyvzvShtR1v192sdYwfvgGG8e4S5pEsuAksPuyPj6MTBZBZvHvZIvMkyFH2j2I6_A4VIeZ3GOKyGigOg0dID1VQpXYTDkIDNJ_fFzjH39iPbM7p08KX1UWhOT02uU0yR0RK-3lH8obg57t9sohm4OUZVa-skdrOWh1U_qM_yKAiGhhkUIFBFAjCvdpmmiQIGk-zWX2MpVMHqkTDDbF9wyp87m2PbYegL5SuNTibFrYVTnRHfeCS8cA1uV7skajLXVK9cMuoKbSgyjMQAM3ZQ_kiaez78tvMz03tKKxtghcf4oyQHkHD3OIx15HdJad3W48oJxTBkyPO9DvR7r7dRVT4mGw70Tx1dZcYog6YeWPzXMCXl6SgO37QP3raxZMpkgbhWy5kzhbSmE-uIigUHUyiEo9gLhOwsVNwW1pzW9-LP4HDuwO7XGeVTep9SAaPCAIs4_SfiLwM3L0BoEPpxPPY7MBd-6FkofxblJsf_uset1CHbpT2xqUG2CHKO8Q79YJqgte5I34JK6mj42S89EDRO0lbg3VG769NRsbWuCLT4GWagjHJw5gpkdsvkC0xpszdilkBUprqzqy27ZbJti2I4VtBx53qlUOCDTKQdW_TN9NyH=w1139-h410-no" alt="" title="texts image"></p><blockquote><p>기획자 디자이너, 퍼블리셔와의 협업시 문구 변경으로 인한 피로를 덜기 위해 ID기반의 문구 관리를 앱</p></blockquote><h2><span id="동기">동기</span></h2><ul><li>부동산 계열에서 일을 하다보니 너무많은 term이 존재한다.</li><li>사소한 문구 변경이 데일리로 일어난다.</li><li>퍼블리셔 쪽에서도 html에 대한 이력관리를 원한다.</li><li>문구 변경과 markup의 변경이 구분되지 않는다.</li><li>react로 퍼블리싱하지 않는 이상 태그를 그대로 사용하지 못하므로 daily diff이슈가 존재한다.</li><li>여러 곳에서 동일하게 쓰이는 문구 변경이 일어난 경우 diff에 혼란이 있다.</li></ul><h2><span id="개발">개발</span></h2><blockquote><p>일단 퍼블리셔 쪽에서 <code>ID</code>를 사용하용하여 퍼블리싱 할 수 있게 끔 하는 것을 최우선으로 했다.</p></blockquote><ul><li>독립적으로 사용할 수 있도록 <a href="https://www.serverless.com" target="_blank" rel="noopener">serverless</a>를 통해 DB까지 한번에 deploy한다.</li><li>backend 엔드포인트만 사용자 별로 바꾸면 되니까 fe는 직접 만들어서 배포했다. <strong><a href="https://texts.surge.sh" target="_blank" rel="noopener">Texts</a></strong></li></ul><h2><span id="운영">운영</span></h2><h3><span id="기획스트링-관리-주체">기획(스트링 관리 주체)</span></h3><ul><li><a href="https://texts.surge.sh" target="_blank" rel="noopener">https://texts.surge.sh</a>?endpoint=https://[BACKEND_ENDPOINT] 접속</li><li>스트링 마음껏 만들고 잘 됬으면 deploy한다.</li></ul><h3><span id="퍼블리셔">퍼블리셔</span></h3><ul><li>퍼블리셔 쪽에서는 <code>&lt;div data-text-id=&quot;TEXT_ID&quot;/&gt;</code>와 같은 형식으로 퍼블리싱을 할 수 있게한다.</li><li>퍼블리셔는 눈으로 이를 확인할 수 있어야하므로 이를 치환해주는 태그를 서비스해준다. <strong><a href="https://texts-translator.surge.sh" title="texts" target="_blank" rel="noopener">Texts Translator</a></strong></li><li>퍼블리셔가 동적인 동작을 위해 <code>jQuery</code>태그를 심듯이 심어주면 동적으로 확인이 가능해준다.</li></ul><h3><span id="개발">개발</span></h3><ul><li>개발 버전에서는 퍼블리셔와 같이 태그를 심어서 스트링 관리주체가 변경하는 것을 즉각적으로 확인할 수 있게끔 한다.</li><li>프로덕션 릴리즈시에 아래 형식으로 저장해서 CI빌드시에 넣으면된다.</li></ul><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ http post https://[END_POINT]/json &gt; language_ko.json</span><br></pre></td></tr></table></figure><h2><span id="todos">todos</span></h2><ul><li>퍼블리셔쪽에 구문 변경으로 인한 스트레스에서 벗어나고 싶지않냐고 설득한다.</li><li>기획자분이 스트링을 관리할 수 있도록 제안하고 설득한다.</li></ul><h2><span id="히스토리">히스토리</span></h2><ul><li>표준을 이용할 수 있게 끔 <code>Intl</code>을 붙이려고 디자이너쪽에서 태그를 어떻게 사용하게 해야할지 감이 오지 않아 뒤로 미뤘다.</li></ul><h2><span id="장점">장점</span></h2><ul><li>퍼블에서도 모델을 분리한다.</li><li>모델, 디자인, 컨트롤의 물리적인 관리주체(부서)가 명확해 진다.</li></ul><h2><span id="단점">단점</span></h2><ul><li>서비스가 아니라 aws 설치 형태라 결국 나만의…</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      기획자 디자이너, 퍼블리셔와의 협업시 문구 변경으로 인한 피로를 덜기 위해 ID 기반의 문구 관리
-    
-    </summary>
-    
-      <category term="dev" scheme="http://blog.bglee.me/categories/dev/"/>
-    
-      <category term="js" scheme="http://blog.bglee.me/categories/dev/js/"/>
     
     
   </entry>
