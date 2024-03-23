@@ -1,0 +1,1107 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-ea177f1f1aa270b2.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","kubespray","c"]
+0:["LWg_oWSEeqb4cXC5n1vGm",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","kubespray","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"kubespray\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","kubespray","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+10:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+f:{"source":"kubespray","target":"kubespray"}
+11:T5779,<h1 id="kubespray">kubespray</h1>
+<h2 id="setup">setup</h2>
+<p>3대 이상의 vm(<a href="multipass">multipass</a> 참고) 준비
+<a href="multipass">multipass</a> 사용을 가정하기 때문에 ubuntu 를 기준으로 작성됨</p>
+<h3 id="dns">dns</h3>
+<pre><code class="hljs language-sh">sudo vi /etc/hosts
+<span class="hljs-comment"># 3대에 접근할 수 있도록 정보 설정</span>
+</code></pre><h3 id="configure-access-permission">configure access permission</h3>
+<pre><code class="hljs language-sh">ssh-keygen
+ssh-copy-id [name - /etc/hosts 에 기재한 이름]
+</code></pre><p><strong>자기 자신도 ansible 대상이라 함께 복사해야한다</strong></p>
+<blockquote><p>실패시</p></blockquote><pre><code class="hljs language-sh">ssh-keygen
+<span class="hljs-built_in">cat</span> ~/.ssh/id_rsa.pub <span class="hljs-comment"># 복사</span>
+vi ~/.ssh/authorized_keys <span class="hljs-comment"># 마지막 줄에 추가, /etc/hosts 에 설정한 컨트롤 플레인이 될 모든 노드에 대해 설정</span>
+ssh [name - /etc/hosts 에 기재한 이름] <span class="hljs-comment"># 접속 확인</span>
+</code></pre><h3 id="configure-kubespray">configure kubespray</h3>
+<pre><code class="hljs language-sh">git <span class="hljs-built_in">clone</span> -b v2.22.0 https://github.com/kubernetes-sigs/kubespray.git
+<span class="hljs-built_in">cd</span> kubespray
+sudo apt install python3-pip -y
+sudo pip3 install -r requirements.txt
+<span class="hljs-built_in">cp</span> -r inventory/sample inventory/pi
+vi inventory/pi/hosts.yml <span class="hljs-comment"># 설정은 kubespray 문서 참고</span>
+vi inventory/pi/group_vars/k8s_cluster/k8s-cluster.yml <span class="hljs-comment"># 설정은 kubespray 문서 참고</span>
+ansible-playbook -i inventory/pi/hosts.yml --become --become-user=root -v cluster.yml
+</code></pre><pre><code class="hljs language-yaml"><span class="hljs-attr">all:</span>
+  <span class="hljs-attr">hosts:</span>
+    <span class="hljs-attr">pi0:</span>
+      <span class="hljs-attr">ansible_host:</span> <span class="hljs-string">pi0</span>
+    <span class="hljs-attr">pi1:</span>
+      <span class="hljs-attr">ansible_host:</span> <span class="hljs-string">pi1</span>
+    <span class="hljs-attr">pi2:</span>
+      <span class="hljs-attr">ansible_host:</span> <span class="hljs-string">pi2</span>
+  <span class="hljs-attr">children:</span>
+    <span class="hljs-attr">kube_control_plane:</span>
+      <span class="hljs-attr">hosts:</span>
+        <span class="hljs-attr">pi0:</span>
+        <span class="hljs-attr">pi1:</span>
+        <span class="hljs-attr">pi2:</span>
+    <span class="hljs-attr">kube_node:</span>
+      <span class="hljs-attr">hosts:</span>
+        <span class="hljs-attr">pi0:</span>
+        <span class="hljs-attr">pi1:</span>
+        <span class="hljs-attr">pi2:</span>
+    <span class="hljs-attr">etcd:</span>
+      <span class="hljs-attr">hosts:</span>
+        <span class="hljs-attr">pi0:</span>
+        <span class="hljs-attr">pi1:</span>
+        <span class="hljs-attr">pi2:</span>
+    <span class="hljs-attr">k8s_cluster:</span>
+      <span class="hljs-attr">children:</span>
+        <span class="hljs-attr">kube_control_plane:</span>
+        <span class="hljs-attr">kube_node:</span>
+        <span class="hljs-attr">calico_rr:</span>
+    <span class="hljs-attr">calico_rr:</span>
+      <span class="hljs-attr">hosts:</span> {}
+</code></pre><pre><code class="hljs language-yaml"><span class="hljs-attr">kube_proxy_strlct_arp:</span> <span class="hljs-literal">true</span> <span class="hljs-comment"># MetalLB 설정</span>
+<span class="hljs-attr">kubernetes audit:</span> <span class="hljs-literal">true</span>
+</code></pre><h3 id="install-kubectl">install kubectl</h3>
+<pre><code class="hljs language-sh">sudo snap install kubectl --classic
+kubectl get nodes -o wide
+</code></pre><h3 id="configure-local-kubeconfig">configure local kube/config</h3>
+<p>여기는 localhost 기 때문에 물리적인 사용 컴퓨터, 나의 경우에는 mac 이다.
+<code class="span">kubectl</code> 이 깔려있다고 가정한다.</p>
+<pre><code class="hljs language-sh">vi ~/.kube/config <span class="hljs-comment"># vm 내의 `/root/.kube/config` 를 복사해온다, 모르겟으면 [multipass](multipass) mount 참조</span>
+<span class="hljs-comment"># clusters.cluster[].server 의 ip control-plane 의 ip로 교체한다.</span>
+<span class="hljs-comment"># 2022-11-27 책에서는 추가으로 아래 정보 수정을 하고 있는데 이건 여러 클러스터를 사용할때 로컬에서 구분하기 위한 거으로 생각된다.</span>
+<span class="hljs-comment"># - clusters.cluster[].name</span>
+<span class="hljs-comment"># - clusters.contexts[].context[].cluster</span>
+<span class="hljs-comment"># - clusters.contexts[].context[].user</span>
+<span class="hljs-comment"># - clusters.contexts[].name</span>
+<span class="hljs-comment"># - current-context</span>
+<span class="hljs-comment"># - users[].name</span>
+</code></pre><pre><code class="hljs language-sh">$ kubectl get nodes
+NAME     STATUS   ROLES           AGE   VERSION
+kube00   Ready    control-plane   31m   v1.25.4
+kube01   Ready    control-plane   30m   v1.25.4
+kube02   Ready    control-plane   30m   v1.25.4
+</code></pre><h3 id="error">error</h3>
+<pre><code class="hljs language-sh">The connection to the server localhost:8080 was refused - did you specify the right host or port?
+</code></pre><p><code class="span">ansible-playbook</code> 명령어를 실행할때 <code class="span">--become-user=root</code> 가 되어 있어 <code class="span">~/.kube/config</code> 가 <code class="span">root</code> 를 기준으로 생성된 것으로 생각된다.</p>
+<hr>
+<pre><code class="hljs language-sh">fatal: [kube02]: FAILED! =&gt; {<span class="hljs-string">&quot;changed&quot;</span>: <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;nf_conntrack_ipv4&quot;</span>, <span class="hljs-string">&quot;params&quot;</span>: <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;rc&quot;</span>: 1, <span class="hljs-string">&quot;state&quot;</span>: <span class="hljs-string">&quot;present&quot;</span>, <span class="hljs-string">&quot;stderr&quot;</span>: <span class="hljs-string">&quot;modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n&quot;</span>, <span class="hljs-string">&quot;stderr_lines&quot;</span>: [<span class="hljs-string">&quot;modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic&quot;</span>], <span class="hljs-string">&quot;stdout&quot;</span>: <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;stdout_lines&quot;</span>: []}
+</code></pre><pre><code class="hljs language-sh">fatal: [kube02]: FAILED! =&gt; {<span class="hljs-string">&quot;changed&quot;</span>: <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;nf_conntrack_ipv4&quot;</span>, <span class="hljs-string">&quot;params&quot;</span>: <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;rc&quot;</span>: 1, <span class="hljs-string">&quot;state&quot;</span>: <span class="hljs-string">&quot;present&quot;</span>, <span class="hljs-string">&quot;stderr&quot;</span>: <span class="hljs-string">&quot;modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n&quot;</span>, <span class="hljs-string">&quot;stderr_lines&quot;</span>: [<span class="hljs-string">&quot;modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic&quot;</span>], <span class="hljs-string">&quot;stdout&quot;</span>: <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;stdout_lines&quot;</span>: []}
+...ignoring
+Sunday 27 November 2022  17:37:38 +0900 (0:00:00.273)       0:11:17.710 *******
+
+TASK [kubernetes/node : Persist ip_vs modules] **************************************************************************************************************
+changed: [kube00] =&gt; {<span class="hljs-string">&quot;changed&quot;</span>: <span class="hljs-literal">true</span>, <span class="hljs-string">&quot;checksum&quot;</span>: <span class="hljs-string">&quot;963dae5d0f149158bd6b9a750827856f6f2382fd&quot;</span>, <span class="hljs-string">&quot;dest&quot;</span>: <span class="hljs-string">&quot;/etc/modules-load.d/kube_proxy-ipvs.conf&quot;</span>, <span class="hljs-string">&quot;gid&quot;</span>: 0, <span class="hljs-string">&quot;group&quot;</span>: <span class="hljs-string">&quot;root&quot;</span>, <span class="hljs-string">&quot;md5sum&quot;</span>: <span class="hljs-string">&quot;0f7f7753a47d8c043fb1f8043b65beb4&quot;</span>, <span class="hljs-string">&quot;mode&quot;</span>: <span class="hljs-string">&quot;0644&quot;</span>
+</code></pre><h2 id="ansible-playbook-커맨드-중에-보인-에러-메시지인데-무시해도-잘되었다"><code class="span">ansible-playbook</code> 커맨드 중에 보인 에러 메시지인데 무시해도 잘되었다.</h2>
+<pre><code class="hljs language-sh">fatal: [kube03]: FAILED! =&gt; {<span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;Missing sudo password&quot;</span>}
+</code></pre><pre><code class="hljs language-sh">ubuntu@kube00:~/kubespray$ ansible-playbook -i inventory/mycluster/hosts-new02.yml -b facts.yml
+[WARNING]: Skipping callback plugin <span class="hljs-string">&#x27;ara_default&#x27;</span>, unable to load
+
+PLAY [Gather facts] *************************************************************
+Thursday 22 December 2022  13:40:19 +0900 (0:00:00.012)       0:00:00.012 *****
+
+TASK [Gather minimal facts] *****************************************************
+ok: [kube00]
+ok: [kube02]
+ok: [kube01]
+fatal: [kube03]: FAILED! =&gt; {<span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;Missing sudo password&quot;</span>}
+</code></pre><p><code class="span">sudo -l</code> 커맨트를 통해 나오는 순서가 의미가 있으며 오버라이딩 되어 다르게 동작 할 수 있다.  </p>
+<ul>
+<li><a href="https://github.com/ansible/ansible/issues/71939#issuecomment-702185274" target="_blank">[URL] https://github.com/ansible/ansible/issues/71939#issuecomment-702185274</a>
+유저에 대한 권한을 맨 아랫줄로 옮겨서 주니 해결됨 과 같은 상태가 되었으며 <a href="kubespray">kubespray</a> 가 정상 동작했다.</li>
+</ul>
+<pre><code class="hljs language-text"># User privilege specification
+root    ALL=(ALL:ALL) ALL
+# ! 문제 영역
+# ubuntu  ALL=(ALL) NOPASSWD: ALL
+
+# Members of the admin group may gain root privileges
+%admin ALL=(ALL) ALL
+
+# Allow members of group sudo to execute any command
+%sudo   ALL=(ALL:ALL) ALL
+
+# See sudoers(5) for more information on &quot;@include&quot; directives:
+# +update: 2022-12-29 ! 이동 후 해결된 영역
+ubuntu  ALL=(ALL) NOPASSWD: ALL
+# -update: 2022-12-29
+
+@includedir /etc/sudoers.d
+# ! 이동 후 해결된 영역
+ubuntu  ALL=(ALL) NOPASSWD: ALL
+</code></pre><h3 id="문제상황">문제상황</h3>
+<pre><code class="hljs language-sh">ubuntu@kube03:~$ sudo -l
+Matching Defaults entries <span class="hljs-keyword">for</span> ubuntu on kube03:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User ubuntu may run the following commands on kube03:
+    (ALL) NOPASSWD: ALL
+    (ALL : ALL) ALL
+ubuntu@kube03:~$ !v
+vi /etc/sudoers
+ubuntu@kube03:~$ sudo vi /etc/sudoers
+</code></pre><h3 id="해결됨">해결됨</h3>
+<pre><code class="hljs language-sh">ubuntu@kube03:~$ sudo -l
+Matching Defaults entries <span class="hljs-keyword">for</span> ubuntu on kube03:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User ubuntu may run the following commands on kube03:
+    (ALL : ALL) ALL
+    (ALL) NOPASSWD: ALL
+ubuntu@kube03:~$
+</code></pre><hr>
+<pre><code class="hljs language-sh">fatal: [kube03]: FAILED! =&gt; {<span class="hljs-string">&quot;changed&quot;</span>: <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;elapsed&quot;</span>: 300, <span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;Timeout when waiting for file /etc/cni/net.d/calico-kubeconfig&quot;</span>}
+</code></pre><hr>
+<pre><code class="hljs language-sh">fatal: [pi0]: FAILED! =&gt; {<span class="hljs-string">&quot;changed&quot;</span>: <span class="hljs-literal">false</span>, <span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;modprobe: FATAL: Module dummy not found in directory /lib/modules/5.15.0-1012-raspi\n&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;dummy&quot;</span>, <span class="hljs-string">&quot;params&quot;</span>: <span class="hljs-string">&quot;numdummies=0&quot;</span>, <span class="hljs-string">&quot;rc&quot;</span>: 1, <span class="hljs-string">&quot;state&quot;</span>: <span class="hljs-string">&quot;present&quot;</span>, <span class="hljs-string">&quot;stderr&quot;</span>: <span class="hljs-string">&quot;modprobe: FATAL: Module dummy not found in directory /lib/modules/5.15.0-1012-raspi\n&quot;</span>, <span class="hljs-string">&quot;stderr_lines&quot;</span>: [<span class="hljs-string">&quot;modprobe: FATAL: Module dummy not found in directory /lib/modules/5.15.0-1012-raspi&quot;</span>], <span class="hljs-string">&quot;stdout&quot;</span>: <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;stdout_lines&quot;</span>: []}
+</code></pre><ul>
+<li>답을 찾지 못한 상태, ubuntu 22.04 -&gt; ubuntu 20.04 로 다운그레이드함</li>
+</ul>
+<hr>
+<pre><code class="hljs language-sh">Failed to connect to the host via ssh: ssh: Could not resolve hostname pi2: Temporary failure <span class="hljs-keyword">in</span> name resolution<span class="hljs-string">&quot;</span>
+</code></pre><p>/etc/hosts 나 dhcp 서버서 resolv가 안되는 것으로 보인다</p>
+<hr>
+<pre><code class="hljs language-sh">the output has been hidden due to the fact that <span class="hljs-string">&#x27;no_log: true&#x27;</span> was specified <span class="hljs-keyword">for</span> this result<span class="hljs-string">&quot;</span>
+</code></pre><p>설치시에 노드 중 다른 아키텍쳐가 있으면 발생하는 것으로 생각됨, eg) control-plane (arm) + worker node (x86) 조합</p>
+<hr>
+<pre><code class="hljs language-sh">TASK [etcd : Configure | Wait <span class="hljs-keyword">for</span> etcd cluster to be healthy] ***********************************************************************************************************************************************************************
+task path: /Users/deptno/workspace/src/github.com/kubespray/roles/etcd/tasks/configure.yml:82
+fatal: [pi0]: FAILED! =&gt; {
+    <span class="hljs-string">&quot;attempts&quot;</span>: 4,
+    <span class="hljs-string">&quot;changed&quot;</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-string">&quot;cmd&quot;</span>: <span class="hljs-string">&quot;set -o pipefail &amp;&amp; /usr/local/bin/etcdctl endpoint --cluster status &amp;&amp; /usr/local/bin/etcdctl endpoint --cluster health 2&gt;&amp;1 | grep -v &#x27;Error: unhealthy cluster&#x27; &gt;/dev/null&quot;</span>,
+    <span class="hljs-string">&quot;delta&quot;</span>: <span class="hljs-string">&quot;0:00:05.194729&quot;</span>,
+    <span class="hljs-string">&quot;end&quot;</span>: <span class="hljs-string">&quot;2022-12-30 11:54:44.046275&quot;</span>,
+    <span class="hljs-string">&quot;invocation&quot;</span>: {
+        <span class="hljs-string">&quot;module_args&quot;</span>: {
+            <span class="hljs-string">&quot;_raw_params&quot;</span>: <span class="hljs-string">&quot;set -o pipefail &amp;&amp; /usr/local/bin/etcdctl endpoint --cluster status &amp;&amp; /usr/local/bin/etcdctl endpoint --cluster health 2&gt;&amp;1 | grep -v &#x27;Error: unhealthy cluster&#x27; &gt;/dev/null&quot;</span>,
+            <span class="hljs-string">&quot;_uses_shell&quot;</span>: <span class="hljs-literal">true</span>,
+            <span class="hljs-string">&quot;argv&quot;</span>: null,
+            <span class="hljs-string">&quot;chdir&quot;</span>: null,
+            <span class="hljs-string">&quot;creates&quot;</span>: null,
+            <span class="hljs-string">&quot;executable&quot;</span>: <span class="hljs-string">&quot;/bin/bash&quot;</span>,
+            <span class="hljs-string">&quot;removes&quot;</span>: null,
+            <span class="hljs-string">&quot;stdin&quot;</span>: null,
+            <span class="hljs-string">&quot;stdin_add_newline&quot;</span>: <span class="hljs-literal">true</span>,
+            <span class="hljs-string">&quot;strip_empty_ends&quot;</span>: <span class="hljs-literal">true</span>,
+            <span class="hljs-string">&quot;warn&quot;</span>: <span class="hljs-literal">false</span>
+        }
+    },
+    <span class="hljs-string">&quot;msg&quot;</span>: <span class="hljs-string">&quot;non-zero return code&quot;</span>,
+    <span class="hljs-string">&quot;rc&quot;</span>: 1,
+    <span class="hljs-string">&quot;start&quot;</span>: <span class="hljs-string">&quot;2022-12-30 11:54:38.851546&quot;</span>,
+    <span class="hljs-string">&quot;stderr&quot;</span>: <span class="hljs-string">&quot;{\&quot;level\&quot;:\&quot;warn\&quot;,\&quot;ts\&quot;:\&quot;2022-12-30T11:54:43.954+0900\&quot;,\&quot;logger\&quot;:\&quot;etcd-client\&quot;,\&quot;caller\&quot;:\&quot;v3@v3.5.6/retry_interceptor.go:62\&quot;,\&quot;msg\&quot;:\&quot;retrying of unary invoker failed\&quot;,\&quot;target\&quot;:\&quot;etcd-endpoints://0x40000d4c40/192.168.0.74:2379\&quot;,\&quot;attempt\&quot;:0,\&quot;error\&quot;:\&quot;rpc error: code = DeadlineExceeded desc = context deadline exceeded\&quot;}\nFailed to get the status of endpoint https://192.168.0.78:2379 (context deadline exceeded)&quot;</span>,
+    <span class="hljs-string">&quot;stderr_lines&quot;</span>: [
+        <span class="hljs-string">&quot;{\&quot;level\&quot;:\&quot;warn\&quot;,\&quot;ts\&quot;:\&quot;2022-12-30T11:54:43.954+0900\&quot;,\&quot;logger\&quot;:\&quot;etcd-client\&quot;,\&quot;caller\&quot;:\&quot;v3@v3.5.6/retry_interceptor.go:62\&quot;,\&quot;msg\&quot;:\&quot;retrying of unary invoker failed\&quot;,\&quot;target\&quot;:\&quot;etcd-endpoints://0x40000d4c40/192.168.0.74:2379\&quot;,\&quot;attempt\&quot;:0,\&quot;error\&quot;:\&quot;rpc error: code = DeadlineExceeded desc = context deadline exceeded\&quot;}&quot;</span>,
+        <span class="hljs-string">&quot;Failed to get the status of endpoint https://192.168.0.78:2379 (context deadline exceeded)&quot;</span>
+    ],
+    <span class="hljs-string">&quot;stdout&quot;</span>: <span class="hljs-string">&quot;https://192.168.0.77:2379, afd0f05f33356a3a, 3.5.6, 20 kB, false, false, 9, 30, 30, \nhttps://192.168.0.74:2379, f0a124daf3245703, 3.5.6, 20 kB, true, false, 9, 30, 30, &quot;</span>,
+    <span class="hljs-string">&quot;stdout_lines&quot;</span>: [
+        <span class="hljs-string">&quot;https://192.168.0.77:2379, afd0f05f33356a3a, 3.5.6, 20 kB, false, false, 9, 30, 30, &quot;</span>,
+        <span class="hljs-string">&quot;https://192.168.0.74:2379, f0a124daf3245703, 3.5.6, 20 kB, true, false, 9, 30, 30, &quot;</span>
+    ]
+}
+</code></pre><pre><code class="hljs language-sh">sudo service ufw stop
+sudo vi /etc/hosts
+</code></pre><ul>
+<li><input checked="" disabled="" type="checkbox"> 방화벽 해제</li>
+<li><input checked="" disabled="" type="checkbox"> <code class="span">sudo vi /etc/hosts</code> 호스트간 명시 이후 에러메시지 변함 -&gt; 재시작 하니 같음</li>
+</ul>
+<pre><code class="hljs language-sh">fatal: [pi0]: FAILED! =&gt; {
+    <span class="hljs-string">&quot;attempts&quot;</span>: 5,
+    <span class="hljs-string">&quot;changed&quot;</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-string">&quot;cmd&quot;</span>: [
+        <span class="hljs-string">&quot;/usr/local/bin/kubeadm&quot;</span>,
+        <span class="hljs-string">&quot;--kubeconfig&quot;</span>,
+        <span class="hljs-string">&quot;/etc/kubernetes/admin.conf&quot;</span>,
+        <span class="hljs-string">&quot;token&quot;</span>,
+        <span class="hljs-string">&quot;create&quot;</span>
+    ],
+    <span class="hljs-string">&quot;delta&quot;</span>: <span class="hljs-string">&quot;0:01:15.145403&quot;</span>,
+    <span class="hljs-string">&quot;end&quot;</span>: <span class="hljs-string">&quot;2022-12-30 12:25:47.954213&quot;</span>,
+    <span class="hljs-string">&quot;invocation&quot;</span>: {
+        <span class="hljs-string">&quot;module_args&quot;</span>: {
+            <span class="hljs-string">&quot;_raw_hello_exchange: master version 4\r\ndebug3: mux_client_forwards: request forwardings: 0 local, 0 remote\r\ndebug3: mux_client_request_session: entering\r\ndebug3: mux_client_request_alive: entering\r\ndebug3: mux_client_request_alive: done pid = 82745\r\ndebug3: mux_client_request_session: session request sent\r\ndebug1: mux_client_request_session: master session id: 4\r\ndebug3: mux_client_read_packet: read header failed: Broken pipe\r\ndebug2: Received exit status from master 1\r\n&quot;</span>)
+</code></pre><ul>
+<li><input checked="" disabled="" type="checkbox"> <code class="span">declare IPS</code> 로 control-plane ip 설정 -&gt; 실패</li>
+<li><input disabled="" type="checkbox"> `ansible-playbook [....] --private-key=~/.ssh/[private key]</li>
+<li><input disabled="" type="checkbox"> 해결 안됨</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="multipass">multipass</a></li>
+<li><a href="kubectl">kubectl</a></li>
+<li><a href="sudo">sudo</a></li>
+<li><a href="book/24-steps-k8s">book/24-steps-k8s</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/a2386f2\n","className":"bg-white text-black","children":"a2386f2"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/kubespray.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/kubespray.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/kubespray.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"kubespray","name":"kubespray","val":8},{"id":"multipass","name":"multipass","val":1},{"id":"kubectl","name":"kubectl","val":7},{"id":"sudo","name":"sudo","val":3},{"id":"book/24-steps-k8s","name":"book/24-steps-k8s","val":13},{"id":"kubernetes","name":"kubernetes","val":39},{"id":"raspberry-pi","name":"raspberry-pi","val":6},{"id":"diary/2022-11-27","name":"diary/2022-11-27","val":3},{"id":"diary/2022-12-28","name":"diary/2022-12-28","val":1}],"links":[{"source":"kubespray","target":"multipass"},{"source":"kubespray","target":"multipass"},{"source":"kubespray","target":"multipass"},{"source":"kubespray","target":"kubespray"},{"source":"kubespray","target":"multipass"},{"source":"kubespray","target":"kubectl"},{"source":"kubespray","target":"sudo"},{"source":"kubespray","target":"book/24-steps-k8s"},{"source":"kubernetes","target":"kubespray"},"$f",{"source":"multipass","target":"kubespray"},{"source":"raspberry-pi","target":"kubespray"},{"source":"sudo","target":"kubespray"},{"source":"book/24-steps-k8s","target":"kubespray"},{"source":"book/24-steps-k8s","target":"kubespray"},{"source":"book/24-steps-k8s","target":"kubespray"},{"source":"diary/2022-11-27","target":"kubespray"},{"source":"diary/2022-12-28","target":"kubespray"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","kubespray",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/kubespray","children":[["$","span",null,{"className":"underline","children":"kubespray"}],["$","sup",null,{"children":8}]]}]}],["$","span","multipass",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/multipass","children":[["$","span",null,{"className":"underline","children":"multipass"}],["$","sup",null,{"children":1}]]}]}],["$","span","kubectl",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/kubectl","children":[["$","span",null,{"className":"underline","children":"kubectl"}],["$","sup",null,{"children":7}]]}]}],["$","span","sudo",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/sudo","children":[["$","span",null,{"className":"underline","children":"sudo"}],["$","sup",null,{"children":3}]]}]}],["$","span","book/24-steps-k8s",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/book/24-steps-k8s","children":[["$","span",null,{"className":"underline","children":"book/24-steps-k8s"}],["$","sup",null,{"children":13}]]}]}],["$","span","kubernetes",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/kubernetes","children":[["$","span",null,{"className":"underline","children":"kubernetes"}],["$","sup",null,{"children":39}]]}]}],["$","span","raspberry-pi",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/raspberry-pi","children":[["$","span",null,{"className":"underline","children":"raspberry-pi"}],["$","sup",null,{"children":6}]]}]}],["$","span","diary/2022-11-27",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/diary/2022-11-27","children":[["$","span",null,{"className":"underline","children":"diary/2022-11-27"}],["$","sup",null,{"children":3}]]}]}],["$","span","diary/2022-12-28",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/diary/2022-12-28","children":[["$","span",null,{"className":"underline","children":"diary/2022-12-28"}],["$","sup",null,{"children":1}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","kubespray",{"className":"pl-0","children":["$","a",null,{"href":"#kubespray","children":"kubespray"}]}],["$","div","setup",{"className":"pl-2","children":["$","a",null,{"href":"#setup","children":"setup"}]}],["$","div","dns",{"className":"pl-4","children":["$","a",null,{"href":"#dns","children":"dns"}]}],["$","div","configure-access-permission",{"className":"pl-4","children":["$","a",null,{"href":"#configure-access-permission","children":"configure access permission"}]}],["$","div","configure-kubespray",{"className":"pl-4","children":["$","a",null,{"href":"#configure-kubespray","children":"configure kubespray"}]}],["$","div","install-kubectl",{"className":"pl-4","children":["$","a",null,{"href":"#install-kubectl","children":"install kubectl"}]}],["$","div","configure-local-kubeconfig",{"className":"pl-4","children":["$","a",null,{"href":"#configure-local-kubeconfig","children":"configure local kube/config"}]}],["$","div","error",{"className":"pl-4","children":["$","a",null,{"href":"#error","children":"error"}]}],["$","div","ansible-playbook-커맨드-중에-보인-에러-메시지인데-무시해도-잘되었다",{"className":"pl-2","children":["$","a",null,{"href":"#ansible-playbook-커맨드-중에-보인-에러-메시지인데-무시해도-잘되었다","children":"ansible-playbook 커맨드 중에 보인 에러 메시지인데 무시해도 잘되었다."}]}],["$","div","문제상황",{"className":"pl-4","children":["$","a",null,{"href":"#문제상황","children":"문제상황"}]}],["$","div","해결됨",{"className":"pl-4","children":["$","a",null,{"href":"#해결됨","children":"해결됨"}]}],["$","div","link",{"className":"pl-2","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$11"}}]]}]]
+12:T2ea3,
+## setup
+3대 이상의 vm([[multipass]] 참고) 준비
+[[multipass]] 사용을 가정하기 때문에 ubuntu 를 기준으로 작성됨
+
+### dns
+```sh
+sudo vi /etc/hosts
+# 3대에 접근할 수 있도록 정보 설정
+```
+
+### configure access permission
+```sh
+ssh-keygen
+ssh-copy-id [name - /etc/hosts 에 기재한 이름]
+```
+
+**자기 자신도 ansible 대상이라 함께 복사해야한다**
+
+> 실패시
+```sh
+ssh-keygen
+cat ~/.ssh/id_rsa.pub # 복사
+vi ~/.ssh/authorized_keys # 마지막 줄에 추가, /etc/hosts 에 설정한 컨트롤 플레인이 될 모든 노드에 대해 설정
+ssh [name - /etc/hosts 에 기재한 이름] # 접속 확인
+```
+
+### configure kubespray
+```sh
+git clone -b v2.22.0 https://github.com/kubernetes-sigs/kubespray.git
+cd kubespray
+sudo apt install python3-pip -y
+sudo pip3 install -r requirements.txt
+cp -r inventory/sample inventory/pi
+vi inventory/pi/hosts.yml # 설정은 kubespray 문서 참고
+vi inventory/pi/group_vars/k8s_cluster/k8s-cluster.yml # 설정은 kubespray 문서 참고
+ansible-playbook -i inventory/pi/hosts.yml --become --become-user=root -v cluster.yml
+```
+
+```yaml inventory/pi/hosts.yml
+all:
+  hosts:
+    pi0:
+      ansible_host: pi0
+    pi1:
+      ansible_host: pi1
+    pi2:
+      ansible_host: pi2
+  children:
+    kube_control_plane:
+      hosts:
+        pi0:
+        pi1:
+        pi2:
+    kube_node:
+      hosts:
+        pi0:
+        pi1:
+        pi2:
+    etcd:
+      hosts:
+        pi0:
+        pi1:
+        pi2:
+    k8s_cluster:
+      children:
+        kube_control_plane:
+        kube_node:
+        calico_rr:
+    calico_rr:
+      hosts: {}
+```
+```yaml k8s-cluster.yml
+kube_proxy_strlct_arp: true # MetalLB 설정
+kubernetes audit: true
+```
+
+### install kubectl
+```sh
+sudo snap install kubectl --classic
+kubectl get nodes -o wide
+```
+
+### configure local kube/config
+여기는 localhost 기 때문에 물리적인 사용 컴퓨터, 나의 경우에는 mac 이다.
+`kubectl` 이 깔려있다고 가정한다.
+
+```sh
+vi ~/.kube/config # vm 내의 `/root/.kube/config` 를 복사해온다, 모르겟으면 [[multipass]] mount 참조
+# clusters.cluster[].server 의 ip control-plane 의 ip로 교체한다.
+# 2022-11-27 책에서는 추가으로 아래 정보 수정을 하고 있는데 이건 여러 클러스터를 사용할때 로컬에서 구분하기 위한 거으로 생각된다.
+# - clusters.cluster[].name
+# - clusters.contexts[].context[].cluster
+# - clusters.contexts[].context[].user
+# - clusters.contexts[].name
+# - current-context
+# - users[].name
+```
+```sh 
+$ kubectl get nodes
+NAME     STATUS   ROLES           AGE   VERSION
+kube00   Ready    control-plane   31m   v1.25.4
+kube01   Ready    control-plane   30m   v1.25.4
+kube02   Ready    control-plane   30m   v1.25.4
+```
+
+### error
+```sh
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+```
+`ansible-playbook` 명령어를 실행할때 `--become-user=root` 가 되어 있어 `~/.kube/config` 가 `root` 를 기준으로 생성된 것으로 생각된다.
+
+---
+```sh
+fatal: [kube02]: FAILED! => {"changed": false, "msg": "modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n", "name": "nf_conntrack_ipv4", "params": "", "rc": 1, "state": "present", "stderr": "modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n", "stderr_lines": ["modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic"], "stdout": "", "stdout_lines": []}
+```
+```sh
+fatal: [kube02]: FAILED! => {"changed": false, "msg": "modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n", "name": "nf_conntrack_ipv4", "params": "", "rc": 1, "state": "present", "stderr": "modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n", "stderr_lines": ["modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic"], "stdout": "", "stdout_lines": []}
+...ignoring
+Sunday 27 November 2022  17:37:38 +0900 (0:00:00.273)       0:11:17.710 *******
+
+TASK [kubernetes/node : Persist ip_vs modules] **************************************************************************************************************
+changed: [kube00] => {"changed": true, "checksum": "963dae5d0f149158bd6b9a750827856f6f2382fd", "dest": "/etc/modules-load.d/kube_proxy-ipvs.conf", "gid": 0, "group": "root", "md5sum": "0f7f7753a47d8c043fb1f8043b65beb4", "mode": "0644"
+```
+`ansible-playbook` 커맨드 중에 보인 에러 메시지인데 무시해도 잘되었다.
+---
+```sh
+fatal: [kube03]: FAILED! => {"msg": "Missing sudo password"}
+```
+```sh
+ubuntu@kube00:~/kubespray$ ansible-playbook -i inventory/mycluster/hosts-new02.yml -b facts.yml
+[WARNING]: Skipping callback plugin 'ara_default', unable to load
+
+PLAY [Gather facts] *************************************************************
+Thursday 22 December 2022  13:40:19 +0900 (0:00:00.012)       0:00:00.012 *****
+
+TASK [Gather minimal facts] *****************************************************
+ok: [kube00]
+ok: [kube02]
+ok: [kube01]
+fatal: [kube03]: FAILED! => {"msg": "Missing sudo password"}
+```
+
+`sudo -l` 커맨트를 통해 나오는 순서가 의미가 있으며 오버라이딩 되어 다르게 동작 할 수 있다.  
+- https://github.com/ansible/ansible/issues/71939#issuecomment-702185274
+유저에 대한 권한을 맨 아랫줄로 옮겨서 주니 해결됨 과 같은 상태가 되었으며 [[kubespray]] 가 정상 동작했다.
+
+```text /etc/sudoers
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+# ! 문제 영역
+# ubuntu  ALL=(ALL) NOPASSWD: ALL
+
+# Members of the admin group may gain root privileges
+%admin ALL=(ALL) ALL
+
+# Allow members of group sudo to execute any command
+%sudo   ALL=(ALL:ALL) ALL
+
+# See sudoers(5) for more information on "@include" directives:
+# +update: 2022-12-29 ! 이동 후 해결된 영역
+ubuntu  ALL=(ALL) NOPASSWD: ALL
+# -update: 2022-12-29
+
+@includedir /etc/sudoers.d
+# ! 이동 후 해결된 영역
+ubuntu  ALL=(ALL) NOPASSWD: ALL
+```
+
+### 문제상황
+```sh 
+ubuntu@kube03:~$ sudo -l
+Matching Defaults entries for ubuntu on kube03:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User ubuntu may run the following commands on kube03:
+    (ALL) NOPASSWD: ALL
+    (ALL : ALL) ALL
+ubuntu@kube03:~$ !v
+vi /etc/sudoers
+ubuntu@kube03:~$ sudo vi /etc/sudoers
+```
+
+### 해결됨
+```sh
+ubuntu@kube03:~$ sudo -l
+Matching Defaults entries for ubuntu on kube03:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User ubuntu may run the following commands on kube03:
+    (ALL : ALL) ALL
+    (ALL) NOPASSWD: ALL
+ubuntu@kube03:~$
+```
+---
+```sh
+fatal: [kube03]: FAILED! => {"changed": false, "elapsed": 300, "msg": "Timeout when waiting for file /etc/cni/net.d/calico-kubeconfig"}
+```
+---
+```sh 
+fatal: [pi0]: FAILED! => {"changed": false, "msg": "modprobe: FATAL: Module dummy not found in directory /lib/modules/5.15.0-1012-raspi\n", "name": "dummy", "params": "numdummies=0", "rc": 1, "state": "present", "stderr": "modprobe: FATAL: Module dummy not found in directory /lib/modules/5.15.0-1012-raspi\n", "stderr_lines": ["modprobe: FATAL: Module dummy not found in directory /lib/modules/5.15.0-1012-raspi"], "stdout": "", "stdout_lines": []}
+```
+- 답을 찾지 못한 상태, ubuntu 22.04 -> ubuntu 20.04 로 다운그레이드함
+---
+```sh
+Failed to connect to the host via ssh: ssh: Could not resolve hostname pi2: Temporary failure in name resolution"
+```
+/etc/hosts 나 dhcp 서버서 resolv가 안되는 것으로 보인다
+
+---
+```sh 
+the output has been hidden due to the fact that 'no_log: true' was specified for this result"
+```
+설치시에 노드 중 다른 아키텍쳐가 있으면 발생하는 것으로 생각됨, eg) control-plane (arm) + worker node (x86) 조합
+
+---
+```sh 
+TASK [etcd : Configure | Wait for etcd cluster to be healthy] ***********************************************************************************************************************************************************************
+task path: /Users/deptno/workspace/src/github.com/kubespray/roles/etcd/tasks/configure.yml:82
+fatal: [pi0]: FAILED! => {
+    "attempts": 4,
+    "changed": false,
+    "cmd": "set -o pipefail && /usr/local/bin/etcdctl endpoint --cluster status && /usr/local/bin/etcdctl endpoint --cluster health 2>&1 | grep -v 'Error: unhealthy cluster' >/dev/null",
+    "delta": "0:00:05.194729",
+    "end": "2022-12-30 11:54:44.046275",
+    "invocation": {
+        "module_args": {
+            "_raw_params": "set -o pipefail && /usr/local/bin/etcdctl endpoint --cluster status && /usr/local/bin/etcdctl endpoint --cluster health 2>&1 | grep -v 'Error: unhealthy cluster' >/dev/null",
+            "_uses_shell": true,
+            "argv": null,
+            "chdir": null,
+            "creates": null,
+            "executable": "/bin/bash",
+            "removes": null,
+            "stdin": null,
+            "stdin_add_newline": true,
+            "strip_empty_ends": true,
+            "warn": false
+        }
+    },
+    "msg": "non-zero return code",
+    "rc": 1,
+    "start": "2022-12-30 11:54:38.851546",
+    "stderr": "{\"level\":\"warn\",\"ts\":\"2022-12-30T11:54:43.954+0900\",\"logger\":\"etcd-client\",\"caller\":\"v3@v3.5.6/retry_interceptor.go:62\",\"msg\":\"retrying of unary invoker failed\",\"target\":\"etcd-endpoints://0x40000d4c40/192.168.0.74:2379\",\"attempt\":0,\"error\":\"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"}\nFailed to get the status of endpoint https://192.168.0.78:2379 (context deadline exceeded)",
+    "stderr_lines": [
+        "{\"level\":\"warn\",\"ts\":\"2022-12-30T11:54:43.954+0900\",\"logger\":\"etcd-client\",\"caller\":\"v3@v3.5.6/retry_interceptor.go:62\",\"msg\":\"retrying of unary invoker failed\",\"target\":\"etcd-endpoints://0x40000d4c40/192.168.0.74:2379\",\"attempt\":0,\"error\":\"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"}",
+        "Failed to get the status of endpoint https://192.168.0.78:2379 (context deadline exceeded)"
+    ],
+    "stdout": "https://192.168.0.77:2379, afd0f05f33356a3a, 3.5.6, 20 kB, false, false, 9, 30, 30, \nhttps://192.168.0.74:2379, f0a124daf3245703, 3.5.6, 20 kB, true, false, 9, 30, 30, ",
+    "stdout_lines": [
+        "https://192.168.0.77:2379, afd0f05f33356a3a, 3.5.6, 20 kB, false, false, 9, 30, 30, ",
+        "https://192.168.0.74:2379, f0a124daf3245703, 3.5.6, 20 kB, true, false, 9, 30, 30, "
+    ]
+}
+
+```
+```sh 
+sudo service ufw stop
+sudo vi /etc/hosts
+```
+- [X] 방화벽 해제
+- [X] `sudo vi /etc/hosts` 호스트간 명시 이후 에러메시지 변함 -> 재시작 하니 같음
+```sh 
+fatal: [pi0]: FAILED! => {
+    "attempts": 5,
+    "changed": false,
+    "cmd": [
+        "/usr/local/bin/kubeadm",
+        "--kubeconfig",
+        "/etc/kubernetes/admin.conf",
+        "token",
+        "create"
+    ],
+    "delta": "0:01:15.145403",
+    "end": "2022-12-30 12:25:47.954213",
+    "invocation": {
+        "module_args": {
+            "_raw_hello_exchange: master version 4\r\ndebug3: mux_client_forwards: request forwardings: 0 local, 0 remote\r\ndebug3: mux_client_request_session: entering\r\ndebug3: mux_client_request_alive: entering\r\ndebug3: mux_client_request_alive: done pid = 82745\r\ndebug3: mux_client_request_session: session request sent\r\ndebug1: mux_client_request_session: master session id: 4\r\ndebug3: mux_client_read_packet: read header failed: Broken pipe\r\ndebug2: Received exit status from master 1\r\n")
+```
+- [X] `declare IPS` 로 control-plane ip 설정 -> 실패
+- [ ] `ansible-playbook [....] --private-key=~/.ssh/[private key]
+- [ ] 해결 안됨
+## link
+- [[multipass]]
+- [[kubectl]]
+- [[sudo]]
+- [[book/24-steps-k8s]]
+13:T2ea3,
+## setup
+3대 이상의 vm([[multipass]] 참고) 준비
+[[multipass]] 사용을 가정하기 때문에 ubuntu 를 기준으로 작성됨
+
+### dns
+```sh
+sudo vi /etc/hosts
+# 3대에 접근할 수 있도록 정보 설정
+```
+
+### configure access permission
+```sh
+ssh-keygen
+ssh-copy-id [name - /etc/hosts 에 기재한 이름]
+```
+
+**자기 자신도 ansible 대상이라 함께 복사해야한다**
+
+> 실패시
+```sh
+ssh-keygen
+cat ~/.ssh/id_rsa.pub # 복사
+vi ~/.ssh/authorized_keys # 마지막 줄에 추가, /etc/hosts 에 설정한 컨트롤 플레인이 될 모든 노드에 대해 설정
+ssh [name - /etc/hosts 에 기재한 이름] # 접속 확인
+```
+
+### configure kubespray
+```sh
+git clone -b v2.22.0 https://github.com/kubernetes-sigs/kubespray.git
+cd kubespray
+sudo apt install python3-pip -y
+sudo pip3 install -r requirements.txt
+cp -r inventory/sample inventory/pi
+vi inventory/pi/hosts.yml # 설정은 kubespray 문서 참고
+vi inventory/pi/group_vars/k8s_cluster/k8s-cluster.yml # 설정은 kubespray 문서 참고
+ansible-playbook -i inventory/pi/hosts.yml --become --become-user=root -v cluster.yml
+```
+
+```yaml inventory/pi/hosts.yml
+all:
+  hosts:
+    pi0:
+      ansible_host: pi0
+    pi1:
+      ansible_host: pi1
+    pi2:
+      ansible_host: pi2
+  children:
+    kube_control_plane:
+      hosts:
+        pi0:
+        pi1:
+        pi2:
+    kube_node:
+      hosts:
+        pi0:
+        pi1:
+        pi2:
+    etcd:
+      hosts:
+        pi0:
+        pi1:
+        pi2:
+    k8s_cluster:
+      children:
+        kube_control_plane:
+        kube_node:
+        calico_rr:
+    calico_rr:
+      hosts: {}
+```
+```yaml k8s-cluster.yml
+kube_proxy_strlct_arp: true # MetalLB 설정
+kubernetes audit: true
+```
+
+### install kubectl
+```sh
+sudo snap install kubectl --classic
+kubectl get nodes -o wide
+```
+
+### configure local kube/config
+여기는 localhost 기 때문에 물리적인 사용 컴퓨터, 나의 경우에는 mac 이다.
+`kubectl` 이 깔려있다고 가정한다.
+
+```sh
+vi ~/.kube/config # vm 내의 `/root/.kube/config` 를 복사해온다, 모르겟으면 [[multipass]] mount 참조
+# clusters.cluster[].server 의 ip control-plane 의 ip로 교체한다.
+# 2022-11-27 책에서는 추가으로 아래 정보 수정을 하고 있는데 이건 여러 클러스터를 사용할때 로컬에서 구분하기 위한 거으로 생각된다.
+# - clusters.cluster[].name
+# - clusters.contexts[].context[].cluster
+# - clusters.contexts[].context[].user
+# - clusters.contexts[].name
+# - current-context
+# - users[].name
+```
+```sh 
+$ kubectl get nodes
+NAME     STATUS   ROLES           AGE   VERSION
+kube00   Ready    control-plane   31m   v1.25.4
+kube01   Ready    control-plane   30m   v1.25.4
+kube02   Ready    control-plane   30m   v1.25.4
+```
+
+### error
+```sh
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+```
+`ansible-playbook` 명령어를 실행할때 `--become-user=root` 가 되어 있어 `~/.kube/config` 가 `root` 를 기준으로 생성된 것으로 생각된다.
+
+---
+```sh
+fatal: [kube02]: FAILED! => {"changed": false, "msg": "modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n", "name": "nf_conntrack_ipv4", "params": "", "rc": 1, "state": "present", "stderr": "modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n", "stderr_lines": ["modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic"], "stdout": "", "stdout_lines": []}
+```
+```sh
+fatal: [kube02]: FAILED! => {"changed": false, "msg": "modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n", "name": "nf_conntrack_ipv4", "params": "", "rc": 1, "state": "present", "stderr": "modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n", "stderr_lines": ["modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic"], "stdout": "", "stdout_lines": []}
+...ignoring
+Sunday 27 November 2022  17:37:38 +0900 (0:00:00.273)       0:11:17.710 *******
+
+TASK [kubernetes/node : Persist ip_vs modules] **************************************************************************************************************
+changed: [kube00] => {"changed": true, "checksum": "963dae5d0f149158bd6b9a750827856f6f2382fd", "dest": "/etc/modules-load.d/kube_proxy-ipvs.conf", "gid": 0, "group": "root", "md5sum": "0f7f7753a47d8c043fb1f8043b65beb4", "mode": "0644"
+```
+`ansible-playbook` 커맨드 중에 보인 에러 메시지인데 무시해도 잘되었다.
+---
+```sh
+fatal: [kube03]: FAILED! => {"msg": "Missing sudo password"}
+```
+```sh
+ubuntu@kube00:~/kubespray$ ansible-playbook -i inventory/mycluster/hosts-new02.yml -b facts.yml
+[WARNING]: Skipping callback plugin 'ara_default', unable to load
+
+PLAY [Gather facts] *************************************************************
+Thursday 22 December 2022  13:40:19 +0900 (0:00:00.012)       0:00:00.012 *****
+
+TASK [Gather minimal facts] *****************************************************
+ok: [kube00]
+ok: [kube02]
+ok: [kube01]
+fatal: [kube03]: FAILED! => {"msg": "Missing sudo password"}
+```
+
+`sudo -l` 커맨트를 통해 나오는 순서가 의미가 있으며 오버라이딩 되어 다르게 동작 할 수 있다.  
+- https://github.com/ansible/ansible/issues/71939#issuecomment-702185274
+유저에 대한 권한을 맨 아랫줄로 옮겨서 주니 해결됨 과 같은 상태가 되었으며 [[kubespray]] 가 정상 동작했다.
+
+```text /etc/sudoers
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+# ! 문제 영역
+# ubuntu  ALL=(ALL) NOPASSWD: ALL
+
+# Members of the admin group may gain root privileges
+%admin ALL=(ALL) ALL
+
+# Allow members of group sudo to execute any command
+%sudo   ALL=(ALL:ALL) ALL
+
+# See sudoers(5) for more information on "@include" directives:
+# +update: 2022-12-29 ! 이동 후 해결된 영역
+ubuntu  ALL=(ALL) NOPASSWD: ALL
+# -update: 2022-12-29
+
+@includedir /etc/sudoers.d
+# ! 이동 후 해결된 영역
+ubuntu  ALL=(ALL) NOPASSWD: ALL
+```
+
+### 문제상황
+```sh 
+ubuntu@kube03:~$ sudo -l
+Matching Defaults entries for ubuntu on kube03:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User ubuntu may run the following commands on kube03:
+    (ALL) NOPASSWD: ALL
+    (ALL : ALL) ALL
+ubuntu@kube03:~$ !v
+vi /etc/sudoers
+ubuntu@kube03:~$ sudo vi /etc/sudoers
+```
+
+### 해결됨
+```sh
+ubuntu@kube03:~$ sudo -l
+Matching Defaults entries for ubuntu on kube03:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User ubuntu may run the following commands on kube03:
+    (ALL : ALL) ALL
+    (ALL) NOPASSWD: ALL
+ubuntu@kube03:~$
+```
+---
+```sh
+fatal: [kube03]: FAILED! => {"changed": false, "elapsed": 300, "msg": "Timeout when waiting for file /etc/cni/net.d/calico-kubeconfig"}
+```
+---
+```sh 
+fatal: [pi0]: FAILED! => {"changed": false, "msg": "modprobe: FATAL: Module dummy not found in directory /lib/modules/5.15.0-1012-raspi\n", "name": "dummy", "params": "numdummies=0", "rc": 1, "state": "present", "stderr": "modprobe: FATAL: Module dummy not found in directory /lib/modules/5.15.0-1012-raspi\n", "stderr_lines": ["modprobe: FATAL: Module dummy not found in directory /lib/modules/5.15.0-1012-raspi"], "stdout": "", "stdout_lines": []}
+```
+- 답을 찾지 못한 상태, ubuntu 22.04 -> ubuntu 20.04 로 다운그레이드함
+---
+```sh
+Failed to connect to the host via ssh: ssh: Could not resolve hostname pi2: Temporary failure in name resolution"
+```
+/etc/hosts 나 dhcp 서버서 resolv가 안되는 것으로 보인다
+
+---
+```sh 
+the output has been hidden due to the fact that 'no_log: true' was specified for this result"
+```
+설치시에 노드 중 다른 아키텍쳐가 있으면 발생하는 것으로 생각됨, eg) control-plane (arm) + worker node (x86) 조합
+
+---
+```sh 
+TASK [etcd : Configure | Wait for etcd cluster to be healthy] ***********************************************************************************************************************************************************************
+task path: /Users/deptno/workspace/src/github.com/kubespray/roles/etcd/tasks/configure.yml:82
+fatal: [pi0]: FAILED! => {
+    "attempts": 4,
+    "changed": false,
+    "cmd": "set -o pipefail && /usr/local/bin/etcdctl endpoint --cluster status && /usr/local/bin/etcdctl endpoint --cluster health 2>&1 | grep -v 'Error: unhealthy cluster' >/dev/null",
+    "delta": "0:00:05.194729",
+    "end": "2022-12-30 11:54:44.046275",
+    "invocation": {
+        "module_args": {
+            "_raw_params": "set -o pipefail && /usr/local/bin/etcdctl endpoint --cluster status && /usr/local/bin/etcdctl endpoint --cluster health 2>&1 | grep -v 'Error: unhealthy cluster' >/dev/null",
+            "_uses_shell": true,
+            "argv": null,
+            "chdir": null,
+            "creates": null,
+            "executable": "/bin/bash",
+            "removes": null,
+            "stdin": null,
+            "stdin_add_newline": true,
+            "strip_empty_ends": true,
+            "warn": false
+        }
+    },
+    "msg": "non-zero return code",
+    "rc": 1,
+    "start": "2022-12-30 11:54:38.851546",
+    "stderr": "{\"level\":\"warn\",\"ts\":\"2022-12-30T11:54:43.954+0900\",\"logger\":\"etcd-client\",\"caller\":\"v3@v3.5.6/retry_interceptor.go:62\",\"msg\":\"retrying of unary invoker failed\",\"target\":\"etcd-endpoints://0x40000d4c40/192.168.0.74:2379\",\"attempt\":0,\"error\":\"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"}\nFailed to get the status of endpoint https://192.168.0.78:2379 (context deadline exceeded)",
+    "stderr_lines": [
+        "{\"level\":\"warn\",\"ts\":\"2022-12-30T11:54:43.954+0900\",\"logger\":\"etcd-client\",\"caller\":\"v3@v3.5.6/retry_interceptor.go:62\",\"msg\":\"retrying of unary invoker failed\",\"target\":\"etcd-endpoints://0x40000d4c40/192.168.0.74:2379\",\"attempt\":0,\"error\":\"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"}",
+        "Failed to get the status of endpoint https://192.168.0.78:2379 (context deadline exceeded)"
+    ],
+    "stdout": "https://192.168.0.77:2379, afd0f05f33356a3a, 3.5.6, 20 kB, false, false, 9, 30, 30, \nhttps://192.168.0.74:2379, f0a124daf3245703, 3.5.6, 20 kB, true, false, 9, 30, 30, ",
+    "stdout_lines": [
+        "https://192.168.0.77:2379, afd0f05f33356a3a, 3.5.6, 20 kB, false, false, 9, 30, 30, ",
+        "https://192.168.0.74:2379, f0a124daf3245703, 3.5.6, 20 kB, true, false, 9, 30, 30, "
+    ]
+}
+
+```
+```sh 
+sudo service ufw stop
+sudo vi /etc/hosts
+```
+- [X] 방화벽 해제
+- [X] `sudo vi /etc/hosts` 호스트간 명시 이후 에러메시지 변함 -> 재시작 하니 같음
+```sh 
+fatal: [pi0]: FAILED! => {
+    "attempts": 5,
+    "changed": false,
+    "cmd": [
+        "/usr/local/bin/kubeadm",
+        "--kubeconfig",
+        "/etc/kubernetes/admin.conf",
+        "token",
+        "create"
+    ],
+    "delta": "0:01:15.145403",
+    "end": "2022-12-30 12:25:47.954213",
+    "invocation": {
+        "module_args": {
+            "_raw_hello_exchange: master version 4\r\ndebug3: mux_client_forwards: request forwardings: 0 local, 0 remote\r\ndebug3: mux_client_request_session: entering\r\ndebug3: mux_client_request_alive: entering\r\ndebug3: mux_client_request_alive: done pid = 82745\r\ndebug3: mux_client_request_session: session request sent\r\ndebug1: mux_client_request_session: master session id: 4\r\ndebug3: mux_client_read_packet: read header failed: Broken pipe\r\ndebug2: Received exit status from master 1\r\n")
+```
+- [X] `declare IPS` 로 control-plane ip 설정 -> 실패
+- [ ] `ansible-playbook [....] --private-key=~/.ssh/[private key]
+- [ ] 해결 안됨
+## link
+- [[multipass]]
+- [[kubectl]]
+- [[sudo]]
+- [[book/24-steps-k8s]]
+14:T2ea3,
+## setup
+3대 이상의 vm([[multipass]] 참고) 준비
+[[multipass]] 사용을 가정하기 때문에 ubuntu 를 기준으로 작성됨
+
+### dns
+```sh
+sudo vi /etc/hosts
+# 3대에 접근할 수 있도록 정보 설정
+```
+
+### configure access permission
+```sh
+ssh-keygen
+ssh-copy-id [name - /etc/hosts 에 기재한 이름]
+```
+
+**자기 자신도 ansible 대상이라 함께 복사해야한다**
+
+> 실패시
+```sh
+ssh-keygen
+cat ~/.ssh/id_rsa.pub # 복사
+vi ~/.ssh/authorized_keys # 마지막 줄에 추가, /etc/hosts 에 설정한 컨트롤 플레인이 될 모든 노드에 대해 설정
+ssh [name - /etc/hosts 에 기재한 이름] # 접속 확인
+```
+
+### configure kubespray
+```sh
+git clone -b v2.22.0 https://github.com/kubernetes-sigs/kubespray.git
+cd kubespray
+sudo apt install python3-pip -y
+sudo pip3 install -r requirements.txt
+cp -r inventory/sample inventory/pi
+vi inventory/pi/hosts.yml # 설정은 kubespray 문서 참고
+vi inventory/pi/group_vars/k8s_cluster/k8s-cluster.yml # 설정은 kubespray 문서 참고
+ansible-playbook -i inventory/pi/hosts.yml --become --become-user=root -v cluster.yml
+```
+
+```yaml inventory/pi/hosts.yml
+all:
+  hosts:
+    pi0:
+      ansible_host: pi0
+    pi1:
+      ansible_host: pi1
+    pi2:
+      ansible_host: pi2
+  children:
+    kube_control_plane:
+      hosts:
+        pi0:
+        pi1:
+        pi2:
+    kube_node:
+      hosts:
+        pi0:
+        pi1:
+        pi2:
+    etcd:
+      hosts:
+        pi0:
+        pi1:
+        pi2:
+    k8s_cluster:
+      children:
+        kube_control_plane:
+        kube_node:
+        calico_rr:
+    calico_rr:
+      hosts: {}
+```
+```yaml k8s-cluster.yml
+kube_proxy_strlct_arp: true # MetalLB 설정
+kubernetes audit: true
+```
+
+### install kubectl
+```sh
+sudo snap install kubectl --classic
+kubectl get nodes -o wide
+```
+
+### configure local kube/config
+여기는 localhost 기 때문에 물리적인 사용 컴퓨터, 나의 경우에는 mac 이다.
+`kubectl` 이 깔려있다고 가정한다.
+
+```sh
+vi ~/.kube/config # vm 내의 `/root/.kube/config` 를 복사해온다, 모르겟으면 [[multipass]] mount 참조
+# clusters.cluster[].server 의 ip control-plane 의 ip로 교체한다.
+# 2022-11-27 책에서는 추가으로 아래 정보 수정을 하고 있는데 이건 여러 클러스터를 사용할때 로컬에서 구분하기 위한 거으로 생각된다.
+# - clusters.cluster[].name
+# - clusters.contexts[].context[].cluster
+# - clusters.contexts[].context[].user
+# - clusters.contexts[].name
+# - current-context
+# - users[].name
+```
+```sh 
+$ kubectl get nodes
+NAME     STATUS   ROLES           AGE   VERSION
+kube00   Ready    control-plane   31m   v1.25.4
+kube01   Ready    control-plane   30m   v1.25.4
+kube02   Ready    control-plane   30m   v1.25.4
+```
+
+### error
+```sh
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+```
+`ansible-playbook` 명령어를 실행할때 `--become-user=root` 가 되어 있어 `~/.kube/config` 가 `root` 를 기준으로 생성된 것으로 생각된다.
+
+---
+```sh
+fatal: [kube02]: FAILED! => {"changed": false, "msg": "modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n", "name": "nf_conntrack_ipv4", "params": "", "rc": 1, "state": "present", "stderr": "modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n", "stderr_lines": ["modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic"], "stdout": "", "stdout_lines": []}
+```
+```sh
+fatal: [kube02]: FAILED! => {"changed": false, "msg": "modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n", "name": "nf_conntrack_ipv4", "params": "", "rc": 1, "state": "present", "stderr": "modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic\n", "stderr_lines": ["modprobe: FATAL: Module nf_conntrack_ipv4 not found in directory /lib/modules/5.15.0-53-generic"], "stdout": "", "stdout_lines": []}
+...ignoring
+Sunday 27 November 2022  17:37:38 +0900 (0:00:00.273)       0:11:17.710 *******
+
+TASK [kubernetes/node : Persist ip_vs modules] **************************************************************************************************************
+changed: [kube00] => {"changed": true, "checksum": "963dae5d0f149158bd6b9a750827856f6f2382fd", "dest": "/etc/modules-load.d/kube_proxy-ipvs.conf", "gid": 0, "group": "root", "md5sum": "0f7f7753a47d8c043fb1f8043b65beb4", "mode": "0644"
+```
+`ansible-playbook` 커맨드 중에 보인 에러 메시지인데 무시해도 잘되었다.
+---
+```sh
+fatal: [kube03]: FAILED! => {"msg": "Missing sudo password"}
+```
+```sh
+ubuntu@kube00:~/kubespray$ ansible-playbook -i inventory/mycluster/hosts-new02.yml -b facts.yml
+[WARNING]: Skipping callback plugin 'ara_default', unable to load
+
+PLAY [Gather facts] *************************************************************
+Thursday 22 December 2022  13:40:19 +0900 (0:00:00.012)       0:00:00.012 *****
+
+TASK [Gather minimal facts] *****************************************************
+ok: [kube00]
+ok: [kube02]
+ok: [kube01]
+fatal: [kube03]: FAILED! => {"msg": "Missing sudo password"}
+```
+
+`sudo -l` 커맨트를 통해 나오는 순서가 의미가 있으며 오버라이딩 되어 다르게 동작 할 수 있다.  
+- https://github.com/ansible/ansible/issues/71939#issuecomment-702185274
+유저에 대한 권한을 맨 아랫줄로 옮겨서 주니 해결됨 과 같은 상태가 되었으며 [[kubespray]] 가 정상 동작했다.
+
+```text /etc/sudoers
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+# ! 문제 영역
+# ubuntu  ALL=(ALL) NOPASSWD: ALL
+
+# Members of the admin group may gain root privileges
+%admin ALL=(ALL) ALL
+
+# Allow members of group sudo to execute any command
+%sudo   ALL=(ALL:ALL) ALL
+
+# See sudoers(5) for more information on "@include" directives:
+# +update: 2022-12-29 ! 이동 후 해결된 영역
+ubuntu  ALL=(ALL) NOPASSWD: ALL
+# -update: 2022-12-29
+
+@includedir /etc/sudoers.d
+# ! 이동 후 해결된 영역
+ubuntu  ALL=(ALL) NOPASSWD: ALL
+```
+
+### 문제상황
+```sh 
+ubuntu@kube03:~$ sudo -l
+Matching Defaults entries for ubuntu on kube03:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User ubuntu may run the following commands on kube03:
+    (ALL) NOPASSWD: ALL
+    (ALL : ALL) ALL
+ubuntu@kube03:~$ !v
+vi /etc/sudoers
+ubuntu@kube03:~$ sudo vi /etc/sudoers
+```
+
+### 해결됨
+```sh
+ubuntu@kube03:~$ sudo -l
+Matching Defaults entries for ubuntu on kube03:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User ubuntu may run the following commands on kube03:
+    (ALL : ALL) ALL
+    (ALL) NOPASSWD: ALL
+ubuntu@kube03:~$
+```
+---
+```sh
+fatal: [kube03]: FAILED! => {"changed": false, "elapsed": 300, "msg": "Timeout when waiting for file /etc/cni/net.d/calico-kubeconfig"}
+```
+---
+```sh 
+fatal: [pi0]: FAILED! => {"changed": false, "msg": "modprobe: FATAL: Module dummy not found in directory /lib/modules/5.15.0-1012-raspi\n", "name": "dummy", "params": "numdummies=0", "rc": 1, "state": "present", "stderr": "modprobe: FATAL: Module dummy not found in directory /lib/modules/5.15.0-1012-raspi\n", "stderr_lines": ["modprobe: FATAL: Module dummy not found in directory /lib/modules/5.15.0-1012-raspi"], "stdout": "", "stdout_lines": []}
+```
+- 답을 찾지 못한 상태, ubuntu 22.04 -> ubuntu 20.04 로 다운그레이드함
+---
+```sh
+Failed to connect to the host via ssh: ssh: Could not resolve hostname pi2: Temporary failure in name resolution"
+```
+/etc/hosts 나 dhcp 서버서 resolv가 안되는 것으로 보인다
+
+---
+```sh 
+the output has been hidden due to the fact that 'no_log: true' was specified for this result"
+```
+설치시에 노드 중 다른 아키텍쳐가 있으면 발생하는 것으로 생각됨, eg) control-plane (arm) + worker node (x86) 조합
+
+---
+```sh 
+TASK [etcd : Configure | Wait for etcd cluster to be healthy] ***********************************************************************************************************************************************************************
+task path: /Users/deptno/workspace/src/github.com/kubespray/roles/etcd/tasks/configure.yml:82
+fatal: [pi0]: FAILED! => {
+    "attempts": 4,
+    "changed": false,
+    "cmd": "set -o pipefail && /usr/local/bin/etcdctl endpoint --cluster status && /usr/local/bin/etcdctl endpoint --cluster health 2>&1 | grep -v 'Error: unhealthy cluster' >/dev/null",
+    "delta": "0:00:05.194729",
+    "end": "2022-12-30 11:54:44.046275",
+    "invocation": {
+        "module_args": {
+            "_raw_params": "set -o pipefail && /usr/local/bin/etcdctl endpoint --cluster status && /usr/local/bin/etcdctl endpoint --cluster health 2>&1 | grep -v 'Error: unhealthy cluster' >/dev/null",
+            "_uses_shell": true,
+            "argv": null,
+            "chdir": null,
+            "creates": null,
+            "executable": "/bin/bash",
+            "removes": null,
+            "stdin": null,
+            "stdin_add_newline": true,
+            "strip_empty_ends": true,
+            "warn": false
+        }
+    },
+    "msg": "non-zero return code",
+    "rc": 1,
+    "start": "2022-12-30 11:54:38.851546",
+    "stderr": "{\"level\":\"warn\",\"ts\":\"2022-12-30T11:54:43.954+0900\",\"logger\":\"etcd-client\",\"caller\":\"v3@v3.5.6/retry_interceptor.go:62\",\"msg\":\"retrying of unary invoker failed\",\"target\":\"etcd-endpoints://0x40000d4c40/192.168.0.74:2379\",\"attempt\":0,\"error\":\"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"}\nFailed to get the status of endpoint https://192.168.0.78:2379 (context deadline exceeded)",
+    "stderr_lines": [
+        "{\"level\":\"warn\",\"ts\":\"2022-12-30T11:54:43.954+0900\",\"logger\":\"etcd-client\",\"caller\":\"v3@v3.5.6/retry_interceptor.go:62\",\"msg\":\"retrying of unary invoker failed\",\"target\":\"etcd-endpoints://0x40000d4c40/192.168.0.74:2379\",\"attempt\":0,\"error\":\"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"}",
+        "Failed to get the status of endpoint https://192.168.0.78:2379 (context deadline exceeded)"
+    ],
+    "stdout": "https://192.168.0.77:2379, afd0f05f33356a3a, 3.5.6, 20 kB, false, false, 9, 30, 30, \nhttps://192.168.0.74:2379, f0a124daf3245703, 3.5.6, 20 kB, true, false, 9, 30, 30, ",
+    "stdout_lines": [
+        "https://192.168.0.77:2379, afd0f05f33356a3a, 3.5.6, 20 kB, false, false, 9, 30, 30, ",
+        "https://192.168.0.74:2379, f0a124daf3245703, 3.5.6, 20 kB, true, false, 9, 30, 30, "
+    ]
+}
+
+```
+```sh 
+sudo service ufw stop
+sudo vi /etc/hosts
+```
+- [X] 방화벽 해제
+- [X] `sudo vi /etc/hosts` 호스트간 명시 이후 에러메시지 변함 -> 재시작 하니 같음
+```sh 
+fatal: [pi0]: FAILED! => {
+    "attempts": 5,
+    "changed": false,
+    "cmd": [
+        "/usr/local/bin/kubeadm",
+        "--kubeconfig",
+        "/etc/kubernetes/admin.conf",
+        "token",
+        "create"
+    ],
+    "delta": "0:01:15.145403",
+    "end": "2022-12-30 12:25:47.954213",
+    "invocation": {
+        "module_args": {
+            "_raw_hello_exchange: master version 4\r\ndebug3: mux_client_forwards: request forwardings: 0 local, 0 remote\r\ndebug3: mux_client_request_session: entering\r\ndebug3: mux_client_request_alive: entering\r\ndebug3: mux_client_request_alive: done pid = 82745\r\ndebug3: mux_client_request_session: session request sent\r\ndebug1: mux_client_request_session: master session id: 4\r\ndebug3: mux_client_read_packet: read header failed: Broken pipe\r\ndebug2: Received exit status from master 1\r\n")
+```
+- [X] `declare IPS` 로 control-plane ip 설정 -> 실패
+- [ ] `ansible-playbook [....] --private-key=~/.ssh/[private key]
+- [ ] 해결 안됨
+## link
+- [[multipass]]
+- [[kubectl]]
+- [[sudo]]
+- [[book/24-steps-k8s]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# kubespray"}],["$","meta","3",{"name":"description","content":"$12"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# kubespray"}],["$","meta","15",{"property":"og:description","content":"$13"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/kubespray"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# kubespray"}],["$","meta","19",{"name":"twitter:description","content":"$14"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null

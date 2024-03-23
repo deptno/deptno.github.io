@@ -1,0 +1,470 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-c65c2f1963a00db9.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-ea177f1f1aa270b2.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># firebase</title><meta name="description" content="- firebase 프로젝트를 등록하면 google cloud console 에 firebase 가 테스트 사용 및 API 키를 자동으로 등록한다
+- firebase 프로젝트를 등록하면 google cloud console 에 firebase 서비스계정을 자동으로 등록한다
+
+## flowchart
+- [[wip]]
+```mermaid
+flowchart
+  ad[developer.apple.com] -.key includes APNs: push..-&gt; f
+  ad[developer.apple.com] -.appstore id, bundle id, team_id..-&gt; f
+  gc[console.cloud.google.com] -.CLIENT_ID: oauth.-&gt; f
+  f[console.firebase.google.com] --GoogleService-info.plist--&gt; i[ios app]
+  f[console.firebase.google.com] --google-services.json--&gt; i[android app]
+```
+
+## client
+- console.firebase.google.com 에서 각 플랫폼별 `google-services.json` 을 다운받는다
+- 문서가 두개가 있는데 firebase 문서가 아닌 rnfirebase.io *Getting Started* 문서를 따라간다
+  - [ ] https://firebase.google.com/docs/android/setup?authuser=0&amp;hl=ko#groovy
+  - [X] https://rnfirebase.io
+- [[android]]
+  - `android/app` 에 `google-services.json` 복사
+  - android/build.grade dependecies 에 classpath &#x27;com.google.com:google-service:4.3.15&#x27; 추가한다
+    - google sigin 관련 라이브러 설치하면서 이미 설정되어있음
+  - android/app/build.grade 에서 apply plugin
+- [[ios]]
+  + https://rnfirebase.io
+  - console.firebase.google.com 에서 ios 앱도 프로젝트 설정을 해주어야한다
+    - **주의** 앱 번들 ID는 변경불가
+  - ~~개발자 등록후 진행~~
+  - 패키지 설치
+    - spm 을 사용하는 방법도 있으나 결과적으로 실패
+    - pod 에서와 같이 수정하고 [[flipper]] 를 주석 처리하는 방법이 적혀있으나 안됨
+      ```ruby 
+      # right after `use_frameworks! :linkage =&gt; :static`
+      $RNFirebaseAsStaticFramework = true
+      ```
+    - `ios/Podfile` 에 추가하는 것으로 해결
+      ```ruby 
+      pod &#x27;FirebaseCore&#x27;, :modular_headers =&gt; true
+      ```
+      + [[react-native]] **### Module &#x27;FirebaseCore&#x27; not Found** 참조
+  - `AppDelegate.mm` 수정
+
+## serverside
++ https://firebase.google.com/docs/cloud-messaging/server?hl=ko
+- console.firebase.google.com 에서 프로젝트 -&gt;  프로젝트 설정 -&gt;  서비스 계정 -&gt; *새 비공개 키 생성*
+- api spec
+  + https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages?hl=ko 
+
+## [[error]]
+### Error: No Firebase App &#x27;[DEFAULT]&#x27; has been created - call firebase.initializeApp()
+```sh 
+Error: No Firebase App &#x27;[DEFAULT]&#x27; has been created - call firebase.initializeApp()
+```
+- [[android]] 에서 발생했으며 설정이슈 [[#client]] 설정 참고
+
+### TypeError: Cannot read properties of undefined (reading &#x27;INTERNAL&#x27;)
+```sh 
+TypeError: Cannot read properties of undefined (reading &#x27;INTERNAL&#x27;)
+    at initializeApp (.yarn/cache/firebase-admin-npm-12.0.0-a20a06d34c-70e619250d.zip/node_modules/firebase-admin/lib/app/firebase-namespace.js:246:21)
+```
++ https://firebase.google.com/docs/admin/setup?hl=ko#add-sdk
+- 위 **공식**  문서를 그대로 따라하면 에러가 발생한다 [[diary:2023-12-20]]
+- 아래 링크를 참조하면 모듈이 클래스로 생성되어서 `this` 에러가 나는 것이라고 말하고 있다
+  + https://stackoverflow.com/questions/66260225/cannot-export-firebase-admins-initializeapp-function
+- 실제로 된다 `{ initializeApp }` -&gt; `admin` 으로 모듈을 로드해서 사용
+- as-is
+```ts 
+import { initializeApp, credential } from &#x27;firebase-admin&#x27;
+import { applicationDefault } from &#x27;firebase-admin/app&#x27;
+
+const app = initializeApp({
+  credential: applicationDefault()
+})
+```
+- to-be
+```ts 
+import admin from &#x27;firebase-admin&#x27;
+import { applicationDefault } from &#x27;firebase-admin/app&#x27;
+
+const app = admin.initializeApp({
+  credential: applicationDefault()
+})
+```
+
+### The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.
+```sh 
+  errorInfo: {
+    code: &#x27;app/duplicate-app&#x27;,
+    message: &#x27;The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.&#x27;
+  },
+  codePrefix: &#x27;app&#x27;,
+  page: &#x27;/api/test/fcm&#x27;
+```
+- [[nextjs]] hmr 과 함께 모듈이 두번로딩되어서 발생하는 것으로 추정
+  + https://github.com/firebase/firebase-admin-node/issues/2111#issuecomment-1636441596
+- 최종적으로 다음과 같은 모습이 되어야함 - [[diary:2023-12-20]]
+```ts 
+import admin from &#x27;firebase-admin&#x27;
+import { applicationDefault, getApp, getApps } from &#x27;firebase-admin/app&#x27;
+
+const apps = getApps()
+const app = apps[0] ?? admin.initializeApp({
+  credential: applicationDefault()
+})
+```
+
+## link
+- [[fcm]]
+- [[firebase-app-check]]
+- [[big-query]]
+- [[devide-app-by-development-env]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# firebase"/><meta property="og:description" content="- firebase 프로젝트를 등록하면 google cloud console 에 firebase 가 테스트 사용 및 API 키를 자동으로 등록한다
+- firebase 프로젝트를 등록하면 google cloud console 에 firebase 서비스계정을 자동으로 등록한다
+
+## flowchart
+- [[wip]]
+```mermaid
+flowchart
+  ad[developer.apple.com] -.key includes APNs: push..-&gt; f
+  ad[developer.apple.com] -.appstore id, bundle id, team_id..-&gt; f
+  gc[console.cloud.google.com] -.CLIENT_ID: oauth.-&gt; f
+  f[console.firebase.google.com] --GoogleService-info.plist--&gt; i[ios app]
+  f[console.firebase.google.com] --google-services.json--&gt; i[android app]
+```
+
+## client
+- console.firebase.google.com 에서 각 플랫폼별 `google-services.json` 을 다운받는다
+- 문서가 두개가 있는데 firebase 문서가 아닌 rnfirebase.io *Getting Started* 문서를 따라간다
+  - [ ] https://firebase.google.com/docs/android/setup?authuser=0&amp;hl=ko#groovy
+  - [X] https://rnfirebase.io
+- [[android]]
+  - `android/app` 에 `google-services.json` 복사
+  - android/build.grade dependecies 에 classpath &#x27;com.google.com:google-service:4.3.15&#x27; 추가한다
+    - google sigin 관련 라이브러 설치하면서 이미 설정되어있음
+  - android/app/build.grade 에서 apply plugin
+- [[ios]]
+  + https://rnfirebase.io
+  - console.firebase.google.com 에서 ios 앱도 프로젝트 설정을 해주어야한다
+    - **주의** 앱 번들 ID는 변경불가
+  - ~~개발자 등록후 진행~~
+  - 패키지 설치
+    - spm 을 사용하는 방법도 있으나 결과적으로 실패
+    - pod 에서와 같이 수정하고 [[flipper]] 를 주석 처리하는 방법이 적혀있으나 안됨
+      ```ruby 
+      # right after `use_frameworks! :linkage =&gt; :static`
+      $RNFirebaseAsStaticFramework = true
+      ```
+    - `ios/Podfile` 에 추가하는 것으로 해결
+      ```ruby 
+      pod &#x27;FirebaseCore&#x27;, :modular_headers =&gt; true
+      ```
+      + [[react-native]] **### Module &#x27;FirebaseCore&#x27; not Found** 참조
+  - `AppDelegate.mm` 수정
+
+## serverside
++ https://firebase.google.com/docs/cloud-messaging/server?hl=ko
+- console.firebase.google.com 에서 프로젝트 -&gt;  프로젝트 설정 -&gt;  서비스 계정 -&gt; *새 비공개 키 생성*
+- api spec
+  + https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages?hl=ko 
+
+## [[error]]
+### Error: No Firebase App &#x27;[DEFAULT]&#x27; has been created - call firebase.initializeApp()
+```sh 
+Error: No Firebase App &#x27;[DEFAULT]&#x27; has been created - call firebase.initializeApp()
+```
+- [[android]] 에서 발생했으며 설정이슈 [[#client]] 설정 참고
+
+### TypeError: Cannot read properties of undefined (reading &#x27;INTERNAL&#x27;)
+```sh 
+TypeError: Cannot read properties of undefined (reading &#x27;INTERNAL&#x27;)
+    at initializeApp (.yarn/cache/firebase-admin-npm-12.0.0-a20a06d34c-70e619250d.zip/node_modules/firebase-admin/lib/app/firebase-namespace.js:246:21)
+```
++ https://firebase.google.com/docs/admin/setup?hl=ko#add-sdk
+- 위 **공식**  문서를 그대로 따라하면 에러가 발생한다 [[diary:2023-12-20]]
+- 아래 링크를 참조하면 모듈이 클래스로 생성되어서 `this` 에러가 나는 것이라고 말하고 있다
+  + https://stackoverflow.com/questions/66260225/cannot-export-firebase-admins-initializeapp-function
+- 실제로 된다 `{ initializeApp }` -&gt; `admin` 으로 모듈을 로드해서 사용
+- as-is
+```ts 
+import { initializeApp, credential } from &#x27;firebase-admin&#x27;
+import { applicationDefault } from &#x27;firebase-admin/app&#x27;
+
+const app = initializeApp({
+  credential: applicationDefault()
+})
+```
+- to-be
+```ts 
+import admin from &#x27;firebase-admin&#x27;
+import { applicationDefault } from &#x27;firebase-admin/app&#x27;
+
+const app = admin.initializeApp({
+  credential: applicationDefault()
+})
+```
+
+### The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.
+```sh 
+  errorInfo: {
+    code: &#x27;app/duplicate-app&#x27;,
+    message: &#x27;The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.&#x27;
+  },
+  codePrefix: &#x27;app&#x27;,
+  page: &#x27;/api/test/fcm&#x27;
+```
+- [[nextjs]] hmr 과 함께 모듈이 두번로딩되어서 발생하는 것으로 추정
+  + https://github.com/firebase/firebase-admin-node/issues/2111#issuecomment-1636441596
+- 최종적으로 다음과 같은 모습이 되어야함 - [[diary:2023-12-20]]
+```ts 
+import admin from &#x27;firebase-admin&#x27;
+import { applicationDefault, getApp, getApps } from &#x27;firebase-admin/app&#x27;
+
+const apps = getApps()
+const app = apps[0] ?? admin.initializeApp({
+  credential: applicationDefault()
+})
+```
+
+## link
+- [[fcm]]
+- [[firebase-app-check]]
+- [[big-query]]
+- [[devide-app-by-development-env]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/firebase"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# firebase"/><meta name="twitter:description" content="- firebase 프로젝트를 등록하면 google cloud console 에 firebase 가 테스트 사용 및 API 키를 자동으로 등록한다
+- firebase 프로젝트를 등록하면 google cloud console 에 firebase 서비스계정을 자동으로 등록한다
+
+## flowchart
+- [[wip]]
+```mermaid
+flowchart
+  ad[developer.apple.com] -.key includes APNs: push..-&gt; f
+  ad[developer.apple.com] -.appstore id, bundle id, team_id..-&gt; f
+  gc[console.cloud.google.com] -.CLIENT_ID: oauth.-&gt; f
+  f[console.firebase.google.com] --GoogleService-info.plist--&gt; i[ios app]
+  f[console.firebase.google.com] --google-services.json--&gt; i[android app]
+```
+
+## client
+- console.firebase.google.com 에서 각 플랫폼별 `google-services.json` 을 다운받는다
+- 문서가 두개가 있는데 firebase 문서가 아닌 rnfirebase.io *Getting Started* 문서를 따라간다
+  - [ ] https://firebase.google.com/docs/android/setup?authuser=0&amp;hl=ko#groovy
+  - [X] https://rnfirebase.io
+- [[android]]
+  - `android/app` 에 `google-services.json` 복사
+  - android/build.grade dependecies 에 classpath &#x27;com.google.com:google-service:4.3.15&#x27; 추가한다
+    - google sigin 관련 라이브러 설치하면서 이미 설정되어있음
+  - android/app/build.grade 에서 apply plugin
+- [[ios]]
+  + https://rnfirebase.io
+  - console.firebase.google.com 에서 ios 앱도 프로젝트 설정을 해주어야한다
+    - **주의** 앱 번들 ID는 변경불가
+  - ~~개발자 등록후 진행~~
+  - 패키지 설치
+    - spm 을 사용하는 방법도 있으나 결과적으로 실패
+    - pod 에서와 같이 수정하고 [[flipper]] 를 주석 처리하는 방법이 적혀있으나 안됨
+      ```ruby 
+      # right after `use_frameworks! :linkage =&gt; :static`
+      $RNFirebaseAsStaticFramework = true
+      ```
+    - `ios/Podfile` 에 추가하는 것으로 해결
+      ```ruby 
+      pod &#x27;FirebaseCore&#x27;, :modular_headers =&gt; true
+      ```
+      + [[react-native]] **### Module &#x27;FirebaseCore&#x27; not Found** 참조
+  - `AppDelegate.mm` 수정
+
+## serverside
++ https://firebase.google.com/docs/cloud-messaging/server?hl=ko
+- console.firebase.google.com 에서 프로젝트 -&gt;  프로젝트 설정 -&gt;  서비스 계정 -&gt; *새 비공개 키 생성*
+- api spec
+  + https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages?hl=ko 
+
+## [[error]]
+### Error: No Firebase App &#x27;[DEFAULT]&#x27; has been created - call firebase.initializeApp()
+```sh 
+Error: No Firebase App &#x27;[DEFAULT]&#x27; has been created - call firebase.initializeApp()
+```
+- [[android]] 에서 발생했으며 설정이슈 [[#client]] 설정 참고
+
+### TypeError: Cannot read properties of undefined (reading &#x27;INTERNAL&#x27;)
+```sh 
+TypeError: Cannot read properties of undefined (reading &#x27;INTERNAL&#x27;)
+    at initializeApp (.yarn/cache/firebase-admin-npm-12.0.0-a20a06d34c-70e619250d.zip/node_modules/firebase-admin/lib/app/firebase-namespace.js:246:21)
+```
++ https://firebase.google.com/docs/admin/setup?hl=ko#add-sdk
+- 위 **공식**  문서를 그대로 따라하면 에러가 발생한다 [[diary:2023-12-20]]
+- 아래 링크를 참조하면 모듈이 클래스로 생성되어서 `this` 에러가 나는 것이라고 말하고 있다
+  + https://stackoverflow.com/questions/66260225/cannot-export-firebase-admins-initializeapp-function
+- 실제로 된다 `{ initializeApp }` -&gt; `admin` 으로 모듈을 로드해서 사용
+- as-is
+```ts 
+import { initializeApp, credential } from &#x27;firebase-admin&#x27;
+import { applicationDefault } from &#x27;firebase-admin/app&#x27;
+
+const app = initializeApp({
+  credential: applicationDefault()
+})
+```
+- to-be
+```ts 
+import admin from &#x27;firebase-admin&#x27;
+import { applicationDefault } from &#x27;firebase-admin/app&#x27;
+
+const app = admin.initializeApp({
+  credential: applicationDefault()
+})
+```
+
+### The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.
+```sh 
+  errorInfo: {
+    code: &#x27;app/duplicate-app&#x27;,
+    message: &#x27;The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.&#x27;
+  },
+  codePrefix: &#x27;app&#x27;,
+  page: &#x27;/api/test/fcm&#x27;
+```
+- [[nextjs]] hmr 과 함께 모듈이 두번로딩되어서 발생하는 것으로 추정
+  + https://github.com/firebase/firebase-admin-node/issues/2111#issuecomment-1636441596
+- 최종적으로 다음과 같은 모습이 되어야함 - [[diary:2023-12-20]]
+```ts 
+import admin from &#x27;firebase-admin&#x27;
+import { applicationDefault, getApp, getApps } from &#x27;firebase-admin/app&#x27;
+
+const apps = getApps()
+const app = apps[0] ?? admin.initializeApp({
+  credential: applicationDefault()
+})
+```
+
+## link
+- [[fcm]]
+- [[firebase-app-check]]
+- [[big-query]]
+- [[devide-app-by-development-env]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/a2386f2
+" class="bg-white text-black">a2386f2</a></div><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/firebase.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/firebase.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/firebase.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/firebase"><span class="underline">firebase</span><sup>14</sup></a></span><span><a class="text-blue-600" href="/public-wiki/wip"><span class="underline">wip</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/android"><span class="underline">android</span><sup>23</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ios"><span class="underline">ios</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/flipper"><span class="underline">flipper</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/react-native"><span class="underline">react-native</span><sup>90</sup></a></span><span><a class="text-blue-600" href="/public-wiki/error"><span class="underline">error</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-20"><span class="underline">diary/2023-12-20</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/nextjs"><span class="underline">nextjs</span><sup>12</sup></a></span><span><a class="text-blue-600" href="/public-wiki/fcm"><span class="underline">fcm</span><sup>21</sup></a></span><span><a class="text-blue-600" href="/public-wiki/firebase-app-check"><span class="underline">firebase-app-check</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/big-query"><span class="underline">big-query</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/devide-app-by-development-env"><span class="underline">devide-app-by-development-env</span><sup>30</sup></a></span><span><a class="text-blue-600" href="/public-wiki/apns"><span class="underline">apns</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/fastlane"><span class="underline">fastlane</span><sup>26</sup></a></span><span><a class="text-blue-600" href="/public-wiki/google-analytics-for-firebase"><span class="underline">google-analytics-for-firebase</span><sup>16</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-21"><span class="underline">diary/2023-12-21</span><sup>20</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-27"><span class="underline">diary/2023-12-27</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-29"><span class="underline">diary/2023-12-29</span><sup>10</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-31"><span class="underline">diary/2023-12-31</span><sup>93</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-01"><span class="underline">diary/2024-01-01</span><sup>16</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-05"><span class="underline">diary/2024-01-05</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-15"><span class="underline">diary/2024-01-15</span><sup>14</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-18"><span class="underline">diary/2024-01-18</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-23"><span class="underline">diary/2024-01-23</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-25"><span class="underline">diary/2024-01-25</span><sup>59</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-03-15"><span class="underline">diary/2024-03-15</span><sup>4</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#firebase">firebase</a></div><div class="pl-2"><a href="#flowchart">flowchart</a></div><div class="pl-2"><a href="#client">client</a></div><div class="pl-2"><a href="#serverside">serverside</a></div><div class="pl-2"><a href="#error">error</a></div><div class="pl-4"><a href="#error-no-firebase-app-default-has-been-created---call-firebaseinitializeapp">Error: No Firebase App &#x27;[DEFAULT]&#x27; has been created - call firebase.initializeApp()</a></div><div class="pl-4"><a href="#typeerror-cannot-read-properties-of-undefined-reading-internal">TypeError: Cannot read properties of undefined (reading &#x27;INTERNAL&#x27;)</a></div><div class="pl-4"><a href="#the-default-firebase-app-already-exists-this-means-you-called-initializeapp-more-than-once-without-providing-an-app-name-as-the-second-argument-in-most-cases-you-only-need-to-call-initializeapp-once-but-if-you-do-want-to-initialize-multiple-apps-pass-a-second-argument-to-initializeapp-to-give-each-app-a-unique-name">The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="firebase">firebase</h1>
+<ul>
+<li>firebase 프로젝트를 등록하면 google cloud console 에 firebase 가 테스트 사용 및 API 키를 자동으로 등록한다</li>
+<li>firebase 프로젝트를 등록하면 google cloud console 에 firebase 서비스계정을 자동으로 등록한다</li>
+</ul>
+<h2 id="flowchart">flowchart</h2>
+<ul>
+<li><a href="wip">wip</a></li>
+</ul>
+<pre><code class="hljs language-mermaid">flowchart
+  ad[developer.apple.com] -.key includes APNs: push..-&gt; f
+  ad[developer.apple.com] -.appstore id, bundle id, team_id..-&gt; f
+  gc[console.cloud.google.com] -.CLIENT_ID: oauth.-&gt; f
+  f[console.firebase.google.com] --GoogleService-info.plist--&gt; i[ios app]
+  f[console.firebase.google.com] --google-services.json--&gt; i[android app]
+</code></pre><h2 id="client">client</h2>
+<ul>
+<li>console.firebase.google.com 에서 각 플랫폼별 <code class="span">google-services.json</code> 을 다운받는다</li>
+<li>문서가 두개가 있는데 firebase 문서가 아닌 rnfirebase.io <em>Getting Started</em> 문서를 따라간다<ul>
+<li><input disabled="" type="checkbox"> <a href="https://firebase.google.com/docs/android/setup?authuser=0&hl=ko#groovy" target="_blank">[URL] https://firebase.google.com/docs/android/setup?authuser=0&hl=ko#groovy</a></li>
+<li><input checked="" disabled="" type="checkbox"> <a href="https://rnfirebase.io" target="_blank">[URL] https://rnfirebase.io/</a></li>
+</ul>
+</li>
+<li><a href="android">android</a><ul>
+<li><code class="span">android/app</code> 에 <code class="span">google-services.json</code> 복사</li>
+<li>android/build.grade dependecies 에 classpath &#39;com.google.com:google-service:4.3.15&#39; 추가한다<ul>
+<li>google sigin 관련 라이브러 설치하면서 이미 설정되어있음</li>
+</ul>
+</li>
+<li>android/app/build.grade 에서 apply plugin</li>
+</ul>
+</li>
+<li><a href="ios">ios</a><ul>
+<li><a href="https://rnfirebase.io" target="_blank">[URL] https://rnfirebase.io/</a></li>
+</ul>
+<ul>
+<li>console.firebase.google.com 에서 ios 앱도 프로젝트 설정을 해주어야한다<ul>
+<li><strong>주의</strong> 앱 번들 ID는 변경불가</li>
+</ul>
+</li>
+<li><del>개발자 등록후 진행</del></li>
+<li>패키지 설치<ul>
+<li>spm 을 사용하는 방법도 있으나 결과적으로 실패</li>
+<li>pod 에서와 같이 수정하고 <a href="flipper">flipper</a> 를 주석 처리하는 방법이 적혀있으나 안됨<pre><code class="hljs language-ruby"><span class="hljs-comment"># right after `use_frameworks! :linkage =&gt; :static`</span>
+<span class="hljs-variable">$RNFirebaseAsStaticFramework</span> = <span class="hljs-literal">true</span>
+</code></pre></li>
+<li><code class="span">ios/Podfile</code> 에 추가하는 것으로 해결<pre><code class="hljs language-ruby">pod <span class="hljs-string">&#x27;FirebaseCore&#x27;</span>, <span class="hljs-symbol">:modular_headers</span> =&gt; <span class="hljs-literal">true</span>
+</code></pre><ul>
+<li><a href="react-native">react-native</a> <strong>### Module &#39;FirebaseCore&#39; not Found</strong> 참조</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code class="span">AppDelegate.mm</code> 수정</li>
+</ul>
+</li>
+</ul>
+<h2 id="serverside">serverside</h2>
+<ul>
+<li><a href="https://firebase.google.com/docs/cloud-messaging/server?hl=ko" target="_blank">[URL] https://firebase.google.com/docs/cloud-messaging/server?hl=ko</a></li>
+</ul>
+<ul>
+<li>console.firebase.google.com 에서 프로젝트 -&gt;  프로젝트 설정 -&gt;  서비스 계정 -&gt; <em>새 비공개 키 생성</em></li>
+<li>api spec<ul>
+<li><a href="https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages?hl=ko" target="_blank">[URL] https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages?hl=ko</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="error"><a href="error">error</a></h2>
+<h3 id="error-no-firebase-app-default-has-been-created---call-firebaseinitializeapp">Error: No Firebase App &#39;[DEFAULT]&#39; has been created - call firebase.initializeApp()</h3>
+<pre><code class="hljs language-sh">Error: No Firebase App <span class="hljs-string">&#x27;[DEFAULT]&#x27;</span> has been created - call firebase.initializeApp()
+</code></pre><ul>
+<li><a href="android">android</a> 에서 발생했으며 설정이슈 [[#client]] 설정 참고</li>
+</ul>
+<h3 id="typeerror-cannot-read-properties-of-undefined-reading-internal">TypeError: Cannot read properties of undefined (reading &#39;INTERNAL&#39;)</h3>
+<pre><code class="hljs language-sh">TypeError: Cannot <span class="hljs-built_in">read</span> properties of undefined (reading <span class="hljs-string">&#x27;INTERNAL&#x27;</span>)
+    at initializeApp (.yarn/cache/firebase-admin-npm-12.0.0-a20a06d34c-70e619250d.zip/node_modules/firebase-admin/lib/app/firebase-namespace.js:246:21)
+</code></pre><ul>
+<li><a href="https://firebase.google.com/docs/admin/setup?hl=ko#add-sdk" target="_blank">[URL] https://firebase.google.com/docs/admin/setup?hl=ko#add-sdk</a></li>
+</ul>
+<ul>
+<li>위 <strong>공식</strong>  문서를 그대로 따라하면 에러가 발생한다 <a href="/public-wiki/diary/2023-12-20">[diary] diary:2023-12-20</a></li>
+<li>아래 링크를 참조하면 모듈이 클래스로 생성되어서 <code class="span">this</code> 에러가 나는 것이라고 말하고 있다<ul>
+<li><a href="https://stackoverflow.com/questions/66260225/cannot-export-firebase-admins-initializeapp-function" target="_blank">[URL] https://stackoverflow.com/questions/66260225/cannot-export-firebase-admins-initializeapp-function</a></li>
+</ul>
+</li>
+<li>실제로 된다 <code class="span">{ initializeApp }</code> -&gt; <code class="span">admin</code> 으로 모듈을 로드해서 사용</li>
+<li>as-is</li>
+</ul>
+<pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { initializeApp, credential } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;firebase-admin&#x27;</span>
+<span class="hljs-keyword">import</span> { applicationDefault } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;firebase-admin/app&#x27;</span>
+
+<span class="hljs-keyword">const</span> app = <span class="hljs-title function_">initializeApp</span>({
+  <span class="hljs-attr">credential</span>: <span class="hljs-title function_">applicationDefault</span>()
+})
+</code></pre><ul>
+<li>to-be</li>
+</ul>
+<pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> admin <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;firebase-admin&#x27;</span>
+<span class="hljs-keyword">import</span> { applicationDefault } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;firebase-admin/app&#x27;</span>
+
+<span class="hljs-keyword">const</span> app = admin.<span class="hljs-title function_">initializeApp</span>({
+  <span class="hljs-attr">credential</span>: <span class="hljs-title function_">applicationDefault</span>()
+})
+</code></pre><h3 id="the-default-firebase-app-already-exists-this-means-you-called-initializeapp-more-than-once-without-providing-an-app-name-as-the-second-argument-in-most-cases-you-only-need-to-call-initializeapp-once-but-if-you-do-want-to-initialize-multiple-apps-pass-a-second-argument-to-initializeapp-to-give-each-app-a-unique-name">The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.</h3>
+<pre><code class="hljs language-sh">  errorInfo: {
+    code: <span class="hljs-string">&#x27;app/duplicate-app&#x27;</span>,
+    message: <span class="hljs-string">&#x27;The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.&#x27;</span>
+  },
+  codePrefix: <span class="hljs-string">&#x27;app&#x27;</span>,
+  page: <span class="hljs-string">&#x27;/api/test/fcm&#x27;</span>
+</code></pre><ul>
+<li><a href="nextjs">nextjs</a> hmr 과 함께 모듈이 두번로딩되어서 발생하는 것으로 추정<ul>
+<li><a href="https://github.com/firebase/firebase-admin-node/issues/2111#issuecomment-1636441596" target="_blank">[URL] https://github.com/firebase/firebase-admin-node/issues/2111#issuecomment-1636441596</a></li>
+</ul>
+</li>
+<li>최종적으로 다음과 같은 모습이 되어야함 - <a href="/public-wiki/diary/2023-12-20">[diary] diary:2023-12-20</a></li>
+</ul>
+<pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> admin <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;firebase-admin&#x27;</span>
+<span class="hljs-keyword">import</span> { applicationDefault, getApp, getApps } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;firebase-admin/app&#x27;</span>
+
+<span class="hljs-keyword">const</span> apps = <span class="hljs-title function_">getApps</span>()
+<span class="hljs-keyword">const</span> app = apps[<span class="hljs-number">0</span>] ?? admin.<span class="hljs-title function_">initializeApp</span>({
+  <span class="hljs-attr">credential</span>: <span class="hljs-title function_">applicationDefault</span>()
+})
+</code></pre><h2 id="link">link</h2>
+<ul>
+<li><a href="fcm">fcm</a></li>
+<li><a href="firebase-app-check">firebase-app-check</a></li>
+<li><a href="big-query">big-query</a></li>
+<li><a href="devide-app-by-development-env">devide-app-by-development-env</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-c65c2f1963a00db9.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-ea177f1f1aa270b2.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"firebase\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"LWg_oWSEeqb4cXC5n1vGm\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/firebase\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"firebase\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"firebase\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"firebase\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T2616,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"firebase\"\u003efirebase\u003c/h1\u003e\n\u003cul\u003e\n\u003cli\u003efirebase 프로젝트를 등록하면 google cloud console 에 firebase 가 테스트 사용 및 API 키를 자동으로 등록한다\u003c/li\u003e\n\u003cli\u003efirebase 프로젝트를 등록하면 google cloud console 에 firebase 서비스계정을 자동으로 등록한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"flowchart\"\u003eflowchart\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"wip\"\u003ewip\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-mermaid\"\u003eflowchart\n  ad[developer.apple.com] -.key includes APNs: push..-\u0026gt; f\n  ad[developer.apple.com] -.appstore id, bundle id, team_id..-\u0026gt; f\n  gc[console.cloud.google.com] -.CLIENT_ID: oauth.-\u0026gt; f\n  f[console.firebase.google.com] --GoogleService-info.plist--\u0026gt; i[ios app]\n  f[console.firebase.google.com] --google-services.json--\u0026gt; i[android app]\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"client\"\u003eclient\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003econsole.firebase.google.com 에서 각 플랫폼별 \u003ccode class=\"span\"\u003egoogle-services.json\u003c/code\u003e 을 다운받는다\u003c/li\u003e\n\u003cli\u003e문서가 두개가 있는데 firebase 문서가 아닌 rnfirebase.io \u003cem\u003eGetting Started\u003c/em\u003e 문서를 따라간다\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"https://firebase.google.com/docs/android/setup?authuser=0\u0026hl=ko#groovy\" target=\"_blank\"\u003e[URL] https://firebase.google.com/docs/android/setup?authuser=0\u0026hl=ko#groovy\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"https://rnfirebase.io\" target=\"_blank\"\u003e[URL] https://rnfirebase.io/\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"android\"\u003eandroid\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eandroid/app\u003c/code\u003e 에 \u003ccode class=\"span\"\u003egoogle-services.json\u003c/code\u003e 복사\u003c/li\u003e\n\u003cli\u003eandroid/build.grade dependecies 에 classpath \u0026#39;com.google.com:google-service:4.3.15\u0026#39; 추가한다\u003cul\u003e\n\u003cli\u003egoogle sigin 관련 라이브러 설치하면서 이미 설정되어있음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eandroid/app/build.grade 에서 apply plugin\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"ios\"\u003eios\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://rnfirebase.io\" target=\"_blank\"\u003e[URL] https://rnfirebase.io/\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003econsole.firebase.google.com 에서 ios 앱도 프로젝트 설정을 해주어야한다\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003e주의\u003c/strong\u003e 앱 번들 ID는 변경불가\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cdel\u003e개발자 등록후 진행\u003c/del\u003e\u003c/li\u003e\n\u003cli\u003e패키지 설치\u003cul\u003e\n\u003cli\u003espm 을 사용하는 방법도 있으나 결과적으로 실패\u003c/li\u003e\n\u003cli\u003epod 에서와 같이 수정하고 \u003ca href=\"flipper\"\u003eflipper\u003c/a\u003e 를 주석 처리하는 방법이 적혀있으나 안됨\u003cpre\u003e\u003ccode class=\"hljs language-ruby\"\u003e\u003cspan class=\"hljs-comment\"\u003e# right after `use_frameworks! :linkage =\u0026gt; :static`\u003c/span\u003e\n\u003cspan class=\"hljs-variable\"\u003e$RNFirebaseAsStaticFramework\u003c/span\u003e = \u003cspan class=\"hljs-literal\"\u003etrue\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eios/Podfile\u003c/code\u003e 에 추가하는 것으로 해결\u003cpre\u003e\u003ccode class=\"hljs language-ruby\"\u003epod \u003cspan class=\"hljs-string\"\u003e\u0026#x27;FirebaseCore\u0026#x27;\u003c/span\u003e, \u003cspan class=\"hljs-symbol\"\u003e:modular_headers\u003c/span\u003e =\u0026gt; \u003cspan class=\"hljs-literal\"\u003etrue\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"react-native\"\u003ereact-native\u003c/a\u003e \u003cstrong\u003e### Module \u0026#39;FirebaseCore\u0026#39; not Found\u003c/strong\u003e 참조\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eAppDelegate.mm\u003c/code\u003e 수정\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"serverside\"\u003eserverside\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://firebase.google.com/docs/cloud-messaging/server?hl=ko\" target=\"_blank\"\u003e[URL] https://firebase.google.com/docs/cloud-messaging/server?hl=ko\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003econsole.firebase.google.com 에서 프로젝트 -\u0026gt;  프로젝트 설정 -\u0026gt;  서비스 계정 -\u0026gt; \u003cem\u003e새 비공개 키 생성\u003c/em\u003e\u003c/li\u003e\n\u003cli\u003eapi spec\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages?hl=ko\" target=\"_blank\"\u003e[URL] https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages?hl=ko\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"error\"\u003e\u003ca href=\"error\"\u003eerror\u003c/a\u003e\u003c/h2\u003e\n\u003ch3 id=\"error-no-firebase-app-default-has-been-created---call-firebaseinitializeapp\"\u003eError: No Firebase App \u0026#39;[DEFAULT]\u0026#39; has been created - call firebase.initializeApp()\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eError: No Firebase App \u003cspan class=\"hljs-string\"\u003e\u0026#x27;[DEFAULT]\u0026#x27;\u003c/span\u003e has been created - call firebase.initializeApp()\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"android\"\u003eandroid\u003c/a\u003e 에서 발생했으며 설정이슈 [[#client]] 설정 참고\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"typeerror-cannot-read-properties-of-undefined-reading-internal\"\u003eTypeError: Cannot read properties of undefined (reading \u0026#39;INTERNAL\u0026#39;)\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eTypeError: Cannot \u003cspan class=\"hljs-built_in\"\u003eread\u003c/span\u003e properties of undefined (reading \u003cspan class=\"hljs-string\"\u003e\u0026#x27;INTERNAL\u0026#x27;\u003c/span\u003e)\n    at initializeApp (.yarn/cache/firebase-admin-npm-12.0.0-a20a06d34c-70e619250d.zip/node_modules/firebase-admin/lib/app/firebase-namespace.js:246:21)\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://firebase.google.com/docs/admin/setup?hl=ko#add-sdk\" target=\"_blank\"\u003e[URL] https://firebase.google.com/docs/admin/setup?hl=ko#add-sdk\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e위 \u003cstrong\u003e공식\u003c/strong\u003e  문서를 그대로 따라하면 에러가 발생한다 \u003ca href=\"/public-wiki/diary/2023-12-20\"\u003e[diary] diary:2023-12-20\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e아래 링크를 참조하면 모듈이 클래스로 생성되어서 \u003ccode class=\"span\"\u003ethis\u003c/code\u003e 에러가 나는 것이라고 말하고 있다\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://stackoverflow.com/questions/66260225/cannot-export-firebase-admins-initializeapp-function\" target=\"_blank\"\u003e[URL] https://stackoverflow.com/questions/66260225/cannot-export-firebase-admins-initializeapp-function\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e실제로 된다 \u003ccode class=\"span\"\u003e{ initializeApp }\u003c/code\u003e -\u0026gt; \u003ccode class=\"span\"\u003eadmin\u003c/code\u003e 으로 모듈을 로드해서 사용\u003c/li\u003e\n\u003cli\u003eas-is\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-ts\"\u003e\u003cspan class=\"hljs-keyword\"\u003eimport\u003c/span\u003e { initializeApp, credential } \u003cspan class=\"hljs-keyword\"\u003efrom\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026#x27;firebase-admin\u0026#x27;\u003c/span\u003e\n\u003cspan class=\"hljs-keyword\"\u003eimport\u003c/span\u003e { applicationDefault } \u003cspan class=\"hljs-keyword\"\u003efrom\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026#x27;firebase-admin/app\u0026#x27;\u003c/span\u003e\n\n\u003cspan class=\"hljs-keyword\"\u003econst\u003c/span\u003e app = \u003cspan class=\"hljs-title function_\"\u003einitializeApp\u003c/span\u003e({\n  \u003cspan class=\"hljs-attr\"\u003ecredential\u003c/span\u003e: \u003cspan class=\"hljs-title function_\"\u003eapplicationDefault\u003c/span\u003e()\n})\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003eto-be\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-ts\"\u003e\u003cspan class=\"hljs-keyword\"\u003eimport\u003c/span\u003e admin \u003cspan class=\"hljs-keyword\"\u003efrom\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026#x27;firebase-admin\u0026#x27;\u003c/span\u003e\n\u003cspan class=\"hljs-keyword\"\u003eimport\u003c/span\u003e { applicationDefault } \u003cspan class=\"hljs-keyword\"\u003efrom\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026#x27;firebase-admin/app\u0026#x27;\u003c/span\u003e\n\n\u003cspan class=\"hljs-keyword\"\u003econst\u003c/span\u003e app = admin.\u003cspan class=\"hljs-title function_\"\u003einitializeApp\u003c/span\u003e({\n  \u003cspan class=\"hljs-attr\"\u003ecredential\u003c/span\u003e: \u003cspan class=\"hljs-title function_\"\u003eapplicationDefault\u003c/span\u003e()\n})\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"the-default-firebase-app-already-exists-this-means-you-called-initializeapp-more-than-once-without-providing-an-app-name-as-the-second-argument-in-most-cases-you-only-need-to-call-initializeapp-once-but-if-you-do-want-to-initialize-multiple-apps-pass-a-second-argument-to-initializeapp-to-give-each-app-a-unique-name\"\u003eThe default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e  errorInfo: {\n    code: \u003cspan class=\"hljs-string\"\u003e\u0026#x27;app/duplicate-app\u0026#x27;\u003c/span\u003e,\n    message: \u003cspan class=\"hljs-string\"\u003e\u0026#x27;The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.\u0026#x27;\u003c/span\u003e\n  },\n  codePrefix: \u003cspan class=\"hljs-string\"\u003e\u0026#x27;app\u0026#x27;\u003c/span\u003e,\n  page: \u003cspan class=\"hljs-string\"\u003e\u0026#x27;/api/test/fcm\u0026#x27;\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"nextjs\"\u003enextjs\u003c/a\u003e hmr 과 함께 모듈이 두번로딩되어서 발생하는 것으로 추정\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/firebase/firebase-admin-node/issues/2111#issuecomment-1636441596\" target=\"_blank\"\u003e[URL] https://github.com/firebase/firebase-admin-node/issues/2111#issuecomment-1636441596\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e최종적으로 다음과 같은 모습이 되어야함 - \u003ca href=\"/public-wiki/diary/2023-12-20\"\u003e[diary] diary:2023-12-20\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-ts\"\u003e\u003cspan class=\"hljs-keyword\"\u003eimport\u003c/span\u003e admin \u003cspan class=\"hljs-keyword\"\u003efrom\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026#x27;firebase-admin\u0026#x27;\u003c/span\u003e\n\u003cspan class=\"hljs-keyword\"\u003eimport\u003c/span\u003e { applicationDefault, getApp, getApps } \u003cspan class=\"hljs-keyword\"\u003efrom\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026#x27;firebase-admin/app\u0026#x27;\u003c/span\u003e\n\n\u003cspan class=\"hljs-keyword\"\u003econst\u003c/span\u003e apps = \u003cspan class=\"hljs-title function_\"\u003egetApps\u003c/span\u003e()\n\u003cspan class=\"hljs-keyword\"\u003econst\u003c/span\u003e app = apps[\u003cspan class=\"hljs-number\"\u003e0\u003c/span\u003e] ?? admin.\u003cspan class=\"hljs-title function_\"\u003einitializeApp\u003c/span\u003e({\n  \u003cspan class=\"hljs-attr\"\u003ecredential\u003c/span\u003e: \u003cspan class=\"hljs-title function_\"\u003eapplicationDefault\u003c/span\u003e()\n})\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"fcm\"\u003efcm\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"firebase-app-check\"\u003efirebase-app-check\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"big-query\"\u003ebig-query\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"devide-app-by-development-env\"\u003edevide-app-by-development-env\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/a2386f2\\n\",\"className\":\"bg-white text-black\",\"children\":\"a2386f2\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/firebase.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/firebase.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/firebase.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"firebase\",\"name\":\"firebase\",\"val\":14},{\"id\":\"wip\",\"name\":\"wip\",\"val\":\"$undefined\"},{\"id\":\"android\",\"name\":\"android\",\"val\":23},{\"id\":\"ios\",\"name\":\"ios\",\"val\":11},{\"id\":\"flipper\",\"name\":\"flipper\",\"val\":4},{\"id\":\"react-native\",\"name\":\"react-native\",\"val\":90},{\"id\":\"error\",\"name\":\"error\",\"val\":4},{\"id\":\"diary/2023-12-20\",\"name\":\"diary/2023-12-20\",\"val\":1},{\"id\":\"nextjs\",\"name\":\"nextjs\",\"val\":12},{\"id\":\"fcm\",\"name\":\"fcm\",\"val\":21},{\"id\":\"firebase-app-check\",\"name\":\"firebase-app-check\",\"val\":11},{\"id\":\"big-query\",\"name\":\"big-query\",\"val\":3},{\"id\":\"devide-app-by-development-env\",\"name\":\"devide-app-by-development-env\",\"val\":30},{\"id\":\"apns\",\"name\":\"apns\",\"val\":8},{\"id\":\"fastlane\",\"name\":\"fastlane\",\"val\":26},{\"id\":\"google-analytics-for-firebase\",\"name\":\"google-analytics-for-firebase\",\"val\":16},{\"id\":\"diary/2023-12-21\",\"name\":\"diary/2023-12-21\",\"val\":20},{\"id\":\"diary/2023-12-27\",\"name\":\"diary/2023-12-27\",\"val\":5},{\"id\":\"diary/2023-12-29\",\"name\":\"diary/2023-12-29\",\"val\":10},{\"id\":\"diary/2023-12-31\",\"name\":\"diary/2023-12-31\",\"val\":93},{\"id\":\"diary/2024-01-01\",\"name\":\"diary/2024-01-01\",\"val\":16},{\"id\":\"diary/2024-01-05\",\"name\":\"diary/2024-01-05\",\"val\":5},{\"id\":\"diary/2024-01-15\",\"name\":\"diary/2024-01-15\",\"val\":14},{\"id\":\"diary/2024-01-18\",\"name\":\"diary/2024-01-18\",\"val\":7},{\"id\":\"diary/2024-01-23\",\"name\":\"diary/2024-01-23\",\"val\":7},{\"id\":\"diary/2024-01-25\",\"name\":\"diary/2024-01-25\",\"val\":59},{\"id\":\"diary/2024-03-15\",\"name\":\"diary/2024-03-15\",\"val\":4}],\"links\":[{\"source\":\"firebase\",\"target\":\"wip\"},{\"source\":\"firebase\",\"target\":\"android\"},{\"source\":\"firebase\",\"target\":\"ios\"},{\"source\":\"firebase\",\"target\":\"flipper\"},{\"source\":\"firebase\",\"target\":\"react-native\"},{\"source\":\"firebase\",\"target\":\"error\"},{\"source\":\"firebase\",\"target\":\"android\"},{\"source\":\"firebase\",\"target\":\"diary/2023-12-20\"},{\"source\":\"firebase\",\"target\":\"nextjs\"},{\"source\":\"firebase\",\"target\":\"diary/2023-12-20\"},{\"source\":\"firebase\",\"target\":\"fcm\"},{\"source\":\"firebase\",\"target\":\"firebase-app-check\"},{\"source\":\"firebase\",\"target\":\"big-query\"},{\"source\":\"firebase\",\"target\":\"devide-app-by-development-env\"},{\"source\":\"android\",\"target\":\"firebase\"},{\"source\":\"apns\",\"target\":\"firebase\"},{\"source\":\"big-query\",\"target\":\"firebase\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"firebase\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"firebase\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"firebase\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"firebase\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"firebase\"},{\"source\":\"fastlane\",\"target\":\"firebase\"},{\"source\":\"fastlane\",\"target\":\"firebase\"},{\"source\":\"fcm\",\"target\":\"firebase\"},{\"source\":\"fcm\",\"target\":\"firebase\"},{\"source\":\"firebase-app-check\",\"target\":\"firebase\"},{\"source\":\"firebase-app-check\",\"target\":\"firebase\"},{\"source\":\"firebase-app-check\",\"target\":\"firebase\"},{\"source\":\"google-analytics-for-firebase\",\"target\":\"firebase\"},{\"source\":\"react-native\",\"target\":\"firebase\"},{\"source\":\"diary/2023-12-20\",\"target\":\"firebase\"},{\"source\":\"diary/2023-12-21\",\"target\":\"firebase\"},{\"source\":\"diary/2023-12-27\",\"target\":\"firebase\"},{\"source\":\"diary/2023-12-29\",\"target\":\"firebase\"},{\"source\":\"diary/2023-12-31\",\"target\":\"firebase\"},{\"source\":\"diary/2023-12-31\",\"target\":\"firebase\"},{\"source\":\"diary/2023-12-31\",\"target\":\"firebase\"},{\"source\":\"diary/2024-01-01\",\"target\":\"firebase\"},{\"source\":\"diary/2024-01-01\",\"target\":\"firebase\"},{\"source\":\"diary/2024-01-05\",\"target\":\"firebase\"},{\"source\":\"diary/2024-01-15\",\"target\":\"firebase\"},{\"source\":\"diary/2024-01-15\",\"target\":\"firebase\"},{\"source\":\"diary/2024-01-15\",\"target\":\"firebase\"},{\"source\":\"diary/2024-01-18\",\"target\":\"firebase\"},{\"source\":\"diary/2024-01-23\",\"target\":\"firebase\"},{\"source\":\"diary/2024-01-25\",\"target\":\"firebase\"},{\"source\":\"diary/2024-01-25\",\"target\":\"firebase\"},{\"source\":\"diary/2024-03-15\",\"target\":\"firebase\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"firebase\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/firebase\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"firebase\"}],[\"$\",\"sup\",null,{\"children\":14}]]}]}],[\"$\",\"span\",\"wip\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/wip\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"wip\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"android\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/android\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"android\"}],[\"$\",\"sup\",null,{\"children\":23}]]}]}],[\"$\",\"span\",\"ios\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ios\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ios\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"flipper\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/flipper\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"flipper\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"react-native\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/react-native\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"react-native\"}],[\"$\",\"sup\",null,{\"children\":90}]]}]}],[\"$\",\"span\",\"error\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/error\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"error\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"diary/2023-12-20\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-20\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-20\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"nextjs\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/nextjs\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"nextjs\"}],[\"$\",\"sup\",null,{\"children\":12}]]}]}],[\"$\",\"span\",\"fcm\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/fcm\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"fcm\"}],[\"$\",\"sup\",null,{\"children\":21}]]}]}],[\"$\",\"span\",\"firebase-app-check\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/firebase-app-check\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"firebase-app-check\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"big-query\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/big-query\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"big-query\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"devide-app-by-development-env\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/devide-app-by-development-env\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"devide-app-by-development-env\"}],[\"$\",\"sup\",null,{\"children\":30}]]}]}],[\"$\",\"span\",\"apns\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/apns\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"apns\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"fastlane\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/fastlane\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"fastlane\"}],[\"$\",\"sup\",null,{\"children\":26}]]}]}],[\"$\",\"span\",\"google-analytics-for-firebase\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/google-analytics-for-firebase\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"google-analytics-for-firebase\"}],[\"$\",\"sup\",null,{\"children\":16}]]}]}],[\"$\",\"span\",\"diary/2023-12-21\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-21\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-21\"}],[\"$\",\"sup\",null,{\"children\":20}]]}]}],[\"$\",\"span\",\"diary/2023-12-27\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-27\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-27\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"diary/2023-12-29\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-29\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-29\"}],[\"$\",\"sup\",null,{\"children\":10}]]}]}],[\"$\",\"span\",\"diary/2023-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-31\"}],[\"$\",\"sup\",null,{\"children\":93}]]}]}],[\"$\",\"span\",\"diary/2024-01-01\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-01\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-01\"}],[\"$\",\"sup\",null,{\"children\":16}]]}]}],[\"$\",\"span\",\"diary/2024-01-05\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-05\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-05\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"diary/2024-01-15\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-15\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-15\"}],[\"$\",\"sup\",null,{\"children\":14}]]}]}],[\"$\",\"span\",\"diary/2024-01-18\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-18\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-18\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"diary/2024-01-23\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-23\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-23\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"diary/2024-01-25\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-25\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-25\"}],[\"$\",\"sup\",null,{\"children\":59}]]}]}],[\"$\",\"span\",\"diary/2024-03-15\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-03-15\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-03-15\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"firebase\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#firebase\",\"children\":\"firebase\"}]}],[\"$\",\"div\",\"flowchart\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#flowchart\",\"children\":\"flowchart\"}]}],[\"$\",\"div\",\"client\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#client\",\"children\":\"client\"}]}],[\"$\",\"div\",\"serverside\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#serverside\",\"children\":\"serverside\"}]}],[\"$\",\"div\",\"error\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error\",\"children\":\"error\"}]}],[\"$\",\"div\",\"error-no-firebase-app-default-has-been-created---call-firebaseinitializeapp\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error-no-firebase-app-default-has-been-created---call-firebaseinitializeapp\",\"children\":\"Error: No Firebase App '[DEFAULT]' has been created - call firebase.initializeApp()\"}]}],[\"$\",\"div\",\"typeerror-cannot-read-properties-of-undefined-reading-internal\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#typeerror-cannot-read-properties-of-undefined-reading-internal\",\"children\":\"TypeError: Cannot read properties of undefined (reading 'INTERNAL')\"}]}],[\"$\",\"div\",\"the-default-firebase-app-already-exists-this-means-you-called-initializeapp-more-than-once-without-providing-an-app-name-as-the-second-argument-in-most-cases-you-only-need-to-call-initializeapp-once-but-if-you-do-want-to-initialize-multiple-apps-pass-a-second-argument-to-initializeapp-to-give-each-app-a-unique-name\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#the-default-firebase-app-already-exists-this-means-you-called-initializeapp-more-than-once-without-providing-an-app-name-as-the-second-argument-in-most-cases-you-only-need-to-call-initializeapp-once-but-if-you-do-want-to-initialize-multiple-apps-pass-a-second-argument-to-initializeapp-to-give-each-app-a-unique-name\",\"children\":\"The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T13fd,"])</script><script>self.__next_f.push([1,"- firebase 프로젝트를 등록하면 google cloud console 에 firebase 가 테스트 사용 및 API 키를 자동으로 등록한다\n- firebase 프로젝트를 등록하면 google cloud console 에 firebase 서비스계정을 자동으로 등록한다\n\n## flowchart\n- [[wip]]\n```mermaid\nflowchart\n  ad[developer.apple.com] -.key includes APNs: push..-\u003e f\n  ad[developer.apple.com] -.appstore id, bundle id, team_id..-\u003e f\n  gc[console.cloud.google.com] -.CLIENT_ID: oauth.-\u003e f\n  f[console.firebase.google.com] --GoogleService-info.plist--\u003e i[ios app]\n  f[console.firebase.google.com] --google-services.json--\u003e i[android app]\n```\n\n## client\n- console.firebase.google.com 에서 각 플랫폼별 `google-services.json` 을 다운받는다\n- 문서가 두개가 있는데 firebase 문서가 아닌 rnfirebase.io *Getting Started* 문서를 따라간다\n  - [ ] https://firebase.google.com/docs/android/setup?authuser=0\u0026hl=ko#groovy\n  - [X] https://rnfirebase.io\n- [[android]]\n  - `android/app` 에 `google-services.json` 복사\n  - android/build.grade dependecies 에 classpath 'com.google.com:google-service:4.3.15' 추가한다\n    - google sigin 관련 라이브러 설치하면서 이미 설정되어있음\n  - android/app/build.grade 에서 apply plugin\n- [[ios]]\n  + https://rnfirebase.io\n  - console.firebase.google.com 에서 ios 앱도 프로젝트 설정을 해주어야한다\n    - **주의** 앱 번들 ID는 변경불가\n  - ~~개발자 등록후 진행~~\n  - 패키지 설치\n    - spm 을 사용하는 방법도 있으나 결과적으로 실패\n    - pod 에서와 같이 수정하고 [[flipper]] 를 주석 처리하는 방법이 적혀있으나 안됨\n      ```ruby \n      # right after `use_frameworks! :linkage =\u003e :static`\n      $RNFirebaseAsStaticFramework = true\n      ```\n    - `ios/Podfile` 에 추가하는 것으로 해결\n      ```ruby \n      pod 'FirebaseCore', :modular_headers =\u003e true\n      ```\n      + [[react-native]] **### Module 'FirebaseCore' not Found** 참조\n  - `AppDelegate.mm` 수정\n\n## serverside\n+ https://firebase.google.com/docs/cloud-messaging/server?hl=ko\n- console.firebase.google.com 에서 프로젝트 -\u003e  프로젝트 설정 -\u003e  서비스 계정 -\u003e *새 비공개 키 생성*\n- api spec\n  + https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages?hl=ko \n\n## [[error]]\n### Error: No Firebase App '[DEFAULT]' has been created - call firebase.initializeApp()\n```sh \nError: No Firebase App '[DEFAULT]' has been created - call firebase.initializeApp()\n```\n- [[android]] 에서 발생했으며 설정이슈 [[#client]] 설정 참고\n\n### TypeError: Cannot read properties of undefined (reading 'INTERNAL')\n```sh \nTypeError: Cannot read properties of undefined (reading 'INTERNAL')\n    at initializeApp (.yarn/cache/firebase-admin-npm-12.0.0-a20a06d34c-70e619250d.zip/node_modules/firebase-admin/lib/app/firebase-namespace.js:246:21)\n```\n+ https://firebase.google.com/docs/admin/setup?hl=ko#add-sdk\n- 위 **공식**  문서를 그대로 따라하면 에러가 발생한다 [[diary:2023-12-20]]\n- 아래 링크를 참조하면 모듈이 클래스로 생성되어서 `this` 에러가 나는 것이라고 말하고 있다\n  + https://stackoverflow.com/questions/66260225/cannot-export-firebase-admins-initializeapp-function\n- 실제로 된다 `{ initializeApp }` -\u003e `admin` 으로 모듈을 로드해서 사용\n- as-is\n```ts \nimport { initializeApp, credential } from 'firebase-admin'\nimport { applicationDefault } from 'firebase-admin/app'\n\nconst app = initializeApp({\n  credential: applicationDefault()\n})\n```\n- to-be\n```ts \nimport admin from 'firebase-admin'\nimport { applicationDefault } from 'firebase-admin/app'\n\nconst app = admin.initializeApp({\n  credential: applicationDefault()\n})\n```\n\n### The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.\n```sh \n  errorInfo: {\n    code: 'app/duplicate-app',\n    message: 'The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.'\n  },\n  codePrefix: 'app',\n  page: '/api/test/fcm'\n```\n- [[nextjs]] hmr 과 함께 모듈이 두번로딩되어서 발생하는 것으로 추정\n  + https://github.com/firebase/firebase-admin-node/issues/2111#issuecomment-1636441596\n- 최종적으로 다음과 같은 모습이 되어야함 - [[diary:2023-12-20]]\n```ts \nimport admin from 'firebase-admin'\nimport { applicationDefault, getApp, getApps } from 'firebase-admin/app'\n\nconst apps = getApps()\nconst app = apps[0] ?? admin.initializeApp({\n  credential: applicationDefault()\n})\n```\n\n## link\n- [[fcm]]\n- [[firebase-app-check]]\n- [[big-query]]\n- [[devide-app-by-development-env]]\n"])</script><script>self.__next_f.push([1,"16:T13fd,"])</script><script>self.__next_f.push([1,"- firebase 프로젝트를 등록하면 google cloud console 에 firebase 가 테스트 사용 및 API 키를 자동으로 등록한다\n- firebase 프로젝트를 등록하면 google cloud console 에 firebase 서비스계정을 자동으로 등록한다\n\n## flowchart\n- [[wip]]\n```mermaid\nflowchart\n  ad[developer.apple.com] -.key includes APNs: push..-\u003e f\n  ad[developer.apple.com] -.appstore id, bundle id, team_id..-\u003e f\n  gc[console.cloud.google.com] -.CLIENT_ID: oauth.-\u003e f\n  f[console.firebase.google.com] --GoogleService-info.plist--\u003e i[ios app]\n  f[console.firebase.google.com] --google-services.json--\u003e i[android app]\n```\n\n## client\n- console.firebase.google.com 에서 각 플랫폼별 `google-services.json` 을 다운받는다\n- 문서가 두개가 있는데 firebase 문서가 아닌 rnfirebase.io *Getting Started* 문서를 따라간다\n  - [ ] https://firebase.google.com/docs/android/setup?authuser=0\u0026hl=ko#groovy\n  - [X] https://rnfirebase.io\n- [[android]]\n  - `android/app` 에 `google-services.json` 복사\n  - android/build.grade dependecies 에 classpath 'com.google.com:google-service:4.3.15' 추가한다\n    - google sigin 관련 라이브러 설치하면서 이미 설정되어있음\n  - android/app/build.grade 에서 apply plugin\n- [[ios]]\n  + https://rnfirebase.io\n  - console.firebase.google.com 에서 ios 앱도 프로젝트 설정을 해주어야한다\n    - **주의** 앱 번들 ID는 변경불가\n  - ~~개발자 등록후 진행~~\n  - 패키지 설치\n    - spm 을 사용하는 방법도 있으나 결과적으로 실패\n    - pod 에서와 같이 수정하고 [[flipper]] 를 주석 처리하는 방법이 적혀있으나 안됨\n      ```ruby \n      # right after `use_frameworks! :linkage =\u003e :static`\n      $RNFirebaseAsStaticFramework = true\n      ```\n    - `ios/Podfile` 에 추가하는 것으로 해결\n      ```ruby \n      pod 'FirebaseCore', :modular_headers =\u003e true\n      ```\n      + [[react-native]] **### Module 'FirebaseCore' not Found** 참조\n  - `AppDelegate.mm` 수정\n\n## serverside\n+ https://firebase.google.com/docs/cloud-messaging/server?hl=ko\n- console.firebase.google.com 에서 프로젝트 -\u003e  프로젝트 설정 -\u003e  서비스 계정 -\u003e *새 비공개 키 생성*\n- api spec\n  + https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages?hl=ko \n\n## [[error]]\n### Error: No Firebase App '[DEFAULT]' has been created - call firebase.initializeApp()\n```sh \nError: No Firebase App '[DEFAULT]' has been created - call firebase.initializeApp()\n```\n- [[android]] 에서 발생했으며 설정이슈 [[#client]] 설정 참고\n\n### TypeError: Cannot read properties of undefined (reading 'INTERNAL')\n```sh \nTypeError: Cannot read properties of undefined (reading 'INTERNAL')\n    at initializeApp (.yarn/cache/firebase-admin-npm-12.0.0-a20a06d34c-70e619250d.zip/node_modules/firebase-admin/lib/app/firebase-namespace.js:246:21)\n```\n+ https://firebase.google.com/docs/admin/setup?hl=ko#add-sdk\n- 위 **공식**  문서를 그대로 따라하면 에러가 발생한다 [[diary:2023-12-20]]\n- 아래 링크를 참조하면 모듈이 클래스로 생성되어서 `this` 에러가 나는 것이라고 말하고 있다\n  + https://stackoverflow.com/questions/66260225/cannot-export-firebase-admins-initializeapp-function\n- 실제로 된다 `{ initializeApp }` -\u003e `admin` 으로 모듈을 로드해서 사용\n- as-is\n```ts \nimport { initializeApp, credential } from 'firebase-admin'\nimport { applicationDefault } from 'firebase-admin/app'\n\nconst app = initializeApp({\n  credential: applicationDefault()\n})\n```\n- to-be\n```ts \nimport admin from 'firebase-admin'\nimport { applicationDefault } from 'firebase-admin/app'\n\nconst app = admin.initializeApp({\n  credential: applicationDefault()\n})\n```\n\n### The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.\n```sh \n  errorInfo: {\n    code: 'app/duplicate-app',\n    message: 'The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.'\n  },\n  codePrefix: 'app',\n  page: '/api/test/fcm'\n```\n- [[nextjs]] hmr 과 함께 모듈이 두번로딩되어서 발생하는 것으로 추정\n  + https://github.com/firebase/firebase-admin-node/issues/2111#issuecomment-1636441596\n- 최종적으로 다음과 같은 모습이 되어야함 - [[diary:2023-12-20]]\n```ts \nimport admin from 'firebase-admin'\nimport { applicationDefault, getApp, getApps } from 'firebase-admin/app'\n\nconst apps = getApps()\nconst app = apps[0] ?? admin.initializeApp({\n  credential: applicationDefault()\n})\n```\n\n## link\n- [[fcm]]\n- [[firebase-app-check]]\n- [[big-query]]\n- [[devide-app-by-development-env]]\n"])</script><script>self.__next_f.push([1,"17:T13fd,"])</script><script>self.__next_f.push([1,"- firebase 프로젝트를 등록하면 google cloud console 에 firebase 가 테스트 사용 및 API 키를 자동으로 등록한다\n- firebase 프로젝트를 등록하면 google cloud console 에 firebase 서비스계정을 자동으로 등록한다\n\n## flowchart\n- [[wip]]\n```mermaid\nflowchart\n  ad[developer.apple.com] -.key includes APNs: push..-\u003e f\n  ad[developer.apple.com] -.appstore id, bundle id, team_id..-\u003e f\n  gc[console.cloud.google.com] -.CLIENT_ID: oauth.-\u003e f\n  f[console.firebase.google.com] --GoogleService-info.plist--\u003e i[ios app]\n  f[console.firebase.google.com] --google-services.json--\u003e i[android app]\n```\n\n## client\n- console.firebase.google.com 에서 각 플랫폼별 `google-services.json` 을 다운받는다\n- 문서가 두개가 있는데 firebase 문서가 아닌 rnfirebase.io *Getting Started* 문서를 따라간다\n  - [ ] https://firebase.google.com/docs/android/setup?authuser=0\u0026hl=ko#groovy\n  - [X] https://rnfirebase.io\n- [[android]]\n  - `android/app` 에 `google-services.json` 복사\n  - android/build.grade dependecies 에 classpath 'com.google.com:google-service:4.3.15' 추가한다\n    - google sigin 관련 라이브러 설치하면서 이미 설정되어있음\n  - android/app/build.grade 에서 apply plugin\n- [[ios]]\n  + https://rnfirebase.io\n  - console.firebase.google.com 에서 ios 앱도 프로젝트 설정을 해주어야한다\n    - **주의** 앱 번들 ID는 변경불가\n  - ~~개발자 등록후 진행~~\n  - 패키지 설치\n    - spm 을 사용하는 방법도 있으나 결과적으로 실패\n    - pod 에서와 같이 수정하고 [[flipper]] 를 주석 처리하는 방법이 적혀있으나 안됨\n      ```ruby \n      # right after `use_frameworks! :linkage =\u003e :static`\n      $RNFirebaseAsStaticFramework = true\n      ```\n    - `ios/Podfile` 에 추가하는 것으로 해결\n      ```ruby \n      pod 'FirebaseCore', :modular_headers =\u003e true\n      ```\n      + [[react-native]] **### Module 'FirebaseCore' not Found** 참조\n  - `AppDelegate.mm` 수정\n\n## serverside\n+ https://firebase.google.com/docs/cloud-messaging/server?hl=ko\n- console.firebase.google.com 에서 프로젝트 -\u003e  프로젝트 설정 -\u003e  서비스 계정 -\u003e *새 비공개 키 생성*\n- api spec\n  + https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages?hl=ko \n\n## [[error]]\n### Error: No Firebase App '[DEFAULT]' has been created - call firebase.initializeApp()\n```sh \nError: No Firebase App '[DEFAULT]' has been created - call firebase.initializeApp()\n```\n- [[android]] 에서 발생했으며 설정이슈 [[#client]] 설정 참고\n\n### TypeError: Cannot read properties of undefined (reading 'INTERNAL')\n```sh \nTypeError: Cannot read properties of undefined (reading 'INTERNAL')\n    at initializeApp (.yarn/cache/firebase-admin-npm-12.0.0-a20a06d34c-70e619250d.zip/node_modules/firebase-admin/lib/app/firebase-namespace.js:246:21)\n```\n+ https://firebase.google.com/docs/admin/setup?hl=ko#add-sdk\n- 위 **공식**  문서를 그대로 따라하면 에러가 발생한다 [[diary:2023-12-20]]\n- 아래 링크를 참조하면 모듈이 클래스로 생성되어서 `this` 에러가 나는 것이라고 말하고 있다\n  + https://stackoverflow.com/questions/66260225/cannot-export-firebase-admins-initializeapp-function\n- 실제로 된다 `{ initializeApp }` -\u003e `admin` 으로 모듈을 로드해서 사용\n- as-is\n```ts \nimport { initializeApp, credential } from 'firebase-admin'\nimport { applicationDefault } from 'firebase-admin/app'\n\nconst app = initializeApp({\n  credential: applicationDefault()\n})\n```\n- to-be\n```ts \nimport admin from 'firebase-admin'\nimport { applicationDefault } from 'firebase-admin/app'\n\nconst app = admin.initializeApp({\n  credential: applicationDefault()\n})\n```\n\n### The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.\n```sh \n  errorInfo: {\n    code: 'app/duplicate-app',\n    message: 'The default Firebase app already exists. This means you called initializeApp() more than once without providing an app name as the second argument. In most cases you only need to call initializeApp() once. But if you do want to initialize multiple apps, pass a second argument to initializeApp() to give each app a unique name.'\n  },\n  codePrefix: 'app',\n  page: '/api/test/fcm'\n```\n- [[nextjs]] hmr 과 함께 모듈이 두번로딩되어서 발생하는 것으로 추정\n  + https://github.com/firebase/firebase-admin-node/issues/2111#issuecomment-1636441596\n- 최종적으로 다음과 같은 모습이 되어야함 - [[diary:2023-12-20]]\n```ts \nimport admin from 'firebase-admin'\nimport { applicationDefault, getApp, getApps } from 'firebase-admin/app'\n\nconst apps = getApps()\nconst app = apps[0] ?? admin.initializeApp({\n  credential: applicationDefault()\n})\n```\n\n## link\n- [[fcm]]\n- [[firebase-app-check]]\n- [[big-query]]\n- [[devide-app-by-development-env]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# firebase\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# firebase\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/firebase\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# firebase\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
