@@ -1,0 +1,635 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-e6f48f16817ae44e.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","eks-immersion-day","c"]
+0:["ijHrSmB3cZmRD5f6fhTUk",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","eks-immersion-day","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"eks-immersion-day\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","eks-immersion-day","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:T182c,<h1 id="eks-immersion-day">eks immersion day</h1>
+<p><a href="/public-wiki/diary/2022-12-14">[diary] diary:2022-12-14</a> </p>
+<ul>
+<li><p><a href="https://catalog.us-east-1.prod.workshops.aws/workshops/9c0aa9ab-90a9-44a6-abe1-8dff360ae428/ko-KR/100-scaling/200-cluster-scaling" target="_blank">[URL] https://catalog.us-east-1.prod.workshops.aws/workshops/9c0aa9ab-90a9-44a6-abe1-8dff360ae428/ko-KR/100-scaling/200-cluster-scaling</a></p>
+</li>
+<li><p>Container Overview</p>
+<ul>
+<li>chroot -&gt; pivot root</li>
+<li>namespace -&gt; </li>
+<li>cgroup -&gt; 프로세스별로 가용 컴퓨팅 자원을 제어</li>
+</ul>
+</li>
+<li><p>Dockerfile</p>
+<ul>
+<li><p>from</p>
+</li>
+<li><p>label</p>
+</li>
+<li><p>expose</p>
+</li>
+<li><p>healthcheck</p>
+</li>
+<li><p>run</p>
+</li>
+<li><p>env</p>
+</li>
+<li><p>add</p>
+</li>
+<li><p>copy</p>
+</li>
+<li><p>entrypoint</p>
+</li>
+<li><p>cmd</p>
+</li>
+<li><p>add, copy</p>
+<ul>
+<li>add 는 기능이 더 많다.</li>
+<li>압축된 파일을 add 하면서 해제도가능 </li>
+<li>url 도 지원 가능 -&gt; 빌드 캐시가 안될듯</li>
+</ul>
+</li>
+<li><p>entrypoint, cmd</p>
+<ul>
+<li>entrypoint 는 변경되지 않으므로 보통 ex) node</li>
+<li>cmd 는 오버라이딩이 됨, ex) node 의 파라메터</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>docker expect 로 구조 확인 가능 <strong>union mount system</strong></p>
+</li>
+<li><p>docker network ls</p>
+<ul>
+<li>bridge</li>
+<li>host</li>
+<li>container</li>
+<li>none</li>
+</ul>
+</li>
+<li><p>iptables &gt; docker proxy 순서</p>
+</li>
+<li><p>multi stage</p>
+<ul>
+<li>build와 런타임에 필요한 디펜던시가 다른경우 처리</li>
+</ul>
+</li>
+<li><p>kublet은 agent 형태로 따로 설치됨</p>
+</li>
+<li><p>pod 아이피를 container는 공유 받는다 (sidecar 인경우 두 아이피가 같음)</p>
+</li>
+<li><p>k8s</p>
+<ul>
+<li><p>volume</p>
+<ul>
+<li>emptyDir - 호스트 폴더 이용 파드 삭제시 제거 </li>
+<li>hostPath - 노트 바뀔시에는 사용불가</li>
+<li>pv - 노드가 바껴도 사용가능</li>
+</ul>
+</li>
+<li><p>pv </p>
+<ul>
+<li>dynamic pv -&gt; pvc 에 의해서 pv를 생성하면서 할당</li>
+</ul>
+</li>
+<li><p>network</p>
+<ul>
+<li>overlay network, 가상화가 될때 다른 노드의 가상화에서 ip가 겹치지 않도록 함</li>
+</ul>
+</li>
+<li><p>eth0, lo -&gt; 도커 설치후 docker0 이 추가됨</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs language-sh">docker network <span class="hljs-built_in">ls</span> 
+docker network ispect 
+sudo su
+iptables -t nat -S <span class="hljs-comment"># port-forwarding 후 해보자</span>
+</code></pre><ul>
+<li><p>role - rbac</p>
+<ul>
+<li>rbac role -&gt; namespace 단위</li>
+<li>cluster role -&gt; cluster 단위</li>
+<li>service account -&gt; pod 가 가지는 권한</li>
+</ul>
+</li>
+<li><p>eks</p>
+<ul>
+<li>cordon 해당 노드에 파드를 띄우지 않도록 한다. 스케줄링 제거</li>
+<li>drain 해당 노드의 파드를 다른 파드로 이동시킨다.</li>
+<li>pod disruption budge</li>
+<li>특정 파드 수는 유지하면서 파드 업데이트를 할 수 있다.</li>
+<li>특정 메타데이터를 주입하면 fargate 스케줄러에 의해서 따로 관리됨</li>
+</ul>
+</li>
+<li><p>network</p>
+<ul>
+<li>docker network -&gt; local</li>
+<li>overlay network -&gt; node 간</li>
+<li>cni<ul>
+<li>vpc - aws 는 vpc cni<ul>
+<li>secondary ip 가 인스턴스 타입 종속적으로 갯수가 정해짐</li>
+<li>vcpu 의 캐파에 의해서도 제한됨</li>
+<li>pod 생성 갯수가 제한 됨</li>
+<li>secondary ip = network interface, private ip / network interface + @</li>
+<li>vpc cni 플러그인을 사용하면 secondary ip * 16 이 가능</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>svc -&gt; k-proxy -&gt; iptables 수정</li>
+<li>svc nodeport 시에 externalTrafficPolicy = local 로 설정, s-not 관련 설명인데 추후 찾아볼 것</li>
+<li>lb 생성하면 aws lb 가 생성됨 cloud 벤더 별로 매니지머트 시스템이 존재</li>
+<li>alb<ul>
+<li>instance mode -&gt; node 에서 재 라우팅</li>
+<li>ip mode -&gt; 다이렉트로 파드, 성능 up</li>
+</ul>
+</li>
+<li>csi, conatiner storage interface<ul>
+<li>ebs 는 같은 az에서만 마운트 가능</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>security</p>
+<ul>
+<li>kms 적용하면 secret 이 암호호됨</li>
+<li>guard duty</li>
+<li>kubectl &lt;-&gt; iam authenticator client &lt;-&gt; sts<ul>
+<li>iam authenticator -&gt; config map = aws-auth</li>
+</ul>
+</li>
+<li>irsa, iam role for service account<ul>
+<li>application 의 권한 - pod</li>
+<li>ec2에 권한도 가능하나 pod 는 어떤 node 에 배포될지 정해져 있지 않다.</li>
+<li>k8s sa 의 annotation 을 통해서 iam role 과 바인딩됨</li>
+<li>pod<ul>
+<li>AWS_ROLE_ARN</li>
+<li>AWS_WEB_IDENTITY_TOKEN_FILE</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>확장</p>
+<ul>
+<li>cluster auto-scaler 노드 확장을 위한 플러그인</li>
+<li>karpenter 더 유연, node group 에 묶이지 않는다.</li>
+<li>kubetl edit 아래쪽에 status 는 etcd 에서 들어온다</li>
+<li>ingress controller<ul>
+<li>ingress - alb</li>
+<li>service - nlb</li>
+</ul>
+</li>
+<li>aws lb<ul>
+<li>instance(default) -&gt; node port 로 보내고 알아서 route</li>
+<li>ip -&gt; alb에서 파드 자체로 라우팅</li>
+</ul>
+</li>
+<li>autoscaling 을 위해서는 metric-server 가 필요함</li>
+</ul>
+</li>
+<li><p>kubelet 은 worker node 에서 직접 확인이 가능</p>
+</li>
+<li><p>q&amp;a</p>
+</li>
+</ul>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">alb.ingress.kubernetes.io/group.name:</span> <span class="hljs-string">eks-demo-group</span>
+<span class="hljs-attr">alb.ingress.kubernetes.io/group.order:</span> <span class="hljs-string">&#x27;1&#x27;</span>
+</code></pre><ul>
+<li>keyword <ul>
+<li>netfilter</li>
+<li>iptables</li>
+<li>cni</li>
+<li>eni </li>
+<li>aws load balancer controller </li>
+<li>csi </li>
+<li>bastion server </li>
+<li>argocd vs flux</li>
+<li>eks blue prints</li>
+<li>watch -n1</li>
+<li>blue-green max-surge</li>
+<li>siege 부하 테스트 k6 와 비교</li>
+<li><a href="https://codeberg.org/hjacobs/kube-ops-view" target="_blank">[URL] https://codeberg.org/hjacobs/kube-ops-view</a></li>
+</ul>
+</li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/887fe21\n","className":"bg-white text-black","children":"887fe21"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/eks-immersion-day.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/eks-immersion-day.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/eks-immersion-day.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"eks-immersion-day","name":"eks-immersion-day","val":1},{"id":"diary/2022-12-14","name":"diary/2022-12-14","val":1},{"id":"index","name":"index","val":105}],"links":[{"source":"eks-immersion-day","target":"diary/2022-12-14"},{"source":"index","target":"eks-immersion-day"},{"source":"diary/2022-12-14","target":"eks-immersion-day"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","eks-immersion-day",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/eks-immersion-day","children":[["$","span",null,{"className":"underline","children":"eks-immersion-day"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2022-12-14",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2022-12-14","children":[["$","span",null,{"className":"underline","children":"diary/2022-12-14"}],["$","sup",null,{"children":1}]]}]}],["$","span","index",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/index","children":[["$","span",null,{"className":"underline","children":"index"}],["$","sup",null,{"children":105}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","eks-immersion-day",{"className":"pl-0","children":["$","a",null,{"href":"#eks-immersion-day","children":"eks immersion day"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:T1147,
+[[diary:2022-12-14]] 
+
+- https://catalog.us-east-1.prod.workshops.aws/workshops/9c0aa9ab-90a9-44a6-abe1-8dff360ae428/ko-KR/100-scaling/200-cluster-scaling
+
+- Container Overview
+  - chroot -> pivot root
+  - namespace -> 
+  - cgroup -> 프로세스별로 가용 컴퓨팅 자원을 제어
+- Dockerfile
+  - from
+  - label
+  - expose
+  - healthcheck
+  - run
+  - env
+  - add
+  - copy
+  - entrypoint
+  - cmd
+  
+  - add, copy
+    - add 는 기능이 더 많다.
+    - 압축된 파일을 add 하면서 해제도가능 
+    - url 도 지원 가능 -> 빌드 캐시가 안될듯
+  - entrypoint, cmd
+    - entrypoint 는 변경되지 않으므로 보통 ex) node
+    - cmd 는 오버라이딩이 됨, ex) node 의 파라메터
+    
+- docker expect 로 구조 확인 가능 **union mount system**
+- docker network ls
+  - bridge
+  - host
+  - container
+  - none
+- iptables > docker proxy 순서
+- multi stage
+  - build와 런타임에 필요한 디펜던시가 다른경우 처리
+  
+- kublet은 agent 형태로 따로 설치됨
+- pod 아이피를 container는 공유 받는다 (sidecar 인경우 두 아이피가 같음)
+
+- k8s
+  - volume
+    - emptyDir - 호스트 폴더 이용 파드 삭제시 제거 
+    - hostPath - 노트 바뀔시에는 사용불가
+    - pv - 노드가 바껴도 사용가능
+    
+  - pv 
+    - dynamic pv -> pvc 에 의해서 pv를 생성하면서 할당
+    
+  - network
+    - overlay network, 가상화가 될때 다른 노드의 가상화에서 ip가 겹치지 않도록 함
+    
+  - eth0, lo -> 도커 설치후 docker0 이 추가됨
+```sh
+docker network ls 
+docker network ispect 
+sudo su
+iptables -t nat -S # port-forwarding 후 해보자
+```
+- role - rbac
+  - rbac role -> namespace 단위
+  - cluster role -> cluster 단위
+  - service account -> pod 가 가지는 권한
+  
+- eks
+  - cordon 해당 노드에 파드를 띄우지 않도록 한다. 스케줄링 제거
+  - drain 해당 노드의 파드를 다른 파드로 이동시킨다.
+  - pod disruption budge
+  - 특정 파드 수는 유지하면서 파드 업데이트를 할 수 있다.
+  - 특정 메타데이터를 주입하면 fargate 스케줄러에 의해서 따로 관리됨
+  
+- network
+  - docker network -> local
+  - overlay network -> node 간
+  - cni
+    - vpc - aws 는 vpc cni
+      - secondary ip 가 인스턴스 타입 종속적으로 갯수가 정해짐
+      - vcpu 의 캐파에 의해서도 제한됨
+      - pod 생성 갯수가 제한 됨
+      - secondary ip = network interface, private ip / network interface + @
+      - vpc cni 플러그인을 사용하면 secondary ip * 16 이 가능
+  - svc -> k-proxy -> iptables 수정
+  - svc nodeport 시에 externalTrafficPolicy = local 로 설정, s-not 관련 설명인데 추후 찾아볼 것
+  - lb 생성하면 aws lb 가 생성됨 cloud 벤더 별로 매니지머트 시스템이 존재
+  - alb
+    - instance mode -> node 에서 재 라우팅
+    - ip mode -> 다이렉트로 파드, 성능 up
+  - csi, conatiner storage interface
+    - ebs 는 같은 az에서만 마운트 가능
+- security
+  - kms 적용하면 secret 이 암호호됨
+  - guard duty
+  - kubectl <-> iam authenticator client <-> sts
+    - iam authenticator -> config map = aws-auth
+  - irsa, iam role for service account
+    - application 의 권한 - pod
+    - ec2에 권한도 가능하나 pod 는 어떤 node 에 배포될지 정해져 있지 않다.
+    - k8s sa 의 annotation 을 통해서 iam role 과 바인딩됨
+    - pod
+      - AWS_ROLE_ARN
+      - AWS_WEB_IDENTITY_TOKEN_FILE
+- 확장
+  - cluster auto-scaler 노드 확장을 위한 플러그인
+  - karpenter 더 유연, node group 에 묶이지 않는다.
+  - kubetl edit 아래쪽에 status 는 etcd 에서 들어온다
+  - ingress controller
+    - ingress - alb
+    - service - nlb
+  - aws lb
+    - instance(default) -> node port 로 보내고 알아서 route
+    - ip -> alb에서 파드 자체로 라우팅
+  - autoscaling 을 위해서는 metric-server 가 필요함
+  
+- kubelet 은 worker node 에서 직접 확인이 가능
+  
+- q&a
+```yaml
+alb.ingress.kubernetes.io/group.name: eks-demo-group
+alb.ingress.kubernetes.io/group.order: '1'
+```
+  
+- keyword 
+  - netfilter
+  - iptables
+  - cni
+  - eni 
+  - aws load balancer controller 
+  - csi 
+  - bastion server 
+  - argocd vs flux
+  - eks blue prints
+  - watch -n1
+  - blue-green max-surge
+  - siege 부하 테스트 k6 와 비교
+  - https://codeberg.org/hjacobs/kube-ops-view
+12:T1147,
+[[diary:2022-12-14]] 
+
+- https://catalog.us-east-1.prod.workshops.aws/workshops/9c0aa9ab-90a9-44a6-abe1-8dff360ae428/ko-KR/100-scaling/200-cluster-scaling
+
+- Container Overview
+  - chroot -> pivot root
+  - namespace -> 
+  - cgroup -> 프로세스별로 가용 컴퓨팅 자원을 제어
+- Dockerfile
+  - from
+  - label
+  - expose
+  - healthcheck
+  - run
+  - env
+  - add
+  - copy
+  - entrypoint
+  - cmd
+  
+  - add, copy
+    - add 는 기능이 더 많다.
+    - 압축된 파일을 add 하면서 해제도가능 
+    - url 도 지원 가능 -> 빌드 캐시가 안될듯
+  - entrypoint, cmd
+    - entrypoint 는 변경되지 않으므로 보통 ex) node
+    - cmd 는 오버라이딩이 됨, ex) node 의 파라메터
+    
+- docker expect 로 구조 확인 가능 **union mount system**
+- docker network ls
+  - bridge
+  - host
+  - container
+  - none
+- iptables > docker proxy 순서
+- multi stage
+  - build와 런타임에 필요한 디펜던시가 다른경우 처리
+  
+- kublet은 agent 형태로 따로 설치됨
+- pod 아이피를 container는 공유 받는다 (sidecar 인경우 두 아이피가 같음)
+
+- k8s
+  - volume
+    - emptyDir - 호스트 폴더 이용 파드 삭제시 제거 
+    - hostPath - 노트 바뀔시에는 사용불가
+    - pv - 노드가 바껴도 사용가능
+    
+  - pv 
+    - dynamic pv -> pvc 에 의해서 pv를 생성하면서 할당
+    
+  - network
+    - overlay network, 가상화가 될때 다른 노드의 가상화에서 ip가 겹치지 않도록 함
+    
+  - eth0, lo -> 도커 설치후 docker0 이 추가됨
+```sh
+docker network ls 
+docker network ispect 
+sudo su
+iptables -t nat -S # port-forwarding 후 해보자
+```
+- role - rbac
+  - rbac role -> namespace 단위
+  - cluster role -> cluster 단위
+  - service account -> pod 가 가지는 권한
+  
+- eks
+  - cordon 해당 노드에 파드를 띄우지 않도록 한다. 스케줄링 제거
+  - drain 해당 노드의 파드를 다른 파드로 이동시킨다.
+  - pod disruption budge
+  - 특정 파드 수는 유지하면서 파드 업데이트를 할 수 있다.
+  - 특정 메타데이터를 주입하면 fargate 스케줄러에 의해서 따로 관리됨
+  
+- network
+  - docker network -> local
+  - overlay network -> node 간
+  - cni
+    - vpc - aws 는 vpc cni
+      - secondary ip 가 인스턴스 타입 종속적으로 갯수가 정해짐
+      - vcpu 의 캐파에 의해서도 제한됨
+      - pod 생성 갯수가 제한 됨
+      - secondary ip = network interface, private ip / network interface + @
+      - vpc cni 플러그인을 사용하면 secondary ip * 16 이 가능
+  - svc -> k-proxy -> iptables 수정
+  - svc nodeport 시에 externalTrafficPolicy = local 로 설정, s-not 관련 설명인데 추후 찾아볼 것
+  - lb 생성하면 aws lb 가 생성됨 cloud 벤더 별로 매니지머트 시스템이 존재
+  - alb
+    - instance mode -> node 에서 재 라우팅
+    - ip mode -> 다이렉트로 파드, 성능 up
+  - csi, conatiner storage interface
+    - ebs 는 같은 az에서만 마운트 가능
+- security
+  - kms 적용하면 secret 이 암호호됨
+  - guard duty
+  - kubectl <-> iam authenticator client <-> sts
+    - iam authenticator -> config map = aws-auth
+  - irsa, iam role for service account
+    - application 의 권한 - pod
+    - ec2에 권한도 가능하나 pod 는 어떤 node 에 배포될지 정해져 있지 않다.
+    - k8s sa 의 annotation 을 통해서 iam role 과 바인딩됨
+    - pod
+      - AWS_ROLE_ARN
+      - AWS_WEB_IDENTITY_TOKEN_FILE
+- 확장
+  - cluster auto-scaler 노드 확장을 위한 플러그인
+  - karpenter 더 유연, node group 에 묶이지 않는다.
+  - kubetl edit 아래쪽에 status 는 etcd 에서 들어온다
+  - ingress controller
+    - ingress - alb
+    - service - nlb
+  - aws lb
+    - instance(default) -> node port 로 보내고 알아서 route
+    - ip -> alb에서 파드 자체로 라우팅
+  - autoscaling 을 위해서는 metric-server 가 필요함
+  
+- kubelet 은 worker node 에서 직접 확인이 가능
+  
+- q&a
+```yaml
+alb.ingress.kubernetes.io/group.name: eks-demo-group
+alb.ingress.kubernetes.io/group.order: '1'
+```
+  
+- keyword 
+  - netfilter
+  - iptables
+  - cni
+  - eni 
+  - aws load balancer controller 
+  - csi 
+  - bastion server 
+  - argocd vs flux
+  - eks blue prints
+  - watch -n1
+  - blue-green max-surge
+  - siege 부하 테스트 k6 와 비교
+  - https://codeberg.org/hjacobs/kube-ops-view
+13:T1147,
+[[diary:2022-12-14]] 
+
+- https://catalog.us-east-1.prod.workshops.aws/workshops/9c0aa9ab-90a9-44a6-abe1-8dff360ae428/ko-KR/100-scaling/200-cluster-scaling
+
+- Container Overview
+  - chroot -> pivot root
+  - namespace -> 
+  - cgroup -> 프로세스별로 가용 컴퓨팅 자원을 제어
+- Dockerfile
+  - from
+  - label
+  - expose
+  - healthcheck
+  - run
+  - env
+  - add
+  - copy
+  - entrypoint
+  - cmd
+  
+  - add, copy
+    - add 는 기능이 더 많다.
+    - 압축된 파일을 add 하면서 해제도가능 
+    - url 도 지원 가능 -> 빌드 캐시가 안될듯
+  - entrypoint, cmd
+    - entrypoint 는 변경되지 않으므로 보통 ex) node
+    - cmd 는 오버라이딩이 됨, ex) node 의 파라메터
+    
+- docker expect 로 구조 확인 가능 **union mount system**
+- docker network ls
+  - bridge
+  - host
+  - container
+  - none
+- iptables > docker proxy 순서
+- multi stage
+  - build와 런타임에 필요한 디펜던시가 다른경우 처리
+  
+- kublet은 agent 형태로 따로 설치됨
+- pod 아이피를 container는 공유 받는다 (sidecar 인경우 두 아이피가 같음)
+
+- k8s
+  - volume
+    - emptyDir - 호스트 폴더 이용 파드 삭제시 제거 
+    - hostPath - 노트 바뀔시에는 사용불가
+    - pv - 노드가 바껴도 사용가능
+    
+  - pv 
+    - dynamic pv -> pvc 에 의해서 pv를 생성하면서 할당
+    
+  - network
+    - overlay network, 가상화가 될때 다른 노드의 가상화에서 ip가 겹치지 않도록 함
+    
+  - eth0, lo -> 도커 설치후 docker0 이 추가됨
+```sh
+docker network ls 
+docker network ispect 
+sudo su
+iptables -t nat -S # port-forwarding 후 해보자
+```
+- role - rbac
+  - rbac role -> namespace 단위
+  - cluster role -> cluster 단위
+  - service account -> pod 가 가지는 권한
+  
+- eks
+  - cordon 해당 노드에 파드를 띄우지 않도록 한다. 스케줄링 제거
+  - drain 해당 노드의 파드를 다른 파드로 이동시킨다.
+  - pod disruption budge
+  - 특정 파드 수는 유지하면서 파드 업데이트를 할 수 있다.
+  - 특정 메타데이터를 주입하면 fargate 스케줄러에 의해서 따로 관리됨
+  
+- network
+  - docker network -> local
+  - overlay network -> node 간
+  - cni
+    - vpc - aws 는 vpc cni
+      - secondary ip 가 인스턴스 타입 종속적으로 갯수가 정해짐
+      - vcpu 의 캐파에 의해서도 제한됨
+      - pod 생성 갯수가 제한 됨
+      - secondary ip = network interface, private ip / network interface + @
+      - vpc cni 플러그인을 사용하면 secondary ip * 16 이 가능
+  - svc -> k-proxy -> iptables 수정
+  - svc nodeport 시에 externalTrafficPolicy = local 로 설정, s-not 관련 설명인데 추후 찾아볼 것
+  - lb 생성하면 aws lb 가 생성됨 cloud 벤더 별로 매니지머트 시스템이 존재
+  - alb
+    - instance mode -> node 에서 재 라우팅
+    - ip mode -> 다이렉트로 파드, 성능 up
+  - csi, conatiner storage interface
+    - ebs 는 같은 az에서만 마운트 가능
+- security
+  - kms 적용하면 secret 이 암호호됨
+  - guard duty
+  - kubectl <-> iam authenticator client <-> sts
+    - iam authenticator -> config map = aws-auth
+  - irsa, iam role for service account
+    - application 의 권한 - pod
+    - ec2에 권한도 가능하나 pod 는 어떤 node 에 배포될지 정해져 있지 않다.
+    - k8s sa 의 annotation 을 통해서 iam role 과 바인딩됨
+    - pod
+      - AWS_ROLE_ARN
+      - AWS_WEB_IDENTITY_TOKEN_FILE
+- 확장
+  - cluster auto-scaler 노드 확장을 위한 플러그인
+  - karpenter 더 유연, node group 에 묶이지 않는다.
+  - kubetl edit 아래쪽에 status 는 etcd 에서 들어온다
+  - ingress controller
+    - ingress - alb
+    - service - nlb
+  - aws lb
+    - instance(default) -> node port 로 보내고 알아서 route
+    - ip -> alb에서 파드 자체로 라우팅
+  - autoscaling 을 위해서는 metric-server 가 필요함
+  
+- kubelet 은 worker node 에서 직접 확인이 가능
+  
+- q&a
+```yaml
+alb.ingress.kubernetes.io/group.name: eks-demo-group
+alb.ingress.kubernetes.io/group.order: '1'
+```
+  
+- keyword 
+  - netfilter
+  - iptables
+  - cni
+  - eni 
+  - aws load balancer controller 
+  - csi 
+  - bastion server 
+  - argocd vs flux
+  - eks blue prints
+  - watch -n1
+  - blue-green max-surge
+  - siege 부하 테스트 k6 와 비교
+  - https://codeberg.org/hjacobs/kube-ops-view
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# eks immersion day"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# eks immersion day"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/eks-immersion-day"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# eks immersion day"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null
