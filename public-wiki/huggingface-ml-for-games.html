@@ -1,0 +1,1257 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-c65c2f1963a00db9.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-ea177f1f1aa270b2.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># huggingface ml for games</title><meta name="description" content="
+## 프로젝트 에러
+- 2024-05-22 기준 프로젝는 [[unity]] 6 에서 열었을시 실패했다 이전 버전으로 연다
+- 에러있다고 하면서 safe mode 에 진입하게되고 이때 패키지 두개를 설치하면된다
+- name 으로 설치 -&gt; `com.unity.sentis` 패키지를 설치시에 버전을 `1.3.0-pre.1` 로 고정한다
+- git 으로 설치 -&gt; `https://github.com/huggingface/sharp-transformers.git`
+
+## UNIT 0. WELCOME TO THE COURSCE
+### Welcome to the course 🤗
+- AI 모델로 하는 혁신
+  - How we make games
+    - 텍스쳐 생성
+    - AI 보이스 사용
+  - How we create gameplay
+    - LLM 백엔드의 NPC
+- 배우게될 것
+  - 챗 모델을 사용한 NPC
+  - 모델의 로컬 및 클라우드 API 사용
+  - AI 툴들, TTS, 이미지 생성
+  - 게임 데모 생성
+- 요구사항
+  - 디스코드 조인
+  - 유니티 개발
+    - https://learn.unity.com/course/create-with-code (36시간 30분)
+- 이 코스에서 다루진 않지만 딥하게 가고자 한다면 추가 학습이 열려있다
+  - NLP
+  - Audio
+  - Gradio
+- 코스의 목표
+  - 자신만의 게임 데모
+  - AI 를 활용한 게임 제작
+  - AI 를 활용한 게임 플레이(NPC등)
+
+### The Goal, Build Your own Game Demo
+- 자격증 조건
+  - 5명 이내의 팀
+  - WebGL 혹은 Windows 에서 구동
+  - English
+  - 1개 이상의 오픈소스 툴 활용
+- Unity 
+  + https://learn.unity.com/course/create-with-code
+
+### Syllabus
+- 강의구성
+  - 이론
+    - ML 을 딥하게 다루는 것이 아님을 알 것
+    - 허깅 페이스의 추론 api 를 사용할 것으로 예상됨
+  - 핸즈온
+- 각 유닛은 1주(주당 3-4시간)으로 진행되는 페이스로 구성
+- 데모 구현을 위해서는 2-4주의 시간을 사용할 것을 권장
+
+### The Team
+- 강사 소개
+
+### Onboarding
+- 할일
+  - 허깅페이스 계정 생성
+  - 디스코드 서버 조인
+
+#### 디스코드 채널
+
+|                                             |                            |
+|---------------------------------------------|----------------------------|
+| ml-4-games-course-announcements             | 최신정보                   |
+| ml-4-games-course-announcements-study-group | 질문 및 의견 교환          |
+| ml-4-games-dev                              | ML 게임 개발에 대한 교환   |
+| ml-4-games-searching-for-team               | 데모 구현을 위한 팀원 찾기 |
+| ml-4-games-i-made-this                      | 내 모델 공유               |
+
+### Discord 101
+- 주저하지말고 자주 참여해라
+
+### Getting the most of the course
+- 따라서 구현할 것
+- 수정을 주저하지 말것
+- 팀으로 할것을 권고
+
+### Conclusion
+- 배우게될 것
+  - Unity Sentis 와 로컬에서 AI 모델 사용 및 첫번째 지능형 AI NPC
+  - 데모 게임에 대한 게임 디자인 문서 작성
+
+## UNIT 1. CREATE A SMART ROBOT NPC USING HUGGING FACE 🤗 AND UNITY SENTIS
+### Introduction
+- 배우게 될 것
+  - Sentence Similarity
+  - AI 모델의 로컬, 클라우드 실행 차이
+  - 허깅페이스
+  - Unity Sentis, Sharp Transformers 와 함께 AI 모델을 로컬에서 실행하는 방법
+- 사용하는 것
+  - 유니티 게임 엔진 2022.3+ 
+  - Jammo Robot 어셋
+  - Unity Sentis library - AI 모델을 게임안에서 실행하기 위해 필요
+  - Hugging Face Sharp Transformers -  유니티 게임 안에서 허깅페이스 트랜스포머를 실행할 수 있게 하는 유니티 플러그인
+- 예제 게임 설명
+  - 채팅으로 NPC 에게 요청하고 NPC 가 이를 실행
+  - 가져다 달라거나 춤춰달라거나 요청 후 이를 NPC 가 실행
+  - 건물안에서 가드를 피해서 숨고 목적 아이템을 훔쳐오라는 지시 후 NPC 가 이를 수행하는 게임
+
+### What is Sentence Similarity?
+#### The Power of Sentence Similarity 🤖
+- 게임만들기 전에 문장 유사도에 대한 정의와 동작을 이해해야한다
+
+#### How does this game work?
+- 선택지를 클릭하는 대신 챗을 통해 더 많은 자유도를 제공한다
+- 로봇은 액션 리스트를 가지고 있고 유저의 채팅문장과 유사도가 높은 액션을 선택해서 사용한다
+
+#### What is Sentence Similarity?
+- 주어진 문장(input) 과 타겟 문장들간의 유사도를 계산하는 것
+- 입력 문장 -&gt; embed -&gt; 임베딩(벡터)
+  - 이를 가지고 cosine 유사도를 계산
+  - 딥하게 들어가고 싶다면 링크 참조
+    + https://huggingface.co/tasks/sentence-similarity
+
+#### The Complete pipeline
+- 유저 인풋과 액션 리스트는 모두 string 으로 되어있다.
+- 유사도 처리를 위해서는 임베딩이 필요하며 이는 *Sharp Transformers* 에서 처리한다
+- *Sharp Transformers* 를 통해 토큰화된 인풋은 *Unity Sentis* 모델의 입력으로 들어간다
+- *Unity Sentis* 모델의 결과로 유사도 점수가 나온다
+
+1. 유저가 명령어를 입력한다: &quot;Can you bring me the red cube?&quot;
+2. 로봇은 액션 목록을 가지고 있다
+  - Hello
+  - Happy
+  - Bring red box
+  - Move to blue pillar
+3. 가장 유사한 액션을 찾기 위해 인풋을 임베딩한다
+4. *Sharp Transformers* 에 의해 입력이 토큰화된다
+5. 토큰화된 입력을 모델에 넣어 인풋에 대한 정보를 갖는 임베딩을 출력한다(by *Unity Sentis*)
+6. 임베딩 되었으므로 유사도 검색이 가능해진다
+7. 유사도 검색(비교) 에서 가장 높은 스코어를 가진 액션을 선택한다  
+  - 해당 스코어가 `0.2` 이상인 경우 액션을 실행을 요구한다
+  - 해당 스코어가 `0.2` 이하인 경우 &quot;몰루~&quot; 처리한다
+
+##### Why `0.2` for the Similarity score threshold?
+- 여러 테스트 결과를 통해 찾아진 값이다
+- 스코어는 액션 리스트 전체를 합치면 1이 된다, 때문에 액션 리스트가 늘어나는 경우 threshold 값은 낮아져야한다
+
+### How to run an AI model: local vs remote Inference
+#### How to run an AI model: local vs remote
+- 이 게임에서 유사도 검색을 사용하기 위해 `all-MiniLM-L6-v2` 모델을 사용한다
+  + https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
+- 이 모델은 BERT 트랜스포머 모델로 이미 학습을 마쳤으므로 사용하면된다
+
+#### Running the model remotely
+- 서버 api 를 호출하는 방식
+- 허깅페이스에서 *Inference API* 를 제공
+  - 프로토타입및 테스트용은 무료
+  - 이를 사용하기 위한 유니티 플러그인이 존재
+    + https://huggingface.co/blog/unity-api
+- 장점
+  - 클라이언트 측에 리소스 필요하지 않음
+  - 서버쪽에서 로깅할 수 있음으로 유저 입력에 대한 정보등을 개선에 쓸 수 있음
+- 단점
+  - 인터넷 연결 및 서버 상태에 따른 종속이 생김
+  - 잠재적 비용 비용 폭탄 가능성
+- 주로 클라이언트에서 실행할 수 없는 큰 모델을 실행하는 경우 API 제공이 필요하다
+
+#### Running the model locally
+- 클라이언트에서 사용하기 위해 2개의 라이브러리를 사용한다
+  - *Unity Sentis* - AI 모델을 게임 안에서 실행할 수 있도록 한다
+  - *The Hugging Face Sharp Transformers library* - 유니티 게임에서 트랜스포머 모델을 사용할 수 있도록 한다
+- 장점
+  - 돈 안나감
+  - 인터넷 연결 종속 없음
+- 단점
+  - 클라이언트 스펙에 영향을 받는다(RAM/VRAM)
+  - 유저가 어떤식으로 모델을 활용하는 정보를 쉽게 얻지 못한다
+
+- 유사도 검색은 가벼운 모델이라 **로컬에서 사용하기로한다**
+
+### What is Hugging Face 🤗?
+- 허깅페이스에 대한 설명
+- 추론 API 서비스를 무료, 유료 옵션으로 제공
+- *Sentence Similarity* 모델을 사용하는 가이드
+
+### Let&#x27;s build our smart robot demo 🤖
+- 제공하는 코드를 통해 로봇과 유사도 검색을 통한 액션 매치를 수행하는 핸즈온
+
+### What can you do now?
+- 위 핸즈온에 더해서 SST(Speach-To-Text) 등의 기능을 추가해 볼 것
+
+### Conclusion
+- 다음
+
+## DEFINING MY DEMO PART 1. FINDING THE IDEA AND WRITING THE GDD
+### Introduction
+- 이 코스의 목표
+  - AI 툴을 사용하여 게임 데모 제작
+  - 혹은 AI 를 사용하여 게임 운영(NPC)
+- 이 챕터는 데모를 만드는 챕터
+- 팀으로하는 걸 추천
+- GDD(Game Design Document) 은 한페이지 문서로 다음을 포함
+  - 게임 플레이 매커니즘
+  - 사용할 AI 툴
+  - 사용할 에셋
+  - 필요시 스토리
+  - 게임의 범위
+  - 필요시 팀
+
+### It&#x27;s your first game?
+- 게임제작시시 염두해야둬야할 [[youtube]] 영상 제공
+- 스코프는 한달을 넘어가지 않도록 매우 작게 할 것
+- 첫번째 작업은 만드는데 의의를 둔다
+- 자신의 능력 맞춰 개발한다
+  - 그림을 못그리면 최대한 배제된 것으로 
+  - 코딩을 못하면 단순성에 초점을 맞추어
+- 매우 작은 MVP(Minimum Viable Product) 를 작성
+  - 매우 작은 게임의 핵심을 설계
+  - 디테일한 아이템 목록이나 여러 캐릭터 마법등은 배제
+  - 수퍼마리오를 예로 이동, 가로로 긴 맵, 떨어지면 죽는 영역(테스트 재시작 트리거 포인트)
+- 매우 작은 MVP(Minimum Viable Product) 를 작성
+- 한시간내에 안풀리는건 하지말 것, 검색으로 대부분 해결이 가능
+- 마케팅은 매우 중요하다 인디개발자로 살 것이라면 특히
+  - 3분 내의 소개 동영상
+  - 웹사이트, 심플한것이 아마추어로 보이는 것 보다 낫다
+  - 인디게임 대회에 출품
+  - 게임업계인 SNS 에 부탁
+  - 게임 뉴스 사이트에 메일보내기
+  - 출시가 가까워지면 Reddit AMA, 팟케스트, SNS, 웹사이트 업데이트
+  - 스팀이나 GOG 등에 출시한다, 이때 홍보채널을 가지고 있는 것이 출시에 도움이 된다
+  - 가능한 많은 곳에 출시한다
+  - 출시후에는 단점을 받아들이고, 버그픽스등을 서비스한다
+  - 유저 및 기자들과 소통을 유지한다
+- [ ] [[@todo]] GDC 토크 영상 시청
+  - https://www.youtube.com/watch?time_continue=2&amp;v=ZW8gWgpptI8&amp;embeds_referring_euri=https%3A%2F%2Fhuggingface.co%2F&amp;source_ve_path=Mjg2NjY&amp;feature=emb_logo
+
+### Step 1. Crafting the Game Idea
+- 내 단점을 받아들인다
+- 좋아하는 게임으로 부터 영감을 얻는다
+- AI를 통해 게임을 어떻게 개선할지 생각한다
+- 게임의 범위를 작게 한다
+- 허깅페이스 챗에서 브레인 스토밍을 한다
+
+### Step 2. Writing the GDD
+#### What  is a Game Design Document(GDD)
+- 게임 프로젝트의 청사진
+- 정의를 명확히하고 게임의 비전의 이해를 팀원들과 공유한다 
+- 개발 프로세스를 촉진한다
+- 아웃라인
+  - 게임플레이
+  - 피처
+  - 게임 매커지니즘
+  - 어셋
+  - 등등
+#### The One Page Game Design Document Template
+- [ ] Game Title
+- [ ] Team and roles
+- [ ] Game Concept
+- [ ] Game Genre
+- [ ] Game Features and AI tools/model used
+- [ ] Platform
+- [ ] Scope
+- [ ] Art Style
+- [ ] Level
+- [ ] Assets
+- [ ] Todo
+
+### Conclusion
+
+## BONUS 1. CLASSICAL AI IN VIDEO GAMES
+- AI 사례
+
+## UNIT 2. AI TOOLS FOR GAME DEVELOPERS 🎨
+### Introduction
+- AI 툴 적용
+
+### Introduction
+### Code Assistants 👩💻
+### Music Generation 🎵
+### AI Voice Actors 🤖
+### Animation Generation 💃
+### Texture Generation 🖼️
+### 2D Assets Generation 🎮
+### Sound Effects Generation 🔊
+### Conclusion
+
+## link
+- [[huggingface]]
+- [[unity]]
+- [[book/making-game-graphic-with-stable-diffusion]]
+- [[stable-diffusion]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# huggingface ml for games"/><meta property="og:description" content="
+## 프로젝트 에러
+- 2024-05-22 기준 프로젝는 [[unity]] 6 에서 열었을시 실패했다 이전 버전으로 연다
+- 에러있다고 하면서 safe mode 에 진입하게되고 이때 패키지 두개를 설치하면된다
+- name 으로 설치 -&gt; `com.unity.sentis` 패키지를 설치시에 버전을 `1.3.0-pre.1` 로 고정한다
+- git 으로 설치 -&gt; `https://github.com/huggingface/sharp-transformers.git`
+
+## UNIT 0. WELCOME TO THE COURSCE
+### Welcome to the course 🤗
+- AI 모델로 하는 혁신
+  - How we make games
+    - 텍스쳐 생성
+    - AI 보이스 사용
+  - How we create gameplay
+    - LLM 백엔드의 NPC
+- 배우게될 것
+  - 챗 모델을 사용한 NPC
+  - 모델의 로컬 및 클라우드 API 사용
+  - AI 툴들, TTS, 이미지 생성
+  - 게임 데모 생성
+- 요구사항
+  - 디스코드 조인
+  - 유니티 개발
+    - https://learn.unity.com/course/create-with-code (36시간 30분)
+- 이 코스에서 다루진 않지만 딥하게 가고자 한다면 추가 학습이 열려있다
+  - NLP
+  - Audio
+  - Gradio
+- 코스의 목표
+  - 자신만의 게임 데모
+  - AI 를 활용한 게임 제작
+  - AI 를 활용한 게임 플레이(NPC등)
+
+### The Goal, Build Your own Game Demo
+- 자격증 조건
+  - 5명 이내의 팀
+  - WebGL 혹은 Windows 에서 구동
+  - English
+  - 1개 이상의 오픈소스 툴 활용
+- Unity 
+  + https://learn.unity.com/course/create-with-code
+
+### Syllabus
+- 강의구성
+  - 이론
+    - ML 을 딥하게 다루는 것이 아님을 알 것
+    - 허깅 페이스의 추론 api 를 사용할 것으로 예상됨
+  - 핸즈온
+- 각 유닛은 1주(주당 3-4시간)으로 진행되는 페이스로 구성
+- 데모 구현을 위해서는 2-4주의 시간을 사용할 것을 권장
+
+### The Team
+- 강사 소개
+
+### Onboarding
+- 할일
+  - 허깅페이스 계정 생성
+  - 디스코드 서버 조인
+
+#### 디스코드 채널
+
+|                                             |                            |
+|---------------------------------------------|----------------------------|
+| ml-4-games-course-announcements             | 최신정보                   |
+| ml-4-games-course-announcements-study-group | 질문 및 의견 교환          |
+| ml-4-games-dev                              | ML 게임 개발에 대한 교환   |
+| ml-4-games-searching-for-team               | 데모 구현을 위한 팀원 찾기 |
+| ml-4-games-i-made-this                      | 내 모델 공유               |
+
+### Discord 101
+- 주저하지말고 자주 참여해라
+
+### Getting the most of the course
+- 따라서 구현할 것
+- 수정을 주저하지 말것
+- 팀으로 할것을 권고
+
+### Conclusion
+- 배우게될 것
+  - Unity Sentis 와 로컬에서 AI 모델 사용 및 첫번째 지능형 AI NPC
+  - 데모 게임에 대한 게임 디자인 문서 작성
+
+## UNIT 1. CREATE A SMART ROBOT NPC USING HUGGING FACE 🤗 AND UNITY SENTIS
+### Introduction
+- 배우게 될 것
+  - Sentence Similarity
+  - AI 모델의 로컬, 클라우드 실행 차이
+  - 허깅페이스
+  - Unity Sentis, Sharp Transformers 와 함께 AI 모델을 로컬에서 실행하는 방법
+- 사용하는 것
+  - 유니티 게임 엔진 2022.3+ 
+  - Jammo Robot 어셋
+  - Unity Sentis library - AI 모델을 게임안에서 실행하기 위해 필요
+  - Hugging Face Sharp Transformers -  유니티 게임 안에서 허깅페이스 트랜스포머를 실행할 수 있게 하는 유니티 플러그인
+- 예제 게임 설명
+  - 채팅으로 NPC 에게 요청하고 NPC 가 이를 실행
+  - 가져다 달라거나 춤춰달라거나 요청 후 이를 NPC 가 실행
+  - 건물안에서 가드를 피해서 숨고 목적 아이템을 훔쳐오라는 지시 후 NPC 가 이를 수행하는 게임
+
+### What is Sentence Similarity?
+#### The Power of Sentence Similarity 🤖
+- 게임만들기 전에 문장 유사도에 대한 정의와 동작을 이해해야한다
+
+#### How does this game work?
+- 선택지를 클릭하는 대신 챗을 통해 더 많은 자유도를 제공한다
+- 로봇은 액션 리스트를 가지고 있고 유저의 채팅문장과 유사도가 높은 액션을 선택해서 사용한다
+
+#### What is Sentence Similarity?
+- 주어진 문장(input) 과 타겟 문장들간의 유사도를 계산하는 것
+- 입력 문장 -&gt; embed -&gt; 임베딩(벡터)
+  - 이를 가지고 cosine 유사도를 계산
+  - 딥하게 들어가고 싶다면 링크 참조
+    + https://huggingface.co/tasks/sentence-similarity
+
+#### The Complete pipeline
+- 유저 인풋과 액션 리스트는 모두 string 으로 되어있다.
+- 유사도 처리를 위해서는 임베딩이 필요하며 이는 *Sharp Transformers* 에서 처리한다
+- *Sharp Transformers* 를 통해 토큰화된 인풋은 *Unity Sentis* 모델의 입력으로 들어간다
+- *Unity Sentis* 모델의 결과로 유사도 점수가 나온다
+
+1. 유저가 명령어를 입력한다: &quot;Can you bring me the red cube?&quot;
+2. 로봇은 액션 목록을 가지고 있다
+  - Hello
+  - Happy
+  - Bring red box
+  - Move to blue pillar
+3. 가장 유사한 액션을 찾기 위해 인풋을 임베딩한다
+4. *Sharp Transformers* 에 의해 입력이 토큰화된다
+5. 토큰화된 입력을 모델에 넣어 인풋에 대한 정보를 갖는 임베딩을 출력한다(by *Unity Sentis*)
+6. 임베딩 되었으므로 유사도 검색이 가능해진다
+7. 유사도 검색(비교) 에서 가장 높은 스코어를 가진 액션을 선택한다  
+  - 해당 스코어가 `0.2` 이상인 경우 액션을 실행을 요구한다
+  - 해당 스코어가 `0.2` 이하인 경우 &quot;몰루~&quot; 처리한다
+
+##### Why `0.2` for the Similarity score threshold?
+- 여러 테스트 결과를 통해 찾아진 값이다
+- 스코어는 액션 리스트 전체를 합치면 1이 된다, 때문에 액션 리스트가 늘어나는 경우 threshold 값은 낮아져야한다
+
+### How to run an AI model: local vs remote Inference
+#### How to run an AI model: local vs remote
+- 이 게임에서 유사도 검색을 사용하기 위해 `all-MiniLM-L6-v2` 모델을 사용한다
+  + https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
+- 이 모델은 BERT 트랜스포머 모델로 이미 학습을 마쳤으므로 사용하면된다
+
+#### Running the model remotely
+- 서버 api 를 호출하는 방식
+- 허깅페이스에서 *Inference API* 를 제공
+  - 프로토타입및 테스트용은 무료
+  - 이를 사용하기 위한 유니티 플러그인이 존재
+    + https://huggingface.co/blog/unity-api
+- 장점
+  - 클라이언트 측에 리소스 필요하지 않음
+  - 서버쪽에서 로깅할 수 있음으로 유저 입력에 대한 정보등을 개선에 쓸 수 있음
+- 단점
+  - 인터넷 연결 및 서버 상태에 따른 종속이 생김
+  - 잠재적 비용 비용 폭탄 가능성
+- 주로 클라이언트에서 실행할 수 없는 큰 모델을 실행하는 경우 API 제공이 필요하다
+
+#### Running the model locally
+- 클라이언트에서 사용하기 위해 2개의 라이브러리를 사용한다
+  - *Unity Sentis* - AI 모델을 게임 안에서 실행할 수 있도록 한다
+  - *The Hugging Face Sharp Transformers library* - 유니티 게임에서 트랜스포머 모델을 사용할 수 있도록 한다
+- 장점
+  - 돈 안나감
+  - 인터넷 연결 종속 없음
+- 단점
+  - 클라이언트 스펙에 영향을 받는다(RAM/VRAM)
+  - 유저가 어떤식으로 모델을 활용하는 정보를 쉽게 얻지 못한다
+
+- 유사도 검색은 가벼운 모델이라 **로컬에서 사용하기로한다**
+
+### What is Hugging Face 🤗?
+- 허깅페이스에 대한 설명
+- 추론 API 서비스를 무료, 유료 옵션으로 제공
+- *Sentence Similarity* 모델을 사용하는 가이드
+
+### Let&#x27;s build our smart robot demo 🤖
+- 제공하는 코드를 통해 로봇과 유사도 검색을 통한 액션 매치를 수행하는 핸즈온
+
+### What can you do now?
+- 위 핸즈온에 더해서 SST(Speach-To-Text) 등의 기능을 추가해 볼 것
+
+### Conclusion
+- 다음
+
+## DEFINING MY DEMO PART 1. FINDING THE IDEA AND WRITING THE GDD
+### Introduction
+- 이 코스의 목표
+  - AI 툴을 사용하여 게임 데모 제작
+  - 혹은 AI 를 사용하여 게임 운영(NPC)
+- 이 챕터는 데모를 만드는 챕터
+- 팀으로하는 걸 추천
+- GDD(Game Design Document) 은 한페이지 문서로 다음을 포함
+  - 게임 플레이 매커니즘
+  - 사용할 AI 툴
+  - 사용할 에셋
+  - 필요시 스토리
+  - 게임의 범위
+  - 필요시 팀
+
+### It&#x27;s your first game?
+- 게임제작시시 염두해야둬야할 [[youtube]] 영상 제공
+- 스코프는 한달을 넘어가지 않도록 매우 작게 할 것
+- 첫번째 작업은 만드는데 의의를 둔다
+- 자신의 능력 맞춰 개발한다
+  - 그림을 못그리면 최대한 배제된 것으로 
+  - 코딩을 못하면 단순성에 초점을 맞추어
+- 매우 작은 MVP(Minimum Viable Product) 를 작성
+  - 매우 작은 게임의 핵심을 설계
+  - 디테일한 아이템 목록이나 여러 캐릭터 마법등은 배제
+  - 수퍼마리오를 예로 이동, 가로로 긴 맵, 떨어지면 죽는 영역(테스트 재시작 트리거 포인트)
+- 매우 작은 MVP(Minimum Viable Product) 를 작성
+- 한시간내에 안풀리는건 하지말 것, 검색으로 대부분 해결이 가능
+- 마케팅은 매우 중요하다 인디개발자로 살 것이라면 특히
+  - 3분 내의 소개 동영상
+  - 웹사이트, 심플한것이 아마추어로 보이는 것 보다 낫다
+  - 인디게임 대회에 출품
+  - 게임업계인 SNS 에 부탁
+  - 게임 뉴스 사이트에 메일보내기
+  - 출시가 가까워지면 Reddit AMA, 팟케스트, SNS, 웹사이트 업데이트
+  - 스팀이나 GOG 등에 출시한다, 이때 홍보채널을 가지고 있는 것이 출시에 도움이 된다
+  - 가능한 많은 곳에 출시한다
+  - 출시후에는 단점을 받아들이고, 버그픽스등을 서비스한다
+  - 유저 및 기자들과 소통을 유지한다
+- [ ] [[@todo]] GDC 토크 영상 시청
+  - https://www.youtube.com/watch?time_continue=2&amp;v=ZW8gWgpptI8&amp;embeds_referring_euri=https%3A%2F%2Fhuggingface.co%2F&amp;source_ve_path=Mjg2NjY&amp;feature=emb_logo
+
+### Step 1. Crafting the Game Idea
+- 내 단점을 받아들인다
+- 좋아하는 게임으로 부터 영감을 얻는다
+- AI를 통해 게임을 어떻게 개선할지 생각한다
+- 게임의 범위를 작게 한다
+- 허깅페이스 챗에서 브레인 스토밍을 한다
+
+### Step 2. Writing the GDD
+#### What  is a Game Design Document(GDD)
+- 게임 프로젝트의 청사진
+- 정의를 명확히하고 게임의 비전의 이해를 팀원들과 공유한다 
+- 개발 프로세스를 촉진한다
+- 아웃라인
+  - 게임플레이
+  - 피처
+  - 게임 매커지니즘
+  - 어셋
+  - 등등
+#### The One Page Game Design Document Template
+- [ ] Game Title
+- [ ] Team and roles
+- [ ] Game Concept
+- [ ] Game Genre
+- [ ] Game Features and AI tools/model used
+- [ ] Platform
+- [ ] Scope
+- [ ] Art Style
+- [ ] Level
+- [ ] Assets
+- [ ] Todo
+
+### Conclusion
+
+## BONUS 1. CLASSICAL AI IN VIDEO GAMES
+- AI 사례
+
+## UNIT 2. AI TOOLS FOR GAME DEVELOPERS 🎨
+### Introduction
+- AI 툴 적용
+
+### Introduction
+### Code Assistants 👩💻
+### Music Generation 🎵
+### AI Voice Actors 🤖
+### Animation Generation 💃
+### Texture Generation 🖼️
+### 2D Assets Generation 🎮
+### Sound Effects Generation 🔊
+### Conclusion
+
+## link
+- [[huggingface]]
+- [[unity]]
+- [[book/making-game-graphic-with-stable-diffusion]]
+- [[stable-diffusion]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/huggingface-ml-for-games"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# huggingface ml for games"/><meta name="twitter:description" content="
+## 프로젝트 에러
+- 2024-05-22 기준 프로젝는 [[unity]] 6 에서 열었을시 실패했다 이전 버전으로 연다
+- 에러있다고 하면서 safe mode 에 진입하게되고 이때 패키지 두개를 설치하면된다
+- name 으로 설치 -&gt; `com.unity.sentis` 패키지를 설치시에 버전을 `1.3.0-pre.1` 로 고정한다
+- git 으로 설치 -&gt; `https://github.com/huggingface/sharp-transformers.git`
+
+## UNIT 0. WELCOME TO THE COURSCE
+### Welcome to the course 🤗
+- AI 모델로 하는 혁신
+  - How we make games
+    - 텍스쳐 생성
+    - AI 보이스 사용
+  - How we create gameplay
+    - LLM 백엔드의 NPC
+- 배우게될 것
+  - 챗 모델을 사용한 NPC
+  - 모델의 로컬 및 클라우드 API 사용
+  - AI 툴들, TTS, 이미지 생성
+  - 게임 데모 생성
+- 요구사항
+  - 디스코드 조인
+  - 유니티 개발
+    - https://learn.unity.com/course/create-with-code (36시간 30분)
+- 이 코스에서 다루진 않지만 딥하게 가고자 한다면 추가 학습이 열려있다
+  - NLP
+  - Audio
+  - Gradio
+- 코스의 목표
+  - 자신만의 게임 데모
+  - AI 를 활용한 게임 제작
+  - AI 를 활용한 게임 플레이(NPC등)
+
+### The Goal, Build Your own Game Demo
+- 자격증 조건
+  - 5명 이내의 팀
+  - WebGL 혹은 Windows 에서 구동
+  - English
+  - 1개 이상의 오픈소스 툴 활용
+- Unity 
+  + https://learn.unity.com/course/create-with-code
+
+### Syllabus
+- 강의구성
+  - 이론
+    - ML 을 딥하게 다루는 것이 아님을 알 것
+    - 허깅 페이스의 추론 api 를 사용할 것으로 예상됨
+  - 핸즈온
+- 각 유닛은 1주(주당 3-4시간)으로 진행되는 페이스로 구성
+- 데모 구현을 위해서는 2-4주의 시간을 사용할 것을 권장
+
+### The Team
+- 강사 소개
+
+### Onboarding
+- 할일
+  - 허깅페이스 계정 생성
+  - 디스코드 서버 조인
+
+#### 디스코드 채널
+
+|                                             |                            |
+|---------------------------------------------|----------------------------|
+| ml-4-games-course-announcements             | 최신정보                   |
+| ml-4-games-course-announcements-study-group | 질문 및 의견 교환          |
+| ml-4-games-dev                              | ML 게임 개발에 대한 교환   |
+| ml-4-games-searching-for-team               | 데모 구현을 위한 팀원 찾기 |
+| ml-4-games-i-made-this                      | 내 모델 공유               |
+
+### Discord 101
+- 주저하지말고 자주 참여해라
+
+### Getting the most of the course
+- 따라서 구현할 것
+- 수정을 주저하지 말것
+- 팀으로 할것을 권고
+
+### Conclusion
+- 배우게될 것
+  - Unity Sentis 와 로컬에서 AI 모델 사용 및 첫번째 지능형 AI NPC
+  - 데모 게임에 대한 게임 디자인 문서 작성
+
+## UNIT 1. CREATE A SMART ROBOT NPC USING HUGGING FACE 🤗 AND UNITY SENTIS
+### Introduction
+- 배우게 될 것
+  - Sentence Similarity
+  - AI 모델의 로컬, 클라우드 실행 차이
+  - 허깅페이스
+  - Unity Sentis, Sharp Transformers 와 함께 AI 모델을 로컬에서 실행하는 방법
+- 사용하는 것
+  - 유니티 게임 엔진 2022.3+ 
+  - Jammo Robot 어셋
+  - Unity Sentis library - AI 모델을 게임안에서 실행하기 위해 필요
+  - Hugging Face Sharp Transformers -  유니티 게임 안에서 허깅페이스 트랜스포머를 실행할 수 있게 하는 유니티 플러그인
+- 예제 게임 설명
+  - 채팅으로 NPC 에게 요청하고 NPC 가 이를 실행
+  - 가져다 달라거나 춤춰달라거나 요청 후 이를 NPC 가 실행
+  - 건물안에서 가드를 피해서 숨고 목적 아이템을 훔쳐오라는 지시 후 NPC 가 이를 수행하는 게임
+
+### What is Sentence Similarity?
+#### The Power of Sentence Similarity 🤖
+- 게임만들기 전에 문장 유사도에 대한 정의와 동작을 이해해야한다
+
+#### How does this game work?
+- 선택지를 클릭하는 대신 챗을 통해 더 많은 자유도를 제공한다
+- 로봇은 액션 리스트를 가지고 있고 유저의 채팅문장과 유사도가 높은 액션을 선택해서 사용한다
+
+#### What is Sentence Similarity?
+- 주어진 문장(input) 과 타겟 문장들간의 유사도를 계산하는 것
+- 입력 문장 -&gt; embed -&gt; 임베딩(벡터)
+  - 이를 가지고 cosine 유사도를 계산
+  - 딥하게 들어가고 싶다면 링크 참조
+    + https://huggingface.co/tasks/sentence-similarity
+
+#### The Complete pipeline
+- 유저 인풋과 액션 리스트는 모두 string 으로 되어있다.
+- 유사도 처리를 위해서는 임베딩이 필요하며 이는 *Sharp Transformers* 에서 처리한다
+- *Sharp Transformers* 를 통해 토큰화된 인풋은 *Unity Sentis* 모델의 입력으로 들어간다
+- *Unity Sentis* 모델의 결과로 유사도 점수가 나온다
+
+1. 유저가 명령어를 입력한다: &quot;Can you bring me the red cube?&quot;
+2. 로봇은 액션 목록을 가지고 있다
+  - Hello
+  - Happy
+  - Bring red box
+  - Move to blue pillar
+3. 가장 유사한 액션을 찾기 위해 인풋을 임베딩한다
+4. *Sharp Transformers* 에 의해 입력이 토큰화된다
+5. 토큰화된 입력을 모델에 넣어 인풋에 대한 정보를 갖는 임베딩을 출력한다(by *Unity Sentis*)
+6. 임베딩 되었으므로 유사도 검색이 가능해진다
+7. 유사도 검색(비교) 에서 가장 높은 스코어를 가진 액션을 선택한다  
+  - 해당 스코어가 `0.2` 이상인 경우 액션을 실행을 요구한다
+  - 해당 스코어가 `0.2` 이하인 경우 &quot;몰루~&quot; 처리한다
+
+##### Why `0.2` for the Similarity score threshold?
+- 여러 테스트 결과를 통해 찾아진 값이다
+- 스코어는 액션 리스트 전체를 합치면 1이 된다, 때문에 액션 리스트가 늘어나는 경우 threshold 값은 낮아져야한다
+
+### How to run an AI model: local vs remote Inference
+#### How to run an AI model: local vs remote
+- 이 게임에서 유사도 검색을 사용하기 위해 `all-MiniLM-L6-v2` 모델을 사용한다
+  + https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
+- 이 모델은 BERT 트랜스포머 모델로 이미 학습을 마쳤으므로 사용하면된다
+
+#### Running the model remotely
+- 서버 api 를 호출하는 방식
+- 허깅페이스에서 *Inference API* 를 제공
+  - 프로토타입및 테스트용은 무료
+  - 이를 사용하기 위한 유니티 플러그인이 존재
+    + https://huggingface.co/blog/unity-api
+- 장점
+  - 클라이언트 측에 리소스 필요하지 않음
+  - 서버쪽에서 로깅할 수 있음으로 유저 입력에 대한 정보등을 개선에 쓸 수 있음
+- 단점
+  - 인터넷 연결 및 서버 상태에 따른 종속이 생김
+  - 잠재적 비용 비용 폭탄 가능성
+- 주로 클라이언트에서 실행할 수 없는 큰 모델을 실행하는 경우 API 제공이 필요하다
+
+#### Running the model locally
+- 클라이언트에서 사용하기 위해 2개의 라이브러리를 사용한다
+  - *Unity Sentis* - AI 모델을 게임 안에서 실행할 수 있도록 한다
+  - *The Hugging Face Sharp Transformers library* - 유니티 게임에서 트랜스포머 모델을 사용할 수 있도록 한다
+- 장점
+  - 돈 안나감
+  - 인터넷 연결 종속 없음
+- 단점
+  - 클라이언트 스펙에 영향을 받는다(RAM/VRAM)
+  - 유저가 어떤식으로 모델을 활용하는 정보를 쉽게 얻지 못한다
+
+- 유사도 검색은 가벼운 모델이라 **로컬에서 사용하기로한다**
+
+### What is Hugging Face 🤗?
+- 허깅페이스에 대한 설명
+- 추론 API 서비스를 무료, 유료 옵션으로 제공
+- *Sentence Similarity* 모델을 사용하는 가이드
+
+### Let&#x27;s build our smart robot demo 🤖
+- 제공하는 코드를 통해 로봇과 유사도 검색을 통한 액션 매치를 수행하는 핸즈온
+
+### What can you do now?
+- 위 핸즈온에 더해서 SST(Speach-To-Text) 등의 기능을 추가해 볼 것
+
+### Conclusion
+- 다음
+
+## DEFINING MY DEMO PART 1. FINDING THE IDEA AND WRITING THE GDD
+### Introduction
+- 이 코스의 목표
+  - AI 툴을 사용하여 게임 데모 제작
+  - 혹은 AI 를 사용하여 게임 운영(NPC)
+- 이 챕터는 데모를 만드는 챕터
+- 팀으로하는 걸 추천
+- GDD(Game Design Document) 은 한페이지 문서로 다음을 포함
+  - 게임 플레이 매커니즘
+  - 사용할 AI 툴
+  - 사용할 에셋
+  - 필요시 스토리
+  - 게임의 범위
+  - 필요시 팀
+
+### It&#x27;s your first game?
+- 게임제작시시 염두해야둬야할 [[youtube]] 영상 제공
+- 스코프는 한달을 넘어가지 않도록 매우 작게 할 것
+- 첫번째 작업은 만드는데 의의를 둔다
+- 자신의 능력 맞춰 개발한다
+  - 그림을 못그리면 최대한 배제된 것으로 
+  - 코딩을 못하면 단순성에 초점을 맞추어
+- 매우 작은 MVP(Minimum Viable Product) 를 작성
+  - 매우 작은 게임의 핵심을 설계
+  - 디테일한 아이템 목록이나 여러 캐릭터 마법등은 배제
+  - 수퍼마리오를 예로 이동, 가로로 긴 맵, 떨어지면 죽는 영역(테스트 재시작 트리거 포인트)
+- 매우 작은 MVP(Minimum Viable Product) 를 작성
+- 한시간내에 안풀리는건 하지말 것, 검색으로 대부분 해결이 가능
+- 마케팅은 매우 중요하다 인디개발자로 살 것이라면 특히
+  - 3분 내의 소개 동영상
+  - 웹사이트, 심플한것이 아마추어로 보이는 것 보다 낫다
+  - 인디게임 대회에 출품
+  - 게임업계인 SNS 에 부탁
+  - 게임 뉴스 사이트에 메일보내기
+  - 출시가 가까워지면 Reddit AMA, 팟케스트, SNS, 웹사이트 업데이트
+  - 스팀이나 GOG 등에 출시한다, 이때 홍보채널을 가지고 있는 것이 출시에 도움이 된다
+  - 가능한 많은 곳에 출시한다
+  - 출시후에는 단점을 받아들이고, 버그픽스등을 서비스한다
+  - 유저 및 기자들과 소통을 유지한다
+- [ ] [[@todo]] GDC 토크 영상 시청
+  - https://www.youtube.com/watch?time_continue=2&amp;v=ZW8gWgpptI8&amp;embeds_referring_euri=https%3A%2F%2Fhuggingface.co%2F&amp;source_ve_path=Mjg2NjY&amp;feature=emb_logo
+
+### Step 1. Crafting the Game Idea
+- 내 단점을 받아들인다
+- 좋아하는 게임으로 부터 영감을 얻는다
+- AI를 통해 게임을 어떻게 개선할지 생각한다
+- 게임의 범위를 작게 한다
+- 허깅페이스 챗에서 브레인 스토밍을 한다
+
+### Step 2. Writing the GDD
+#### What  is a Game Design Document(GDD)
+- 게임 프로젝트의 청사진
+- 정의를 명확히하고 게임의 비전의 이해를 팀원들과 공유한다 
+- 개발 프로세스를 촉진한다
+- 아웃라인
+  - 게임플레이
+  - 피처
+  - 게임 매커지니즘
+  - 어셋
+  - 등등
+#### The One Page Game Design Document Template
+- [ ] Game Title
+- [ ] Team and roles
+- [ ] Game Concept
+- [ ] Game Genre
+- [ ] Game Features and AI tools/model used
+- [ ] Platform
+- [ ] Scope
+- [ ] Art Style
+- [ ] Level
+- [ ] Assets
+- [ ] Todo
+
+### Conclusion
+
+## BONUS 1. CLASSICAL AI IN VIDEO GAMES
+- AI 사례
+
+## UNIT 2. AI TOOLS FOR GAME DEVELOPERS 🎨
+### Introduction
+- AI 툴 적용
+
+### Introduction
+### Code Assistants 👩💻
+### Music Generation 🎵
+### AI Voice Actors 🤖
+### Animation Generation 💃
+### Texture Generation 🖼️
+### 2D Assets Generation 🎮
+### Sound Effects Generation 🔊
+### Conclusion
+
+## link
+- [[huggingface]]
+- [[unity]]
+- [[book/making-game-graphic-with-stable-diffusion]]
+- [[stable-diffusion]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/d7bc37d
+" class="bg-white text-black">d7bc37d</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/huggingface-ml-for-games.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/huggingface-ml-for-games.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/huggingface-ml-for-games.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/huggingface-ml-for-games"><span class="underline">huggingface-ml-for-games</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/unity"><span class="underline">unity</span><sup>13</sup></a></span><span><a class="text-blue-600" href="/public-wiki/youtube"><span class="underline">youtube</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/@todo"><span class="underline">@todo</span><sup>30</sup></a></span><span><a class="text-blue-600" href="/public-wiki/huggingface"><span class="underline">huggingface</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/book/making-game-graphic-with-stable-diffusion"><span class="underline">book/making-game-graphic-with-stable-diffusion</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/stable-diffusion"><span class="underline">stable-diffusion</span><sup>19</sup></a></span><span><a class="text-blue-600" href="/public-wiki/indie-game"><span class="underline">indie-game</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/stable-diffusion-webui"><span class="underline">stable-diffusion-webui</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/unity-learn-create-with-code"><span class="underline">unity-learn-create-with-code</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-05-13"><span class="underline">diary/2024-05-13</span><sup>3</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#huggingface-ml-for-games">huggingface ml for games</a></div><div class="pl-2"><a href="#프로젝트-에러">프로젝트 에러</a></div><div class="pl-2"><a href="#unit-0-welcome-to-the-coursce">UNIT 0. WELCOME TO THE COURSCE</a></div><div class="pl-4"><a href="#welcome-to-the-course-🤗">Welcome to the course 🤗</a></div><div class="pl-4"><a href="#the-goal-build-your-own-game-demo">The Goal, Build Your own Game Demo</a></div><div class="pl-4"><a href="#syllabus">Syllabus</a></div><div class="pl-4"><a href="#the-team">The Team</a></div><div class="pl-4"><a href="#onboarding">Onboarding</a></div><div class="pl-6"><a href="#디스코드-채널">디스코드 채널</a></div><div class="pl-4"><a href="#discord-101">Discord 101</a></div><div class="pl-4"><a href="#getting-the-most-of-the-course">Getting the most of the course</a></div><div class="pl-4"><a href="#conclusion">Conclusion</a></div><div class="pl-2"><a href="#unit-1-create-a-smart-robot-npc-using-hugging-face-🤗-and-unity-sentis">UNIT 1. CREATE A SMART ROBOT NPC USING HUGGING FACE 🤗 AND UNITY SENTIS</a></div><div class="pl-4"><a href="#introduction">Introduction</a></div><div class="pl-4"><a href="#what-is-sentence-similarity">What is Sentence Similarity?</a></div><div class="pl-6"><a href="#the-power-of-sentence-similarity-🤖">The Power of Sentence Similarity 🤖</a></div><div class="pl-6"><a href="#how-does-this-game-work">How does this game work?</a></div><div class="pl-6"><a href="#what-is-sentence-similarity-1">What is Sentence Similarity?</a></div><div class="pl-6"><a href="#the-complete-pipeline">The Complete pipeline</a></div><div class="pl-8"><a href="#why-02-for-the-similarity-score-threshold">Why 0.2 for the Similarity score threshold?</a></div><div class="pl-4"><a href="#how-to-run-an-ai-model-local-vs-remote-inference">How to run an AI model: local vs remote Inference</a></div><div class="pl-6"><a href="#how-to-run-an-ai-model-local-vs-remote">How to run an AI model: local vs remote</a></div><div class="pl-6"><a href="#running-the-model-remotely">Running the model remotely</a></div><div class="pl-6"><a href="#running-the-model-locally">Running the model locally</a></div><div class="pl-4"><a href="#what-is-hugging-face-🤗">What is Hugging Face 🤗?</a></div><div class="pl-4"><a href="#lets-build-our-smart-robot-demo-🤖">Let&#x27;s build our smart robot demo 🤖</a></div><div class="pl-4"><a href="#what-can-you-do-now">What can you do now?</a></div><div class="pl-4"><a href="#conclusion-1">Conclusion</a></div><div class="pl-2"><a href="#defining-my-demo-part-1-finding-the-idea-and-writing-the-gdd">DEFINING MY DEMO PART 1. FINDING THE IDEA AND WRITING THE GDD</a></div><div class="pl-4"><a href="#introduction-1">Introduction</a></div><div class="pl-4"><a href="#its-your-first-game">It&#x27;s your first game?</a></div><div class="pl-4"><a href="#step-1-crafting-the-game-idea">Step 1. Crafting the Game Idea</a></div><div class="pl-4"><a href="#step-2-writing-the-gdd">Step 2. Writing the GDD</a></div><div class="pl-6"><a href="#what--is-a-game-design-documentgdd">What  is a Game Design Document(GDD)</a></div><div class="pl-6"><a href="#the-one-page-game-design-document-template">The One Page Game Design Document Template</a></div><div class="pl-4"><a href="#conclusion-2">Conclusion</a></div><div class="pl-2"><a href="#bonus-1-classical-ai-in-video-games">BONUS 1. CLASSICAL AI IN VIDEO GAMES</a></div><div class="pl-2"><a href="#unit-2-ai-tools-for-game-developers-🎨">UNIT 2. AI TOOLS FOR GAME DEVELOPERS 🎨</a></div><div class="pl-4"><a href="#introduction-2">Introduction</a></div><div class="pl-4"><a href="#introduction-3">Introduction</a></div><div class="pl-4"><a href="#code-assistants-👩💻">Code Assistants 👩💻</a></div><div class="pl-4"><a href="#music-generation-🎵">Music Generation 🎵</a></div><div class="pl-4"><a href="#ai-voice-actors-🤖">AI Voice Actors 🤖</a></div><div class="pl-4"><a href="#animation-generation-💃">Animation Generation 💃</a></div><div class="pl-4"><a href="#texture-generation-🖼️">Texture Generation 🖼️</a></div><div class="pl-4"><a href="#2d-assets-generation-🎮">2D Assets Generation 🎮</a></div><div class="pl-4"><a href="#sound-effects-generation-🔊">Sound Effects Generation 🔊</a></div><div class="pl-4"><a href="#conclusion-3">Conclusion</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="huggingface-ml-for-games">huggingface ml for games</h1>
+<h2 id="프로젝트-에러">프로젝트 에러</h2>
+<ul>
+<li>2024-05-22 기준 프로젝는 <a href="unity">unity</a> 6 에서 열었을시 실패했다 이전 버전으로 연다</li>
+<li>에러있다고 하면서 safe mode 에 진입하게되고 이때 패키지 두개를 설치하면된다</li>
+<li>name 으로 설치 -&gt; <code class="span">com.unity.sentis</code> 패키지를 설치시에 버전을 <code class="span">1.3.0-pre.1</code> 로 고정한다</li>
+<li>git 으로 설치 -&gt; <code class="span">https://github.com/huggingface/sharp-transformers.git</code></li>
+</ul>
+<h2 id="unit-0-welcome-to-the-coursce">UNIT 0. WELCOME TO THE COURSCE</h2>
+<h3 id="welcome-to-the-course-">Welcome to the course 🤗</h3>
+<ul>
+<li>AI 모델로 하는 혁신<ul>
+<li>How we make games<ul>
+<li>텍스쳐 생성</li>
+<li>AI 보이스 사용</li>
+</ul>
+</li>
+<li>How we create gameplay<ul>
+<li>LLM 백엔드의 NPC</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>배우게될 것<ul>
+<li>챗 모델을 사용한 NPC</li>
+<li>모델의 로컬 및 클라우드 API 사용</li>
+<li>AI 툴들, TTS, 이미지 생성</li>
+<li>게임 데모 생성</li>
+</ul>
+</li>
+<li>요구사항<ul>
+<li>디스코드 조인</li>
+<li>유니티 개발<ul>
+<li><a href="https://learn.unity.com/course/create-with-code" target="_blank">[URL] https://learn.unity.com/course/create-with-code</a> (36시간 30분)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>이 코스에서 다루진 않지만 딥하게 가고자 한다면 추가 학습이 열려있다<ul>
+<li>NLP</li>
+<li>Audio</li>
+<li>Gradio</li>
+</ul>
+</li>
+<li>코스의 목표<ul>
+<li>자신만의 게임 데모</li>
+<li>AI 를 활용한 게임 제작</li>
+<li>AI 를 활용한 게임 플레이(NPC등)</li>
+</ul>
+</li>
+</ul>
+<h3 id="the-goal-build-your-own-game-demo">The Goal, Build Your own Game Demo</h3>
+<ul>
+<li>자격증 조건<ul>
+<li>5명 이내의 팀</li>
+<li>WebGL 혹은 Windows 에서 구동</li>
+<li>English</li>
+<li>1개 이상의 오픈소스 툴 활용</li>
+</ul>
+</li>
+<li>Unity <ul>
+<li><a href="https://learn.unity.com/course/create-with-code" target="_blank">[URL] https://learn.unity.com/course/create-with-code</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="syllabus">Syllabus</h3>
+<ul>
+<li>강의구성<ul>
+<li>이론<ul>
+<li>ML 을 딥하게 다루는 것이 아님을 알 것</li>
+<li>허깅 페이스의 추론 api 를 사용할 것으로 예상됨</li>
+</ul>
+</li>
+<li>핸즈온</li>
+</ul>
+</li>
+<li>각 유닛은 1주(주당 3-4시간)으로 진행되는 페이스로 구성</li>
+<li>데모 구현을 위해서는 2-4주의 시간을 사용할 것을 권장</li>
+</ul>
+<h3 id="the-team">The Team</h3>
+<ul>
+<li>강사 소개</li>
+</ul>
+<h3 id="onboarding">Onboarding</h3>
+<ul>
+<li>할일<ul>
+<li>허깅페이스 계정 생성</li>
+<li>디스코드 서버 조인</li>
+</ul>
+</li>
+</ul>
+<h4 id="디스코드-채널">디스코드 채널</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ml-4-games-course-announcements</td>
+<td>최신정보</td>
+</tr>
+<tr>
+<td>ml-4-games-course-announcements-study-group</td>
+<td>질문 및 의견 교환</td>
+</tr>
+<tr>
+<td>ml-4-games-dev</td>
+<td>ML 게임 개발에 대한 교환</td>
+</tr>
+<tr>
+<td>ml-4-games-searching-for-team</td>
+<td>데모 구현을 위한 팀원 찾기</td>
+</tr>
+<tr>
+<td>ml-4-games-i-made-this</td>
+<td>내 모델 공유</td>
+</tr>
+</tbody></table>
+<h3 id="discord-101">Discord 101</h3>
+<ul>
+<li>주저하지말고 자주 참여해라</li>
+</ul>
+<h3 id="getting-the-most-of-the-course">Getting the most of the course</h3>
+<ul>
+<li>따라서 구현할 것</li>
+<li>수정을 주저하지 말것</li>
+<li>팀으로 할것을 권고</li>
+</ul>
+<h3 id="conclusion">Conclusion</h3>
+<ul>
+<li>배우게될 것<ul>
+<li>Unity Sentis 와 로컬에서 AI 모델 사용 및 첫번째 지능형 AI NPC</li>
+<li>데모 게임에 대한 게임 디자인 문서 작성</li>
+</ul>
+</li>
+</ul>
+<h2 id="unit-1-create-a-smart-robot-npc-using-hugging-face--and-unity-sentis">UNIT 1. CREATE A SMART ROBOT NPC USING HUGGING FACE 🤗 AND UNITY SENTIS</h2>
+<h3 id="introduction">Introduction</h3>
+<ul>
+<li>배우게 될 것<ul>
+<li>Sentence Similarity</li>
+<li>AI 모델의 로컬, 클라우드 실행 차이</li>
+<li>허깅페이스</li>
+<li>Unity Sentis, Sharp Transformers 와 함께 AI 모델을 로컬에서 실행하는 방법</li>
+</ul>
+</li>
+<li>사용하는 것<ul>
+<li>유니티 게임 엔진 2022.3+ </li>
+<li>Jammo Robot 어셋</li>
+<li>Unity Sentis library - AI 모델을 게임안에서 실행하기 위해 필요</li>
+<li>Hugging Face Sharp Transformers -  유니티 게임 안에서 허깅페이스 트랜스포머를 실행할 수 있게 하는 유니티 플러그인</li>
+</ul>
+</li>
+<li>예제 게임 설명<ul>
+<li>채팅으로 NPC 에게 요청하고 NPC 가 이를 실행</li>
+<li>가져다 달라거나 춤춰달라거나 요청 후 이를 NPC 가 실행</li>
+<li>건물안에서 가드를 피해서 숨고 목적 아이템을 훔쳐오라는 지시 후 NPC 가 이를 수행하는 게임</li>
+</ul>
+</li>
+</ul>
+<h3 id="what-is-sentence-similarity">What is Sentence Similarity?</h3>
+<h4 id="the-power-of-sentence-similarity-">The Power of Sentence Similarity 🤖</h4>
+<ul>
+<li>게임만들기 전에 문장 유사도에 대한 정의와 동작을 이해해야한다</li>
+</ul>
+<h4 id="how-does-this-game-work">How does this game work?</h4>
+<ul>
+<li>선택지를 클릭하는 대신 챗을 통해 더 많은 자유도를 제공한다</li>
+<li>로봇은 액션 리스트를 가지고 있고 유저의 채팅문장과 유사도가 높은 액션을 선택해서 사용한다</li>
+</ul>
+<h4 id="what-is-sentence-similarity-1">What is Sentence Similarity?</h4>
+<ul>
+<li>주어진 문장(input) 과 타겟 문장들간의 유사도를 계산하는 것</li>
+<li>입력 문장 -&gt; embed -&gt; 임베딩(벡터)<ul>
+<li>이를 가지고 cosine 유사도를 계산</li>
+<li>딥하게 들어가고 싶다면 링크 참조<ul>
+<li><a href="https://huggingface.co/tasks/sentence-similarity" target="_blank">[URL] https://huggingface.co/tasks/sentence-similarity</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="the-complete-pipeline">The Complete pipeline</h4>
+<ul>
+<li>유저 인풋과 액션 리스트는 모두 string 으로 되어있다.</li>
+<li>유사도 처리를 위해서는 임베딩이 필요하며 이는 <em>Sharp Transformers</em> 에서 처리한다</li>
+<li><em>Sharp Transformers</em> 를 통해 토큰화된 인풋은 <em>Unity Sentis</em> 모델의 입력으로 들어간다</li>
+<li><em>Unity Sentis</em> 모델의 결과로 유사도 점수가 나온다</li>
+</ul>
+<ol>
+<li>유저가 명령어를 입력한다: &quot;Can you bring me the red cube?&quot;</li>
+<li>로봇은 액션 목록을 가지고 있다</li>
+</ol>
+<ul>
+<li>Hello</li>
+<li>Happy</li>
+<li>Bring red box</li>
+<li>Move to blue pillar</li>
+</ul>
+<ol start="3">
+<li>가장 유사한 액션을 찾기 위해 인풋을 임베딩한다</li>
+<li><em>Sharp Transformers</em> 에 의해 입력이 토큰화된다</li>
+<li>토큰화된 입력을 모델에 넣어 인풋에 대한 정보를 갖는 임베딩을 출력한다(by <em>Unity Sentis</em>)</li>
+<li>임베딩 되었으므로 유사도 검색이 가능해진다</li>
+<li>유사도 검색(비교) 에서 가장 높은 스코어를 가진 액션을 선택한다</li>
+</ol>
+<ul>
+<li>해당 스코어가 <code class="span">0.2</code> 이상인 경우 액션을 실행을 요구한다</li>
+<li>해당 스코어가 <code class="span">0.2</code> 이하인 경우 &quot;몰루~&quot; 처리한다</li>
+</ul>
+<h5 id="why-02-for-the-similarity-score-threshold">Why <code class="span">0.2</code> for the Similarity score threshold?</h5>
+<ul>
+<li>여러 테스트 결과를 통해 찾아진 값이다</li>
+<li>스코어는 액션 리스트 전체를 합치면 1이 된다, 때문에 액션 리스트가 늘어나는 경우 threshold 값은 낮아져야한다</li>
+</ul>
+<h3 id="how-to-run-an-ai-model-local-vs-remote-inference">How to run an AI model: local vs remote Inference</h3>
+<h4 id="how-to-run-an-ai-model-local-vs-remote">How to run an AI model: local vs remote</h4>
+<ul>
+<li>이 게임에서 유사도 검색을 사용하기 위해 <code class="span">all-MiniLM-L6-v2</code> 모델을 사용한다<ul>
+<li><a href="https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2" target="_blank">[URL] https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2</a></li>
+</ul>
+</li>
+<li>이 모델은 BERT 트랜스포머 모델로 이미 학습을 마쳤으므로 사용하면된다</li>
+</ul>
+<h4 id="running-the-model-remotely">Running the model remotely</h4>
+<ul>
+<li>서버 api 를 호출하는 방식</li>
+<li>허깅페이스에서 <em>Inference API</em> 를 제공<ul>
+<li>프로토타입및 테스트용은 무료</li>
+<li>이를 사용하기 위한 유니티 플러그인이 존재<ul>
+<li><a href="https://huggingface.co/blog/unity-api" target="_blank">[URL] https://huggingface.co/blog/unity-api</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>장점<ul>
+<li>클라이언트 측에 리소스 필요하지 않음</li>
+<li>서버쪽에서 로깅할 수 있음으로 유저 입력에 대한 정보등을 개선에 쓸 수 있음</li>
+</ul>
+</li>
+<li>단점<ul>
+<li>인터넷 연결 및 서버 상태에 따른 종속이 생김</li>
+<li>잠재적 비용 비용 폭탄 가능성</li>
+</ul>
+</li>
+<li>주로 클라이언트에서 실행할 수 없는 큰 모델을 실행하는 경우 API 제공이 필요하다</li>
+</ul>
+<h4 id="running-the-model-locally">Running the model locally</h4>
+<ul>
+<li><p>클라이언트에서 사용하기 위해 2개의 라이브러리를 사용한다</p>
+<ul>
+<li><em>Unity Sentis</em> - AI 모델을 게임 안에서 실행할 수 있도록 한다</li>
+<li><em>The Hugging Face Sharp Transformers library</em> - 유니티 게임에서 트랜스포머 모델을 사용할 수 있도록 한다</li>
+</ul>
+</li>
+<li><p>장점</p>
+<ul>
+<li>돈 안나감</li>
+<li>인터넷 연결 종속 없음</li>
+</ul>
+</li>
+<li><p>단점</p>
+<ul>
+<li>클라이언트 스펙에 영향을 받는다(RAM/VRAM)</li>
+<li>유저가 어떤식으로 모델을 활용하는 정보를 쉽게 얻지 못한다</li>
+</ul>
+</li>
+<li><p>유사도 검색은 가벼운 모델이라 <strong>로컬에서 사용하기로한다</strong></p>
+</li>
+</ul>
+<h3 id="what-is-hugging-face-">What is Hugging Face 🤗?</h3>
+<ul>
+<li>허깅페이스에 대한 설명</li>
+<li>추론 API 서비스를 무료, 유료 옵션으로 제공</li>
+<li><em>Sentence Similarity</em> 모델을 사용하는 가이드</li>
+</ul>
+<h3 id="lets-build-our-smart-robot-demo-">Let&#39;s build our smart robot demo 🤖</h3>
+<ul>
+<li>제공하는 코드를 통해 로봇과 유사도 검색을 통한 액션 매치를 수행하는 핸즈온</li>
+</ul>
+<h3 id="what-can-you-do-now">What can you do now?</h3>
+<ul>
+<li>위 핸즈온에 더해서 SST(Speach-To-Text) 등의 기능을 추가해 볼 것</li>
+</ul>
+<h3 id="conclusion-1">Conclusion</h3>
+<ul>
+<li>다음</li>
+</ul>
+<h2 id="defining-my-demo-part-1-finding-the-idea-and-writing-the-gdd">DEFINING MY DEMO PART 1. FINDING THE IDEA AND WRITING THE GDD</h2>
+<h3 id="introduction-1">Introduction</h3>
+<ul>
+<li>이 코스의 목표<ul>
+<li>AI 툴을 사용하여 게임 데모 제작</li>
+<li>혹은 AI 를 사용하여 게임 운영(NPC)</li>
+</ul>
+</li>
+<li>이 챕터는 데모를 만드는 챕터</li>
+<li>팀으로하는 걸 추천</li>
+<li>GDD(Game Design Document) 은 한페이지 문서로 다음을 포함<ul>
+<li>게임 플레이 매커니즘</li>
+<li>사용할 AI 툴</li>
+<li>사용할 에셋</li>
+<li>필요시 스토리</li>
+<li>게임의 범위</li>
+<li>필요시 팀</li>
+</ul>
+</li>
+</ul>
+<h3 id="its-your-first-game">It&#39;s your first game?</h3>
+<ul>
+<li>게임제작시시 염두해야둬야할 <a href="youtube">youtube</a> 영상 제공</li>
+<li>스코프는 한달을 넘어가지 않도록 매우 작게 할 것</li>
+<li>첫번째 작업은 만드는데 의의를 둔다</li>
+<li>자신의 능력 맞춰 개발한다<ul>
+<li>그림을 못그리면 최대한 배제된 것으로 </li>
+<li>코딩을 못하면 단순성에 초점을 맞추어</li>
+</ul>
+</li>
+<li>매우 작은 MVP(Minimum Viable Product) 를 작성<ul>
+<li>매우 작은 게임의 핵심을 설계</li>
+<li>디테일한 아이템 목록이나 여러 캐릭터 마법등은 배제</li>
+<li>수퍼마리오를 예로 이동, 가로로 긴 맵, 떨어지면 죽는 영역(테스트 재시작 트리거 포인트)</li>
+</ul>
+</li>
+<li>매우 작은 MVP(Minimum Viable Product) 를 작성</li>
+<li>한시간내에 안풀리는건 하지말 것, 검색으로 대부분 해결이 가능</li>
+<li>마케팅은 매우 중요하다 인디개발자로 살 것이라면 특히<ul>
+<li>3분 내의 소개 동영상</li>
+<li>웹사이트, 심플한것이 아마추어로 보이는 것 보다 낫다</li>
+<li>인디게임 대회에 출품</li>
+<li>게임업계인 SNS 에 부탁</li>
+<li>게임 뉴스 사이트에 메일보내기</li>
+<li>출시가 가까워지면 Reddit AMA, 팟케스트, SNS, 웹사이트 업데이트</li>
+<li>스팀이나 GOG 등에 출시한다, 이때 홍보채널을 가지고 있는 것이 출시에 도움이 된다</li>
+<li>가능한 많은 곳에 출시한다</li>
+<li>출시후에는 단점을 받아들이고, 버그픽스등을 서비스한다</li>
+<li>유저 및 기자들과 소통을 유지한다</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> <a href="@todo">@todo</a> GDC 토크 영상 시청<ul>
+<li><a href="https://www.youtube.com/watch?time_continue=2&v=ZW8gWgpptI8&embeds_referring_euri=https%3A%2F%2Fhuggingface.co%2F&source_ve_path=Mjg2NjY&feature=emb_logo" target="_blank">[URL] https://www.youtube.com/watch?time_continue=2&v=ZW8gWgpptI8&embeds_referring_euri=https://huggingface.co/&source_ve_path=Mjg2NjY&feature=emb_logo</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="step-1-crafting-the-game-idea">Step 1. Crafting the Game Idea</h3>
+<ul>
+<li>내 단점을 받아들인다</li>
+<li>좋아하는 게임으로 부터 영감을 얻는다</li>
+<li>AI를 통해 게임을 어떻게 개선할지 생각한다</li>
+<li>게임의 범위를 작게 한다</li>
+<li>허깅페이스 챗에서 브레인 스토밍을 한다</li>
+</ul>
+<h3 id="step-2-writing-the-gdd">Step 2. Writing the GDD</h3>
+<h4 id="what--is-a-game-design-documentgdd">What  is a Game Design Document(GDD)</h4>
+<ul>
+<li>게임 프로젝트의 청사진</li>
+<li>정의를 명확히하고 게임의 비전의 이해를 팀원들과 공유한다 </li>
+<li>개발 프로세스를 촉진한다</li>
+<li>아웃라인<ul>
+<li>게임플레이</li>
+<li>피처</li>
+<li>게임 매커지니즘</li>
+<li>어셋</li>
+<li>등등</li>
+</ul>
+</li>
+</ul>
+<h4 id="the-one-page-game-design-document-template">The One Page Game Design Document Template</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Game Title</li>
+<li><input disabled="" type="checkbox"> Team and roles</li>
+<li><input disabled="" type="checkbox"> Game Concept</li>
+<li><input disabled="" type="checkbox"> Game Genre</li>
+<li><input disabled="" type="checkbox"> Game Features and AI tools/model used</li>
+<li><input disabled="" type="checkbox"> Platform</li>
+<li><input disabled="" type="checkbox"> Scope</li>
+<li><input disabled="" type="checkbox"> Art Style</li>
+<li><input disabled="" type="checkbox"> Level</li>
+<li><input disabled="" type="checkbox"> Assets</li>
+<li><input disabled="" type="checkbox"> Todo</li>
+</ul>
+<h3 id="conclusion-2">Conclusion</h3>
+<h2 id="bonus-1-classical-ai-in-video-games">BONUS 1. CLASSICAL AI IN VIDEO GAMES</h2>
+<ul>
+<li>AI 사례</li>
+</ul>
+<h2 id="unit-2-ai-tools-for-game-developers-">UNIT 2. AI TOOLS FOR GAME DEVELOPERS 🎨</h2>
+<h3 id="introduction-2">Introduction</h3>
+<ul>
+<li>AI 툴 적용</li>
+</ul>
+<h3 id="introduction-3">Introduction</h3>
+<h3 id="code-assistants-">Code Assistants 👩💻</h3>
+<h3 id="music-generation-">Music Generation 🎵</h3>
+<h3 id="ai-voice-actors-">AI Voice Actors 🤖</h3>
+<h3 id="animation-generation-">Animation Generation 💃</h3>
+<h3 id="texture-generation-️">Texture Generation 🖼️</h3>
+<h3 id="2d-assets-generation-">2D Assets Generation 🎮</h3>
+<h3 id="sound-effects-generation-">Sound Effects Generation 🔊</h3>
+<h3 id="conclusion-3">Conclusion</h3>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="huggingface">huggingface</a></li>
+<li><a href="unity">unity</a></li>
+<li><a href="book/making-game-graphic-with-stable-diffusion">book/making-game-graphic-with-stable-diffusion</a></li>
+<li><a href="stable-diffusion">stable-diffusion</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-c65c2f1963a00db9.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-ea177f1f1aa270b2.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"huggingface-ml-for-games\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"jkJpAAbaWnUVak4_41ihX\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/huggingface-ml-for-games\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"huggingface-ml-for-games\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"huggingface-ml-for-games\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"huggingface-ml-for-games\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T40c8,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"huggingface-ml-for-games\"\u003ehuggingface ml for games\u003c/h1\u003e\n\u003ch2 id=\"프로젝트-에러\"\u003e프로젝트 에러\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e2024-05-22 기준 프로젝는 \u003ca href=\"unity\"\u003eunity\u003c/a\u003e 6 에서 열었을시 실패했다 이전 버전으로 연다\u003c/li\u003e\n\u003cli\u003e에러있다고 하면서 safe mode 에 진입하게되고 이때 패키지 두개를 설치하면된다\u003c/li\u003e\n\u003cli\u003ename 으로 설치 -\u0026gt; \u003ccode class=\"span\"\u003ecom.unity.sentis\u003c/code\u003e 패키지를 설치시에 버전을 \u003ccode class=\"span\"\u003e1.3.0-pre.1\u003c/code\u003e 로 고정한다\u003c/li\u003e\n\u003cli\u003egit 으로 설치 -\u0026gt; \u003ccode class=\"span\"\u003ehttps://github.com/huggingface/sharp-transformers.git\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"unit-0-welcome-to-the-coursce\"\u003eUNIT 0. WELCOME TO THE COURSCE\u003c/h2\u003e\n\u003ch3 id=\"welcome-to-the-course-\"\u003eWelcome to the course 🤗\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eAI 모델로 하는 혁신\u003cul\u003e\n\u003cli\u003eHow we make games\u003cul\u003e\n\u003cli\u003e텍스쳐 생성\u003c/li\u003e\n\u003cli\u003eAI 보이스 사용\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eHow we create gameplay\u003cul\u003e\n\u003cli\u003eLLM 백엔드의 NPC\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e배우게될 것\u003cul\u003e\n\u003cli\u003e챗 모델을 사용한 NPC\u003c/li\u003e\n\u003cli\u003e모델의 로컬 및 클라우드 API 사용\u003c/li\u003e\n\u003cli\u003eAI 툴들, TTS, 이미지 생성\u003c/li\u003e\n\u003cli\u003e게임 데모 생성\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e요구사항\u003cul\u003e\n\u003cli\u003e디스코드 조인\u003c/li\u003e\n\u003cli\u003e유니티 개발\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://learn.unity.com/course/create-with-code\" target=\"_blank\"\u003e[URL] https://learn.unity.com/course/create-with-code\u003c/a\u003e (36시간 30분)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e이 코스에서 다루진 않지만 딥하게 가고자 한다면 추가 학습이 열려있다\u003cul\u003e\n\u003cli\u003eNLP\u003c/li\u003e\n\u003cli\u003eAudio\u003c/li\u003e\n\u003cli\u003eGradio\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e코스의 목표\u003cul\u003e\n\u003cli\u003e자신만의 게임 데모\u003c/li\u003e\n\u003cli\u003eAI 를 활용한 게임 제작\u003c/li\u003e\n\u003cli\u003eAI 를 활용한 게임 플레이(NPC등)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"the-goal-build-your-own-game-demo\"\u003eThe Goal, Build Your own Game Demo\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e자격증 조건\u003cul\u003e\n\u003cli\u003e5명 이내의 팀\u003c/li\u003e\n\u003cli\u003eWebGL 혹은 Windows 에서 구동\u003c/li\u003e\n\u003cli\u003eEnglish\u003c/li\u003e\n\u003cli\u003e1개 이상의 오픈소스 툴 활용\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eUnity \u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://learn.unity.com/course/create-with-code\" target=\"_blank\"\u003e[URL] https://learn.unity.com/course/create-with-code\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"syllabus\"\u003eSyllabus\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e강의구성\u003cul\u003e\n\u003cli\u003e이론\u003cul\u003e\n\u003cli\u003eML 을 딥하게 다루는 것이 아님을 알 것\u003c/li\u003e\n\u003cli\u003e허깅 페이스의 추론 api 를 사용할 것으로 예상됨\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e핸즈온\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e각 유닛은 1주(주당 3-4시간)으로 진행되는 페이스로 구성\u003c/li\u003e\n\u003cli\u003e데모 구현을 위해서는 2-4주의 시간을 사용할 것을 권장\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"the-team\"\u003eThe Team\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e강사 소개\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"onboarding\"\u003eOnboarding\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e할일\u003cul\u003e\n\u003cli\u003e허깅페이스 계정 생성\u003c/li\u003e\n\u003cli\u003e디스코드 서버 조인\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"디스코드-채널\"\u003e디스코드 채널\u003c/h4\u003e\n\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003e\u003c/th\u003e\n\u003cth\u003e\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\u003ctr\u003e\n\u003ctd\u003eml-4-games-course-announcements\u003c/td\u003e\n\u003ctd\u003e최신정보\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eml-4-games-course-announcements-study-group\u003c/td\u003e\n\u003ctd\u003e질문 및 의견 교환\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eml-4-games-dev\u003c/td\u003e\n\u003ctd\u003eML 게임 개발에 대한 교환\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eml-4-games-searching-for-team\u003c/td\u003e\n\u003ctd\u003e데모 구현을 위한 팀원 찾기\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eml-4-games-i-made-this\u003c/td\u003e\n\u003ctd\u003e내 모델 공유\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\u003c/table\u003e\n\u003ch3 id=\"discord-101\"\u003eDiscord 101\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e주저하지말고 자주 참여해라\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"getting-the-most-of-the-course\"\u003eGetting the most of the course\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e따라서 구현할 것\u003c/li\u003e\n\u003cli\u003e수정을 주저하지 말것\u003c/li\u003e\n\u003cli\u003e팀으로 할것을 권고\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"conclusion\"\u003eConclusion\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e배우게될 것\u003cul\u003e\n\u003cli\u003eUnity Sentis 와 로컬에서 AI 모델 사용 및 첫번째 지능형 AI NPC\u003c/li\u003e\n\u003cli\u003e데모 게임에 대한 게임 디자인 문서 작성\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"unit-1-create-a-smart-robot-npc-using-hugging-face--and-unity-sentis\"\u003eUNIT 1. CREATE A SMART ROBOT NPC USING HUGGING FACE 🤗 AND UNITY SENTIS\u003c/h2\u003e\n\u003ch3 id=\"introduction\"\u003eIntroduction\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e배우게 될 것\u003cul\u003e\n\u003cli\u003eSentence Similarity\u003c/li\u003e\n\u003cli\u003eAI 모델의 로컬, 클라우드 실행 차이\u003c/li\u003e\n\u003cli\u003e허깅페이스\u003c/li\u003e\n\u003cli\u003eUnity Sentis, Sharp Transformers 와 함께 AI 모델을 로컬에서 실행하는 방법\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e사용하는 것\u003cul\u003e\n\u003cli\u003e유니티 게임 엔진 2022.3+ \u003c/li\u003e\n\u003cli\u003eJammo Robot 어셋\u003c/li\u003e\n\u003cli\u003eUnity Sentis library - AI 모델을 게임안에서 실행하기 위해 필요\u003c/li\u003e\n\u003cli\u003eHugging Face Sharp Transformers -  유니티 게임 안에서 허깅페이스 트랜스포머를 실행할 수 있게 하는 유니티 플러그인\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e예제 게임 설명\u003cul\u003e\n\u003cli\u003e채팅으로 NPC 에게 요청하고 NPC 가 이를 실행\u003c/li\u003e\n\u003cli\u003e가져다 달라거나 춤춰달라거나 요청 후 이를 NPC 가 실행\u003c/li\u003e\n\u003cli\u003e건물안에서 가드를 피해서 숨고 목적 아이템을 훔쳐오라는 지시 후 NPC 가 이를 수행하는 게임\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"what-is-sentence-similarity\"\u003eWhat is Sentence Similarity?\u003c/h3\u003e\n\u003ch4 id=\"the-power-of-sentence-similarity-\"\u003eThe Power of Sentence Similarity 🤖\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e게임만들기 전에 문장 유사도에 대한 정의와 동작을 이해해야한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"how-does-this-game-work\"\u003eHow does this game work?\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e선택지를 클릭하는 대신 챗을 통해 더 많은 자유도를 제공한다\u003c/li\u003e\n\u003cli\u003e로봇은 액션 리스트를 가지고 있고 유저의 채팅문장과 유사도가 높은 액션을 선택해서 사용한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"what-is-sentence-similarity-1\"\u003eWhat is Sentence Similarity?\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e주어진 문장(input) 과 타겟 문장들간의 유사도를 계산하는 것\u003c/li\u003e\n\u003cli\u003e입력 문장 -\u0026gt; embed -\u0026gt; 임베딩(벡터)\u003cul\u003e\n\u003cli\u003e이를 가지고 cosine 유사도를 계산\u003c/li\u003e\n\u003cli\u003e딥하게 들어가고 싶다면 링크 참조\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://huggingface.co/tasks/sentence-similarity\" target=\"_blank\"\u003e[URL] https://huggingface.co/tasks/sentence-similarity\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"the-complete-pipeline\"\u003eThe Complete pipeline\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e유저 인풋과 액션 리스트는 모두 string 으로 되어있다.\u003c/li\u003e\n\u003cli\u003e유사도 처리를 위해서는 임베딩이 필요하며 이는 \u003cem\u003eSharp Transformers\u003c/em\u003e 에서 처리한다\u003c/li\u003e\n\u003cli\u003e\u003cem\u003eSharp Transformers\u003c/em\u003e 를 통해 토큰화된 인풋은 \u003cem\u003eUnity Sentis\u003c/em\u003e 모델의 입력으로 들어간다\u003c/li\u003e\n\u003cli\u003e\u003cem\u003eUnity Sentis\u003c/em\u003e 모델의 결과로 유사도 점수가 나온다\u003c/li\u003e\n\u003c/ul\u003e\n\u003col\u003e\n\u003cli\u003e유저가 명령어를 입력한다: \u0026quot;Can you bring me the red cube?\u0026quot;\u003c/li\u003e\n\u003cli\u003e로봇은 액션 목록을 가지고 있다\u003c/li\u003e\n\u003c/ol\u003e\n\u003cul\u003e\n\u003cli\u003eHello\u003c/li\u003e\n\u003cli\u003eHappy\u003c/li\u003e\n\u003cli\u003eBring red box\u003c/li\u003e\n\u003cli\u003eMove to blue pillar\u003c/li\u003e\n\u003c/ul\u003e\n\u003col start=\"3\"\u003e\n\u003cli\u003e가장 유사한 액션을 찾기 위해 인풋을 임베딩한다\u003c/li\u003e\n\u003cli\u003e\u003cem\u003eSharp Transformers\u003c/em\u003e 에 의해 입력이 토큰화된다\u003c/li\u003e\n\u003cli\u003e토큰화된 입력을 모델에 넣어 인풋에 대한 정보를 갖는 임베딩을 출력한다(by \u003cem\u003eUnity Sentis\u003c/em\u003e)\u003c/li\u003e\n\u003cli\u003e임베딩 되었으므로 유사도 검색이 가능해진다\u003c/li\u003e\n\u003cli\u003e유사도 검색(비교) 에서 가장 높은 스코어를 가진 액션을 선택한다\u003c/li\u003e\n\u003c/ol\u003e\n\u003cul\u003e\n\u003cli\u003e해당 스코어가 \u003ccode class=\"span\"\u003e0.2\u003c/code\u003e 이상인 경우 액션을 실행을 요구한다\u003c/li\u003e\n\u003cli\u003e해당 스코어가 \u003ccode class=\"span\"\u003e0.2\u003c/code\u003e 이하인 경우 \u0026quot;몰루~\u0026quot; 처리한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch5 id=\"why-02-for-the-similarity-score-threshold\"\u003eWhy \u003ccode class=\"span\"\u003e0.2\u003c/code\u003e for the Similarity score threshold?\u003c/h5\u003e\n\u003cul\u003e\n\u003cli\u003e여러 테스트 결과를 통해 찾아진 값이다\u003c/li\u003e\n\u003cli\u003e스코어는 액션 리스트 전체를 합치면 1이 된다, 때문에 액션 리스트가 늘어나는 경우 threshold 값은 낮아져야한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"how-to-run-an-ai-model-local-vs-remote-inference\"\u003eHow to run an AI model: local vs remote Inference\u003c/h3\u003e\n\u003ch4 id=\"how-to-run-an-ai-model-local-vs-remote\"\u003eHow to run an AI model: local vs remote\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e이 게임에서 유사도 검색을 사용하기 위해 \u003ccode class=\"span\"\u003eall-MiniLM-L6-v2\u003c/code\u003e 모델을 사용한다\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2\" target=\"_blank\"\u003e[URL] https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e이 모델은 BERT 트랜스포머 모델로 이미 학습을 마쳤으므로 사용하면된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"running-the-model-remotely\"\u003eRunning the model remotely\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e서버 api 를 호출하는 방식\u003c/li\u003e\n\u003cli\u003e허깅페이스에서 \u003cem\u003eInference API\u003c/em\u003e 를 제공\u003cul\u003e\n\u003cli\u003e프로토타입및 테스트용은 무료\u003c/li\u003e\n\u003cli\u003e이를 사용하기 위한 유니티 플러그인이 존재\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://huggingface.co/blog/unity-api\" target=\"_blank\"\u003e[URL] https://huggingface.co/blog/unity-api\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e장점\u003cul\u003e\n\u003cli\u003e클라이언트 측에 리소스 필요하지 않음\u003c/li\u003e\n\u003cli\u003e서버쪽에서 로깅할 수 있음으로 유저 입력에 대한 정보등을 개선에 쓸 수 있음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e단점\u003cul\u003e\n\u003cli\u003e인터넷 연결 및 서버 상태에 따른 종속이 생김\u003c/li\u003e\n\u003cli\u003e잠재적 비용 비용 폭탄 가능성\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e주로 클라이언트에서 실행할 수 없는 큰 모델을 실행하는 경우 API 제공이 필요하다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"running-the-model-locally\"\u003eRunning the model locally\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cp\u003e클라이언트에서 사용하기 위해 2개의 라이브러리를 사용한다\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cem\u003eUnity Sentis\u003c/em\u003e - AI 모델을 게임 안에서 실행할 수 있도록 한다\u003c/li\u003e\n\u003cli\u003e\u003cem\u003eThe Hugging Face Sharp Transformers library\u003c/em\u003e - 유니티 게임에서 트랜스포머 모델을 사용할 수 있도록 한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e장점\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e돈 안나감\u003c/li\u003e\n\u003cli\u003e인터넷 연결 종속 없음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e단점\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e클라이언트 스펙에 영향을 받는다(RAM/VRAM)\u003c/li\u003e\n\u003cli\u003e유저가 어떤식으로 모델을 활용하는 정보를 쉽게 얻지 못한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e유사도 검색은 가벼운 모델이라 \u003cstrong\u003e로컬에서 사용하기로한다\u003c/strong\u003e\u003c/p\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"what-is-hugging-face-\"\u003eWhat is Hugging Face 🤗?\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e허깅페이스에 대한 설명\u003c/li\u003e\n\u003cli\u003e추론 API 서비스를 무료, 유료 옵션으로 제공\u003c/li\u003e\n\u003cli\u003e\u003cem\u003eSentence Similarity\u003c/em\u003e 모델을 사용하는 가이드\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"lets-build-our-smart-robot-demo-\"\u003eLet\u0026#39;s build our smart robot demo 🤖\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e제공하는 코드를 통해 로봇과 유사도 검색을 통한 액션 매치를 수행하는 핸즈온\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"what-can-you-do-now\"\u003eWhat can you do now?\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e위 핸즈온에 더해서 SST(Speach-To-Text) 등의 기능을 추가해 볼 것\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"conclusion-1\"\u003eConclusion\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e다음\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"defining-my-demo-part-1-finding-the-idea-and-writing-the-gdd\"\u003eDEFINING MY DEMO PART 1. FINDING THE IDEA AND WRITING THE GDD\u003c/h2\u003e\n\u003ch3 id=\"introduction-1\"\u003eIntroduction\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e이 코스의 목표\u003cul\u003e\n\u003cli\u003eAI 툴을 사용하여 게임 데모 제작\u003c/li\u003e\n\u003cli\u003e혹은 AI 를 사용하여 게임 운영(NPC)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e이 챕터는 데모를 만드는 챕터\u003c/li\u003e\n\u003cli\u003e팀으로하는 걸 추천\u003c/li\u003e\n\u003cli\u003eGDD(Game Design Document) 은 한페이지 문서로 다음을 포함\u003cul\u003e\n\u003cli\u003e게임 플레이 매커니즘\u003c/li\u003e\n\u003cli\u003e사용할 AI 툴\u003c/li\u003e\n\u003cli\u003e사용할 에셋\u003c/li\u003e\n\u003cli\u003e필요시 스토리\u003c/li\u003e\n\u003cli\u003e게임의 범위\u003c/li\u003e\n\u003cli\u003e필요시 팀\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"its-your-first-game\"\u003eIt\u0026#39;s your first game?\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e게임제작시시 염두해야둬야할 \u003ca href=\"youtube\"\u003eyoutube\u003c/a\u003e 영상 제공\u003c/li\u003e\n\u003cli\u003e스코프는 한달을 넘어가지 않도록 매우 작게 할 것\u003c/li\u003e\n\u003cli\u003e첫번째 작업은 만드는데 의의를 둔다\u003c/li\u003e\n\u003cli\u003e자신의 능력 맞춰 개발한다\u003cul\u003e\n\u003cli\u003e그림을 못그리면 최대한 배제된 것으로 \u003c/li\u003e\n\u003cli\u003e코딩을 못하면 단순성에 초점을 맞추어\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e매우 작은 MVP(Minimum Viable Product) 를 작성\u003cul\u003e\n\u003cli\u003e매우 작은 게임의 핵심을 설계\u003c/li\u003e\n\u003cli\u003e디테일한 아이템 목록이나 여러 캐릭터 마법등은 배제\u003c/li\u003e\n\u003cli\u003e수퍼마리오를 예로 이동, 가로로 긴 맵, 떨어지면 죽는 영역(테스트 재시작 트리거 포인트)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e매우 작은 MVP(Minimum Viable Product) 를 작성\u003c/li\u003e\n\u003cli\u003e한시간내에 안풀리는건 하지말 것, 검색으로 대부분 해결이 가능\u003c/li\u003e\n\u003cli\u003e마케팅은 매우 중요하다 인디개발자로 살 것이라면 특히\u003cul\u003e\n\u003cli\u003e3분 내의 소개 동영상\u003c/li\u003e\n\u003cli\u003e웹사이트, 심플한것이 아마추어로 보이는 것 보다 낫다\u003c/li\u003e\n\u003cli\u003e인디게임 대회에 출품\u003c/li\u003e\n\u003cli\u003e게임업계인 SNS 에 부탁\u003c/li\u003e\n\u003cli\u003e게임 뉴스 사이트에 메일보내기\u003c/li\u003e\n\u003cli\u003e출시가 가까워지면 Reddit AMA, 팟케스트, SNS, 웹사이트 업데이트\u003c/li\u003e\n\u003cli\u003e스팀이나 GOG 등에 출시한다, 이때 홍보채널을 가지고 있는 것이 출시에 도움이 된다\u003c/li\u003e\n\u003cli\u003e가능한 많은 곳에 출시한다\u003c/li\u003e\n\u003cli\u003e출시후에는 단점을 받아들이고, 버그픽스등을 서비스한다\u003c/li\u003e\n\u003cli\u003e유저 및 기자들과 소통을 유지한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"@todo\"\u003e@todo\u003c/a\u003e GDC 토크 영상 시청\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://www.youtube.com/watch?time_continue=2\u0026v=ZW8gWgpptI8\u0026embeds_referring_euri=https%3A%2F%2Fhuggingface.co%2F\u0026source_ve_path=Mjg2NjY\u0026feature=emb_logo\" target=\"_blank\"\u003e[URL] https://www.youtube.com/watch?time_continue=2\u0026v=ZW8gWgpptI8\u0026embeds_referring_euri=https://huggingface.co/\u0026source_ve_path=Mjg2NjY\u0026feature=emb_logo\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"step-1-crafting-the-game-idea\"\u003eStep 1. Crafting the Game Idea\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e내 단점을 받아들인다\u003c/li\u003e\n\u003cli\u003e좋아하는 게임으로 부터 영감을 얻는다\u003c/li\u003e\n\u003cli\u003eAI를 통해 게임을 어떻게 개선할지 생각한다\u003c/li\u003e\n\u003cli\u003e게임의 범위를 작게 한다\u003c/li\u003e\n\u003cli\u003e허깅페이스 챗에서 브레인 스토밍을 한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"step-2-writing-the-gdd\"\u003eStep 2. Writing the GDD\u003c/h3\u003e\n\u003ch4 id=\"what--is-a-game-design-documentgdd\"\u003eWhat  is a Game Design Document(GDD)\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e게임 프로젝트의 청사진\u003c/li\u003e\n\u003cli\u003e정의를 명확히하고 게임의 비전의 이해를 팀원들과 공유한다 \u003c/li\u003e\n\u003cli\u003e개발 프로세스를 촉진한다\u003c/li\u003e\n\u003cli\u003e아웃라인\u003cul\u003e\n\u003cli\u003e게임플레이\u003c/li\u003e\n\u003cli\u003e피처\u003c/li\u003e\n\u003cli\u003e게임 매커지니즘\u003c/li\u003e\n\u003cli\u003e어셋\u003c/li\u003e\n\u003cli\u003e등등\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"the-one-page-game-design-document-template\"\u003eThe One Page Game Design Document Template\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e Game Title\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e Team and roles\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e Game Concept\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e Game Genre\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e Game Features and AI tools/model used\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e Platform\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e Scope\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e Art Style\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e Level\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e Assets\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e Todo\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"conclusion-2\"\u003eConclusion\u003c/h3\u003e\n\u003ch2 id=\"bonus-1-classical-ai-in-video-games\"\u003eBONUS 1. CLASSICAL AI IN VIDEO GAMES\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eAI 사례\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"unit-2-ai-tools-for-game-developers-\"\u003eUNIT 2. AI TOOLS FOR GAME DEVELOPERS 🎨\u003c/h2\u003e\n\u003ch3 id=\"introduction-2\"\u003eIntroduction\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eAI 툴 적용\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"introduction-3\"\u003eIntroduction\u003c/h3\u003e\n\u003ch3 id=\"code-assistants-\"\u003eCode Assistants 👩💻\u003c/h3\u003e\n\u003ch3 id=\"music-generation-\"\u003eMusic Generation 🎵\u003c/h3\u003e\n\u003ch3 id=\"ai-voice-actors-\"\u003eAI Voice Actors 🤖\u003c/h3\u003e\n\u003ch3 id=\"animation-generation-\"\u003eAnimation Generation 💃\u003c/h3\u003e\n\u003ch3 id=\"texture-generation-️\"\u003eTexture Generation 🖼️\u003c/h3\u003e\n\u003ch3 id=\"2d-assets-generation-\"\u003e2D Assets Generation 🎮\u003c/h3\u003e\n\u003ch3 id=\"sound-effects-generation-\"\u003eSound Effects Generation 🔊\u003c/h3\u003e\n\u003ch3 id=\"conclusion-3\"\u003eConclusion\u003c/h3\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"huggingface\"\u003ehuggingface\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"unity\"\u003eunity\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"book/making-game-graphic-with-stable-diffusion\"\u003ebook/making-game-graphic-with-stable-diffusion\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"stable-diffusion\"\u003estable-diffusion\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/d7bc37d\\n\",\"className\":\"bg-white text-black\",\"children\":\"d7bc37d\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/huggingface-ml-for-games.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/huggingface-ml-for-games.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/huggingface-ml-for-games.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"huggingface-ml-for-games\",\"name\":\"huggingface-ml-for-games\",\"val\":7},{\"id\":\"unity\",\"name\":\"unity\",\"val\":13},{\"id\":\"youtube\",\"name\":\"youtube\",\"val\":2},{\"id\":\"@todo\",\"name\":\"@todo\",\"val\":30},{\"id\":\"huggingface\",\"name\":\"huggingface\",\"val\":7},{\"id\":\"book/making-game-graphic-with-stable-diffusion\",\"name\":\"book/making-game-graphic-with-stable-diffusion\",\"val\":1},{\"id\":\"stable-diffusion\",\"name\":\"stable-diffusion\",\"val\":19},{\"id\":\"indie-game\",\"name\":\"indie-game\",\"val\":7},{\"id\":\"stable-diffusion-webui\",\"name\":\"stable-diffusion-webui\",\"val\":11},{\"id\":\"unity-learn-create-with-code\",\"name\":\"unity-learn-create-with-code\",\"val\":2},{\"id\":\"diary/2024-05-13\",\"name\":\"diary/2024-05-13\",\"val\":3}],\"links\":[{\"source\":\"huggingface-ml-for-games\",\"target\":\"unity\"},{\"source\":\"huggingface-ml-for-games\",\"target\":\"youtube\"},{\"source\":\"huggingface-ml-for-games\",\"target\":\"@todo\"},{\"source\":\"huggingface-ml-for-games\",\"target\":\"huggingface\"},{\"source\":\"huggingface-ml-for-games\",\"target\":\"unity\"},{\"source\":\"huggingface-ml-for-games\",\"target\":\"book/making-game-graphic-with-stable-diffusion\"},{\"source\":\"huggingface-ml-for-games\",\"target\":\"stable-diffusion\"},{\"source\":\"huggingface\",\"target\":\"huggingface-ml-for-games\"},{\"source\":\"indie-game\",\"target\":\"huggingface-ml-for-games\"},{\"source\":\"indie-game\",\"target\":\"huggingface-ml-for-games\"},{\"source\":\"stable-diffusion-webui\",\"target\":\"huggingface-ml-for-games\"},{\"source\":\"stable-diffusion\",\"target\":\"huggingface-ml-for-games\"},{\"source\":\"unity-learn-create-with-code\",\"target\":\"huggingface-ml-for-games\"},{\"source\":\"unity\",\"target\":\"huggingface-ml-for-games\"},{\"source\":\"diary/2024-05-13\",\"target\":\"huggingface-ml-for-games\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"huggingface-ml-for-games\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/huggingface-ml-for-games\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"huggingface-ml-for-games\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"unity\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/unity\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"unity\"}],[\"$\",\"sup\",null,{\"children\":13}]]}]}],[\"$\",\"span\",\"youtube\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/youtube\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"youtube\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"@todo\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/@todo\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"@todo\"}],[\"$\",\"sup\",null,{\"children\":30}]]}]}],[\"$\",\"span\",\"huggingface\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/huggingface\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"huggingface\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"book/making-game-graphic-with-stable-diffusion\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/book/making-game-graphic-with-stable-diffusion\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"book/making-game-graphic-with-stable-diffusion\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"stable-diffusion\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/stable-diffusion\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"stable-diffusion\"}],[\"$\",\"sup\",null,{\"children\":19}]]}]}],[\"$\",\"span\",\"indie-game\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/indie-game\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"indie-game\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"stable-diffusion-webui\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/stable-diffusion-webui\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"stable-diffusion-webui\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"unity-learn-create-with-code\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/unity-learn-create-with-code\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"unity-learn-create-with-code\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2024-05-13\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-05-13\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-05-13\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"huggingface-ml-for-games\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#huggingface-ml-for-games\",\"children\":\"huggingface ml for games\"}]}],[\"$\",\"div\",\"프로젝트-에러\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#프로젝트-에러\",\"children\":\"프로젝트 에러\"}]}],[\"$\",\"div\",\"unit-0-welcome-to-the-coursce\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#unit-0-welcome-to-the-coursce\",\"children\":\"UNIT 0. WELCOME TO THE COURSCE\"}]}],[\"$\",\"div\",\"welcome-to-the-course-🤗\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#welcome-to-the-course-🤗\",\"children\":\"Welcome to the course 🤗\"}]}],[\"$\",\"div\",\"the-goal-build-your-own-game-demo\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#the-goal-build-your-own-game-demo\",\"children\":\"The Goal, Build Your own Game Demo\"}]}],[\"$\",\"div\",\"syllabus\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#syllabus\",\"children\":\"Syllabus\"}]}],[\"$\",\"div\",\"the-team\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#the-team\",\"children\":\"The Team\"}]}],[\"$\",\"div\",\"onboarding\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#onboarding\",\"children\":\"Onboarding\"}]}],[\"$\",\"div\",\"디스코드-채널\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#디스코드-채널\",\"children\":\"디스코드 채널\"}]}],[\"$\",\"div\",\"discord-101\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#discord-101\",\"children\":\"Discord 101\"}]}],[\"$\",\"div\",\"getting-the-most-of-the-course\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#getting-the-most-of-the-course\",\"children\":\"Getting the most of the course\"}]}],[\"$\",\"div\",\"conclusion\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#conclusion\",\"children\":\"Conclusion\"}]}],[\"$\",\"div\",\"unit-1-create-a-smart-robot-npc-using-hugging-face-🤗-and-unity-sentis\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#unit-1-create-a-smart-robot-npc-using-hugging-face-🤗-and-unity-sentis\",\"children\":\"UNIT 1. CREATE A SMART ROBOT NPC USING HUGGING FACE 🤗 AND UNITY SENTIS\"}]}],[\"$\",\"div\",\"introduction\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#introduction\",\"children\":\"Introduction\"}]}],[\"$\",\"div\",\"what-is-sentence-similarity\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#what-is-sentence-similarity\",\"children\":\"What is Sentence Similarity?\"}]}],[\"$\",\"div\",\"the-power-of-sentence-similarity-🤖\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#the-power-of-sentence-similarity-🤖\",\"children\":\"The Power of Sentence Similarity 🤖\"}]}],[\"$\",\"div\",\"how-does-this-game-work\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#how-does-this-game-work\",\"children\":\"How does this game work?\"}]}],[\"$\",\"div\",\"what-is-sentence-similarity-1\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#what-is-sentence-similarity-1\",\"children\":\"What is Sentence Similarity?\"}]}],[\"$\",\"div\",\"the-complete-pipeline\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#the-complete-pipeline\",\"children\":\"The Complete pipeline\"}]}],[\"$\",\"div\",\"why-02-for-the-similarity-score-threshold\",{\"className\":\"pl-8\",\"children\":[\"$\",\"a\",null,{\"href\":\"#why-02-for-the-similarity-score-threshold\",\"children\":\"Why 0.2 for the Similarity score threshold?\"}]}],[\"$\",\"div\",\"how-to-run-an-ai-model-local-vs-remote-inference\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#how-to-run-an-ai-model-local-vs-remote-inference\",\"children\":\"How to run an AI model: local vs remote Inference\"}]}],[\"$\",\"div\",\"how-to-run-an-ai-model-local-vs-remote\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#how-to-run-an-ai-model-local-vs-remote\",\"children\":\"How to run an AI model: local vs remote\"}]}],[\"$\",\"div\",\"running-the-model-remotely\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#running-the-model-remotely\",\"children\":\"Running the model remotely\"}]}],[\"$\",\"div\",\"running-the-model-locally\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#running-the-model-locally\",\"children\":\"Running the model locally\"}]}],[\"$\",\"div\",\"what-is-hugging-face-🤗\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#what-is-hugging-face-🤗\",\"children\":\"What is Hugging Face 🤗?\"}]}],[\"$\",\"div\",\"lets-build-our-smart-robot-demo-🤖\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#lets-build-our-smart-robot-demo-🤖\",\"children\":\"Let's build our smart robot demo 🤖\"}]}],[\"$\",\"div\",\"what-can-you-do-now\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#what-can-you-do-now\",\"children\":\"What can you do now?\"}]}],[\"$\",\"div\",\"conclusion-1\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#conclusion-1\",\"children\":\"Conclusion\"}]}],[\"$\",\"div\",\"defining-my-demo-part-1-finding-the-idea-and-writing-the-gdd\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#defining-my-demo-part-1-finding-the-idea-and-writing-the-gdd\",\"children\":\"DEFINING MY DEMO PART 1. FINDING THE IDEA AND WRITING THE GDD\"}]}],[\"$\",\"div\",\"introduction-1\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#introduction-1\",\"children\":\"Introduction\"}]}],[\"$\",\"div\",\"its-your-first-game\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#its-your-first-game\",\"children\":\"It's your first game?\"}]}],[\"$\",\"div\",\"step-1-crafting-the-game-idea\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#step-1-crafting-the-game-idea\",\"children\":\"Step 1. Crafting the Game Idea\"}]}],[\"$\",\"div\",\"step-2-writing-the-gdd\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#step-2-writing-the-gdd\",\"children\":\"Step 2. Writing the GDD\"}]}],[\"$\",\"div\",\"what--is-a-game-design-documentgdd\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#what--is-a-game-design-documentgdd\",\"children\":\"What  is a Game Design Document(GDD)\"}]}],[\"$\",\"div\",\"the-one-page-game-design-document-template\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#the-one-page-game-design-document-template\",\"children\":\"The One Page Game Design Document Template\"}]}],[\"$\",\"div\",\"conclusion-2\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#conclusion-2\",\"children\":\"Conclusion\"}]}],[\"$\",\"div\",\"bonus-1-classical-ai-in-video-games\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#bonus-1-classical-ai-in-video-games\",\"children\":\"BONUS 1. CLASSICAL AI IN VIDEO GAMES\"}]}],[\"$\",\"div\",\"unit-2-ai-tools-for-game-developers-🎨\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#unit-2-ai-tools-for-game-developers-🎨\",\"children\":\"UNIT 2. AI TOOLS FOR GAME DEVELOPERS 🎨\"}]}],[\"$\",\"div\",\"introduction-2\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#introduction-2\",\"children\":\"Introduction\"}]}],[\"$\",\"div\",\"introduction-3\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#introduction-3\",\"children\":\"Introduction\"}]}],[\"$\",\"div\",\"code-assistants-👩💻\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#code-assistants-👩💻\",\"children\":\"Code Assistants 👩💻\"}]}],[\"$\",\"div\",\"music-generation-🎵\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#music-generation-🎵\",\"children\":\"Music Generation 🎵\"}]}],[\"$\",\"div\",\"ai-voice-actors-🤖\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#ai-voice-actors-🤖\",\"children\":\"AI Voice Actors 🤖\"}]}],[\"$\",\"div\",\"animation-generation-💃\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#animation-generation-💃\",\"children\":\"Animation Generation 💃\"}]}],[\"$\",\"div\",\"texture-generation-🖼️\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#texture-generation-🖼️\",\"children\":\"Texture Generation 🖼️\"}]}],[\"$\",\"div\",\"2d-assets-generation-🎮\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#2d-assets-generation-🎮\",\"children\":\"2D Assets Generation 🎮\"}]}],[\"$\",\"div\",\"sound-effects-generation-🔊\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#sound-effects-generation-🔊\",\"children\":\"Sound Effects Generation 🔊\"}]}],[\"$\",\"div\",\"conclusion-3\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#conclusion-3\",\"children\":\"Conclusion\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T2d38,"])</script><script>self.__next_f.push([1,"\n## 프로젝트 에러\n- 2024-05-22 기준 프로젝는 [[unity]] 6 에서 열었을시 실패했다 이전 버전으로 연다\n- 에러있다고 하면서 safe mode 에 진입하게되고 이때 패키지 두개를 설치하면된다\n- name 으로 설치 -\u003e `com.unity.sentis` 패키지를 설치시에 버전을 `1.3.0-pre.1` 로 고정한다\n- git 으로 설치 -\u003e `https://github.com/huggingface/sharp-transformers.git`\n\n## UNIT 0. WELCOME TO THE COURSCE\n### Welcome to the course 🤗\n- AI 모델로 하는 혁신\n  - How we make games\n    - 텍스쳐 생성\n    - AI 보이스 사용\n  - How we create gameplay\n    - LLM 백엔드의 NPC\n- 배우게될 것\n  - 챗 모델을 사용한 NPC\n  - 모델의 로컬 및 클라우드 API 사용\n  - AI 툴들, TTS, 이미지 생성\n  - 게임 데모 생성\n- 요구사항\n  - 디스코드 조인\n  - 유니티 개발\n    - https://learn.unity.com/course/create-with-code (36시간 30분)\n- 이 코스에서 다루진 않지만 딥하게 가고자 한다면 추가 학습이 열려있다\n  - NLP\n  - Audio\n  - Gradio\n- 코스의 목표\n  - 자신만의 게임 데모\n  - AI 를 활용한 게임 제작\n  - AI 를 활용한 게임 플레이(NPC등)\n\n### The Goal, Build Your own Game Demo\n- 자격증 조건\n  - 5명 이내의 팀\n  - WebGL 혹은 Windows 에서 구동\n  - English\n  - 1개 이상의 오픈소스 툴 활용\n- Unity \n  + https://learn.unity.com/course/create-with-code\n\n### Syllabus\n- 강의구성\n  - 이론\n    - ML 을 딥하게 다루는 것이 아님을 알 것\n    - 허깅 페이스의 추론 api 를 사용할 것으로 예상됨\n  - 핸즈온\n- 각 유닛은 1주(주당 3-4시간)으로 진행되는 페이스로 구성\n- 데모 구현을 위해서는 2-4주의 시간을 사용할 것을 권장\n\n### The Team\n- 강사 소개\n\n### Onboarding\n- 할일\n  - 허깅페이스 계정 생성\n  - 디스코드 서버 조인\n\n#### 디스코드 채널\n\n|                                             |                            |\n|---------------------------------------------|----------------------------|\n| ml-4-games-course-announcements             | 최신정보                   |\n| ml-4-games-course-announcements-study-group | 질문 및 의견 교환          |\n| ml-4-games-dev                              | ML 게임 개발에 대한 교환   |\n| ml-4-games-searching-for-team               | 데모 구현을 위한 팀원 찾기 |\n| ml-4-games-i-made-this                      | 내 모델 공유               |\n\n### Discord 101\n- 주저하지말고 자주 참여해라\n\n### Getting the most of the course\n- 따라서 구현할 것\n- 수정을 주저하지 말것\n- 팀으로 할것을 권고\n\n### Conclusion\n- 배우게될 것\n  - Unity Sentis 와 로컬에서 AI 모델 사용 및 첫번째 지능형 AI NPC\n  - 데모 게임에 대한 게임 디자인 문서 작성\n\n## UNIT 1. CREATE A SMART ROBOT NPC USING HUGGING FACE 🤗 AND UNITY SENTIS\n### Introduction\n- 배우게 될 것\n  - Sentence Similarity\n  - AI 모델의 로컬, 클라우드 실행 차이\n  - 허깅페이스\n  - Unity Sentis, Sharp Transformers 와 함께 AI 모델을 로컬에서 실행하는 방법\n- 사용하는 것\n  - 유니티 게임 엔진 2022.3+ \n  - Jammo Robot 어셋\n  - Unity Sentis library - AI 모델을 게임안에서 실행하기 위해 필요\n  - Hugging Face Sharp Transformers -  유니티 게임 안에서 허깅페이스 트랜스포머를 실행할 수 있게 하는 유니티 플러그인\n- 예제 게임 설명\n  - 채팅으로 NPC 에게 요청하고 NPC 가 이를 실행\n  - 가져다 달라거나 춤춰달라거나 요청 후 이를 NPC 가 실행\n  - 건물안에서 가드를 피해서 숨고 목적 아이템을 훔쳐오라는 지시 후 NPC 가 이를 수행하는 게임\n\n### What is Sentence Similarity?\n#### The Power of Sentence Similarity 🤖\n- 게임만들기 전에 문장 유사도에 대한 정의와 동작을 이해해야한다\n\n#### How does this game work?\n- 선택지를 클릭하는 대신 챗을 통해 더 많은 자유도를 제공한다\n- 로봇은 액션 리스트를 가지고 있고 유저의 채팅문장과 유사도가 높은 액션을 선택해서 사용한다\n\n#### What is Sentence Similarity?\n- 주어진 문장(input) 과 타겟 문장들간의 유사도를 계산하는 것\n- 입력 문장 -\u003e embed -\u003e 임베딩(벡터)\n  - 이를 가지고 cosine 유사도를 계산\n  - 딥하게 들어가고 싶다면 링크 참조\n    + https://huggingface.co/tasks/sentence-similarity\n\n#### The Complete pipeline\n- 유저 인풋과 액션 리스트는 모두 string 으로 되어있다.\n- 유사도 처리를 위해서는 임베딩이 필요하며 이는 *Sharp Transformers* 에서 처리한다\n- *Sharp Transformers* 를 통해 토큰화된 인풋은 *Unity Sentis* 모델의 입력으로 들어간다\n- *Unity Sentis* 모델의 결과로 유사도 점수가 나온다\n\n1. 유저가 명령어를 입력한다: \"Can you bring me the red cube?\"\n2. 로봇은 액션 목록을 가지고 있다\n  - Hello\n  - Happy\n  - Bring red box\n  - Move to blue pillar\n3. 가장 유사한 액션을 찾기 위해 인풋을 임베딩한다\n4. *Sharp Transformers* 에 의해 입력이 토큰화된다\n5. 토큰화된 입력을 모델에 넣어 인풋에 대한 정보를 갖는 임베딩을 출력한다(by *Unity Sentis*)\n6. 임베딩 되었으므로 유사도 검색이 가능해진다\n7. 유사도 검색(비교) 에서 가장 높은 스코어를 가진 액션을 선택한다  \n  - 해당 스코어가 `0.2` 이상인 경우 액션을 실행을 요구한다\n  - 해당 스코어가 `0.2` 이하인 경우 \"몰루~\" 처리한다\n\n##### Why `0.2` for the Similarity score threshold?\n- 여러 테스트 결과를 통해 찾아진 값이다\n- 스코어는 액션 리스트 전체를 합치면 1이 된다, 때문에 액션 리스트가 늘어나는 경우 threshold 값은 낮아져야한다\n\n### How to run an AI model: local vs remote Inference\n#### How to run an AI model: local vs remote\n- 이 게임에서 유사도 검색을 사용하기 위해 `all-MiniLM-L6-v2` 모델을 사용한다\n  + https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2\n- 이 모델은 BERT 트랜스포머 모델로 이미 학습을 마쳤으므로 사용하면된다\n\n#### Running the model remotely\n- 서버 api 를 호출하는 방식\n- 허깅페이스에서 *Inference API* 를 제공\n  - 프로토타입및 테스트용은 무료\n  - 이를 사용하기 위한 유니티 플러그인이 존재\n    + https://huggingface.co/blog/unity-api\n- 장점\n  - 클라이언트 측에 리소스 필요하지 않음\n  - 서버쪽에서 로깅할 수 있음으로 유저 입력에 대한 정보등을 개선에 쓸 수 있음\n- 단점\n  - 인터넷 연결 및 서버 상태에 따른 종속이 생김\n  - 잠재적 비용 비용 폭탄 가능성\n- 주로 클라이언트에서 실행할 수 없는 큰 모델을 실행하는 경우 API 제공이 필요하다\n\n#### Running the model locally\n- 클라이언트에서 사용하기 위해 2개의 라이브러리를 사용한다\n  - *Unity Sentis* - AI 모델을 게임 안에서 실행할 수 있도록 한다\n  - *The Hugging Face Sharp Transformers library* - 유니티 게임에서 트랜스포머 모델을 사용할 수 있도록 한다\n- 장점\n  - 돈 안나감\n  - 인터넷 연결 종속 없음\n- 단점\n  - 클라이언트 스펙에 영향을 받는다(RAM/VRAM)\n  - 유저가 어떤식으로 모델을 활용하는 정보를 쉽게 얻지 못한다\n\n- 유사도 검색은 가벼운 모델이라 **로컬에서 사용하기로한다**\n\n### What is Hugging Face 🤗?\n- 허깅페이스에 대한 설명\n- 추론 API 서비스를 무료, 유료 옵션으로 제공\n- *Sentence Similarity* 모델을 사용하는 가이드\n\n### Let's build our smart robot demo 🤖\n- 제공하는 코드를 통해 로봇과 유사도 검색을 통한 액션 매치를 수행하는 핸즈온\n\n### What can you do now?\n- 위 핸즈온에 더해서 SST(Speach-To-Text) 등의 기능을 추가해 볼 것\n\n### Conclusion\n- 다음\n\n## DEFINING MY DEMO PART 1. FINDING THE IDEA AND WRITING THE GDD\n### Introduction\n- 이 코스의 목표\n  - AI 툴을 사용하여 게임 데모 제작\n  - 혹은 AI 를 사용하여 게임 운영(NPC)\n- 이 챕터는 데모를 만드는 챕터\n- 팀으로하는 걸 추천\n- GDD(Game Design Document) 은 한페이지 문서로 다음을 포함\n  - 게임 플레이 매커니즘\n  - 사용할 AI 툴\n  - 사용할 에셋\n  - 필요시 스토리\n  - 게임의 범위\n  - 필요시 팀\n\n### It's your first game?\n- 게임제작시시 염두해야둬야할 [[youtube]] 영상 제공\n- 스코프는 한달을 넘어가지 않도록 매우 작게 할 것\n- 첫번째 작업은 만드는데 의의를 둔다\n- 자신의 능력 맞춰 개발한다\n  - 그림을 못그리면 최대한 배제된 것으로 \n  - 코딩을 못하면 단순성에 초점을 맞추어\n- 매우 작은 MVP(Minimum Viable Product) 를 작성\n  - 매우 작은 게임의 핵심을 설계\n  - 디테일한 아이템 목록이나 여러 캐릭터 마법등은 배제\n  - 수퍼마리오를 예로 이동, 가로로 긴 맵, 떨어지면 죽는 영역(테스트 재시작 트리거 포인트)\n- 매우 작은 MVP(Minimum Viable Product) 를 작성\n- 한시간내에 안풀리는건 하지말 것, 검색으로 대부분 해결이 가능\n- 마케팅은 매우 중요하다 인디개발자로 살 것이라면 특히\n  - 3분 내의 소개 동영상\n  - 웹사이트, 심플한것이 아마추어로 보이는 것 보다 낫다\n  - 인디게임 대회에 출품\n  - 게임업계인 SNS 에 부탁\n  - 게임 뉴스 사이트에 메일보내기\n  - 출시가 가까워지면 Reddit AMA, 팟케스트, SNS, 웹사이트 업데이트\n  - 스팀이나 GOG 등에 출시한다, 이때 홍보채널을 가지고 있는 것이 출시에 도움이 된다\n  - 가능한 많은 곳에 출시한다\n  - 출시후에는 단점을 받아들이고, 버그픽스등을 서비스한다\n  - 유저 및 기자들과 소통을 유지한다\n- [ ] [[@todo]] GDC 토크 영상 시청\n  - https://www.youtube.com/watch?time_continue=2\u0026v=ZW8gWgpptI8\u0026embeds_referring_euri=https%3A%2F%2Fhuggingface.co%2F\u0026source_ve_path=Mjg2NjY\u0026feature=emb_logo\n\n### Step 1. Crafting the Game Idea\n- 내 단점을 받아들인다\n- 좋아하는 게임으로 부터 영감을 얻는다\n- AI를 통해 게임을 어떻게 개선할지 생각한다\n- 게임의 범위를 작게 한다\n- 허깅페이스 챗에서 브레인 스토밍을 한다\n\n### Step 2. Writing the GDD\n#### What  is a Game Design Document(GDD)\n- 게임 프로젝트의 청사진\n- 정의를 명확히하고 게임의 비전의 이해를 팀원들과 공유한다 \n- 개발 프로세스를 촉진한다\n- 아웃라인\n  - 게임플레이\n  - 피처\n  - 게임 매커지니즘\n  - 어셋\n  - 등등\n#### The One Page Game Design Document Template\n- [ ] Game Title\n- [ ] Team and roles\n- [ ] Game Concept\n- [ ] Game Genre\n- [ ] Game Features and AI tools/model used\n- [ ] Platform\n- [ ] Scope\n- [ ] Art Style\n- [ ] Level\n- [ ] Assets\n- [ ] Todo\n\n### Conclusion\n\n## BONUS 1. CLASSICAL AI IN VIDEO GAMES\n- AI 사례\n\n## UNIT 2. AI TOOLS FOR GAME DEVELOPERS 🎨\n### Introduction\n- AI 툴 적용\n\n### Introduction\n### Code Assistants 👩💻\n### Music Generation 🎵\n### AI Voice Actors 🤖\n### Animation Generation 💃\n### Texture Generation 🖼️\n### 2D Assets Generation 🎮\n### Sound Effects Generation 🔊\n### Conclusion\n\n## link\n- [[huggingface]]\n- [[unity]]\n- [[book/making-game-graphic-with-stable-diffusion]]\n- [[stable-diffusion]]\n"])</script><script>self.__next_f.push([1,"16:T2d38,"])</script><script>self.__next_f.push([1,"\n## 프로젝트 에러\n- 2024-05-22 기준 프로젝는 [[unity]] 6 에서 열었을시 실패했다 이전 버전으로 연다\n- 에러있다고 하면서 safe mode 에 진입하게되고 이때 패키지 두개를 설치하면된다\n- name 으로 설치 -\u003e `com.unity.sentis` 패키지를 설치시에 버전을 `1.3.0-pre.1` 로 고정한다\n- git 으로 설치 -\u003e `https://github.com/huggingface/sharp-transformers.git`\n\n## UNIT 0. WELCOME TO THE COURSCE\n### Welcome to the course 🤗\n- AI 모델로 하는 혁신\n  - How we make games\n    - 텍스쳐 생성\n    - AI 보이스 사용\n  - How we create gameplay\n    - LLM 백엔드의 NPC\n- 배우게될 것\n  - 챗 모델을 사용한 NPC\n  - 모델의 로컬 및 클라우드 API 사용\n  - AI 툴들, TTS, 이미지 생성\n  - 게임 데모 생성\n- 요구사항\n  - 디스코드 조인\n  - 유니티 개발\n    - https://learn.unity.com/course/create-with-code (36시간 30분)\n- 이 코스에서 다루진 않지만 딥하게 가고자 한다면 추가 학습이 열려있다\n  - NLP\n  - Audio\n  - Gradio\n- 코스의 목표\n  - 자신만의 게임 데모\n  - AI 를 활용한 게임 제작\n  - AI 를 활용한 게임 플레이(NPC등)\n\n### The Goal, Build Your own Game Demo\n- 자격증 조건\n  - 5명 이내의 팀\n  - WebGL 혹은 Windows 에서 구동\n  - English\n  - 1개 이상의 오픈소스 툴 활용\n- Unity \n  + https://learn.unity.com/course/create-with-code\n\n### Syllabus\n- 강의구성\n  - 이론\n    - ML 을 딥하게 다루는 것이 아님을 알 것\n    - 허깅 페이스의 추론 api 를 사용할 것으로 예상됨\n  - 핸즈온\n- 각 유닛은 1주(주당 3-4시간)으로 진행되는 페이스로 구성\n- 데모 구현을 위해서는 2-4주의 시간을 사용할 것을 권장\n\n### The Team\n- 강사 소개\n\n### Onboarding\n- 할일\n  - 허깅페이스 계정 생성\n  - 디스코드 서버 조인\n\n#### 디스코드 채널\n\n|                                             |                            |\n|---------------------------------------------|----------------------------|\n| ml-4-games-course-announcements             | 최신정보                   |\n| ml-4-games-course-announcements-study-group | 질문 및 의견 교환          |\n| ml-4-games-dev                              | ML 게임 개발에 대한 교환   |\n| ml-4-games-searching-for-team               | 데모 구현을 위한 팀원 찾기 |\n| ml-4-games-i-made-this                      | 내 모델 공유               |\n\n### Discord 101\n- 주저하지말고 자주 참여해라\n\n### Getting the most of the course\n- 따라서 구현할 것\n- 수정을 주저하지 말것\n- 팀으로 할것을 권고\n\n### Conclusion\n- 배우게될 것\n  - Unity Sentis 와 로컬에서 AI 모델 사용 및 첫번째 지능형 AI NPC\n  - 데모 게임에 대한 게임 디자인 문서 작성\n\n## UNIT 1. CREATE A SMART ROBOT NPC USING HUGGING FACE 🤗 AND UNITY SENTIS\n### Introduction\n- 배우게 될 것\n  - Sentence Similarity\n  - AI 모델의 로컬, 클라우드 실행 차이\n  - 허깅페이스\n  - Unity Sentis, Sharp Transformers 와 함께 AI 모델을 로컬에서 실행하는 방법\n- 사용하는 것\n  - 유니티 게임 엔진 2022.3+ \n  - Jammo Robot 어셋\n  - Unity Sentis library - AI 모델을 게임안에서 실행하기 위해 필요\n  - Hugging Face Sharp Transformers -  유니티 게임 안에서 허깅페이스 트랜스포머를 실행할 수 있게 하는 유니티 플러그인\n- 예제 게임 설명\n  - 채팅으로 NPC 에게 요청하고 NPC 가 이를 실행\n  - 가져다 달라거나 춤춰달라거나 요청 후 이를 NPC 가 실행\n  - 건물안에서 가드를 피해서 숨고 목적 아이템을 훔쳐오라는 지시 후 NPC 가 이를 수행하는 게임\n\n### What is Sentence Similarity?\n#### The Power of Sentence Similarity 🤖\n- 게임만들기 전에 문장 유사도에 대한 정의와 동작을 이해해야한다\n\n#### How does this game work?\n- 선택지를 클릭하는 대신 챗을 통해 더 많은 자유도를 제공한다\n- 로봇은 액션 리스트를 가지고 있고 유저의 채팅문장과 유사도가 높은 액션을 선택해서 사용한다\n\n#### What is Sentence Similarity?\n- 주어진 문장(input) 과 타겟 문장들간의 유사도를 계산하는 것\n- 입력 문장 -\u003e embed -\u003e 임베딩(벡터)\n  - 이를 가지고 cosine 유사도를 계산\n  - 딥하게 들어가고 싶다면 링크 참조\n    + https://huggingface.co/tasks/sentence-similarity\n\n#### The Complete pipeline\n- 유저 인풋과 액션 리스트는 모두 string 으로 되어있다.\n- 유사도 처리를 위해서는 임베딩이 필요하며 이는 *Sharp Transformers* 에서 처리한다\n- *Sharp Transformers* 를 통해 토큰화된 인풋은 *Unity Sentis* 모델의 입력으로 들어간다\n- *Unity Sentis* 모델의 결과로 유사도 점수가 나온다\n\n1. 유저가 명령어를 입력한다: \"Can you bring me the red cube?\"\n2. 로봇은 액션 목록을 가지고 있다\n  - Hello\n  - Happy\n  - Bring red box\n  - Move to blue pillar\n3. 가장 유사한 액션을 찾기 위해 인풋을 임베딩한다\n4. *Sharp Transformers* 에 의해 입력이 토큰화된다\n5. 토큰화된 입력을 모델에 넣어 인풋에 대한 정보를 갖는 임베딩을 출력한다(by *Unity Sentis*)\n6. 임베딩 되었으므로 유사도 검색이 가능해진다\n7. 유사도 검색(비교) 에서 가장 높은 스코어를 가진 액션을 선택한다  \n  - 해당 스코어가 `0.2` 이상인 경우 액션을 실행을 요구한다\n  - 해당 스코어가 `0.2` 이하인 경우 \"몰루~\" 처리한다\n\n##### Why `0.2` for the Similarity score threshold?\n- 여러 테스트 결과를 통해 찾아진 값이다\n- 스코어는 액션 리스트 전체를 합치면 1이 된다, 때문에 액션 리스트가 늘어나는 경우 threshold 값은 낮아져야한다\n\n### How to run an AI model: local vs remote Inference\n#### How to run an AI model: local vs remote\n- 이 게임에서 유사도 검색을 사용하기 위해 `all-MiniLM-L6-v2` 모델을 사용한다\n  + https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2\n- 이 모델은 BERT 트랜스포머 모델로 이미 학습을 마쳤으므로 사용하면된다\n\n#### Running the model remotely\n- 서버 api 를 호출하는 방식\n- 허깅페이스에서 *Inference API* 를 제공\n  - 프로토타입및 테스트용은 무료\n  - 이를 사용하기 위한 유니티 플러그인이 존재\n    + https://huggingface.co/blog/unity-api\n- 장점\n  - 클라이언트 측에 리소스 필요하지 않음\n  - 서버쪽에서 로깅할 수 있음으로 유저 입력에 대한 정보등을 개선에 쓸 수 있음\n- 단점\n  - 인터넷 연결 및 서버 상태에 따른 종속이 생김\n  - 잠재적 비용 비용 폭탄 가능성\n- 주로 클라이언트에서 실행할 수 없는 큰 모델을 실행하는 경우 API 제공이 필요하다\n\n#### Running the model locally\n- 클라이언트에서 사용하기 위해 2개의 라이브러리를 사용한다\n  - *Unity Sentis* - AI 모델을 게임 안에서 실행할 수 있도록 한다\n  - *The Hugging Face Sharp Transformers library* - 유니티 게임에서 트랜스포머 모델을 사용할 수 있도록 한다\n- 장점\n  - 돈 안나감\n  - 인터넷 연결 종속 없음\n- 단점\n  - 클라이언트 스펙에 영향을 받는다(RAM/VRAM)\n  - 유저가 어떤식으로 모델을 활용하는 정보를 쉽게 얻지 못한다\n\n- 유사도 검색은 가벼운 모델이라 **로컬에서 사용하기로한다**\n\n### What is Hugging Face 🤗?\n- 허깅페이스에 대한 설명\n- 추론 API 서비스를 무료, 유료 옵션으로 제공\n- *Sentence Similarity* 모델을 사용하는 가이드\n\n### Let's build our smart robot demo 🤖\n- 제공하는 코드를 통해 로봇과 유사도 검색을 통한 액션 매치를 수행하는 핸즈온\n\n### What can you do now?\n- 위 핸즈온에 더해서 SST(Speach-To-Text) 등의 기능을 추가해 볼 것\n\n### Conclusion\n- 다음\n\n## DEFINING MY DEMO PART 1. FINDING THE IDEA AND WRITING THE GDD\n### Introduction\n- 이 코스의 목표\n  - AI 툴을 사용하여 게임 데모 제작\n  - 혹은 AI 를 사용하여 게임 운영(NPC)\n- 이 챕터는 데모를 만드는 챕터\n- 팀으로하는 걸 추천\n- GDD(Game Design Document) 은 한페이지 문서로 다음을 포함\n  - 게임 플레이 매커니즘\n  - 사용할 AI 툴\n  - 사용할 에셋\n  - 필요시 스토리\n  - 게임의 범위\n  - 필요시 팀\n\n### It's your first game?\n- 게임제작시시 염두해야둬야할 [[youtube]] 영상 제공\n- 스코프는 한달을 넘어가지 않도록 매우 작게 할 것\n- 첫번째 작업은 만드는데 의의를 둔다\n- 자신의 능력 맞춰 개발한다\n  - 그림을 못그리면 최대한 배제된 것으로 \n  - 코딩을 못하면 단순성에 초점을 맞추어\n- 매우 작은 MVP(Minimum Viable Product) 를 작성\n  - 매우 작은 게임의 핵심을 설계\n  - 디테일한 아이템 목록이나 여러 캐릭터 마법등은 배제\n  - 수퍼마리오를 예로 이동, 가로로 긴 맵, 떨어지면 죽는 영역(테스트 재시작 트리거 포인트)\n- 매우 작은 MVP(Minimum Viable Product) 를 작성\n- 한시간내에 안풀리는건 하지말 것, 검색으로 대부분 해결이 가능\n- 마케팅은 매우 중요하다 인디개발자로 살 것이라면 특히\n  - 3분 내의 소개 동영상\n  - 웹사이트, 심플한것이 아마추어로 보이는 것 보다 낫다\n  - 인디게임 대회에 출품\n  - 게임업계인 SNS 에 부탁\n  - 게임 뉴스 사이트에 메일보내기\n  - 출시가 가까워지면 Reddit AMA, 팟케스트, SNS, 웹사이트 업데이트\n  - 스팀이나 GOG 등에 출시한다, 이때 홍보채널을 가지고 있는 것이 출시에 도움이 된다\n  - 가능한 많은 곳에 출시한다\n  - 출시후에는 단점을 받아들이고, 버그픽스등을 서비스한다\n  - 유저 및 기자들과 소통을 유지한다\n- [ ] [[@todo]] GDC 토크 영상 시청\n  - https://www.youtube.com/watch?time_continue=2\u0026v=ZW8gWgpptI8\u0026embeds_referring_euri=https%3A%2F%2Fhuggingface.co%2F\u0026source_ve_path=Mjg2NjY\u0026feature=emb_logo\n\n### Step 1. Crafting the Game Idea\n- 내 단점을 받아들인다\n- 좋아하는 게임으로 부터 영감을 얻는다\n- AI를 통해 게임을 어떻게 개선할지 생각한다\n- 게임의 범위를 작게 한다\n- 허깅페이스 챗에서 브레인 스토밍을 한다\n\n### Step 2. Writing the GDD\n#### What  is a Game Design Document(GDD)\n- 게임 프로젝트의 청사진\n- 정의를 명확히하고 게임의 비전의 이해를 팀원들과 공유한다 \n- 개발 프로세스를 촉진한다\n- 아웃라인\n  - 게임플레이\n  - 피처\n  - 게임 매커지니즘\n  - 어셋\n  - 등등\n#### The One Page Game Design Document Template\n- [ ] Game Title\n- [ ] Team and roles\n- [ ] Game Concept\n- [ ] Game Genre\n- [ ] Game Features and AI tools/model used\n- [ ] Platform\n- [ ] Scope\n- [ ] Art Style\n- [ ] Level\n- [ ] Assets\n- [ ] Todo\n\n### Conclusion\n\n## BONUS 1. CLASSICAL AI IN VIDEO GAMES\n- AI 사례\n\n## UNIT 2. AI TOOLS FOR GAME DEVELOPERS 🎨\n### Introduction\n- AI 툴 적용\n\n### Introduction\n### Code Assistants 👩💻\n### Music Generation 🎵\n### AI Voice Actors 🤖\n### Animation Generation 💃\n### Texture Generation 🖼️\n### 2D Assets Generation 🎮\n### Sound Effects Generation 🔊\n### Conclusion\n\n## link\n- [[huggingface]]\n- [[unity]]\n- [[book/making-game-graphic-with-stable-diffusion]]\n- [[stable-diffusion]]\n"])</script><script>self.__next_f.push([1,"17:T2d38,"])</script><script>self.__next_f.push([1,"\n## 프로젝트 에러\n- 2024-05-22 기준 프로젝는 [[unity]] 6 에서 열었을시 실패했다 이전 버전으로 연다\n- 에러있다고 하면서 safe mode 에 진입하게되고 이때 패키지 두개를 설치하면된다\n- name 으로 설치 -\u003e `com.unity.sentis` 패키지를 설치시에 버전을 `1.3.0-pre.1` 로 고정한다\n- git 으로 설치 -\u003e `https://github.com/huggingface/sharp-transformers.git`\n\n## UNIT 0. WELCOME TO THE COURSCE\n### Welcome to the course 🤗\n- AI 모델로 하는 혁신\n  - How we make games\n    - 텍스쳐 생성\n    - AI 보이스 사용\n  - How we create gameplay\n    - LLM 백엔드의 NPC\n- 배우게될 것\n  - 챗 모델을 사용한 NPC\n  - 모델의 로컬 및 클라우드 API 사용\n  - AI 툴들, TTS, 이미지 생성\n  - 게임 데모 생성\n- 요구사항\n  - 디스코드 조인\n  - 유니티 개발\n    - https://learn.unity.com/course/create-with-code (36시간 30분)\n- 이 코스에서 다루진 않지만 딥하게 가고자 한다면 추가 학습이 열려있다\n  - NLP\n  - Audio\n  - Gradio\n- 코스의 목표\n  - 자신만의 게임 데모\n  - AI 를 활용한 게임 제작\n  - AI 를 활용한 게임 플레이(NPC등)\n\n### The Goal, Build Your own Game Demo\n- 자격증 조건\n  - 5명 이내의 팀\n  - WebGL 혹은 Windows 에서 구동\n  - English\n  - 1개 이상의 오픈소스 툴 활용\n- Unity \n  + https://learn.unity.com/course/create-with-code\n\n### Syllabus\n- 강의구성\n  - 이론\n    - ML 을 딥하게 다루는 것이 아님을 알 것\n    - 허깅 페이스의 추론 api 를 사용할 것으로 예상됨\n  - 핸즈온\n- 각 유닛은 1주(주당 3-4시간)으로 진행되는 페이스로 구성\n- 데모 구현을 위해서는 2-4주의 시간을 사용할 것을 권장\n\n### The Team\n- 강사 소개\n\n### Onboarding\n- 할일\n  - 허깅페이스 계정 생성\n  - 디스코드 서버 조인\n\n#### 디스코드 채널\n\n|                                             |                            |\n|---------------------------------------------|----------------------------|\n| ml-4-games-course-announcements             | 최신정보                   |\n| ml-4-games-course-announcements-study-group | 질문 및 의견 교환          |\n| ml-4-games-dev                              | ML 게임 개발에 대한 교환   |\n| ml-4-games-searching-for-team               | 데모 구현을 위한 팀원 찾기 |\n| ml-4-games-i-made-this                      | 내 모델 공유               |\n\n### Discord 101\n- 주저하지말고 자주 참여해라\n\n### Getting the most of the course\n- 따라서 구현할 것\n- 수정을 주저하지 말것\n- 팀으로 할것을 권고\n\n### Conclusion\n- 배우게될 것\n  - Unity Sentis 와 로컬에서 AI 모델 사용 및 첫번째 지능형 AI NPC\n  - 데모 게임에 대한 게임 디자인 문서 작성\n\n## UNIT 1. CREATE A SMART ROBOT NPC USING HUGGING FACE 🤗 AND UNITY SENTIS\n### Introduction\n- 배우게 될 것\n  - Sentence Similarity\n  - AI 모델의 로컬, 클라우드 실행 차이\n  - 허깅페이스\n  - Unity Sentis, Sharp Transformers 와 함께 AI 모델을 로컬에서 실행하는 방법\n- 사용하는 것\n  - 유니티 게임 엔진 2022.3+ \n  - Jammo Robot 어셋\n  - Unity Sentis library - AI 모델을 게임안에서 실행하기 위해 필요\n  - Hugging Face Sharp Transformers -  유니티 게임 안에서 허깅페이스 트랜스포머를 실행할 수 있게 하는 유니티 플러그인\n- 예제 게임 설명\n  - 채팅으로 NPC 에게 요청하고 NPC 가 이를 실행\n  - 가져다 달라거나 춤춰달라거나 요청 후 이를 NPC 가 실행\n  - 건물안에서 가드를 피해서 숨고 목적 아이템을 훔쳐오라는 지시 후 NPC 가 이를 수행하는 게임\n\n### What is Sentence Similarity?\n#### The Power of Sentence Similarity 🤖\n- 게임만들기 전에 문장 유사도에 대한 정의와 동작을 이해해야한다\n\n#### How does this game work?\n- 선택지를 클릭하는 대신 챗을 통해 더 많은 자유도를 제공한다\n- 로봇은 액션 리스트를 가지고 있고 유저의 채팅문장과 유사도가 높은 액션을 선택해서 사용한다\n\n#### What is Sentence Similarity?\n- 주어진 문장(input) 과 타겟 문장들간의 유사도를 계산하는 것\n- 입력 문장 -\u003e embed -\u003e 임베딩(벡터)\n  - 이를 가지고 cosine 유사도를 계산\n  - 딥하게 들어가고 싶다면 링크 참조\n    + https://huggingface.co/tasks/sentence-similarity\n\n#### The Complete pipeline\n- 유저 인풋과 액션 리스트는 모두 string 으로 되어있다.\n- 유사도 처리를 위해서는 임베딩이 필요하며 이는 *Sharp Transformers* 에서 처리한다\n- *Sharp Transformers* 를 통해 토큰화된 인풋은 *Unity Sentis* 모델의 입력으로 들어간다\n- *Unity Sentis* 모델의 결과로 유사도 점수가 나온다\n\n1. 유저가 명령어를 입력한다: \"Can you bring me the red cube?\"\n2. 로봇은 액션 목록을 가지고 있다\n  - Hello\n  - Happy\n  - Bring red box\n  - Move to blue pillar\n3. 가장 유사한 액션을 찾기 위해 인풋을 임베딩한다\n4. *Sharp Transformers* 에 의해 입력이 토큰화된다\n5. 토큰화된 입력을 모델에 넣어 인풋에 대한 정보를 갖는 임베딩을 출력한다(by *Unity Sentis*)\n6. 임베딩 되었으므로 유사도 검색이 가능해진다\n7. 유사도 검색(비교) 에서 가장 높은 스코어를 가진 액션을 선택한다  \n  - 해당 스코어가 `0.2` 이상인 경우 액션을 실행을 요구한다\n  - 해당 스코어가 `0.2` 이하인 경우 \"몰루~\" 처리한다\n\n##### Why `0.2` for the Similarity score threshold?\n- 여러 테스트 결과를 통해 찾아진 값이다\n- 스코어는 액션 리스트 전체를 합치면 1이 된다, 때문에 액션 리스트가 늘어나는 경우 threshold 값은 낮아져야한다\n\n### How to run an AI model: local vs remote Inference\n#### How to run an AI model: local vs remote\n- 이 게임에서 유사도 검색을 사용하기 위해 `all-MiniLM-L6-v2` 모델을 사용한다\n  + https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2\n- 이 모델은 BERT 트랜스포머 모델로 이미 학습을 마쳤으므로 사용하면된다\n\n#### Running the model remotely\n- 서버 api 를 호출하는 방식\n- 허깅페이스에서 *Inference API* 를 제공\n  - 프로토타입및 테스트용은 무료\n  - 이를 사용하기 위한 유니티 플러그인이 존재\n    + https://huggingface.co/blog/unity-api\n- 장점\n  - 클라이언트 측에 리소스 필요하지 않음\n  - 서버쪽에서 로깅할 수 있음으로 유저 입력에 대한 정보등을 개선에 쓸 수 있음\n- 단점\n  - 인터넷 연결 및 서버 상태에 따른 종속이 생김\n  - 잠재적 비용 비용 폭탄 가능성\n- 주로 클라이언트에서 실행할 수 없는 큰 모델을 실행하는 경우 API 제공이 필요하다\n\n#### Running the model locally\n- 클라이언트에서 사용하기 위해 2개의 라이브러리를 사용한다\n  - *Unity Sentis* - AI 모델을 게임 안에서 실행할 수 있도록 한다\n  - *The Hugging Face Sharp Transformers library* - 유니티 게임에서 트랜스포머 모델을 사용할 수 있도록 한다\n- 장점\n  - 돈 안나감\n  - 인터넷 연결 종속 없음\n- 단점\n  - 클라이언트 스펙에 영향을 받는다(RAM/VRAM)\n  - 유저가 어떤식으로 모델을 활용하는 정보를 쉽게 얻지 못한다\n\n- 유사도 검색은 가벼운 모델이라 **로컬에서 사용하기로한다**\n\n### What is Hugging Face 🤗?\n- 허깅페이스에 대한 설명\n- 추론 API 서비스를 무료, 유료 옵션으로 제공\n- *Sentence Similarity* 모델을 사용하는 가이드\n\n### Let's build our smart robot demo 🤖\n- 제공하는 코드를 통해 로봇과 유사도 검색을 통한 액션 매치를 수행하는 핸즈온\n\n### What can you do now?\n- 위 핸즈온에 더해서 SST(Speach-To-Text) 등의 기능을 추가해 볼 것\n\n### Conclusion\n- 다음\n\n## DEFINING MY DEMO PART 1. FINDING THE IDEA AND WRITING THE GDD\n### Introduction\n- 이 코스의 목표\n  - AI 툴을 사용하여 게임 데모 제작\n  - 혹은 AI 를 사용하여 게임 운영(NPC)\n- 이 챕터는 데모를 만드는 챕터\n- 팀으로하는 걸 추천\n- GDD(Game Design Document) 은 한페이지 문서로 다음을 포함\n  - 게임 플레이 매커니즘\n  - 사용할 AI 툴\n  - 사용할 에셋\n  - 필요시 스토리\n  - 게임의 범위\n  - 필요시 팀\n\n### It's your first game?\n- 게임제작시시 염두해야둬야할 [[youtube]] 영상 제공\n- 스코프는 한달을 넘어가지 않도록 매우 작게 할 것\n- 첫번째 작업은 만드는데 의의를 둔다\n- 자신의 능력 맞춰 개발한다\n  - 그림을 못그리면 최대한 배제된 것으로 \n  - 코딩을 못하면 단순성에 초점을 맞추어\n- 매우 작은 MVP(Minimum Viable Product) 를 작성\n  - 매우 작은 게임의 핵심을 설계\n  - 디테일한 아이템 목록이나 여러 캐릭터 마법등은 배제\n  - 수퍼마리오를 예로 이동, 가로로 긴 맵, 떨어지면 죽는 영역(테스트 재시작 트리거 포인트)\n- 매우 작은 MVP(Minimum Viable Product) 를 작성\n- 한시간내에 안풀리는건 하지말 것, 검색으로 대부분 해결이 가능\n- 마케팅은 매우 중요하다 인디개발자로 살 것이라면 특히\n  - 3분 내의 소개 동영상\n  - 웹사이트, 심플한것이 아마추어로 보이는 것 보다 낫다\n  - 인디게임 대회에 출품\n  - 게임업계인 SNS 에 부탁\n  - 게임 뉴스 사이트에 메일보내기\n  - 출시가 가까워지면 Reddit AMA, 팟케스트, SNS, 웹사이트 업데이트\n  - 스팀이나 GOG 등에 출시한다, 이때 홍보채널을 가지고 있는 것이 출시에 도움이 된다\n  - 가능한 많은 곳에 출시한다\n  - 출시후에는 단점을 받아들이고, 버그픽스등을 서비스한다\n  - 유저 및 기자들과 소통을 유지한다\n- [ ] [[@todo]] GDC 토크 영상 시청\n  - https://www.youtube.com/watch?time_continue=2\u0026v=ZW8gWgpptI8\u0026embeds_referring_euri=https%3A%2F%2Fhuggingface.co%2F\u0026source_ve_path=Mjg2NjY\u0026feature=emb_logo\n\n### Step 1. Crafting the Game Idea\n- 내 단점을 받아들인다\n- 좋아하는 게임으로 부터 영감을 얻는다\n- AI를 통해 게임을 어떻게 개선할지 생각한다\n- 게임의 범위를 작게 한다\n- 허깅페이스 챗에서 브레인 스토밍을 한다\n\n### Step 2. Writing the GDD\n#### What  is a Game Design Document(GDD)\n- 게임 프로젝트의 청사진\n- 정의를 명확히하고 게임의 비전의 이해를 팀원들과 공유한다 \n- 개발 프로세스를 촉진한다\n- 아웃라인\n  - 게임플레이\n  - 피처\n  - 게임 매커지니즘\n  - 어셋\n  - 등등\n#### The One Page Game Design Document Template\n- [ ] Game Title\n- [ ] Team and roles\n- [ ] Game Concept\n- [ ] Game Genre\n- [ ] Game Features and AI tools/model used\n- [ ] Platform\n- [ ] Scope\n- [ ] Art Style\n- [ ] Level\n- [ ] Assets\n- [ ] Todo\n\n### Conclusion\n\n## BONUS 1. CLASSICAL AI IN VIDEO GAMES\n- AI 사례\n\n## UNIT 2. AI TOOLS FOR GAME DEVELOPERS 🎨\n### Introduction\n- AI 툴 적용\n\n### Introduction\n### Code Assistants 👩💻\n### Music Generation 🎵\n### AI Voice Actors 🤖\n### Animation Generation 💃\n### Texture Generation 🖼️\n### 2D Assets Generation 🎮\n### Sound Effects Generation 🔊\n### Conclusion\n\n## link\n- [[huggingface]]\n- [[unity]]\n- [[book/making-game-graphic-with-stable-diffusion]]\n- [[stable-diffusion]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# huggingface ml for games\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# huggingface ml for games\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/huggingface-ml-for-games\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# huggingface ml for games\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

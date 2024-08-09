@@ -1,0 +1,254 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-c65c2f1963a00db9.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-ea177f1f1aa270b2.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># podman</title><meta name="description" content="
+- [[docker]] 의 oci 버전
+- docker 와 달리 daemon 이 없다
+- docker 명령어와 호환 -&gt; `alias docker=podman`
+
+## command
+```sh 
+podman login [container registry]
+podman image list
+podman system connection list
+```
+
+## install
+```sh 
+$ brew install podman
+$ pod image list
+Cannot connect to Podman. Please verify your connection to the Linux system using `podman system connection list`, or try `podman machine init` and `podman machine start` to manage a new Linux VM
+Error: unable to connect to Podman socket: Get &quot;http://d/v4.3.1/libpod/_ping&quot;: dial unix ///var/folders/yr/lb2jlrrd1fs7h6hn30n_ksvr0000gn/T/podman-run--1/podman/podman.sock: connect: no such file or directory
+```
+manage 를 위한 vm 을 아래 명령어로 띄우도록한다
+```sh
+$ podman machine init
+$ podman machine start start
+ ~/w/sr/g/d/k8s-5950x  master ?1  podman machine start start                                                   125 err  16.15.0 node  03:42:55
+Starting machine &quot;start&quot;
+Waiting for VM ...
+Mounting volume... /Users/deptno:/Users/deptno
+
+This machine is currently configured in rootless mode. If your containers
+require root permissions (e.g. ports &lt; 1024), or if you run into compatibility
+issues with non-podman clients, you can switch using the following command:
+
+        podman machine set --rootful start
+
+API forwarding listening on: /Users/deptno/.local/share/containers/podman/machine/start/podman.sock
+
+The system helper service is not installed; the default Docker API socket
+address can&#x27;t be used by podman. If you would like to install it run the
+following commands:
+
+        sudo /opt/homebrew/Cellar/podman/4.3.1/bin/podman-mac-helper install
+        podman machine stop start; podman machine start start
+
+You can still connect Docker API clients by setting DOCKER_HOST using the
+following command in your terminal session:
+
+        export DOCKER_HOST=&#x27;unix:///Users/deptno/.local/share/containers/podman/machine/start/podman.sock&#x27;
+
+Machine &quot;start&quot; started successfully
+```
+
+## error
+### Error: failed to connect: dial tcp [::1]:61310: connect: connection refused
+```sh 
+$ podman run -ti fathyb/carbonyl https://youtube.com                                                         127 err  16.15.0 node  17:46:50
+Error: failed to connect: dial tcp [::1]:61310: connect: connection refused
+```
+---
+### docker build 보다 느림
+graph driver 에 대한 검색 결과가 노출되고 있음, docker 를 쓰는게 지금 마음이 편함
+
+## link
+- [[docker]]
+- [[kubernetes]]
+- [[harbor]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# podman"/><meta property="og:description" content="
+- [[docker]] 의 oci 버전
+- docker 와 달리 daemon 이 없다
+- docker 명령어와 호환 -&gt; `alias docker=podman`
+
+## command
+```sh 
+podman login [container registry]
+podman image list
+podman system connection list
+```
+
+## install
+```sh 
+$ brew install podman
+$ pod image list
+Cannot connect to Podman. Please verify your connection to the Linux system using `podman system connection list`, or try `podman machine init` and `podman machine start` to manage a new Linux VM
+Error: unable to connect to Podman socket: Get &quot;http://d/v4.3.1/libpod/_ping&quot;: dial unix ///var/folders/yr/lb2jlrrd1fs7h6hn30n_ksvr0000gn/T/podman-run--1/podman/podman.sock: connect: no such file or directory
+```
+manage 를 위한 vm 을 아래 명령어로 띄우도록한다
+```sh
+$ podman machine init
+$ podman machine start start
+ ~/w/sr/g/d/k8s-5950x  master ?1  podman machine start start                                                   125 err  16.15.0 node  03:42:55
+Starting machine &quot;start&quot;
+Waiting for VM ...
+Mounting volume... /Users/deptno:/Users/deptno
+
+This machine is currently configured in rootless mode. If your containers
+require root permissions (e.g. ports &lt; 1024), or if you run into compatibility
+issues with non-podman clients, you can switch using the following command:
+
+        podman machine set --rootful start
+
+API forwarding listening on: /Users/deptno/.local/share/containers/podman/machine/start/podman.sock
+
+The system helper service is not installed; the default Docker API socket
+address can&#x27;t be used by podman. If you would like to install it run the
+following commands:
+
+        sudo /opt/homebrew/Cellar/podman/4.3.1/bin/podman-mac-helper install
+        podman machine stop start; podman machine start start
+
+You can still connect Docker API clients by setting DOCKER_HOST using the
+following command in your terminal session:
+
+        export DOCKER_HOST=&#x27;unix:///Users/deptno/.local/share/containers/podman/machine/start/podman.sock&#x27;
+
+Machine &quot;start&quot; started successfully
+```
+
+## error
+### Error: failed to connect: dial tcp [::1]:61310: connect: connection refused
+```sh 
+$ podman run -ti fathyb/carbonyl https://youtube.com                                                         127 err  16.15.0 node  17:46:50
+Error: failed to connect: dial tcp [::1]:61310: connect: connection refused
+```
+---
+### docker build 보다 느림
+graph driver 에 대한 검색 결과가 노출되고 있음, docker 를 쓰는게 지금 마음이 편함
+
+## link
+- [[docker]]
+- [[kubernetes]]
+- [[harbor]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/podman"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# podman"/><meta name="twitter:description" content="
+- [[docker]] 의 oci 버전
+- docker 와 달리 daemon 이 없다
+- docker 명령어와 호환 -&gt; `alias docker=podman`
+
+## command
+```sh 
+podman login [container registry]
+podman image list
+podman system connection list
+```
+
+## install
+```sh 
+$ brew install podman
+$ pod image list
+Cannot connect to Podman. Please verify your connection to the Linux system using `podman system connection list`, or try `podman machine init` and `podman machine start` to manage a new Linux VM
+Error: unable to connect to Podman socket: Get &quot;http://d/v4.3.1/libpod/_ping&quot;: dial unix ///var/folders/yr/lb2jlrrd1fs7h6hn30n_ksvr0000gn/T/podman-run--1/podman/podman.sock: connect: no such file or directory
+```
+manage 를 위한 vm 을 아래 명령어로 띄우도록한다
+```sh
+$ podman machine init
+$ podman machine start start
+ ~/w/sr/g/d/k8s-5950x  master ?1  podman machine start start                                                   125 err  16.15.0 node  03:42:55
+Starting machine &quot;start&quot;
+Waiting for VM ...
+Mounting volume... /Users/deptno:/Users/deptno
+
+This machine is currently configured in rootless mode. If your containers
+require root permissions (e.g. ports &lt; 1024), or if you run into compatibility
+issues with non-podman clients, you can switch using the following command:
+
+        podman machine set --rootful start
+
+API forwarding listening on: /Users/deptno/.local/share/containers/podman/machine/start/podman.sock
+
+The system helper service is not installed; the default Docker API socket
+address can&#x27;t be used by podman. If you would like to install it run the
+following commands:
+
+        sudo /opt/homebrew/Cellar/podman/4.3.1/bin/podman-mac-helper install
+        podman machine stop start; podman machine start start
+
+You can still connect Docker API clients by setting DOCKER_HOST using the
+following command in your terminal session:
+
+        export DOCKER_HOST=&#x27;unix:///Users/deptno/.local/share/containers/podman/machine/start/podman.sock&#x27;
+
+Machine &quot;start&quot; started successfully
+```
+
+## error
+### Error: failed to connect: dial tcp [::1]:61310: connect: connection refused
+```sh 
+$ podman run -ti fathyb/carbonyl https://youtube.com                                                         127 err  16.15.0 node  17:46:50
+Error: failed to connect: dial tcp [::1]:61310: connect: connection refused
+```
+---
+### docker build 보다 느림
+graph driver 에 대한 검색 결과가 노출되고 있음, docker 를 쓰는게 지금 마음이 편함
+
+## link
+- [[docker]]
+- [[kubernetes]]
+- [[harbor]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/d7bc37d
+" class="bg-white text-black">d7bc37d</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/podman.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/podman.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/podman.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/podman"><span class="underline">podman</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/docker"><span class="underline">docker</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/kubernetes"><span class="underline">kubernetes</span><sup>39</sup></a></span><span><a class="text-blue-600" href="/public-wiki/harbor"><span class="underline">harbor</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-01-16"><span class="underline">diary/2023-01-16</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-02-03"><span class="underline">diary/2023-02-03</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-31"><span class="underline">diary/2023-12-31</span><sup>93</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-02"><span class="underline">diary/2024-01-02</span><sup>10</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#podman">podman</a></div><div class="pl-2"><a href="#command">command</a></div><div class="pl-2"><a href="#install">install</a></div><div class="pl-2"><a href="#error">error</a></div><div class="pl-4"><a href="#error-failed-to-connect-dial-tcp-161310-connect-connection-refused">Error: failed to connect: dial tcp [::1]:61310: connect: connection refused</a></div><div class="pl-4"><a href="#docker-build-보다-느림">docker build 보다 느림</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="podman">podman</h1>
+<ul>
+<li><a href="docker">docker</a> 의 oci 버전</li>
+<li>docker 와 달리 daemon 이 없다</li>
+<li>docker 명령어와 호환 -&gt; <code class="span">alias docker=podman</code></li>
+</ul>
+<h2 id="command">command</h2>
+<pre><code class="hljs language-sh">podman login [container registry]
+podman image list
+podman system connection list
+</code></pre><h2 id="install">install</h2>
+<pre><code class="hljs language-sh">$ brew install podman
+$ pod image list
+Cannot connect to Podman. Please verify your connection to the Linux system using `podman system connection list`, or try `podman machine init` and `podman machine start` to manage a new Linux VM
+Error: unable to connect to Podman socket: Get <span class="hljs-string">&quot;http://d/v4.3.1/libpod/_ping&quot;</span>: dial unix ///var/folders/yr/lb2jlrrd1fs7h6hn30n_ksvr0000gn/T/podman-run--1/podman/podman.sock: connect: no such file or directory
+</code></pre><p>manage 를 위한 vm 을 아래 명령어로 띄우도록한다</p>
+<pre><code class="hljs language-sh">$ podman machine init
+$ podman machine start start
+ ~/w/sr/g/d/k8s-5950x  master ?1  podman machine start start                                                   125 err  16.15.0 node  03:42:55
+Starting machine <span class="hljs-string">&quot;start&quot;</span>
+Waiting <span class="hljs-keyword">for</span> VM ...
+Mounting volume... /Users/deptno:/Users/deptno
+
+This machine is currently configured <span class="hljs-keyword">in</span> rootless mode. If your containers
+require root permissions (e.g. ports &lt; 1024), or <span class="hljs-keyword">if</span> you run into compatibility
+issues with non-podman clients, you can switch using the following <span class="hljs-built_in">command</span>:
+
+        podman machine <span class="hljs-built_in">set</span> --rootful start
+
+API forwarding listening on: /Users/deptno/.local/share/containers/podman/machine/start/podman.sock
+
+The system helper service is not installed; the default Docker API socket
+address can<span class="hljs-string">&#x27;t be used by podman. If you would like to install it run the
+following commands:
+
+        sudo /opt/homebrew/Cellar/podman/4.3.1/bin/podman-mac-helper install
+        podman machine stop start; podman machine start start
+
+You can still connect Docker API clients by setting DOCKER_HOST using the
+following command in your terminal session:
+
+        export DOCKER_HOST=&#x27;</span>unix:///Users/deptno/.local/share/containers/podman/machine/start/podman.sock<span class="hljs-string">&#x27;
+
+Machine &quot;start&quot; started successfully</span>
+</code></pre><h2 id="error">error</h2>
+<h3 id="error-failed-to-connect-dial-tcp-161310-connect-connection-refused">Error: failed to connect: dial tcp [::1]:61310: connect: connection refused</h3>
+<pre><code class="hljs language-sh">$ podman run -ti fathyb/carbonyl https://youtube.com                                                         127 err  16.15.0 node  17:46:50
+Error: failed to connect: dial tcp [::1]:61310: connect: connection refused
+</code></pre><hr>
+<h3 id="docker-build-보다-느림">docker build 보다 느림</h3>
+<p>graph driver 에 대한 검색 결과가 노출되고 있음, docker 를 쓰는게 지금 마음이 편함</p>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="docker">docker</a></li>
+<li><a href="kubernetes">kubernetes</a></li>
+<li><a href="harbor">harbor</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-c65c2f1963a00db9.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-ea177f1f1aa270b2.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"podman\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"jkJpAAbaWnUVak4_41ihX\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/podman\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"podman\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"podman\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"podman\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:Td4b,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"podman\"\u003epodman\u003c/h1\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"docker\"\u003edocker\u003c/a\u003e 의 oci 버전\u003c/li\u003e\n\u003cli\u003edocker 와 달리 daemon 이 없다\u003c/li\u003e\n\u003cli\u003edocker 명령어와 호환 -\u0026gt; \u003ccode class=\"span\"\u003ealias docker=podman\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"command\"\u003ecommand\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003epodman login [container registry]\npodman image list\npodman system connection list\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"install\"\u003einstall\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ brew install podman\n$ pod image list\nCannot connect to Podman. Please verify your connection to the Linux system using `podman system connection list`, or try `podman machine init` and `podman machine start` to manage a new Linux VM\nError: unable to connect to Podman socket: Get \u003cspan class=\"hljs-string\"\u003e\u0026quot;http://d/v4.3.1/libpod/_ping\u0026quot;\u003c/span\u003e: dial unix ///var/folders/yr/lb2jlrrd1fs7h6hn30n_ksvr0000gn/T/podman-run--1/podman/podman.sock: connect: no such file or directory\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003emanage 를 위한 vm 을 아래 명령어로 띄우도록한다\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ podman machine init\n$ podman machine start start\n ~/w/sr/g/d/k8s-5950x  master ?1  podman machine start start                                                   125 err  16.15.0 node  03:42:55\nStarting machine \u003cspan class=\"hljs-string\"\u003e\u0026quot;start\u0026quot;\u003c/span\u003e\nWaiting \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e VM ...\nMounting volume... /Users/deptno:/Users/deptno\n\nThis machine is currently configured \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e rootless mode. If your containers\nrequire root permissions (e.g. ports \u0026lt; 1024), or \u003cspan class=\"hljs-keyword\"\u003eif\u003c/span\u003e you run into compatibility\nissues with non-podman clients, you can switch using the following \u003cspan class=\"hljs-built_in\"\u003ecommand\u003c/span\u003e:\n\n        podman machine \u003cspan class=\"hljs-built_in\"\u003eset\u003c/span\u003e --rootful start\n\nAPI forwarding listening on: /Users/deptno/.local/share/containers/podman/machine/start/podman.sock\n\nThe system helper service is not installed; the default Docker API socket\naddress can\u003cspan class=\"hljs-string\"\u003e\u0026#x27;t be used by podman. If you would like to install it run the\nfollowing commands:\n\n        sudo /opt/homebrew/Cellar/podman/4.3.1/bin/podman-mac-helper install\n        podman machine stop start; podman machine start start\n\nYou can still connect Docker API clients by setting DOCKER_HOST using the\nfollowing command in your terminal session:\n\n        export DOCKER_HOST=\u0026#x27;\u003c/span\u003eunix:///Users/deptno/.local/share/containers/podman/machine/start/podman.sock\u003cspan class=\"hljs-string\"\u003e\u0026#x27;\n\nMachine \u0026quot;start\u0026quot; started successfully\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"error\"\u003eerror\u003c/h2\u003e\n\u003ch3 id=\"error-failed-to-connect-dial-tcp-161310-connect-connection-refused\"\u003eError: failed to connect: dial tcp [::1]:61310: connect: connection refused\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ podman run -ti fathyb/carbonyl https://youtube.com                                                         127 err  16.15.0 node  17:46:50\nError: failed to connect: dial tcp [::1]:61310: connect: connection refused\n\u003c/code\u003e\u003c/pre\u003e\u003chr\u003e\n\u003ch3 id=\"docker-build-보다-느림\"\u003edocker build 보다 느림\u003c/h3\u003e\n\u003cp\u003egraph driver 에 대한 검색 결과가 노출되고 있음, docker 를 쓰는게 지금 마음이 편함\u003c/p\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"docker\"\u003edocker\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"kubernetes\"\u003ekubernetes\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"harbor\"\u003eharbor\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/d7bc37d\\n\",\"className\":\"bg-white text-black\",\"children\":\"d7bc37d\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/podman.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/podman.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/podman.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"podman\",\"name\":\"podman\",\"val\":4},{\"id\":\"docker\",\"name\":\"docker\",\"val\":6},{\"id\":\"kubernetes\",\"name\":\"kubernetes\",\"val\":39},{\"id\":\"harbor\",\"name\":\"harbor\",\"val\":11},{\"id\":\"diary/2023-01-16\",\"name\":\"diary/2023-01-16\",\"val\":4},{\"id\":\"diary/2023-02-03\",\"name\":\"diary/2023-02-03\",\"val\":2},{\"id\":\"diary/2023-12-31\",\"name\":\"diary/2023-12-31\",\"val\":93},{\"id\":\"diary/2024-01-02\",\"name\":\"diary/2024-01-02\",\"val\":10}],\"links\":[{\"source\":\"podman\",\"target\":\"docker\"},{\"source\":\"podman\",\"target\":\"docker\"},{\"source\":\"podman\",\"target\":\"kubernetes\"},{\"source\":\"podman\",\"target\":\"harbor\"},{\"source\":\"docker\",\"target\":\"podman\"},{\"source\":\"harbor\",\"target\":\"podman\"},{\"source\":\"kubernetes\",\"target\":\"podman\"},{\"source\":\"diary/2023-01-16\",\"target\":\"podman\"},{\"source\":\"diary/2023-02-03\",\"target\":\"podman\"},{\"source\":\"diary/2023-12-31\",\"target\":\"podman\"},{\"source\":\"diary/2024-01-02\",\"target\":\"podman\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"podman\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/podman\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"podman\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"docker\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/docker\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"docker\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"kubernetes\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/kubernetes\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"kubernetes\"}],[\"$\",\"sup\",null,{\"children\":39}]]}]}],[\"$\",\"span\",\"harbor\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/harbor\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"harbor\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"diary/2023-01-16\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-01-16\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-01-16\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"diary/2023-02-03\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-02-03\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-02-03\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2023-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-31\"}],[\"$\",\"sup\",null,{\"children\":93}]]}]}],[\"$\",\"span\",\"diary/2024-01-02\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-02\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-02\"}],[\"$\",\"sup\",null,{\"children\":10}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"podman\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#podman\",\"children\":\"podman\"}]}],[\"$\",\"div\",\"command\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#command\",\"children\":\"command\"}]}],[\"$\",\"div\",\"install\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#install\",\"children\":\"install\"}]}],[\"$\",\"div\",\"error\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error\",\"children\":\"error\"}]}],[\"$\",\"div\",\"error-failed-to-connect-dial-tcp-161310-connect-connection-refused\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error-failed-to-connect-dial-tcp-161310-connect-connection-refused\",\"children\":\"Error: failed to connect: dial tcp [::1]:61310: connect: connection refused\"}]}],[\"$\",\"div\",\"docker-build-보다-느림\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#docker-build-보다-느림\",\"children\":\"docker build 보다 느림\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T9d0,"])</script><script>self.__next_f.push([1,"\n- [[docker]] 의 oci 버전\n- docker 와 달리 daemon 이 없다\n- docker 명령어와 호환 -\u003e `alias docker=podman`\n\n## command\n```sh \npodman login [container registry]\npodman image list\npodman system connection list\n```\n\n## install\n```sh \n$ brew install podman\n$ pod image list\nCannot connect to Podman. Please verify your connection to the Linux system using `podman system connection list`, or try `podman machine init` and `podman machine start` to manage a new Linux VM\nError: unable to connect to Podman socket: Get \"http://d/v4.3.1/libpod/_ping\": dial unix ///var/folders/yr/lb2jlrrd1fs7h6hn30n_ksvr0000gn/T/podman-run--1/podman/podman.sock: connect: no such file or directory\n```\nmanage 를 위한 vm 을 아래 명령어로 띄우도록한다\n```sh\n$ podman machine init\n$ podman machine start start\n ~/w/sr/g/d/k8s-5950x  master ?1  podman machine start start                                                   125 err  16.15.0 node  03:42:55\nStarting machine \"start\"\nWaiting for VM ...\nMounting volume... /Users/deptno:/Users/deptno\n\nThis machine is currently configured in rootless mode. If your containers\nrequire root permissions (e.g. ports \u003c 1024), or if you run into compatibility\nissues with non-podman clients, you can switch using the following command:\n\n        podman machine set --rootful start\n\nAPI forwarding listening on: /Users/deptno/.local/share/containers/podman/machine/start/podman.sock\n\nThe system helper service is not installed; the default Docker API socket\naddress can't be used by podman. If you would like to install it run the\nfollowing commands:\n\n        sudo /opt/homebrew/Cellar/podman/4.3.1/bin/podman-mac-helper install\n        podman machine stop start; podman machine start start\n\nYou can still connect Docker API clients by setting DOCKER_HOST using the\nfollowing command in your terminal session:\n\n        export DOCKER_HOST='unix:///Users/deptno/.local/share/containers/podman/machine/start/podman.sock'\n\nMachine \"start\" started successfully\n```\n\n## error\n### Error: failed to connect: dial tcp [::1]:61310: connect: connection refused\n```sh \n$ podman run -ti fathyb/carbonyl https://youtube.com                                                         127 err  16.15.0 node  17:46:50\nError: failed to connect: dial tcp [::1]:61310: connect: connection refused\n```\n---\n### docker build 보다 느림\ngraph driver 에 대한 검색 결과가 노출되고 있음, docker 를 쓰는게 지금 마음이 편함\n\n## link\n- [[docker]]\n- [[kubernetes]]\n- [[harbor]]\n"])</script><script>self.__next_f.push([1,"16:T9d0,"])</script><script>self.__next_f.push([1,"\n- [[docker]] 의 oci 버전\n- docker 와 달리 daemon 이 없다\n- docker 명령어와 호환 -\u003e `alias docker=podman`\n\n## command\n```sh \npodman login [container registry]\npodman image list\npodman system connection list\n```\n\n## install\n```sh \n$ brew install podman\n$ pod image list\nCannot connect to Podman. Please verify your connection to the Linux system using `podman system connection list`, or try `podman machine init` and `podman machine start` to manage a new Linux VM\nError: unable to connect to Podman socket: Get \"http://d/v4.3.1/libpod/_ping\": dial unix ///var/folders/yr/lb2jlrrd1fs7h6hn30n_ksvr0000gn/T/podman-run--1/podman/podman.sock: connect: no such file or directory\n```\nmanage 를 위한 vm 을 아래 명령어로 띄우도록한다\n```sh\n$ podman machine init\n$ podman machine start start\n ~/w/sr/g/d/k8s-5950x  master ?1  podman machine start start                                                   125 err  16.15.0 node  03:42:55\nStarting machine \"start\"\nWaiting for VM ...\nMounting volume... /Users/deptno:/Users/deptno\n\nThis machine is currently configured in rootless mode. If your containers\nrequire root permissions (e.g. ports \u003c 1024), or if you run into compatibility\nissues with non-podman clients, you can switch using the following command:\n\n        podman machine set --rootful start\n\nAPI forwarding listening on: /Users/deptno/.local/share/containers/podman/machine/start/podman.sock\n\nThe system helper service is not installed; the default Docker API socket\naddress can't be used by podman. If you would like to install it run the\nfollowing commands:\n\n        sudo /opt/homebrew/Cellar/podman/4.3.1/bin/podman-mac-helper install\n        podman machine stop start; podman machine start start\n\nYou can still connect Docker API clients by setting DOCKER_HOST using the\nfollowing command in your terminal session:\n\n        export DOCKER_HOST='unix:///Users/deptno/.local/share/containers/podman/machine/start/podman.sock'\n\nMachine \"start\" started successfully\n```\n\n## error\n### Error: failed to connect: dial tcp [::1]:61310: connect: connection refused\n```sh \n$ podman run -ti fathyb/carbonyl https://youtube.com                                                         127 err  16.15.0 node  17:46:50\nError: failed to connect: dial tcp [::1]:61310: connect: connection refused\n```\n---\n### docker build 보다 느림\ngraph driver 에 대한 검색 결과가 노출되고 있음, docker 를 쓰는게 지금 마음이 편함\n\n## link\n- [[docker]]\n- [[kubernetes]]\n- [[harbor]]\n"])</script><script>self.__next_f.push([1,"17:T9d0,"])</script><script>self.__next_f.push([1,"\n- [[docker]] 의 oci 버전\n- docker 와 달리 daemon 이 없다\n- docker 명령어와 호환 -\u003e `alias docker=podman`\n\n## command\n```sh \npodman login [container registry]\npodman image list\npodman system connection list\n```\n\n## install\n```sh \n$ brew install podman\n$ pod image list\nCannot connect to Podman. Please verify your connection to the Linux system using `podman system connection list`, or try `podman machine init` and `podman machine start` to manage a new Linux VM\nError: unable to connect to Podman socket: Get \"http://d/v4.3.1/libpod/_ping\": dial unix ///var/folders/yr/lb2jlrrd1fs7h6hn30n_ksvr0000gn/T/podman-run--1/podman/podman.sock: connect: no such file or directory\n```\nmanage 를 위한 vm 을 아래 명령어로 띄우도록한다\n```sh\n$ podman machine init\n$ podman machine start start\n ~/w/sr/g/d/k8s-5950x  master ?1  podman machine start start                                                   125 err  16.15.0 node  03:42:55\nStarting machine \"start\"\nWaiting for VM ...\nMounting volume... /Users/deptno:/Users/deptno\n\nThis machine is currently configured in rootless mode. If your containers\nrequire root permissions (e.g. ports \u003c 1024), or if you run into compatibility\nissues with non-podman clients, you can switch using the following command:\n\n        podman machine set --rootful start\n\nAPI forwarding listening on: /Users/deptno/.local/share/containers/podman/machine/start/podman.sock\n\nThe system helper service is not installed; the default Docker API socket\naddress can't be used by podman. If you would like to install it run the\nfollowing commands:\n\n        sudo /opt/homebrew/Cellar/podman/4.3.1/bin/podman-mac-helper install\n        podman machine stop start; podman machine start start\n\nYou can still connect Docker API clients by setting DOCKER_HOST using the\nfollowing command in your terminal session:\n\n        export DOCKER_HOST='unix:///Users/deptno/.local/share/containers/podman/machine/start/podman.sock'\n\nMachine \"start\" started successfully\n```\n\n## error\n### Error: failed to connect: dial tcp [::1]:61310: connect: connection refused\n```sh \n$ podman run -ti fathyb/carbonyl https://youtube.com                                                         127 err  16.15.0 node  17:46:50\nError: failed to connect: dial tcp [::1]:61310: connect: connection refused\n```\n---\n### docker build 보다 느림\ngraph driver 에 대한 검색 결과가 노출되고 있음, docker 를 쓰는게 지금 마음이 편함\n\n## link\n- [[docker]]\n- [[kubernetes]]\n- [[harbor]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# podman\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# podman\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/podman\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# podman\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
