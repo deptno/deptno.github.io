@@ -1,0 +1,233 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-4c64d053c4d9d270.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-6c34bb9eefa912ee.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># salji.ro</title><meta name="description" content="
+## 도메인
+- [[diary:2024-10-04]] 도메인 미리 갱신 $40
+
+## 장애
+
+### 0:푸시 X, 랭킹 X
++ [[diary:2024-05-18]]
+  - 알람 발송안됨, `ranker` 인지 `redis`, `keyword-notifier-fcm` 인지 재시작, 기록 바로 못해서 기억 없음
+
+### 1:푸시 X, 랭킹 X
++ [[diary:2024-05-20]]
+  - [X] redis -&gt; 정상
+  - keyword-notifier-fcm
+```json
+{
+  &quot;level&quot;:&quot;fatal&quot;,
+  &quot;file&quot;:&quot;/dist/index.js&quot;,
+  &quot;err&quot;: {
+    &quot;type&quot;:&quot;Error&quot;,
+    &quot;message&quot;:&quot;Connection terminated unexpectedly&quot;,
+    &quot;stack&quot;:&quot;Error: Connection terminated unexpectedly\n    at Connection.&lt;anonymous&gt; (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/client.js:132:73)\n    at Object.onceWrapper (node:events:632:28)\n    at Connection.emit (node:events:518:28)\n    at Socket.&lt;anonymous&gt; (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/connection.js:63:12)\n    at Socket.emit (node:events:518:28)\n    at TCP.&lt;anonymous&gt; (node:net:337:12)&quot;
+  },
+  &quot;msg&quot;:&quot;dbClient onError&quot;
+}
+```
+  - redis 가 아니라 pg가 떨어짐, fatal 이후 재시작됨
+    - pg 가 메모리 치고있음, **3**번 재시작됨
+  - [X] **추후** 커넥션이 자주 떨어지는거 같은데 pg 메모리 점검 필요 -&gt; 2x 로 늘림
+  - [X] `keyword-notifier-fcm`, `ranker` 재시작으로 복구
+    - `fatal` 에러 이후 재시작되지 않는게 **원인**
+  - **조치**
+    + https://github.com/deptno/salji.ro/pull/628
+    - pr head commit 으로 namespace 전체 배포(4개)
+    - 선머지
+  - **추가**
+    - 잘못봤었는데 callback 아안에서 에러핸들러가 호출되면서 종료되지 않는 이유였고 `process.exit` 추가
+      + `05205291d63ead0f5f56291e45ade2e6224267a5`
+    - [X] 디비 커넥션이 자꾸 끊어지는 문제는 실제로 존재하는 거 같아서 메모리 확장 해야할 것으로 보임(2x)
+
+### 0:푸시 X
++ [[diary:2024-05-21]]
+  - 어제배포 중에 `keyword-notifier-fcm` 실서버 배포 누락
+  - 
+### eomisea.co.kr 
++ [[diary:2024-08-05]]
+- 일주일 넘도록 깨짐
+
+## link
+- [[project]]
+- [[tubemon.io]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# salji.ro"/><meta property="og:description" content="
+## 도메인
+- [[diary:2024-10-04]] 도메인 미리 갱신 $40
+
+## 장애
+
+### 0:푸시 X, 랭킹 X
++ [[diary:2024-05-18]]
+  - 알람 발송안됨, `ranker` 인지 `redis`, `keyword-notifier-fcm` 인지 재시작, 기록 바로 못해서 기억 없음
+
+### 1:푸시 X, 랭킹 X
++ [[diary:2024-05-20]]
+  - [X] redis -&gt; 정상
+  - keyword-notifier-fcm
+```json
+{
+  &quot;level&quot;:&quot;fatal&quot;,
+  &quot;file&quot;:&quot;/dist/index.js&quot;,
+  &quot;err&quot;: {
+    &quot;type&quot;:&quot;Error&quot;,
+    &quot;message&quot;:&quot;Connection terminated unexpectedly&quot;,
+    &quot;stack&quot;:&quot;Error: Connection terminated unexpectedly\n    at Connection.&lt;anonymous&gt; (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/client.js:132:73)\n    at Object.onceWrapper (node:events:632:28)\n    at Connection.emit (node:events:518:28)\n    at Socket.&lt;anonymous&gt; (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/connection.js:63:12)\n    at Socket.emit (node:events:518:28)\n    at TCP.&lt;anonymous&gt; (node:net:337:12)&quot;
+  },
+  &quot;msg&quot;:&quot;dbClient onError&quot;
+}
+```
+  - redis 가 아니라 pg가 떨어짐, fatal 이후 재시작됨
+    - pg 가 메모리 치고있음, **3**번 재시작됨
+  - [X] **추후** 커넥션이 자주 떨어지는거 같은데 pg 메모리 점검 필요 -&gt; 2x 로 늘림
+  - [X] `keyword-notifier-fcm`, `ranker` 재시작으로 복구
+    - `fatal` 에러 이후 재시작되지 않는게 **원인**
+  - **조치**
+    + https://github.com/deptno/salji.ro/pull/628
+    - pr head commit 으로 namespace 전체 배포(4개)
+    - 선머지
+  - **추가**
+    - 잘못봤었는데 callback 아안에서 에러핸들러가 호출되면서 종료되지 않는 이유였고 `process.exit` 추가
+      + `05205291d63ead0f5f56291e45ade2e6224267a5`
+    - [X] 디비 커넥션이 자꾸 끊어지는 문제는 실제로 존재하는 거 같아서 메모리 확장 해야할 것으로 보임(2x)
+
+### 0:푸시 X
++ [[diary:2024-05-21]]
+  - 어제배포 중에 `keyword-notifier-fcm` 실서버 배포 누락
+  - 
+### eomisea.co.kr 
++ [[diary:2024-08-05]]
+- 일주일 넘도록 깨짐
+
+## link
+- [[project]]
+- [[tubemon.io]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/salji.ro"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# salji.ro"/><meta name="twitter:description" content="
+## 도메인
+- [[diary:2024-10-04]] 도메인 미리 갱신 $40
+
+## 장애
+
+### 0:푸시 X, 랭킹 X
++ [[diary:2024-05-18]]
+  - 알람 발송안됨, `ranker` 인지 `redis`, `keyword-notifier-fcm` 인지 재시작, 기록 바로 못해서 기억 없음
+
+### 1:푸시 X, 랭킹 X
++ [[diary:2024-05-20]]
+  - [X] redis -&gt; 정상
+  - keyword-notifier-fcm
+```json
+{
+  &quot;level&quot;:&quot;fatal&quot;,
+  &quot;file&quot;:&quot;/dist/index.js&quot;,
+  &quot;err&quot;: {
+    &quot;type&quot;:&quot;Error&quot;,
+    &quot;message&quot;:&quot;Connection terminated unexpectedly&quot;,
+    &quot;stack&quot;:&quot;Error: Connection terminated unexpectedly\n    at Connection.&lt;anonymous&gt; (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/client.js:132:73)\n    at Object.onceWrapper (node:events:632:28)\n    at Connection.emit (node:events:518:28)\n    at Socket.&lt;anonymous&gt; (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/connection.js:63:12)\n    at Socket.emit (node:events:518:28)\n    at TCP.&lt;anonymous&gt; (node:net:337:12)&quot;
+  },
+  &quot;msg&quot;:&quot;dbClient onError&quot;
+}
+```
+  - redis 가 아니라 pg가 떨어짐, fatal 이후 재시작됨
+    - pg 가 메모리 치고있음, **3**번 재시작됨
+  - [X] **추후** 커넥션이 자주 떨어지는거 같은데 pg 메모리 점검 필요 -&gt; 2x 로 늘림
+  - [X] `keyword-notifier-fcm`, `ranker` 재시작으로 복구
+    - `fatal` 에러 이후 재시작되지 않는게 **원인**
+  - **조치**
+    + https://github.com/deptno/salji.ro/pull/628
+    - pr head commit 으로 namespace 전체 배포(4개)
+    - 선머지
+  - **추가**
+    - 잘못봤었는데 callback 아안에서 에러핸들러가 호출되면서 종료되지 않는 이유였고 `process.exit` 추가
+      + `05205291d63ead0f5f56291e45ade2e6224267a5`
+    - [X] 디비 커넥션이 자꾸 끊어지는 문제는 실제로 존재하는 거 같아서 메모리 확장 해야할 것으로 보임(2x)
+
+### 0:푸시 X
++ [[diary:2024-05-21]]
+  - 어제배포 중에 `keyword-notifier-fcm` 실서버 배포 누락
+  - 
+### eomisea.co.kr 
++ [[diary:2024-08-05]]
+- 일주일 넘도록 깨짐
+
+## link
+- [[project]]
+- [[tubemon.io]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/626bcf6
+" class="bg-white text-black">626bcf6</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/salji.ro.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/salji.ro.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/salji.ro.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/salji.ro"><span class="underline">salji.ro</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-10-04"><span class="underline">diary/2024-10-04</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-05-18"><span class="underline">diary/2024-05-18</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-05-20"><span class="underline">diary/2024-05-20</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-05-21"><span class="underline">diary/2024-05-21</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-08-05"><span class="underline">diary/2024-08-05</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/project"><span class="underline">project</span><sup>10</sup></a></span><span><a class="text-blue-600" href="/public-wiki/tubemon.io"><span class="underline">tubemon.io</span><sup>10</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-07-07"><span class="underline">diary/2024-07-07</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-07-10"><span class="underline">diary/2024-07-10</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-07-11"><span class="underline">diary/2024-07-11</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-07-22"><span class="underline">diary/2024-07-22</span><sup>1</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#saljiro">salji.ro</a></div><div class="pl-2"><a href="#도메인">도메인</a></div><div class="pl-2"><a href="#장애">장애</a></div><div class="pl-4"><a href="#0푸시-x-랭킹-x">0:푸시 X, 랭킹 X</a></div><div class="pl-4"><a href="#1푸시-x-랭킹-x">1:푸시 X, 랭킹 X</a></div><div class="pl-4"><a href="#0푸시-x">0:푸시 X</a></div><div class="pl-4"><a href="#eomiseacokr">eomisea.co.kr</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="saljiro">salji.ro</h1>
+<h2 id="도메인">도메인</h2>
+<ul>
+<li><a href="/public-wiki/diary/2024-10-04">[diary] diary:2024-10-04</a> 도메인 미리 갱신 $40</li>
+</ul>
+<h2 id="장애">장애</h2>
+<h3 id="0푸시-x-랭킹-x">0:푸시 X, 랭킹 X</h3>
+<ul>
+<li><a href="/public-wiki/diary/2024-05-18">[diary] diary:2024-05-18</a><ul>
+<li>알람 발송안됨, <code class="span">ranker</code> 인지 <code class="span">redis</code>, <code class="span">keyword-notifier-fcm</code> 인지 재시작, 기록 바로 못해서 기억 없음</li>
+</ul>
+</li>
+</ul>
+<h3 id="1푸시-x-랭킹-x">1:푸시 X, 랭킹 X</h3>
+<ul>
+<li><a href="/public-wiki/diary/2024-05-20">[diary] diary:2024-05-20</a><ul>
+<li><input checked="" disabled="" type="checkbox"> redis -&gt; 정상</li>
+<li>keyword-notifier-fcm</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;level&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;fatal&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;file&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;/dist/index.js&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;err&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Error&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;message&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Connection terminated unexpectedly&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;stack&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Error: Connection terminated unexpectedly\n    at Connection.&lt;anonymous&gt; (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/client.js:132:73)\n    at Object.onceWrapper (node:events:632:28)\n    at Connection.emit (node:events:518:28)\n    at Socket.&lt;anonymous&gt; (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/connection.js:63:12)\n    at Socket.emit (node:events:518:28)\n    at TCP.&lt;anonymous&gt; (node:net:337:12)&quot;</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;msg&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;dbClient onError&quot;</span>
+<span class="hljs-punctuation">}</span>
+</code></pre><ul>
+<li>redis 가 아니라 pg가 떨어짐, fatal 이후 재시작됨<ul>
+<li>pg 가 메모리 치고있음, <strong>3</strong>번 재시작됨</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> <strong>추후</strong> 커넥션이 자주 떨어지는거 같은데 pg 메모리 점검 필요 -&gt; 2x 로 늘림</li>
+<li><input checked="" disabled="" type="checkbox"> <code class="span">keyword-notifier-fcm</code>, <code class="span">ranker</code> 재시작으로 복구<ul>
+<li><code class="span">fatal</code> 에러 이후 재시작되지 않는게 <strong>원인</strong></li>
+</ul>
+</li>
+<li><strong>조치</strong><ul>
+<li><a href="https://github.com/deptno/salji.ro/pull/628" target="_blank">[URL] https://github.com/deptno/salji.ro/pull/628</a></li>
+</ul>
+<ul>
+<li>pr head commit 으로 namespace 전체 배포(4개)</li>
+<li>선머지</li>
+</ul>
+</li>
+<li><strong>추가</strong><ul>
+<li>잘못봤었는데 callback 아안에서 에러핸들러가 호출되면서 종료되지 않는 이유였고 <code class="span">process.exit</code> 추가<ul>
+<li><code class="span">05205291d63ead0f5f56291e45ade2e6224267a5</code></li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> 디비 커넥션이 자꾸 끊어지는 문제는 실제로 존재하는 거 같아서 메모리 확장 해야할 것으로 보임(2x)</li>
+</ul>
+</li>
+</ul>
+<h3 id="0푸시-x">0:푸시 X</h3>
+<ul>
+<li><a href="/public-wiki/diary/2024-05-21">[diary] diary:2024-05-21</a><ul>
+<li>어제배포 중에 <code class="span">keyword-notifier-fcm</code> 실서버 배포 누락</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<h3 id="eomiseacokr">eomisea.co.kr</h3>
+<ul>
+<li><a href="/public-wiki/diary/2024-08-05">[diary] diary:2024-08-05</a></li>
+</ul>
+<ul>
+<li>일주일 넘도록 깨짐</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="project">project</a></li>
+<li><a href="tubemon.io">tubemon.io</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-4c64d053c4d9d270.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-6c34bb9eefa912ee.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"salji.ro\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"oZajO7D5cjG2ikbsu8UxW\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/salji.ro\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"salji.ro\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"salji.ro\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"salji.ro\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T11d7,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"saljiro\"\u003esalji.ro\u003c/h1\u003e\n\u003ch2 id=\"도메인\"\u003e도메인\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"/public-wiki/diary/2024-10-04\"\u003e[diary] diary:2024-10-04\u003c/a\u003e 도메인 미리 갱신 $40\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"장애\"\u003e장애\u003c/h2\u003e\n\u003ch3 id=\"0푸시-x-랭킹-x\"\u003e0:푸시 X, 랭킹 X\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"/public-wiki/diary/2024-05-18\"\u003e[diary] diary:2024-05-18\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e알람 발송안됨, \u003ccode class=\"span\"\u003eranker\u003c/code\u003e 인지 \u003ccode class=\"span\"\u003eredis\u003c/code\u003e, \u003ccode class=\"span\"\u003ekeyword-notifier-fcm\u003c/code\u003e 인지 재시작, 기록 바로 못해서 기억 없음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"1푸시-x-랭킹-x\"\u003e1:푸시 X, 랭킹 X\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"/public-wiki/diary/2024-05-20\"\u003e[diary] diary:2024-05-20\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e redis -\u0026gt; 정상\u003c/li\u003e\n\u003cli\u003ekeyword-notifier-fcm\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-json\"\u003e\u003cspan class=\"hljs-punctuation\"\u003e{\u003c/span\u003e\n  \u003cspan class=\"hljs-attr\"\u003e\u0026quot;level\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e:\u003c/span\u003e\u003cspan class=\"hljs-string\"\u003e\u0026quot;fatal\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e,\u003c/span\u003e\n  \u003cspan class=\"hljs-attr\"\u003e\u0026quot;file\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e:\u003c/span\u003e\u003cspan class=\"hljs-string\"\u003e\u0026quot;/dist/index.js\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e,\u003c/span\u003e\n  \u003cspan class=\"hljs-attr\"\u003e\u0026quot;err\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e:\u003c/span\u003e \u003cspan class=\"hljs-punctuation\"\u003e{\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003e\u0026quot;type\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e:\u003c/span\u003e\u003cspan class=\"hljs-string\"\u003e\u0026quot;Error\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e,\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003e\u0026quot;message\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e:\u003c/span\u003e\u003cspan class=\"hljs-string\"\u003e\u0026quot;Connection terminated unexpectedly\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e,\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003e\u0026quot;stack\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e:\u003c/span\u003e\u003cspan class=\"hljs-string\"\u003e\u0026quot;Error: Connection terminated unexpectedly\\n    at Connection.\u0026lt;anonymous\u0026gt; (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/client.js:132:73)\\n    at Object.onceWrapper (node:events:632:28)\\n    at Connection.emit (node:events:518:28)\\n    at Socket.\u0026lt;anonymous\u0026gt; (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/connection.js:63:12)\\n    at Socket.emit (node:events:518:28)\\n    at TCP.\u0026lt;anonymous\u0026gt; (node:net:337:12)\u0026quot;\u003c/span\u003e\n  \u003cspan class=\"hljs-punctuation\"\u003e}\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e,\u003c/span\u003e\n  \u003cspan class=\"hljs-attr\"\u003e\u0026quot;msg\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e:\u003c/span\u003e\u003cspan class=\"hljs-string\"\u003e\u0026quot;dbClient onError\u0026quot;\u003c/span\u003e\n\u003cspan class=\"hljs-punctuation\"\u003e}\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003eredis 가 아니라 pg가 떨어짐, fatal 이후 재시작됨\u003cul\u003e\n\u003cli\u003epg 가 메모리 치고있음, \u003cstrong\u003e3\u003c/strong\u003e번 재시작됨\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cstrong\u003e추후\u003c/strong\u003e 커넥션이 자주 떨어지는거 같은데 pg 메모리 점검 필요 -\u0026gt; 2x 로 늘림\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ccode class=\"span\"\u003ekeyword-notifier-fcm\u003c/code\u003e, \u003ccode class=\"span\"\u003eranker\u003c/code\u003e 재시작으로 복구\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efatal\u003c/code\u003e 에러 이후 재시작되지 않는게 \u003cstrong\u003e원인\u003c/strong\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003e조치\u003c/strong\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/deptno/salji.ro/pull/628\" target=\"_blank\"\u003e[URL] https://github.com/deptno/salji.ro/pull/628\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003epr head commit 으로 namespace 전체 배포(4개)\u003c/li\u003e\n\u003cli\u003e선머지\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003e추가\u003c/strong\u003e\u003cul\u003e\n\u003cli\u003e잘못봤었는데 callback 아안에서 에러핸들러가 호출되면서 종료되지 않는 이유였고 \u003ccode class=\"span\"\u003eprocess.exit\u003c/code\u003e 추가\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e05205291d63ead0f5f56291e45ade2e6224267a5\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 디비 커넥션이 자꾸 끊어지는 문제는 실제로 존재하는 거 같아서 메모리 확장 해야할 것으로 보임(2x)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"0푸시-x\"\u003e0:푸시 X\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"/public-wiki/diary/2024-05-21\"\u003e[diary] diary:2024-05-21\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e어제배포 중에 \u003ccode class=\"span\"\u003ekeyword-notifier-fcm\u003c/code\u003e 실서버 배포 누락\u003c/li\u003e\n\u003cli\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"eomiseacokr\"\u003eeomisea.co.kr\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"/public-wiki/diary/2024-08-05\"\u003e[diary] diary:2024-08-05\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e일주일 넘도록 깨짐\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"project\"\u003eproject\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"tubemon.io\"\u003etubemon.io\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/626bcf6\\n\",\"className\":\"bg-white text-black\",\"children\":\"626bcf6\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/salji.ro.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/salji.ro.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/salji.ro.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"salji.ro\",\"name\":\"salji.ro\",\"val\":7},{\"id\":\"diary/2024-10-04\",\"name\":\"diary/2024-10-04\",\"val\":2},{\"id\":\"diary/2024-05-18\",\"name\":\"diary/2024-05-18\",\"val\":2},{\"id\":\"diary/2024-05-20\",\"name\":\"diary/2024-05-20\",\"val\":3},{\"id\":\"diary/2024-05-21\",\"name\":\"diary/2024-05-21\",\"val\":2},{\"id\":\"diary/2024-08-05\",\"name\":\"diary/2024-08-05\",\"val\":2},{\"id\":\"project\",\"name\":\"project\",\"val\":10},{\"id\":\"tubemon.io\",\"name\":\"tubemon.io\",\"val\":10},{\"id\":\"diary/2024-07-07\",\"name\":\"diary/2024-07-07\",\"val\":3},{\"id\":\"diary/2024-07-10\",\"name\":\"diary/2024-07-10\",\"val\":1},{\"id\":\"diary/2024-07-11\",\"name\":\"diary/2024-07-11\",\"val\":1},{\"id\":\"diary/2024-07-22\",\"name\":\"diary/2024-07-22\",\"val\":1}],\"links\":[{\"source\":\"salji.ro\",\"target\":\"diary/2024-10-04\"},{\"source\":\"salji.ro\",\"target\":\"diary/2024-05-18\"},{\"source\":\"salji.ro\",\"target\":\"diary/2024-05-20\"},{\"source\":\"salji.ro\",\"target\":\"diary/2024-05-21\"},{\"source\":\"salji.ro\",\"target\":\"diary/2024-08-05\"},{\"source\":\"salji.ro\",\"target\":\"project\"},{\"source\":\"salji.ro\",\"target\":\"tubemon.io\"},{\"source\":\"project\",\"target\":\"salji.ro\"},{\"source\":\"tubemon.io\",\"target\":\"salji.ro\"},{\"source\":\"diary/2024-05-18\",\"target\":\"salji.ro\"},{\"source\":\"diary/2024-05-20\",\"target\":\"salji.ro\"},{\"source\":\"diary/2024-05-21\",\"target\":\"salji.ro\"},{\"source\":\"diary/2024-07-07\",\"target\":\"salji.ro\"},{\"source\":\"diary/2024-07-10\",\"target\":\"salji.ro\"},{\"source\":\"diary/2024-07-11\",\"target\":\"salji.ro\"},{\"source\":\"diary/2024-07-22\",\"target\":\"salji.ro\"},{\"source\":\"diary/2024-08-05\",\"target\":\"salji.ro\"},{\"source\":\"diary/2024-10-04\",\"target\":\"salji.ro\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"salji.ro\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/salji.ro\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"salji.ro\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"diary/2024-10-04\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-10-04\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-10-04\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2024-05-18\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-05-18\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-05-18\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2024-05-20\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-05-20\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-05-20\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2024-05-21\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-05-21\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-05-21\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2024-08-05\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-08-05\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-08-05\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"project\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/project\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"project\"}],[\"$\",\"sup\",null,{\"children\":10}]]}]}],[\"$\",\"span\",\"tubemon.io\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/tubemon.io\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"tubemon.io\"}],[\"$\",\"sup\",null,{\"children\":10}]]}]}],[\"$\",\"span\",\"diary/2024-07-07\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-07-07\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-07-07\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2024-07-10\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-07-10\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-07-10\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"diary/2024-07-11\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-07-11\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-07-11\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"diary/2024-07-22\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-07-22\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-07-22\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"saljiro\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#saljiro\",\"children\":\"salji.ro\"}]}],[\"$\",\"div\",\"도메인\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#도메인\",\"children\":\"도메인\"}]}],[\"$\",\"div\",\"장애\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#장애\",\"children\":\"장애\"}]}],[\"$\",\"div\",\"0푸시-x-랭킹-x\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#0푸시-x-랭킹-x\",\"children\":\"0:푸시 X, 랭킹 X\"}]}],[\"$\",\"div\",\"1푸시-x-랭킹-x\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#1푸시-x-랭킹-x\",\"children\":\"1:푸시 X, 랭킹 X\"}]}],[\"$\",\"div\",\"0푸시-x\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#0푸시-x\",\"children\":\"0:푸시 X\"}]}],[\"$\",\"div\",\"eomiseacokr\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#eomiseacokr\",\"children\":\"eomisea.co.kr\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T7fd,"])</script><script>self.__next_f.push([1,"\n## 도메인\n- [[diary:2024-10-04]] 도메인 미리 갱신 $40\n\n## 장애\n\n### 0:푸시 X, 랭킹 X\n+ [[diary:2024-05-18]]\n  - 알람 발송안됨, `ranker` 인지 `redis`, `keyword-notifier-fcm` 인지 재시작, 기록 바로 못해서 기억 없음\n\n### 1:푸시 X, 랭킹 X\n+ [[diary:2024-05-20]]\n  - [X] redis -\u003e 정상\n  - keyword-notifier-fcm\n```json\n{\n  \"level\":\"fatal\",\n  \"file\":\"/dist/index.js\",\n  \"err\": {\n    \"type\":\"Error\",\n    \"message\":\"Connection terminated unexpectedly\",\n    \"stack\":\"Error: Connection terminated unexpectedly\\n    at Connection.\u003canonymous\u003e (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/client.js:132:73)\\n    at Object.onceWrapper (node:events:632:28)\\n    at Connection.emit (node:events:518:28)\\n    at Socket.\u003canonymous\u003e (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/connection.js:63:12)\\n    at Socket.emit (node:events:518:28)\\n    at TCP.\u003canonymous\u003e (node:net:337:12)\"\n  },\n  \"msg\":\"dbClient onError\"\n}\n```\n  - redis 가 아니라 pg가 떨어짐, fatal 이후 재시작됨\n    - pg 가 메모리 치고있음, **3**번 재시작됨\n  - [X] **추후** 커넥션이 자주 떨어지는거 같은데 pg 메모리 점검 필요 -\u003e 2x 로 늘림\n  - [X] `keyword-notifier-fcm`, `ranker` 재시작으로 복구\n    - `fatal` 에러 이후 재시작되지 않는게 **원인**\n  - **조치**\n    + https://github.com/deptno/salji.ro/pull/628\n    - pr head commit 으로 namespace 전체 배포(4개)\n    - 선머지\n  - **추가**\n    - 잘못봤었는데 callback 아안에서 에러핸들러가 호출되면서 종료되지 않는 이유였고 `process.exit` 추가\n      + `05205291d63ead0f5f56291e45ade2e6224267a5`\n    - [X] 디비 커넥션이 자꾸 끊어지는 문제는 실제로 존재하는 거 같아서 메모리 확장 해야할 것으로 보임(2x)\n\n### 0:푸시 X\n+ [[diary:2024-05-21]]\n  - 어제배포 중에 `keyword-notifier-fcm` 실서버 배포 누락\n  - \n### eomisea.co.kr \n+ [[diary:2024-08-05]]\n- 일주일 넘도록 깨짐\n\n## link\n- [[project]]\n- [[tubemon.io]]\n"])</script><script>self.__next_f.push([1,"16:T7fd,"])</script><script>self.__next_f.push([1,"\n## 도메인\n- [[diary:2024-10-04]] 도메인 미리 갱신 $40\n\n## 장애\n\n### 0:푸시 X, 랭킹 X\n+ [[diary:2024-05-18]]\n  - 알람 발송안됨, `ranker` 인지 `redis`, `keyword-notifier-fcm` 인지 재시작, 기록 바로 못해서 기억 없음\n\n### 1:푸시 X, 랭킹 X\n+ [[diary:2024-05-20]]\n  - [X] redis -\u003e 정상\n  - keyword-notifier-fcm\n```json\n{\n  \"level\":\"fatal\",\n  \"file\":\"/dist/index.js\",\n  \"err\": {\n    \"type\":\"Error\",\n    \"message\":\"Connection terminated unexpectedly\",\n    \"stack\":\"Error: Connection terminated unexpectedly\\n    at Connection.\u003canonymous\u003e (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/client.js:132:73)\\n    at Object.onceWrapper (node:events:632:28)\\n    at Connection.emit (node:events:518:28)\\n    at Socket.\u003canonymous\u003e (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/connection.js:63:12)\\n    at Socket.emit (node:events:518:28)\\n    at TCP.\u003canonymous\u003e (node:net:337:12)\"\n  },\n  \"msg\":\"dbClient onError\"\n}\n```\n  - redis 가 아니라 pg가 떨어짐, fatal 이후 재시작됨\n    - pg 가 메모리 치고있음, **3**번 재시작됨\n  - [X] **추후** 커넥션이 자주 떨어지는거 같은데 pg 메모리 점검 필요 -\u003e 2x 로 늘림\n  - [X] `keyword-notifier-fcm`, `ranker` 재시작으로 복구\n    - `fatal` 에러 이후 재시작되지 않는게 **원인**\n  - **조치**\n    + https://github.com/deptno/salji.ro/pull/628\n    - pr head commit 으로 namespace 전체 배포(4개)\n    - 선머지\n  - **추가**\n    - 잘못봤었는데 callback 아안에서 에러핸들러가 호출되면서 종료되지 않는 이유였고 `process.exit` 추가\n      + `05205291d63ead0f5f56291e45ade2e6224267a5`\n    - [X] 디비 커넥션이 자꾸 끊어지는 문제는 실제로 존재하는 거 같아서 메모리 확장 해야할 것으로 보임(2x)\n\n### 0:푸시 X\n+ [[diary:2024-05-21]]\n  - 어제배포 중에 `keyword-notifier-fcm` 실서버 배포 누락\n  - \n### eomisea.co.kr \n+ [[diary:2024-08-05]]\n- 일주일 넘도록 깨짐\n\n## link\n- [[project]]\n- [[tubemon.io]]\n"])</script><script>self.__next_f.push([1,"17:T7fd,"])</script><script>self.__next_f.push([1,"\n## 도메인\n- [[diary:2024-10-04]] 도메인 미리 갱신 $40\n\n## 장애\n\n### 0:푸시 X, 랭킹 X\n+ [[diary:2024-05-18]]\n  - 알람 발송안됨, `ranker` 인지 `redis`, `keyword-notifier-fcm` 인지 재시작, 기록 바로 못해서 기억 없음\n\n### 1:푸시 X, 랭킹 X\n+ [[diary:2024-05-20]]\n  - [X] redis -\u003e 정상\n  - keyword-notifier-fcm\n```json\n{\n  \"level\":\"fatal\",\n  \"file\":\"/dist/index.js\",\n  \"err\": {\n    \"type\":\"Error\",\n    \"message\":\"Connection terminated unexpectedly\",\n    \"stack\":\"Error: Connection terminated unexpectedly\\n    at Connection.\u003canonymous\u003e (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/client.js:132:73)\\n    at Object.onceWrapper (node:events:632:28)\\n    at Connection.emit (node:events:518:28)\\n    at Socket.\u003canonymous\u003e (/app/node_modules/.pnpm/pg@8.11.3/node_modules/pg/lib/connection.js:63:12)\\n    at Socket.emit (node:events:518:28)\\n    at TCP.\u003canonymous\u003e (node:net:337:12)\"\n  },\n  \"msg\":\"dbClient onError\"\n}\n```\n  - redis 가 아니라 pg가 떨어짐, fatal 이후 재시작됨\n    - pg 가 메모리 치고있음, **3**번 재시작됨\n  - [X] **추후** 커넥션이 자주 떨어지는거 같은데 pg 메모리 점검 필요 -\u003e 2x 로 늘림\n  - [X] `keyword-notifier-fcm`, `ranker` 재시작으로 복구\n    - `fatal` 에러 이후 재시작되지 않는게 **원인**\n  - **조치**\n    + https://github.com/deptno/salji.ro/pull/628\n    - pr head commit 으로 namespace 전체 배포(4개)\n    - 선머지\n  - **추가**\n    - 잘못봤었는데 callback 아안에서 에러핸들러가 호출되면서 종료되지 않는 이유였고 `process.exit` 추가\n      + `05205291d63ead0f5f56291e45ade2e6224267a5`\n    - [X] 디비 커넥션이 자꾸 끊어지는 문제는 실제로 존재하는 거 같아서 메모리 확장 해야할 것으로 보임(2x)\n\n### 0:푸시 X\n+ [[diary:2024-05-21]]\n  - 어제배포 중에 `keyword-notifier-fcm` 실서버 배포 누락\n  - \n### eomisea.co.kr \n+ [[diary:2024-08-05]]\n- 일주일 넘도록 깨짐\n\n## link\n- [[project]]\n- [[tubemon.io]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# salji.ro\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# salji.ro\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/salji.ro\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# salji.ro\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

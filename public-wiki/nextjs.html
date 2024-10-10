@@ -1,0 +1,1403 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-4c64d053c4d9d270.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-6c34bb9eefa912ee.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># next.js</title><meta name="description" content="
+next.js
+
+## next
+### next@13
+- client side cache 를 가지 server 에서 받아온 컴포넌트들을 재활용한다
+- partial rendering 
+  - client navigation 이 일어난 경우 해당 컴포넌트 부분만을 새로 그린다
+- directory 에 page.tsx 가 있어야 라우팅이 가능해진다
+- route groups
+  - `(name)` directory
+  - url 구조에 영향을 주지 않고 `layout` 등 공통 컴포넌트 사용을 가능하게 한다
+  - 다른 route groups 에 같은 라우트(url) 을 생성하는 경우 에러로 간주된다
+  - route groups 간의 navigation 은 full page load 가 발생한다
+- dynamic route
+  - `/[name]/page.tsx` 의 경우 `({params}: {params: { name: string }})` 을 받게 된다
+  - catch all segments
+    - `/[...name]/page.tsx` name 이 하나의 뎁스가 아니라 여러 뎁스인 경우에도 매칭된다
+    - `({params}: {params: { name: string[] }})`
+  - optional catch all segments
+    - `/[...name]/page.tsx` `name` 이 없는 `/` 의 경우에도 매칭된다
+- page.tsx 는 기본적으로 server component 지만 `&#x27;use-client&#x27;` 를 통해 client component 사용이 [[가능]]
+- layout.tsx 
+  - 중첩가능
+  - subtree 에서 재사용
+  - subtree 라우팅시 re-render 되지 않는다
+  - root layout 이 아니라면 optional
+  - root layout (최상위 layout.tsx) 는 required
+  - root layout (최상위 layout.tsx) 는 &lt;html&gt;, &lt;body&gt; 태그를 포함해야한다
+  - root layout 의 경우는 server component 만가능하다 나머지는 client component 로 활용이 가능하다
+  - fetch 가 가능하다
+  - layout fetch 는 자식에게 전달될 수 없지만 children 에서 중복 패치를 하더라도 next.js 가 퍼포먼스 영향 없이 중복을 제거하여 처리
+- template.tsx
+  - client component 로 추측된다
+  - 위치상으로는 layout 의 child
+  - 마찬가지로 중첩이 가능하다
+  - navigation 시 재사용되는 layout 과 달리 mount 시점마다 다시 instance 화 된다
+  - 둘 중 하나를 쓰는 것이라면 layout 이 더 권장된다
+- navigation
+  - &lt;Link&gt; - server and client components, 추천 됨
+  - useRouter - client components
+  - 조건이 안되서 hard navigation 이 일어나는 경우 loading.tsx 가 호출됨
+- server components 는 client side 에서 cached 된다
+  - `useRouter().refresh()` 를 통해 invaliding 이 가능하다
+- &lt;Link&gt; 컴포넌트가 viewport 안에 들어오면 기본적으로 prefetch 된다
+  - prefetch 는 default 가 true
+  - dynamic route 의 경우에는 loading.tsx 만 먼저 prefetch
+- cache
+  - if cache soft, navigation
+    - static route
+    - dynamic route
+      - [path] 가 변하지 않은 경우
+    - back/forward navigation
+  - if cache is invalidated, hard navigation
+- next.js 는 focus and scroll management 를 함
+
+tbd
+- parallel routes - 2 page 를 한번에 그린다(e.g. dashboard)
+
+
+### next@13 app directory setup
+```sh
+yarn dlx create-next-app@latest --experimental-app [project]
+cd [project]
+
+corepack enable
+yarn set version stable
+
+yarn config set nodeLinker pnpm # 필수는 아님, 기본은 node_modules
+yarn # migrate to yarn 3.x
+```
+
+### server and client components
++ https://beta.nextjs.org/docs/rendering/server-and-client-components
+- server component 여러곳에서 같은 data fetch 는 캐시를 통해 공유되어 한번만 fetch 가 일어난다
+- client component 에서 server component 를 렌더링할 수 없다
+  - client component 에서 children 으로 server component 를 받아서 렌더링한다
+- server component 에서는 client component 렌더링이 가능하다
+- client component 는 최상단에 `&#x27;use client&#x27;` 디렉티브 선언이 필요하다
+  - 기존 많은 라이브러리들은 디렉티브가 없으므로 **server component 에서 사용하는 경우** 래핑이 필요하다
+### static and dynamic rendering
+- 아래 기능을 사용함으로써 동적 렌더링을 사용할 수 있다
+  - dynamic function
+    - server component
+      - cookies()
+      - headers()
+    - client component -&gt; &lt;Suspend /&gt; 사용 권고 (loading.ts)
+      - useSearchParams()
+  - dynamic data fetching
+    - dynamic
+      - no-store
+      - revalidate: 0
+  - 정리
+  | rendering | data fetching | dynamic functions |
+  |-----------|---------------|-------------------|
+  | static    | cached        | no                |
+  | dynamic   | cached        | yes               |
+  | dynamic   | not cached    | yes               |
+  | dynamic   | not cached    | yes               |
+
+
+```ts 
+export const dynamic = &#x27;auto&#x27;
+// &#x27;auto&#x27; | &#x27;force-dynamic&#x27; | &#x27;error&#x27; | &#x27;force-static&#x27;
+```
+  + https://beta.nextjs.org/docs/api-reference/segment-config#dynamic
+
+## tailwindcss
+```sh
+yarn add -D tailwindcss postcss autoprefixer
+yarn tailwindcss init -p # -p 는 postcss 설정 추가
+
+cat app/globals.css &lt;&lt; EOF # hello
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+EOF
+
+cat tailwind.config.js &lt;&lt; EOF
+/** @type {import(&#x27;tailwindcss&#x27;).Config} */
+module.exports = {
+  content: [
+    &quot;./app/**/*.{ts,tsx}&quot;,
+    &quot;./pages/**/*.{ts,tsx}&quot;,
+    &quot;./components/**/*.{ts,tsx}&quot;,
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+EOF
+```
+
+### ui framework based on tailwindcss (eg. daisyui)
+```sh
+yarn add daisyui
+cat tailwind.config.js &lt;&lt; EOF
+/** @type {import(&#x27;tailwindcss&#x27;).Config} */
+module.exports = {
+  content: [
+    &quot;./app/**/*.{ts,tsx}&quot;,
+    &quot;./pages/**/*.{ts,tsx}&quot;,
+    &quot;./components/**/*.{ts,tsx}&quot;,
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [
+    require(&#x27;daisyui&#x27;),
+  ],
+}
+EOF
+```
+
+## config
+### standalone
+- next.js@13.2 standalone 적용 후
+  - image size: 465 -&gt; 363 Mb 으로 빠짐 -&gt; 22% down
+  - memory usage: @ 는 website 에 한번 접속 후의 상태
+    - 69@129Mi -&gt; 24@65-&gt;83Mi 
+    - 69@117Mi -&gt; 25@64-&gt;108Mi
+    - 최적화가 조금 더 들어가는건지 메모리 사용량이 빠짐
+
+## cache
++ https://nextjs.org/docs/app/building-your-application/caching
+
+### Request Memoization
+&gt; 클라이언트 당 한번의 요청에서 발생하는 캐시 컨트롤
+- **React Component Tree** 내에서 요청당 같은 요청에 대해서 캐싱을 한다 - [[../dataloader|dataloader]] 와 같은 개념
+  - [[../nextjs|nextjs]] 가 아닌 [[../react|react]] 피쳐다
+  - fetch 의 `GET` 에서만 동작
+  - route handler 에서는 동작하지 않는다 *GET* 혼동하지 말것, 여긴 리액트 컴포넌트 트리의 일부가 아니기 때문
+  - 특수한 처리를 위해서라면 `React.cache` 함수를 통해 커스텀 처리 가능
+  - opt-out 가능, 할일은 없을 듯
+    - `fetch(url, { signal: new AbortController() })`
+
+### Data Cache
+&gt; Request Memoization 과는 달리 영구적으로 캐시된다
+- 렌더링 중에 만난 `fetch` 는 기본적으로 캐시된다
+- `fetch(..., { cache: &#x27;no-store&#x27; })` 로 캐시를 무시하고 요청할 수 있으며 이 또한 **캐시**된다
+- 캐시는 영구적이며 두가지 캐이스로 revalidation 이 가능하다
+  - 시간 지정(`{next: { revalidate: 60 }}`)
+    - **중요한 점**은 시간을 60초로 지정했을때 90초가 지난 시점에 요청이 **처음** 들어왔따면 이때 revalidate 가 진행되고 리턴 자체는 캐시되었던 데이터가 리턴된다. `stale-while-revalidate` 와 개념이 같다
+  - 명시적 요청
+    - `revalidateTag(&#x27;tag&#x27;)` 
+      - `{next: { tags: [tag] }}` 요청에 대해서 무효화 한다
+    - `revalidatePath`
+- `fetch` 메소드를 명시적으로 쓸 수 없어서 옵션을 전달할 수 없는 경우 *Soute Segment Config*을 사용한다
+  + https://nextjs.org/docs/app/building-your-application/caching#segment-config-options
+- opt-out 가능
+  - `export const revalidate = 0`
+  - `export const dynamic = &#x27;force-dynamic&#x27;`
+
+### Full Route Cache
+&gt; 빌드타임에 생성되는 리액트 서버 컴포넌트 페이로드와 클라이언트 컴포넌트에서 자바스크립트를 통해 생성하는 html
+- 빌드 타임 캐싱, or revalidation
+- static rendering 은 빌드 타임에 기본적으로 캐시된다
+- dynamic rendering 은 빌드 타임에 기본적으로 캐시되지 **않는다**
+- [X] ~~파라메터(slug) 가 포함된 페이지의 경우 `generateStaticParams` 에 정의경우 빌드 타임 아니면 런타임의 첫 요청에서 캐싱됨~~
+  - 불확실
+    + https://nextjs.org/docs/app/building-your-application/caching#generatestaticparams
+    - [ ] 위 내용에 따른 dynamic 도 첫 요청떄 캐시를 하는데 `generateStaticParams` 이 명시된 곳에서 빠진 경우에만인지 확인이 필요
+- chunk
+  - chunking
+    - route 마다
+      - React Server Comoponent -&gt; **React Server Component Payload** 로 변환
+        - streaming 을 최적화하기 위한 *바이너리* 포맷
+        - rsc 의 결과로 dom 을 업데이트하기 위해 사용
+        - 클라이언트 컴포넌트 placeholder
+        - 클라이언트 컴포넌트로 전달될 props
+        - **클라이언트**의 **Route Cache** 에 저장됨
+        - **Route Cache** 에 존재하는 경우 **요청 자체를 스킵**
+    - suspense 바운더리 마다
+  - 둘을 합쳐서 청크 생성
+    - React Server Component Payload,
+    - Client Componetn javascript to render html on the server
+- 무효화
+  - `fetch(url, { signal: new AbortController() })`
+  - 새로운 빌드 배포
+- opt-out
+  - dynamic function 사용
+    - cookies 
+    - headers
+    - searchParams, 이건 prop
+  - cache 되지 않은 `fetch` 를 사용하는 경우 해당 `fetch` 만 opt-out 된다 나머지 자체는 캐시가 유지된다
+
+### Route Cache
+&gt; 방문했던, 방문할(prefetching) 라우트에 대한 클라이언트 캐시  
+&gt; React Server Component Payload 를 route segment 마다 in-memory 저장  
+&gt; user session 동안 유지
+- 지속시간
+  - static 페이지인 경우 5분
+  - dynamic 페이지인 경우 30초
+    - `&lt;Link prefetch /&gt;` 혹은 `router.prefetch` 를 명시적으로 사용하는 경우 5분
+- 무효화
+  - `router.refresh`
+  - server action
+    - `revalidateTag`
+    - `revalidatePath`
+    - `cookies.set`
+    - `cookies.delete`
+- opt-out
+  - 얜 opt-out 이 없다
+
+### Full Route Cache vs Route Cache
+
+|        | Full Route Cache    | Route Cache            |
+|--------|---------------------|------------------------|
+| 어디서 | Server              | Client                 |
+| 무엇을 | RSCP &amp; HTML, static | RSCP, static &amp; dynamic |
+| 얼마나 | persist             | user session           |
+
+
+## error
+### next.js 13 + next-auth
+signin 을 누르면 제대로 동작하지 않는이슈 브라우저에서는 아래 메시지가 찍힌다
+```sh
+next dev --turbo
+
+[400] /api/auth/providers (194ms)
+[400] /api/auth/_log (30ms)
+[400] /api/auth/error (97ms)
+```
+아래는 브라우저에서 찍히는 로그
+```text
+Error: This action with HTTP GET is not supported by NextAuth.js
+```
+`--turbo` 옵션을 빼니 동작한다. dynamic route 쪽에 문제가 있는 것으로 보인다. 버전 정보를 추가해 둔다.
+```json
+    &quot;next&quot;: &quot;13.1.6&quot;,
+    &quot;next-auth&quot;: &quot;^4.19.2&quot;,
+```
+
+### next-auth/src 를 참조해서 에러나는 경우
+참조가 src로 걸린건지 확인해서 수정할 것
+```sh
+./node_modules/.store/next-auth-virtual-8ec2bd5fde/node_modules/next-auth/src/core/lib/assert.ts:134:27
+Type error: Element implicitly has an &#x27;any&#x27; type because expression of type &#x27;string&#x27; can&#x27;t be used to index type &#x27;Adapter&lt;boolean&gt;&#x27;.
+  No index signature with a parameter of type &#x27;string&#x27; was found on type &#x27;Adapter&lt;boolean&gt;&#x27;.
+
+  132 |       &quot;useVerificationToken&quot;,
+  133 |       &quot;getUserByEmail&quot;,
+&gt; 134 |     ].filter((method) =&gt; !adapter[method])
+      |                           ^
+  135 |
+  136 |     if (missingMethods.length) {
+  137 |       return new MissingAdapterMethods(
+```
+
+### &#x27;sharp&#x27; is required to be installed in standalone mode for the image optimization to function correctly.
+```sh 
+⨯ Error: &#x27;sharp&#x27; is required to be installed in standalone mode for the image optimization to function correctly. Read more at: https://nextjs.org/docs/messages/sharp-missing-in-production
+```
+- arm 에서 빌드하고 x86 에서 [[docker]] 컨테이너가 뜨게되는데 경우 네이티브 빌드 모듈인 `sharp` 없다고 `warning` 이 난다
+- dockerfile 에 글로벌 설치해서 처리해버리는게 가장 깔끔하다 생각된다
+```dockerfile 
+RUN npm install -g --arch=x64 --platform=linux --libc=glibc sharp
+ENV NEXT_SHARP_PATH=/usr/local/lib/node_modules/sharp
+```
+  + https://github.com/lovell/sharp/issues/3877#issuecomment-1850388322
+
+### Error: Next.js package not found
+```sh 
+⨯ Error: Next.js package not found
+
+Debug info:
+- Execution of get_next_package failed
+- Next.js package not found
+```
++ https://github.com/vercel/next.js/issues/56887#issuecomment-1826767117
+- [[pnpm]] 모노레포 구성 후 실행 -&gt; 접근시 에러가 발생
+- `outputFileTracingRoot` 옵션으로 `node_modules` 위치를 주면 해결됨
+
+## link
+- [[react]]
+- [[tailwindcss]]
+- [[yarn]]
+- [[corepack]]
+- [[next-auth]]
+- [[turborepo]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# next.js"/><meta property="og:description" content="
+next.js
+
+## next
+### next@13
+- client side cache 를 가지 server 에서 받아온 컴포넌트들을 재활용한다
+- partial rendering 
+  - client navigation 이 일어난 경우 해당 컴포넌트 부분만을 새로 그린다
+- directory 에 page.tsx 가 있어야 라우팅이 가능해진다
+- route groups
+  - `(name)` directory
+  - url 구조에 영향을 주지 않고 `layout` 등 공통 컴포넌트 사용을 가능하게 한다
+  - 다른 route groups 에 같은 라우트(url) 을 생성하는 경우 에러로 간주된다
+  - route groups 간의 navigation 은 full page load 가 발생한다
+- dynamic route
+  - `/[name]/page.tsx` 의 경우 `({params}: {params: { name: string }})` 을 받게 된다
+  - catch all segments
+    - `/[...name]/page.tsx` name 이 하나의 뎁스가 아니라 여러 뎁스인 경우에도 매칭된다
+    - `({params}: {params: { name: string[] }})`
+  - optional catch all segments
+    - `/[...name]/page.tsx` `name` 이 없는 `/` 의 경우에도 매칭된다
+- page.tsx 는 기본적으로 server component 지만 `&#x27;use-client&#x27;` 를 통해 client component 사용이 [[가능]]
+- layout.tsx 
+  - 중첩가능
+  - subtree 에서 재사용
+  - subtree 라우팅시 re-render 되지 않는다
+  - root layout 이 아니라면 optional
+  - root layout (최상위 layout.tsx) 는 required
+  - root layout (최상위 layout.tsx) 는 &lt;html&gt;, &lt;body&gt; 태그를 포함해야한다
+  - root layout 의 경우는 server component 만가능하다 나머지는 client component 로 활용이 가능하다
+  - fetch 가 가능하다
+  - layout fetch 는 자식에게 전달될 수 없지만 children 에서 중복 패치를 하더라도 next.js 가 퍼포먼스 영향 없이 중복을 제거하여 처리
+- template.tsx
+  - client component 로 추측된다
+  - 위치상으로는 layout 의 child
+  - 마찬가지로 중첩이 가능하다
+  - navigation 시 재사용되는 layout 과 달리 mount 시점마다 다시 instance 화 된다
+  - 둘 중 하나를 쓰는 것이라면 layout 이 더 권장된다
+- navigation
+  - &lt;Link&gt; - server and client components, 추천 됨
+  - useRouter - client components
+  - 조건이 안되서 hard navigation 이 일어나는 경우 loading.tsx 가 호출됨
+- server components 는 client side 에서 cached 된다
+  - `useRouter().refresh()` 를 통해 invaliding 이 가능하다
+- &lt;Link&gt; 컴포넌트가 viewport 안에 들어오면 기본적으로 prefetch 된다
+  - prefetch 는 default 가 true
+  - dynamic route 의 경우에는 loading.tsx 만 먼저 prefetch
+- cache
+  - if cache soft, navigation
+    - static route
+    - dynamic route
+      - [path] 가 변하지 않은 경우
+    - back/forward navigation
+  - if cache is invalidated, hard navigation
+- next.js 는 focus and scroll management 를 함
+
+tbd
+- parallel routes - 2 page 를 한번에 그린다(e.g. dashboard)
+
+
+### next@13 app directory setup
+```sh
+yarn dlx create-next-app@latest --experimental-app [project]
+cd [project]
+
+corepack enable
+yarn set version stable
+
+yarn config set nodeLinker pnpm # 필수는 아님, 기본은 node_modules
+yarn # migrate to yarn 3.x
+```
+
+### server and client components
++ https://beta.nextjs.org/docs/rendering/server-and-client-components
+- server component 여러곳에서 같은 data fetch 는 캐시를 통해 공유되어 한번만 fetch 가 일어난다
+- client component 에서 server component 를 렌더링할 수 없다
+  - client component 에서 children 으로 server component 를 받아서 렌더링한다
+- server component 에서는 client component 렌더링이 가능하다
+- client component 는 최상단에 `&#x27;use client&#x27;` 디렉티브 선언이 필요하다
+  - 기존 많은 라이브러리들은 디렉티브가 없으므로 **server component 에서 사용하는 경우** 래핑이 필요하다
+### static and dynamic rendering
+- 아래 기능을 사용함으로써 동적 렌더링을 사용할 수 있다
+  - dynamic function
+    - server component
+      - cookies()
+      - headers()
+    - client component -&gt; &lt;Suspend /&gt; 사용 권고 (loading.ts)
+      - useSearchParams()
+  - dynamic data fetching
+    - dynamic
+      - no-store
+      - revalidate: 0
+  - 정리
+  | rendering | data fetching | dynamic functions |
+  |-----------|---------------|-------------------|
+  | static    | cached        | no                |
+  | dynamic   | cached        | yes               |
+  | dynamic   | not cached    | yes               |
+  | dynamic   | not cached    | yes               |
+
+
+```ts 
+export const dynamic = &#x27;auto&#x27;
+// &#x27;auto&#x27; | &#x27;force-dynamic&#x27; | &#x27;error&#x27; | &#x27;force-static&#x27;
+```
+  + https://beta.nextjs.org/docs/api-reference/segment-config#dynamic
+
+## tailwindcss
+```sh
+yarn add -D tailwindcss postcss autoprefixer
+yarn tailwindcss init -p # -p 는 postcss 설정 추가
+
+cat app/globals.css &lt;&lt; EOF # hello
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+EOF
+
+cat tailwind.config.js &lt;&lt; EOF
+/** @type {import(&#x27;tailwindcss&#x27;).Config} */
+module.exports = {
+  content: [
+    &quot;./app/**/*.{ts,tsx}&quot;,
+    &quot;./pages/**/*.{ts,tsx}&quot;,
+    &quot;./components/**/*.{ts,tsx}&quot;,
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+EOF
+```
+
+### ui framework based on tailwindcss (eg. daisyui)
+```sh
+yarn add daisyui
+cat tailwind.config.js &lt;&lt; EOF
+/** @type {import(&#x27;tailwindcss&#x27;).Config} */
+module.exports = {
+  content: [
+    &quot;./app/**/*.{ts,tsx}&quot;,
+    &quot;./pages/**/*.{ts,tsx}&quot;,
+    &quot;./components/**/*.{ts,tsx}&quot;,
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [
+    require(&#x27;daisyui&#x27;),
+  ],
+}
+EOF
+```
+
+## config
+### standalone
+- next.js@13.2 standalone 적용 후
+  - image size: 465 -&gt; 363 Mb 으로 빠짐 -&gt; 22% down
+  - memory usage: @ 는 website 에 한번 접속 후의 상태
+    - 69@129Mi -&gt; 24@65-&gt;83Mi 
+    - 69@117Mi -&gt; 25@64-&gt;108Mi
+    - 최적화가 조금 더 들어가는건지 메모리 사용량이 빠짐
+
+## cache
++ https://nextjs.org/docs/app/building-your-application/caching
+
+### Request Memoization
+&gt; 클라이언트 당 한번의 요청에서 발생하는 캐시 컨트롤
+- **React Component Tree** 내에서 요청당 같은 요청에 대해서 캐싱을 한다 - [[../dataloader|dataloader]] 와 같은 개념
+  - [[../nextjs|nextjs]] 가 아닌 [[../react|react]] 피쳐다
+  - fetch 의 `GET` 에서만 동작
+  - route handler 에서는 동작하지 않는다 *GET* 혼동하지 말것, 여긴 리액트 컴포넌트 트리의 일부가 아니기 때문
+  - 특수한 처리를 위해서라면 `React.cache` 함수를 통해 커스텀 처리 가능
+  - opt-out 가능, 할일은 없을 듯
+    - `fetch(url, { signal: new AbortController() })`
+
+### Data Cache
+&gt; Request Memoization 과는 달리 영구적으로 캐시된다
+- 렌더링 중에 만난 `fetch` 는 기본적으로 캐시된다
+- `fetch(..., { cache: &#x27;no-store&#x27; })` 로 캐시를 무시하고 요청할 수 있으며 이 또한 **캐시**된다
+- 캐시는 영구적이며 두가지 캐이스로 revalidation 이 가능하다
+  - 시간 지정(`{next: { revalidate: 60 }}`)
+    - **중요한 점**은 시간을 60초로 지정했을때 90초가 지난 시점에 요청이 **처음** 들어왔따면 이때 revalidate 가 진행되고 리턴 자체는 캐시되었던 데이터가 리턴된다. `stale-while-revalidate` 와 개념이 같다
+  - 명시적 요청
+    - `revalidateTag(&#x27;tag&#x27;)` 
+      - `{next: { tags: [tag] }}` 요청에 대해서 무효화 한다
+    - `revalidatePath`
+- `fetch` 메소드를 명시적으로 쓸 수 없어서 옵션을 전달할 수 없는 경우 *Soute Segment Config*을 사용한다
+  + https://nextjs.org/docs/app/building-your-application/caching#segment-config-options
+- opt-out 가능
+  - `export const revalidate = 0`
+  - `export const dynamic = &#x27;force-dynamic&#x27;`
+
+### Full Route Cache
+&gt; 빌드타임에 생성되는 리액트 서버 컴포넌트 페이로드와 클라이언트 컴포넌트에서 자바스크립트를 통해 생성하는 html
+- 빌드 타임 캐싱, or revalidation
+- static rendering 은 빌드 타임에 기본적으로 캐시된다
+- dynamic rendering 은 빌드 타임에 기본적으로 캐시되지 **않는다**
+- [X] ~~파라메터(slug) 가 포함된 페이지의 경우 `generateStaticParams` 에 정의경우 빌드 타임 아니면 런타임의 첫 요청에서 캐싱됨~~
+  - 불확실
+    + https://nextjs.org/docs/app/building-your-application/caching#generatestaticparams
+    - [ ] 위 내용에 따른 dynamic 도 첫 요청떄 캐시를 하는데 `generateStaticParams` 이 명시된 곳에서 빠진 경우에만인지 확인이 필요
+- chunk
+  - chunking
+    - route 마다
+      - React Server Comoponent -&gt; **React Server Component Payload** 로 변환
+        - streaming 을 최적화하기 위한 *바이너리* 포맷
+        - rsc 의 결과로 dom 을 업데이트하기 위해 사용
+        - 클라이언트 컴포넌트 placeholder
+        - 클라이언트 컴포넌트로 전달될 props
+        - **클라이언트**의 **Route Cache** 에 저장됨
+        - **Route Cache** 에 존재하는 경우 **요청 자체를 스킵**
+    - suspense 바운더리 마다
+  - 둘을 합쳐서 청크 생성
+    - React Server Component Payload,
+    - Client Componetn javascript to render html on the server
+- 무효화
+  - `fetch(url, { signal: new AbortController() })`
+  - 새로운 빌드 배포
+- opt-out
+  - dynamic function 사용
+    - cookies 
+    - headers
+    - searchParams, 이건 prop
+  - cache 되지 않은 `fetch` 를 사용하는 경우 해당 `fetch` 만 opt-out 된다 나머지 자체는 캐시가 유지된다
+
+### Route Cache
+&gt; 방문했던, 방문할(prefetching) 라우트에 대한 클라이언트 캐시  
+&gt; React Server Component Payload 를 route segment 마다 in-memory 저장  
+&gt; user session 동안 유지
+- 지속시간
+  - static 페이지인 경우 5분
+  - dynamic 페이지인 경우 30초
+    - `&lt;Link prefetch /&gt;` 혹은 `router.prefetch` 를 명시적으로 사용하는 경우 5분
+- 무효화
+  - `router.refresh`
+  - server action
+    - `revalidateTag`
+    - `revalidatePath`
+    - `cookies.set`
+    - `cookies.delete`
+- opt-out
+  - 얜 opt-out 이 없다
+
+### Full Route Cache vs Route Cache
+
+|        | Full Route Cache    | Route Cache            |
+|--------|---------------------|------------------------|
+| 어디서 | Server              | Client                 |
+| 무엇을 | RSCP &amp; HTML, static | RSCP, static &amp; dynamic |
+| 얼마나 | persist             | user session           |
+
+
+## error
+### next.js 13 + next-auth
+signin 을 누르면 제대로 동작하지 않는이슈 브라우저에서는 아래 메시지가 찍힌다
+```sh
+next dev --turbo
+
+[400] /api/auth/providers (194ms)
+[400] /api/auth/_log (30ms)
+[400] /api/auth/error (97ms)
+```
+아래는 브라우저에서 찍히는 로그
+```text
+Error: This action with HTTP GET is not supported by NextAuth.js
+```
+`--turbo` 옵션을 빼니 동작한다. dynamic route 쪽에 문제가 있는 것으로 보인다. 버전 정보를 추가해 둔다.
+```json
+    &quot;next&quot;: &quot;13.1.6&quot;,
+    &quot;next-auth&quot;: &quot;^4.19.2&quot;,
+```
+
+### next-auth/src 를 참조해서 에러나는 경우
+참조가 src로 걸린건지 확인해서 수정할 것
+```sh
+./node_modules/.store/next-auth-virtual-8ec2bd5fde/node_modules/next-auth/src/core/lib/assert.ts:134:27
+Type error: Element implicitly has an &#x27;any&#x27; type because expression of type &#x27;string&#x27; can&#x27;t be used to index type &#x27;Adapter&lt;boolean&gt;&#x27;.
+  No index signature with a parameter of type &#x27;string&#x27; was found on type &#x27;Adapter&lt;boolean&gt;&#x27;.
+
+  132 |       &quot;useVerificationToken&quot;,
+  133 |       &quot;getUserByEmail&quot;,
+&gt; 134 |     ].filter((method) =&gt; !adapter[method])
+      |                           ^
+  135 |
+  136 |     if (missingMethods.length) {
+  137 |       return new MissingAdapterMethods(
+```
+
+### &#x27;sharp&#x27; is required to be installed in standalone mode for the image optimization to function correctly.
+```sh 
+⨯ Error: &#x27;sharp&#x27; is required to be installed in standalone mode for the image optimization to function correctly. Read more at: https://nextjs.org/docs/messages/sharp-missing-in-production
+```
+- arm 에서 빌드하고 x86 에서 [[docker]] 컨테이너가 뜨게되는데 경우 네이티브 빌드 모듈인 `sharp` 없다고 `warning` 이 난다
+- dockerfile 에 글로벌 설치해서 처리해버리는게 가장 깔끔하다 생각된다
+```dockerfile 
+RUN npm install -g --arch=x64 --platform=linux --libc=glibc sharp
+ENV NEXT_SHARP_PATH=/usr/local/lib/node_modules/sharp
+```
+  + https://github.com/lovell/sharp/issues/3877#issuecomment-1850388322
+
+### Error: Next.js package not found
+```sh 
+⨯ Error: Next.js package not found
+
+Debug info:
+- Execution of get_next_package failed
+- Next.js package not found
+```
++ https://github.com/vercel/next.js/issues/56887#issuecomment-1826767117
+- [[pnpm]] 모노레포 구성 후 실행 -&gt; 접근시 에러가 발생
+- `outputFileTracingRoot` 옵션으로 `node_modules` 위치를 주면 해결됨
+
+## link
+- [[react]]
+- [[tailwindcss]]
+- [[yarn]]
+- [[corepack]]
+- [[next-auth]]
+- [[turborepo]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/nextjs"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# next.js"/><meta name="twitter:description" content="
+next.js
+
+## next
+### next@13
+- client side cache 를 가지 server 에서 받아온 컴포넌트들을 재활용한다
+- partial rendering 
+  - client navigation 이 일어난 경우 해당 컴포넌트 부분만을 새로 그린다
+- directory 에 page.tsx 가 있어야 라우팅이 가능해진다
+- route groups
+  - `(name)` directory
+  - url 구조에 영향을 주지 않고 `layout` 등 공통 컴포넌트 사용을 가능하게 한다
+  - 다른 route groups 에 같은 라우트(url) 을 생성하는 경우 에러로 간주된다
+  - route groups 간의 navigation 은 full page load 가 발생한다
+- dynamic route
+  - `/[name]/page.tsx` 의 경우 `({params}: {params: { name: string }})` 을 받게 된다
+  - catch all segments
+    - `/[...name]/page.tsx` name 이 하나의 뎁스가 아니라 여러 뎁스인 경우에도 매칭된다
+    - `({params}: {params: { name: string[] }})`
+  - optional catch all segments
+    - `/[...name]/page.tsx` `name` 이 없는 `/` 의 경우에도 매칭된다
+- page.tsx 는 기본적으로 server component 지만 `&#x27;use-client&#x27;` 를 통해 client component 사용이 [[가능]]
+- layout.tsx 
+  - 중첩가능
+  - subtree 에서 재사용
+  - subtree 라우팅시 re-render 되지 않는다
+  - root layout 이 아니라면 optional
+  - root layout (최상위 layout.tsx) 는 required
+  - root layout (최상위 layout.tsx) 는 &lt;html&gt;, &lt;body&gt; 태그를 포함해야한다
+  - root layout 의 경우는 server component 만가능하다 나머지는 client component 로 활용이 가능하다
+  - fetch 가 가능하다
+  - layout fetch 는 자식에게 전달될 수 없지만 children 에서 중복 패치를 하더라도 next.js 가 퍼포먼스 영향 없이 중복을 제거하여 처리
+- template.tsx
+  - client component 로 추측된다
+  - 위치상으로는 layout 의 child
+  - 마찬가지로 중첩이 가능하다
+  - navigation 시 재사용되는 layout 과 달리 mount 시점마다 다시 instance 화 된다
+  - 둘 중 하나를 쓰는 것이라면 layout 이 더 권장된다
+- navigation
+  - &lt;Link&gt; - server and client components, 추천 됨
+  - useRouter - client components
+  - 조건이 안되서 hard navigation 이 일어나는 경우 loading.tsx 가 호출됨
+- server components 는 client side 에서 cached 된다
+  - `useRouter().refresh()` 를 통해 invaliding 이 가능하다
+- &lt;Link&gt; 컴포넌트가 viewport 안에 들어오면 기본적으로 prefetch 된다
+  - prefetch 는 default 가 true
+  - dynamic route 의 경우에는 loading.tsx 만 먼저 prefetch
+- cache
+  - if cache soft, navigation
+    - static route
+    - dynamic route
+      - [path] 가 변하지 않은 경우
+    - back/forward navigation
+  - if cache is invalidated, hard navigation
+- next.js 는 focus and scroll management 를 함
+
+tbd
+- parallel routes - 2 page 를 한번에 그린다(e.g. dashboard)
+
+
+### next@13 app directory setup
+```sh
+yarn dlx create-next-app@latest --experimental-app [project]
+cd [project]
+
+corepack enable
+yarn set version stable
+
+yarn config set nodeLinker pnpm # 필수는 아님, 기본은 node_modules
+yarn # migrate to yarn 3.x
+```
+
+### server and client components
++ https://beta.nextjs.org/docs/rendering/server-and-client-components
+- server component 여러곳에서 같은 data fetch 는 캐시를 통해 공유되어 한번만 fetch 가 일어난다
+- client component 에서 server component 를 렌더링할 수 없다
+  - client component 에서 children 으로 server component 를 받아서 렌더링한다
+- server component 에서는 client component 렌더링이 가능하다
+- client component 는 최상단에 `&#x27;use client&#x27;` 디렉티브 선언이 필요하다
+  - 기존 많은 라이브러리들은 디렉티브가 없으므로 **server component 에서 사용하는 경우** 래핑이 필요하다
+### static and dynamic rendering
+- 아래 기능을 사용함으로써 동적 렌더링을 사용할 수 있다
+  - dynamic function
+    - server component
+      - cookies()
+      - headers()
+    - client component -&gt; &lt;Suspend /&gt; 사용 권고 (loading.ts)
+      - useSearchParams()
+  - dynamic data fetching
+    - dynamic
+      - no-store
+      - revalidate: 0
+  - 정리
+  | rendering | data fetching | dynamic functions |
+  |-----------|---------------|-------------------|
+  | static    | cached        | no                |
+  | dynamic   | cached        | yes               |
+  | dynamic   | not cached    | yes               |
+  | dynamic   | not cached    | yes               |
+
+
+```ts 
+export const dynamic = &#x27;auto&#x27;
+// &#x27;auto&#x27; | &#x27;force-dynamic&#x27; | &#x27;error&#x27; | &#x27;force-static&#x27;
+```
+  + https://beta.nextjs.org/docs/api-reference/segment-config#dynamic
+
+## tailwindcss
+```sh
+yarn add -D tailwindcss postcss autoprefixer
+yarn tailwindcss init -p # -p 는 postcss 설정 추가
+
+cat app/globals.css &lt;&lt; EOF # hello
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+EOF
+
+cat tailwind.config.js &lt;&lt; EOF
+/** @type {import(&#x27;tailwindcss&#x27;).Config} */
+module.exports = {
+  content: [
+    &quot;./app/**/*.{ts,tsx}&quot;,
+    &quot;./pages/**/*.{ts,tsx}&quot;,
+    &quot;./components/**/*.{ts,tsx}&quot;,
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+EOF
+```
+
+### ui framework based on tailwindcss (eg. daisyui)
+```sh
+yarn add daisyui
+cat tailwind.config.js &lt;&lt; EOF
+/** @type {import(&#x27;tailwindcss&#x27;).Config} */
+module.exports = {
+  content: [
+    &quot;./app/**/*.{ts,tsx}&quot;,
+    &quot;./pages/**/*.{ts,tsx}&quot;,
+    &quot;./components/**/*.{ts,tsx}&quot;,
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [
+    require(&#x27;daisyui&#x27;),
+  ],
+}
+EOF
+```
+
+## config
+### standalone
+- next.js@13.2 standalone 적용 후
+  - image size: 465 -&gt; 363 Mb 으로 빠짐 -&gt; 22% down
+  - memory usage: @ 는 website 에 한번 접속 후의 상태
+    - 69@129Mi -&gt; 24@65-&gt;83Mi 
+    - 69@117Mi -&gt; 25@64-&gt;108Mi
+    - 최적화가 조금 더 들어가는건지 메모리 사용량이 빠짐
+
+## cache
++ https://nextjs.org/docs/app/building-your-application/caching
+
+### Request Memoization
+&gt; 클라이언트 당 한번의 요청에서 발생하는 캐시 컨트롤
+- **React Component Tree** 내에서 요청당 같은 요청에 대해서 캐싱을 한다 - [[../dataloader|dataloader]] 와 같은 개념
+  - [[../nextjs|nextjs]] 가 아닌 [[../react|react]] 피쳐다
+  - fetch 의 `GET` 에서만 동작
+  - route handler 에서는 동작하지 않는다 *GET* 혼동하지 말것, 여긴 리액트 컴포넌트 트리의 일부가 아니기 때문
+  - 특수한 처리를 위해서라면 `React.cache` 함수를 통해 커스텀 처리 가능
+  - opt-out 가능, 할일은 없을 듯
+    - `fetch(url, { signal: new AbortController() })`
+
+### Data Cache
+&gt; Request Memoization 과는 달리 영구적으로 캐시된다
+- 렌더링 중에 만난 `fetch` 는 기본적으로 캐시된다
+- `fetch(..., { cache: &#x27;no-store&#x27; })` 로 캐시를 무시하고 요청할 수 있으며 이 또한 **캐시**된다
+- 캐시는 영구적이며 두가지 캐이스로 revalidation 이 가능하다
+  - 시간 지정(`{next: { revalidate: 60 }}`)
+    - **중요한 점**은 시간을 60초로 지정했을때 90초가 지난 시점에 요청이 **처음** 들어왔따면 이때 revalidate 가 진행되고 리턴 자체는 캐시되었던 데이터가 리턴된다. `stale-while-revalidate` 와 개념이 같다
+  - 명시적 요청
+    - `revalidateTag(&#x27;tag&#x27;)` 
+      - `{next: { tags: [tag] }}` 요청에 대해서 무효화 한다
+    - `revalidatePath`
+- `fetch` 메소드를 명시적으로 쓸 수 없어서 옵션을 전달할 수 없는 경우 *Soute Segment Config*을 사용한다
+  + https://nextjs.org/docs/app/building-your-application/caching#segment-config-options
+- opt-out 가능
+  - `export const revalidate = 0`
+  - `export const dynamic = &#x27;force-dynamic&#x27;`
+
+### Full Route Cache
+&gt; 빌드타임에 생성되는 리액트 서버 컴포넌트 페이로드와 클라이언트 컴포넌트에서 자바스크립트를 통해 생성하는 html
+- 빌드 타임 캐싱, or revalidation
+- static rendering 은 빌드 타임에 기본적으로 캐시된다
+- dynamic rendering 은 빌드 타임에 기본적으로 캐시되지 **않는다**
+- [X] ~~파라메터(slug) 가 포함된 페이지의 경우 `generateStaticParams` 에 정의경우 빌드 타임 아니면 런타임의 첫 요청에서 캐싱됨~~
+  - 불확실
+    + https://nextjs.org/docs/app/building-your-application/caching#generatestaticparams
+    - [ ] 위 내용에 따른 dynamic 도 첫 요청떄 캐시를 하는데 `generateStaticParams` 이 명시된 곳에서 빠진 경우에만인지 확인이 필요
+- chunk
+  - chunking
+    - route 마다
+      - React Server Comoponent -&gt; **React Server Component Payload** 로 변환
+        - streaming 을 최적화하기 위한 *바이너리* 포맷
+        - rsc 의 결과로 dom 을 업데이트하기 위해 사용
+        - 클라이언트 컴포넌트 placeholder
+        - 클라이언트 컴포넌트로 전달될 props
+        - **클라이언트**의 **Route Cache** 에 저장됨
+        - **Route Cache** 에 존재하는 경우 **요청 자체를 스킵**
+    - suspense 바운더리 마다
+  - 둘을 합쳐서 청크 생성
+    - React Server Component Payload,
+    - Client Componetn javascript to render html on the server
+- 무효화
+  - `fetch(url, { signal: new AbortController() })`
+  - 새로운 빌드 배포
+- opt-out
+  - dynamic function 사용
+    - cookies 
+    - headers
+    - searchParams, 이건 prop
+  - cache 되지 않은 `fetch` 를 사용하는 경우 해당 `fetch` 만 opt-out 된다 나머지 자체는 캐시가 유지된다
+
+### Route Cache
+&gt; 방문했던, 방문할(prefetching) 라우트에 대한 클라이언트 캐시  
+&gt; React Server Component Payload 를 route segment 마다 in-memory 저장  
+&gt; user session 동안 유지
+- 지속시간
+  - static 페이지인 경우 5분
+  - dynamic 페이지인 경우 30초
+    - `&lt;Link prefetch /&gt;` 혹은 `router.prefetch` 를 명시적으로 사용하는 경우 5분
+- 무효화
+  - `router.refresh`
+  - server action
+    - `revalidateTag`
+    - `revalidatePath`
+    - `cookies.set`
+    - `cookies.delete`
+- opt-out
+  - 얜 opt-out 이 없다
+
+### Full Route Cache vs Route Cache
+
+|        | Full Route Cache    | Route Cache            |
+|--------|---------------------|------------------------|
+| 어디서 | Server              | Client                 |
+| 무엇을 | RSCP &amp; HTML, static | RSCP, static &amp; dynamic |
+| 얼마나 | persist             | user session           |
+
+
+## error
+### next.js 13 + next-auth
+signin 을 누르면 제대로 동작하지 않는이슈 브라우저에서는 아래 메시지가 찍힌다
+```sh
+next dev --turbo
+
+[400] /api/auth/providers (194ms)
+[400] /api/auth/_log (30ms)
+[400] /api/auth/error (97ms)
+```
+아래는 브라우저에서 찍히는 로그
+```text
+Error: This action with HTTP GET is not supported by NextAuth.js
+```
+`--turbo` 옵션을 빼니 동작한다. dynamic route 쪽에 문제가 있는 것으로 보인다. 버전 정보를 추가해 둔다.
+```json
+    &quot;next&quot;: &quot;13.1.6&quot;,
+    &quot;next-auth&quot;: &quot;^4.19.2&quot;,
+```
+
+### next-auth/src 를 참조해서 에러나는 경우
+참조가 src로 걸린건지 확인해서 수정할 것
+```sh
+./node_modules/.store/next-auth-virtual-8ec2bd5fde/node_modules/next-auth/src/core/lib/assert.ts:134:27
+Type error: Element implicitly has an &#x27;any&#x27; type because expression of type &#x27;string&#x27; can&#x27;t be used to index type &#x27;Adapter&lt;boolean&gt;&#x27;.
+  No index signature with a parameter of type &#x27;string&#x27; was found on type &#x27;Adapter&lt;boolean&gt;&#x27;.
+
+  132 |       &quot;useVerificationToken&quot;,
+  133 |       &quot;getUserByEmail&quot;,
+&gt; 134 |     ].filter((method) =&gt; !adapter[method])
+      |                           ^
+  135 |
+  136 |     if (missingMethods.length) {
+  137 |       return new MissingAdapterMethods(
+```
+
+### &#x27;sharp&#x27; is required to be installed in standalone mode for the image optimization to function correctly.
+```sh 
+⨯ Error: &#x27;sharp&#x27; is required to be installed in standalone mode for the image optimization to function correctly. Read more at: https://nextjs.org/docs/messages/sharp-missing-in-production
+```
+- arm 에서 빌드하고 x86 에서 [[docker]] 컨테이너가 뜨게되는데 경우 네이티브 빌드 모듈인 `sharp` 없다고 `warning` 이 난다
+- dockerfile 에 글로벌 설치해서 처리해버리는게 가장 깔끔하다 생각된다
+```dockerfile 
+RUN npm install -g --arch=x64 --platform=linux --libc=glibc sharp
+ENV NEXT_SHARP_PATH=/usr/local/lib/node_modules/sharp
+```
+  + https://github.com/lovell/sharp/issues/3877#issuecomment-1850388322
+
+### Error: Next.js package not found
+```sh 
+⨯ Error: Next.js package not found
+
+Debug info:
+- Execution of get_next_package failed
+- Next.js package not found
+```
++ https://github.com/vercel/next.js/issues/56887#issuecomment-1826767117
+- [[pnpm]] 모노레포 구성 후 실행 -&gt; 접근시 에러가 발생
+- `outputFileTracingRoot` 옵션으로 `node_modules` 위치를 주면 해결됨
+
+## link
+- [[react]]
+- [[tailwindcss]]
+- [[yarn]]
+- [[corepack]]
+- [[next-auth]]
+- [[turborepo]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/626bcf6
+" class="bg-white text-black">626bcf6</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/nextjs.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/nextjs.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/nextjs.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/nextjs"><span class="underline">nextjs</span><sup>12</sup></a></span><span><a class="text-blue-600" href="/public-wiki/가능"><span class="underline">가능</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/../dataloader"><span class="underline">../dataloader</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/../nextjs"><span class="underline">../nextjs</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/../react"><span class="underline">../react</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/docker"><span class="underline">docker</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/pnpm"><span class="underline">pnpm</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/react"><span class="underline">react</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/tailwindcss"><span class="underline">tailwindcss</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/yarn"><span class="underline">yarn</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/corepack"><span class="underline">corepack</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/next-auth"><span class="underline">next-auth</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/turborepo"><span class="underline">turborepo</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/about-me"><span class="underline">about-me</span><sup>60</sup></a></span><span><a class="text-blue-600" href="/public-wiki/firebase"><span class="underline">firebase</span><sup>14</sup></a></span><span><a class="text-blue-600" href="/public-wiki/frontend"><span class="underline">frontend</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/index"><span class="underline">index</span><sup>106</sup></a></span><span><a class="text-blue-600" href="/public-wiki/me"><span class="underline">me</span><sup>16</sup></a></span><span><a class="text-blue-600" href="/public-wiki/milvus"><span class="underline">milvus</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/seo"><span class="underline">seo</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/stylexjs"><span class="underline">stylexjs</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-18"><span class="underline">diary/2023-12-18</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-21"><span class="underline">diary/2023-12-21</span><sup>20</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-29"><span class="underline">diary/2023-12-29</span><sup>10</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-03"><span class="underline">diary/2024-01-03</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-08"><span class="underline">diary/2024-01-08</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-25"><span class="underline">diary/2024-01-25</span><sup>59</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-28"><span class="underline">diary/2024-01-28</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-02-22"><span class="underline">diary/2024-02-22</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-02-23"><span class="underline">diary/2024-02-23</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-03-02"><span class="underline">diary/2024-03-02</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-03-17"><span class="underline">diary/2024-03-17</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-03-22"><span class="underline">diary/2024-03-22</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-03-23"><span class="underline">diary/2024-03-23</span><sup>5</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#nextjs">next.js</a></div><div class="pl-2"><a href="#next">next</a></div><div class="pl-4"><a href="#next13">next@13</a></div><div class="pl-4"><a href="#next13-app-directory-setup">next@13 app directory setup</a></div><div class="pl-4"><a href="#server-and-client-components">server and client components</a></div><div class="pl-4"><a href="#static-and-dynamic-rendering">static and dynamic rendering</a></div><div class="pl-2"><a href="#tailwindcss">tailwindcss</a></div><div class="pl-4"><a href="#ui-framework-based-on-tailwindcss-eg-daisyui">ui framework based on tailwindcss (eg. daisyui)</a></div><div class="pl-2"><a href="#config">config</a></div><div class="pl-4"><a href="#standalone">standalone</a></div><div class="pl-2"><a href="#cache">cache</a></div><div class="pl-4"><a href="#request-memoization">Request Memoization</a></div><div class="pl-4"><a href="#data-cache">Data Cache</a></div><div class="pl-4"><a href="#full-route-cache">Full Route Cache</a></div><div class="pl-4"><a href="#route-cache">Route Cache</a></div><div class="pl-4"><a href="#full-route-cache-vs-route-cache">Full Route Cache vs Route Cache</a></div><div class="pl-2"><a href="#error">error</a></div><div class="pl-4"><a href="#nextjs-13--next-auth">next.js 13 + next-auth</a></div><div class="pl-4"><a href="#next-authsrc-를-참조해서-에러나는-경우">next-auth/src 를 참조해서 에러나는 경우</a></div><div class="pl-4"><a href="#sharp-is-required-to-be-installed-in-standalone-mode-for-the-image-optimization-to-function-correctly">&#x27;sharp&#x27; is required to be installed in standalone mode for the image optimization to function correctly.</a></div><div class="pl-4"><a href="#error-nextjs-package-not-found">Error: Next.js package not found</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="nextjs">next.js</h1>
+<p>next.js</p>
+<h2 id="next">next</h2>
+<h3 id="next13">next@13</h3>
+<ul>
+<li>client side cache 를 가지 server 에서 받아온 컴포넌트들을 재활용한다</li>
+<li>partial rendering <ul>
+<li>client navigation 이 일어난 경우 해당 컴포넌트 부분만을 새로 그린다</li>
+</ul>
+</li>
+<li>directory 에 page.tsx 가 있어야 라우팅이 가능해진다</li>
+<li>route groups<ul>
+<li><code class="span">(name)</code> directory</li>
+<li>url 구조에 영향을 주지 않고 <code class="span">layout</code> 등 공통 컴포넌트 사용을 가능하게 한다</li>
+<li>다른 route groups 에 같은 라우트(url) 을 생성하는 경우 에러로 간주된다</li>
+<li>route groups 간의 navigation 은 full page load 가 발생한다</li>
+</ul>
+</li>
+<li>dynamic route<ul>
+<li><code class="span">/[name]/page.tsx</code> 의 경우 <code class="span">({params}: {params: { name: string }})</code> 을 받게 된다</li>
+<li>catch all segments<ul>
+<li><code class="span">/[...name]/page.tsx</code> name 이 하나의 뎁스가 아니라 여러 뎁스인 경우에도 매칭된다</li>
+<li><code class="span">({params}: {params: { name: string[] }})</code></li>
+</ul>
+</li>
+<li>optional catch all segments<ul>
+<li><code class="span">/[...name]/page.tsx</code> <code class="span">name</code> 이 없는 <code class="span">/</code> 의 경우에도 매칭된다</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>page.tsx 는 기본적으로 server component 지만 <code class="span">&#39;use-client&#39;</code> 를 통해 client component 사용이 <a href="가능">가능</a></li>
+<li>layout.tsx <ul>
+<li>중첩가능</li>
+<li>subtree 에서 재사용</li>
+<li>subtree 라우팅시 re-render 되지 않는다</li>
+<li>root layout 이 아니라면 optional</li>
+<li>root layout (최상위 layout.tsx) 는 required</li>
+<li>root layout (최상위 layout.tsx) 는 <html>, <body> 태그를 포함해야한다</li>
+<li>root layout 의 경우는 server component 만가능하다 나머지는 client component 로 활용이 가능하다</li>
+<li>fetch 가 가능하다</li>
+<li>layout fetch 는 자식에게 전달될 수 없지만 children 에서 중복 패치를 하더라도 next.js 가 퍼포먼스 영향 없이 중복을 제거하여 처리</li>
+</ul>
+</li>
+<li>template.tsx<ul>
+<li>client component 로 추측된다</li>
+<li>위치상으로는 layout 의 child</li>
+<li>마찬가지로 중첩이 가능하다</li>
+<li>navigation 시 재사용되는 layout 과 달리 mount 시점마다 다시 instance 화 된다</li>
+<li>둘 중 하나를 쓰는 것이라면 layout 이 더 권장된다</li>
+</ul>
+</li>
+<li>navigation<ul>
+<li><Link> - server and client components, 추천 됨</li>
+<li>useRouter - client components</li>
+<li>조건이 안되서 hard navigation 이 일어나는 경우 loading.tsx 가 호출됨</li>
+</ul>
+</li>
+<li>server components 는 client side 에서 cached 된다<ul>
+<li><code class="span">useRouter().refresh()</code> 를 통해 invaliding 이 가능하다</li>
+</ul>
+</li>
+<li><Link> 컴포넌트가 viewport 안에 들어오면 기본적으로 prefetch 된다
+- prefetch 는 default 가 true
+- dynamic route 의 경우에는 loading.tsx 만 먼저 prefetch</li>
+<li>cache<ul>
+<li>if cache soft, navigation<ul>
+<li>static route</li>
+<li>dynamic route<ul>
+<li>[path] 가 변하지 않은 경우</li>
+</ul>
+</li>
+<li>back/forward navigation</li>
+</ul>
+</li>
+<li>if cache is invalidated, hard navigation</li>
+</ul>
+</li>
+<li>next.js 는 focus and scroll management 를 함</li>
+</ul>
+<p>tbd</p>
+<ul>
+<li>parallel routes - 2 page 를 한번에 그린다(e.g. dashboard)</li>
+</ul>
+<h3 id="next13-app-directory-setup">next@13 app directory setup</h3>
+<pre><code class="hljs language-sh">yarn dlx create-next-app@latest --experimental-app [project]
+<span class="hljs-built_in">cd</span> [project]
+
+corepack <span class="hljs-built_in">enable</span>
+yarn <span class="hljs-built_in">set</span> version stable
+
+yarn config <span class="hljs-built_in">set</span> nodeLinker pnpm <span class="hljs-comment"># 필수는 아님, 기본은 node_modules</span>
+yarn <span class="hljs-comment"># migrate to yarn 3.x</span>
+</code></pre><h3 id="server-and-client-components">server and client components</h3>
+<ul>
+<li><a href="https://beta.nextjs.org/docs/rendering/server-and-client-components" target="_blank">[URL] https://beta.nextjs.org/docs/rendering/server-and-client-components</a></li>
+</ul>
+<ul>
+<li>server component 여러곳에서 같은 data fetch 는 캐시를 통해 공유되어 한번만 fetch 가 일어난다</li>
+<li>client component 에서 server component 를 렌더링할 수 없다<ul>
+<li>client component 에서 children 으로 server component 를 받아서 렌더링한다</li>
+</ul>
+</li>
+<li>server component 에서는 client component 렌더링이 가능하다</li>
+<li>client component 는 최상단에 <code class="span">&#39;use client&#39;</code> 디렉티브 선언이 필요하다<ul>
+<li>기존 많은 라이브러리들은 디렉티브가 없으므로 <strong>server component 에서 사용하는 경우</strong> 래핑이 필요하다</li>
+</ul>
+</li>
+</ul>
+<h3 id="static-and-dynamic-rendering">static and dynamic rendering</h3>
+<ul>
+<li>아래 기능을 사용함으로써 동적 렌더링을 사용할 수 있다<ul>
+<li>dynamic function<ul>
+<li>server component<ul>
+<li>cookies()</li>
+<li>headers()</li>
+</ul>
+</li>
+<li>client component -&gt; <Suspend /> 사용 권고 (loading.ts)<ul>
+<li>useSearchParams()</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>dynamic data fetching<ul>
+<li>dynamic<ul>
+<li>no-store</li>
+<li>revalidate: 0</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>정리<table>
+<thead>
+<tr>
+<th>rendering</th>
+<th>data fetching</th>
+<th>dynamic functions</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>static</td>
+<td>cached</td>
+<td>no</td>
+</tr>
+<tr>
+<td>dynamic</td>
+<td>cached</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>dynamic</td>
+<td>not cached</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>dynamic</td>
+<td>not cached</td>
+<td>yes</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> dynamic = <span class="hljs-string">&#x27;auto&#x27;</span>
+<span class="hljs-comment">// &#x27;auto&#x27; | &#x27;force-dynamic&#x27; | &#x27;error&#x27; | &#x27;force-static&#x27;</span>
+</code></pre><ul>
+<li><a href="https://beta.nextjs.org/docs/api-reference/segment-config#dynamic" target="_blank">[URL] https://beta.nextjs.org/docs/api-reference/segment-config#dynamic</a></li>
+</ul>
+<h2 id="tailwindcss">tailwindcss</h2>
+<pre><code class="hljs language-sh">yarn add -D tailwindcss postcss autoprefixer
+yarn tailwindcss init -p <span class="hljs-comment"># -p 는 postcss 설정 추가</span>
+
+<span class="hljs-built_in">cat</span> app/globals.css &lt;&lt; <span class="hljs-string">EOF # hello
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+EOF</span>
+
+<span class="hljs-built_in">cat</span> tailwind.config.js &lt;&lt; <span class="hljs-string">EOF
+/** @type {import(&#x27;tailwindcss&#x27;).Config} */
+module.exports = {
+  content: [
+    &quot;./app/**/*.{ts,tsx}&quot;,
+    &quot;./pages/**/*.{ts,tsx}&quot;,
+    &quot;./components/**/*.{ts,tsx}&quot;,
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+EOF</span>
+</code></pre><h3 id="ui-framework-based-on-tailwindcss-eg-daisyui">ui framework based on tailwindcss (eg. daisyui)</h3>
+<pre><code class="hljs language-sh">yarn add daisyui
+<span class="hljs-built_in">cat</span> tailwind.config.js &lt;&lt; <span class="hljs-string">EOF
+/** @type {import(&#x27;tailwindcss&#x27;).Config} */
+module.exports = {
+  content: [
+    &quot;./app/**/*.{ts,tsx}&quot;,
+    &quot;./pages/**/*.{ts,tsx}&quot;,
+    &quot;./components/**/*.{ts,tsx}&quot;,
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [
+    require(&#x27;daisyui&#x27;),
+  ],
+}
+EOF</span>
+</code></pre><h2 id="config">config</h2>
+<h3 id="standalone">standalone</h3>
+<ul>
+<li><a href="mailto:next.js@13.2" target="_blank">next.js@13.2</a> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=next.js@13.2&body=from deptno.dev" target="_blank">[지메일로 보내기]</a> standalone 적용 후<ul>
+<li>image size: 465 -&gt; 363 Mb 으로 빠짐 -&gt; 22% down</li>
+<li>memory usage: @ 는 website 에 한번 접속 후의 상태<ul>
+<li>69@129Mi -&gt; 24@65-&gt;83Mi </li>
+<li>69@117Mi -&gt; 25@64-&gt;108Mi</li>
+<li>최적화가 조금 더 들어가는건지 메모리 사용량이 빠짐</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="cache">cache</h2>
+<ul>
+<li><a href="https://nextjs.org/docs/app/building-your-application/caching" target="_blank">[URL] https://nextjs.org/docs/app/building-your-application/caching</a></li>
+</ul>
+<h3 id="request-memoization">Request Memoization</h3>
+<blockquote><p>클라이언트 당 한번의 요청에서 발생하는 캐시 컨트롤</p></blockquote><ul>
+<li><strong>React Component Tree</strong> 내에서 요청당 같은 요청에 대해서 캐싱을 한다 - <a href="../dataloader">dataloader</a> 와 같은 개념<ul>
+<li><a href="../nextjs">nextjs</a> 가 아닌 <a href="../react">react</a> 피쳐다</li>
+<li>fetch 의 <code class="span">GET</code> 에서만 동작</li>
+<li>route handler 에서는 동작하지 않는다 <em>GET</em> 혼동하지 말것, 여긴 리액트 컴포넌트 트리의 일부가 아니기 때문</li>
+<li>특수한 처리를 위해서라면 <code class="span">React.cache</code> 함수를 통해 커스텀 처리 가능</li>
+<li>opt-out 가능, 할일은 없을 듯<ul>
+<li><code class="span">fetch(url, { signal: new AbortController() })</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="data-cache">Data Cache</h3>
+<blockquote><p>Request Memoization 과는 달리 영구적으로 캐시된다</p></blockquote><ul>
+<li>렌더링 중에 만난 <code class="span">fetch</code> 는 기본적으로 캐시된다</li>
+<li><code class="span">fetch(..., { cache: &#39;no-store&#39; })</code> 로 캐시를 무시하고 요청할 수 있으며 이 또한 <strong>캐시</strong>된다</li>
+<li>캐시는 영구적이며 두가지 캐이스로 revalidation 이 가능하다<ul>
+<li>시간 지정(<code class="span">{next: { revalidate: 60 }}</code>)<ul>
+<li><strong>중요한 점</strong>은 시간을 60초로 지정했을때 90초가 지난 시점에 요청이 <strong>처음</strong> 들어왔따면 이때 revalidate 가 진행되고 리턴 자체는 캐시되었던 데이터가 리턴된다. <code class="span">stale-while-revalidate</code> 와 개념이 같다</li>
+</ul>
+</li>
+<li>명시적 요청<ul>
+<li><code class="span">revalidateTag(&#39;tag&#39;)</code> <ul>
+<li><code class="span">{next: { tags: [tag] }}</code> 요청에 대해서 무효화 한다</li>
+</ul>
+</li>
+<li><code class="span">revalidatePath</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code class="span">fetch</code> 메소드를 명시적으로 쓸 수 없어서 옵션을 전달할 수 없는 경우 <em>Soute Segment Config</em>을 사용한다<ul>
+<li><a href="https://nextjs.org/docs/app/building-your-application/caching#segment-config-options" target="_blank">[URL] https://nextjs.org/docs/app/building-your-application/caching#segment-config-options</a></li>
+</ul>
+</li>
+<li>opt-out 가능<ul>
+<li><code class="span">export const revalidate = 0</code></li>
+<li><code class="span">export const dynamic = &#39;force-dynamic&#39;</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="full-route-cache">Full Route Cache</h3>
+<blockquote><p>빌드타임에 생성되는 리액트 서버 컴포넌트 페이로드와 클라이언트 컴포넌트에서 자바스크립트를 통해 생성하는 html</p></blockquote><ul>
+<li>빌드 타임 캐싱, or revalidation</li>
+<li>static rendering 은 빌드 타임에 기본적으로 캐시된다</li>
+<li>dynamic rendering 은 빌드 타임에 기본적으로 캐시되지 <strong>않는다</strong></li>
+<li><input checked="" disabled="" type="checkbox"> <del>파라메터(slug) 가 포함된 페이지의 경우 <code class="span">generateStaticParams</code> 에 정의경우 빌드 타임 아니면 런타임의 첫 요청에서 캐싱됨</del><ul>
+<li>불확실<ul>
+<li><a href="https://nextjs.org/docs/app/building-your-application/caching#generatestaticparams" target="_blank">[URL] https://nextjs.org/docs/app/building-your-application/caching#generatestaticparams</a></li>
+</ul>
+<ul>
+<li><input disabled="" type="checkbox"> 위 내용에 따른 dynamic 도 첫 요청떄 캐시를 하는데 <code class="span">generateStaticParams</code> 이 명시된 곳에서 빠진 경우에만인지 확인이 필요</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>chunk<ul>
+<li>chunking<ul>
+<li>route 마다<ul>
+<li>React Server Comoponent -&gt; <strong>React Server Component Payload</strong> 로 변환<ul>
+<li>streaming 을 최적화하기 위한 <em>바이너리</em> 포맷</li>
+<li>rsc 의 결과로 dom 을 업데이트하기 위해 사용</li>
+<li>클라이언트 컴포넌트 placeholder</li>
+<li>클라이언트 컴포넌트로 전달될 props</li>
+<li><strong>클라이언트</strong>의 <strong>Route Cache</strong> 에 저장됨</li>
+<li><strong>Route Cache</strong> 에 존재하는 경우 <strong>요청 자체를 스킵</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>suspense 바운더리 마다</li>
+</ul>
+</li>
+<li>둘을 합쳐서 청크 생성<ul>
+<li>React Server Component Payload,</li>
+<li>Client Componetn javascript to render html on the server</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>무효화<ul>
+<li><code class="span">fetch(url, { signal: new AbortController() })</code></li>
+<li>새로운 빌드 배포</li>
+</ul>
+</li>
+<li>opt-out<ul>
+<li>dynamic function 사용<ul>
+<li>cookies </li>
+<li>headers</li>
+<li>searchParams, 이건 prop</li>
+</ul>
+</li>
+<li>cache 되지 않은 <code class="span">fetch</code> 를 사용하는 경우 해당 <code class="span">fetch</code> 만 opt-out 된다 나머지 자체는 캐시가 유지된다</li>
+</ul>
+</li>
+</ul>
+<h3 id="route-cache">Route Cache</h3>
+<blockquote><p>방문했던, 방문할(prefetching) 라우트에 대한 클라이언트 캐시<br>React Server Component Payload 를 route segment 마다 in-memory 저장<br>user session 동안 유지</p></blockquote><ul>
+<li>지속시간<ul>
+<li>static 페이지인 경우 5분</li>
+<li>dynamic 페이지인 경우 30초<ul>
+<li><code class="span">&lt;Link prefetch /&gt;</code> 혹은 <code class="span">router.prefetch</code> 를 명시적으로 사용하는 경우 5분</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>무효화<ul>
+<li><code class="span">router.refresh</code></li>
+<li>server action<ul>
+<li><code class="span">revalidateTag</code></li>
+<li><code class="span">revalidatePath</code></li>
+<li><code class="span">cookies.set</code></li>
+<li><code class="span">cookies.delete</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>opt-out<ul>
+<li>얜 opt-out 이 없다</li>
+</ul>
+</li>
+</ul>
+<h3 id="full-route-cache-vs-route-cache">Full Route Cache vs Route Cache</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Full Route Cache</th>
+<th>Route Cache</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>어디서</td>
+<td>Server</td>
+<td>Client</td>
+</tr>
+<tr>
+<td>무엇을</td>
+<td>RSCP &amp; HTML, static</td>
+<td>RSCP, static &amp; dynamic</td>
+</tr>
+<tr>
+<td>얼마나</td>
+<td>persist</td>
+<td>user session</td>
+</tr>
+</tbody></table>
+<h2 id="error">error</h2>
+<h3 id="nextjs-13--next-auth">next.js 13 + next-auth</h3>
+<p>signin 을 누르면 제대로 동작하지 않는이슈 브라우저에서는 아래 메시지가 찍힌다</p>
+<pre><code class="hljs language-sh">next dev --turbo
+
+[400] /api/auth/providers (194ms)
+[400] /api/auth/_log (30ms)
+[400] /api/auth/error (97ms)
+</code></pre><p>아래는 브라우저에서 찍히는 로그</p>
+<pre><code class="hljs language-text">Error: This action with HTTP GET is not supported by NextAuth.js
+</code></pre><p><code class="span">--turbo</code> 옵션을 빼니 동작한다. dynamic route 쪽에 문제가 있는 것으로 보인다. 버전 정보를 추가해 둔다.</p>
+<pre><code class="hljs language-json">    <span class="hljs-attr">&quot;next&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;13.1.6&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;next-auth&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^4.19.2&quot;</span><span class="hljs-punctuation">,</span>
+</code></pre><h3 id="next-authsrc-를-참조해서-에러나는-경우">next-auth/src 를 참조해서 에러나는 경우</h3>
+<p>참조가 src로 걸린건지 확인해서 수정할 것</p>
+<pre><code class="hljs language-sh">./node_modules/.store/next-auth-virtual-8ec2bd5fde/node_modules/next-auth/src/core/lib/assert.ts:134:27
+Type error: Element implicitly has an <span class="hljs-string">&#x27;any&#x27;</span> <span class="hljs-built_in">type</span> because expression of <span class="hljs-built_in">type</span> <span class="hljs-string">&#x27;string&#x27;</span> can<span class="hljs-string">&#x27;t be used to index type &#x27;</span>Adapter&lt;boolean&gt;<span class="hljs-string">&#x27;.
+  No index signature with a parameter of type &#x27;</span>string<span class="hljs-string">&#x27; was found on type &#x27;</span>Adapter&lt;boolean&gt;<span class="hljs-string">&#x27;.
+
+  132 |       &quot;useVerificationToken&quot;,
+  133 |       &quot;getUserByEmail&quot;,
+&gt; 134 |     ].filter((method) =&gt; !adapter[method])
+      |                           ^
+  135 |
+  136 |     if (missingMethods.length) {
+  137 |       return new MissingAdapterMethods(</span>
+</code></pre><h3 id="sharp-is-required-to-be-installed-in-standalone-mode-for-the-image-optimization-to-function-correctly">&#39;sharp&#39; is required to be installed in standalone mode for the image optimization to function correctly.</h3>
+<pre><code class="hljs language-sh">⨯ Error: <span class="hljs-string">&#x27;sharp&#x27;</span> is required to be installed <span class="hljs-keyword">in</span> standalone mode <span class="hljs-keyword">for</span> the image optimization to <span class="hljs-keyword">function</span> correctly. Read more at: https://nextjs.org/docs/messages/sharp-missing-in-production
+</code></pre><ul>
+<li>arm 에서 빌드하고 x86 에서 <a href="docker">docker</a> 컨테이너가 뜨게되는데 경우 네이티브 빌드 모듈인 <code class="span">sharp</code> 없다고 <code class="span">warning</code> 이 난다</li>
+<li>dockerfile 에 글로벌 설치해서 처리해버리는게 가장 깔끔하다 생각된다</li>
+</ul>
+<pre><code class="hljs language-dockerfile"><span class="hljs-keyword">RUN</span><span class="language-bash"> npm install -g --<span class="hljs-built_in">arch</span>=x64 --platform=linux --libc=glibc sharp</span>
+<span class="hljs-keyword">ENV</span> NEXT_SHARP_PATH=/usr/local/lib/node_modules/sharp
+</code></pre><ul>
+<li><a href="https://github.com/lovell/sharp/issues/3877#issuecomment-1850388322" target="_blank">[URL] https://github.com/lovell/sharp/issues/3877#issuecomment-1850388322</a></li>
+</ul>
+<h3 id="error-nextjs-package-not-found">Error: Next.js package not found</h3>
+<pre><code class="hljs language-sh">⨯ Error: Next.js package not found
+
+Debug info:
+- Execution of get_next_package failed
+- Next.js package not found
+</code></pre><ul>
+<li><a href="https://github.com/vercel/next.js/issues/56887#issuecomment-1826767117" target="_blank">[URL] https://github.com/vercel/next.js/issues/56887#issuecomment-1826767117</a></li>
+</ul>
+<ul>
+<li><a href="pnpm">pnpm</a> 모노레포 구성 후 실행 -&gt; 접근시 에러가 발생</li>
+<li><code class="span">outputFileTracingRoot</code> 옵션으로 <code class="span">node_modules</code> 위치를 주면 해결됨</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="react">react</a></li>
+<li><a href="tailwindcss">tailwindcss</a></li>
+<li><a href="yarn">yarn</a></li>
+<li><a href="corepack">corepack</a></li>
+<li><a href="next-auth">next-auth</a></li>
+<li><a href="turborepo">turborepo</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-4c64d053c4d9d270.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-6c34bb9eefa912ee.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"nextjs\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"oZajO7D5cjG2ikbsu8UxW\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/nextjs\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"nextjs\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"nextjs\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"nextjs\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T4dfc,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"nextjs\"\u003enext.js\u003c/h1\u003e\n\u003cp\u003enext.js\u003c/p\u003e\n\u003ch2 id=\"next\"\u003enext\u003c/h2\u003e\n\u003ch3 id=\"next13\"\u003enext@13\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eclient side cache 를 가지 server 에서 받아온 컴포넌트들을 재활용한다\u003c/li\u003e\n\u003cli\u003epartial rendering \u003cul\u003e\n\u003cli\u003eclient navigation 이 일어난 경우 해당 컴포넌트 부분만을 새로 그린다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003edirectory 에 page.tsx 가 있어야 라우팅이 가능해진다\u003c/li\u003e\n\u003cli\u003eroute groups\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e(name)\u003c/code\u003e directory\u003c/li\u003e\n\u003cli\u003eurl 구조에 영향을 주지 않고 \u003ccode class=\"span\"\u003elayout\u003c/code\u003e 등 공통 컴포넌트 사용을 가능하게 한다\u003c/li\u003e\n\u003cli\u003e다른 route groups 에 같은 라우트(url) 을 생성하는 경우 에러로 간주된다\u003c/li\u003e\n\u003cli\u003eroute groups 간의 navigation 은 full page load 가 발생한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003edynamic route\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e/[name]/page.tsx\u003c/code\u003e 의 경우 \u003ccode class=\"span\"\u003e({params}: {params: { name: string }})\u003c/code\u003e 을 받게 된다\u003c/li\u003e\n\u003cli\u003ecatch all segments\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e/[...name]/page.tsx\u003c/code\u003e name 이 하나의 뎁스가 아니라 여러 뎁스인 경우에도 매칭된다\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e({params}: {params: { name: string[] }})\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eoptional catch all segments\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e/[...name]/page.tsx\u003c/code\u003e \u003ccode class=\"span\"\u003ename\u003c/code\u003e 이 없는 \u003ccode class=\"span\"\u003e/\u003c/code\u003e 의 경우에도 매칭된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003epage.tsx 는 기본적으로 server component 지만 \u003ccode class=\"span\"\u003e\u0026#39;use-client\u0026#39;\u003c/code\u003e 를 통해 client component 사용이 \u003ca href=\"가능\"\u003e가능\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003elayout.tsx \u003cul\u003e\n\u003cli\u003e중첩가능\u003c/li\u003e\n\u003cli\u003esubtree 에서 재사용\u003c/li\u003e\n\u003cli\u003esubtree 라우팅시 re-render 되지 않는다\u003c/li\u003e\n\u003cli\u003eroot layout 이 아니라면 optional\u003c/li\u003e\n\u003cli\u003eroot layout (최상위 layout.tsx) 는 required\u003c/li\u003e\n\u003cli\u003eroot layout (최상위 layout.tsx) 는 \u003chtml\u003e, \u003cbody\u003e 태그를 포함해야한다\u003c/li\u003e\n\u003cli\u003eroot layout 의 경우는 server component 만가능하다 나머지는 client component 로 활용이 가능하다\u003c/li\u003e\n\u003cli\u003efetch 가 가능하다\u003c/li\u003e\n\u003cli\u003elayout fetch 는 자식에게 전달될 수 없지만 children 에서 중복 패치를 하더라도 next.js 가 퍼포먼스 영향 없이 중복을 제거하여 처리\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003etemplate.tsx\u003cul\u003e\n\u003cli\u003eclient component 로 추측된다\u003c/li\u003e\n\u003cli\u003e위치상으로는 layout 의 child\u003c/li\u003e\n\u003cli\u003e마찬가지로 중첩이 가능하다\u003c/li\u003e\n\u003cli\u003enavigation 시 재사용되는 layout 과 달리 mount 시점마다 다시 instance 화 된다\u003c/li\u003e\n\u003cli\u003e둘 중 하나를 쓰는 것이라면 layout 이 더 권장된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003enavigation\u003cul\u003e\n\u003cli\u003e\u003cLink\u003e - server and client components, 추천 됨\u003c/li\u003e\n\u003cli\u003euseRouter - client components\u003c/li\u003e\n\u003cli\u003e조건이 안되서 hard navigation 이 일어나는 경우 loading.tsx 가 호출됨\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eserver components 는 client side 에서 cached 된다\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003euseRouter().refresh()\u003c/code\u003e 를 통해 invaliding 이 가능하다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cLink\u003e 컴포넌트가 viewport 안에 들어오면 기본적으로 prefetch 된다\n- prefetch 는 default 가 true\n- dynamic route 의 경우에는 loading.tsx 만 먼저 prefetch\u003c/li\u003e\n\u003cli\u003ecache\u003cul\u003e\n\u003cli\u003eif cache soft, navigation\u003cul\u003e\n\u003cli\u003estatic route\u003c/li\u003e\n\u003cli\u003edynamic route\u003cul\u003e\n\u003cli\u003e[path] 가 변하지 않은 경우\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eback/forward navigation\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eif cache is invalidated, hard navigation\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003enext.js 는 focus and scroll management 를 함\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003etbd\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eparallel routes - 2 page 를 한번에 그린다(e.g. dashboard)\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"next13-app-directory-setup\"\u003enext@13 app directory setup\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eyarn dlx create-next-app@latest --experimental-app [project]\n\u003cspan class=\"hljs-built_in\"\u003ecd\u003c/span\u003e [project]\n\ncorepack \u003cspan class=\"hljs-built_in\"\u003eenable\u003c/span\u003e\nyarn \u003cspan class=\"hljs-built_in\"\u003eset\u003c/span\u003e version stable\n\nyarn config \u003cspan class=\"hljs-built_in\"\u003eset\u003c/span\u003e nodeLinker pnpm \u003cspan class=\"hljs-comment\"\u003e# 필수는 아님, 기본은 node_modules\u003c/span\u003e\nyarn \u003cspan class=\"hljs-comment\"\u003e# migrate to yarn 3.x\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"server-and-client-components\"\u003eserver and client components\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://beta.nextjs.org/docs/rendering/server-and-client-components\" target=\"_blank\"\u003e[URL] https://beta.nextjs.org/docs/rendering/server-and-client-components\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003eserver component 여러곳에서 같은 data fetch 는 캐시를 통해 공유되어 한번만 fetch 가 일어난다\u003c/li\u003e\n\u003cli\u003eclient component 에서 server component 를 렌더링할 수 없다\u003cul\u003e\n\u003cli\u003eclient component 에서 children 으로 server component 를 받아서 렌더링한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eserver component 에서는 client component 렌더링이 가능하다\u003c/li\u003e\n\u003cli\u003eclient component 는 최상단에 \u003ccode class=\"span\"\u003e\u0026#39;use client\u0026#39;\u003c/code\u003e 디렉티브 선언이 필요하다\u003cul\u003e\n\u003cli\u003e기존 많은 라이브러리들은 디렉티브가 없으므로 \u003cstrong\u003eserver component 에서 사용하는 경우\u003c/strong\u003e 래핑이 필요하다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"static-and-dynamic-rendering\"\u003estatic and dynamic rendering\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e아래 기능을 사용함으로써 동적 렌더링을 사용할 수 있다\u003cul\u003e\n\u003cli\u003edynamic function\u003cul\u003e\n\u003cli\u003eserver component\u003cul\u003e\n\u003cli\u003ecookies()\u003c/li\u003e\n\u003cli\u003eheaders()\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eclient component -\u0026gt; \u003cSuspend /\u003e 사용 권고 (loading.ts)\u003cul\u003e\n\u003cli\u003euseSearchParams()\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003edynamic data fetching\u003cul\u003e\n\u003cli\u003edynamic\u003cul\u003e\n\u003cli\u003eno-store\u003c/li\u003e\n\u003cli\u003erevalidate: 0\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e정리\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003erendering\u003c/th\u003e\n\u003cth\u003edata fetching\u003c/th\u003e\n\u003cth\u003edynamic functions\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\u003ctr\u003e\n\u003ctd\u003estatic\u003c/td\u003e\n\u003ctd\u003ecached\u003c/td\u003e\n\u003ctd\u003eno\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003edynamic\u003c/td\u003e\n\u003ctd\u003ecached\u003c/td\u003e\n\u003ctd\u003eyes\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003edynamic\u003c/td\u003e\n\u003ctd\u003enot cached\u003c/td\u003e\n\u003ctd\u003eyes\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003edynamic\u003c/td\u003e\n\u003ctd\u003enot cached\u003c/td\u003e\n\u003ctd\u003eyes\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\u003c/table\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-ts\"\u003e\u003cspan class=\"hljs-keyword\"\u003eexport\u003c/span\u003e \u003cspan class=\"hljs-keyword\"\u003econst\u003c/span\u003e dynamic = \u003cspan class=\"hljs-string\"\u003e\u0026#x27;auto\u0026#x27;\u003c/span\u003e\n\u003cspan class=\"hljs-comment\"\u003e// \u0026#x27;auto\u0026#x27; | \u0026#x27;force-dynamic\u0026#x27; | \u0026#x27;error\u0026#x27; | \u0026#x27;force-static\u0026#x27;\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://beta.nextjs.org/docs/api-reference/segment-config#dynamic\" target=\"_blank\"\u003e[URL] https://beta.nextjs.org/docs/api-reference/segment-config#dynamic\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"tailwindcss\"\u003etailwindcss\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eyarn add -D tailwindcss postcss autoprefixer\nyarn tailwindcss init -p \u003cspan class=\"hljs-comment\"\u003e# -p 는 postcss 설정 추가\u003c/span\u003e\n\n\u003cspan class=\"hljs-built_in\"\u003ecat\u003c/span\u003e app/globals.css \u0026lt;\u0026lt; \u003cspan class=\"hljs-string\"\u003eEOF # hello\n@tailwind base;\n@tailwind components;\n@tailwind utilities;\nEOF\u003c/span\u003e\n\n\u003cspan class=\"hljs-built_in\"\u003ecat\u003c/span\u003e tailwind.config.js \u0026lt;\u0026lt; \u003cspan class=\"hljs-string\"\u003eEOF\n/** @type {import(\u0026#x27;tailwindcss\u0026#x27;).Config} */\nmodule.exports = {\n  content: [\n    \u0026quot;./app/**/*.{ts,tsx}\u0026quot;,\n    \u0026quot;./pages/**/*.{ts,tsx}\u0026quot;,\n    \u0026quot;./components/**/*.{ts,tsx}\u0026quot;,\n  ],\n  theme: {\n    extend: {},\n  },\n  plugins: [],\n}\nEOF\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"ui-framework-based-on-tailwindcss-eg-daisyui\"\u003eui framework based on tailwindcss (eg. daisyui)\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eyarn add daisyui\n\u003cspan class=\"hljs-built_in\"\u003ecat\u003c/span\u003e tailwind.config.js \u0026lt;\u0026lt; \u003cspan class=\"hljs-string\"\u003eEOF\n/** @type {import(\u0026#x27;tailwindcss\u0026#x27;).Config} */\nmodule.exports = {\n  content: [\n    \u0026quot;./app/**/*.{ts,tsx}\u0026quot;,\n    \u0026quot;./pages/**/*.{ts,tsx}\u0026quot;,\n    \u0026quot;./components/**/*.{ts,tsx}\u0026quot;,\n  ],\n  theme: {\n    extend: {},\n  },\n  plugins: [\n    require(\u0026#x27;daisyui\u0026#x27;),\n  ],\n}\nEOF\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"config\"\u003econfig\u003c/h2\u003e\n\u003ch3 id=\"standalone\"\u003estandalone\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"mailto:next.js@13.2\" target=\"_blank\"\u003enext.js@13.2\u003c/a\u003e \u003ca href=\"https://mail.google.com/mail/?view=cm\u0026fs=1\u0026to=next.js@13.2\u0026body=from deptno.dev\" target=\"_blank\"\u003e[지메일로 보내기]\u003c/a\u003e standalone 적용 후\u003cul\u003e\n\u003cli\u003eimage size: 465 -\u0026gt; 363 Mb 으로 빠짐 -\u0026gt; 22% down\u003c/li\u003e\n\u003cli\u003ememory usage: @ 는 website 에 한번 접속 후의 상태\u003cul\u003e\n\u003cli\u003e69@129Mi -\u0026gt; 24@65-\u0026gt;83Mi \u003c/li\u003e\n\u003cli\u003e69@117Mi -\u0026gt; 25@64-\u0026gt;108Mi\u003c/li\u003e\n\u003cli\u003e최적화가 조금 더 들어가는건지 메모리 사용량이 빠짐\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"cache\"\u003ecache\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://nextjs.org/docs/app/building-your-application/caching\" target=\"_blank\"\u003e[URL] https://nextjs.org/docs/app/building-your-application/caching\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"request-memoization\"\u003eRequest Memoization\u003c/h3\u003e\n\u003cblockquote\u003e\u003cp\u003e클라이언트 당 한번의 요청에서 발생하는 캐시 컨트롤\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003eReact Component Tree\u003c/strong\u003e 내에서 요청당 같은 요청에 대해서 캐싱을 한다 - \u003ca href=\"../dataloader\"\u003edataloader\u003c/a\u003e 와 같은 개념\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../nextjs\"\u003enextjs\u003c/a\u003e 가 아닌 \u003ca href=\"../react\"\u003ereact\u003c/a\u003e 피쳐다\u003c/li\u003e\n\u003cli\u003efetch 의 \u003ccode class=\"span\"\u003eGET\u003c/code\u003e 에서만 동작\u003c/li\u003e\n\u003cli\u003eroute handler 에서는 동작하지 않는다 \u003cem\u003eGET\u003c/em\u003e 혼동하지 말것, 여긴 리액트 컴포넌트 트리의 일부가 아니기 때문\u003c/li\u003e\n\u003cli\u003e특수한 처리를 위해서라면 \u003ccode class=\"span\"\u003eReact.cache\u003c/code\u003e 함수를 통해 커스텀 처리 가능\u003c/li\u003e\n\u003cli\u003eopt-out 가능, 할일은 없을 듯\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efetch(url, { signal: new AbortController() })\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"data-cache\"\u003eData Cache\u003c/h3\u003e\n\u003cblockquote\u003e\u003cp\u003eRequest Memoization 과는 달리 영구적으로 캐시된다\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003e렌더링 중에 만난 \u003ccode class=\"span\"\u003efetch\u003c/code\u003e 는 기본적으로 캐시된다\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efetch(..., { cache: \u0026#39;no-store\u0026#39; })\u003c/code\u003e 로 캐시를 무시하고 요청할 수 있으며 이 또한 \u003cstrong\u003e캐시\u003c/strong\u003e된다\u003c/li\u003e\n\u003cli\u003e캐시는 영구적이며 두가지 캐이스로 revalidation 이 가능하다\u003cul\u003e\n\u003cli\u003e시간 지정(\u003ccode class=\"span\"\u003e{next: { revalidate: 60 }}\u003c/code\u003e)\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003e중요한 점\u003c/strong\u003e은 시간을 60초로 지정했을때 90초가 지난 시점에 요청이 \u003cstrong\u003e처음\u003c/strong\u003e 들어왔따면 이때 revalidate 가 진행되고 리턴 자체는 캐시되었던 데이터가 리턴된다. \u003ccode class=\"span\"\u003estale-while-revalidate\u003c/code\u003e 와 개념이 같다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e명시적 요청\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003erevalidateTag(\u0026#39;tag\u0026#39;)\u003c/code\u003e \u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e{next: { tags: [tag] }}\u003c/code\u003e 요청에 대해서 무효화 한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003erevalidatePath\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efetch\u003c/code\u003e 메소드를 명시적으로 쓸 수 없어서 옵션을 전달할 수 없는 경우 \u003cem\u003eSoute Segment Config\u003c/em\u003e을 사용한다\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://nextjs.org/docs/app/building-your-application/caching#segment-config-options\" target=\"_blank\"\u003e[URL] https://nextjs.org/docs/app/building-your-application/caching#segment-config-options\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eopt-out 가능\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eexport const revalidate = 0\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eexport const dynamic = \u0026#39;force-dynamic\u0026#39;\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"full-route-cache\"\u003eFull Route Cache\u003c/h3\u003e\n\u003cblockquote\u003e\u003cp\u003e빌드타임에 생성되는 리액트 서버 컴포넌트 페이로드와 클라이언트 컴포넌트에서 자바스크립트를 통해 생성하는 html\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003e빌드 타임 캐싱, or revalidation\u003c/li\u003e\n\u003cli\u003estatic rendering 은 빌드 타임에 기본적으로 캐시된다\u003c/li\u003e\n\u003cli\u003edynamic rendering 은 빌드 타임에 기본적으로 캐시되지 \u003cstrong\u003e않는다\u003c/strong\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cdel\u003e파라메터(slug) 가 포함된 페이지의 경우 \u003ccode class=\"span\"\u003egenerateStaticParams\u003c/code\u003e 에 정의경우 빌드 타임 아니면 런타임의 첫 요청에서 캐싱됨\u003c/del\u003e\u003cul\u003e\n\u003cli\u003e불확실\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://nextjs.org/docs/app/building-your-application/caching#generatestaticparams\" target=\"_blank\"\u003e[URL] https://nextjs.org/docs/app/building-your-application/caching#generatestaticparams\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 위 내용에 따른 dynamic 도 첫 요청떄 캐시를 하는데 \u003ccode class=\"span\"\u003egenerateStaticParams\u003c/code\u003e 이 명시된 곳에서 빠진 경우에만인지 확인이 필요\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003echunk\u003cul\u003e\n\u003cli\u003echunking\u003cul\u003e\n\u003cli\u003eroute 마다\u003cul\u003e\n\u003cli\u003eReact Server Comoponent -\u0026gt; \u003cstrong\u003eReact Server Component Payload\u003c/strong\u003e 로 변환\u003cul\u003e\n\u003cli\u003estreaming 을 최적화하기 위한 \u003cem\u003e바이너리\u003c/em\u003e 포맷\u003c/li\u003e\n\u003cli\u003ersc 의 결과로 dom 을 업데이트하기 위해 사용\u003c/li\u003e\n\u003cli\u003e클라이언트 컴포넌트 placeholder\u003c/li\u003e\n\u003cli\u003e클라이언트 컴포넌트로 전달될 props\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003e클라이언트\u003c/strong\u003e의 \u003cstrong\u003eRoute Cache\u003c/strong\u003e 에 저장됨\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eRoute Cache\u003c/strong\u003e 에 존재하는 경우 \u003cstrong\u003e요청 자체를 스킵\u003c/strong\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003esuspense 바운더리 마다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e둘을 합쳐서 청크 생성\u003cul\u003e\n\u003cli\u003eReact Server Component Payload,\u003c/li\u003e\n\u003cli\u003eClient Componetn javascript to render html on the server\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e무효화\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efetch(url, { signal: new AbortController() })\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e새로운 빌드 배포\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eopt-out\u003cul\u003e\n\u003cli\u003edynamic function 사용\u003cul\u003e\n\u003cli\u003ecookies \u003c/li\u003e\n\u003cli\u003eheaders\u003c/li\u003e\n\u003cli\u003esearchParams, 이건 prop\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003ecache 되지 않은 \u003ccode class=\"span\"\u003efetch\u003c/code\u003e 를 사용하는 경우 해당 \u003ccode class=\"span\"\u003efetch\u003c/code\u003e 만 opt-out 된다 나머지 자체는 캐시가 유지된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"route-cache\"\u003eRoute Cache\u003c/h3\u003e\n\u003cblockquote\u003e\u003cp\u003e방문했던, 방문할(prefetching) 라우트에 대한 클라이언트 캐시\u003cbr\u003eReact Server Component Payload 를 route segment 마다 in-memory 저장\u003cbr\u003euser session 동안 유지\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003e지속시간\u003cul\u003e\n\u003cli\u003estatic 페이지인 경우 5분\u003c/li\u003e\n\u003cli\u003edynamic 페이지인 경우 30초\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e\u0026lt;Link prefetch /\u0026gt;\u003c/code\u003e 혹은 \u003ccode class=\"span\"\u003erouter.prefetch\u003c/code\u003e 를 명시적으로 사용하는 경우 5분\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e무효화\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003erouter.refresh\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003eserver action\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003erevalidateTag\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003erevalidatePath\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ecookies.set\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ecookies.delete\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eopt-out\u003cul\u003e\n\u003cli\u003e얜 opt-out 이 없다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"full-route-cache-vs-route-cache\"\u003eFull Route Cache vs Route Cache\u003c/h3\u003e\n\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003e\u003c/th\u003e\n\u003cth\u003eFull Route Cache\u003c/th\u003e\n\u003cth\u003eRoute Cache\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\u003ctr\u003e\n\u003ctd\u003e어디서\u003c/td\u003e\n\u003ctd\u003eServer\u003c/td\u003e\n\u003ctd\u003eClient\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e무엇을\u003c/td\u003e\n\u003ctd\u003eRSCP \u0026amp; HTML, static\u003c/td\u003e\n\u003ctd\u003eRSCP, static \u0026amp; dynamic\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e얼마나\u003c/td\u003e\n\u003ctd\u003epersist\u003c/td\u003e\n\u003ctd\u003euser session\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\u003c/table\u003e\n\u003ch2 id=\"error\"\u003eerror\u003c/h2\u003e\n\u003ch3 id=\"nextjs-13--next-auth\"\u003enext.js 13 + next-auth\u003c/h3\u003e\n\u003cp\u003esignin 을 누르면 제대로 동작하지 않는이슈 브라우저에서는 아래 메시지가 찍힌다\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003enext dev --turbo\n\n[400] /api/auth/providers (194ms)\n[400] /api/auth/_log (30ms)\n[400] /api/auth/error (97ms)\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003e아래는 브라우저에서 찍히는 로그\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-text\"\u003eError: This action with HTTP GET is not supported by NextAuth.js\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003e\u003ccode class=\"span\"\u003e--turbo\u003c/code\u003e 옵션을 빼니 동작한다. dynamic route 쪽에 문제가 있는 것으로 보인다. 버전 정보를 추가해 둔다.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-json\"\u003e    \u003cspan class=\"hljs-attr\"\u003e\u0026quot;next\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;13.1.6\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e,\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003e\u0026quot;next-auth\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;^4.19.2\u0026quot;\u003c/span\u003e\u003cspan class=\"hljs-punctuation\"\u003e,\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"next-authsrc-를-참조해서-에러나는-경우\"\u003enext-auth/src 를 참조해서 에러나는 경우\u003c/h3\u003e\n\u003cp\u003e참조가 src로 걸린건지 확인해서 수정할 것\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e./node_modules/.store/next-auth-virtual-8ec2bd5fde/node_modules/next-auth/src/core/lib/assert.ts:134:27\nType error: Element implicitly has an \u003cspan class=\"hljs-string\"\u003e\u0026#x27;any\u0026#x27;\u003c/span\u003e \u003cspan class=\"hljs-built_in\"\u003etype\u003c/span\u003e because expression of \u003cspan class=\"hljs-built_in\"\u003etype\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026#x27;string\u0026#x27;\u003c/span\u003e can\u003cspan class=\"hljs-string\"\u003e\u0026#x27;t be used to index type \u0026#x27;\u003c/span\u003eAdapter\u0026lt;boolean\u0026gt;\u003cspan class=\"hljs-string\"\u003e\u0026#x27;.\n  No index signature with a parameter of type \u0026#x27;\u003c/span\u003estring\u003cspan class=\"hljs-string\"\u003e\u0026#x27; was found on type \u0026#x27;\u003c/span\u003eAdapter\u0026lt;boolean\u0026gt;\u003cspan class=\"hljs-string\"\u003e\u0026#x27;.\n\n  132 |       \u0026quot;useVerificationToken\u0026quot;,\n  133 |       \u0026quot;getUserByEmail\u0026quot;,\n\u0026gt; 134 |     ].filter((method) =\u0026gt; !adapter[method])\n      |                           ^\n  135 |\n  136 |     if (missingMethods.length) {\n  137 |       return new MissingAdapterMethods(\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"sharp-is-required-to-be-installed-in-standalone-mode-for-the-image-optimization-to-function-correctly\"\u003e\u0026#39;sharp\u0026#39; is required to be installed in standalone mode for the image optimization to function correctly.\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e⨯ Error: \u003cspan class=\"hljs-string\"\u003e\u0026#x27;sharp\u0026#x27;\u003c/span\u003e is required to be installed \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e standalone mode \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e the image optimization to \u003cspan class=\"hljs-keyword\"\u003efunction\u003c/span\u003e correctly. Read more at: https://nextjs.org/docs/messages/sharp-missing-in-production\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003earm 에서 빌드하고 x86 에서 \u003ca href=\"docker\"\u003edocker\u003c/a\u003e 컨테이너가 뜨게되는데 경우 네이티브 빌드 모듈인 \u003ccode class=\"span\"\u003esharp\u003c/code\u003e 없다고 \u003ccode class=\"span\"\u003ewarning\u003c/code\u003e 이 난다\u003c/li\u003e\n\u003cli\u003edockerfile 에 글로벌 설치해서 처리해버리는게 가장 깔끔하다 생각된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-dockerfile\"\u003e\u003cspan class=\"hljs-keyword\"\u003eRUN\u003c/span\u003e\u003cspan class=\"language-bash\"\u003e npm install -g --\u003cspan class=\"hljs-built_in\"\u003earch\u003c/span\u003e=x64 --platform=linux --libc=glibc sharp\u003c/span\u003e\n\u003cspan class=\"hljs-keyword\"\u003eENV\u003c/span\u003e NEXT_SHARP_PATH=/usr/local/lib/node_modules/sharp\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/lovell/sharp/issues/3877#issuecomment-1850388322\" target=\"_blank\"\u003e[URL] https://github.com/lovell/sharp/issues/3877#issuecomment-1850388322\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"error-nextjs-package-not-found\"\u003eError: Next.js package not found\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e⨯ Error: Next.js package not found\n\nDebug info:\n- Execution of get_next_package failed\n- Next.js package not found\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/vercel/next.js/issues/56887#issuecomment-1826767117\" target=\"_blank\"\u003e[URL] https://github.com/vercel/next.js/issues/56887#issuecomment-1826767117\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"pnpm\"\u003epnpm\u003c/a\u003e 모노레포 구성 후 실행 -\u0026gt; 접근시 에러가 발생\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eoutputFileTracingRoot\u003c/code\u003e 옵션으로 \u003ccode class=\"span\"\u003enode_modules\u003c/code\u003e 위치를 주면 해결됨\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"react\"\u003ereact\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"tailwindcss\"\u003etailwindcss\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"yarn\"\u003eyarn\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"corepack\"\u003ecorepack\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"next-auth\"\u003enext-auth\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"turborepo\"\u003eturborepo\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/626bcf6\\n\",\"className\":\"bg-white text-black\",\"children\":\"626bcf6\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/nextjs.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/nextjs.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/nextjs.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"nextjs\",\"name\":\"nextjs\",\"val\":12},{\"id\":\"가능\",\"name\":\"가능\",\"val\":\"$undefined\"},{\"id\":\"../dataloader\",\"name\":\"../dataloader\",\"val\":\"$undefined\"},{\"id\":\"../nextjs\",\"name\":\"../nextjs\",\"val\":\"$undefined\"},{\"id\":\"../react\",\"name\":\"../react\",\"val\":\"$undefined\"},{\"id\":\"docker\",\"name\":\"docker\",\"val\":7},{\"id\":\"pnpm\",\"name\":\"pnpm\",\"val\":5},{\"id\":\"react\",\"name\":\"react\",\"val\":4},{\"id\":\"tailwindcss\",\"name\":\"tailwindcss\",\"val\":3},{\"id\":\"yarn\",\"name\":\"yarn\",\"val\":11},{\"id\":\"corepack\",\"name\":\"corepack\",\"val\":3},{\"id\":\"next-auth\",\"name\":\"next-auth\",\"val\":8},{\"id\":\"turborepo\",\"name\":\"turborepo\",\"val\":3},{\"id\":\"about-me\",\"name\":\"about-me\",\"val\":60},{\"id\":\"firebase\",\"name\":\"firebase\",\"val\":14},{\"id\":\"frontend\",\"name\":\"frontend\",\"val\":2},{\"id\":\"index\",\"name\":\"index\",\"val\":106},{\"id\":\"me\",\"name\":\"me\",\"val\":16},{\"id\":\"milvus\",\"name\":\"milvus\",\"val\":9},{\"id\":\"seo\",\"name\":\"seo\",\"val\":7},{\"id\":\"stylexjs\",\"name\":\"stylexjs\",\"val\":3},{\"id\":\"diary/2023-12-18\",\"name\":\"diary/2023-12-18\",\"val\":4},{\"id\":\"diary/2023-12-21\",\"name\":\"diary/2023-12-21\",\"val\":20},{\"id\":\"diary/2023-12-29\",\"name\":\"diary/2023-12-29\",\"val\":10},{\"id\":\"diary/2024-01-03\",\"name\":\"diary/2024-01-03\",\"val\":6},{\"id\":\"diary/2024-01-08\",\"name\":\"diary/2024-01-08\",\"val\":5},{\"id\":\"diary/2024-01-25\",\"name\":\"diary/2024-01-25\",\"val\":59},{\"id\":\"diary/2024-01-28\",\"name\":\"diary/2024-01-28\",\"val\":8},{\"id\":\"diary/2024-02-22\",\"name\":\"diary/2024-02-22\",\"val\":6},{\"id\":\"diary/2024-02-23\",\"name\":\"diary/2024-02-23\",\"val\":7},{\"id\":\"diary/2024-03-02\",\"name\":\"diary/2024-03-02\",\"val\":6},{\"id\":\"diary/2024-03-17\",\"name\":\"diary/2024-03-17\",\"val\":1},{\"id\":\"diary/2024-03-22\",\"name\":\"diary/2024-03-22\",\"val\":1},{\"id\":\"diary/2024-03-23\",\"name\":\"diary/2024-03-23\",\"val\":5}],\"links\":[{\"source\":\"nextjs\",\"target\":\"가능\"},{\"source\":\"nextjs\",\"target\":\"../dataloader\"},{\"source\":\"nextjs\",\"target\":\"../nextjs\"},{\"source\":\"nextjs\",\"target\":\"../react\"},{\"source\":\"nextjs\",\"target\":\"docker\"},{\"source\":\"nextjs\",\"target\":\"pnpm\"},{\"source\":\"nextjs\",\"target\":\"react\"},{\"source\":\"nextjs\",\"target\":\"tailwindcss\"},{\"source\":\"nextjs\",\"target\":\"yarn\"},{\"source\":\"nextjs\",\"target\":\"corepack\"},{\"source\":\"nextjs\",\"target\":\"next-auth\"},{\"source\":\"nextjs\",\"target\":\"turborepo\"},{\"source\":\"about-me\",\"target\":\"nextjs\"},{\"source\":\"about-me\",\"target\":\"nextjs\"},{\"source\":\"firebase\",\"target\":\"nextjs\"},{\"source\":\"frontend\",\"target\":\"nextjs\"},{\"source\":\"index\",\"target\":\"nextjs\"},{\"source\":\"me\",\"target\":\"nextjs\"},{\"source\":\"milvus\",\"target\":\"nextjs\"},{\"source\":\"next-auth\",\"target\":\"nextjs\"},{\"source\":\"react\",\"target\":\"nextjs\"},{\"source\":\"seo\",\"target\":\"nextjs\"},{\"source\":\"seo\",\"target\":\"nextjs\"},{\"source\":\"stylexjs\",\"target\":\"nextjs\"},{\"source\":\"tailwindcss\",\"target\":\"nextjs\"},{\"source\":\"turborepo\",\"target\":\"nextjs\"},{\"source\":\"diary/2023-12-18\",\"target\":\"nextjs\"},{\"source\":\"diary/2023-12-18\",\"target\":\"nextjs\"},{\"source\":\"diary/2023-12-21\",\"target\":\"nextjs\"},{\"source\":\"diary/2023-12-21\",\"target\":\"nextjs\"},{\"source\":\"diary/2023-12-29\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-01-03\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-01-08\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-01-25\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-01-28\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-02-22\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-02-23\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-02-23\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-03-02\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-03-02\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-03-02\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-03-17\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-03-22\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-03-23\",\"target\":\"nextjs\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"nextjs\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/nextjs\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"nextjs\"}],[\"$\",\"sup\",null,{\"children\":12}]]}]}],[\"$\",\"span\",\"가능\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/가능\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"가능\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"../dataloader\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/../dataloader\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"../dataloader\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"../nextjs\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/../nextjs\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"../nextjs\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"../react\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/../react\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"../react\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"docker\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/docker\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"docker\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"pnpm\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/pnpm\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"pnpm\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"react\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/react\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"react\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"tailwindcss\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/tailwindcss\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"tailwindcss\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"yarn\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/yarn\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"yarn\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"corepack\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/corepack\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"corepack\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"next-auth\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/next-auth\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"next-auth\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"turborepo\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/turborepo\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"turborepo\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"about-me\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/about-me\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"about-me\"}],[\"$\",\"sup\",null,{\"children\":60}]]}]}],[\"$\",\"span\",\"firebase\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/firebase\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"firebase\"}],[\"$\",\"sup\",null,{\"children\":14}]]}]}],[\"$\",\"span\",\"frontend\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/frontend\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"frontend\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"index\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/index\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"index\"}],[\"$\",\"sup\",null,{\"children\":106}]]}]}],[\"$\",\"span\",\"me\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/me\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"me\"}],[\"$\",\"sup\",null,{\"children\":16}]]}]}],[\"$\",\"span\",\"milvus\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/milvus\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"milvus\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"seo\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/seo\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"seo\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"stylexjs\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/stylexjs\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"stylexjs\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2023-12-18\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-18\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-18\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"diary/2023-12-21\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-21\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-21\"}],[\"$\",\"sup\",null,{\"children\":20}]]}]}],[\"$\",\"span\",\"diary/2023-12-29\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-29\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-29\"}],[\"$\",\"sup\",null,{\"children\":10}]]}]}],[\"$\",\"span\",\"diary/2024-01-03\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-03\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-03\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"diary/2024-01-08\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-08\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-08\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"diary/2024-01-25\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-25\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-25\"}],[\"$\",\"sup\",null,{\"children\":59}]]}]}],[\"$\",\"span\",\"diary/2024-01-28\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-28\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-28\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"diary/2024-02-22\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-02-22\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-02-22\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"diary/2024-02-23\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-02-23\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-02-23\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"diary/2024-03-02\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-03-02\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-03-02\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"diary/2024-03-17\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-03-17\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-03-17\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"diary/2024-03-22\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-03-22\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-03-22\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"diary/2024-03-23\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-03-23\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-03-23\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"nextjs\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#nextjs\",\"children\":\"next.js\"}]}],[\"$\",\"div\",\"next\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#next\",\"children\":\"next\"}]}],[\"$\",\"div\",\"next13\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#next13\",\"children\":\"next@13\"}]}],[\"$\",\"div\",\"next13-app-directory-setup\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#next13-app-directory-setup\",\"children\":\"next@13 app directory setup\"}]}],[\"$\",\"div\",\"server-and-client-components\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#server-and-client-components\",\"children\":\"server and client components\"}]}],[\"$\",\"div\",\"static-and-dynamic-rendering\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#static-and-dynamic-rendering\",\"children\":\"static and dynamic rendering\"}]}],[\"$\",\"div\",\"tailwindcss\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#tailwindcss\",\"children\":\"tailwindcss\"}]}],[\"$\",\"div\",\"ui-framework-based-on-tailwindcss-eg-daisyui\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#ui-framework-based-on-tailwindcss-eg-daisyui\",\"children\":\"ui framework based on tailwindcss (eg. daisyui)\"}]}],[\"$\",\"div\",\"config\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#config\",\"children\":\"config\"}]}],[\"$\",\"div\",\"standalone\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#standalone\",\"children\":\"standalone\"}]}],[\"$\",\"div\",\"cache\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#cache\",\"children\":\"cache\"}]}],[\"$\",\"div\",\"request-memoization\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#request-memoization\",\"children\":\"Request Memoization\"}]}],[\"$\",\"div\",\"data-cache\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#data-cache\",\"children\":\"Data Cache\"}]}],[\"$\",\"div\",\"full-route-cache\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#full-route-cache\",\"children\":\"Full Route Cache\"}]}],[\"$\",\"div\",\"route-cache\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#route-cache\",\"children\":\"Route Cache\"}]}],[\"$\",\"div\",\"full-route-cache-vs-route-cache\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#full-route-cache-vs-route-cache\",\"children\":\"Full Route Cache vs Route Cache\"}]}],[\"$\",\"div\",\"error\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error\",\"children\":\"error\"}]}],[\"$\",\"div\",\"nextjs-13--next-auth\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#nextjs-13--next-auth\",\"children\":\"next.js 13 + next-auth\"}]}],[\"$\",\"div\",\"next-authsrc-를-참조해서-에러나는-경우\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#next-authsrc-를-참조해서-에러나는-경우\",\"children\":\"next-auth/src 를 참조해서 에러나는 경우\"}]}],[\"$\",\"div\",\"sharp-is-required-to-be-installed-in-standalone-mode-for-the-image-optimization-to-function-correctly\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#sharp-is-required-to-be-installed-in-standalone-mode-for-the-image-optimization-to-function-correctly\",\"children\":\"'sharp' is required to be installed in standalone mode for the image optimization to function correctly.\"}]}],[\"$\",\"div\",\"error-nextjs-package-not-found\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error-nextjs-package-not-found\",\"children\":\"Error: Next.js package not found\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T32be,"])</script><script>self.__next_f.push([1,"\nnext.js\n\n## next\n### next@13\n- client side cache 를 가지 server 에서 받아온 컴포넌트들을 재활용한다\n- partial rendering \n  - client navigation 이 일어난 경우 해당 컴포넌트 부분만을 새로 그린다\n- directory 에 page.tsx 가 있어야 라우팅이 가능해진다\n- route groups\n  - `(name)` directory\n  - url 구조에 영향을 주지 않고 `layout` 등 공통 컴포넌트 사용을 가능하게 한다\n  - 다른 route groups 에 같은 라우트(url) 을 생성하는 경우 에러로 간주된다\n  - route groups 간의 navigation 은 full page load 가 발생한다\n- dynamic route\n  - `/[name]/page.tsx` 의 경우 `({params}: {params: { name: string }})` 을 받게 된다\n  - catch all segments\n    - `/[...name]/page.tsx` name 이 하나의 뎁스가 아니라 여러 뎁스인 경우에도 매칭된다\n    - `({params}: {params: { name: string[] }})`\n  - optional catch all segments\n    - `/[...name]/page.tsx` `name` 이 없는 `/` 의 경우에도 매칭된다\n- page.tsx 는 기본적으로 server component 지만 `'use-client'` 를 통해 client component 사용이 [[가능]]\n- layout.tsx \n  - 중첩가능\n  - subtree 에서 재사용\n  - subtree 라우팅시 re-render 되지 않는다\n  - root layout 이 아니라면 optional\n  - root layout (최상위 layout.tsx) 는 required\n  - root layout (최상위 layout.tsx) 는 \u003chtml\u003e, \u003cbody\u003e 태그를 포함해야한다\n  - root layout 의 경우는 server component 만가능하다 나머지는 client component 로 활용이 가능하다\n  - fetch 가 가능하다\n  - layout fetch 는 자식에게 전달될 수 없지만 children 에서 중복 패치를 하더라도 next.js 가 퍼포먼스 영향 없이 중복을 제거하여 처리\n- template.tsx\n  - client component 로 추측된다\n  - 위치상으로는 layout 의 child\n  - 마찬가지로 중첩이 가능하다\n  - navigation 시 재사용되는 layout 과 달리 mount 시점마다 다시 instance 화 된다\n  - 둘 중 하나를 쓰는 것이라면 layout 이 더 권장된다\n- navigation\n  - \u003cLink\u003e - server and client components, 추천 됨\n  - useRouter - client components\n  - 조건이 안되서 hard navigation 이 일어나는 경우 loading.tsx 가 호출됨\n- server components 는 client side 에서 cached 된다\n  - `useRouter().refresh()` 를 통해 invaliding 이 가능하다\n- \u003cLink\u003e 컴포넌트가 viewport 안에 들어오면 기본적으로 prefetch 된다\n  - prefetch 는 default 가 true\n  - dynamic route 의 경우에는 loading.tsx 만 먼저 prefetch\n- cache\n  - if cache soft, navigation\n    - static route\n    - dynamic route\n      - [path] 가 변하지 않은 경우\n    - back/forward navigation\n  - if cache is invalidated, hard navigation\n- next.js 는 focus and scroll management 를 함\n\ntbd\n- parallel routes - 2 page 를 한번에 그린다(e.g. dashboard)\n\n\n### next@13 app directory setup\n```sh\nyarn dlx create-next-app@latest --experimental-app [project]\ncd [project]\n\ncorepack enable\nyarn set version stable\n\nyarn config set nodeLinker pnpm # 필수는 아님, 기본은 node_modules\nyarn # migrate to yarn 3.x\n```\n\n### server and client components\n+ https://beta.nextjs.org/docs/rendering/server-and-client-components\n- server component 여러곳에서 같은 data fetch 는 캐시를 통해 공유되어 한번만 fetch 가 일어난다\n- client component 에서 server component 를 렌더링할 수 없다\n  - client component 에서 children 으로 server component 를 받아서 렌더링한다\n- server component 에서는 client component 렌더링이 가능하다\n- client component 는 최상단에 `'use client'` 디렉티브 선언이 필요하다\n  - 기존 많은 라이브러리들은 디렉티브가 없으므로 **server component 에서 사용하는 경우** 래핑이 필요하다\n### static and dynamic rendering\n- 아래 기능을 사용함으로써 동적 렌더링을 사용할 수 있다\n  - dynamic function\n    - server component\n      - cookies()\n      - headers()\n    - client component -\u003e \u003cSuspend /\u003e 사용 권고 (loading.ts)\n      - useSearchParams()\n  - dynamic data fetching\n    - dynamic\n      - no-store\n      - revalidate: 0\n  - 정리\n  | rendering | data fetching | dynamic functions |\n  |-----------|---------------|-------------------|\n  | static    | cached        | no                |\n  | dynamic   | cached        | yes               |\n  | dynamic   | not cached    | yes               |\n  | dynamic   | not cached    | yes               |\n\n\n```ts \nexport const dynamic = 'auto'\n// 'auto' | 'force-dynamic' | 'error' | 'force-static'\n```\n  + https://beta.nextjs.org/docs/api-reference/segment-config#dynamic\n\n## tailwindcss\n```sh\nyarn add -D tailwindcss postcss autoprefixer\nyarn tailwindcss init -p # -p 는 postcss 설정 추가\n\ncat app/globals.css \u003c\u003c EOF # hello\n@tailwind base;\n@tailwind components;\n@tailwind utilities;\nEOF\n\ncat tailwind.config.js \u003c\u003c EOF\n/** @type {import('tailwindcss').Config} */\nmodule.exports = {\n  content: [\n    \"./app/**/*.{ts,tsx}\",\n    \"./pages/**/*.{ts,tsx}\",\n    \"./components/**/*.{ts,tsx}\",\n  ],\n  theme: {\n    extend: {},\n  },\n  plugins: [],\n}\nEOF\n```\n\n### ui framework based on tailwindcss (eg. daisyui)\n```sh\nyarn add daisyui\ncat tailwind.config.js \u003c\u003c EOF\n/** @type {import('tailwindcss').Config} */\nmodule.exports = {\n  content: [\n    \"./app/**/*.{ts,tsx}\",\n    \"./pages/**/*.{ts,tsx}\",\n    \"./components/**/*.{ts,tsx}\",\n  ],\n  theme: {\n    extend: {},\n  },\n  plugins: [\n    require('daisyui'),\n  ],\n}\nEOF\n```\n\n## config\n### standalone\n- next.js@13.2 standalone 적용 후\n  - image size: 465 -\u003e 363 Mb 으로 빠짐 -\u003e 22% down\n  - memory usage: @ 는 website 에 한번 접속 후의 상태\n    - 69@129Mi -\u003e 24@65-\u003e83Mi \n    - 69@117Mi -\u003e 25@64-\u003e108Mi\n    - 최적화가 조금 더 들어가는건지 메모리 사용량이 빠짐\n\n## cache\n+ https://nextjs.org/docs/app/building-your-application/caching\n\n### Request Memoization\n\u003e 클라이언트 당 한번의 요청에서 발생하는 캐시 컨트롤\n- **React Component Tree** 내에서 요청당 같은 요청에 대해서 캐싱을 한다 - [[../dataloader|dataloader]] 와 같은 개념\n  - [[../nextjs|nextjs]] 가 아닌 [[../react|react]] 피쳐다\n  - fetch 의 `GET` 에서만 동작\n  - route handler 에서는 동작하지 않는다 *GET* 혼동하지 말것, 여긴 리액트 컴포넌트 트리의 일부가 아니기 때문\n  - 특수한 처리를 위해서라면 `React.cache` 함수를 통해 커스텀 처리 가능\n  - opt-out 가능, 할일은 없을 듯\n    - `fetch(url, { signal: new AbortController() })`\n\n### Data Cache\n\u003e Request Memoization 과는 달리 영구적으로 캐시된다\n- 렌더링 중에 만난 `fetch` 는 기본적으로 캐시된다\n- `fetch(..., { cache: 'no-store' })` 로 캐시를 무시하고 요청할 수 있으며 이 또한 **캐시**된다\n- 캐시는 영구적이며 두가지 캐이스로 revalidation 이 가능하다\n  - 시간 지정(`{next: { revalidate: 60 }}`)\n    - **중요한 점**은 시간을 60초로 지정했을때 90초가 지난 시점에 요청이 **처음** 들어왔따면 이때 revalidate 가 진행되고 리턴 자체는 캐시되었던 데이터가 리턴된다. `stale-while-revalidate` 와 개념이 같다\n  - 명시적 요청\n    - `revalidateTag('tag')` \n      - `{next: { tags: [tag] }}` 요청에 대해서 무효화 한다\n    - `revalidatePath`\n- `fetch` 메소드를 명시적으로 쓸 수 없어서 옵션을 전달할 수 없는 경우 *Soute Segment Config*을 사용한다\n  + https://nextjs.org/docs/app/building-your-application/caching#segment-config-options\n- opt-out 가능\n  - `export const revalidate = 0`\n  - `export const dynamic = 'force-dynamic'`\n\n### Full Route Cache\n\u003e 빌드타임에 생성되는 리액트 서버 컴포넌트 페이로드와 클라이언트 컴포넌트에서 자바스크립트를 통해 생성하는 html\n- 빌드 타임 캐싱, or revalidation\n- static rendering 은 빌드 타임에 기본적으로 캐시된다\n- dynamic rendering 은 빌드 타임에 기본적으로 캐시되지 **않는다**\n- [X] ~~파라메터(slug) 가 포함된 페이지의 경우 `generateStaticParams` 에 정의경우 빌드 타임 아니면 런타임의 첫 요청에서 캐싱됨~~\n  - 불확실\n    + https://nextjs.org/docs/app/building-your-application/caching#generatestaticparams\n    - [ ] 위 내용에 따른 dynamic 도 첫 요청떄 캐시를 하는데 `generateStaticParams` 이 명시된 곳에서 빠진 경우에만인지 확인이 필요\n- chunk\n  - chunking\n    - route 마다\n      - React Server Comoponent -\u003e **React Server Component Payload** 로 변환\n        - streaming 을 최적화하기 위한 *바이너리* 포맷\n        - rsc 의 결과로 dom 을 업데이트하기 위해 사용\n        - 클라이언트 컴포넌트 placeholder\n        - 클라이언트 컴포넌트로 전달될 props\n        - **클라이언트**의 **Route Cache** 에 저장됨\n        - **Route Cache** 에 존재하는 경우 **요청 자체를 스킵**\n    - suspense 바운더리 마다\n  - 둘을 합쳐서 청크 생성\n    - React Server Component Payload,\n    - Client Componetn javascript to render html on the server\n- 무효화\n  - `fetch(url, { signal: new AbortController() })`\n  - 새로운 빌드 배포\n- opt-out\n  - dynamic function 사용\n    - cookies \n    - headers\n    - searchParams, 이건 prop\n  - cache 되지 않은 `fetch` 를 사용하는 경우 해당 `fetch` 만 opt-out 된다 나머지 자체는 캐시가 유지된다\n\n### Route Cache\n\u003e 방문했던, 방문할(prefetching) 라우트에 대한 클라이언트 캐시  \n\u003e React Server Component Payload 를 route segment 마다 in-memory 저장  \n\u003e user session 동안 유지\n- 지속시간\n  - static 페이지인 경우 5분\n  - dynamic 페이지인 경우 30초\n    - `\u003cLink prefetch /\u003e` 혹은 `router.prefetch` 를 명시적으로 사용하는 경우 5분\n- 무효화\n  - `router.refresh`\n  - server action\n    - `revalidateTag`\n    - `revalidatePath`\n    - `cookies.set`\n    - `cookies.delete`\n- opt-out\n  - 얜 opt-out 이 없다\n\n### Full Route Cache vs Route Cache\n\n|        | Full Route Cache    | Route Cache            |\n|--------|---------------------|------------------------|\n| 어디서 | Server              | Client                 |\n| 무엇을 | RSCP \u0026 HTML, static | RSCP, static \u0026 dynamic |\n| 얼마나 | persist             | user session           |\n\n\n## error\n### next.js 13 + next-auth\nsignin 을 누르면 제대로 동작하지 않는이슈 브라우저에서는 아래 메시지가 찍힌다\n```sh\nnext dev --turbo\n\n[400] /api/auth/providers (194ms)\n[400] /api/auth/_log (30ms)\n[400] /api/auth/error (97ms)\n```\n아래는 브라우저에서 찍히는 로그\n```text\nError: This action with HTTP GET is not supported by NextAuth.js\n```\n`--turbo` 옵션을 빼니 동작한다. dynamic route 쪽에 문제가 있는 것으로 보인다. 버전 정보를 추가해 둔다.\n```json\n    \"next\": \"13.1.6\",\n    \"next-auth\": \"^4.19.2\",\n```\n\n### next-auth/src 를 참조해서 에러나는 경우\n참조가 src로 걸린건지 확인해서 수정할 것\n```sh\n./node_modules/.store/next-auth-virtual-8ec2bd5fde/node_modules/next-auth/src/core/lib/assert.ts:134:27\nType error: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Adapter\u003cboolean\u003e'.\n  No index signature with a parameter of type 'string' was found on type 'Adapter\u003cboolean\u003e'.\n\n  132 |       \"useVerificationToken\",\n  133 |       \"getUserByEmail\",\n\u003e 134 |     ].filter((method) =\u003e !adapter[method])\n      |                           ^\n  135 |\n  136 |     if (missingMethods.length) {\n  137 |       return new MissingAdapterMethods(\n```\n\n### 'sharp' is required to be installed in standalone mode for the image optimization to function correctly.\n```sh \n⨯ Error: 'sharp' is required to be installed in standalone mode for the image optimization to function correctly. Read more at: https://nextjs.org/docs/messages/sharp-missing-in-production\n```\n- arm 에서 빌드하고 x86 에서 [[docker]] 컨테이너가 뜨게되는데 경우 네이티브 빌드 모듈인 `sharp` 없다고 `warning` 이 난다\n- dockerfile 에 글로벌 설치해서 처리해버리는게 가장 깔끔하다 생각된다\n```dockerfile \nRUN npm install -g --arch=x64 --platform=linux --libc=glibc sharp\nENV NEXT_SHARP_PATH=/usr/local/lib/node_modules/sharp\n```\n  + https://github.com/lovell/sharp/issues/3877#issuecomment-1850388322\n\n### Error: Next.js package not found\n```sh \n⨯ Error: Next.js package not found\n\nDebug info:\n- Execution of get_next_package failed\n- Next.js package not found\n```\n+ https://github.com/vercel/next.js/issues/56887#issuecomment-1826767117\n- [[pnpm]] 모노레포 구성 후 실행 -\u003e 접근시 에러가 발생\n- `outputFileTracingRoot` 옵션으로 `node_modules` 위치를 주면 해결됨\n\n## link\n- [[react]]\n- [[tailwindcss]]\n- [[yarn]]\n- [[corepack]]\n- [[next-auth]]\n- [[turborepo]]\n"])</script><script>self.__next_f.push([1,"16:T32be,"])</script><script>self.__next_f.push([1,"\nnext.js\n\n## next\n### next@13\n- client side cache 를 가지 server 에서 받아온 컴포넌트들을 재활용한다\n- partial rendering \n  - client navigation 이 일어난 경우 해당 컴포넌트 부분만을 새로 그린다\n- directory 에 page.tsx 가 있어야 라우팅이 가능해진다\n- route groups\n  - `(name)` directory\n  - url 구조에 영향을 주지 않고 `layout` 등 공통 컴포넌트 사용을 가능하게 한다\n  - 다른 route groups 에 같은 라우트(url) 을 생성하는 경우 에러로 간주된다\n  - route groups 간의 navigation 은 full page load 가 발생한다\n- dynamic route\n  - `/[name]/page.tsx` 의 경우 `({params}: {params: { name: string }})` 을 받게 된다\n  - catch all segments\n    - `/[...name]/page.tsx` name 이 하나의 뎁스가 아니라 여러 뎁스인 경우에도 매칭된다\n    - `({params}: {params: { name: string[] }})`\n  - optional catch all segments\n    - `/[...name]/page.tsx` `name` 이 없는 `/` 의 경우에도 매칭된다\n- page.tsx 는 기본적으로 server component 지만 `'use-client'` 를 통해 client component 사용이 [[가능]]\n- layout.tsx \n  - 중첩가능\n  - subtree 에서 재사용\n  - subtree 라우팅시 re-render 되지 않는다\n  - root layout 이 아니라면 optional\n  - root layout (최상위 layout.tsx) 는 required\n  - root layout (최상위 layout.tsx) 는 \u003chtml\u003e, \u003cbody\u003e 태그를 포함해야한다\n  - root layout 의 경우는 server component 만가능하다 나머지는 client component 로 활용이 가능하다\n  - fetch 가 가능하다\n  - layout fetch 는 자식에게 전달될 수 없지만 children 에서 중복 패치를 하더라도 next.js 가 퍼포먼스 영향 없이 중복을 제거하여 처리\n- template.tsx\n  - client component 로 추측된다\n  - 위치상으로는 layout 의 child\n  - 마찬가지로 중첩이 가능하다\n  - navigation 시 재사용되는 layout 과 달리 mount 시점마다 다시 instance 화 된다\n  - 둘 중 하나를 쓰는 것이라면 layout 이 더 권장된다\n- navigation\n  - \u003cLink\u003e - server and client components, 추천 됨\n  - useRouter - client components\n  - 조건이 안되서 hard navigation 이 일어나는 경우 loading.tsx 가 호출됨\n- server components 는 client side 에서 cached 된다\n  - `useRouter().refresh()` 를 통해 invaliding 이 가능하다\n- \u003cLink\u003e 컴포넌트가 viewport 안에 들어오면 기본적으로 prefetch 된다\n  - prefetch 는 default 가 true\n  - dynamic route 의 경우에는 loading.tsx 만 먼저 prefetch\n- cache\n  - if cache soft, navigation\n    - static route\n    - dynamic route\n      - [path] 가 변하지 않은 경우\n    - back/forward navigation\n  - if cache is invalidated, hard navigation\n- next.js 는 focus and scroll management 를 함\n\ntbd\n- parallel routes - 2 page 를 한번에 그린다(e.g. dashboard)\n\n\n### next@13 app directory setup\n```sh\nyarn dlx create-next-app@latest --experimental-app [project]\ncd [project]\n\ncorepack enable\nyarn set version stable\n\nyarn config set nodeLinker pnpm # 필수는 아님, 기본은 node_modules\nyarn # migrate to yarn 3.x\n```\n\n### server and client components\n+ https://beta.nextjs.org/docs/rendering/server-and-client-components\n- server component 여러곳에서 같은 data fetch 는 캐시를 통해 공유되어 한번만 fetch 가 일어난다\n- client component 에서 server component 를 렌더링할 수 없다\n  - client component 에서 children 으로 server component 를 받아서 렌더링한다\n- server component 에서는 client component 렌더링이 가능하다\n- client component 는 최상단에 `'use client'` 디렉티브 선언이 필요하다\n  - 기존 많은 라이브러리들은 디렉티브가 없으므로 **server component 에서 사용하는 경우** 래핑이 필요하다\n### static and dynamic rendering\n- 아래 기능을 사용함으로써 동적 렌더링을 사용할 수 있다\n  - dynamic function\n    - server component\n      - cookies()\n      - headers()\n    - client component -\u003e \u003cSuspend /\u003e 사용 권고 (loading.ts)\n      - useSearchParams()\n  - dynamic data fetching\n    - dynamic\n      - no-store\n      - revalidate: 0\n  - 정리\n  | rendering | data fetching | dynamic functions |\n  |-----------|---------------|-------------------|\n  | static    | cached        | no                |\n  | dynamic   | cached        | yes               |\n  | dynamic   | not cached    | yes               |\n  | dynamic   | not cached    | yes               |\n\n\n```ts \nexport const dynamic = 'auto'\n// 'auto' | 'force-dynamic' | 'error' | 'force-static'\n```\n  + https://beta.nextjs.org/docs/api-reference/segment-config#dynamic\n\n## tailwindcss\n```sh\nyarn add -D tailwindcss postcss autoprefixer\nyarn tailwindcss init -p # -p 는 postcss 설정 추가\n\ncat app/globals.css \u003c\u003c EOF # hello\n@tailwind base;\n@tailwind components;\n@tailwind utilities;\nEOF\n\ncat tailwind.config.js \u003c\u003c EOF\n/** @type {import('tailwindcss').Config} */\nmodule.exports = {\n  content: [\n    \"./app/**/*.{ts,tsx}\",\n    \"./pages/**/*.{ts,tsx}\",\n    \"./components/**/*.{ts,tsx}\",\n  ],\n  theme: {\n    extend: {},\n  },\n  plugins: [],\n}\nEOF\n```\n\n### ui framework based on tailwindcss (eg. daisyui)\n```sh\nyarn add daisyui\ncat tailwind.config.js \u003c\u003c EOF\n/** @type {import('tailwindcss').Config} */\nmodule.exports = {\n  content: [\n    \"./app/**/*.{ts,tsx}\",\n    \"./pages/**/*.{ts,tsx}\",\n    \"./components/**/*.{ts,tsx}\",\n  ],\n  theme: {\n    extend: {},\n  },\n  plugins: [\n    require('daisyui'),\n  ],\n}\nEOF\n```\n\n## config\n### standalone\n- next.js@13.2 standalone 적용 후\n  - image size: 465 -\u003e 363 Mb 으로 빠짐 -\u003e 22% down\n  - memory usage: @ 는 website 에 한번 접속 후의 상태\n    - 69@129Mi -\u003e 24@65-\u003e83Mi \n    - 69@117Mi -\u003e 25@64-\u003e108Mi\n    - 최적화가 조금 더 들어가는건지 메모리 사용량이 빠짐\n\n## cache\n+ https://nextjs.org/docs/app/building-your-application/caching\n\n### Request Memoization\n\u003e 클라이언트 당 한번의 요청에서 발생하는 캐시 컨트롤\n- **React Component Tree** 내에서 요청당 같은 요청에 대해서 캐싱을 한다 - [[../dataloader|dataloader]] 와 같은 개념\n  - [[../nextjs|nextjs]] 가 아닌 [[../react|react]] 피쳐다\n  - fetch 의 `GET` 에서만 동작\n  - route handler 에서는 동작하지 않는다 *GET* 혼동하지 말것, 여긴 리액트 컴포넌트 트리의 일부가 아니기 때문\n  - 특수한 처리를 위해서라면 `React.cache` 함수를 통해 커스텀 처리 가능\n  - opt-out 가능, 할일은 없을 듯\n    - `fetch(url, { signal: new AbortController() })`\n\n### Data Cache\n\u003e Request Memoization 과는 달리 영구적으로 캐시된다\n- 렌더링 중에 만난 `fetch` 는 기본적으로 캐시된다\n- `fetch(..., { cache: 'no-store' })` 로 캐시를 무시하고 요청할 수 있으며 이 또한 **캐시**된다\n- 캐시는 영구적이며 두가지 캐이스로 revalidation 이 가능하다\n  - 시간 지정(`{next: { revalidate: 60 }}`)\n    - **중요한 점**은 시간을 60초로 지정했을때 90초가 지난 시점에 요청이 **처음** 들어왔따면 이때 revalidate 가 진행되고 리턴 자체는 캐시되었던 데이터가 리턴된다. `stale-while-revalidate` 와 개념이 같다\n  - 명시적 요청\n    - `revalidateTag('tag')` \n      - `{next: { tags: [tag] }}` 요청에 대해서 무효화 한다\n    - `revalidatePath`\n- `fetch` 메소드를 명시적으로 쓸 수 없어서 옵션을 전달할 수 없는 경우 *Soute Segment Config*을 사용한다\n  + https://nextjs.org/docs/app/building-your-application/caching#segment-config-options\n- opt-out 가능\n  - `export const revalidate = 0`\n  - `export const dynamic = 'force-dynamic'`\n\n### Full Route Cache\n\u003e 빌드타임에 생성되는 리액트 서버 컴포넌트 페이로드와 클라이언트 컴포넌트에서 자바스크립트를 통해 생성하는 html\n- 빌드 타임 캐싱, or revalidation\n- static rendering 은 빌드 타임에 기본적으로 캐시된다\n- dynamic rendering 은 빌드 타임에 기본적으로 캐시되지 **않는다**\n- [X] ~~파라메터(slug) 가 포함된 페이지의 경우 `generateStaticParams` 에 정의경우 빌드 타임 아니면 런타임의 첫 요청에서 캐싱됨~~\n  - 불확실\n    + https://nextjs.org/docs/app/building-your-application/caching#generatestaticparams\n    - [ ] 위 내용에 따른 dynamic 도 첫 요청떄 캐시를 하는데 `generateStaticParams` 이 명시된 곳에서 빠진 경우에만인지 확인이 필요\n- chunk\n  - chunking\n    - route 마다\n      - React Server Comoponent -\u003e **React Server Component Payload** 로 변환\n        - streaming 을 최적화하기 위한 *바이너리* 포맷\n        - rsc 의 결과로 dom 을 업데이트하기 위해 사용\n        - 클라이언트 컴포넌트 placeholder\n        - 클라이언트 컴포넌트로 전달될 props\n        - **클라이언트**의 **Route Cache** 에 저장됨\n        - **Route Cache** 에 존재하는 경우 **요청 자체를 스킵**\n    - suspense 바운더리 마다\n  - 둘을 합쳐서 청크 생성\n    - React Server Component Payload,\n    - Client Componetn javascript to render html on the server\n- 무효화\n  - `fetch(url, { signal: new AbortController() })`\n  - 새로운 빌드 배포\n- opt-out\n  - dynamic function 사용\n    - cookies \n    - headers\n    - searchParams, 이건 prop\n  - cache 되지 않은 `fetch` 를 사용하는 경우 해당 `fetch` 만 opt-out 된다 나머지 자체는 캐시가 유지된다\n\n### Route Cache\n\u003e 방문했던, 방문할(prefetching) 라우트에 대한 클라이언트 캐시  \n\u003e React Server Component Payload 를 route segment 마다 in-memory 저장  \n\u003e user session 동안 유지\n- 지속시간\n  - static 페이지인 경우 5분\n  - dynamic 페이지인 경우 30초\n    - `\u003cLink prefetch /\u003e` 혹은 `router.prefetch` 를 명시적으로 사용하는 경우 5분\n- 무효화\n  - `router.refresh`\n  - server action\n    - `revalidateTag`\n    - `revalidatePath`\n    - `cookies.set`\n    - `cookies.delete`\n- opt-out\n  - 얜 opt-out 이 없다\n\n### Full Route Cache vs Route Cache\n\n|        | Full Route Cache    | Route Cache            |\n|--------|---------------------|------------------------|\n| 어디서 | Server              | Client                 |\n| 무엇을 | RSCP \u0026 HTML, static | RSCP, static \u0026 dynamic |\n| 얼마나 | persist             | user session           |\n\n\n## error\n### next.js 13 + next-auth\nsignin 을 누르면 제대로 동작하지 않는이슈 브라우저에서는 아래 메시지가 찍힌다\n```sh\nnext dev --turbo\n\n[400] /api/auth/providers (194ms)\n[400] /api/auth/_log (30ms)\n[400] /api/auth/error (97ms)\n```\n아래는 브라우저에서 찍히는 로그\n```text\nError: This action with HTTP GET is not supported by NextAuth.js\n```\n`--turbo` 옵션을 빼니 동작한다. dynamic route 쪽에 문제가 있는 것으로 보인다. 버전 정보를 추가해 둔다.\n```json\n    \"next\": \"13.1.6\",\n    \"next-auth\": \"^4.19.2\",\n```\n\n### next-auth/src 를 참조해서 에러나는 경우\n참조가 src로 걸린건지 확인해서 수정할 것\n```sh\n./node_modules/.store/next-auth-virtual-8ec2bd5fde/node_modules/next-auth/src/core/lib/assert.ts:134:27\nType error: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Adapter\u003cboolean\u003e'.\n  No index signature with a parameter of type 'string' was found on type 'Adapter\u003cboolean\u003e'.\n\n  132 |       \"useVerificationToken\",\n  133 |       \"getUserByEmail\",\n\u003e 134 |     ].filter((method) =\u003e !adapter[method])\n      |                           ^\n  135 |\n  136 |     if (missingMethods.length) {\n  137 |       return new MissingAdapterMethods(\n```\n\n### 'sharp' is required to be installed in standalone mode for the image optimization to function correctly.\n```sh \n⨯ Error: 'sharp' is required to be installed in standalone mode for the image optimization to function correctly. Read more at: https://nextjs.org/docs/messages/sharp-missing-in-production\n```\n- arm 에서 빌드하고 x86 에서 [[docker]] 컨테이너가 뜨게되는데 경우 네이티브 빌드 모듈인 `sharp` 없다고 `warning` 이 난다\n- dockerfile 에 글로벌 설치해서 처리해버리는게 가장 깔끔하다 생각된다\n```dockerfile \nRUN npm install -g --arch=x64 --platform=linux --libc=glibc sharp\nENV NEXT_SHARP_PATH=/usr/local/lib/node_modules/sharp\n```\n  + https://github.com/lovell/sharp/issues/3877#issuecomment-1850388322\n\n### Error: Next.js package not found\n```sh \n⨯ Error: Next.js package not found\n\nDebug info:\n- Execution of get_next_package failed\n- Next.js package not found\n```\n+ https://github.com/vercel/next.js/issues/56887#issuecomment-1826767117\n- [[pnpm]] 모노레포 구성 후 실행 -\u003e 접근시 에러가 발생\n- `outputFileTracingRoot` 옵션으로 `node_modules` 위치를 주면 해결됨\n\n## link\n- [[react]]\n- [[tailwindcss]]\n- [[yarn]]\n- [[corepack]]\n- [[next-auth]]\n- [[turborepo]]\n"])</script><script>self.__next_f.push([1,"17:T32be,"])</script><script>self.__next_f.push([1,"\nnext.js\n\n## next\n### next@13\n- client side cache 를 가지 server 에서 받아온 컴포넌트들을 재활용한다\n- partial rendering \n  - client navigation 이 일어난 경우 해당 컴포넌트 부분만을 새로 그린다\n- directory 에 page.tsx 가 있어야 라우팅이 가능해진다\n- route groups\n  - `(name)` directory\n  - url 구조에 영향을 주지 않고 `layout` 등 공통 컴포넌트 사용을 가능하게 한다\n  - 다른 route groups 에 같은 라우트(url) 을 생성하는 경우 에러로 간주된다\n  - route groups 간의 navigation 은 full page load 가 발생한다\n- dynamic route\n  - `/[name]/page.tsx` 의 경우 `({params}: {params: { name: string }})` 을 받게 된다\n  - catch all segments\n    - `/[...name]/page.tsx` name 이 하나의 뎁스가 아니라 여러 뎁스인 경우에도 매칭된다\n    - `({params}: {params: { name: string[] }})`\n  - optional catch all segments\n    - `/[...name]/page.tsx` `name` 이 없는 `/` 의 경우에도 매칭된다\n- page.tsx 는 기본적으로 server component 지만 `'use-client'` 를 통해 client component 사용이 [[가능]]\n- layout.tsx \n  - 중첩가능\n  - subtree 에서 재사용\n  - subtree 라우팅시 re-render 되지 않는다\n  - root layout 이 아니라면 optional\n  - root layout (최상위 layout.tsx) 는 required\n  - root layout (최상위 layout.tsx) 는 \u003chtml\u003e, \u003cbody\u003e 태그를 포함해야한다\n  - root layout 의 경우는 server component 만가능하다 나머지는 client component 로 활용이 가능하다\n  - fetch 가 가능하다\n  - layout fetch 는 자식에게 전달될 수 없지만 children 에서 중복 패치를 하더라도 next.js 가 퍼포먼스 영향 없이 중복을 제거하여 처리\n- template.tsx\n  - client component 로 추측된다\n  - 위치상으로는 layout 의 child\n  - 마찬가지로 중첩이 가능하다\n  - navigation 시 재사용되는 layout 과 달리 mount 시점마다 다시 instance 화 된다\n  - 둘 중 하나를 쓰는 것이라면 layout 이 더 권장된다\n- navigation\n  - \u003cLink\u003e - server and client components, 추천 됨\n  - useRouter - client components\n  - 조건이 안되서 hard navigation 이 일어나는 경우 loading.tsx 가 호출됨\n- server components 는 client side 에서 cached 된다\n  - `useRouter().refresh()` 를 통해 invaliding 이 가능하다\n- \u003cLink\u003e 컴포넌트가 viewport 안에 들어오면 기본적으로 prefetch 된다\n  - prefetch 는 default 가 true\n  - dynamic route 의 경우에는 loading.tsx 만 먼저 prefetch\n- cache\n  - if cache soft, navigation\n    - static route\n    - dynamic route\n      - [path] 가 변하지 않은 경우\n    - back/forward navigation\n  - if cache is invalidated, hard navigation\n- next.js 는 focus and scroll management 를 함\n\ntbd\n- parallel routes - 2 page 를 한번에 그린다(e.g. dashboard)\n\n\n### next@13 app directory setup\n```sh\nyarn dlx create-next-app@latest --experimental-app [project]\ncd [project]\n\ncorepack enable\nyarn set version stable\n\nyarn config set nodeLinker pnpm # 필수는 아님, 기본은 node_modules\nyarn # migrate to yarn 3.x\n```\n\n### server and client components\n+ https://beta.nextjs.org/docs/rendering/server-and-client-components\n- server component 여러곳에서 같은 data fetch 는 캐시를 통해 공유되어 한번만 fetch 가 일어난다\n- client component 에서 server component 를 렌더링할 수 없다\n  - client component 에서 children 으로 server component 를 받아서 렌더링한다\n- server component 에서는 client component 렌더링이 가능하다\n- client component 는 최상단에 `'use client'` 디렉티브 선언이 필요하다\n  - 기존 많은 라이브러리들은 디렉티브가 없으므로 **server component 에서 사용하는 경우** 래핑이 필요하다\n### static and dynamic rendering\n- 아래 기능을 사용함으로써 동적 렌더링을 사용할 수 있다\n  - dynamic function\n    - server component\n      - cookies()\n      - headers()\n    - client component -\u003e \u003cSuspend /\u003e 사용 권고 (loading.ts)\n      - useSearchParams()\n  - dynamic data fetching\n    - dynamic\n      - no-store\n      - revalidate: 0\n  - 정리\n  | rendering | data fetching | dynamic functions |\n  |-----------|---------------|-------------------|\n  | static    | cached        | no                |\n  | dynamic   | cached        | yes               |\n  | dynamic   | not cached    | yes               |\n  | dynamic   | not cached    | yes               |\n\n\n```ts \nexport const dynamic = 'auto'\n// 'auto' | 'force-dynamic' | 'error' | 'force-static'\n```\n  + https://beta.nextjs.org/docs/api-reference/segment-config#dynamic\n\n## tailwindcss\n```sh\nyarn add -D tailwindcss postcss autoprefixer\nyarn tailwindcss init -p # -p 는 postcss 설정 추가\n\ncat app/globals.css \u003c\u003c EOF # hello\n@tailwind base;\n@tailwind components;\n@tailwind utilities;\nEOF\n\ncat tailwind.config.js \u003c\u003c EOF\n/** @type {import('tailwindcss').Config} */\nmodule.exports = {\n  content: [\n    \"./app/**/*.{ts,tsx}\",\n    \"./pages/**/*.{ts,tsx}\",\n    \"./components/**/*.{ts,tsx}\",\n  ],\n  theme: {\n    extend: {},\n  },\n  plugins: [],\n}\nEOF\n```\n\n### ui framework based on tailwindcss (eg. daisyui)\n```sh\nyarn add daisyui\ncat tailwind.config.js \u003c\u003c EOF\n/** @type {import('tailwindcss').Config} */\nmodule.exports = {\n  content: [\n    \"./app/**/*.{ts,tsx}\",\n    \"./pages/**/*.{ts,tsx}\",\n    \"./components/**/*.{ts,tsx}\",\n  ],\n  theme: {\n    extend: {},\n  },\n  plugins: [\n    require('daisyui'),\n  ],\n}\nEOF\n```\n\n## config\n### standalone\n- next.js@13.2 standalone 적용 후\n  - image size: 465 -\u003e 363 Mb 으로 빠짐 -\u003e 22% down\n  - memory usage: @ 는 website 에 한번 접속 후의 상태\n    - 69@129Mi -\u003e 24@65-\u003e83Mi \n    - 69@117Mi -\u003e 25@64-\u003e108Mi\n    - 최적화가 조금 더 들어가는건지 메모리 사용량이 빠짐\n\n## cache\n+ https://nextjs.org/docs/app/building-your-application/caching\n\n### Request Memoization\n\u003e 클라이언트 당 한번의 요청에서 발생하는 캐시 컨트롤\n- **React Component Tree** 내에서 요청당 같은 요청에 대해서 캐싱을 한다 - [[../dataloader|dataloader]] 와 같은 개념\n  - [[../nextjs|nextjs]] 가 아닌 [[../react|react]] 피쳐다\n  - fetch 의 `GET` 에서만 동작\n  - route handler 에서는 동작하지 않는다 *GET* 혼동하지 말것, 여긴 리액트 컴포넌트 트리의 일부가 아니기 때문\n  - 특수한 처리를 위해서라면 `React.cache` 함수를 통해 커스텀 처리 가능\n  - opt-out 가능, 할일은 없을 듯\n    - `fetch(url, { signal: new AbortController() })`\n\n### Data Cache\n\u003e Request Memoization 과는 달리 영구적으로 캐시된다\n- 렌더링 중에 만난 `fetch` 는 기본적으로 캐시된다\n- `fetch(..., { cache: 'no-store' })` 로 캐시를 무시하고 요청할 수 있으며 이 또한 **캐시**된다\n- 캐시는 영구적이며 두가지 캐이스로 revalidation 이 가능하다\n  - 시간 지정(`{next: { revalidate: 60 }}`)\n    - **중요한 점**은 시간을 60초로 지정했을때 90초가 지난 시점에 요청이 **처음** 들어왔따면 이때 revalidate 가 진행되고 리턴 자체는 캐시되었던 데이터가 리턴된다. `stale-while-revalidate` 와 개념이 같다\n  - 명시적 요청\n    - `revalidateTag('tag')` \n      - `{next: { tags: [tag] }}` 요청에 대해서 무효화 한다\n    - `revalidatePath`\n- `fetch` 메소드를 명시적으로 쓸 수 없어서 옵션을 전달할 수 없는 경우 *Soute Segment Config*을 사용한다\n  + https://nextjs.org/docs/app/building-your-application/caching#segment-config-options\n- opt-out 가능\n  - `export const revalidate = 0`\n  - `export const dynamic = 'force-dynamic'`\n\n### Full Route Cache\n\u003e 빌드타임에 생성되는 리액트 서버 컴포넌트 페이로드와 클라이언트 컴포넌트에서 자바스크립트를 통해 생성하는 html\n- 빌드 타임 캐싱, or revalidation\n- static rendering 은 빌드 타임에 기본적으로 캐시된다\n- dynamic rendering 은 빌드 타임에 기본적으로 캐시되지 **않는다**\n- [X] ~~파라메터(slug) 가 포함된 페이지의 경우 `generateStaticParams` 에 정의경우 빌드 타임 아니면 런타임의 첫 요청에서 캐싱됨~~\n  - 불확실\n    + https://nextjs.org/docs/app/building-your-application/caching#generatestaticparams\n    - [ ] 위 내용에 따른 dynamic 도 첫 요청떄 캐시를 하는데 `generateStaticParams` 이 명시된 곳에서 빠진 경우에만인지 확인이 필요\n- chunk\n  - chunking\n    - route 마다\n      - React Server Comoponent -\u003e **React Server Component Payload** 로 변환\n        - streaming 을 최적화하기 위한 *바이너리* 포맷\n        - rsc 의 결과로 dom 을 업데이트하기 위해 사용\n        - 클라이언트 컴포넌트 placeholder\n        - 클라이언트 컴포넌트로 전달될 props\n        - **클라이언트**의 **Route Cache** 에 저장됨\n        - **Route Cache** 에 존재하는 경우 **요청 자체를 스킵**\n    - suspense 바운더리 마다\n  - 둘을 합쳐서 청크 생성\n    - React Server Component Payload,\n    - Client Componetn javascript to render html on the server\n- 무효화\n  - `fetch(url, { signal: new AbortController() })`\n  - 새로운 빌드 배포\n- opt-out\n  - dynamic function 사용\n    - cookies \n    - headers\n    - searchParams, 이건 prop\n  - cache 되지 않은 `fetch` 를 사용하는 경우 해당 `fetch` 만 opt-out 된다 나머지 자체는 캐시가 유지된다\n\n### Route Cache\n\u003e 방문했던, 방문할(prefetching) 라우트에 대한 클라이언트 캐시  \n\u003e React Server Component Payload 를 route segment 마다 in-memory 저장  \n\u003e user session 동안 유지\n- 지속시간\n  - static 페이지인 경우 5분\n  - dynamic 페이지인 경우 30초\n    - `\u003cLink prefetch /\u003e` 혹은 `router.prefetch` 를 명시적으로 사용하는 경우 5분\n- 무효화\n  - `router.refresh`\n  - server action\n    - `revalidateTag`\n    - `revalidatePath`\n    - `cookies.set`\n    - `cookies.delete`\n- opt-out\n  - 얜 opt-out 이 없다\n\n### Full Route Cache vs Route Cache\n\n|        | Full Route Cache    | Route Cache            |\n|--------|---------------------|------------------------|\n| 어디서 | Server              | Client                 |\n| 무엇을 | RSCP \u0026 HTML, static | RSCP, static \u0026 dynamic |\n| 얼마나 | persist             | user session           |\n\n\n## error\n### next.js 13 + next-auth\nsignin 을 누르면 제대로 동작하지 않는이슈 브라우저에서는 아래 메시지가 찍힌다\n```sh\nnext dev --turbo\n\n[400] /api/auth/providers (194ms)\n[400] /api/auth/_log (30ms)\n[400] /api/auth/error (97ms)\n```\n아래는 브라우저에서 찍히는 로그\n```text\nError: This action with HTTP GET is not supported by NextAuth.js\n```\n`--turbo` 옵션을 빼니 동작한다. dynamic route 쪽에 문제가 있는 것으로 보인다. 버전 정보를 추가해 둔다.\n```json\n    \"next\": \"13.1.6\",\n    \"next-auth\": \"^4.19.2\",\n```\n\n### next-auth/src 를 참조해서 에러나는 경우\n참조가 src로 걸린건지 확인해서 수정할 것\n```sh\n./node_modules/.store/next-auth-virtual-8ec2bd5fde/node_modules/next-auth/src/core/lib/assert.ts:134:27\nType error: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Adapter\u003cboolean\u003e'.\n  No index signature with a parameter of type 'string' was found on type 'Adapter\u003cboolean\u003e'.\n\n  132 |       \"useVerificationToken\",\n  133 |       \"getUserByEmail\",\n\u003e 134 |     ].filter((method) =\u003e !adapter[method])\n      |                           ^\n  135 |\n  136 |     if (missingMethods.length) {\n  137 |       return new MissingAdapterMethods(\n```\n\n### 'sharp' is required to be installed in standalone mode for the image optimization to function correctly.\n```sh \n⨯ Error: 'sharp' is required to be installed in standalone mode for the image optimization to function correctly. Read more at: https://nextjs.org/docs/messages/sharp-missing-in-production\n```\n- arm 에서 빌드하고 x86 에서 [[docker]] 컨테이너가 뜨게되는데 경우 네이티브 빌드 모듈인 `sharp` 없다고 `warning` 이 난다\n- dockerfile 에 글로벌 설치해서 처리해버리는게 가장 깔끔하다 생각된다\n```dockerfile \nRUN npm install -g --arch=x64 --platform=linux --libc=glibc sharp\nENV NEXT_SHARP_PATH=/usr/local/lib/node_modules/sharp\n```\n  + https://github.com/lovell/sharp/issues/3877#issuecomment-1850388322\n\n### Error: Next.js package not found\n```sh \n⨯ Error: Next.js package not found\n\nDebug info:\n- Execution of get_next_package failed\n- Next.js package not found\n```\n+ https://github.com/vercel/next.js/issues/56887#issuecomment-1826767117\n- [[pnpm]] 모노레포 구성 후 실행 -\u003e 접근시 에러가 발생\n- `outputFileTracingRoot` 옵션으로 `node_modules` 위치를 주면 해결됨\n\n## link\n- [[react]]\n- [[tailwindcss]]\n- [[yarn]]\n- [[corepack]]\n- [[next-auth]]\n- [[turborepo]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# next.js\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# next.js\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/nextjs\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# next.js\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

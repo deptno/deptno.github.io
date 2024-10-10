@@ -1,0 +1,289 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-6c34bb9eefa912ee.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","diary/2024-01-15","c"]
+0:["oZajO7D5cjG2ikbsu8UxW",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","diary/2024-01-15","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"diary\",\"2024-01-15\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","diary/2024-01-15","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:T105f,<ul>
+<li><a href="../xcode">xcode</a> 빌드 환경 구분<ul>
+<li>목적<ul>
+<li>환경에 따라 각자 다른 앱으로 설치를 구분</li>
+<li>다른 deeplink scheme 을 갖기 위함</li>
+</ul>
+</li>
+<li>각기 설치를 위해<ul>
+<li><a href="../ios">ios</a> 는 bundle identifier 가 달라져야한다</li>
+<li><a href="../android">android</a> 는 package name 이 변경되어야할 것으로 추측<ul>
+<li><a href="../chatgpt">chatgpt</a> android id 가 달라야한다고 말함</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>분리<table>
+<thead>
+<tr>
+<th></th>
+<th>local</th>
+<th>development</th>
+<th>production</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>env</td>
+<td>.env</td>
+<td>.env.dev</td>
+<td>.env.production</td>
+</tr>
+</tbody></table>
+</li>
+<li>os<table>
+<thead>
+<tr>
+<th></th>
+<th>ios</th>
+<th>android</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>file</td>
+<td>info.plist</td>
+<td>AndroidManafiest.xml</td>
+</tr>
+<tr>
+<td>앱이름</td>
+<td>CFBundleDisplayName</td>
+<td>android:label</td>
+</tr>
+<tr>
+<td>scheme</td>
+<td>CFBundleURLSchemes</td>
+<td>android:scheme</td>
+</tr>
+</tbody></table>
+</li>
+<li><a href="../devide-app-by-development-env"></a> 에 정리<ul>
+<li>project -&gt; info -&gt; configuration 추가</li>
+<li>project -&gt; target -&gt; build settings -&gt; packaging -&gt; product bundler identifier 환경별로 분리<ul>
+<li>project 가 아니라 <strong>target</strong> 을 수정해야한다</li>
+</ul>
+</li>
+<li>project -&gt; target -&gt; build settings -&gt; + 버튼 눌러서 user define 변수 추가<ul>
+<li>실수로 target 대신 <strong>project</strong> 에 설정했지만 상관없이 가능하다</li>
+<li>DISPLAY_APP_NAME 에 환경에 맞게 보여줄 앱 이름 추가</li>
+</ul>
+</li>
+<li><a href="../firebase">firebase</a> build_app 함수 인자로 <code class="span">configuration = &quot;[추가한이름]&quot;,</code> 를 넣어준다</li>
+<li>환경이 맞지 않기 때문에 <a href="../firebase">firebase</a> 업로드에 실패한다</li>
+<li>bundle identifier 분리시<ul>
+<li>장점<ul>
+<li>로컬 빌드, 데브 빌드, 프로덕션을 따로 설치할 수 있다</li>
+<li>빌드 버전  확인을 위해 로컬빌드를 다시할 필요없다</li>
+</ul>
+</li>
+<li>단점<ul>
+<li><a href="testflight">testflight</a> 사용을 위한다면 앱 추가 생성 필요</li>
+<li><a href="../firebase">firebase</a> 사용시 앱 추가 생성 필요<ul>
+<li>GoogleService-info.plist<ul>
+<li>앱 ID 자체는 변하지 않기 때문에 <a href="../xcode">xcode</a> user define 변수를 통해서 해결 가능할 것으로 추측</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>앱스토어 제출용이아닌데 생성하는것은 너무 귀찮으므로<ul>
+<li>firebase distribution 에 배포시 환경에 따라  bundle identifier 를 구분하고</li>
+<li>testflight 는 실제 앱 버전에 대한 테스트용으로 쓰는게 좋을 것 같음</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>firebase 프로젝트 생성시 기준과 비교하여<ul>
+<li>GOOGLE_APP_ID 다름 - firebase id 로 추측</li>
+<li>BUNDLE_ID 다름</li>
+<li>CLIENT_ID 없음<ul>
+<li>console.cloud.google.com 사용자 인증 정보 oauth 2.0 client id 에서 발급된 아이디</li>
+<li>구글 인증에 쓰이는 것으로 추측</li>
+<li><input disabled="" type="checkbox"> 없는데 구글로그인 잘된다</li>
+</ul>
+</li>
+<li>REVERSE_CLIENT_ID 없음</li>
+</ul>
+</li>
+<li>이후 <a href="../fastlane">fastlane</a> 빌드 해보면 profile을 찾지 못해서 에러가 발생한다<ul>
+<li>bundle identifier 에 맞는 profile 수동 생성한 후, 맞는 identifier 를 선택한다(이건 xcode 에서 자동으로 생성한 것으로 보임)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="../fcm">fcm</a> 읽어볼 글,  포맷관련<ul>
+<li><a href="https://firebase.google.com/docs/cloud-messaging/understand-delivery?hl=ko&platform=ios" target="_blank">[URL] https://firebase.google.com/docs/cloud-messaging/understand-delivery?hl=ko&platform=ios</a> - <a href="../mistake">mistake</a> fcm topic 포맷은 base64가 아니다 특수 문자 제거한 이후 encodeURIComponetn 돌려야한다</li>
+</ul>
+</li>
+<li><a href="../apple">apple</a> 로그인</li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/626bcf6\n","className":"bg-white text-black","children":"626bcf6"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/diary/2024-01-15.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/diary/2024-01-15.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/diary/2024-01-15.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"diary/2024-01-15","name":"diary/2024-01-15","val":14},{"id":"xcode","name":"xcode","val":16},{"id":"ios","name":"ios","val":11},{"id":"android","name":"android","val":23},{"id":"chatgpt","name":"chatgpt","val":3},{"id":"devide-app-by-development-env","name":"devide-app-by-development-env","val":30},{"id":"firebase","name":"firebase","val":14},{"id":"diary/testflight","name":"diary/testflight","val":"$undefined"},{"id":"fastlane","name":"fastlane","val":26},{"id":"fcm","name":"fcm","val":21},{"id":"mistake","name":"mistake","val":"$undefined"},{"id":"apple","name":"apple","val":7},{"id":"diary/index","name":"diary/index","val":381}],"links":[{"source":"diary/2024-01-15","target":"xcode"},{"source":"diary/2024-01-15","target":"ios"},{"source":"diary/2024-01-15","target":"android"},{"source":"diary/2024-01-15","target":"chatgpt"},{"source":"diary/2024-01-15","target":"devide-app-by-development-env"},{"source":"diary/2024-01-15","target":"firebase"},{"source":"diary/2024-01-15","target":"firebase"},{"source":"diary/2024-01-15","target":"diary/testflight"},{"source":"diary/2024-01-15","target":"firebase"},{"source":"diary/2024-01-15","target":"xcode"},{"source":"diary/2024-01-15","target":"fastlane"},{"source":"diary/2024-01-15","target":"fcm"},{"source":"diary/2024-01-15","target":"mistake"},{"source":"diary/2024-01-15","target":"apple"},{"source":"devide-app-by-development-env","target":"diary/2024-01-15"},{"source":"diary/index","target":"diary/2024-01-15"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","diary/2024-01-15",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-01-15","children":[["$","span",null,{"className":"underline","children":"diary/2024-01-15"}],["$","sup",null,{"children":14}]]}]}],["$","span","xcode",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/xcode","children":[["$","span",null,{"className":"underline","children":"xcode"}],["$","sup",null,{"children":16}]]}]}],["$","span","ios",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ios","children":[["$","span",null,{"className":"underline","children":"ios"}],["$","sup",null,{"children":11}]]}]}],["$","span","android",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/android","children":[["$","span",null,{"className":"underline","children":"android"}],["$","sup",null,{"children":23}]]}]}],["$","span","chatgpt",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/chatgpt","children":[["$","span",null,{"className":"underline","children":"chatgpt"}],["$","sup",null,{"children":3}]]}]}],["$","span","devide-app-by-development-env",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/devide-app-by-development-env","children":[["$","span",null,{"className":"underline","children":"devide-app-by-development-env"}],["$","sup",null,{"children":30}]]}]}],["$","span","firebase",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/firebase","children":[["$","span",null,{"className":"underline","children":"firebase"}],["$","sup",null,{"children":14}]]}]}],["$","span","diary/testflight",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/testflight","children":[["$","span",null,{"className":"underline","children":"diary/testflight"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","fastlane",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/fastlane","children":[["$","span",null,{"className":"underline","children":"fastlane"}],["$","sup",null,{"children":26}]]}]}],["$","span","fcm",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/fcm","children":[["$","span",null,{"className":"underline","children":"fcm"}],["$","sup",null,{"children":21}]]}]}],["$","span","mistake",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/mistake","children":[["$","span",null,{"className":"underline","children":"mistake"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","apple",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/apple","children":[["$","span",null,{"className":"underline","children":"apple"}],["$","sup",null,{"children":7}]]}]}],["$","span","diary/index",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/index","children":[["$","span",null,{"className":"underline","children":"diary/index"}],["$","sup",null,{"children":381}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[]}],["$","div",null,{"className":"flex flex-wrap gap-2 pb-2 m-0 leading-tight ml-auto","children":[["$","$Lf",null,{"className":"text-blue-600 underline","href":"/public-wiki/diary/2024-01-14","children":["이전(","2024-01-14",")"]}],["$","$Lf",null,{"className":"text-blue-600 underline","href":"/public-wiki/diary/2024-01-16","children":["다음(","2024-01-16",")"]}]]}]]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:Td61,  - 목적
+    - 환경에 따라 각자 다른 앱으로 설치를 구분
+    - 다른 deeplink scheme 을 갖기 위함
+  - 각기 설치를 위해
+    - [[../ios|ios]] 는 bundle identifier 가 달라져야한다
+    - [[../android|android]] 는 package name 이 변경되어야할 것으로 추측
+      - [[../chatgpt|chatgpt]] android id 가 달라야한다고 말함
+  - 분리
+    |        | local | development | production      |
+    |--------|-------|-------------|-----------------|
+    | env    | .env  | .env.dev    | .env.production |
+  - os
+    |        | ios                 | android              |
+    |--------|---------------------|----------------------|
+    | file   | info.plist          | AndroidManafiest.xml |
+    | 앱이름 | CFBundleDisplayName | android:label        |
+    | scheme | CFBundleURLSchemes  | android:scheme       |
+  - [[../devide-app-by-development-env||앱 개발 환경 분리]] 에 정리
+    - project -> info -> configuration 추가
+    - project -> target -> build settings -> packaging -> product bundler identifier 환경별로 분리
+      - project 가 아니라 **target** 을 수정해야한다
+    - project -> target -> build settings -> + 버튼 눌러서 user define 변수 추가
+      - 실수로 target 대신 **project** 에 설정했지만 상관없이 가능하다
+      - DISPLAY_APP_NAME 에 환경에 맞게 보여줄 앱 이름 추가
+    - [[../firebase|firebase]] build_app 함수 인자로 `configuration = "[추가한이름]",` 를 넣어준다
+    - 환경이 맞지 않기 때문에 [[../firebase|firebase]] 업로드에 실패한다
+    - bundle identifier 분리시
+      - 장점
+        - 로컬 빌드, 데브 빌드, 프로덕션을 따로 설치할 수 있다
+        - 빌드 버전  확인을 위해 로컬빌드를 다시할 필요없다
+      - 단점
+        - [[testflight]] 사용을 위한다면 앱 추가 생성 필요
+        - [[../firebase|firebase]] 사용시 앱 추가 생성 필요
+          - GoogleService-info.plist
+            - 앱 ID 자체는 변하지 않기 때문에 [[../xcode|xcode]] user define 변수를 통해서 해결 가능할 것으로 추측
+      - 앱스토어 제출용이아닌데 생성하는것은 너무 귀찮으므로
+        - firebase distribution 에 배포시 환경에 따라  bundle identifier 를 구분하고
+        - testflight 는 실제 앱 버전에 대한 테스트용으로 쓰는게 좋을 것 같음
+    - firebase 프로젝트 생성시 기준과 비교하여
+      - GOOGLE_APP_ID 다름 - firebase id 로 추측
+      - BUNDLE_ID 다름
+      - CLIENT_ID 없음
+        - console.cloud.google.com 사용자 인증 정보 oauth 2.0 client id 에서 발급된 아이디
+        - 구글 인증에 쓰이는 것으로 추측
+        - [ ] 없는데 구글로그인 잘된다
+      - REVERSE_CLIENT_ID 없음
+    - 이후 [[../fastlane|fastlane]] 빌드 해보면 profile을 찾지 못해서 에러가 발생한다
+      - bundle identifier 에 맞는 profile 수동 생성한 후, 맞는 identifier 를 선택한다(이건 xcode 에서 자동으로 생성한 것으로 보임)
+- [[../fcm|fcm]] 읽어볼 글,  포맷관련
+  + https://firebase.google.com/docs/cloud-messaging/understand-delivery?hl=ko&platform=ios - [[../mistake|mistake]] fcm topic 포맷은 base64가 아니다 특수 문자 제거한 이후 encodeURIComponetn 돌려야한다
+- [[../apple|apple]] 로그인
+12:Td61,  - 목적
+    - 환경에 따라 각자 다른 앱으로 설치를 구분
+    - 다른 deeplink scheme 을 갖기 위함
+  - 각기 설치를 위해
+    - [[../ios|ios]] 는 bundle identifier 가 달라져야한다
+    - [[../android|android]] 는 package name 이 변경되어야할 것으로 추측
+      - [[../chatgpt|chatgpt]] android id 가 달라야한다고 말함
+  - 분리
+    |        | local | development | production      |
+    |--------|-------|-------------|-----------------|
+    | env    | .env  | .env.dev    | .env.production |
+  - os
+    |        | ios                 | android              |
+    |--------|---------------------|----------------------|
+    | file   | info.plist          | AndroidManafiest.xml |
+    | 앱이름 | CFBundleDisplayName | android:label        |
+    | scheme | CFBundleURLSchemes  | android:scheme       |
+  - [[../devide-app-by-development-env||앱 개발 환경 분리]] 에 정리
+    - project -> info -> configuration 추가
+    - project -> target -> build settings -> packaging -> product bundler identifier 환경별로 분리
+      - project 가 아니라 **target** 을 수정해야한다
+    - project -> target -> build settings -> + 버튼 눌러서 user define 변수 추가
+      - 실수로 target 대신 **project** 에 설정했지만 상관없이 가능하다
+      - DISPLAY_APP_NAME 에 환경에 맞게 보여줄 앱 이름 추가
+    - [[../firebase|firebase]] build_app 함수 인자로 `configuration = "[추가한이름]",` 를 넣어준다
+    - 환경이 맞지 않기 때문에 [[../firebase|firebase]] 업로드에 실패한다
+    - bundle identifier 분리시
+      - 장점
+        - 로컬 빌드, 데브 빌드, 프로덕션을 따로 설치할 수 있다
+        - 빌드 버전  확인을 위해 로컬빌드를 다시할 필요없다
+      - 단점
+        - [[testflight]] 사용을 위한다면 앱 추가 생성 필요
+        - [[../firebase|firebase]] 사용시 앱 추가 생성 필요
+          - GoogleService-info.plist
+            - 앱 ID 자체는 변하지 않기 때문에 [[../xcode|xcode]] user define 변수를 통해서 해결 가능할 것으로 추측
+      - 앱스토어 제출용이아닌데 생성하는것은 너무 귀찮으므로
+        - firebase distribution 에 배포시 환경에 따라  bundle identifier 를 구분하고
+        - testflight 는 실제 앱 버전에 대한 테스트용으로 쓰는게 좋을 것 같음
+    - firebase 프로젝트 생성시 기준과 비교하여
+      - GOOGLE_APP_ID 다름 - firebase id 로 추측
+      - BUNDLE_ID 다름
+      - CLIENT_ID 없음
+        - console.cloud.google.com 사용자 인증 정보 oauth 2.0 client id 에서 발급된 아이디
+        - 구글 인증에 쓰이는 것으로 추측
+        - [ ] 없는데 구글로그인 잘된다
+      - REVERSE_CLIENT_ID 없음
+    - 이후 [[../fastlane|fastlane]] 빌드 해보면 profile을 찾지 못해서 에러가 발생한다
+      - bundle identifier 에 맞는 profile 수동 생성한 후, 맞는 identifier 를 선택한다(이건 xcode 에서 자동으로 생성한 것으로 보임)
+- [[../fcm|fcm]] 읽어볼 글,  포맷관련
+  + https://firebase.google.com/docs/cloud-messaging/understand-delivery?hl=ko&platform=ios - [[../mistake|mistake]] fcm topic 포맷은 base64가 아니다 특수 문자 제거한 이후 encodeURIComponetn 돌려야한다
+- [[../apple|apple]] 로그인
+13:Td61,  - 목적
+    - 환경에 따라 각자 다른 앱으로 설치를 구분
+    - 다른 deeplink scheme 을 갖기 위함
+  - 각기 설치를 위해
+    - [[../ios|ios]] 는 bundle identifier 가 달라져야한다
+    - [[../android|android]] 는 package name 이 변경되어야할 것으로 추측
+      - [[../chatgpt|chatgpt]] android id 가 달라야한다고 말함
+  - 분리
+    |        | local | development | production      |
+    |--------|-------|-------------|-----------------|
+    | env    | .env  | .env.dev    | .env.production |
+  - os
+    |        | ios                 | android              |
+    |--------|---------------------|----------------------|
+    | file   | info.plist          | AndroidManafiest.xml |
+    | 앱이름 | CFBundleDisplayName | android:label        |
+    | scheme | CFBundleURLSchemes  | android:scheme       |
+  - [[../devide-app-by-development-env||앱 개발 환경 분리]] 에 정리
+    - project -> info -> configuration 추가
+    - project -> target -> build settings -> packaging -> product bundler identifier 환경별로 분리
+      - project 가 아니라 **target** 을 수정해야한다
+    - project -> target -> build settings -> + 버튼 눌러서 user define 변수 추가
+      - 실수로 target 대신 **project** 에 설정했지만 상관없이 가능하다
+      - DISPLAY_APP_NAME 에 환경에 맞게 보여줄 앱 이름 추가
+    - [[../firebase|firebase]] build_app 함수 인자로 `configuration = "[추가한이름]",` 를 넣어준다
+    - 환경이 맞지 않기 때문에 [[../firebase|firebase]] 업로드에 실패한다
+    - bundle identifier 분리시
+      - 장점
+        - 로컬 빌드, 데브 빌드, 프로덕션을 따로 설치할 수 있다
+        - 빌드 버전  확인을 위해 로컬빌드를 다시할 필요없다
+      - 단점
+        - [[testflight]] 사용을 위한다면 앱 추가 생성 필요
+        - [[../firebase|firebase]] 사용시 앱 추가 생성 필요
+          - GoogleService-info.plist
+            - 앱 ID 자체는 변하지 않기 때문에 [[../xcode|xcode]] user define 변수를 통해서 해결 가능할 것으로 추측
+      - 앱스토어 제출용이아닌데 생성하는것은 너무 귀찮으므로
+        - firebase distribution 에 배포시 환경에 따라  bundle identifier 를 구분하고
+        - testflight 는 실제 앱 버전에 대한 테스트용으로 쓰는게 좋을 것 같음
+    - firebase 프로젝트 생성시 기준과 비교하여
+      - GOOGLE_APP_ID 다름 - firebase id 로 추측
+      - BUNDLE_ID 다름
+      - CLIENT_ID 없음
+        - console.cloud.google.com 사용자 인증 정보 oauth 2.0 client id 에서 발급된 아이디
+        - 구글 인증에 쓰이는 것으로 추측
+        - [ ] 없는데 구글로그인 잘된다
+      - REVERSE_CLIENT_ID 없음
+    - 이후 [[../fastlane|fastlane]] 빌드 해보면 profile을 찾지 못해서 에러가 발생한다
+      - bundle identifier 에 맞는 profile 수동 생성한 후, 맞는 identifier 를 선택한다(이건 xcode 에서 자동으로 생성한 것으로 보임)
+- [[../fcm|fcm]] 읽어볼 글,  포맷관련
+  + https://firebase.google.com/docs/cloud-messaging/understand-delivery?hl=ko&platform=ios - [[../mistake|mistake]] fcm topic 포맷은 base64가 아니다 특수 문자 제거한 이후 encodeURIComponetn 돌려야한다
+- [[../apple|apple]] 로그인
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"- [[../xcode|xcode]] 빌드 환경 구분"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"- [[../xcode|xcode]] 빌드 환경 구분"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/diary/2024-01-15"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"- [[../xcode|xcode]] 빌드 환경 구분"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null
