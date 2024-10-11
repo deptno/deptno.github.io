@@ -1,0 +1,641 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-ee16007fd80507ef.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-acc14253718cae7b.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># vim</title><meta name="description" content="&gt; 현재(2023-10-08)는 [[neovim]] 와 동이어가 되서 문서가 파편화 되었으니 둘다 참조가 필요하다
+&gt; reference, back link 포함
+
+```vim
+&quot; ex command 결과보기
+:messages
+```
+
+## [[font]] 설정
+## 열기 옵션
+```sh
+$ vim -c &quot;24&quot; file.txt
+$ vim --clean &quot;24&quot; file.txt
+```
+- `-c` : 첫 번째 파일이 열린 후 ex 명령어로 실행
+- `-R` : 읽기 전용으로 열기
+- `+[LINE_NUM]` : 해당 라인에서 열기
+- `+/[TEXT]` : 텍스트를 검색하여 열기
+- `-` : stdin 으로 입력을 받는 경우`|` 사용으로 받는 경우등에 사용된다.
+- `-r` : 스왑파일 리스트 출력 [[vim-autoswap]] 참고
+- `-O` : 여러 파일을 제공하면 창을 분할하여 보여준다. 수평/수직 분할(o/O)
+  ```sh
+  $ vim -o $(git status -s | awk &#x27;{print $2}&#x27;) # 상태가 변한 애들 모두 연다.
+  ```
+- `--clean` : 플러그인 설정 로드 없이 연다.
+- `-M` : 수정 불가 전용으로 연다
+
+## registers
+- i : 최근 input text
+- : : 최근 명령어
+- % : 현재 파일명
+- # : 이전 버퍼명
+
+- [0-9] : 입력 모드에서 `ctrl + r + [0-9]` 로 접근가능
+- [az] : 매크로에 사용
+- [AZ] : 매크로에 append 가 가능 `:let @A=normal_command`
+
+## ex-mode
+- move 0 : 가장 위로 이동
+- move +1 : 현재 라인 아래로 이동
+- move -1 : 현재 라인 위로 이동
+- copy 0 : 가장 위로 복사
+- copy +0 : 현재 라인 아래에 복사 yyp
+- copy +1 : 현재 라인 아래에 복사
+
+`copy` 는 `t` 로 사용가능 `move` 는 `m` 로 사용가능.
+
+### vim &lt;-&gt; os
+#### 파일명 복사
+`+` 레지스터가 클립보드(mac)인걸 이용하여 아래와 같이 전달 한다.
+```vim
+&quot; 현재 파일 경로
+:let @+ = expand(&quot;%&quot;)
+&quot; 절대경로
+:let @+ = expand(&quot;%:p&quot;)
+&quot; 디렉토리 까지
+:let @+ = expand(&quot;%:h&quot;)
+```
+
+### 변수
+```vim
+&quot; 확인
+:set clipboard?
+&quot; prepend
+:set clipboard^=unnamed
+&quot; append
+:set clipboard+=unnamed
+&quot; override
+:set clipboard=unnamed
+```
+
+### 워킹 디렉토리 변경
+```vim
+&quot; 현재 파일의 디렉토리로 변경
+cd %:p:h
+```
+
+## normal-mode
+- `gf` : 현재 윈도우에서 파일을 따라간다. 단 `@` 가 있는 경우 visual-mode 에서 따라가도록한다.
+
+## key-binding
+### &lt;Plug&gt; [[question]]
+플러그인에서 바인딩 전용으로 내보내는 것 같기도??
+- :VimwikiToggleListItem&lt;CR&gt;
+- &lt;Plug&gt;VimwikiToggleListItem
+
+### 특정 파일 타입에서만 바인딩을 원하는 경우
+```sh
+autocmd FileType vimwiki nmap x &lt;Plug&gt;VimwikiToggleListItem
+```
+
+## 패턴 검색
+&gt; `/` 로 시작
+
+```vim
+&quot; 대소문자 구분 안함
+:set ignorecase
+&quot; 대문자가 포함된 경우 구분 / 포함되지 않은 경우 구분 없이 검색
+:set smartcase
+```
+
+```vim
+# regexp
+/\v[SEARCH_TEXT]
+# 일반 문자열 검색
+/\V[SEARCH_TEXT]
+# 대소문자 구분 안함
+/\c[SEARCH_TEXT]
+# 대문자 구분
+/\C[SEARCH_TEXT]
+```
+
+### 여러 파일 치환
+- headless 모드에서 vim 을 [[sed]] 처럼 사용해서 치환
+  ```sh
+  vim **/*.md --headless --clean -c &#x27;silent! argdo %s/\v(\`\`\`.*\n)##/\1\r##/g | update | q&#x27; 
+  ```
+  - `--headless` 는 vim 을 `background` 에서 실행 [[neovim]] 에서만 지원될 것으로 추정
+  - `--clean` 은 치환처리에 필요없고 속도를 위해서 로드하지 않기 위해 추가
+  - 모든 *markdown* 파일을 연 뒤에 `argdo` 로 열파일 모두에 대해서 치환 후 저장 그리고 종료
+  + [[diary:2023-12-19]]
+  + [[diary:2023-11-15]]
+
+## 정렬
+visual 모드에서 사용 예, 
+```vim
+:&#x27;&lt;,&#x27;&gt;sort   # 정렬
+:&#x27;&lt;,&#x27;&gt;sort!  # 역순 정렬
+:&#x27;&lt;,&#x27;&gt;sort n # 넘버 정렬
+```
+
+- https://webdevetc.com/blog/sort-text-in-vim/
+
+## 외부 프로그램
+- [[jq]]
+```vim
+:%!jq
+```
+
+## 문법 검사
+
+```vim normal
+z=
+```
+
+## plugins
+- [[vimwiki]]
+- [[defx]]
+- [[floatterm]]
+- [[taskwiki]]
+- [[vim-surround]]
+- [[vim-autoswap]]
+- [[telekasten]]
+
+## [[error]]
+```vim
+Vim:E117: Unknown function: netrw#CheckIfRemote
+```
+- https://github.com/tpope/vim-fugitive/issues/594#issuecomment-75315088
+
+
+## releated
+- [[vim-session]]
+- [[comparison:tagstack-vs-jump]]
+- [[neovim]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# vim"/><meta property="og:description" content="&gt; 현재(2023-10-08)는 [[neovim]] 와 동이어가 되서 문서가 파편화 되었으니 둘다 참조가 필요하다
+&gt; reference, back link 포함
+
+```vim
+&quot; ex command 결과보기
+:messages
+```
+
+## [[font]] 설정
+## 열기 옵션
+```sh
+$ vim -c &quot;24&quot; file.txt
+$ vim --clean &quot;24&quot; file.txt
+```
+- `-c` : 첫 번째 파일이 열린 후 ex 명령어로 실행
+- `-R` : 읽기 전용으로 열기
+- `+[LINE_NUM]` : 해당 라인에서 열기
+- `+/[TEXT]` : 텍스트를 검색하여 열기
+- `-` : stdin 으로 입력을 받는 경우`|` 사용으로 받는 경우등에 사용된다.
+- `-r` : 스왑파일 리스트 출력 [[vim-autoswap]] 참고
+- `-O` : 여러 파일을 제공하면 창을 분할하여 보여준다. 수평/수직 분할(o/O)
+  ```sh
+  $ vim -o $(git status -s | awk &#x27;{print $2}&#x27;) # 상태가 변한 애들 모두 연다.
+  ```
+- `--clean` : 플러그인 설정 로드 없이 연다.
+- `-M` : 수정 불가 전용으로 연다
+
+## registers
+- i : 최근 input text
+- : : 최근 명령어
+- % : 현재 파일명
+- # : 이전 버퍼명
+
+- [0-9] : 입력 모드에서 `ctrl + r + [0-9]` 로 접근가능
+- [az] : 매크로에 사용
+- [AZ] : 매크로에 append 가 가능 `:let @A=normal_command`
+
+## ex-mode
+- move 0 : 가장 위로 이동
+- move +1 : 현재 라인 아래로 이동
+- move -1 : 현재 라인 위로 이동
+- copy 0 : 가장 위로 복사
+- copy +0 : 현재 라인 아래에 복사 yyp
+- copy +1 : 현재 라인 아래에 복사
+
+`copy` 는 `t` 로 사용가능 `move` 는 `m` 로 사용가능.
+
+### vim &lt;-&gt; os
+#### 파일명 복사
+`+` 레지스터가 클립보드(mac)인걸 이용하여 아래와 같이 전달 한다.
+```vim
+&quot; 현재 파일 경로
+:let @+ = expand(&quot;%&quot;)
+&quot; 절대경로
+:let @+ = expand(&quot;%:p&quot;)
+&quot; 디렉토리 까지
+:let @+ = expand(&quot;%:h&quot;)
+```
+
+### 변수
+```vim
+&quot; 확인
+:set clipboard?
+&quot; prepend
+:set clipboard^=unnamed
+&quot; append
+:set clipboard+=unnamed
+&quot; override
+:set clipboard=unnamed
+```
+
+### 워킹 디렉토리 변경
+```vim
+&quot; 현재 파일의 디렉토리로 변경
+cd %:p:h
+```
+
+## normal-mode
+- `gf` : 현재 윈도우에서 파일을 따라간다. 단 `@` 가 있는 경우 visual-mode 에서 따라가도록한다.
+
+## key-binding
+### &lt;Plug&gt; [[question]]
+플러그인에서 바인딩 전용으로 내보내는 것 같기도??
+- :VimwikiToggleListItem&lt;CR&gt;
+- &lt;Plug&gt;VimwikiToggleListItem
+
+### 특정 파일 타입에서만 바인딩을 원하는 경우
+```sh
+autocmd FileType vimwiki nmap x &lt;Plug&gt;VimwikiToggleListItem
+```
+
+## 패턴 검색
+&gt; `/` 로 시작
+
+```vim
+&quot; 대소문자 구분 안함
+:set ignorecase
+&quot; 대문자가 포함된 경우 구분 / 포함되지 않은 경우 구분 없이 검색
+:set smartcase
+```
+
+```vim
+# regexp
+/\v[SEARCH_TEXT]
+# 일반 문자열 검색
+/\V[SEARCH_TEXT]
+# 대소문자 구분 안함
+/\c[SEARCH_TEXT]
+# 대문자 구분
+/\C[SEARCH_TEXT]
+```
+
+### 여러 파일 치환
+- headless 모드에서 vim 을 [[sed]] 처럼 사용해서 치환
+  ```sh
+  vim **/*.md --headless --clean -c &#x27;silent! argdo %s/\v(\`\`\`.*\n)##/\1\r##/g | update | q&#x27; 
+  ```
+  - `--headless` 는 vim 을 `background` 에서 실행 [[neovim]] 에서만 지원될 것으로 추정
+  - `--clean` 은 치환처리에 필요없고 속도를 위해서 로드하지 않기 위해 추가
+  - 모든 *markdown* 파일을 연 뒤에 `argdo` 로 열파일 모두에 대해서 치환 후 저장 그리고 종료
+  + [[diary:2023-12-19]]
+  + [[diary:2023-11-15]]
+
+## 정렬
+visual 모드에서 사용 예, 
+```vim
+:&#x27;&lt;,&#x27;&gt;sort   # 정렬
+:&#x27;&lt;,&#x27;&gt;sort!  # 역순 정렬
+:&#x27;&lt;,&#x27;&gt;sort n # 넘버 정렬
+```
+
+- https://webdevetc.com/blog/sort-text-in-vim/
+
+## 외부 프로그램
+- [[jq]]
+```vim
+:%!jq
+```
+
+## 문법 검사
+
+```vim normal
+z=
+```
+
+## plugins
+- [[vimwiki]]
+- [[defx]]
+- [[floatterm]]
+- [[taskwiki]]
+- [[vim-surround]]
+- [[vim-autoswap]]
+- [[telekasten]]
+
+## [[error]]
+```vim
+Vim:E117: Unknown function: netrw#CheckIfRemote
+```
+- https://github.com/tpope/vim-fugitive/issues/594#issuecomment-75315088
+
+
+## releated
+- [[vim-session]]
+- [[comparison:tagstack-vs-jump]]
+- [[neovim]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/vim"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# vim"/><meta name="twitter:description" content="&gt; 현재(2023-10-08)는 [[neovim]] 와 동이어가 되서 문서가 파편화 되었으니 둘다 참조가 필요하다
+&gt; reference, back link 포함
+
+```vim
+&quot; ex command 결과보기
+:messages
+```
+
+## [[font]] 설정
+## 열기 옵션
+```sh
+$ vim -c &quot;24&quot; file.txt
+$ vim --clean &quot;24&quot; file.txt
+```
+- `-c` : 첫 번째 파일이 열린 후 ex 명령어로 실행
+- `-R` : 읽기 전용으로 열기
+- `+[LINE_NUM]` : 해당 라인에서 열기
+- `+/[TEXT]` : 텍스트를 검색하여 열기
+- `-` : stdin 으로 입력을 받는 경우`|` 사용으로 받는 경우등에 사용된다.
+- `-r` : 스왑파일 리스트 출력 [[vim-autoswap]] 참고
+- `-O` : 여러 파일을 제공하면 창을 분할하여 보여준다. 수평/수직 분할(o/O)
+  ```sh
+  $ vim -o $(git status -s | awk &#x27;{print $2}&#x27;) # 상태가 변한 애들 모두 연다.
+  ```
+- `--clean` : 플러그인 설정 로드 없이 연다.
+- `-M` : 수정 불가 전용으로 연다
+
+## registers
+- i : 최근 input text
+- : : 최근 명령어
+- % : 현재 파일명
+- # : 이전 버퍼명
+
+- [0-9] : 입력 모드에서 `ctrl + r + [0-9]` 로 접근가능
+- [az] : 매크로에 사용
+- [AZ] : 매크로에 append 가 가능 `:let @A=normal_command`
+
+## ex-mode
+- move 0 : 가장 위로 이동
+- move +1 : 현재 라인 아래로 이동
+- move -1 : 현재 라인 위로 이동
+- copy 0 : 가장 위로 복사
+- copy +0 : 현재 라인 아래에 복사 yyp
+- copy +1 : 현재 라인 아래에 복사
+
+`copy` 는 `t` 로 사용가능 `move` 는 `m` 로 사용가능.
+
+### vim &lt;-&gt; os
+#### 파일명 복사
+`+` 레지스터가 클립보드(mac)인걸 이용하여 아래와 같이 전달 한다.
+```vim
+&quot; 현재 파일 경로
+:let @+ = expand(&quot;%&quot;)
+&quot; 절대경로
+:let @+ = expand(&quot;%:p&quot;)
+&quot; 디렉토리 까지
+:let @+ = expand(&quot;%:h&quot;)
+```
+
+### 변수
+```vim
+&quot; 확인
+:set clipboard?
+&quot; prepend
+:set clipboard^=unnamed
+&quot; append
+:set clipboard+=unnamed
+&quot; override
+:set clipboard=unnamed
+```
+
+### 워킹 디렉토리 변경
+```vim
+&quot; 현재 파일의 디렉토리로 변경
+cd %:p:h
+```
+
+## normal-mode
+- `gf` : 현재 윈도우에서 파일을 따라간다. 단 `@` 가 있는 경우 visual-mode 에서 따라가도록한다.
+
+## key-binding
+### &lt;Plug&gt; [[question]]
+플러그인에서 바인딩 전용으로 내보내는 것 같기도??
+- :VimwikiToggleListItem&lt;CR&gt;
+- &lt;Plug&gt;VimwikiToggleListItem
+
+### 특정 파일 타입에서만 바인딩을 원하는 경우
+```sh
+autocmd FileType vimwiki nmap x &lt;Plug&gt;VimwikiToggleListItem
+```
+
+## 패턴 검색
+&gt; `/` 로 시작
+
+```vim
+&quot; 대소문자 구분 안함
+:set ignorecase
+&quot; 대문자가 포함된 경우 구분 / 포함되지 않은 경우 구분 없이 검색
+:set smartcase
+```
+
+```vim
+# regexp
+/\v[SEARCH_TEXT]
+# 일반 문자열 검색
+/\V[SEARCH_TEXT]
+# 대소문자 구분 안함
+/\c[SEARCH_TEXT]
+# 대문자 구분
+/\C[SEARCH_TEXT]
+```
+
+### 여러 파일 치환
+- headless 모드에서 vim 을 [[sed]] 처럼 사용해서 치환
+  ```sh
+  vim **/*.md --headless --clean -c &#x27;silent! argdo %s/\v(\`\`\`.*\n)##/\1\r##/g | update | q&#x27; 
+  ```
+  - `--headless` 는 vim 을 `background` 에서 실행 [[neovim]] 에서만 지원될 것으로 추정
+  - `--clean` 은 치환처리에 필요없고 속도를 위해서 로드하지 않기 위해 추가
+  - 모든 *markdown* 파일을 연 뒤에 `argdo` 로 열파일 모두에 대해서 치환 후 저장 그리고 종료
+  + [[diary:2023-12-19]]
+  + [[diary:2023-11-15]]
+
+## 정렬
+visual 모드에서 사용 예, 
+```vim
+:&#x27;&lt;,&#x27;&gt;sort   # 정렬
+:&#x27;&lt;,&#x27;&gt;sort!  # 역순 정렬
+:&#x27;&lt;,&#x27;&gt;sort n # 넘버 정렬
+```
+
+- https://webdevetc.com/blog/sort-text-in-vim/
+
+## 외부 프로그램
+- [[jq]]
+```vim
+:%!jq
+```
+
+## 문법 검사
+
+```vim normal
+z=
+```
+
+## plugins
+- [[vimwiki]]
+- [[defx]]
+- [[floatterm]]
+- [[taskwiki]]
+- [[vim-surround]]
+- [[vim-autoswap]]
+- [[telekasten]]
+
+## [[error]]
+```vim
+Vim:E117: Unknown function: netrw#CheckIfRemote
+```
+- https://github.com/tpope/vim-fugitive/issues/594#issuecomment-75315088
+
+
+## releated
+- [[vim-session]]
+- [[comparison:tagstack-vs-jump]]
+- [[neovim]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/5427f8b
+" class="bg-white text-black">5427f8b</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/vim.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/vim.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/vim.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/vim"><span class="underline">vim</span><sup>20</sup></a></span><span><a class="text-blue-600" href="/public-wiki/neovim"><span class="underline">neovim</span><sup>22</sup></a></span><span><a class="text-blue-600" href="/public-wiki/font"><span class="underline">font</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vim-autoswap"><span class="underline">vim-autoswap</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/question"><span class="underline">question</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/sed"><span class="underline">sed</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-19"><span class="underline">diary/2023-12-19</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-11-15"><span class="underline">diary/2023-11-15</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/jq"><span class="underline">jq</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vimwiki"><span class="underline">vimwiki</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/defx"><span class="underline">defx</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/floatterm"><span class="underline">floatterm</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/taskwiki"><span class="underline">taskwiki</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vim-surround"><span class="underline">vim-surround</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/telekasten"><span class="underline">telekasten</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/error"><span class="underline">error</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vim-session"><span class="underline">vim-session</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/comparison:tagstack-vs-jump"><span class="underline">comparison:tagstack-vs-jump</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/@todo"><span class="underline">@todo</span><sup>30</sup></a></span><span><a class="text-blue-600" href="/public-wiki/bruno"><span class="underline">bruno</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/deptno.dev"><span class="underline">deptno.dev</span><sup>17</sup></a></span><span><a class="text-blue-600" href="/public-wiki/fzf"><span class="underline">fzf</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git"><span class="underline">git</span><sup>43</sup></a></span><span><a class="text-blue-600" href="/public-wiki/gx"><span class="underline">gx</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/idea"><span class="underline">idea</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/setup-terminal"><span class="underline">setup-terminal</span><sup>16</sup></a></span><span><a class="text-blue-600" href="/public-wiki/terminal"><span class="underline">terminal</span><sup>85</sup></a></span><span><a class="text-blue-600" href="/public-wiki/universal-ctags"><span class="underline">universal-ctags</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vi"><span class="underline">vi</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vim-startify"><span class="underline">vim-startify</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vimscript"><span class="underline">vimscript</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-10-17"><span class="underline">diary/2023-10-17</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-10-24"><span class="underline">diary/2023-10-24</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-21"><span class="underline">diary/2023-12-21</span><sup>20</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#vim">vim</a></div><div class="pl-2"><a href="#font-설정">font 설정</a></div><div class="pl-2"><a href="#열기-옵션">열기 옵션</a></div><div class="pl-2"><a href="#registers">registers</a></div><div class="pl-0"><a href="#-이전-버퍼명">: 이전 버퍼명</a></div><div class="pl-2"><a href="#ex-mode">ex-mode</a></div><div class="pl-4"><a href="#vim---os">vim &lt;-&gt; os</a></div><div class="pl-6"><a href="#파일명-복사">파일명 복사</a></div><div class="pl-4"><a href="#변수">변수</a></div><div class="pl-4"><a href="#워킹-디렉토리-변경">워킹 디렉토리 변경</a></div><div class="pl-2"><a href="#normal-mode">normal-mode</a></div><div class="pl-2"><a href="#key-binding">key-binding</a></div><div class="pl-4"><a href="#question"> question</a></div><div class="pl-4"><a href="#특정-파일-타입에서만-바인딩을-원하는-경우">특정 파일 타입에서만 바인딩을 원하는 경우</a></div><div class="pl-2"><a href="#패턴-검색">패턴 검색</a></div><div class="pl-4"><a href="#여러-파일-치환">여러 파일 치환</a></div><div class="pl-2"><a href="#정렬">정렬</a></div><div class="pl-2"><a href="#외부-프로그램">외부 프로그램</a></div><div class="pl-2"><a href="#문법-검사">문법 검사</a></div><div class="pl-2"><a href="#plugins">plugins</a></div><div class="pl-2"><a href="#error">error</a></div><div class="pl-2"><a href="#releated">releated</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="vim">vim</h1>
+<blockquote><p>현재(2023-10-08)는 <a href="neovim">neovim</a> 와 동이어가 되서 문서가 파편화 되었으니 둘다 참조가 필요하다
+reference, back link 포함</p></blockquote><pre><code class="hljs language-vim"><span class="hljs-comment">&quot; ex command 결과보기</span>
+:<span class="hljs-keyword">messages</span>
+</code></pre><h2 id="font-설정"><a href="font">font</a> 설정</h2>
+<h2 id="열기-옵션">열기 옵션</h2>
+<pre><code class="hljs language-sh">$ vim -c <span class="hljs-string">&quot;24&quot;</span> file.txt
+$ vim --clean <span class="hljs-string">&quot;24&quot;</span> file.txt
+</code></pre><ul>
+<li><code class="span">-c</code> : 첫 번째 파일이 열린 후 ex 명령어로 실행</li>
+<li><code class="span">-R</code> : 읽기 전용으로 열기</li>
+<li><code class="span">+[LINE_NUM]</code> : 해당 라인에서 열기</li>
+<li><code class="span">+/[TEXT]</code> : 텍스트를 검색하여 열기</li>
+<li><code class="span">-</code> : stdin 으로 입력을 받는 경우<code class="span">|</code> 사용으로 받는 경우등에 사용된다.</li>
+<li><code class="span">-r</code> : 스왑파일 리스트 출력 <a href="vim-autoswap">vim-autoswap</a> 참고</li>
+<li><code class="span">-O</code> : 여러 파일을 제공하면 창을 분할하여 보여준다. 수평/수직 분할(o/O)<pre><code class="hljs language-sh">$ vim -o $(git status -s | awk <span class="hljs-string">&#x27;{print $2}&#x27;</span>) <span class="hljs-comment"># 상태가 변한 애들 모두 연다.</span>
+</code></pre></li>
+<li><code class="span">--clean</code> : 플러그인 설정 로드 없이 연다.</li>
+<li><code class="span">-M</code> : 수정 불가 전용으로 연다</li>
+</ul>
+<h2 id="registers">registers</h2>
+<ul>
+<li><p>i : 최근 input text</p>
+</li>
+<li><p>: : 최근 명령어</p>
+</li>
+<li><p>% : 현재 파일명</p>
+</li>
+<li><h1 id="-이전-버퍼명">: 이전 버퍼명</h1>
+</li>
+<li><p>[0-9] : 입력 모드에서 <code class="span">ctrl + r + [0-9]</code> 로 접근가능</p>
+</li>
+<li><p>[az] : 매크로에 사용</p>
+</li>
+<li><p>[AZ] : 매크로에 append 가 가능 <code class="span">:let @A=normal_command</code></p>
+</li>
+</ul>
+<h2 id="ex-mode">ex-mode</h2>
+<ul>
+<li>move 0 : 가장 위로 이동</li>
+<li>move +1 : 현재 라인 아래로 이동</li>
+<li>move -1 : 현재 라인 위로 이동</li>
+<li>copy 0 : 가장 위로 복사</li>
+<li>copy +0 : 현재 라인 아래에 복사 yyp</li>
+<li>copy +1 : 현재 라인 아래에 복사</li>
+</ul>
+<p><code class="span">copy</code> 는 <code class="span">t</code> 로 사용가능 <code class="span">move</code> 는 <code class="span">m</code> 로 사용가능.</p>
+<h3 id="vim---os">vim &lt;-&gt; os</h3>
+<h4 id="파일명-복사">파일명 복사</h4>
+<p><code class="span">+</code> 레지스터가 클립보드(mac)인걸 이용하여 아래와 같이 전달 한다.</p>
+<pre><code class="hljs language-vim"><span class="hljs-comment">&quot; 현재 파일 경로</span>
+:<span class="hljs-keyword">let</span> @+ = <span class="hljs-built_in">expand</span>(<span class="hljs-string">&quot;%&quot;</span>)
+<span class="hljs-comment">&quot; 절대경로</span>
+:<span class="hljs-keyword">let</span> @+ = <span class="hljs-built_in">expand</span>(<span class="hljs-string">&quot;%:p&quot;</span>)
+<span class="hljs-comment">&quot; 디렉토리 까지</span>
+:<span class="hljs-keyword">let</span> @+ = <span class="hljs-built_in">expand</span>(<span class="hljs-string">&quot;%:h&quot;</span>)
+</code></pre><h3 id="변수">변수</h3>
+<pre><code class="hljs language-vim"><span class="hljs-comment">&quot; 확인</span>
+:<span class="hljs-keyword">set</span> clipboard?
+<span class="hljs-comment">&quot; prepend</span>
+:<span class="hljs-keyword">set</span> clipboard^=unnamed
+<span class="hljs-comment">&quot; append</span>
+:<span class="hljs-keyword">set</span> clipboard+=unnamed
+<span class="hljs-comment">&quot; override</span>
+:<span class="hljs-keyword">set</span> clipboard=unnamed
+</code></pre><h3 id="워킹-디렉토리-변경">워킹 디렉토리 변경</h3>
+<pre><code class="hljs language-vim"><span class="hljs-comment">&quot; 현재 파일의 디렉토리로 변경</span>
+<span class="hljs-keyword">cd</span> %:<span class="hljs-keyword">p</span>:h
+</code></pre><h2 id="normal-mode">normal-mode</h2>
+<ul>
+<li><code class="span">gf</code> : 현재 윈도우에서 파일을 따라간다. 단 <code class="span">@</code> 가 있는 경우 visual-mode 에서 따라가도록한다.</li>
+</ul>
+<h2 id="key-binding">key-binding</h2>
+<h3 id="-question"><Plug> <a href="question">question</a></h3>
+<p>플러그인에서 바인딩 전용으로 내보내는 것 같기도??</p>
+<ul>
+<li>:VimwikiToggleListItem<CR></li>
+<li><Plug>VimwikiToggleListItem</li>
+</ul>
+<h3 id="특정-파일-타입에서만-바인딩을-원하는-경우">특정 파일 타입에서만 바인딩을 원하는 경우</h3>
+<pre><code class="hljs language-sh">autocmd FileType vimwiki nmap x &lt;Plug&gt;VimwikiToggleListItem
+</code></pre><h2 id="패턴-검색">패턴 검색</h2>
+<blockquote><p><code class="span">/</code> 로 시작</p></blockquote><pre><code class="hljs language-vim"><span class="hljs-comment">&quot; 대소문자 구분 안함</span>
+:<span class="hljs-keyword">set</span> ignorecase
+<span class="hljs-comment">&quot; 대문자가 포함된 경우 구분 / 포함되지 않은 경우 구분 없이 검색</span>
+:<span class="hljs-keyword">set</span> smartcase
+</code></pre><pre><code class="hljs language-vim"># regexp
+/\v[SEARCH_TEXT]
+# 일반 문자열 검색
+/\V[SEARCH_TEXT]
+# 대소문자 구분 안함
+/\<span class="hljs-keyword">c</span>[SEARCH_TEXT]
+# 대문자 구분
+/\C[SEARCH_TEXT]
+</code></pre><h3 id="여러-파일-치환">여러 파일 치환</h3>
+<ul>
+<li>headless 모드에서 vim 을 <a href="sed">sed</a> 처럼 사용해서 치환<pre><code class="hljs language-sh">vim **/*.md --headless --clean -c <span class="hljs-string">&#x27;silent! argdo %s/\v(\`\`\`.*\n)##/\1\r##/g | update | q&#x27;</span> 
+</code></pre><ul>
+<li><code class="span">--headless</code> 는 vim 을 <code class="span">background</code> 에서 실행 <a href="neovim">neovim</a> 에서만 지원될 것으로 추정</li>
+<li><code class="span">--clean</code> 은 치환처리에 필요없고 속도를 위해서 로드하지 않기 위해 추가</li>
+<li>모든 <em>markdown</em> 파일을 연 뒤에 <code class="span">argdo</code> 로 열파일 모두에 대해서 치환 후 저장 그리고 종료</li>
+</ul>
+<ul>
+<li><a href="/public-wiki/diary/2023-12-19">[diary] diary:2023-12-19</a></li>
+<li><a href="/public-wiki/diary/2023-11-15">[diary] diary:2023-11-15</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="정렬">정렬</h2>
+<p>visual 모드에서 사용 예, </p>
+<pre><code class="hljs language-vim">:<span class="hljs-string">&#x27;&lt;,&#x27;</span>&gt;<span class="hljs-keyword">sort</span>   # 정렬
+:<span class="hljs-string">&#x27;&lt;,&#x27;</span>&gt;sort!  # 역순 정렬
+:<span class="hljs-string">&#x27;&lt;,&#x27;</span>&gt;<span class="hljs-keyword">sort</span> n # 넘버 정렬
+</code></pre><ul>
+<li><a href="https://webdevetc.com/blog/sort-text-in-vim/" target="_blank">[URL] https://webdevetc.com/blog/sort-text-in-vim/</a></li>
+</ul>
+<h2 id="외부-프로그램">외부 프로그램</h2>
+<ul>
+<li><a href="jq">jq</a></li>
+</ul>
+<pre><code class="hljs language-vim">:%!jq
+</code></pre><h2 id="문법-검사">문법 검사</h2>
+<pre><code class="hljs language-vim"><span class="hljs-keyword">z</span>=
+</code></pre><h2 id="plugins">plugins</h2>
+<ul>
+<li><a href="vimwiki">vimwiki</a></li>
+<li><a href="defx">defx</a></li>
+<li><a href="floatterm">floatterm</a></li>
+<li><a href="taskwiki">taskwiki</a></li>
+<li><a href="vim-surround">vim-surround</a></li>
+<li><a href="vim-autoswap">vim-autoswap</a></li>
+<li><a href="telekasten">telekasten</a></li>
+</ul>
+<h2 id="error"><a href="error">error</a></h2>
+<pre><code class="hljs language-vim">Vim:E117: Unknown <span class="hljs-keyword">function</span>: netrw#CheckIfRemote
+</code></pre><ul>
+<li><a href="https://github.com/tpope/vim-fugitive/issues/594#issuecomment-75315088" target="_blank">[URL] https://github.com/tpope/vim-fugitive/issues/594#issuecomment-75315088</a></li>
+</ul>
+<h2 id="releated">releated</h2>
+<ul>
+<li><a href="vim-session">vim-session</a></li>
+<li><a href="comparison:tagstack-vs-jump">comparison:tagstack-vs-jump</a></li>
+<li><a href="neovim">neovim</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-ee16007fd80507ef.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-acc14253718cae7b.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"vim\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"kKV5CxI4RD_CctXE8Ke3_\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/vim\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"vim\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"vim\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"vim\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T2139,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"vim\"\u003evim\u003c/h1\u003e\n\u003cblockquote\u003e\u003cp\u003e현재(2023-10-08)는 \u003ca href=\"neovim\"\u003eneovim\u003c/a\u003e 와 동이어가 되서 문서가 파편화 되었으니 둘다 참조가 필요하다\nreference, back link 포함\u003c/p\u003e\u003c/blockquote\u003e\u003cpre\u003e\u003ccode class=\"hljs language-vim\"\u003e\u003cspan class=\"hljs-comment\"\u003e\u0026quot; ex command 결과보기\u003c/span\u003e\n:\u003cspan class=\"hljs-keyword\"\u003emessages\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"font-설정\"\u003e\u003ca href=\"font\"\u003efont\u003c/a\u003e 설정\u003c/h2\u003e\n\u003ch2 id=\"열기-옵션\"\u003e열기 옵션\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ vim -c \u003cspan class=\"hljs-string\"\u003e\u0026quot;24\u0026quot;\u003c/span\u003e file.txt\n$ vim --clean \u003cspan class=\"hljs-string\"\u003e\u0026quot;24\u0026quot;\u003c/span\u003e file.txt\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e-c\u003c/code\u003e : 첫 번째 파일이 열린 후 ex 명령어로 실행\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e-R\u003c/code\u003e : 읽기 전용으로 열기\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e+[LINE_NUM]\u003c/code\u003e : 해당 라인에서 열기\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e+/[TEXT]\u003c/code\u003e : 텍스트를 검색하여 열기\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e-\u003c/code\u003e : stdin 으로 입력을 받는 경우\u003ccode class=\"span\"\u003e|\u003c/code\u003e 사용으로 받는 경우등에 사용된다.\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e-r\u003c/code\u003e : 스왑파일 리스트 출력 \u003ca href=\"vim-autoswap\"\u003evim-autoswap\u003c/a\u003e 참고\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e-O\u003c/code\u003e : 여러 파일을 제공하면 창을 분할하여 보여준다. 수평/수직 분할(o/O)\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ vim -o $(git status -s | awk \u003cspan class=\"hljs-string\"\u003e\u0026#x27;{print $2}\u0026#x27;\u003c/span\u003e) \u003cspan class=\"hljs-comment\"\u003e# 상태가 변한 애들 모두 연다.\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e--clean\u003c/code\u003e : 플러그인 설정 로드 없이 연다.\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e-M\u003c/code\u003e : 수정 불가 전용으로 연다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"registers\"\u003eregisters\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cp\u003ei : 최근 input text\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e: : 최근 명령어\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e% : 현재 파일명\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ch1 id=\"-이전-버퍼명\"\u003e: 이전 버퍼명\u003c/h1\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e[0-9] : 입력 모드에서 \u003ccode class=\"span\"\u003ectrl + r + [0-9]\u003c/code\u003e 로 접근가능\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e[az] : 매크로에 사용\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e[AZ] : 매크로에 append 가 가능 \u003ccode class=\"span\"\u003e:let @A=normal_command\u003c/code\u003e\u003c/p\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"ex-mode\"\u003eex-mode\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003emove 0 : 가장 위로 이동\u003c/li\u003e\n\u003cli\u003emove +1 : 현재 라인 아래로 이동\u003c/li\u003e\n\u003cli\u003emove -1 : 현재 라인 위로 이동\u003c/li\u003e\n\u003cli\u003ecopy 0 : 가장 위로 복사\u003c/li\u003e\n\u003cli\u003ecopy +0 : 현재 라인 아래에 복사 yyp\u003c/li\u003e\n\u003cli\u003ecopy +1 : 현재 라인 아래에 복사\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u003ccode class=\"span\"\u003ecopy\u003c/code\u003e 는 \u003ccode class=\"span\"\u003et\u003c/code\u003e 로 사용가능 \u003ccode class=\"span\"\u003emove\u003c/code\u003e 는 \u003ccode class=\"span\"\u003em\u003c/code\u003e 로 사용가능.\u003c/p\u003e\n\u003ch3 id=\"vim---os\"\u003evim \u0026lt;-\u0026gt; os\u003c/h3\u003e\n\u003ch4 id=\"파일명-복사\"\u003e파일명 복사\u003c/h4\u003e\n\u003cp\u003e\u003ccode class=\"span\"\u003e+\u003c/code\u003e 레지스터가 클립보드(mac)인걸 이용하여 아래와 같이 전달 한다.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-vim\"\u003e\u003cspan class=\"hljs-comment\"\u003e\u0026quot; 현재 파일 경로\u003c/span\u003e\n:\u003cspan class=\"hljs-keyword\"\u003elet\u003c/span\u003e @+ = \u003cspan class=\"hljs-built_in\"\u003eexpand\u003c/span\u003e(\u003cspan class=\"hljs-string\"\u003e\u0026quot;%\u0026quot;\u003c/span\u003e)\n\u003cspan class=\"hljs-comment\"\u003e\u0026quot; 절대경로\u003c/span\u003e\n:\u003cspan class=\"hljs-keyword\"\u003elet\u003c/span\u003e @+ = \u003cspan class=\"hljs-built_in\"\u003eexpand\u003c/span\u003e(\u003cspan class=\"hljs-string\"\u003e\u0026quot;%:p\u0026quot;\u003c/span\u003e)\n\u003cspan class=\"hljs-comment\"\u003e\u0026quot; 디렉토리 까지\u003c/span\u003e\n:\u003cspan class=\"hljs-keyword\"\u003elet\u003c/span\u003e @+ = \u003cspan class=\"hljs-built_in\"\u003eexpand\u003c/span\u003e(\u003cspan class=\"hljs-string\"\u003e\u0026quot;%:h\u0026quot;\u003c/span\u003e)\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"변수\"\u003e변수\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-vim\"\u003e\u003cspan class=\"hljs-comment\"\u003e\u0026quot; 확인\u003c/span\u003e\n:\u003cspan class=\"hljs-keyword\"\u003eset\u003c/span\u003e clipboard?\n\u003cspan class=\"hljs-comment\"\u003e\u0026quot; prepend\u003c/span\u003e\n:\u003cspan class=\"hljs-keyword\"\u003eset\u003c/span\u003e clipboard^=unnamed\n\u003cspan class=\"hljs-comment\"\u003e\u0026quot; append\u003c/span\u003e\n:\u003cspan class=\"hljs-keyword\"\u003eset\u003c/span\u003e clipboard+=unnamed\n\u003cspan class=\"hljs-comment\"\u003e\u0026quot; override\u003c/span\u003e\n:\u003cspan class=\"hljs-keyword\"\u003eset\u003c/span\u003e clipboard=unnamed\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"워킹-디렉토리-변경\"\u003e워킹 디렉토리 변경\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-vim\"\u003e\u003cspan class=\"hljs-comment\"\u003e\u0026quot; 현재 파일의 디렉토리로 변경\u003c/span\u003e\n\u003cspan class=\"hljs-keyword\"\u003ecd\u003c/span\u003e %:\u003cspan class=\"hljs-keyword\"\u003ep\u003c/span\u003e:h\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"normal-mode\"\u003enormal-mode\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003egf\u003c/code\u003e : 현재 윈도우에서 파일을 따라간다. 단 \u003ccode class=\"span\"\u003e@\u003c/code\u003e 가 있는 경우 visual-mode 에서 따라가도록한다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"key-binding\"\u003ekey-binding\u003c/h2\u003e\n\u003ch3 id=\"-question\"\u003e\u003cPlug\u003e \u003ca href=\"question\"\u003equestion\u003c/a\u003e\u003c/h3\u003e\n\u003cp\u003e플러그인에서 바인딩 전용으로 내보내는 것 같기도??\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e:VimwikiToggleListItem\u003cCR\u003e\u003c/li\u003e\n\u003cli\u003e\u003cPlug\u003eVimwikiToggleListItem\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"특정-파일-타입에서만-바인딩을-원하는-경우\"\u003e특정 파일 타입에서만 바인딩을 원하는 경우\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eautocmd FileType vimwiki nmap x \u0026lt;Plug\u0026gt;VimwikiToggleListItem\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"패턴-검색\"\u003e패턴 검색\u003c/h2\u003e\n\u003cblockquote\u003e\u003cp\u003e\u003ccode class=\"span\"\u003e/\u003c/code\u003e 로 시작\u003c/p\u003e\u003c/blockquote\u003e\u003cpre\u003e\u003ccode class=\"hljs language-vim\"\u003e\u003cspan class=\"hljs-comment\"\u003e\u0026quot; 대소문자 구분 안함\u003c/span\u003e\n:\u003cspan class=\"hljs-keyword\"\u003eset\u003c/span\u003e ignorecase\n\u003cspan class=\"hljs-comment\"\u003e\u0026quot; 대문자가 포함된 경우 구분 / 포함되지 않은 경우 구분 없이 검색\u003c/span\u003e\n:\u003cspan class=\"hljs-keyword\"\u003eset\u003c/span\u003e smartcase\n\u003c/code\u003e\u003c/pre\u003e\u003cpre\u003e\u003ccode class=\"hljs language-vim\"\u003e# regexp\n/\\v[SEARCH_TEXT]\n# 일반 문자열 검색\n/\\V[SEARCH_TEXT]\n# 대소문자 구분 안함\n/\\\u003cspan class=\"hljs-keyword\"\u003ec\u003c/span\u003e[SEARCH_TEXT]\n# 대문자 구분\n/\\C[SEARCH_TEXT]\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"여러-파일-치환\"\u003e여러 파일 치환\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eheadless 모드에서 vim 을 \u003ca href=\"sed\"\u003esed\u003c/a\u003e 처럼 사용해서 치환\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003evim **/*.md --headless --clean -c \u003cspan class=\"hljs-string\"\u003e\u0026#x27;silent! argdo %s/\\v(\\`\\`\\`.*\\n)##/\\1\\r##/g | update | q\u0026#x27;\u003c/span\u003e \n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e--headless\u003c/code\u003e 는 vim 을 \u003ccode class=\"span\"\u003ebackground\u003c/code\u003e 에서 실행 \u003ca href=\"neovim\"\u003eneovim\u003c/a\u003e 에서만 지원될 것으로 추정\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e--clean\u003c/code\u003e 은 치환처리에 필요없고 속도를 위해서 로드하지 않기 위해 추가\u003c/li\u003e\n\u003cli\u003e모든 \u003cem\u003emarkdown\u003c/em\u003e 파일을 연 뒤에 \u003ccode class=\"span\"\u003eargdo\u003c/code\u003e 로 열파일 모두에 대해서 치환 후 저장 그리고 종료\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"/public-wiki/diary/2023-12-19\"\u003e[diary] diary:2023-12-19\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"/public-wiki/diary/2023-11-15\"\u003e[diary] diary:2023-11-15\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"정렬\"\u003e정렬\u003c/h2\u003e\n\u003cp\u003evisual 모드에서 사용 예, \u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-vim\"\u003e:\u003cspan class=\"hljs-string\"\u003e\u0026#x27;\u0026lt;,\u0026#x27;\u003c/span\u003e\u0026gt;\u003cspan class=\"hljs-keyword\"\u003esort\u003c/span\u003e   # 정렬\n:\u003cspan class=\"hljs-string\"\u003e\u0026#x27;\u0026lt;,\u0026#x27;\u003c/span\u003e\u0026gt;sort!  # 역순 정렬\n:\u003cspan class=\"hljs-string\"\u003e\u0026#x27;\u0026lt;,\u0026#x27;\u003c/span\u003e\u0026gt;\u003cspan class=\"hljs-keyword\"\u003esort\u003c/span\u003e n # 넘버 정렬\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://webdevetc.com/blog/sort-text-in-vim/\" target=\"_blank\"\u003e[URL] https://webdevetc.com/blog/sort-text-in-vim/\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"외부-프로그램\"\u003e외부 프로그램\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"jq\"\u003ejq\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-vim\"\u003e:%!jq\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"문법-검사\"\u003e문법 검사\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-vim\"\u003e\u003cspan class=\"hljs-keyword\"\u003ez\u003c/span\u003e=\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"plugins\"\u003eplugins\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"vimwiki\"\u003evimwiki\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"defx\"\u003edefx\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"floatterm\"\u003efloatterm\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"taskwiki\"\u003etaskwiki\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"vim-surround\"\u003evim-surround\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"vim-autoswap\"\u003evim-autoswap\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"telekasten\"\u003etelekasten\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"error\"\u003e\u003ca href=\"error\"\u003eerror\u003c/a\u003e\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-vim\"\u003eVim:E117: Unknown \u003cspan class=\"hljs-keyword\"\u003efunction\u003c/span\u003e: netrw#CheckIfRemote\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/tpope/vim-fugitive/issues/594#issuecomment-75315088\" target=\"_blank\"\u003e[URL] https://github.com/tpope/vim-fugitive/issues/594#issuecomment-75315088\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"releated\"\u003ereleated\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"vim-session\"\u003evim-session\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"comparison:tagstack-vs-jump\"\u003ecomparison:tagstack-vs-jump\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"neovim\"\u003eneovim\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/5427f8b\\n\",\"className\":\"bg-white text-black\",\"children\":\"5427f8b\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/vim.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/vim.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/vim.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"vim\",\"name\":\"vim\",\"val\":20},{\"id\":\"neovim\",\"name\":\"neovim\",\"val\":22},{\"id\":\"font\",\"name\":\"font\",\"val\":1},{\"id\":\"vim-autoswap\",\"name\":\"vim-autoswap\",\"val\":\"$undefined\"},{\"id\":\"question\",\"name\":\"question\",\"val\":\"$undefined\"},{\"id\":\"sed\",\"name\":\"sed\",\"val\":4},{\"id\":\"diary/2023-12-19\",\"name\":\"diary/2023-12-19\",\"val\":2},{\"id\":\"diary/2023-11-15\",\"name\":\"diary/2023-11-15\",\"val\":6},{\"id\":\"jq\",\"name\":\"jq\",\"val\":6},{\"id\":\"vimwiki\",\"name\":\"vimwiki\",\"val\":8},{\"id\":\"defx\",\"name\":\"defx\",\"val\":4},{\"id\":\"floatterm\",\"name\":\"floatterm\",\"val\":1},{\"id\":\"taskwiki\",\"name\":\"taskwiki\",\"val\":5},{\"id\":\"vim-surround\",\"name\":\"vim-surround\",\"val\":2},{\"id\":\"telekasten\",\"name\":\"telekasten\",\"val\":2},{\"id\":\"error\",\"name\":\"error\",\"val\":4},{\"id\":\"vim-session\",\"name\":\"vim-session\",\"val\":2},{\"id\":\"comparison:tagstack-vs-jump\",\"name\":\"comparison:tagstack-vs-jump\",\"val\":4},{\"id\":\"@todo\",\"name\":\"@todo\",\"val\":30},{\"id\":\"bruno\",\"name\":\"bruno\",\"val\":7},{\"id\":\"deptno.dev\",\"name\":\"deptno.dev\",\"val\":17},{\"id\":\"fzf\",\"name\":\"fzf\",\"val\":4},{\"id\":\"git\",\"name\":\"git\",\"val\":43},{\"id\":\"gx\",\"name\":\"gx\",\"val\":2},{\"id\":\"idea\",\"name\":\"idea\",\"val\":5},{\"id\":\"setup-terminal\",\"name\":\"setup-terminal\",\"val\":16},{\"id\":\"terminal\",\"name\":\"terminal\",\"val\":85},{\"id\":\"universal-ctags\",\"name\":\"universal-ctags\",\"val\":3},{\"id\":\"vi\",\"name\":\"vi\",\"val\":1},{\"id\":\"vim-startify\",\"name\":\"vim-startify\",\"val\":5},{\"id\":\"vimscript\",\"name\":\"vimscript\",\"val\":3},{\"id\":\"diary/2023-10-17\",\"name\":\"diary/2023-10-17\",\"val\":5},{\"id\":\"diary/2023-10-24\",\"name\":\"diary/2023-10-24\",\"val\":3},{\"id\":\"diary/2023-12-21\",\"name\":\"diary/2023-12-21\",\"val\":20}],\"links\":[{\"source\":\"vim\",\"target\":\"neovim\"},{\"source\":\"vim\",\"target\":\"font\"},{\"source\":\"vim\",\"target\":\"vim-autoswap\"},{\"source\":\"vim\",\"target\":\"question\"},{\"source\":\"vim\",\"target\":\"sed\"},{\"source\":\"vim\",\"target\":\"neovim\"},{\"source\":\"vim\",\"target\":\"diary/2023-12-19\"},{\"source\":\"vim\",\"target\":\"diary/2023-11-15\"},{\"source\":\"vim\",\"target\":\"jq\"},{\"source\":\"vim\",\"target\":\"vimwiki\"},{\"source\":\"vim\",\"target\":\"defx\"},{\"source\":\"vim\",\"target\":\"floatterm\"},{\"source\":\"vim\",\"target\":\"taskwiki\"},{\"source\":\"vim\",\"target\":\"vim-surround\"},{\"source\":\"vim\",\"target\":\"vim-autoswap\"},{\"source\":\"vim\",\"target\":\"telekasten\"},{\"source\":\"vim\",\"target\":\"error\"},{\"source\":\"vim\",\"target\":\"vim-session\"},{\"source\":\"vim\",\"target\":\"comparison:tagstack-vs-jump\"},{\"source\":\"vim\",\"target\":\"neovim\"},{\"source\":\"@todo\",\"target\":\"vim\"},{\"source\":\"bruno\",\"target\":\"vim\"},{\"source\":\"comparison:tagstack-vs-jump\",\"target\":\"vim\"},{\"source\":\"deptno.dev\",\"target\":\"vim\"},{\"source\":\"font\",\"target\":\"vim\"},{\"source\":\"fzf\",\"target\":\"vim\"},{\"source\":\"git\",\"target\":\"vim\"},{\"source\":\"gx\",\"target\":\"vim\"},{\"source\":\"idea\",\"target\":\"vim\"},{\"source\":\"jq\",\"target\":\"vim\"},{\"source\":\"neovim\",\"target\":\"vim\"},{\"source\":\"setup-terminal\",\"target\":\"vim\"},{\"source\":\"setup-terminal\",\"target\":\"vim\"},{\"source\":\"telekasten\",\"target\":\"vim\"},{\"source\":\"terminal\",\"target\":\"vim\"},{\"source\":\"universal-ctags\",\"target\":\"vim\"},{\"source\":\"vi\",\"target\":\"vim\"},{\"source\":\"vim-session\",\"target\":\"vim\"},{\"source\":\"vim-startify\",\"target\":\"vim\"},{\"source\":\"vimscript\",\"target\":\"vim\"},{\"source\":\"vimwiki\",\"target\":\"vim\"},{\"source\":\"vimwiki\",\"target\":\"vim\"},{\"source\":\"diary/2023-10-17\",\"target\":\"vim\"},{\"source\":\"diary/2023-10-24\",\"target\":\"vim\"},{\"source\":\"diary/2023-11-15\",\"target\":\"vim\"},{\"source\":\"diary/2023-11-15\",\"target\":\"vim\"},{\"source\":\"diary/2023-12-19\",\"target\":\"vim\"},{\"source\":\"diary/2023-12-21\",\"target\":\"vim\"},{\"source\":\"diary/2023-12-21\",\"target\":\"vim\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"vim\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vim\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vim\"}],[\"$\",\"sup\",null,{\"children\":20}]]}]}],[\"$\",\"span\",\"neovim\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/neovim\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"neovim\"}],[\"$\",\"sup\",null,{\"children\":22}]]}]}],[\"$\",\"span\",\"font\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/font\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"font\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"vim-autoswap\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vim-autoswap\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vim-autoswap\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"question\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/question\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"question\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"sed\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/sed\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"sed\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"diary/2023-12-19\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-19\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-19\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2023-11-15\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-11-15\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-11-15\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"jq\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/jq\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"jq\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"vimwiki\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vimwiki\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vimwiki\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"defx\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/defx\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"defx\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"floatterm\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/floatterm\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"floatterm\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"taskwiki\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/taskwiki\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"taskwiki\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"vim-surround\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vim-surround\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vim-surround\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"telekasten\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/telekasten\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"telekasten\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"error\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/error\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"error\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"vim-session\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vim-session\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vim-session\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"comparison:tagstack-vs-jump\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/comparison:tagstack-vs-jump\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"comparison:tagstack-vs-jump\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"@todo\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/@todo\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"@todo\"}],[\"$\",\"sup\",null,{\"children\":30}]]}]}],[\"$\",\"span\",\"bruno\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/bruno\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"bruno\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"deptno.dev\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/deptno.dev\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"deptno.dev\"}],[\"$\",\"sup\",null,{\"children\":17}]]}]}],[\"$\",\"span\",\"fzf\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/fzf\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"fzf\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"git\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git\"}],[\"$\",\"sup\",null,{\"children\":43}]]}]}],[\"$\",\"span\",\"gx\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/gx\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"gx\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"idea\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/idea\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"idea\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"setup-terminal\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/setup-terminal\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"setup-terminal\"}],[\"$\",\"sup\",null,{\"children\":16}]]}]}],[\"$\",\"span\",\"terminal\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/terminal\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"terminal\"}],[\"$\",\"sup\",null,{\"children\":85}]]}]}],[\"$\",\"span\",\"universal-ctags\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/universal-ctags\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"universal-ctags\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"vi\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vi\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vi\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"vim-startify\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vim-startify\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vim-startify\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"vimscript\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vimscript\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vimscript\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2023-10-17\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-10-17\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-10-17\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"diary/2023-10-24\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-10-24\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-10-24\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2023-12-21\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-21\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-21\"}],[\"$\",\"sup\",null,{\"children\":20}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"vim\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#vim\",\"children\":\"vim\"}]}],[\"$\",\"div\",\"font-설정\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#font-설정\",\"children\":\"font 설정\"}]}],[\"$\",\"div\",\"열기-옵션\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#열기-옵션\",\"children\":\"열기 옵션\"}]}],[\"$\",\"div\",\"registers\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#registers\",\"children\":\"registers\"}]}],[\"$\",\"div\",\"-이전-버퍼명\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#-이전-버퍼명\",\"children\":\": 이전 버퍼명\"}]}],[\"$\",\"div\",\"ex-mode\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#ex-mode\",\"children\":\"ex-mode\"}]}],[\"$\",\"div\",\"vim---os\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#vim---os\",\"children\":\"vim \u003c-\u003e os\"}]}],[\"$\",\"div\",\"파일명-복사\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#파일명-복사\",\"children\":\"파일명 복사\"}]}],[\"$\",\"div\",\"변수\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#변수\",\"children\":\"변수\"}]}],[\"$\",\"div\",\"워킹-디렉토리-변경\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#워킹-디렉토리-변경\",\"children\":\"워킹 디렉토리 변경\"}]}],[\"$\",\"div\",\"normal-mode\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#normal-mode\",\"children\":\"normal-mode\"}]}],[\"$\",\"div\",\"key-binding\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#key-binding\",\"children\":\"key-binding\"}]}],[\"$\",\"div\",\"question\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#question\",\"children\":\" question\"}]}],[\"$\",\"div\",\"특정-파일-타입에서만-바인딩을-원하는-경우\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#특정-파일-타입에서만-바인딩을-원하는-경우\",\"children\":\"특정 파일 타입에서만 바인딩을 원하는 경우\"}]}],[\"$\",\"div\",\"패턴-검색\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#패턴-검색\",\"children\":\"패턴 검색\"}]}],[\"$\",\"div\",\"여러-파일-치환\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#여러-파일-치환\",\"children\":\"여러 파일 치환\"}]}],[\"$\",\"div\",\"정렬\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#정렬\",\"children\":\"정렬\"}]}],[\"$\",\"div\",\"외부-프로그램\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#외부-프로그램\",\"children\":\"외부 프로그램\"}]}],[\"$\",\"div\",\"문법-검사\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#문법-검사\",\"children\":\"문법 검사\"}]}],[\"$\",\"div\",\"plugins\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#plugins\",\"children\":\"plugins\"}]}],[\"$\",\"div\",\"error\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error\",\"children\":\"error\"}]}],[\"$\",\"div\",\"releated\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#releated\",\"children\":\"releated\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:Tfcd,"])</script><script>self.__next_f.push([1,"\u003e 현재(2023-10-08)는 [[neovim]] 와 동이어가 되서 문서가 파편화 되었으니 둘다 참조가 필요하다\n\u003e reference, back link 포함\n\n```vim\n\" ex command 결과보기\n:messages\n```\n\n## [[font]] 설정\n## 열기 옵션\n```sh\n$ vim -c \"24\" file.txt\n$ vim --clean \"24\" file.txt\n```\n- `-c` : 첫 번째 파일이 열린 후 ex 명령어로 실행\n- `-R` : 읽기 전용으로 열기\n- `+[LINE_NUM]` : 해당 라인에서 열기\n- `+/[TEXT]` : 텍스트를 검색하여 열기\n- `-` : stdin 으로 입력을 받는 경우`|` 사용으로 받는 경우등에 사용된다.\n- `-r` : 스왑파일 리스트 출력 [[vim-autoswap]] 참고\n- `-O` : 여러 파일을 제공하면 창을 분할하여 보여준다. 수평/수직 분할(o/O)\n  ```sh\n  $ vim -o $(git status -s | awk '{print $2}') # 상태가 변한 애들 모두 연다.\n  ```\n- `--clean` : 플러그인 설정 로드 없이 연다.\n- `-M` : 수정 불가 전용으로 연다\n\n## registers\n- i : 최근 input text\n- : : 최근 명령어\n- % : 현재 파일명\n- # : 이전 버퍼명\n\n- [0-9] : 입력 모드에서 `ctrl + r + [0-9]` 로 접근가능\n- [az] : 매크로에 사용\n- [AZ] : 매크로에 append 가 가능 `:let @A=normal_command`\n\n## ex-mode\n- move 0 : 가장 위로 이동\n- move +1 : 현재 라인 아래로 이동\n- move -1 : 현재 라인 위로 이동\n- copy 0 : 가장 위로 복사\n- copy +0 : 현재 라인 아래에 복사 yyp\n- copy +1 : 현재 라인 아래에 복사\n\n`copy` 는 `t` 로 사용가능 `move` 는 `m` 로 사용가능.\n\n### vim \u003c-\u003e os\n#### 파일명 복사\n`+` 레지스터가 클립보드(mac)인걸 이용하여 아래와 같이 전달 한다.\n```vim\n\" 현재 파일 경로\n:let @+ = expand(\"%\")\n\" 절대경로\n:let @+ = expand(\"%:p\")\n\" 디렉토리 까지\n:let @+ = expand(\"%:h\")\n```\n\n### 변수\n```vim\n\" 확인\n:set clipboard?\n\" prepend\n:set clipboard^=unnamed\n\" append\n:set clipboard+=unnamed\n\" override\n:set clipboard=unnamed\n```\n\n### 워킹 디렉토리 변경\n```vim\n\" 현재 파일의 디렉토리로 변경\ncd %:p:h\n```\n\n## normal-mode\n- `gf` : 현재 윈도우에서 파일을 따라간다. 단 `@` 가 있는 경우 visual-mode 에서 따라가도록한다.\n\n## key-binding\n### \u003cPlug\u003e [[question]]\n플러그인에서 바인딩 전용으로 내보내는 것 같기도??\n- :VimwikiToggleListItem\u003cCR\u003e\n- \u003cPlug\u003eVimwikiToggleListItem\n\n### 특정 파일 타입에서만 바인딩을 원하는 경우\n```sh\nautocmd FileType vimwiki nmap x \u003cPlug\u003eVimwikiToggleListItem\n```\n\n## 패턴 검색\n\u003e `/` 로 시작\n\n```vim\n\" 대소문자 구분 안함\n:set ignorecase\n\" 대문자가 포함된 경우 구분 / 포함되지 않은 경우 구분 없이 검색\n:set smartcase\n```\n\n```vim\n# regexp\n/\\v[SEARCH_TEXT]\n# 일반 문자열 검색\n/\\V[SEARCH_TEXT]\n# 대소문자 구분 안함\n/\\c[SEARCH_TEXT]\n# 대문자 구분\n/\\C[SEARCH_TEXT]\n```\n\n### 여러 파일 치환\n- headless 모드에서 vim 을 [[sed]] 처럼 사용해서 치환\n  ```sh\n  vim **/*.md --headless --clean -c 'silent! argdo %s/\\v(\\`\\`\\`.*\\n)##/\\1\\r##/g | update | q' \n  ```\n  - `--headless` 는 vim 을 `background` 에서 실행 [[neovim]] 에서만 지원될 것으로 추정\n  - `--clean` 은 치환처리에 필요없고 속도를 위해서 로드하지 않기 위해 추가\n  - 모든 *markdown* 파일을 연 뒤에 `argdo` 로 열파일 모두에 대해서 치환 후 저장 그리고 종료\n  + [[diary:2023-12-19]]\n  + [[diary:2023-11-15]]\n\n## 정렬\nvisual 모드에서 사용 예, \n```vim\n:'\u003c,'\u003esort   # 정렬\n:'\u003c,'\u003esort!  # 역순 정렬\n:'\u003c,'\u003esort n # 넘버 정렬\n```\n\n- https://webdevetc.com/blog/sort-text-in-vim/\n\n## 외부 프로그램\n- [[jq]]\n```vim\n:%!jq\n```\n\n## 문법 검사\n\n```vim normal\nz=\n```\n\n## plugins\n- [[vimwiki]]\n- [[defx]]\n- [[floatterm]]\n- [[taskwiki]]\n- [[vim-surround]]\n- [[vim-autoswap]]\n- [[telekasten]]\n\n## [[error]]\n```vim\nVim:E117: Unknown function: netrw#CheckIfRemote\n```\n- https://github.com/tpope/vim-fugitive/issues/594#issuecomment-75315088\n\n\n## releated\n- [[vim-session]]\n- [[comparison:tagstack-vs-jump]]\n- [[neovim]]\n"])</script><script>self.__next_f.push([1,"16:Tfcd,"])</script><script>self.__next_f.push([1,"\u003e 현재(2023-10-08)는 [[neovim]] 와 동이어가 되서 문서가 파편화 되었으니 둘다 참조가 필요하다\n\u003e reference, back link 포함\n\n```vim\n\" ex command 결과보기\n:messages\n```\n\n## [[font]] 설정\n## 열기 옵션\n```sh\n$ vim -c \"24\" file.txt\n$ vim --clean \"24\" file.txt\n```\n- `-c` : 첫 번째 파일이 열린 후 ex 명령어로 실행\n- `-R` : 읽기 전용으로 열기\n- `+[LINE_NUM]` : 해당 라인에서 열기\n- `+/[TEXT]` : 텍스트를 검색하여 열기\n- `-` : stdin 으로 입력을 받는 경우`|` 사용으로 받는 경우등에 사용된다.\n- `-r` : 스왑파일 리스트 출력 [[vim-autoswap]] 참고\n- `-O` : 여러 파일을 제공하면 창을 분할하여 보여준다. 수평/수직 분할(o/O)\n  ```sh\n  $ vim -o $(git status -s | awk '{print $2}') # 상태가 변한 애들 모두 연다.\n  ```\n- `--clean` : 플러그인 설정 로드 없이 연다.\n- `-M` : 수정 불가 전용으로 연다\n\n## registers\n- i : 최근 input text\n- : : 최근 명령어\n- % : 현재 파일명\n- # : 이전 버퍼명\n\n- [0-9] : 입력 모드에서 `ctrl + r + [0-9]` 로 접근가능\n- [az] : 매크로에 사용\n- [AZ] : 매크로에 append 가 가능 `:let @A=normal_command`\n\n## ex-mode\n- move 0 : 가장 위로 이동\n- move +1 : 현재 라인 아래로 이동\n- move -1 : 현재 라인 위로 이동\n- copy 0 : 가장 위로 복사\n- copy +0 : 현재 라인 아래에 복사 yyp\n- copy +1 : 현재 라인 아래에 복사\n\n`copy` 는 `t` 로 사용가능 `move` 는 `m` 로 사용가능.\n\n### vim \u003c-\u003e os\n#### 파일명 복사\n`+` 레지스터가 클립보드(mac)인걸 이용하여 아래와 같이 전달 한다.\n```vim\n\" 현재 파일 경로\n:let @+ = expand(\"%\")\n\" 절대경로\n:let @+ = expand(\"%:p\")\n\" 디렉토리 까지\n:let @+ = expand(\"%:h\")\n```\n\n### 변수\n```vim\n\" 확인\n:set clipboard?\n\" prepend\n:set clipboard^=unnamed\n\" append\n:set clipboard+=unnamed\n\" override\n:set clipboard=unnamed\n```\n\n### 워킹 디렉토리 변경\n```vim\n\" 현재 파일의 디렉토리로 변경\ncd %:p:h\n```\n\n## normal-mode\n- `gf` : 현재 윈도우에서 파일을 따라간다. 단 `@` 가 있는 경우 visual-mode 에서 따라가도록한다.\n\n## key-binding\n### \u003cPlug\u003e [[question]]\n플러그인에서 바인딩 전용으로 내보내는 것 같기도??\n- :VimwikiToggleListItem\u003cCR\u003e\n- \u003cPlug\u003eVimwikiToggleListItem\n\n### 특정 파일 타입에서만 바인딩을 원하는 경우\n```sh\nautocmd FileType vimwiki nmap x \u003cPlug\u003eVimwikiToggleListItem\n```\n\n## 패턴 검색\n\u003e `/` 로 시작\n\n```vim\n\" 대소문자 구분 안함\n:set ignorecase\n\" 대문자가 포함된 경우 구분 / 포함되지 않은 경우 구분 없이 검색\n:set smartcase\n```\n\n```vim\n# regexp\n/\\v[SEARCH_TEXT]\n# 일반 문자열 검색\n/\\V[SEARCH_TEXT]\n# 대소문자 구분 안함\n/\\c[SEARCH_TEXT]\n# 대문자 구분\n/\\C[SEARCH_TEXT]\n```\n\n### 여러 파일 치환\n- headless 모드에서 vim 을 [[sed]] 처럼 사용해서 치환\n  ```sh\n  vim **/*.md --headless --clean -c 'silent! argdo %s/\\v(\\`\\`\\`.*\\n)##/\\1\\r##/g | update | q' \n  ```\n  - `--headless` 는 vim 을 `background` 에서 실행 [[neovim]] 에서만 지원될 것으로 추정\n  - `--clean` 은 치환처리에 필요없고 속도를 위해서 로드하지 않기 위해 추가\n  - 모든 *markdown* 파일을 연 뒤에 `argdo` 로 열파일 모두에 대해서 치환 후 저장 그리고 종료\n  + [[diary:2023-12-19]]\n  + [[diary:2023-11-15]]\n\n## 정렬\nvisual 모드에서 사용 예, \n```vim\n:'\u003c,'\u003esort   # 정렬\n:'\u003c,'\u003esort!  # 역순 정렬\n:'\u003c,'\u003esort n # 넘버 정렬\n```\n\n- https://webdevetc.com/blog/sort-text-in-vim/\n\n## 외부 프로그램\n- [[jq]]\n```vim\n:%!jq\n```\n\n## 문법 검사\n\n```vim normal\nz=\n```\n\n## plugins\n- [[vimwiki]]\n- [[defx]]\n- [[floatterm]]\n- [[taskwiki]]\n- [[vim-surround]]\n- [[vim-autoswap]]\n- [[telekasten]]\n\n## [[error]]\n```vim\nVim:E117: Unknown function: netrw#CheckIfRemote\n```\n- https://github.com/tpope/vim-fugitive/issues/594#issuecomment-75315088\n\n\n## releated\n- [[vim-session]]\n- [[comparison:tagstack-vs-jump]]\n- [[neovim]]\n"])</script><script>self.__next_f.push([1,"17:Tfcd,"])</script><script>self.__next_f.push([1,"\u003e 현재(2023-10-08)는 [[neovim]] 와 동이어가 되서 문서가 파편화 되었으니 둘다 참조가 필요하다\n\u003e reference, back link 포함\n\n```vim\n\" ex command 결과보기\n:messages\n```\n\n## [[font]] 설정\n## 열기 옵션\n```sh\n$ vim -c \"24\" file.txt\n$ vim --clean \"24\" file.txt\n```\n- `-c` : 첫 번째 파일이 열린 후 ex 명령어로 실행\n- `-R` : 읽기 전용으로 열기\n- `+[LINE_NUM]` : 해당 라인에서 열기\n- `+/[TEXT]` : 텍스트를 검색하여 열기\n- `-` : stdin 으로 입력을 받는 경우`|` 사용으로 받는 경우등에 사용된다.\n- `-r` : 스왑파일 리스트 출력 [[vim-autoswap]] 참고\n- `-O` : 여러 파일을 제공하면 창을 분할하여 보여준다. 수평/수직 분할(o/O)\n  ```sh\n  $ vim -o $(git status -s | awk '{print $2}') # 상태가 변한 애들 모두 연다.\n  ```\n- `--clean` : 플러그인 설정 로드 없이 연다.\n- `-M` : 수정 불가 전용으로 연다\n\n## registers\n- i : 최근 input text\n- : : 최근 명령어\n- % : 현재 파일명\n- # : 이전 버퍼명\n\n- [0-9] : 입력 모드에서 `ctrl + r + [0-9]` 로 접근가능\n- [az] : 매크로에 사용\n- [AZ] : 매크로에 append 가 가능 `:let @A=normal_command`\n\n## ex-mode\n- move 0 : 가장 위로 이동\n- move +1 : 현재 라인 아래로 이동\n- move -1 : 현재 라인 위로 이동\n- copy 0 : 가장 위로 복사\n- copy +0 : 현재 라인 아래에 복사 yyp\n- copy +1 : 현재 라인 아래에 복사\n\n`copy` 는 `t` 로 사용가능 `move` 는 `m` 로 사용가능.\n\n### vim \u003c-\u003e os\n#### 파일명 복사\n`+` 레지스터가 클립보드(mac)인걸 이용하여 아래와 같이 전달 한다.\n```vim\n\" 현재 파일 경로\n:let @+ = expand(\"%\")\n\" 절대경로\n:let @+ = expand(\"%:p\")\n\" 디렉토리 까지\n:let @+ = expand(\"%:h\")\n```\n\n### 변수\n```vim\n\" 확인\n:set clipboard?\n\" prepend\n:set clipboard^=unnamed\n\" append\n:set clipboard+=unnamed\n\" override\n:set clipboard=unnamed\n```\n\n### 워킹 디렉토리 변경\n```vim\n\" 현재 파일의 디렉토리로 변경\ncd %:p:h\n```\n\n## normal-mode\n- `gf` : 현재 윈도우에서 파일을 따라간다. 단 `@` 가 있는 경우 visual-mode 에서 따라가도록한다.\n\n## key-binding\n### \u003cPlug\u003e [[question]]\n플러그인에서 바인딩 전용으로 내보내는 것 같기도??\n- :VimwikiToggleListItem\u003cCR\u003e\n- \u003cPlug\u003eVimwikiToggleListItem\n\n### 특정 파일 타입에서만 바인딩을 원하는 경우\n```sh\nautocmd FileType vimwiki nmap x \u003cPlug\u003eVimwikiToggleListItem\n```\n\n## 패턴 검색\n\u003e `/` 로 시작\n\n```vim\n\" 대소문자 구분 안함\n:set ignorecase\n\" 대문자가 포함된 경우 구분 / 포함되지 않은 경우 구분 없이 검색\n:set smartcase\n```\n\n```vim\n# regexp\n/\\v[SEARCH_TEXT]\n# 일반 문자열 검색\n/\\V[SEARCH_TEXT]\n# 대소문자 구분 안함\n/\\c[SEARCH_TEXT]\n# 대문자 구분\n/\\C[SEARCH_TEXT]\n```\n\n### 여러 파일 치환\n- headless 모드에서 vim 을 [[sed]] 처럼 사용해서 치환\n  ```sh\n  vim **/*.md --headless --clean -c 'silent! argdo %s/\\v(\\`\\`\\`.*\\n)##/\\1\\r##/g | update | q' \n  ```\n  - `--headless` 는 vim 을 `background` 에서 실행 [[neovim]] 에서만 지원될 것으로 추정\n  - `--clean` 은 치환처리에 필요없고 속도를 위해서 로드하지 않기 위해 추가\n  - 모든 *markdown* 파일을 연 뒤에 `argdo` 로 열파일 모두에 대해서 치환 후 저장 그리고 종료\n  + [[diary:2023-12-19]]\n  + [[diary:2023-11-15]]\n\n## 정렬\nvisual 모드에서 사용 예, \n```vim\n:'\u003c,'\u003esort   # 정렬\n:'\u003c,'\u003esort!  # 역순 정렬\n:'\u003c,'\u003esort n # 넘버 정렬\n```\n\n- https://webdevetc.com/blog/sort-text-in-vim/\n\n## 외부 프로그램\n- [[jq]]\n```vim\n:%!jq\n```\n\n## 문법 검사\n\n```vim normal\nz=\n```\n\n## plugins\n- [[vimwiki]]\n- [[defx]]\n- [[floatterm]]\n- [[taskwiki]]\n- [[vim-surround]]\n- [[vim-autoswap]]\n- [[telekasten]]\n\n## [[error]]\n```vim\nVim:E117: Unknown function: netrw#CheckIfRemote\n```\n- https://github.com/tpope/vim-fugitive/issues/594#issuecomment-75315088\n\n\n## releated\n- [[vim-session]]\n- [[comparison:tagstack-vs-jump]]\n- [[neovim]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# vim\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# vim\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/vim\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# vim\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

@@ -1,0 +1,486 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-acc14253718cae7b.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","node","c"]
+0:["kKV5CxI4RD_CctXE8Ke3_",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","node","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"node\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","node","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:T1a96,<h1 id="node">node</h1>
+<p>javascript runtime a.k.a <a href="nodejs">nodejs</a></p>
+<h2 id="version-에-따른-업데이트">version 에 따른 업데이트</h2>
+<ul>
+<li>20<ul>
+<li><code class="span">.env</code> 주입 <code class="span">-node --env-file=config.env. index.js</code><ul>
+<li><a href="https://nodejs.org/en/blog/release/v20.6.0" target="_blank">[URL] https://nodejs.org/en/blog/release/v20.6.0</a></li>
+</ul>
+</li>
+<li><code class="span">--experimental-permission</code> 파일 쓰기,  읽기 등이 외부라이브러리등에 의해서 행해질 수 있는 것 봉쇄<ul>
+<li>해보니 잘안됨</li>
+</ul>
+<ul>
+<li><a href="https://nodejs.org/en/blog/release/v20.0.0#permission-model" target="_blank">[URL] https://nodejs.org/en/blog/release/v20.0.0#permission-model</a></li>
+</ul>
+</li>
+<li>buildtin test runner<ul>
+<li><code class="span">tsx</code> 사용, <code class="span">package.json</code> 에 <code class="span">&quot;type&quot;: &quot;module&quot;</code> 이 있어야지 <code class="span">import</code> 구문 사용가능</li>
+</ul>
+<pre><code class="hljs language-sh">node --loader tsx --<span class="hljs-built_in">test</span> **/*.test.ts
+</code></pre></li>
+</ul>
+</li>
+</ul>
+<h2 id="options">options</h2>
+<p>--max-old-space-size
+--max-new-space-size
+--require [file.js]
+--enable-source-maps
+--es-module-specifier-resolution=[node] # node 의 경우에는 esmodule 파일의 확장자를 명시하지 않아도 import 가 가능 node@19 부터는 제거될 예정</p>
+<h2 id="esmodule">esmodule</h2>
+<ul>
+<li>__filename -&gt; import.meta.url</li>
+<li>__dirname -&gt; path.dirname(import.meta.url)</li>
+</ul>
+<h2 id="개념">개념</h2>
+<h3 id="비동기-우선-순위">비동기 우선 순위</h3>
+<ul>
+<li>single thread</li>
+<li>async priority<ul>
+<li>micro queue</li>
+<li>promises</li>
+<li>timer</li>
+</ul>
+</li>
+</ul>
+<h2 id="error"><a href="error">error</a></h2>
+<h3 id="econnreset">ECONNRESET</h3>
+<ul>
+<li><a href="axios">axios</a></li>
+</ul>
+<pre><code class="hljs language-sh">Error: Client network socket disconnected before secure TLS connection was established
+    at connResetException (internal/errors.js:609:14)
+    at TLSSocket.onConnectEnd (_tls_wrap.js:1536:19)
+    at Object.onceWrapper (events.js:421:28)
+    at TLSSocket.emit (events.js:327:22)
+    at endReadableNT (_stream_readable.js:1221:12)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21) {
+  code: <span class="hljs-string">&#x27;ECONNRESET&#x27;</span>,
+</code></pre><h3 id="err_ossl_evp_unsupported">ERR_OSSL_EVP_UNSUPPORTED</h3>
+<pre><code class="hljs language-sh">Failed to construct transformer:  Error: error:0308010C:digital envelope routines::unsupported
+  opensslErrorStack: [ <span class="hljs-string">&#x27;error:03000086:digital envelope routines::initialization error&#x27;</span> ],
+  library: <span class="hljs-string">&#x27;digital envelope routines&#x27;</span>,
+  reason: <span class="hljs-string">&#x27;unsupported&#x27;</span>,
+  code: <span class="hljs-string">&#x27;ERR_OSSL_EVP_UNSUPPORTED&#x27;</span>
+}
+</code></pre><p>node18에서는 실행안되고 node 16에서 실행됨 어떤 것 때문인지는 찾아보지 않음</p>
+<h3 id="internal-error-spawn-unknown-system-error--8">Internal Error: spawn Unknown system error -8</h3>
+<p>package.json 의 script에서 쉘스크립트를 실행하는 경우에 발생
+<code class="span">#!/usr/bin/env bash</code>
+와 같이 최상단 라인에 쉘을 명시해주면 해결된다</p>
+<pre><code class="hljs language-sh">Internal Error: spawn Unknown system error -8
+    at ChildProcess.spawn (node:internal/child_process:413:11)
+    at Object.spawn (node:child_process:757:9)
+    at YK (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:4:6994)
+    at uh.implementation (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:392:17802)
+    at uh.exec (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:395:1585)
+    at uh.run (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:395:1756)
+    at I7 (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:401:6331)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async WRe (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:403:16)
+    at async o (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:403:146)
+</code></pre><h3 id="automatic-extension-resolution-of-the-main-field-is-deprecated-for-es-modules">Automatic extension resolution of the &quot;main&quot; field is deprecated for ES modules.</h3>
+<pre><code class="hljs language-sh">Automatic extension resolution of the <span class="hljs-string">&quot;main&quot;</span> field is deprecated <span class="hljs-keyword">for</span> ES modules.
+something:build: (node:11541) [DEP0151] DeprecationWarning: Package /Users/deptno/workspace/src/github.com/deptno/salji.ro/backend/packages/logger/node_modules/@internal/constant/ has a <span class="hljs-string">&quot;main&quot;</span> field <span class="hljs-built_in">set</span> to <span class="hljs-string">&quot;dist&quot;</span>, excluding the full filename and extension to the resolved file at <span class="hljs-string">&quot;dist/index.js&quot;</span>, imported from /backend/packages/logger/dist/logger.mjs.
+</code></pre><ul>
+<li><code class="span">package.json</code> <code class="span">main</code> 속성에 <code class="span">index.js</code> 와 같이 확장자를 포함한 경로 명시</li>
+</ul>
+<h2 id="디버깅">디버깅</h2>
+<h3 id="memory-leak">memory leak</h3>
+<ul>
+<li><a href="env">NODE_OPTIONS</a></li>
+</ul>
+<pre><code class="hljs language-sh">cross-env NODEOPTIONS=--inspect ts-node .
+</code></pre><p><code class="span">inspect</code> 옵션으로 덤프를 생성해서 메모리 추적이 가능하다.</p>
+<h4 id="디바이스-디버깅">디바이스 디버깅</h4>
+<p>크롬에서 확인이가능</p>
+<ul>
+<li>chrome://inspect/#devices</li>
+</ul>
+<p>접속 후 인스펙터를 열면 메모리 탭이 존재하고 여기서 실시간으로 증가와 감소 확인이 가능</p>
+<h2 id="성능테스트">성능테스트</h2>
+<h2 id="부하-테스트">부하 테스트</h2>
+<ul>
+<li><a href="ngrinder">ngrinder</a></li>
+</ul>
+<p>특정 페이지를 지속적으로 해서 tps 측정이 가능하다.<br>이와 함께 크롬의 메모리 탭을 확인해서 레코딩을 걸고 부하테스트를 한 후 gc 가 돌고나서도 메모리가 원래되로 돌아오지 않는지 확인이 필요하다.  </p>
+<h1 id="link">link</h1>
+<ul>
+<li><a href="javascript">javascript</a></li>
+<li><a href="nvm">nvm</a></li>
+<li><a href="npm">npm</a></li>
+<li><a href="yarn">yarn</a></li>
+<li><a href="pnpm">pnpm</a></li>
+<li><a href="axios">axios</a></li>
+<li><a href="iconv-lite">iconv-lite</a></li>
+<li><a href="chrome">chrome</a></li>
+<li><a href="bun">bun</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/5427f8b\n","className":"bg-white text-black","children":"5427f8b"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/node.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/node.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/node.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"node","name":"node","val":14},{"id":"nodejs","name":"nodejs","val":1},{"id":"error","name":"error","val":4},{"id":"axios","name":"axios","val":2},{"id":"env","name":"env","val":5},{"id":"ngrinder","name":"ngrinder","val":"$undefined"},{"id":"javascript","name":"javascript","val":6},{"id":"nvm","name":"nvm","val":1},{"id":"npm","name":"npm","val":"$undefined"},{"id":"yarn","name":"yarn","val":11},{"id":"pnpm","name":"pnpm","val":5},{"id":"iconv-lite","name":"iconv-lite","val":3},{"id":"chrome","name":"chrome","val":3},{"id":"bun","name":"bun","val":10},{"id":"about-me","name":"about-me","val":60},{"id":"benchmark","name":"benchmark","val":2},{"id":"console","name":"console","val":3},{"id":"corepack","name":"corepack","val":3},{"id":"deno","name":"deno","val":3},{"id":"devcontainer","name":"devcontainer","val":3},{"id":"encoding","name":"encoding","val":3},{"id":"index","name":"index","val":106},{"id":"kubernetes","name":"kubernetes","val":40},{"id":"log","name":"log","val":11},{"id":"me","name":"me","val":16},{"id":"milvus","name":"milvus","val":9},{"id":"node-to-rust","name":"node-to-rust","val":11},{"id":"pino","name":"pino","val":3},{"id":"typescript","name":"typescript","val":5},{"id":"v8","name":"v8","val":6},{"id":"diary/2022-02-06","name":"diary/2022-02-06","val":1},{"id":"diary/2023-12-06","name":"diary/2023-12-06","val":5},{"id":"diary/2023-12-22","name":"diary/2023-12-22","val":12},{"id":"diary/2024-02-22","name":"diary/2024-02-22","val":6},{"id":"diary/2024-02-23","name":"diary/2024-02-23","val":7}],"links":[{"source":"node","target":"nodejs"},{"source":"node","target":"error"},{"source":"node","target":"axios"},{"source":"node","target":"env"},{"source":"node","target":"ngrinder"},{"source":"node","target":"javascript"},{"source":"node","target":"nvm"},{"source":"node","target":"npm"},{"source":"node","target":"yarn"},{"source":"node","target":"pnpm"},{"source":"node","target":"axios"},{"source":"node","target":"iconv-lite"},{"source":"node","target":"chrome"},{"source":"node","target":"bun"},{"source":"about-me","target":"node"},{"source":"axios","target":"node"},{"source":"axios","target":"node"},{"source":"benchmark","target":"node"},{"source":"bun","target":"node"},{"source":"chrome","target":"node"},{"source":"console","target":"node"},{"source":"corepack","target":"node"},{"source":"deno","target":"node"},{"source":"devcontainer","target":"node"},{"source":"encoding","target":"node"},{"source":"iconv-lite","target":"node"},{"source":"index","target":"node"},{"source":"javascript","target":"node"},{"source":"kubernetes","target":"node"},{"source":"log","target":"node"},{"source":"me","target":"node"},{"source":"milvus","target":"node"},{"source":"node-to-rust","target":"node"},{"source":"node-to-rust","target":"node"},{"source":"nodejs","target":"node"},{"source":"nvm","target":"node"},{"source":"pino","target":"node"},{"source":"pnpm","target":"node"},{"source":"typescript","target":"node"},{"source":"typescript","target":"node"},{"source":"v8","target":"node"},{"source":"v8","target":"node"},{"source":"yarn","target":"node"},{"source":"yarn","target":"node"},{"source":"diary/2022-02-06","target":"node"},{"source":"diary/2023-12-06","target":"node"},{"source":"diary/2023-12-06","target":"node"},{"source":"diary/2023-12-22","target":"node"},{"source":"diary/2024-02-22","target":"node"},{"source":"diary/2024-02-23","target":"node"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","node",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/node","children":[["$","span",null,{"className":"underline","children":"node"}],["$","sup",null,{"children":14}]]}]}],["$","span","nodejs",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/nodejs","children":[["$","span",null,{"className":"underline","children":"nodejs"}],["$","sup",null,{"children":1}]]}]}],["$","span","error",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/error","children":[["$","span",null,{"className":"underline","children":"error"}],["$","sup",null,{"children":4}]]}]}],["$","span","axios",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/axios","children":[["$","span",null,{"className":"underline","children":"axios"}],["$","sup",null,{"children":2}]]}]}],["$","span","env",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/env","children":[["$","span",null,{"className":"underline","children":"env"}],["$","sup",null,{"children":5}]]}]}],["$","span","ngrinder",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ngrinder","children":[["$","span",null,{"className":"underline","children":"ngrinder"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","javascript",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/javascript","children":[["$","span",null,{"className":"underline","children":"javascript"}],["$","sup",null,{"children":6}]]}]}],["$","span","nvm",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/nvm","children":[["$","span",null,{"className":"underline","children":"nvm"}],["$","sup",null,{"children":1}]]}]}],["$","span","npm",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/npm","children":[["$","span",null,{"className":"underline","children":"npm"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","yarn",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/yarn","children":[["$","span",null,{"className":"underline","children":"yarn"}],["$","sup",null,{"children":11}]]}]}],["$","span","pnpm",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/pnpm","children":[["$","span",null,{"className":"underline","children":"pnpm"}],["$","sup",null,{"children":5}]]}]}],["$","span","iconv-lite",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/iconv-lite","children":[["$","span",null,{"className":"underline","children":"iconv-lite"}],["$","sup",null,{"children":3}]]}]}],["$","span","chrome",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/chrome","children":[["$","span",null,{"className":"underline","children":"chrome"}],["$","sup",null,{"children":3}]]}]}],["$","span","bun",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/bun","children":[["$","span",null,{"className":"underline","children":"bun"}],["$","sup",null,{"children":10}]]}]}],["$","span","about-me",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/about-me","children":[["$","span",null,{"className":"underline","children":"about-me"}],["$","sup",null,{"children":60}]]}]}],["$","span","benchmark",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/benchmark","children":[["$","span",null,{"className":"underline","children":"benchmark"}],["$","sup",null,{"children":2}]]}]}],["$","span","console",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/console","children":[["$","span",null,{"className":"underline","children":"console"}],["$","sup",null,{"children":3}]]}]}],["$","span","corepack",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/corepack","children":[["$","span",null,{"className":"underline","children":"corepack"}],["$","sup",null,{"children":3}]]}]}],["$","span","deno",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/deno","children":[["$","span",null,{"className":"underline","children":"deno"}],["$","sup",null,{"children":3}]]}]}],["$","span","devcontainer",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/devcontainer","children":[["$","span",null,{"className":"underline","children":"devcontainer"}],["$","sup",null,{"children":3}]]}]}],["$","span","encoding",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/encoding","children":[["$","span",null,{"className":"underline","children":"encoding"}],["$","sup",null,{"children":3}]]}]}],["$","span","index",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/index","children":[["$","span",null,{"className":"underline","children":"index"}],["$","sup",null,{"children":106}]]}]}],["$","span","kubernetes",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/kubernetes","children":[["$","span",null,{"className":"underline","children":"kubernetes"}],["$","sup",null,{"children":40}]]}]}],["$","span","log",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/log","children":[["$","span",null,{"className":"underline","children":"log"}],["$","sup",null,{"children":11}]]}]}],["$","span","me",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/me","children":[["$","span",null,{"className":"underline","children":"me"}],["$","sup",null,{"children":16}]]}]}],["$","span","milvus",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/milvus","children":[["$","span",null,{"className":"underline","children":"milvus"}],["$","sup",null,{"children":9}]]}]}],["$","span","node-to-rust",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/node-to-rust","children":[["$","span",null,{"className":"underline","children":"node-to-rust"}],["$","sup",null,{"children":11}]]}]}],["$","span","pino",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/pino","children":[["$","span",null,{"className":"underline","children":"pino"}],["$","sup",null,{"children":3}]]}]}],["$","span","typescript",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/typescript","children":[["$","span",null,{"className":"underline","children":"typescript"}],["$","sup",null,{"children":5}]]}]}],["$","span","v8",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/v8","children":[["$","span",null,{"className":"underline","children":"v8"}],["$","sup",null,{"children":6}]]}]}],["$","span","diary/2022-02-06",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2022-02-06","children":[["$","span",null,{"className":"underline","children":"diary/2022-02-06"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2023-12-06",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-12-06","children":[["$","span",null,{"className":"underline","children":"diary/2023-12-06"}],["$","sup",null,{"children":5}]]}]}],["$","span","diary/2023-12-22",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-12-22","children":[["$","span",null,{"className":"underline","children":"diary/2023-12-22"}],["$","sup",null,{"children":12}]]}]}],["$","span","diary/2024-02-22",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-02-22","children":[["$","span",null,{"className":"underline","children":"diary/2024-02-22"}],["$","sup",null,{"children":6}]]}]}],["$","span","diary/2024-02-23",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-02-23","children":[["$","span",null,{"className":"underline","children":"diary/2024-02-23"}],["$","sup",null,{"children":7}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","node",{"className":"pl-0","children":["$","a",null,{"href":"#node","children":"node"}]}],["$","div","version-에-따른-업데이트",{"className":"pl-2","children":["$","a",null,{"href":"#version-에-따른-업데이트","children":"version 에 따른 업데이트"}]}],["$","div","options",{"className":"pl-2","children":["$","a",null,{"href":"#options","children":"options"}]}],["$","div","esmodule",{"className":"pl-2","children":["$","a",null,{"href":"#esmodule","children":"esmodule"}]}],["$","div","개념",{"className":"pl-2","children":["$","a",null,{"href":"#개념","children":"개념"}]}],["$","div","비동기-우선-순위",{"className":"pl-4","children":["$","a",null,{"href":"#비동기-우선-순위","children":"비동기 우선 순위"}]}],["$","div","error",{"className":"pl-2","children":["$","a",null,{"href":"#error","children":"error"}]}],["$","div","econnreset",{"className":"pl-4","children":["$","a",null,{"href":"#econnreset","children":"ECONNRESET"}]}],["$","div","err_ossl_evp_unsupported",{"className":"pl-4","children":["$","a",null,{"href":"#err_ossl_evp_unsupported","children":"ERR_OSSL_EVP_UNSUPPORTED"}]}],["$","div","internal-error-spawn-unknown-system-error--8",{"className":"pl-4","children":["$","a",null,{"href":"#internal-error-spawn-unknown-system-error--8","children":"Internal Error: spawn Unknown system error -8"}]}],["$","div","automatic-extension-resolution-of-the-main-field-is-deprecated-for-es-modules",{"className":"pl-4","children":["$","a",null,{"href":"#automatic-extension-resolution-of-the-main-field-is-deprecated-for-es-modules","children":"Automatic extension resolution of the \"main\" field is deprecated for ES modules."}]}],["$","div","디버깅",{"className":"pl-2","children":["$","a",null,{"href":"#디버깅","children":"디버깅"}]}],["$","div","memory-leak",{"className":"pl-4","children":["$","a",null,{"href":"#memory-leak","children":"memory leak"}]}],["$","div","디바이스-디버깅",{"className":"pl-6","children":["$","a",null,{"href":"#디바이스-디버깅","children":"디바이스 디버깅"}]}],["$","div","성능테스트",{"className":"pl-2","children":["$","a",null,{"href":"#성능테스트","children":"성능테스트"}]}],["$","div","부하-테스트",{"className":"pl-2","children":["$","a",null,{"href":"#부하-테스트","children":"부하 테스트"}]}],["$","div","link",{"className":"pl-0","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:T1180,
+javascript runtime a.k.a [[nodejs]]
+
+## version 에 따른 업데이트
+- 20
+  - `.env` 주입 `-node --env-file=config.env. index.js`
+    + https://nodejs.org/en/blog/release/v20.6.0
+  - `--experimental-permission` 파일 쓰기,  읽기 등이 외부라이브러리등에 의해서 행해질 수 있는 것 봉쇄
+    - 해보니 잘안됨
+    + https://nodejs.org/en/blog/release/v20.0.0#permission-model
+  - buildtin test runner
+    - `tsx` 사용, `package.json` 에 `"type": "module"` 이 있어야지 `import` 구문 사용가능
+    ```sh 
+    node --loader tsx --test **/*.test.ts
+    ```
+## options
+--max-old-space-size
+--max-new-space-size
+--require [file.js]
+--enable-source-maps
+--es-module-specifier-resolution=[node] # node 의 경우에는 esmodule 파일의 확장자를 명시하지 않아도 import 가 가능 node@19 부터는 제거될 예정
+
+## esmodule
+- __filename -> import.meta.url
+- __dirname -> path.dirname(import.meta.url)
+ 
+## 개념
+### 비동기 우선 순위
+  - single thread
+  - async priority
+    - micro queue
+    - promises
+    - timer
+
+## [[error]]
+### ECONNRESET
+- [[axios]]
+```sh
+Error: Client network socket disconnected before secure TLS connection was established
+    at connResetException (internal/errors.js:609:14)
+    at TLSSocket.onConnectEnd (_tls_wrap.js:1536:19)
+    at Object.onceWrapper (events.js:421:28)
+    at TLSSocket.emit (events.js:327:22)
+    at endReadableNT (_stream_readable.js:1221:12)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21) {
+  code: 'ECONNRESET',
+```
+
+### ERR_OSSL_EVP_UNSUPPORTED
+```sh
+Failed to construct transformer:  Error: error:0308010C:digital envelope routines::unsupported
+  opensslErrorStack: [ 'error:03000086:digital envelope routines::initialization error' ],
+  library: 'digital envelope routines',
+  reason: 'unsupported',
+  code: 'ERR_OSSL_EVP_UNSUPPORTED'
+}
+```
+node18에서는 실행안되고 node 16에서 실행됨 어떤 것 때문인지는 찾아보지 않음
+
+### Internal Error: spawn Unknown system error -8
+package.json 의 script에서 쉘스크립트를 실행하는 경우에 발생
+`#!/usr/bin/env bash`
+와 같이 최상단 라인에 쉘을 명시해주면 해결된다
+```sh
+Internal Error: spawn Unknown system error -8
+    at ChildProcess.spawn (node:internal/child_process:413:11)
+    at Object.spawn (node:child_process:757:9)
+    at YK (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:4:6994)
+    at uh.implementation (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:392:17802)
+    at uh.exec (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:395:1585)
+    at uh.run (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:395:1756)
+    at I7 (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:401:6331)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async WRe (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:403:16)
+    at async o (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:403:146)
+```
+
+### Automatic extension resolution of the "main" field is deprecated for ES modules.
+```sh 
+Automatic extension resolution of the "main" field is deprecated for ES modules.
+something:build: (node:11541) [DEP0151] DeprecationWarning: Package /Users/deptno/workspace/src/github.com/deptno/salji.ro/backend/packages/logger/node_modules/@internal/constant/ has a "main" field set to "dist", excluding the full filename and extension to the resolved file at "dist/index.js", imported from /backend/packages/logger/dist/logger.mjs.
+```
+- `package.json` `main` 속성에 `index.js` 와 같이 확장자를 포함한 경로 명시
+
+## 디버깅
+### memory leak
+- [[env|NODE_OPTIONS]]
+
+```sh
+cross-env NODEOPTIONS=--inspect ts-node .
+```
+
+`inspect` 옵션으로 덤프를 생성해서 메모리 추적이 가능하다.
+
+#### 디바이스 디버깅
+크롬에서 확인이가능
+- chrome://inspect/#devices
+
+접속 후 인스펙터를 열면 메모리 탭이 존재하고 여기서 실시간으로 증가와 감소 확인이 가능
+
+## 성능테스트
+## 부하 테스트
+- [[ngrinder]]
+
+특정 페이지를 지속적으로 해서 tps 측정이 가능하다.  
+이와 함께 크롬의 메모리 탭을 확인해서 레코딩을 걸고 부하테스트를 한 후 gc 가 돌고나서도 메모리가 원래되로 돌아오지 않는지 확인이 필요하다.  
+
+# link
+- [[javascript]]
+- [[nvm]]
+- [[npm]]
+- [[yarn]]
+- [[pnpm]]
+- [[axios]]
+- [[iconv-lite]]
+- [[chrome]]
+- [[bun]]
+12:T1180,
+javascript runtime a.k.a [[nodejs]]
+
+## version 에 따른 업데이트
+- 20
+  - `.env` 주입 `-node --env-file=config.env. index.js`
+    + https://nodejs.org/en/blog/release/v20.6.0
+  - `--experimental-permission` 파일 쓰기,  읽기 등이 외부라이브러리등에 의해서 행해질 수 있는 것 봉쇄
+    - 해보니 잘안됨
+    + https://nodejs.org/en/blog/release/v20.0.0#permission-model
+  - buildtin test runner
+    - `tsx` 사용, `package.json` 에 `"type": "module"` 이 있어야지 `import` 구문 사용가능
+    ```sh 
+    node --loader tsx --test **/*.test.ts
+    ```
+## options
+--max-old-space-size
+--max-new-space-size
+--require [file.js]
+--enable-source-maps
+--es-module-specifier-resolution=[node] # node 의 경우에는 esmodule 파일의 확장자를 명시하지 않아도 import 가 가능 node@19 부터는 제거될 예정
+
+## esmodule
+- __filename -> import.meta.url
+- __dirname -> path.dirname(import.meta.url)
+ 
+## 개념
+### 비동기 우선 순위
+  - single thread
+  - async priority
+    - micro queue
+    - promises
+    - timer
+
+## [[error]]
+### ECONNRESET
+- [[axios]]
+```sh
+Error: Client network socket disconnected before secure TLS connection was established
+    at connResetException (internal/errors.js:609:14)
+    at TLSSocket.onConnectEnd (_tls_wrap.js:1536:19)
+    at Object.onceWrapper (events.js:421:28)
+    at TLSSocket.emit (events.js:327:22)
+    at endReadableNT (_stream_readable.js:1221:12)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21) {
+  code: 'ECONNRESET',
+```
+
+### ERR_OSSL_EVP_UNSUPPORTED
+```sh
+Failed to construct transformer:  Error: error:0308010C:digital envelope routines::unsupported
+  opensslErrorStack: [ 'error:03000086:digital envelope routines::initialization error' ],
+  library: 'digital envelope routines',
+  reason: 'unsupported',
+  code: 'ERR_OSSL_EVP_UNSUPPORTED'
+}
+```
+node18에서는 실행안되고 node 16에서 실행됨 어떤 것 때문인지는 찾아보지 않음
+
+### Internal Error: spawn Unknown system error -8
+package.json 의 script에서 쉘스크립트를 실행하는 경우에 발생
+`#!/usr/bin/env bash`
+와 같이 최상단 라인에 쉘을 명시해주면 해결된다
+```sh
+Internal Error: spawn Unknown system error -8
+    at ChildProcess.spawn (node:internal/child_process:413:11)
+    at Object.spawn (node:child_process:757:9)
+    at YK (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:4:6994)
+    at uh.implementation (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:392:17802)
+    at uh.exec (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:395:1585)
+    at uh.run (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:395:1756)
+    at I7 (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:401:6331)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async WRe (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:403:16)
+    at async o (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:403:146)
+```
+
+### Automatic extension resolution of the "main" field is deprecated for ES modules.
+```sh 
+Automatic extension resolution of the "main" field is deprecated for ES modules.
+something:build: (node:11541) [DEP0151] DeprecationWarning: Package /Users/deptno/workspace/src/github.com/deptno/salji.ro/backend/packages/logger/node_modules/@internal/constant/ has a "main" field set to "dist", excluding the full filename and extension to the resolved file at "dist/index.js", imported from /backend/packages/logger/dist/logger.mjs.
+```
+- `package.json` `main` 속성에 `index.js` 와 같이 확장자를 포함한 경로 명시
+
+## 디버깅
+### memory leak
+- [[env|NODE_OPTIONS]]
+
+```sh
+cross-env NODEOPTIONS=--inspect ts-node .
+```
+
+`inspect` 옵션으로 덤프를 생성해서 메모리 추적이 가능하다.
+
+#### 디바이스 디버깅
+크롬에서 확인이가능
+- chrome://inspect/#devices
+
+접속 후 인스펙터를 열면 메모리 탭이 존재하고 여기서 실시간으로 증가와 감소 확인이 가능
+
+## 성능테스트
+## 부하 테스트
+- [[ngrinder]]
+
+특정 페이지를 지속적으로 해서 tps 측정이 가능하다.  
+이와 함께 크롬의 메모리 탭을 확인해서 레코딩을 걸고 부하테스트를 한 후 gc 가 돌고나서도 메모리가 원래되로 돌아오지 않는지 확인이 필요하다.  
+
+# link
+- [[javascript]]
+- [[nvm]]
+- [[npm]]
+- [[yarn]]
+- [[pnpm]]
+- [[axios]]
+- [[iconv-lite]]
+- [[chrome]]
+- [[bun]]
+13:T1180,
+javascript runtime a.k.a [[nodejs]]
+
+## version 에 따른 업데이트
+- 20
+  - `.env` 주입 `-node --env-file=config.env. index.js`
+    + https://nodejs.org/en/blog/release/v20.6.0
+  - `--experimental-permission` 파일 쓰기,  읽기 등이 외부라이브러리등에 의해서 행해질 수 있는 것 봉쇄
+    - 해보니 잘안됨
+    + https://nodejs.org/en/blog/release/v20.0.0#permission-model
+  - buildtin test runner
+    - `tsx` 사용, `package.json` 에 `"type": "module"` 이 있어야지 `import` 구문 사용가능
+    ```sh 
+    node --loader tsx --test **/*.test.ts
+    ```
+## options
+--max-old-space-size
+--max-new-space-size
+--require [file.js]
+--enable-source-maps
+--es-module-specifier-resolution=[node] # node 의 경우에는 esmodule 파일의 확장자를 명시하지 않아도 import 가 가능 node@19 부터는 제거될 예정
+
+## esmodule
+- __filename -> import.meta.url
+- __dirname -> path.dirname(import.meta.url)
+ 
+## 개념
+### 비동기 우선 순위
+  - single thread
+  - async priority
+    - micro queue
+    - promises
+    - timer
+
+## [[error]]
+### ECONNRESET
+- [[axios]]
+```sh
+Error: Client network socket disconnected before secure TLS connection was established
+    at connResetException (internal/errors.js:609:14)
+    at TLSSocket.onConnectEnd (_tls_wrap.js:1536:19)
+    at Object.onceWrapper (events.js:421:28)
+    at TLSSocket.emit (events.js:327:22)
+    at endReadableNT (_stream_readable.js:1221:12)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21) {
+  code: 'ECONNRESET',
+```
+
+### ERR_OSSL_EVP_UNSUPPORTED
+```sh
+Failed to construct transformer:  Error: error:0308010C:digital envelope routines::unsupported
+  opensslErrorStack: [ 'error:03000086:digital envelope routines::initialization error' ],
+  library: 'digital envelope routines',
+  reason: 'unsupported',
+  code: 'ERR_OSSL_EVP_UNSUPPORTED'
+}
+```
+node18에서는 실행안되고 node 16에서 실행됨 어떤 것 때문인지는 찾아보지 않음
+
+### Internal Error: spawn Unknown system error -8
+package.json 의 script에서 쉘스크립트를 실행하는 경우에 발생
+`#!/usr/bin/env bash`
+와 같이 최상단 라인에 쉘을 명시해주면 해결된다
+```sh
+Internal Error: spawn Unknown system error -8
+    at ChildProcess.spawn (node:internal/child_process:413:11)
+    at Object.spawn (node:child_process:757:9)
+    at YK (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:4:6994)
+    at uh.implementation (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:392:17802)
+    at uh.exec (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:395:1585)
+    at uh.run (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:395:1756)
+    at I7 (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:401:6331)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async WRe (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:403:16)
+    at async o (/Users/deptno/.cache/node/corepack/yarn/3.3.1/yarn.js:403:146)
+```
+
+### Automatic extension resolution of the "main" field is deprecated for ES modules.
+```sh 
+Automatic extension resolution of the "main" field is deprecated for ES modules.
+something:build: (node:11541) [DEP0151] DeprecationWarning: Package /Users/deptno/workspace/src/github.com/deptno/salji.ro/backend/packages/logger/node_modules/@internal/constant/ has a "main" field set to "dist", excluding the full filename and extension to the resolved file at "dist/index.js", imported from /backend/packages/logger/dist/logger.mjs.
+```
+- `package.json` `main` 속성에 `index.js` 와 같이 확장자를 포함한 경로 명시
+
+## 디버깅
+### memory leak
+- [[env|NODE_OPTIONS]]
+
+```sh
+cross-env NODEOPTIONS=--inspect ts-node .
+```
+
+`inspect` 옵션으로 덤프를 생성해서 메모리 추적이 가능하다.
+
+#### 디바이스 디버깅
+크롬에서 확인이가능
+- chrome://inspect/#devices
+
+접속 후 인스펙터를 열면 메모리 탭이 존재하고 여기서 실시간으로 증가와 감소 확인이 가능
+
+## 성능테스트
+## 부하 테스트
+- [[ngrinder]]
+
+특정 페이지를 지속적으로 해서 tps 측정이 가능하다.  
+이와 함께 크롬의 메모리 탭을 확인해서 레코딩을 걸고 부하테스트를 한 후 gc 가 돌고나서도 메모리가 원래되로 돌아오지 않는지 확인이 필요하다.  
+
+# link
+- [[javascript]]
+- [[nvm]]
+- [[npm]]
+- [[yarn]]
+- [[pnpm]]
+- [[axios]]
+- [[iconv-lite]]
+- [[chrome]]
+- [[bun]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# node"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# node"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/node"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# node"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null
