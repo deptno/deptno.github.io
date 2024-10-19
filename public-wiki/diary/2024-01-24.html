@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-39c74ed669a18122.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-1939e229d7d9d28d.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title>- [X] 연말정산</title><meta name="description" content="  - [[2024-01-21]]
+  - [X] 홈텍스 [.] 간소화자료
+  - [X] 부양가족
+    - [X] 주민등록등본 혹은 가족관계증명서 필요
+    - [X] 홈택스,  부양가족 동의 신청
+  - [X] 자동차 연말머시기왔었는데 확인 필요
+- [ ] app 스크린샷 생성 스크립트는 terminal 프로그램으로 배포까지하는게 편하겠음
+  + [[2024-01-23]]
+- [X] 구글로그인 심사
+  - [X] 피드백 처리하여 다시 심사중
+- [.] 안드로이드 플레이 스토어 등록
+  - [X] 계정삭제를 웹으로 지원
+    ```mermaid
+    sequenceDiagram
+      actor u as user
+      participant s as site
+      participant sv as server
+
+      u -&gt;&gt; s: 이메일입력(email) 
+      s -&gt;&gt; sv: POST: 삭제요청(email)
+      sv --&gt;&gt; u: 404: find id by email
+      sv --&gt;&gt; db: save token
+      sv -&gt;&gt; u: 삭인 확제 이메일(id, token)
+      u -&gt;&gt; sv: POST: 삭제확인(id, token)
+      sv --&gt;&gt; db: delete token
+      sv --&gt;&gt; s: redirect: 만료된 토큰
+      sv -&gt;&gt; s: redirect: 삭제완료 알림 페이지
+    ```
+  - [ ] 앱 서명 google playstore 에서 제공하는 키사용 체크
+  - [ ] ad id
+  - fastlane 배포
+    - 최소 한번의 수동 배포가 필요하다
+```sh 
+- [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].
+```
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="- [X] 연말정산"/><meta property="og:description" content="  - [[2024-01-21]]
+  - [X] 홈텍스 [.] 간소화자료
+  - [X] 부양가족
+    - [X] 주민등록등본 혹은 가족관계증명서 필요
+    - [X] 홈택스,  부양가족 동의 신청
+  - [X] 자동차 연말머시기왔었는데 확인 필요
+- [ ] app 스크린샷 생성 스크립트는 terminal 프로그램으로 배포까지하는게 편하겠음
+  + [[2024-01-23]]
+- [X] 구글로그인 심사
+  - [X] 피드백 처리하여 다시 심사중
+- [.] 안드로이드 플레이 스토어 등록
+  - [X] 계정삭제를 웹으로 지원
+    ```mermaid
+    sequenceDiagram
+      actor u as user
+      participant s as site
+      participant sv as server
+
+      u -&gt;&gt; s: 이메일입력(email) 
+      s -&gt;&gt; sv: POST: 삭제요청(email)
+      sv --&gt;&gt; u: 404: find id by email
+      sv --&gt;&gt; db: save token
+      sv -&gt;&gt; u: 삭인 확제 이메일(id, token)
+      u -&gt;&gt; sv: POST: 삭제확인(id, token)
+      sv --&gt;&gt; db: delete token
+      sv --&gt;&gt; s: redirect: 만료된 토큰
+      sv -&gt;&gt; s: redirect: 삭제완료 알림 페이지
+    ```
+  - [ ] 앱 서명 google playstore 에서 제공하는 키사용 체크
+  - [ ] ad id
+  - fastlane 배포
+    - 최소 한번의 수동 배포가 필요하다
+```sh 
+- [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].
+```
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/diary/2024-01-24"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="- [X] 연말정산"/><meta name="twitter:description" content="  - [[2024-01-21]]
+  - [X] 홈텍스 [.] 간소화자료
+  - [X] 부양가족
+    - [X] 주민등록등본 혹은 가족관계증명서 필요
+    - [X] 홈택스,  부양가족 동의 신청
+  - [X] 자동차 연말머시기왔었는데 확인 필요
+- [ ] app 스크린샷 생성 스크립트는 terminal 프로그램으로 배포까지하는게 편하겠음
+  + [[2024-01-23]]
+- [X] 구글로그인 심사
+  - [X] 피드백 처리하여 다시 심사중
+- [.] 안드로이드 플레이 스토어 등록
+  - [X] 계정삭제를 웹으로 지원
+    ```mermaid
+    sequenceDiagram
+      actor u as user
+      participant s as site
+      participant sv as server
+
+      u -&gt;&gt; s: 이메일입력(email) 
+      s -&gt;&gt; sv: POST: 삭제요청(email)
+      sv --&gt;&gt; u: 404: find id by email
+      sv --&gt;&gt; db: save token
+      sv -&gt;&gt; u: 삭인 확제 이메일(id, token)
+      u -&gt;&gt; sv: POST: 삭제확인(id, token)
+      sv --&gt;&gt; db: delete token
+      sv --&gt;&gt; s: redirect: 만료된 토큰
+      sv -&gt;&gt; s: redirect: 삭제완료 알림 페이지
+    ```
+  - [ ] 앱 서명 google playstore 에서 제공하는 키사용 체크
+  - [ ] ad id
+  - fastlane 배포
+    - 최소 한번의 수동 배포가 필요하다
+```sh 
+- [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].
+```
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/1e977cc
+" class="bg-white text-black">1e977cc</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki/diary">diary<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/diary/2024-01-24.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/diary/2024-01-24.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/diary/2024-01-24.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-24"><span class="underline">diary/2024-01-24</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-21"><span class="underline">diary/2024-01-21</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-23"><span class="underline">diary/2024-01-23</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-25"><span class="underline">diary/2024-01-25</span><sup>59</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/index"><span class="underline">diary/index</span><sup>386</sup></a></span></div><hr/><div class="toc"></div><div class="flex flex-wrap gap-2 pb-2 m-0 leading-tight ml-auto"><a class="text-blue-600 underline" href="/public-wiki/diary/2024-01-23">이전(<!-- -->2024-01-23<!-- -->)</a><a class="text-blue-600 underline" href="/public-wiki/diary/2024-01-25">다음(<!-- -->2024-01-25<!-- -->)</a></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><ul>
+<li><input checked="" disabled="" type="checkbox"> 연말정산<ul>
+<li><a href="2024-01-21">2024-01-21</a></li>
+<li><input checked="" disabled="" type="checkbox"> 홈텍스 [.] 간소화자료</li>
+<li><input checked="" disabled="" type="checkbox"> 부양가족<ul>
+<li><input checked="" disabled="" type="checkbox"> 주민등록등본 혹은 가족관계증명서 필요</li>
+<li><input checked="" disabled="" type="checkbox"> 홈택스,  부양가족 동의 신청</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> 자동차 연말머시기왔었는데 확인 필요</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> app 스크린샷 생성 스크립트는 terminal 프로그램으로 배포까지하는게 편하겠음<ul>
+<li><a href="2024-01-23">2024-01-23</a></li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> 구글로그인 심사<ul>
+<li><input checked="" disabled="" type="checkbox"> 피드백 처리하여 다시 심사중</li>
+</ul>
+</li>
+<li>[.] 안드로이드 플레이 스토어 등록<ul>
+<li><input checked="" disabled="" type="checkbox"> 계정삭제를 웹으로 지원<pre><code class="hljs language-mermaid">sequenceDiagram
+  actor u as user
+  participant s as site
+  participant sv as server
+
+  u -&gt;&gt; s: 이메일입력(email) 
+  s -&gt;&gt; sv: POST: 삭제요청(email)
+  sv --&gt;&gt; u: 404: find id by email
+  sv --&gt;&gt; db: save token
+  sv -&gt;&gt; u: 삭인 확제 이메일(id, token)
+  u -&gt;&gt; sv: POST: 삭제확인(id, token)
+  sv --&gt;&gt; db: delete token
+  sv --&gt;&gt; s: redirect: 만료된 토큰
+  sv -&gt;&gt; s: redirect: 삭제완료 알림 페이지
+</code></pre></li>
+<li><input disabled="" type="checkbox"> 앱 서명 google playstore 에서 제공하는 키사용 체크</li>
+<li><input disabled="" type="checkbox"> ad id</li>
+<li>fastlane 배포<ul>
+<li>최소 한번의 수동 배포가 필요하다</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs language-sh">- [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].
+</code></pre></pre></div></main><script src="/_next/static/chunks/webpack-39c74ed669a18122.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-1939e229d7d9d28d.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"diary/2024-01-24\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"yC06f4vhwSZHKmd0hZEYH\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/diary/2024-01-24\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"diary/2024-01-24\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"diary\\\",\\\"2024-01-24\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"diary/2024-01-24\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T821,"])</script><script>self.__next_f.push([1,"\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 연말정산\u003cul\u003e\n\u003cli\u003e\u003ca href=\"2024-01-21\"\u003e2024-01-21\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 홈텍스 [.] 간소화자료\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 부양가족\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 주민등록등본 혹은 가족관계증명서 필요\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 홈택스,  부양가족 동의 신청\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 자동차 연말머시기왔었는데 확인 필요\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e app 스크린샷 생성 스크립트는 terminal 프로그램으로 배포까지하는게 편하겠음\u003cul\u003e\n\u003cli\u003e\u003ca href=\"2024-01-23\"\u003e2024-01-23\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 구글로그인 심사\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 피드백 처리하여 다시 심사중\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e[.] 안드로이드 플레이 스토어 등록\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 계정삭제를 웹으로 지원\u003cpre\u003e\u003ccode class=\"hljs language-mermaid\"\u003esequenceDiagram\n  actor u as user\n  participant s as site\n  participant sv as server\n\n  u -\u0026gt;\u0026gt; s: 이메일입력(email) \n  s -\u0026gt;\u0026gt; sv: POST: 삭제요청(email)\n  sv --\u0026gt;\u0026gt; u: 404: find id by email\n  sv --\u0026gt;\u0026gt; db: save token\n  sv -\u0026gt;\u0026gt; u: 삭인 확제 이메일(id, token)\n  u -\u0026gt;\u0026gt; sv: POST: 삭제확인(id, token)\n  sv --\u0026gt;\u0026gt; db: delete token\n  sv --\u0026gt;\u0026gt; s: redirect: 만료된 토큰\n  sv -\u0026gt;\u0026gt; s: redirect: 삭제완료 알림 페이지\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 앱 서명 google playstore 에서 제공하는 키사용 체크\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e ad id\u003c/li\u003e\n\u003cli\u003efastlane 배포\u003cul\u003e\n\u003cli\u003e최소 한번의 수동 배포가 필요하다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e- [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].\n\u003c/code\u003e\u003c/pre\u003e"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/1e977cc\\n\",\"className\":\"bg-white text-black\",\"children\":\"1e977cc\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/diary/2024-01-24.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/diary/2024-01-24.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/diary/2024-01-24.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"diary/2024-01-24\",\"name\":\"diary/2024-01-24\",\"val\":2},{\"id\":\"diary/2024-01-21\",\"name\":\"diary/2024-01-21\",\"val\":4},{\"id\":\"diary/2024-01-23\",\"name\":\"diary/2024-01-23\",\"val\":7},{\"id\":\"diary/2024-01-25\",\"name\":\"diary/2024-01-25\",\"val\":59},{\"id\":\"diary/index\",\"name\":\"diary/index\",\"val\":386}],\"links\":[{\"source\":\"diary/2024-01-24\",\"target\":\"diary/2024-01-21\"},{\"source\":\"diary/2024-01-24\",\"target\":\"diary/2024-01-23\"},{\"source\":\"diary/2024-01-23\",\"target\":\"diary/2024-01-24\"},{\"source\":\"diary/2024-01-25\",\"target\":\"diary/2024-01-24\"},{\"source\":\"diary/index\",\"target\":\"diary/2024-01-24\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"diary/2024-01-24\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-24\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-24\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2024-01-21\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-21\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-21\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"diary/2024-01-23\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-23\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-23\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"diary/2024-01-25\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-25\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-25\"}],[\"$\",\"sup\",null,{\"children\":59}]]}]}],[\"$\",\"span\",\"diary/index\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/index\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/index\"}],[\"$\",\"sup\",null,{\"children\":386}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[]}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 pb-2 m-0 leading-tight ml-auto\",\"children\":[[\"$\",\"$L13\",null,{\"className\":\"text-blue-600 underline\",\"href\":\"/public-wiki/diary/2024-01-23\",\"children\":[\"이전(\",\"2024-01-23\",\")\"]}],[\"$\",\"$L13\",null,{\"className\":\"text-blue-600 underline\",\"href\":\"/public-wiki/diary/2024-01-25\",\"children\":[\"다음(\",\"2024-01-25\",\")\"]}]]}]]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"- [X] 연말정산\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"  - [[2024-01-21]]\\n  - [X] 홈텍스 [.] 간소화자료\\n  - [X] 부양가족\\n    - [X] 주민등록등본 혹은 가족관계증명서 필요\\n    - [X] 홈택스,  부양가족 동의 신청\\n  - [X] 자동차 연말머시기왔었는데 확인 필요\\n- [ ] app 스크린샷 생성 스크립트는 terminal 프로그램으로 배포까지하는게 편하겠음\\n  + [[2024-01-23]]\\n- [X] 구글로그인 심사\\n  - [X] 피드백 처리하여 다시 심사중\\n- [.] 안드로이드 플레이 스토어 등록\\n  - [X] 계정삭제를 웹으로 지원\\n    ```mermaid\\n    sequenceDiagram\\n      actor u as user\\n      participant s as site\\n      participant sv as server\\n\\n      u -\u003e\u003e s: 이메일입력(email) \\n      s -\u003e\u003e sv: POST: 삭제요청(email)\\n      sv --\u003e\u003e u: 404: find id by email\\n      sv --\u003e\u003e db: save token\\n      sv -\u003e\u003e u: 삭인 확제 이메일(id, token)\\n      u -\u003e\u003e sv: POST: 삭제확인(id, token)\\n      sv --\u003e\u003e db: delete token\\n      sv --\u003e\u003e s: redirect: 만료된 토큰\\n      sv -\u003e\u003e s: redirect: 삭제완료 알림 페이지\\n    ```\\n  - [ ] 앱 서명 google playstore 에서 제공하는 키사용 체크\\n  - [ ] ad id\\n  - fastlane 배포\\n    - 최소 한번의 수동 배포가 필요하다\\n```sh \\n- [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].\\n```\\n\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"- [X] 연말정산\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"  - [[2024-01-21]]\\n  - [X] 홈텍스 [.] 간소화자료\\n  - [X] 부양가족\\n    - [X] 주민등록등본 혹은 가족관계증명서 필요\\n    - [X] 홈택스,  부양가족 동의 신청\\n  - [X] 자동차 연말머시기왔었는데 확인 필요\\n- [ ] app 스크린샷 생성 스크립트는 terminal 프로그램으로 배포까지하는게 편하겠음\\n  + [[2024-01-23]]\\n- [X] 구글로그인 심사\\n  - [X] 피드백 처리하여 다시 심사중\\n- [.] 안드로이드 플레이 스토어 등록\\n  - [X] 계정삭제를 웹으로 지원\\n    ```mermaid\\n    sequenceDiagram\\n      actor u as user\\n      participant s as site\\n      participant sv as server\\n\\n      u -\u003e\u003e s: 이메일입력(email) \\n      s -\u003e\u003e sv: POST: 삭제요청(email)\\n      sv --\u003e\u003e u: 404: find id by email\\n      sv --\u003e\u003e db: save token\\n      sv -\u003e\u003e u: 삭인 확제 이메일(id, token)\\n      u -\u003e\u003e sv: POST: 삭제확인(id, token)\\n      sv --\u003e\u003e db: delete token\\n      sv --\u003e\u003e s: redirect: 만료된 토큰\\n      sv -\u003e\u003e s: redirect: 삭제완료 알림 페이지\\n    ```\\n  - [ ] 앱 서명 google playstore 에서 제공하는 키사용 체크\\n  - [ ] ad id\\n  - fastlane 배포\\n    - 최소 한번의 수동 배포가 필요하다\\n```sh \\n- [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].\\n```\\n\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/diary/2024-01-24\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"- [X] 연말정산\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"  - [[2024-01-21]]\\n  - [X] 홈텍스 [.] 간소화자료\\n  - [X] 부양가족\\n    - [X] 주민등록등본 혹은 가족관계증명서 필요\\n    - [X] 홈택스,  부양가족 동의 신청\\n  - [X] 자동차 연말머시기왔었는데 확인 필요\\n- [ ] app 스크린샷 생성 스크립트는 terminal 프로그램으로 배포까지하는게 편하겠음\\n  + [[2024-01-23]]\\n- [X] 구글로그인 심사\\n  - [X] 피드백 처리하여 다시 심사중\\n- [.] 안드로이드 플레이 스토어 등록\\n  - [X] 계정삭제를 웹으로 지원\\n    ```mermaid\\n    sequenceDiagram\\n      actor u as user\\n      participant s as site\\n      participant sv as server\\n\\n      u -\u003e\u003e s: 이메일입력(email) \\n      s -\u003e\u003e sv: POST: 삭제요청(email)\\n      sv --\u003e\u003e u: 404: find id by email\\n      sv --\u003e\u003e db: save token\\n      sv -\u003e\u003e u: 삭인 확제 이메일(id, token)\\n      u -\u003e\u003e sv: POST: 삭제확인(id, token)\\n      sv --\u003e\u003e db: delete token\\n      sv --\u003e\u003e s: redirect: 만료된 토큰\\n      sv -\u003e\u003e s: redirect: 삭제완료 알림 페이지\\n    ```\\n  - [ ] 앱 서명 google playstore 에서 제공하는 키사용 체크\\n  - [ ] ad id\\n  - fastlane 배포\\n    - 최소 한번의 수동 배포가 필요하다\\n```sh \\n- [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].\\n```\\n\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

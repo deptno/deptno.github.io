@@ -1,0 +1,659 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-1939e229d7d9d28d.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","lua","c"]
+0:["yC06f4vhwSZHKmd0hZEYH",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","lua","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"lua\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","lua","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:T3098,<h1 id="lua">lua</h1>
+<p>lua 5.1 -&gt; luajit -&gt; 5.2</p>
+<p>neovim 은 lua 5.1 을 스크립트 엔진으로 내장하고 있다. 추후에 neovim 에서 내장 스크립트 버전이 업데이트되는 경우 5.1 와의 호환성은 보장한다.</p>
+<h2 id="cli">cli</h2>
+<pre><code class="hljs language-sh">lua <span class="hljs-comment"># 인터프리터 시작</span>
+lua [FILENAME] <span class="hljs-comment"># 파일을 실행</span>
+lua -i [FILENAME] <span class="hljs-comment"># 인터프리터 시작과 함게 해당 파일을 불러와서 실행 `dofile` 과 같음</span>
+lua -e <span class="hljs-string">&quot;LUA_CODE&quot;</span> <span class="hljs-comment"># 코드 실행</span>
+lua -llib -e <span class="hljs-string">&quot;LUA_CODE&quot;</span> <span class="hljs-comment"># lib을 임포트한 후 `LUA_CODE` 실행</span>
+lua -llib -e -i <span class="hljs-string">&quot;LUA_CODE&quot;</span> <span class="hljs-comment"># lib을 임포트한 후 `LUA_CODE` 실행 후에 인터프리터 모드로 진입</span>
+</code></pre><h3 id="arg"><code class="span">arg</code></h3>
+<p><code class="span">arg</code> 는 전역 배열로 <code class="span">cli</code> 를 통해서 실행할때 스크립트 파일명을 기준으로 <code class="span">0</code> 인덱스가 정해지고 그 이전은 <code class="span">-</code> 인덱스가 된다</p>
+<pre><code>lua -e &quot;print(&#x27;hello&#x27;)&quot; script a b
+</code></pre><ul>
+<li><code class="span">arg[-3]</code> &quot;lua&quot;</li>
+<li><code class="span">arg[-2]</code> &quot;-e&quot;</li>
+<li><code class="span">arg[-1]</code> &quot;print(&#39;hello&#39;)&quot;</li>
+<li><code class="span">arg[ 0]</code> &quot;script&quot;</li>
+<li><code class="span">arg[ 1]</code> &quot;a&quot;</li>
+<li><code class="span">arg[ 2]</code> &quot;b&quot;</li>
+</ul>
+<h2 id="환경변수">환경변수</h2>
+<h3 id="init_lua"><code class="span">INIT_LUA</code></h3>
+<blockquote><p>환경 변수의 내용에 따른 실행 분류</p></blockquote><ul>
+<li><code class="span">@</code> 로 시작하는 경우에는 파일명으로 인지하고 해당 파일을 임포트</li>
+<li><code class="span">@</code> 가 아닌 다른 것으로 시작하는 경우에는 루아 코드를 실행, <code class="span">dofile</code> 과 같은 역할이라고 생각됨</li>
+<li><code class="span">INIT_LUA_5_2</code><ul>
+<li>버전명에따라서 suffix 가 달라지는데 5.1 이나 <a href="luajit">luajit</a> 에서도 사용이 가능한지는 확인이 필요</li>
+</ul>
+</li>
+<li><code class="span">INIT_LUA</code><ul>
+<li><code class="span">INIT_LUA_5_2</code> 가 읽힌 후에도 읽어지는 확인 필요</li>
+</ul>
+</li>
+</ul>
+<h2 id="문법">문법</h2>
+<h3 id="load">load</h3>
+<pre><code class="hljs language-lua"><span class="hljs-built_in">dofile</span>(<span class="hljs-string">&quot;FILENAME&quot;</span>) <span class="hljs-comment">-- eval</span>
+<span class="hljs-built_in">loadfile</span>(<span class="hljs-string">&quot;FILENAME&quot;</span>) <span class="hljs-comment">-- eval</span>
+<span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;module_name&quot;</span>) <span class="hljs-comment">-- import</span>
+</code></pre><h4 id="require">require</h4>
+<pre><code class="hljs language-lua"><span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;module.submodule&quot;</span>)
+</code></pre><p><code class="span">require</code> 를 시도하면 아래와 같은 동작으로 모듈을 찾는것으로 이해하고 있다.</p>
+<ol>
+<li>package.searchpath 은 아래 순서로 검색을 시작한다</li>
+</ol>
+<ul>
+<li><code class="span">package.path</code> 활용해서 <code class="span">package.loaded[&quot;module.submodule&quot;]</code> 하나의 모듈명으로 인식해서 찾기<ul>
+<li><code class="span">package.loaded[&quot;module&quot;]</code> <code class="span">.</code>을 기준으로 분리하여 module 을 찾기</li>
+<li><code class="span">loadfile</code> 시도 -&gt; 결과 값을 <code class="span">package.loaded[&quot;module&quot;]</code> 에 저장  결과 값이 없다면 <code class="span">true</code> 를 저장</li>
+<li>이를 통해 추후 리로딩을 막는다. <code class="span">package.loaded[&quot;module&quot;] = nil</code> 을 통해 리로드가 가능해진다</li>
+</ul>
+<ol>
+<li>package.preload</li>
+<li>module - <code class="span">package.path</code></li>
+<li>cmodule - <code class="span">package.cpath</code> -&gt; <code class="span">luaopen_*-module</code> 가  init 함수</li>
+<li>error</li>
+</ol>
+</li>
+</ul>
+<h3 id="string">string</h3>
+<h4 id="match">match</h4>
+<pre><code class="hljs language-lua"><span class="hljs-built_in">string</span>:<span class="hljs-built_in">find</span> <span class="hljs-comment">--   -&gt; index</span>
+<span class="hljs-built_in">string</span>:<span class="hljs-built_in">gmatch</span> <span class="hljs-comment">-- -&gt; iterator</span>
+<span class="hljs-built_in">string</span>:<span class="hljs-built_in">match</span> <span class="hljs-comment">--  -&gt; string</span>
+<span class="hljs-built_in">string</span>:<span class="hljs-built_in">gsub</span> <span class="hljs-comment">--   -&gt; string 치환</span>
+<span class="hljs-built_in">string</span>:<span class="hljs-built_in">sub</span> <span class="hljs-comment">--    -&gt; string substring</span>
+</code></pre><p>pattern 을 인자로 받는 gmatch, match, gsub 의 경우에는 [[#정규표현식]] 을 참조</p>
+<h3 id="전역">전역</h3>
+<p><code class="span">_CAPITAL</code> <code class="span">_</code> 바로 시작되는 대문자 전역변수는 예약어로 사용</p>
+<h3 id="정규표현식">정규표현식</h3>
+<blockquote><p>lua 는 정규표현식을 fully 구현하지 않는다</p></blockquote><ul>
+<li>escape 를 위해 사용되는 문자는 <code class="span">%</code> 다.  때문에 <code class="span">%%</code> 로 <code class="span">%</code> 를 표현해야한다</li>
+<li><code class="span">-</code> 도 패턴에서는 역할이 있으므로 <code class="span">%-</code> 를 사용하므로 주의하자 <a href="/public-wiki/diary/2023-11-01">[diary] diary:2023-11-01</a></li>
+<li>패턴 매칭 내에서도 이전 매칭 결과를 사용할 수 있음<ul>
+<li><code class="span">([&#39;&quot;])hello%1</code> <code class="span">&#39;</code> 혹은 <code class="span">&quot;</code> 이 매칭되었을때 <code class="span">%1</code> 은 이전에 매칭된 결과와 같은 문자열로 픽스됨<ul>
+<li>성공, <code class="span">&quot;hello&quot;</code>, <code class="span">&#39;hello&#39;</code></li>
+<li>실패, <code class="span">&quot;hello&#39;</code>, <code class="span">&#39;hello&quot;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>string pattern 매치에는 정규표현식의 <code class="span">{7, 40}</code> 에 해당 하는 구문이 없다 <a href="/public-wiki/diary/2023-10-12">[diary] diary:2023-10-12</a><ul>
+<li>git sha1 을 매칭하기 위해 사용했다.</li>
+</ul>
+<ul>
+<li><a href="https://github.com/deptno/NvChad/commit/6ed9f8a" target="_blank">[URL] https://github.com/deptno/NvChad/commit/6ed9f8a</a></li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> is_git_hash = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(hash)</span></span>
+  <span class="hljs-keyword">local</span> <span class="hljs-built_in">char</span> = <span class="hljs-string">&#x27;^[0-9a-fA-F]$&#x27;</span>
+  <span class="hljs-keyword">local</span> matched = <span class="hljs-built_in">string</span>.<span class="hljs-built_in">match</span>(hash, <span class="hljs-built_in">string</span>.<span class="hljs-built_in">format</span>(<span class="hljs-string">&#x27;%s*&#x27;</span>, <span class="hljs-built_in">char</span>:<span class="hljs-built_in">rep</span>(<span class="hljs-number">8</span>)))
+
+  <span class="hljs-keyword">return</span> matched ~= <span class="hljs-literal">nil</span> <span class="hljs-keyword">and</span> #matched &lt;= <span class="hljs-number">40</span> <span class="hljs-keyword">and</span> matched
+<span class="hljs-keyword">end</span>
+</code></pre><p>형태로 구현했다. 7글자이상 40글자 이하일때 매칭된다, 링크된 코드는 line matching 을 가정해서 <code class="span">^$</code> 가 제거된 버전이다</p>
+<h2 id="vs-javascript">vs javascript</h2>
+<h3 id="타입확인">타입확인</h3>
+<ul>
+<li>lua: type(변수)</li>
+<li>js: typeof [변수]</li>
+</ul>
+<h3 id="truefalse">true/false</h3>
+<ul>
+<li>lua: <code class="span">false</code>, <code class="span">nil</code> 만을 <code class="span">false</code> 로 간주한다</li>
+<li>js: <code class="span">undefined</code>, <code class="span">null</code>, <code class="span">&quot;&quot;</code>, <code class="span">0</code>, <code class="span">NaN</code> 등 더 많은 상황을 <code class="span">false</code> 로 간주한다</li>
+</ul>
+<h3 id="regexp정규표현식">regexp|정규표현식</h3>
+<ul>
+<li>lua: <code class="span">%</code> 를 escape 문자로 사용</li>
+<li>js: <code class="span">\</code> 를 escape 문자로 사용</li>
+</ul>
+<h3 id="lexical-scoping">lexical scoping</h3>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">a</span>(<span class="hljs-params"></span>) {
+  v = <span class="hljs-number">2</span>
+}
+<span class="hljs-keyword">let</span> v = <span class="hljs-number">1</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(v) <span class="hljs-comment">// 1</span>
+<span class="hljs-title function_">a</span>()
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(v) <span class="hljs-comment">// 2</span>
+</code></pre><pre><code class="hljs language-lua"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">a</span><span class="hljs-params">()</span></span>
+  v = <span class="hljs-number">2</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">local</span> v = <span class="hljs-number">1</span>
+
+<span class="hljs-built_in">print</span>(v) // <span class="hljs-number">1</span>
+a()
+<span class="hljs-built_in">print</span>(v) // <span class="hljs-number">1</span>
+</code></pre><p>자바스크립트와는 다르게 클로저 스코핑이 조금 다르다</p>
+<ul>
+<li><code class="span">function a</code> 의 선언 시점이 <code class="span">local v</code> 보다 이전이라 <code class="span">local v</code> 에 접근할 수 없음</li>
+<li>함수내에서 접근하려는 변수는 전역변수이거나 현재 함수의 <strong>정의</strong> 이전에 <strong>선언</strong>되어야한다.<ul>
+<li><code class="span">local a</code> 만 선언하고 <code class="span">a = function {body} end</code> 등의 정의는 늦게 와도된다.
+대충 스코핑이 함수 호출 시점이 아니라 정의 시점에 만들어진다고 생각하면 될 듯하다</li>
+</ul>
+</li>
+</ul>
+<h2 id="garbage-collection">garbage collection</h2>
+<ul>
+<li><code class="span">local</code> 은 메모리 할당을 생성하지 않지만 string 은 생성한다. 동일한 string 을 연속으로사용하는 것은 메모리를 낭비하지않는다.</li>
+<li>가변인자 함수는 함수가 호출될때 인자 테이블을 생성한다</li>
+<li><code class="span">collectgarbage(&quot;count&quot;) * 1024</code> 로 확인</li>
+</ul>
+<h2 id="coroutines">coroutines</h2>
+<ul>
+<li>coroutine.create 로 coroutine.yeild 반환시에 중단점을 저장하고 추후 coroutine.resume 을 통해 계속 실행할 수 있는 함수를 반환한다.</li>
+<li>coroutine.yeild 를 통해 반환 하는 시점이 다음 coroutine.resume 을 통해 인자를 전달하는 시점으로 이어진다</li>
+</ul>
+<h2 id="책">책</h2>
+<ul>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=43858872" target="_blank">[URL] https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=43858872</a></li>
+</ul>
+<h2 id="doc">doc</h2>
+<ul>
+<li><a href="https://github.com/defold/doc/blob/master/docs/ko/manuals/lua.md" target="_blank">[URL] https://github.com/defold/doc/blob/master/docs/ko/manuals/lua.md</a></li>
+<li><a href="https://wariua.github.io/lua-manual/" target="_blank">[URL] https://wariua.github.io/lua-manual/</a></li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="neovim">neovim</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/1e977cc\n","className":"bg-white text-black","children":"1e977cc"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/lua.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/lua.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/lua.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"lua","name":"lua","val":4},{"id":"luajit","name":"luajit","val":1},{"id":"diary/2023-11-01","name":"diary/2023-11-01","val":1},{"id":"diary/2023-10-12","name":"diary/2023-10-12","val":"$undefined"},{"id":"neovim","name":"neovim","val":22},{"id":"develop-neovim-lua-plugin","name":"develop-neovim-lua-plugin","val":3},{"id":"neovim-lua-plugins","name":"neovim-lua-plugins","val":8},{"id":"neovim-setup","name":"neovim-setup","val":37},{"id":"vim-startify","name":"vim-startify","val":5},{"id":"vimscript","name":"vimscript","val":3},{"id":"diary/2023-10-08","name":"diary/2023-10-08","val":5},{"id":"diary/2023-10-13","name":"diary/2023-10-13","val":1},{"id":"diary/2023-10-30","name":"diary/2023-10-30","val":2},{"id":"diary/2023-12-31","name":"diary/2023-12-31","val":93}],"links":[{"source":"lua","target":"luajit"},{"source":"lua","target":"diary/2023-11-01"},{"source":"lua","target":"diary/2023-10-12"},{"source":"lua","target":"neovim"},{"source":"develop-neovim-lua-plugin","target":"lua"},{"source":"luajit","target":"lua"},{"source":"neovim-lua-plugins","target":"lua"},{"source":"neovim-setup","target":"lua"},{"source":"vim-startify","target":"lua"},{"source":"vim-startify","target":"lua"},{"source":"vimscript","target":"lua"},{"source":"diary/2023-10-08","target":"lua"},{"source":"diary/2023-10-13","target":"lua"},{"source":"diary/2023-10-30","target":"lua"},{"source":"diary/2023-11-01","target":"lua"},{"source":"diary/2023-12-31","target":"lua"},{"source":"diary/2023-12-31","target":"lua"},{"source":"diary/2023-12-31","target":"lua"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","lua",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/lua","children":[["$","span",null,{"className":"underline","children":"lua"}],["$","sup",null,{"children":4}]]}]}],["$","span","luajit",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/luajit","children":[["$","span",null,{"className":"underline","children":"luajit"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2023-11-01",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-11-01","children":[["$","span",null,{"className":"underline","children":"diary/2023-11-01"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2023-10-12",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-10-12","children":[["$","span",null,{"className":"underline","children":"diary/2023-10-12"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","neovim",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim","children":[["$","span",null,{"className":"underline","children":"neovim"}],["$","sup",null,{"children":22}]]}]}],["$","span","develop-neovim-lua-plugin",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/develop-neovim-lua-plugin","children":[["$","span",null,{"className":"underline","children":"develop-neovim-lua-plugin"}],["$","sup",null,{"children":3}]]}]}],["$","span","neovim-lua-plugins",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim-lua-plugins","children":[["$","span",null,{"className":"underline","children":"neovim-lua-plugins"}],["$","sup",null,{"children":8}]]}]}],["$","span","neovim-setup",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim-setup","children":[["$","span",null,{"className":"underline","children":"neovim-setup"}],["$","sup",null,{"children":37}]]}]}],["$","span","vim-startify",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/vim-startify","children":[["$","span",null,{"className":"underline","children":"vim-startify"}],["$","sup",null,{"children":5}]]}]}],["$","span","vimscript",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/vimscript","children":[["$","span",null,{"className":"underline","children":"vimscript"}],["$","sup",null,{"children":3}]]}]}],["$","span","diary/2023-10-08",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-10-08","children":[["$","span",null,{"className":"underline","children":"diary/2023-10-08"}],["$","sup",null,{"children":5}]]}]}],["$","span","diary/2023-10-13",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-10-13","children":[["$","span",null,{"className":"underline","children":"diary/2023-10-13"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2023-10-30",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-10-30","children":[["$","span",null,{"className":"underline","children":"diary/2023-10-30"}],["$","sup",null,{"children":2}]]}]}],["$","span","diary/2023-12-31",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-12-31","children":[["$","span",null,{"className":"underline","children":"diary/2023-12-31"}],["$","sup",null,{"children":93}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","lua",{"className":"pl-0","children":["$","a",null,{"href":"#lua","children":"lua"}]}],["$","div","cli",{"className":"pl-2","children":["$","a",null,{"href":"#cli","children":"cli"}]}],["$","div","arg",{"className":"pl-4","children":["$","a",null,{"href":"#arg","children":"arg"}]}],["$","div","환경변수",{"className":"pl-2","children":["$","a",null,{"href":"#환경변수","children":"환경변수"}]}],["$","div","init_lua",{"className":"pl-4","children":["$","a",null,{"href":"#init_lua","children":"INIT_LUA"}]}],["$","div","문법",{"className":"pl-2","children":["$","a",null,{"href":"#문법","children":"문법"}]}],["$","div","load",{"className":"pl-4","children":["$","a",null,{"href":"#load","children":"load"}]}],["$","div","require",{"className":"pl-6","children":["$","a",null,{"href":"#require","children":"require"}]}],["$","div","string",{"className":"pl-4","children":["$","a",null,{"href":"#string","children":"string"}]}],["$","div","match",{"className":"pl-6","children":["$","a",null,{"href":"#match","children":"match"}]}],["$","div","전역",{"className":"pl-4","children":["$","a",null,{"href":"#전역","children":"전역"}]}],["$","div","정규표현식",{"className":"pl-4","children":["$","a",null,{"href":"#정규표현식","children":"정규표현식"}]}],["$","div","vs-javascript",{"className":"pl-2","children":["$","a",null,{"href":"#vs-javascript","children":"vs javascript"}]}],["$","div","타입확인",{"className":"pl-4","children":["$","a",null,{"href":"#타입확인","children":"타입확인"}]}],["$","div","truefalse",{"className":"pl-4","children":["$","a",null,{"href":"#truefalse","children":"true/false"}]}],["$","div","regexp정규표현식",{"className":"pl-4","children":["$","a",null,{"href":"#regexp정규표현식","children":"regexp|정규표현식"}]}],["$","div","lexical-scoping",{"className":"pl-4","children":["$","a",null,{"href":"#lexical-scoping","children":"lexical scoping"}]}],["$","div","garbage-collection",{"className":"pl-2","children":["$","a",null,{"href":"#garbage-collection","children":"garbage collection"}]}],["$","div","coroutines",{"className":"pl-2","children":["$","a",null,{"href":"#coroutines","children":"coroutines"}]}],["$","div","책",{"className":"pl-2","children":["$","a",null,{"href":"#책","children":"책"}]}],["$","div","doc",{"className":"pl-2","children":["$","a",null,{"href":"#doc","children":"doc"}]}],["$","div","link",{"className":"pl-2","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:T16ee,
+lua 5.1 -> luajit -> 5.2
+
+neovim 은 lua 5.1 을 스크립트 엔진으로 내장하고 있다. 추후에 neovim 에서 내장 스크립트 버전이 업데이트되는 경우 5.1 와의 호환성은 보장한다.
+
+## cli
+```sh 
+lua # 인터프리터 시작
+lua [FILENAME] # 파일을 실행
+lua -i [FILENAME] # 인터프리터 시작과 함게 해당 파일을 불러와서 실행 `dofile` 과 같음
+lua -e "LUA_CODE" # 코드 실행
+lua -llib -e "LUA_CODE" # lib을 임포트한 후 `LUA_CODE` 실행
+lua -llib -e -i "LUA_CODE" # lib을 임포트한 후 `LUA_CODE` 실행 후에 인터프리터 모드로 진입
+```
+
+### `arg`
+`arg` 는 전역 배열로 `cli` 를 통해서 실행할때 스크립트 파일명을 기준으로 `0` 인덱스가 정해지고 그 이전은 `-` 인덱스가 된다
+```
+lua -e "print('hello')" script a b
+```
+- `arg[-3]` "lua"
+- `arg[-2]` "-e"
+- `arg[-1]` "print('hello')"
+- `arg[ 0]` "script"
+- `arg[ 1]` "a"
+- `arg[ 2]` "b"
+
+## 환경변수
+
+### `INIT_LUA`
+> 환경 변수의 내용에 따른 실행 분류
+  - `@` 로 시작하는 경우에는 파일명으로 인지하고 해당 파일을 임포트
+  - `@` 가 아닌 다른 것으로 시작하는 경우에는 루아 코드를 실행, `dofile` 과 같은 역할이라고 생각됨
+- `INIT_LUA_5_2`
+  - 버전명에따라서 suffix 가 달라지는데 5.1 이나 [[luajit]] 에서도 사용이 가능한지는 확인이 필요
+- `INIT_LUA`
+  - `INIT_LUA_5_2` 가 읽힌 후에도 읽어지는 확인 필요
+
+## 문법
+
+### load
+```lua
+dofile("FILENAME") -- eval
+loadfile("FILENAME") -- eval
+require("module_name") -- import
+```
+
+#### require
+```lua
+require("module.submodule")
+```
+`require` 를 시도하면 아래와 같은 동작으로 모듈을 찾는것으로 이해하고 있다.
+
+1. package.searchpath 은 아래 순서로 검색을 시작한다
+- `package.path` 활용해서 `package.loaded["module.submodule"]` 하나의 모듈명으로 인식해서 찾기
+  - `package.loaded["module"]` `.`을 기준으로 분리하여 module 을 찾기
+  - `loadfile` 시도 -> 결과 값을 `package.loaded["module"]` 에 저장  결과 값이 없다면 `true` 를 저장
+  - 이를 통해 추후 리로딩을 막는다. `package.loaded["module"] = nil` 을 통해 리로드가 가능해진다
+  1. package.preload
+  2. module - `package.path`
+  3. cmodule - `package.cpath` -> `luaopen_*-module` 가  init 함수
+  4. error
+
+### string
+#### match
+```lua
+string:find --   -> index
+string:gmatch -- -> iterator
+string:match --  -> string
+string:gsub --   -> string 치환
+string:sub --    -> string substring
+```
+
+pattern 을 인자로 받는 gmatch, match, gsub 의 경우에는 [[#정규표현식]] 을 참조
+
+### 전역
+`_CAPITAL` `_` 바로 시작되는 대문자 전역변수는 예약어로 사용
+
+### 정규표현식
+> lua 는 정규표현식을 fully 구현하지 않는다
+- escape 를 위해 사용되는 문자는 `%` 다.  때문에 `%%` 로 `%` 를 표현해야한다
+- `-` 도 패턴에서는 역할이 있으므로 `%-` 를 사용하므로 주의하자 [[diary:2023-11-01]]
+- 패턴 매칭 내에서도 이전 매칭 결과를 사용할 수 있음
+  - `(['"])hello%1` `'` 혹은 `"` 이 매칭되었을때 `%1` 은 이전에 매칭된 결과와 같은 문자열로 픽스됨
+    - 성공, `"hello"`, `'hello'`
+    - 실패, `"hello'`, `'hello"`
+- string pattern 매치에는 정규표현식의 `{7, 40}` 에 해당 하는 구문이 없다 [[diary:2023-10-12]]
+  - git sha1 을 매칭하기 위해 사용했다.
+  + https://github.com/deptno/NvChad/commit/6ed9f8a
+
+```lua
+local is_git_hash = function(hash)
+  local char = '^[0-9a-fA-F]$'
+  local matched = string.match(hash, string.format('%s*', char:rep(8)))
+
+  return matched ~= nil and #matched <= 40 and matched
+end
+```
+형태로 구현했다. 7글자이상 40글자 이하일때 매칭된다, 링크된 코드는 line matching 을 가정해서 `^$` 가 제거된 버전이다
+
+## vs javascript
+
+### 타입확인
+- lua: type(변수)
+- js: typeof [변수]
+
+### true/false
+- lua: `false`, `nil` 만을 `false` 로 간주한다
+- js: `undefined`, `null`, `""`, `0`, `NaN` 등 더 많은 상황을 `false` 로 간주한다
+
+### regexp|정규표현식
+- lua: `%` 를 escape 문자로 사용
+- js: `\` 를 escape 문자로 사용
+
+### lexical scoping
+```javascript
+function a() {
+  v = 2
+}
+let v = 1
+
+console.log(v) // 1
+a()
+console.log(v) // 2
+```
+
+```lua
+function a()
+  v = 2
+end
+local v = 1
+
+print(v) // 1
+a()
+print(v) // 1
+```
+자바스크립트와는 다르게 클로저 스코핑이 조금 다르다
+- `function a` 의 선언 시점이 `local v` 보다 이전이라 `local v` 에 접근할 수 없음
+- 함수내에서 접근하려는 변수는 전역변수이거나 현재 함수의 **정의** 이전에 **선언**되어야한다.
+  - `local a` 만 선언하고 `a = function {body} end` 등의 정의는 늦게 와도된다.
+대충 스코핑이 함수 호출 시점이 아니라 정의 시점에 만들어진다고 생각하면 될 듯하다
+
+## garbage collection
+- `local` 은 메모리 할당을 생성하지 않지만 string 은 생성한다. 동일한 string 을 연속으로사용하는 것은 메모리를 낭비하지않는다.
+- 가변인자 함수는 함수가 호출될때 인자 테이블을 생성한다
+- `collectgarbage("count") * 1024` 로 확인
+
+## coroutines
+- coroutine.create 로 coroutine.yeild 반환시에 중단점을 저장하고 추후 coroutine.resume 을 통해 계속 실행할 수 있는 함수를 반환한다.
+- coroutine.yeild 를 통해 반환 하는 시점이 다음 coroutine.resume 을 통해 인자를 전달하는 시점으로 이어진다
+
+## 책
+- [루아 프로그래밍 3판](https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=43858872)
+ 
+## doc
++ https://github.com/defold/doc/blob/master/docs/ko/manuals/lua.md
++ https://wariua.github.io/lua-manual/
+
+## link
+- [[neovim]]
+12:T16ee,
+lua 5.1 -> luajit -> 5.2
+
+neovim 은 lua 5.1 을 스크립트 엔진으로 내장하고 있다. 추후에 neovim 에서 내장 스크립트 버전이 업데이트되는 경우 5.1 와의 호환성은 보장한다.
+
+## cli
+```sh 
+lua # 인터프리터 시작
+lua [FILENAME] # 파일을 실행
+lua -i [FILENAME] # 인터프리터 시작과 함게 해당 파일을 불러와서 실행 `dofile` 과 같음
+lua -e "LUA_CODE" # 코드 실행
+lua -llib -e "LUA_CODE" # lib을 임포트한 후 `LUA_CODE` 실행
+lua -llib -e -i "LUA_CODE" # lib을 임포트한 후 `LUA_CODE` 실행 후에 인터프리터 모드로 진입
+```
+
+### `arg`
+`arg` 는 전역 배열로 `cli` 를 통해서 실행할때 스크립트 파일명을 기준으로 `0` 인덱스가 정해지고 그 이전은 `-` 인덱스가 된다
+```
+lua -e "print('hello')" script a b
+```
+- `arg[-3]` "lua"
+- `arg[-2]` "-e"
+- `arg[-1]` "print('hello')"
+- `arg[ 0]` "script"
+- `arg[ 1]` "a"
+- `arg[ 2]` "b"
+
+## 환경변수
+
+### `INIT_LUA`
+> 환경 변수의 내용에 따른 실행 분류
+  - `@` 로 시작하는 경우에는 파일명으로 인지하고 해당 파일을 임포트
+  - `@` 가 아닌 다른 것으로 시작하는 경우에는 루아 코드를 실행, `dofile` 과 같은 역할이라고 생각됨
+- `INIT_LUA_5_2`
+  - 버전명에따라서 suffix 가 달라지는데 5.1 이나 [[luajit]] 에서도 사용이 가능한지는 확인이 필요
+- `INIT_LUA`
+  - `INIT_LUA_5_2` 가 읽힌 후에도 읽어지는 확인 필요
+
+## 문법
+
+### load
+```lua
+dofile("FILENAME") -- eval
+loadfile("FILENAME") -- eval
+require("module_name") -- import
+```
+
+#### require
+```lua
+require("module.submodule")
+```
+`require` 를 시도하면 아래와 같은 동작으로 모듈을 찾는것으로 이해하고 있다.
+
+1. package.searchpath 은 아래 순서로 검색을 시작한다
+- `package.path` 활용해서 `package.loaded["module.submodule"]` 하나의 모듈명으로 인식해서 찾기
+  - `package.loaded["module"]` `.`을 기준으로 분리하여 module 을 찾기
+  - `loadfile` 시도 -> 결과 값을 `package.loaded["module"]` 에 저장  결과 값이 없다면 `true` 를 저장
+  - 이를 통해 추후 리로딩을 막는다. `package.loaded["module"] = nil` 을 통해 리로드가 가능해진다
+  1. package.preload
+  2. module - `package.path`
+  3. cmodule - `package.cpath` -> `luaopen_*-module` 가  init 함수
+  4. error
+
+### string
+#### match
+```lua
+string:find --   -> index
+string:gmatch -- -> iterator
+string:match --  -> string
+string:gsub --   -> string 치환
+string:sub --    -> string substring
+```
+
+pattern 을 인자로 받는 gmatch, match, gsub 의 경우에는 [[#정규표현식]] 을 참조
+
+### 전역
+`_CAPITAL` `_` 바로 시작되는 대문자 전역변수는 예약어로 사용
+
+### 정규표현식
+> lua 는 정규표현식을 fully 구현하지 않는다
+- escape 를 위해 사용되는 문자는 `%` 다.  때문에 `%%` 로 `%` 를 표현해야한다
+- `-` 도 패턴에서는 역할이 있으므로 `%-` 를 사용하므로 주의하자 [[diary:2023-11-01]]
+- 패턴 매칭 내에서도 이전 매칭 결과를 사용할 수 있음
+  - `(['"])hello%1` `'` 혹은 `"` 이 매칭되었을때 `%1` 은 이전에 매칭된 결과와 같은 문자열로 픽스됨
+    - 성공, `"hello"`, `'hello'`
+    - 실패, `"hello'`, `'hello"`
+- string pattern 매치에는 정규표현식의 `{7, 40}` 에 해당 하는 구문이 없다 [[diary:2023-10-12]]
+  - git sha1 을 매칭하기 위해 사용했다.
+  + https://github.com/deptno/NvChad/commit/6ed9f8a
+
+```lua
+local is_git_hash = function(hash)
+  local char = '^[0-9a-fA-F]$'
+  local matched = string.match(hash, string.format('%s*', char:rep(8)))
+
+  return matched ~= nil and #matched <= 40 and matched
+end
+```
+형태로 구현했다. 7글자이상 40글자 이하일때 매칭된다, 링크된 코드는 line matching 을 가정해서 `^$` 가 제거된 버전이다
+
+## vs javascript
+
+### 타입확인
+- lua: type(변수)
+- js: typeof [변수]
+
+### true/false
+- lua: `false`, `nil` 만을 `false` 로 간주한다
+- js: `undefined`, `null`, `""`, `0`, `NaN` 등 더 많은 상황을 `false` 로 간주한다
+
+### regexp|정규표현식
+- lua: `%` 를 escape 문자로 사용
+- js: `\` 를 escape 문자로 사용
+
+### lexical scoping
+```javascript
+function a() {
+  v = 2
+}
+let v = 1
+
+console.log(v) // 1
+a()
+console.log(v) // 2
+```
+
+```lua
+function a()
+  v = 2
+end
+local v = 1
+
+print(v) // 1
+a()
+print(v) // 1
+```
+자바스크립트와는 다르게 클로저 스코핑이 조금 다르다
+- `function a` 의 선언 시점이 `local v` 보다 이전이라 `local v` 에 접근할 수 없음
+- 함수내에서 접근하려는 변수는 전역변수이거나 현재 함수의 **정의** 이전에 **선언**되어야한다.
+  - `local a` 만 선언하고 `a = function {body} end` 등의 정의는 늦게 와도된다.
+대충 스코핑이 함수 호출 시점이 아니라 정의 시점에 만들어진다고 생각하면 될 듯하다
+
+## garbage collection
+- `local` 은 메모리 할당을 생성하지 않지만 string 은 생성한다. 동일한 string 을 연속으로사용하는 것은 메모리를 낭비하지않는다.
+- 가변인자 함수는 함수가 호출될때 인자 테이블을 생성한다
+- `collectgarbage("count") * 1024` 로 확인
+
+## coroutines
+- coroutine.create 로 coroutine.yeild 반환시에 중단점을 저장하고 추후 coroutine.resume 을 통해 계속 실행할 수 있는 함수를 반환한다.
+- coroutine.yeild 를 통해 반환 하는 시점이 다음 coroutine.resume 을 통해 인자를 전달하는 시점으로 이어진다
+
+## 책
+- [루아 프로그래밍 3판](https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=43858872)
+ 
+## doc
++ https://github.com/defold/doc/blob/master/docs/ko/manuals/lua.md
++ https://wariua.github.io/lua-manual/
+
+## link
+- [[neovim]]
+13:T16ee,
+lua 5.1 -> luajit -> 5.2
+
+neovim 은 lua 5.1 을 스크립트 엔진으로 내장하고 있다. 추후에 neovim 에서 내장 스크립트 버전이 업데이트되는 경우 5.1 와의 호환성은 보장한다.
+
+## cli
+```sh 
+lua # 인터프리터 시작
+lua [FILENAME] # 파일을 실행
+lua -i [FILENAME] # 인터프리터 시작과 함게 해당 파일을 불러와서 실행 `dofile` 과 같음
+lua -e "LUA_CODE" # 코드 실행
+lua -llib -e "LUA_CODE" # lib을 임포트한 후 `LUA_CODE` 실행
+lua -llib -e -i "LUA_CODE" # lib을 임포트한 후 `LUA_CODE` 실행 후에 인터프리터 모드로 진입
+```
+
+### `arg`
+`arg` 는 전역 배열로 `cli` 를 통해서 실행할때 스크립트 파일명을 기준으로 `0` 인덱스가 정해지고 그 이전은 `-` 인덱스가 된다
+```
+lua -e "print('hello')" script a b
+```
+- `arg[-3]` "lua"
+- `arg[-2]` "-e"
+- `arg[-1]` "print('hello')"
+- `arg[ 0]` "script"
+- `arg[ 1]` "a"
+- `arg[ 2]` "b"
+
+## 환경변수
+
+### `INIT_LUA`
+> 환경 변수의 내용에 따른 실행 분류
+  - `@` 로 시작하는 경우에는 파일명으로 인지하고 해당 파일을 임포트
+  - `@` 가 아닌 다른 것으로 시작하는 경우에는 루아 코드를 실행, `dofile` 과 같은 역할이라고 생각됨
+- `INIT_LUA_5_2`
+  - 버전명에따라서 suffix 가 달라지는데 5.1 이나 [[luajit]] 에서도 사용이 가능한지는 확인이 필요
+- `INIT_LUA`
+  - `INIT_LUA_5_2` 가 읽힌 후에도 읽어지는 확인 필요
+
+## 문법
+
+### load
+```lua
+dofile("FILENAME") -- eval
+loadfile("FILENAME") -- eval
+require("module_name") -- import
+```
+
+#### require
+```lua
+require("module.submodule")
+```
+`require` 를 시도하면 아래와 같은 동작으로 모듈을 찾는것으로 이해하고 있다.
+
+1. package.searchpath 은 아래 순서로 검색을 시작한다
+- `package.path` 활용해서 `package.loaded["module.submodule"]` 하나의 모듈명으로 인식해서 찾기
+  - `package.loaded["module"]` `.`을 기준으로 분리하여 module 을 찾기
+  - `loadfile` 시도 -> 결과 값을 `package.loaded["module"]` 에 저장  결과 값이 없다면 `true` 를 저장
+  - 이를 통해 추후 리로딩을 막는다. `package.loaded["module"] = nil` 을 통해 리로드가 가능해진다
+  1. package.preload
+  2. module - `package.path`
+  3. cmodule - `package.cpath` -> `luaopen_*-module` 가  init 함수
+  4. error
+
+### string
+#### match
+```lua
+string:find --   -> index
+string:gmatch -- -> iterator
+string:match --  -> string
+string:gsub --   -> string 치환
+string:sub --    -> string substring
+```
+
+pattern 을 인자로 받는 gmatch, match, gsub 의 경우에는 [[#정규표현식]] 을 참조
+
+### 전역
+`_CAPITAL` `_` 바로 시작되는 대문자 전역변수는 예약어로 사용
+
+### 정규표현식
+> lua 는 정규표현식을 fully 구현하지 않는다
+- escape 를 위해 사용되는 문자는 `%` 다.  때문에 `%%` 로 `%` 를 표현해야한다
+- `-` 도 패턴에서는 역할이 있으므로 `%-` 를 사용하므로 주의하자 [[diary:2023-11-01]]
+- 패턴 매칭 내에서도 이전 매칭 결과를 사용할 수 있음
+  - `(['"])hello%1` `'` 혹은 `"` 이 매칭되었을때 `%1` 은 이전에 매칭된 결과와 같은 문자열로 픽스됨
+    - 성공, `"hello"`, `'hello'`
+    - 실패, `"hello'`, `'hello"`
+- string pattern 매치에는 정규표현식의 `{7, 40}` 에 해당 하는 구문이 없다 [[diary:2023-10-12]]
+  - git sha1 을 매칭하기 위해 사용했다.
+  + https://github.com/deptno/NvChad/commit/6ed9f8a
+
+```lua
+local is_git_hash = function(hash)
+  local char = '^[0-9a-fA-F]$'
+  local matched = string.match(hash, string.format('%s*', char:rep(8)))
+
+  return matched ~= nil and #matched <= 40 and matched
+end
+```
+형태로 구현했다. 7글자이상 40글자 이하일때 매칭된다, 링크된 코드는 line matching 을 가정해서 `^$` 가 제거된 버전이다
+
+## vs javascript
+
+### 타입확인
+- lua: type(변수)
+- js: typeof [변수]
+
+### true/false
+- lua: `false`, `nil` 만을 `false` 로 간주한다
+- js: `undefined`, `null`, `""`, `0`, `NaN` 등 더 많은 상황을 `false` 로 간주한다
+
+### regexp|정규표현식
+- lua: `%` 를 escape 문자로 사용
+- js: `\` 를 escape 문자로 사용
+
+### lexical scoping
+```javascript
+function a() {
+  v = 2
+}
+let v = 1
+
+console.log(v) // 1
+a()
+console.log(v) // 2
+```
+
+```lua
+function a()
+  v = 2
+end
+local v = 1
+
+print(v) // 1
+a()
+print(v) // 1
+```
+자바스크립트와는 다르게 클로저 스코핑이 조금 다르다
+- `function a` 의 선언 시점이 `local v` 보다 이전이라 `local v` 에 접근할 수 없음
+- 함수내에서 접근하려는 변수는 전역변수이거나 현재 함수의 **정의** 이전에 **선언**되어야한다.
+  - `local a` 만 선언하고 `a = function {body} end` 등의 정의는 늦게 와도된다.
+대충 스코핑이 함수 호출 시점이 아니라 정의 시점에 만들어진다고 생각하면 될 듯하다
+
+## garbage collection
+- `local` 은 메모리 할당을 생성하지 않지만 string 은 생성한다. 동일한 string 을 연속으로사용하는 것은 메모리를 낭비하지않는다.
+- 가변인자 함수는 함수가 호출될때 인자 테이블을 생성한다
+- `collectgarbage("count") * 1024` 로 확인
+
+## coroutines
+- coroutine.create 로 coroutine.yeild 반환시에 중단점을 저장하고 추후 coroutine.resume 을 통해 계속 실행할 수 있는 함수를 반환한다.
+- coroutine.yeild 를 통해 반환 하는 시점이 다음 coroutine.resume 을 통해 인자를 전달하는 시점으로 이어진다
+
+## 책
+- [루아 프로그래밍 3판](https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=43858872)
+ 
+## doc
++ https://github.com/defold/doc/blob/master/docs/ko/manuals/lua.md
++ https://wariua.github.io/lua-manual/
+
+## link
+- [[neovim]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# lua"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# lua"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/lua"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# lua"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null
