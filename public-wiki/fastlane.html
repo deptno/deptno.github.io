@@ -1,0 +1,1241 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-39c74ed669a18122.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-1939e229d7d9d28d.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># fastlane</title><meta name="description" content="&gt; 앱 배포과정을 자동화, 코드 사이닝,  배포등의 과정을 포함  
+&gt; 배포까지 자동화해야하기 때문에 개발자 등록을 마친 이후에 진행
+
+## setup
+&gt; [[react-native]] 로 진행함  
+&gt; `fastlane` 설치는 프로젝트 루트에 각각에 대한 `fastlane init` 은 `/ios`, `/android` 에서 진행  
+&gt; system 으로 설치하는게 맞을수도 있을 것은 같은데 공식 문서에서 추천하지 않아서 ~~brew 설치~~ 하려했으나 [[react-native]] 프로젝트 루트에 있는 `Gemfile` 에 `gem &#x27;fastlane&#x27;` 을 추가하여 `bundle install` 을 통해 설치
+
+### 설치 방법
+&gt; [[macos]] 기준
+- [ ] system ruby 사용, 공식 문서에서 권장하지 않음
+- [ ] [[brew]] 사용, `brew install fastlane`
+- [X] Gemfile 수정, [[react-native]] 에서 기본적으로 사용하고 있으므로 여기에서 함께 처리함
+
+### [[testflight]] 사용시, 테스터 그룹 설정
+- testflight 를 사용하는 경
+- appstoreconnect
+  - [X] 내부 테스팅 그룹 생성
+
+### firebase app distribution 사용시, 테스터 그룹 생성
+- firebase app distribution 콘솔
+  - [X] 테스팅 그룹 생성
+  ```ruby
+  firebase_app_distribution(
+    # 테스터 그룹 지정
+    groups: &#x27;살지로&#x27;,
+  )
+  ```
+
+### ios
+- [[react-native]] 프로젝트로 진행
+  ```sh 
+  cd ios
+  bundle exec fastlane init
+  ```
+  - **Automate beta distribution to TestFlight** 선택
+- 문서 `Podfile` 에 UTF-8 설정을 요구하고 있음, 설정하진 않음
+  ```ruby 
+  export LC_ALL=en_US.UTF-8
+  export LANG=en_US.UTF-8
+  ```
+    + https://docs.fastlane.tools/getting-started/ios/setup/
+- 아래 [[#인증]] 참조하여 진행
+- 빌드 후 icon 에러, 아래 에러 참조
+- testflight 에 올라간 것은 확인 되나 `No build_beta_detail included` [[#error]] 가 발생
+  - appstoreconnect -&gt; TestFlight -&gt; 베타 정보 입력
+- 성공
+
+#### 인증
+&gt; 인증을 처리하지 않으면 진행되는 중간에 인터렉션을 해줘야한다  
+&gt; 인증 방법은 여러가지가 있으나 여기서는 fastlane 문서에서 권장하는 **App Store connect API Key** 를 사용
+&gt; **App Store Connect API Key** 를 권장하나 fastlane 에서 `produce`, `pem` action 혹은 tool 을 지원하지 못한다
+  + https://appstoreconnect.apple.com/access/api
+
+- 사용자 및 엑세스 -&gt; App Store Connect API -&gt; *App Store Connect API 액세스 요청* -&gt; 바로 승인됨
+  - `*.p8` 파일을 다운로드 받아 아래서 사용
+- *API 키 생성* role 은 **앱 관리** 로 줘봄
+  ```sh 
+  [01:36:03]: ✅  Logging in with your Apple ID was successful
+  [01:36:03]: Checking if the app &#x27;[BUNDLE_ID]&#x27; exists in your Apple Developer Portal...
+  [01:36:04]: ✅  Your app &#x27;[BUNDLE_ID]&#x27; is available in your Apple Developer Portal
+  [01:36:04]: Checking if the app &#x27;[BUNDLE_ID]&#x27; exists on App Store Connect...
+  [01:36:04]: Looks like the app &#x27;[BUNDLE_ID]&#x27; isn&#x27;t available on App Store Connect
+  [01:36:04]: for the team ID &#x27;000000000&#x27; on Apple ID &#x27;deptno@gmail.com&#x27;
+  [01:36:04]: Would you like fastlane to create the App on App Store Connect for you? (y/n)
+  ```
+- `y` 를 누르면 생성해주기도 하는데 직접 생성하기로 한다
+  - SKU 는 고유 아이디로 외부에 노출되지 않는다. `AAAA_0001` 이런식으로 생성이 가능
+- 앱생성후에 `fastlane init` 을 이어가면 `Gemfile`과 함께 `fastlane/{App,Fast}File` 이 생성된다
+- `bundle exec fastlane beta` achive 이 후 에러가 발생
+  ```sh 
+  [02:04:08]: ▸ Archive Succeeded
+  # ...
+  error: exportArchive: No profiles for &#x27;[BUNDLE_ID]&#x27; were found
+
+  Error Domain=IDEProfileLocatorErrorDomain Code=1 &quot;No profiles for &#x27;[BUNDLE_ID]&#x27; were found&quot; UserInfo={IDEDistributionIssueSeverity=3, NSLocalizedDescription=No profiles for &#x27;[BUNDLE_ID]&#x27; were found, NSLocalizedRecoverySuggestion=Xcode couldn&#x27;t find any iOS App Store provisioning profiles matching &#x27;[BUNDLE_ID]&#x27;. Automatic signing is disabled and unable to generate a profile. To enable automatic signing, pass -allowProvisioningUpdates to xcodebuild.}
+
+  ** EXPORT FAILED **
+  [02:04:19]: Exit status: 70
+
+  # ...
+
+  [02:04:20]: fastlane finished with errors
+
+  [!] Error packaging up the application
+  ```
+  - **Provisioning Profile** 이 없어서 나는 에러로 디펄로퍼 콘솔에서 생성하면된다 **개발목적과 배포목적이 따로 필요**한데 여기선 [[testflight]] **배포** 목적이니 **Ad Hoc** 으로 생성
+    - [ ] 생성 후 *Automatically manage signing* 을 체크 해제하고 *Download Profile* 을 선택해서 방금 생성한 프로파일을 선택
+    - [X] 수동은 알아만 두고 자동으로한다
+- *App Store Connect API Key*를 `lane` 안에 추가
+  ```sh 
+  app_store_connect_api_key(
+    key_id: &quot;[API KEY ID]&quot;,
+    issuer_id: &quot;[API KEY ISSUER]&quot;,
+    key_filepath: &quot;./[생성한 API KEY].p8&quot;,
+    duration: 1200, # optional (maximum 1200)
+    in_house: false # optional but may be required if using match/sigh
+  )
+  ```
+
+### android
+- [[react-native]] 프로젝트로 진행
+  ```sh 
+  cd android
+  bundle exec fastlane init # 대충 기본만 하고 나머진 모두 생략 supply 도 하지 않음, fastlane/{AppFile,FastFile} 이 생성됨
+  bundle exec fastlane test # fastlane/README.md 가 지금 생성됨
+  ```
+- `fastlane` 파일을 열어보면 `lane` 이 있어서 `bundle exec fastlane beta` 테스트
+  ```sh 
+  bundle exec fastlane [android] beta
+  [05:46:33]: fastlane finished with errors
+
+  [!] Could not find action, lane or variable &#x27;crashlytics&#x27;. Check out the documentation for more details: https://docs.fastlane.tools/actions
+  ```
+  - `crashlytics` 에러가 발생 아무래도 [[../firebase|firebase]] 서비스를 이야기하는것 같은데 구글 계정 설정을 안해서 나는 것으로 보인다 이것부터 설정
+  - 주석처리
+- firebase app distribution 배포를 위한 `firebase app distribution` 플러그인 추가
+  + https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ko
+  ```sh 
+  fastlane add_plugin firebase_app_distribution
+  ```
+- 계정 정보 추가
+  + https://docs.fastlane.tools/actions/supply/
+  - *구글 클라우드 콘솔*에서 *Google Play Android Developer API* 활성화
+  - *구글 클라우드 콘솔*에서 *Service Account* 생성
+    - fastlane-supply 와 같은 알아보기 쉬운 이름,  이메일은 해당 페이지에 있는 생성기 돌릴 것 -&gt; **DONE**
+  - 생성된 계정의 메뉴로 들어가 `Manage keys` 선택
+    - ADD KEY -&gt; Create New Key(JSON)
+  - *구글 플레이 콘솔*에서 *Users and Permissions* 진입
+    - Invite new users -&gt; 위에서 생성한 서비스 어카운트 이메일 입력 -&gt; Account Permissions 에서 admin 권한 후 초대
+  ```sh
+  bundle exec fastlane run validate_play_store_json_key json_key:[아까 다운로드 받은.json]
+  ```
+  - 성공 확인되면 AppFile `json_key_file(&quot;[아까 다운로드 받은.json]&quot;)` 로 수정
+  - 이것으로 `crashlytics` 에러가 해결되지는 않음
+  - `fastlane supply init` 
+    - `[!] Google Api Error: Invalid request - Package not found: [package.name].` 에러가 발생
+      - *구글 플레이 콘솔*  에서 앱을 아직 생성하지 않았고 한번은 업로드해야한다는 글들이 있음
+        + https://stackoverflow.com/questions/69073389/fastlane-google-api-error-invalid-request-package-not-found-com-example
+      - [[../wip|wip]]
+
+## [[error]]
+
+### Invalid username and password combination. Used &#x27;XXXX@XXXX.com&#x27; as the username.
+&gt; 계정이슈
+```sh
+[10:19:46]: fastlane finished with errors
+
+Looking for related GitHub issues on fastlane/fastlane...
+
+Found no similar issues. To create a new issue, please visit:
+https://github.com/fastlane/fastlane/issues/new
+Run `fastlane env` to append the fastlane environment to your issue
+
+[!] The request could not be completed because:
+	Invalid username and password combination. Used &#x27;XXXX@XXXX.com&#x27; as the username.
+```
+```sh
+fastlane fastlane-credentials remove --username XXXX@XXXX.com
+```
+
+### fatal error: runtime: bsdthread_register error
+```sh
+▸ Running script &#x27;Unity Process symbols&#x27;
+
+❌  fatal error: runtime: bsdthread_register error
+
+
+** ARCHIVE FAILED **
+
+
+The following build commands failed:
+        PhaseScriptExecution Unity\ Process\ symbols /Users/deptno/Library/Developer/Xcode/DerivedData/[APP_NAME]-afpmodexeqnqytfpispoaxqrjqft/Build/Intermediates.noindex/ArchiveIntermediates/[APP_NAME]/IntermediateBuildFilesPath/Unity-iPhone.build/Release-iphoneos/UnityFramework.build/Script-84294926AA792CC5C43FB36D.sh (in target &#x27;UnityFramework&#x27; from project &#x27;Unity-iPhone&#x27;)
+(1 failure)
+[12:14:32]: Exit status: 65
+
++---------------+-------------------------+
+|            Build environment            |
++---------------+-------------------------+
+| xcode_path    | /Applications/Xcode.app |
+| gym_version   | 2.199.0                 |
+| export_method | app-store               |
+| sdk           | iPhoneOS15.0.sdk        |
++---------------+-------------------------+
+
+[12:14:32]: ▸ runtime.schedinit()
+[12:14:32]: ▸   /usr/local/go/src/runtime/proc.go:492 +0xa1 fp=0x7ff7bfef50d0 sp=0x7ff7bfef5090 pc=0x102c651
+[12:14:32]: ▸ runtime.rt0_go(0x7ff7bfef5100, 0x3, 0x7ff7bfef5100, 0x1000000, 0x3, 0x7ff7bfef6360, 0x7ff7bfef63ce, 0x7ff7bfef63da, 0x0, 0x7ff7bfef64b1, ...)
+[12:14:32]: ▸   /usr/local/go/src/runtime/asm_amd64.s:175 +0x1eb fp=0x7ff7bfef50d8 sp=0x7ff7bfef50d0 pc=0x10540fb
+[12:14:32]: ▸ Command PhaseScriptExecution failed with a nonzero exit code
+[12:14:32]:
+[12:14:32]: ⬆️  Check out the few lines of raw `xcodebuild` output above for potential hints on how to solve this error
+[12:14:32]: 📋  For the complete and more detailed error log, check the full log at:
+[12:14:32]: 📋  /Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log
+```
+
+`/Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log` 형태로 로그가 저장되니 여기서 확인하면 된다.
+[[unity]] 항목 확인
+
+### Error: Asset validation failed Missing required icon file
+```sh 
+[04:02:20]: [altool] 2023-12-27 04:02:20.553 *** Error: Asset validation failed Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx) (90022)
+[04:02:20]: [altool]  {
+[04:02:20]: [altool]     NSLocalizedDescription = &quot;Asset validation failed&quot;;
+[04:02:20]: [altool]     NSLocalizedFailureReason = &quot;Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: e19b1052-837f-4d5a-b7a2-98a288cc04e5)&quot;;
+[04:02:20]: [altool]     NSUnderlyingError = &quot;Error Domain=IrisAPI Code=-19241 \&quot;Asset validation failed\&quot; UserInfo={status=409, detail=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, id=e19b1052-837f-4d5a-b7a2-98a288cc04e5, code=STATE_ERROR.VALIDATION_ERROR.90022, title=Asset validation failed, NSLocalizedFailureReason=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, NSLocalizedDescription=Asset validation failed}&quot;;
+[04:02:20]: [altool]     &quot;iris-code&quot; = &quot;STATE_ERROR.VALIDATION_ERROR.90022&quot;;
+[04:02:20]: [altool] }
+
+[04:02:20]: Application Loader output above ^
+[04:02:20]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90713) Missing Info.plist value. A value for the Info.plist key &#x27;CFBundleIconName&#x27; is missing in the bundle &#x27;ro.salji.app&#x27;. Apps built with iOS 11 or later SDK must supply app icons in an asset catalog and must also provide a value for this Info.plist key. For more information see http://help.apple.com/xcode/mac/current/#/dev10510b1f7. (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+```
+- 앱 아이콘에 없어서나는 에러로 구글에서 `app icon generator` 를 검색해서 아무거나 선택하면 될 것으로 보인다 사용한 링크는 아래추가
+  + https://easyappicon.com [[ios]] [[android]] [[react-native]]
+
+### No build_beta_detail included
+- 베타에 대한 정보가 없어서 나는 것으로 추측
+- appstoreconnect -&gt; TestFlight -&gt; 베타 정보 입력
+
+### Missing authentication credentials
+```sh 
+Missing authentication credentials. Set up Application Default Credentials, your Firebase refresh token, or sign in with the Firebase CLI, and try again.
+```
+- **구글 클라우드 콘솔** -&gt; 서비스 계정(**firebase 앱 배포** 권한이 있어야함) -&gt; 배포에 사용되는 계정 -&gt;  API KEY 생성된 것을 사용
+- `fastlane/FastFile` 에서 인자로 인증키 위치 입력
+  ```ruby 
+  release = firebase_app_distribution(
+    # ...
+    service_credentials_file: &#x27;../[PROJECT-NAME]-[SERVICE_ACCOUNT_API_KEY].json&#x27;,
+  )
+  ```
+
+### the server responded with status 403
+```sh 
+the server responded with status 403
+```
++ ~~https://stackoverflow.com/a/77438947~~
++ https://stackoverflow.com/questions/62385911/firebase-app-distribution-failed-to-fetch-app-information-403-the-caller-do
+- 구글 클라우드 콘솔 -&gt;  프로젝트 -&gt;  IAM -&gt; 서비스계정에 firebase 배포에 사용되는 계정 이메일 선택 -&gt; **Firebase 앱 배포** role 추가
+        
+### the server responded with status 404
+```sh 
+the server responded with status 404
+```
+- [[firebase]] console -&gt; Release &amp; Monitor 에서 서비스가 시작된 것인지 확인(대시보드가 보여야함)
+  - [[android]] / [[ios]] 를 **별도로 설정**해야하니 이 부분에 유의
+
+### ios 다운로드 불가
++ https://firebase.google.com/codelabs/appdistribution-udid-collection?hl=ko#2
+- 메일도 오고 테스트도 등록되었으나 다운로드 불가 
+```txt 
+기기가등록되었으며이제준비가끝났습니다
+앱을테스트할준비가되면이메일이전송됩니다.
+```
+- 프로비저닝 이슈로 개인이 사용하는 경우라면 아래와 같이 인증서와 프로비저닝 설정을 추가하면 과정에서 필요한 것들이 자동으로 만들어지며 진행된다
+- `fastlane/AppFile` 에 설정 확인
+  ```ruby
+  app_identifier(&quot;&lt;your app&#x27;s bundle identifier&gt;&quot;)
+  apple_id(&quot;&lt;your Apple id&gt;&quot;)
+  ```
+- `fastlane/FastFile` 에 설정 확인
+```ruby
+lane :lane_name do
+  get_certificates()
+  get_provisioning_profile(adhoc: true)
+  build_app(export_method: &quot;ad-hoc&quot;)
+```
+- 아래와 같이 처리된다
+```sh 
+[14:00:01]: Driving the lane &#x27;ios firebase&#x27; 🚀
+[14:00:01]: ------------------------------
+[14:00:01]: --- Step: get_certificates ---
+[14:00:01]: ------------------------------
+
++-----------------------------------------------------------------------------+
+|                          Summary for cert 2.217.0                           |
++-------------------------+---------------------------------------------------+
+| development             | false                                             |
+| force                   | false                                             |
+| generate_apple_certs    | true                                              |
+| username                | deptno@gmail.com                                  |
+| team_id                 | xxxxxxxxxx                                        |
+| keychain_path           | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |
+| skip_set_partition_list | false                                             |
+| platform                | ios                                               |
++-------------------------+---------------------------------------------------+
+
+[14:00:11]: Found the certificate xxxxxxxxxx (Bonggyun Lee) which is installed on the local machine. Using this one.
+[14:00:11]: Verifying the certificate is properly installed locally...
+[14:00:11]: Successfully installed certificate xxxxxxxxxx
+[14:00:11]: Use signing certificate &#x27;xxxxxxxxxx&#x27; from now on!
+```
+  + https://developer.apple.com
+    - 인증서 생성된 것 확인 가능 TYPE: **Distribution**
+    - 프로파일 생성된 것 확인 가능 TYPE: **Ad hoc**
+    - 이후 배포되는 것들에대해서는 다운로드가 가능한 것이 확인된다
+    - 추가적인 디바이스가 필요한 경우에는 **앱스토어 커넥트 콘솔** 에서 디바이스 추가해서 진행
+      - [[../udid|udid]] 등록확인
+    - [ ] 여러 기기에서 빌드가 필요한 경우에는 [[match]] 필요 한것으로 보인다
+
+## releated
+- [[ios]]
+- [[cert]]
+- [[github]]
+- [[unity]]
+- [[firebase]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# fastlane"/><meta property="og:description" content="&gt; 앱 배포과정을 자동화, 코드 사이닝,  배포등의 과정을 포함  
+&gt; 배포까지 자동화해야하기 때문에 개발자 등록을 마친 이후에 진행
+
+## setup
+&gt; [[react-native]] 로 진행함  
+&gt; `fastlane` 설치는 프로젝트 루트에 각각에 대한 `fastlane init` 은 `/ios`, `/android` 에서 진행  
+&gt; system 으로 설치하는게 맞을수도 있을 것은 같은데 공식 문서에서 추천하지 않아서 ~~brew 설치~~ 하려했으나 [[react-native]] 프로젝트 루트에 있는 `Gemfile` 에 `gem &#x27;fastlane&#x27;` 을 추가하여 `bundle install` 을 통해 설치
+
+### 설치 방법
+&gt; [[macos]] 기준
+- [ ] system ruby 사용, 공식 문서에서 권장하지 않음
+- [ ] [[brew]] 사용, `brew install fastlane`
+- [X] Gemfile 수정, [[react-native]] 에서 기본적으로 사용하고 있으므로 여기에서 함께 처리함
+
+### [[testflight]] 사용시, 테스터 그룹 설정
+- testflight 를 사용하는 경
+- appstoreconnect
+  - [X] 내부 테스팅 그룹 생성
+
+### firebase app distribution 사용시, 테스터 그룹 생성
+- firebase app distribution 콘솔
+  - [X] 테스팅 그룹 생성
+  ```ruby
+  firebase_app_distribution(
+    # 테스터 그룹 지정
+    groups: &#x27;살지로&#x27;,
+  )
+  ```
+
+### ios
+- [[react-native]] 프로젝트로 진행
+  ```sh 
+  cd ios
+  bundle exec fastlane init
+  ```
+  - **Automate beta distribution to TestFlight** 선택
+- 문서 `Podfile` 에 UTF-8 설정을 요구하고 있음, 설정하진 않음
+  ```ruby 
+  export LC_ALL=en_US.UTF-8
+  export LANG=en_US.UTF-8
+  ```
+    + https://docs.fastlane.tools/getting-started/ios/setup/
+- 아래 [[#인증]] 참조하여 진행
+- 빌드 후 icon 에러, 아래 에러 참조
+- testflight 에 올라간 것은 확인 되나 `No build_beta_detail included` [[#error]] 가 발생
+  - appstoreconnect -&gt; TestFlight -&gt; 베타 정보 입력
+- 성공
+
+#### 인증
+&gt; 인증을 처리하지 않으면 진행되는 중간에 인터렉션을 해줘야한다  
+&gt; 인증 방법은 여러가지가 있으나 여기서는 fastlane 문서에서 권장하는 **App Store connect API Key** 를 사용
+&gt; **App Store Connect API Key** 를 권장하나 fastlane 에서 `produce`, `pem` action 혹은 tool 을 지원하지 못한다
+  + https://appstoreconnect.apple.com/access/api
+
+- 사용자 및 엑세스 -&gt; App Store Connect API -&gt; *App Store Connect API 액세스 요청* -&gt; 바로 승인됨
+  - `*.p8` 파일을 다운로드 받아 아래서 사용
+- *API 키 생성* role 은 **앱 관리** 로 줘봄
+  ```sh 
+  [01:36:03]: ✅  Logging in with your Apple ID was successful
+  [01:36:03]: Checking if the app &#x27;[BUNDLE_ID]&#x27; exists in your Apple Developer Portal...
+  [01:36:04]: ✅  Your app &#x27;[BUNDLE_ID]&#x27; is available in your Apple Developer Portal
+  [01:36:04]: Checking if the app &#x27;[BUNDLE_ID]&#x27; exists on App Store Connect...
+  [01:36:04]: Looks like the app &#x27;[BUNDLE_ID]&#x27; isn&#x27;t available on App Store Connect
+  [01:36:04]: for the team ID &#x27;000000000&#x27; on Apple ID &#x27;deptno@gmail.com&#x27;
+  [01:36:04]: Would you like fastlane to create the App on App Store Connect for you? (y/n)
+  ```
+- `y` 를 누르면 생성해주기도 하는데 직접 생성하기로 한다
+  - SKU 는 고유 아이디로 외부에 노출되지 않는다. `AAAA_0001` 이런식으로 생성이 가능
+- 앱생성후에 `fastlane init` 을 이어가면 `Gemfile`과 함께 `fastlane/{App,Fast}File` 이 생성된다
+- `bundle exec fastlane beta` achive 이 후 에러가 발생
+  ```sh 
+  [02:04:08]: ▸ Archive Succeeded
+  # ...
+  error: exportArchive: No profiles for &#x27;[BUNDLE_ID]&#x27; were found
+
+  Error Domain=IDEProfileLocatorErrorDomain Code=1 &quot;No profiles for &#x27;[BUNDLE_ID]&#x27; were found&quot; UserInfo={IDEDistributionIssueSeverity=3, NSLocalizedDescription=No profiles for &#x27;[BUNDLE_ID]&#x27; were found, NSLocalizedRecoverySuggestion=Xcode couldn&#x27;t find any iOS App Store provisioning profiles matching &#x27;[BUNDLE_ID]&#x27;. Automatic signing is disabled and unable to generate a profile. To enable automatic signing, pass -allowProvisioningUpdates to xcodebuild.}
+
+  ** EXPORT FAILED **
+  [02:04:19]: Exit status: 70
+
+  # ...
+
+  [02:04:20]: fastlane finished with errors
+
+  [!] Error packaging up the application
+  ```
+  - **Provisioning Profile** 이 없어서 나는 에러로 디펄로퍼 콘솔에서 생성하면된다 **개발목적과 배포목적이 따로 필요**한데 여기선 [[testflight]] **배포** 목적이니 **Ad Hoc** 으로 생성
+    - [ ] 생성 후 *Automatically manage signing* 을 체크 해제하고 *Download Profile* 을 선택해서 방금 생성한 프로파일을 선택
+    - [X] 수동은 알아만 두고 자동으로한다
+- *App Store Connect API Key*를 `lane` 안에 추가
+  ```sh 
+  app_store_connect_api_key(
+    key_id: &quot;[API KEY ID]&quot;,
+    issuer_id: &quot;[API KEY ISSUER]&quot;,
+    key_filepath: &quot;./[생성한 API KEY].p8&quot;,
+    duration: 1200, # optional (maximum 1200)
+    in_house: false # optional but may be required if using match/sigh
+  )
+  ```
+
+### android
+- [[react-native]] 프로젝트로 진행
+  ```sh 
+  cd android
+  bundle exec fastlane init # 대충 기본만 하고 나머진 모두 생략 supply 도 하지 않음, fastlane/{AppFile,FastFile} 이 생성됨
+  bundle exec fastlane test # fastlane/README.md 가 지금 생성됨
+  ```
+- `fastlane` 파일을 열어보면 `lane` 이 있어서 `bundle exec fastlane beta` 테스트
+  ```sh 
+  bundle exec fastlane [android] beta
+  [05:46:33]: fastlane finished with errors
+
+  [!] Could not find action, lane or variable &#x27;crashlytics&#x27;. Check out the documentation for more details: https://docs.fastlane.tools/actions
+  ```
+  - `crashlytics` 에러가 발생 아무래도 [[../firebase|firebase]] 서비스를 이야기하는것 같은데 구글 계정 설정을 안해서 나는 것으로 보인다 이것부터 설정
+  - 주석처리
+- firebase app distribution 배포를 위한 `firebase app distribution` 플러그인 추가
+  + https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ko
+  ```sh 
+  fastlane add_plugin firebase_app_distribution
+  ```
+- 계정 정보 추가
+  + https://docs.fastlane.tools/actions/supply/
+  - *구글 클라우드 콘솔*에서 *Google Play Android Developer API* 활성화
+  - *구글 클라우드 콘솔*에서 *Service Account* 생성
+    - fastlane-supply 와 같은 알아보기 쉬운 이름,  이메일은 해당 페이지에 있는 생성기 돌릴 것 -&gt; **DONE**
+  - 생성된 계정의 메뉴로 들어가 `Manage keys` 선택
+    - ADD KEY -&gt; Create New Key(JSON)
+  - *구글 플레이 콘솔*에서 *Users and Permissions* 진입
+    - Invite new users -&gt; 위에서 생성한 서비스 어카운트 이메일 입력 -&gt; Account Permissions 에서 admin 권한 후 초대
+  ```sh
+  bundle exec fastlane run validate_play_store_json_key json_key:[아까 다운로드 받은.json]
+  ```
+  - 성공 확인되면 AppFile `json_key_file(&quot;[아까 다운로드 받은.json]&quot;)` 로 수정
+  - 이것으로 `crashlytics` 에러가 해결되지는 않음
+  - `fastlane supply init` 
+    - `[!] Google Api Error: Invalid request - Package not found: [package.name].` 에러가 발생
+      - *구글 플레이 콘솔*  에서 앱을 아직 생성하지 않았고 한번은 업로드해야한다는 글들이 있음
+        + https://stackoverflow.com/questions/69073389/fastlane-google-api-error-invalid-request-package-not-found-com-example
+      - [[../wip|wip]]
+
+## [[error]]
+
+### Invalid username and password combination. Used &#x27;XXXX@XXXX.com&#x27; as the username.
+&gt; 계정이슈
+```sh
+[10:19:46]: fastlane finished with errors
+
+Looking for related GitHub issues on fastlane/fastlane...
+
+Found no similar issues. To create a new issue, please visit:
+https://github.com/fastlane/fastlane/issues/new
+Run `fastlane env` to append the fastlane environment to your issue
+
+[!] The request could not be completed because:
+	Invalid username and password combination. Used &#x27;XXXX@XXXX.com&#x27; as the username.
+```
+```sh
+fastlane fastlane-credentials remove --username XXXX@XXXX.com
+```
+
+### fatal error: runtime: bsdthread_register error
+```sh
+▸ Running script &#x27;Unity Process symbols&#x27;
+
+❌  fatal error: runtime: bsdthread_register error
+
+
+** ARCHIVE FAILED **
+
+
+The following build commands failed:
+        PhaseScriptExecution Unity\ Process\ symbols /Users/deptno/Library/Developer/Xcode/DerivedData/[APP_NAME]-afpmodexeqnqytfpispoaxqrjqft/Build/Intermediates.noindex/ArchiveIntermediates/[APP_NAME]/IntermediateBuildFilesPath/Unity-iPhone.build/Release-iphoneos/UnityFramework.build/Script-84294926AA792CC5C43FB36D.sh (in target &#x27;UnityFramework&#x27; from project &#x27;Unity-iPhone&#x27;)
+(1 failure)
+[12:14:32]: Exit status: 65
+
++---------------+-------------------------+
+|            Build environment            |
++---------------+-------------------------+
+| xcode_path    | /Applications/Xcode.app |
+| gym_version   | 2.199.0                 |
+| export_method | app-store               |
+| sdk           | iPhoneOS15.0.sdk        |
++---------------+-------------------------+
+
+[12:14:32]: ▸ runtime.schedinit()
+[12:14:32]: ▸   /usr/local/go/src/runtime/proc.go:492 +0xa1 fp=0x7ff7bfef50d0 sp=0x7ff7bfef5090 pc=0x102c651
+[12:14:32]: ▸ runtime.rt0_go(0x7ff7bfef5100, 0x3, 0x7ff7bfef5100, 0x1000000, 0x3, 0x7ff7bfef6360, 0x7ff7bfef63ce, 0x7ff7bfef63da, 0x0, 0x7ff7bfef64b1, ...)
+[12:14:32]: ▸   /usr/local/go/src/runtime/asm_amd64.s:175 +0x1eb fp=0x7ff7bfef50d8 sp=0x7ff7bfef50d0 pc=0x10540fb
+[12:14:32]: ▸ Command PhaseScriptExecution failed with a nonzero exit code
+[12:14:32]:
+[12:14:32]: ⬆️  Check out the few lines of raw `xcodebuild` output above for potential hints on how to solve this error
+[12:14:32]: 📋  For the complete and more detailed error log, check the full log at:
+[12:14:32]: 📋  /Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log
+```
+
+`/Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log` 형태로 로그가 저장되니 여기서 확인하면 된다.
+[[unity]] 항목 확인
+
+### Error: Asset validation failed Missing required icon file
+```sh 
+[04:02:20]: [altool] 2023-12-27 04:02:20.553 *** Error: Asset validation failed Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx) (90022)
+[04:02:20]: [altool]  {
+[04:02:20]: [altool]     NSLocalizedDescription = &quot;Asset validation failed&quot;;
+[04:02:20]: [altool]     NSLocalizedFailureReason = &quot;Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: e19b1052-837f-4d5a-b7a2-98a288cc04e5)&quot;;
+[04:02:20]: [altool]     NSUnderlyingError = &quot;Error Domain=IrisAPI Code=-19241 \&quot;Asset validation failed\&quot; UserInfo={status=409, detail=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, id=e19b1052-837f-4d5a-b7a2-98a288cc04e5, code=STATE_ERROR.VALIDATION_ERROR.90022, title=Asset validation failed, NSLocalizedFailureReason=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, NSLocalizedDescription=Asset validation failed}&quot;;
+[04:02:20]: [altool]     &quot;iris-code&quot; = &quot;STATE_ERROR.VALIDATION_ERROR.90022&quot;;
+[04:02:20]: [altool] }
+
+[04:02:20]: Application Loader output above ^
+[04:02:20]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90713) Missing Info.plist value. A value for the Info.plist key &#x27;CFBundleIconName&#x27; is missing in the bundle &#x27;ro.salji.app&#x27;. Apps built with iOS 11 or later SDK must supply app icons in an asset catalog and must also provide a value for this Info.plist key. For more information see http://help.apple.com/xcode/mac/current/#/dev10510b1f7. (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+```
+- 앱 아이콘에 없어서나는 에러로 구글에서 `app icon generator` 를 검색해서 아무거나 선택하면 될 것으로 보인다 사용한 링크는 아래추가
+  + https://easyappicon.com [[ios]] [[android]] [[react-native]]
+
+### No build_beta_detail included
+- 베타에 대한 정보가 없어서 나는 것으로 추측
+- appstoreconnect -&gt; TestFlight -&gt; 베타 정보 입력
+
+### Missing authentication credentials
+```sh 
+Missing authentication credentials. Set up Application Default Credentials, your Firebase refresh token, or sign in with the Firebase CLI, and try again.
+```
+- **구글 클라우드 콘솔** -&gt; 서비스 계정(**firebase 앱 배포** 권한이 있어야함) -&gt; 배포에 사용되는 계정 -&gt;  API KEY 생성된 것을 사용
+- `fastlane/FastFile` 에서 인자로 인증키 위치 입력
+  ```ruby 
+  release = firebase_app_distribution(
+    # ...
+    service_credentials_file: &#x27;../[PROJECT-NAME]-[SERVICE_ACCOUNT_API_KEY].json&#x27;,
+  )
+  ```
+
+### the server responded with status 403
+```sh 
+the server responded with status 403
+```
++ ~~https://stackoverflow.com/a/77438947~~
++ https://stackoverflow.com/questions/62385911/firebase-app-distribution-failed-to-fetch-app-information-403-the-caller-do
+- 구글 클라우드 콘솔 -&gt;  프로젝트 -&gt;  IAM -&gt; 서비스계정에 firebase 배포에 사용되는 계정 이메일 선택 -&gt; **Firebase 앱 배포** role 추가
+        
+### the server responded with status 404
+```sh 
+the server responded with status 404
+```
+- [[firebase]] console -&gt; Release &amp; Monitor 에서 서비스가 시작된 것인지 확인(대시보드가 보여야함)
+  - [[android]] / [[ios]] 를 **별도로 설정**해야하니 이 부분에 유의
+
+### ios 다운로드 불가
++ https://firebase.google.com/codelabs/appdistribution-udid-collection?hl=ko#2
+- 메일도 오고 테스트도 등록되었으나 다운로드 불가 
+```txt 
+기기가등록되었으며이제준비가끝났습니다
+앱을테스트할준비가되면이메일이전송됩니다.
+```
+- 프로비저닝 이슈로 개인이 사용하는 경우라면 아래와 같이 인증서와 프로비저닝 설정을 추가하면 과정에서 필요한 것들이 자동으로 만들어지며 진행된다
+- `fastlane/AppFile` 에 설정 확인
+  ```ruby
+  app_identifier(&quot;&lt;your app&#x27;s bundle identifier&gt;&quot;)
+  apple_id(&quot;&lt;your Apple id&gt;&quot;)
+  ```
+- `fastlane/FastFile` 에 설정 확인
+```ruby
+lane :lane_name do
+  get_certificates()
+  get_provisioning_profile(adhoc: true)
+  build_app(export_method: &quot;ad-hoc&quot;)
+```
+- 아래와 같이 처리된다
+```sh 
+[14:00:01]: Driving the lane &#x27;ios firebase&#x27; 🚀
+[14:00:01]: ------------------------------
+[14:00:01]: --- Step: get_certificates ---
+[14:00:01]: ------------------------------
+
++-----------------------------------------------------------------------------+
+|                          Summary for cert 2.217.0                           |
++-------------------------+---------------------------------------------------+
+| development             | false                                             |
+| force                   | false                                             |
+| generate_apple_certs    | true                                              |
+| username                | deptno@gmail.com                                  |
+| team_id                 | xxxxxxxxxx                                        |
+| keychain_path           | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |
+| skip_set_partition_list | false                                             |
+| platform                | ios                                               |
++-------------------------+---------------------------------------------------+
+
+[14:00:11]: Found the certificate xxxxxxxxxx (Bonggyun Lee) which is installed on the local machine. Using this one.
+[14:00:11]: Verifying the certificate is properly installed locally...
+[14:00:11]: Successfully installed certificate xxxxxxxxxx
+[14:00:11]: Use signing certificate &#x27;xxxxxxxxxx&#x27; from now on!
+```
+  + https://developer.apple.com
+    - 인증서 생성된 것 확인 가능 TYPE: **Distribution**
+    - 프로파일 생성된 것 확인 가능 TYPE: **Ad hoc**
+    - 이후 배포되는 것들에대해서는 다운로드가 가능한 것이 확인된다
+    - 추가적인 디바이스가 필요한 경우에는 **앱스토어 커넥트 콘솔** 에서 디바이스 추가해서 진행
+      - [[../udid|udid]] 등록확인
+    - [ ] 여러 기기에서 빌드가 필요한 경우에는 [[match]] 필요 한것으로 보인다
+
+## releated
+- [[ios]]
+- [[cert]]
+- [[github]]
+- [[unity]]
+- [[firebase]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/fastlane"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# fastlane"/><meta name="twitter:description" content="&gt; 앱 배포과정을 자동화, 코드 사이닝,  배포등의 과정을 포함  
+&gt; 배포까지 자동화해야하기 때문에 개발자 등록을 마친 이후에 진행
+
+## setup
+&gt; [[react-native]] 로 진행함  
+&gt; `fastlane` 설치는 프로젝트 루트에 각각에 대한 `fastlane init` 은 `/ios`, `/android` 에서 진행  
+&gt; system 으로 설치하는게 맞을수도 있을 것은 같은데 공식 문서에서 추천하지 않아서 ~~brew 설치~~ 하려했으나 [[react-native]] 프로젝트 루트에 있는 `Gemfile` 에 `gem &#x27;fastlane&#x27;` 을 추가하여 `bundle install` 을 통해 설치
+
+### 설치 방법
+&gt; [[macos]] 기준
+- [ ] system ruby 사용, 공식 문서에서 권장하지 않음
+- [ ] [[brew]] 사용, `brew install fastlane`
+- [X] Gemfile 수정, [[react-native]] 에서 기본적으로 사용하고 있으므로 여기에서 함께 처리함
+
+### [[testflight]] 사용시, 테스터 그룹 설정
+- testflight 를 사용하는 경
+- appstoreconnect
+  - [X] 내부 테스팅 그룹 생성
+
+### firebase app distribution 사용시, 테스터 그룹 생성
+- firebase app distribution 콘솔
+  - [X] 테스팅 그룹 생성
+  ```ruby
+  firebase_app_distribution(
+    # 테스터 그룹 지정
+    groups: &#x27;살지로&#x27;,
+  )
+  ```
+
+### ios
+- [[react-native]] 프로젝트로 진행
+  ```sh 
+  cd ios
+  bundle exec fastlane init
+  ```
+  - **Automate beta distribution to TestFlight** 선택
+- 문서 `Podfile` 에 UTF-8 설정을 요구하고 있음, 설정하진 않음
+  ```ruby 
+  export LC_ALL=en_US.UTF-8
+  export LANG=en_US.UTF-8
+  ```
+    + https://docs.fastlane.tools/getting-started/ios/setup/
+- 아래 [[#인증]] 참조하여 진행
+- 빌드 후 icon 에러, 아래 에러 참조
+- testflight 에 올라간 것은 확인 되나 `No build_beta_detail included` [[#error]] 가 발생
+  - appstoreconnect -&gt; TestFlight -&gt; 베타 정보 입력
+- 성공
+
+#### 인증
+&gt; 인증을 처리하지 않으면 진행되는 중간에 인터렉션을 해줘야한다  
+&gt; 인증 방법은 여러가지가 있으나 여기서는 fastlane 문서에서 권장하는 **App Store connect API Key** 를 사용
+&gt; **App Store Connect API Key** 를 권장하나 fastlane 에서 `produce`, `pem` action 혹은 tool 을 지원하지 못한다
+  + https://appstoreconnect.apple.com/access/api
+
+- 사용자 및 엑세스 -&gt; App Store Connect API -&gt; *App Store Connect API 액세스 요청* -&gt; 바로 승인됨
+  - `*.p8` 파일을 다운로드 받아 아래서 사용
+- *API 키 생성* role 은 **앱 관리** 로 줘봄
+  ```sh 
+  [01:36:03]: ✅  Logging in with your Apple ID was successful
+  [01:36:03]: Checking if the app &#x27;[BUNDLE_ID]&#x27; exists in your Apple Developer Portal...
+  [01:36:04]: ✅  Your app &#x27;[BUNDLE_ID]&#x27; is available in your Apple Developer Portal
+  [01:36:04]: Checking if the app &#x27;[BUNDLE_ID]&#x27; exists on App Store Connect...
+  [01:36:04]: Looks like the app &#x27;[BUNDLE_ID]&#x27; isn&#x27;t available on App Store Connect
+  [01:36:04]: for the team ID &#x27;000000000&#x27; on Apple ID &#x27;deptno@gmail.com&#x27;
+  [01:36:04]: Would you like fastlane to create the App on App Store Connect for you? (y/n)
+  ```
+- `y` 를 누르면 생성해주기도 하는데 직접 생성하기로 한다
+  - SKU 는 고유 아이디로 외부에 노출되지 않는다. `AAAA_0001` 이런식으로 생성이 가능
+- 앱생성후에 `fastlane init` 을 이어가면 `Gemfile`과 함께 `fastlane/{App,Fast}File` 이 생성된다
+- `bundle exec fastlane beta` achive 이 후 에러가 발생
+  ```sh 
+  [02:04:08]: ▸ Archive Succeeded
+  # ...
+  error: exportArchive: No profiles for &#x27;[BUNDLE_ID]&#x27; were found
+
+  Error Domain=IDEProfileLocatorErrorDomain Code=1 &quot;No profiles for &#x27;[BUNDLE_ID]&#x27; were found&quot; UserInfo={IDEDistributionIssueSeverity=3, NSLocalizedDescription=No profiles for &#x27;[BUNDLE_ID]&#x27; were found, NSLocalizedRecoverySuggestion=Xcode couldn&#x27;t find any iOS App Store provisioning profiles matching &#x27;[BUNDLE_ID]&#x27;. Automatic signing is disabled and unable to generate a profile. To enable automatic signing, pass -allowProvisioningUpdates to xcodebuild.}
+
+  ** EXPORT FAILED **
+  [02:04:19]: Exit status: 70
+
+  # ...
+
+  [02:04:20]: fastlane finished with errors
+
+  [!] Error packaging up the application
+  ```
+  - **Provisioning Profile** 이 없어서 나는 에러로 디펄로퍼 콘솔에서 생성하면된다 **개발목적과 배포목적이 따로 필요**한데 여기선 [[testflight]] **배포** 목적이니 **Ad Hoc** 으로 생성
+    - [ ] 생성 후 *Automatically manage signing* 을 체크 해제하고 *Download Profile* 을 선택해서 방금 생성한 프로파일을 선택
+    - [X] 수동은 알아만 두고 자동으로한다
+- *App Store Connect API Key*를 `lane` 안에 추가
+  ```sh 
+  app_store_connect_api_key(
+    key_id: &quot;[API KEY ID]&quot;,
+    issuer_id: &quot;[API KEY ISSUER]&quot;,
+    key_filepath: &quot;./[생성한 API KEY].p8&quot;,
+    duration: 1200, # optional (maximum 1200)
+    in_house: false # optional but may be required if using match/sigh
+  )
+  ```
+
+### android
+- [[react-native]] 프로젝트로 진행
+  ```sh 
+  cd android
+  bundle exec fastlane init # 대충 기본만 하고 나머진 모두 생략 supply 도 하지 않음, fastlane/{AppFile,FastFile} 이 생성됨
+  bundle exec fastlane test # fastlane/README.md 가 지금 생성됨
+  ```
+- `fastlane` 파일을 열어보면 `lane` 이 있어서 `bundle exec fastlane beta` 테스트
+  ```sh 
+  bundle exec fastlane [android] beta
+  [05:46:33]: fastlane finished with errors
+
+  [!] Could not find action, lane or variable &#x27;crashlytics&#x27;. Check out the documentation for more details: https://docs.fastlane.tools/actions
+  ```
+  - `crashlytics` 에러가 발생 아무래도 [[../firebase|firebase]] 서비스를 이야기하는것 같은데 구글 계정 설정을 안해서 나는 것으로 보인다 이것부터 설정
+  - 주석처리
+- firebase app distribution 배포를 위한 `firebase app distribution` 플러그인 추가
+  + https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ko
+  ```sh 
+  fastlane add_plugin firebase_app_distribution
+  ```
+- 계정 정보 추가
+  + https://docs.fastlane.tools/actions/supply/
+  - *구글 클라우드 콘솔*에서 *Google Play Android Developer API* 활성화
+  - *구글 클라우드 콘솔*에서 *Service Account* 생성
+    - fastlane-supply 와 같은 알아보기 쉬운 이름,  이메일은 해당 페이지에 있는 생성기 돌릴 것 -&gt; **DONE**
+  - 생성된 계정의 메뉴로 들어가 `Manage keys` 선택
+    - ADD KEY -&gt; Create New Key(JSON)
+  - *구글 플레이 콘솔*에서 *Users and Permissions* 진입
+    - Invite new users -&gt; 위에서 생성한 서비스 어카운트 이메일 입력 -&gt; Account Permissions 에서 admin 권한 후 초대
+  ```sh
+  bundle exec fastlane run validate_play_store_json_key json_key:[아까 다운로드 받은.json]
+  ```
+  - 성공 확인되면 AppFile `json_key_file(&quot;[아까 다운로드 받은.json]&quot;)` 로 수정
+  - 이것으로 `crashlytics` 에러가 해결되지는 않음
+  - `fastlane supply init` 
+    - `[!] Google Api Error: Invalid request - Package not found: [package.name].` 에러가 발생
+      - *구글 플레이 콘솔*  에서 앱을 아직 생성하지 않았고 한번은 업로드해야한다는 글들이 있음
+        + https://stackoverflow.com/questions/69073389/fastlane-google-api-error-invalid-request-package-not-found-com-example
+      - [[../wip|wip]]
+
+## [[error]]
+
+### Invalid username and password combination. Used &#x27;XXXX@XXXX.com&#x27; as the username.
+&gt; 계정이슈
+```sh
+[10:19:46]: fastlane finished with errors
+
+Looking for related GitHub issues on fastlane/fastlane...
+
+Found no similar issues. To create a new issue, please visit:
+https://github.com/fastlane/fastlane/issues/new
+Run `fastlane env` to append the fastlane environment to your issue
+
+[!] The request could not be completed because:
+	Invalid username and password combination. Used &#x27;XXXX@XXXX.com&#x27; as the username.
+```
+```sh
+fastlane fastlane-credentials remove --username XXXX@XXXX.com
+```
+
+### fatal error: runtime: bsdthread_register error
+```sh
+▸ Running script &#x27;Unity Process symbols&#x27;
+
+❌  fatal error: runtime: bsdthread_register error
+
+
+** ARCHIVE FAILED **
+
+
+The following build commands failed:
+        PhaseScriptExecution Unity\ Process\ symbols /Users/deptno/Library/Developer/Xcode/DerivedData/[APP_NAME]-afpmodexeqnqytfpispoaxqrjqft/Build/Intermediates.noindex/ArchiveIntermediates/[APP_NAME]/IntermediateBuildFilesPath/Unity-iPhone.build/Release-iphoneos/UnityFramework.build/Script-84294926AA792CC5C43FB36D.sh (in target &#x27;UnityFramework&#x27; from project &#x27;Unity-iPhone&#x27;)
+(1 failure)
+[12:14:32]: Exit status: 65
+
++---------------+-------------------------+
+|            Build environment            |
++---------------+-------------------------+
+| xcode_path    | /Applications/Xcode.app |
+| gym_version   | 2.199.0                 |
+| export_method | app-store               |
+| sdk           | iPhoneOS15.0.sdk        |
++---------------+-------------------------+
+
+[12:14:32]: ▸ runtime.schedinit()
+[12:14:32]: ▸   /usr/local/go/src/runtime/proc.go:492 +0xa1 fp=0x7ff7bfef50d0 sp=0x7ff7bfef5090 pc=0x102c651
+[12:14:32]: ▸ runtime.rt0_go(0x7ff7bfef5100, 0x3, 0x7ff7bfef5100, 0x1000000, 0x3, 0x7ff7bfef6360, 0x7ff7bfef63ce, 0x7ff7bfef63da, 0x0, 0x7ff7bfef64b1, ...)
+[12:14:32]: ▸   /usr/local/go/src/runtime/asm_amd64.s:175 +0x1eb fp=0x7ff7bfef50d8 sp=0x7ff7bfef50d0 pc=0x10540fb
+[12:14:32]: ▸ Command PhaseScriptExecution failed with a nonzero exit code
+[12:14:32]:
+[12:14:32]: ⬆️  Check out the few lines of raw `xcodebuild` output above for potential hints on how to solve this error
+[12:14:32]: 📋  For the complete and more detailed error log, check the full log at:
+[12:14:32]: 📋  /Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log
+```
+
+`/Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log` 형태로 로그가 저장되니 여기서 확인하면 된다.
+[[unity]] 항목 확인
+
+### Error: Asset validation failed Missing required icon file
+```sh 
+[04:02:20]: [altool] 2023-12-27 04:02:20.553 *** Error: Asset validation failed Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx) (90022)
+[04:02:20]: [altool]  {
+[04:02:20]: [altool]     NSLocalizedDescription = &quot;Asset validation failed&quot;;
+[04:02:20]: [altool]     NSLocalizedFailureReason = &quot;Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: e19b1052-837f-4d5a-b7a2-98a288cc04e5)&quot;;
+[04:02:20]: [altool]     NSUnderlyingError = &quot;Error Domain=IrisAPI Code=-19241 \&quot;Asset validation failed\&quot; UserInfo={status=409, detail=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, id=e19b1052-837f-4d5a-b7a2-98a288cc04e5, code=STATE_ERROR.VALIDATION_ERROR.90022, title=Asset validation failed, NSLocalizedFailureReason=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, NSLocalizedDescription=Asset validation failed}&quot;;
+[04:02:20]: [altool]     &quot;iris-code&quot; = &quot;STATE_ERROR.VALIDATION_ERROR.90022&quot;;
+[04:02:20]: [altool] }
+
+[04:02:20]: Application Loader output above ^
+[04:02:20]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90713) Missing Info.plist value. A value for the Info.plist key &#x27;CFBundleIconName&#x27; is missing in the bundle &#x27;ro.salji.app&#x27;. Apps built with iOS 11 or later SDK must supply app icons in an asset catalog and must also provide a value for this Info.plist key. For more information see http://help.apple.com/xcode/mac/current/#/dev10510b1f7. (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+```
+- 앱 아이콘에 없어서나는 에러로 구글에서 `app icon generator` 를 검색해서 아무거나 선택하면 될 것으로 보인다 사용한 링크는 아래추가
+  + https://easyappicon.com [[ios]] [[android]] [[react-native]]
+
+### No build_beta_detail included
+- 베타에 대한 정보가 없어서 나는 것으로 추측
+- appstoreconnect -&gt; TestFlight -&gt; 베타 정보 입력
+
+### Missing authentication credentials
+```sh 
+Missing authentication credentials. Set up Application Default Credentials, your Firebase refresh token, or sign in with the Firebase CLI, and try again.
+```
+- **구글 클라우드 콘솔** -&gt; 서비스 계정(**firebase 앱 배포** 권한이 있어야함) -&gt; 배포에 사용되는 계정 -&gt;  API KEY 생성된 것을 사용
+- `fastlane/FastFile` 에서 인자로 인증키 위치 입력
+  ```ruby 
+  release = firebase_app_distribution(
+    # ...
+    service_credentials_file: &#x27;../[PROJECT-NAME]-[SERVICE_ACCOUNT_API_KEY].json&#x27;,
+  )
+  ```
+
+### the server responded with status 403
+```sh 
+the server responded with status 403
+```
++ ~~https://stackoverflow.com/a/77438947~~
++ https://stackoverflow.com/questions/62385911/firebase-app-distribution-failed-to-fetch-app-information-403-the-caller-do
+- 구글 클라우드 콘솔 -&gt;  프로젝트 -&gt;  IAM -&gt; 서비스계정에 firebase 배포에 사용되는 계정 이메일 선택 -&gt; **Firebase 앱 배포** role 추가
+        
+### the server responded with status 404
+```sh 
+the server responded with status 404
+```
+- [[firebase]] console -&gt; Release &amp; Monitor 에서 서비스가 시작된 것인지 확인(대시보드가 보여야함)
+  - [[android]] / [[ios]] 를 **별도로 설정**해야하니 이 부분에 유의
+
+### ios 다운로드 불가
++ https://firebase.google.com/codelabs/appdistribution-udid-collection?hl=ko#2
+- 메일도 오고 테스트도 등록되었으나 다운로드 불가 
+```txt 
+기기가등록되었으며이제준비가끝났습니다
+앱을테스트할준비가되면이메일이전송됩니다.
+```
+- 프로비저닝 이슈로 개인이 사용하는 경우라면 아래와 같이 인증서와 프로비저닝 설정을 추가하면 과정에서 필요한 것들이 자동으로 만들어지며 진행된다
+- `fastlane/AppFile` 에 설정 확인
+  ```ruby
+  app_identifier(&quot;&lt;your app&#x27;s bundle identifier&gt;&quot;)
+  apple_id(&quot;&lt;your Apple id&gt;&quot;)
+  ```
+- `fastlane/FastFile` 에 설정 확인
+```ruby
+lane :lane_name do
+  get_certificates()
+  get_provisioning_profile(adhoc: true)
+  build_app(export_method: &quot;ad-hoc&quot;)
+```
+- 아래와 같이 처리된다
+```sh 
+[14:00:01]: Driving the lane &#x27;ios firebase&#x27; 🚀
+[14:00:01]: ------------------------------
+[14:00:01]: --- Step: get_certificates ---
+[14:00:01]: ------------------------------
+
++-----------------------------------------------------------------------------+
+|                          Summary for cert 2.217.0                           |
++-------------------------+---------------------------------------------------+
+| development             | false                                             |
+| force                   | false                                             |
+| generate_apple_certs    | true                                              |
+| username                | deptno@gmail.com                                  |
+| team_id                 | xxxxxxxxxx                                        |
+| keychain_path           | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |
+| skip_set_partition_list | false                                             |
+| platform                | ios                                               |
++-------------------------+---------------------------------------------------+
+
+[14:00:11]: Found the certificate xxxxxxxxxx (Bonggyun Lee) which is installed on the local machine. Using this one.
+[14:00:11]: Verifying the certificate is properly installed locally...
+[14:00:11]: Successfully installed certificate xxxxxxxxxx
+[14:00:11]: Use signing certificate &#x27;xxxxxxxxxx&#x27; from now on!
+```
+  + https://developer.apple.com
+    - 인증서 생성된 것 확인 가능 TYPE: **Distribution**
+    - 프로파일 생성된 것 확인 가능 TYPE: **Ad hoc**
+    - 이후 배포되는 것들에대해서는 다운로드가 가능한 것이 확인된다
+    - 추가적인 디바이스가 필요한 경우에는 **앱스토어 커넥트 콘솔** 에서 디바이스 추가해서 진행
+      - [[../udid|udid]] 등록확인
+    - [ ] 여러 기기에서 빌드가 필요한 경우에는 [[match]] 필요 한것으로 보인다
+
+## releated
+- [[ios]]
+- [[cert]]
+- [[github]]
+- [[unity]]
+- [[firebase]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/0733487
+" class="bg-white text-black">0733487</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/fastlane.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/fastlane.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/fastlane.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/fastlane"><span class="underline">fastlane</span><sup>26</sup></a></span><span><a class="text-blue-600" href="/public-wiki/react-native"><span class="underline">react-native</span><sup>90</sup></a></span><span><a class="text-blue-600" href="/public-wiki/macos"><span class="underline">macos</span><sup>13</sup></a></span><span><a class="text-blue-600" href="/public-wiki/brew"><span class="underline">brew</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/testflight"><span class="underline">testflight</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/../firebase"><span class="underline">../firebase</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/../wip"><span class="underline">../wip</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/error"><span class="underline">error</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/unity"><span class="underline">unity</span><sup>13</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ios"><span class="underline">ios</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/android"><span class="underline">android</span><sup>23</sup></a></span><span><a class="text-blue-600" href="/public-wiki/firebase"><span class="underline">firebase</span><sup>14</sup></a></span><span><a class="text-blue-600" href="/public-wiki/../udid"><span class="underline">../udid</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/match"><span class="underline">match</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/cert"><span class="underline">cert</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/github"><span class="underline">github</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/devide-app-by-development-env"><span class="underline">devide-app-by-development-env</span><sup>30</sup></a></span><span><a class="text-blue-600" href="/public-wiki/mobile"><span class="underline">mobile</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/play-console"><span class="underline">play-console</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-26"><span class="underline">diary/2023-12-26</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-27"><span class="underline">diary/2023-12-27</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-29"><span class="underline">diary/2023-12-29</span><sup>10</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-31"><span class="underline">diary/2023-12-31</span><sup>93</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-15"><span class="underline">diary/2024-01-15</span><sup>14</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-16"><span class="underline">diary/2024-01-16</span><sup>15</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-19"><span class="underline">diary/2024-01-19</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-25"><span class="underline">diary/2024-01-25</span><sup>59</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-02-25"><span class="underline">diary/2024-02-25</span><sup>4</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#fastlane">fastlane</a></div><div class="pl-2"><a href="#setup">setup</a></div><div class="pl-4"><a href="#설치-방법">설치 방법</a></div><div class="pl-4"><a href="#testflight-사용시-테스터-그룹-설정">testflight 사용시, 테스터 그룹 설정</a></div><div class="pl-4"><a href="#firebase-app-distribution-사용시-테스터-그룹-생성">firebase app distribution 사용시, 테스터 그룹 생성</a></div><div class="pl-4"><a href="#ios">ios</a></div><div class="pl-6"><a href="#인증">인증</a></div><div class="pl-4"><a href="#android">android</a></div><div class="pl-2"><a href="#error">error</a></div><div class="pl-4"><a href="#invalid-username-and-password-combination-used-xxxxxxxxcom-지메일로-보내기-as-the-username">Invalid username and password combination. Used &#x27;XXXX@XXXX.com [지메일로 보내기]&#x27; as the username.</a></div><div class="pl-4"><a href="#fatal-error-runtime-bsdthread_register-error">fatal error: runtime: bsdthread_register error</a></div><div class="pl-4"><a href="#error-asset-validation-failed-missing-required-icon-file">Error: Asset validation failed Missing required icon file</a></div><div class="pl-4"><a href="#no-build_beta_detail-included">No build_beta_detail included</a></div><div class="pl-4"><a href="#missing-authentication-credentials">Missing authentication credentials</a></div><div class="pl-4"><a href="#the-server-responded-with-status-403">the server responded with status 403</a></div><div class="pl-4"><a href="#the-server-responded-with-status-404">the server responded with status 404</a></div><div class="pl-4"><a href="#ios-다운로드-불가">ios 다운로드 불가</a></div><div class="pl-2"><a href="#releated">releated</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="fastlane">fastlane</h1>
+<blockquote><p>앱 배포과정을 자동화, 코드 사이닝,  배포등의 과정을 포함<br>배포까지 자동화해야하기 때문에 개발자 등록을 마친 이후에 진행</p></blockquote><h2 id="setup">setup</h2>
+<blockquote><p><a href="react-native">react-native</a> 로 진행함<br><code class="span">fastlane</code> 설치는 프로젝트 루트에 각각에 대한 <code class="span">fastlane init</code> 은 <code class="span">/ios</code>, <code class="span">/android</code> 에서 진행<br>system 으로 설치하는게 맞을수도 있을 것은 같은데 공식 문서에서 추천하지 않아서 <del>brew 설치</del> 하려했으나 <a href="react-native">react-native</a> 프로젝트 루트에 있는 <code class="span">Gemfile</code> 에 <code class="span">gem &#39;fastlane&#39;</code> 을 추가하여 <code class="span">bundle install</code> 을 통해 설치</p></blockquote><h3 id="설치-방법">설치 방법</h3>
+<blockquote><p><a href="macos">macos</a> 기준</p></blockquote><ul>
+<li><input disabled="" type="checkbox"> system ruby 사용, 공식 문서에서 권장하지 않음</li>
+<li><input disabled="" type="checkbox"> <a href="brew">brew</a> 사용, <code class="span">brew install fastlane</code></li>
+<li><input checked="" disabled="" type="checkbox"> Gemfile 수정, <a href="react-native">react-native</a> 에서 기본적으로 사용하고 있으므로 여기에서 함께 처리함</li>
+</ul>
+<h3 id="testflight-사용시-테스터-그룹-설정"><a href="testflight">testflight</a> 사용시, 테스터 그룹 설정</h3>
+<ul>
+<li>testflight 를 사용하는 경</li>
+<li>appstoreconnect<ul>
+<li><input checked="" disabled="" type="checkbox"> 내부 테스팅 그룹 생성</li>
+</ul>
+</li>
+</ul>
+<h3 id="firebase-app-distribution-사용시-테스터-그룹-생성">firebase app distribution 사용시, 테스터 그룹 생성</h3>
+<ul>
+<li>firebase app distribution 콘솔<ul>
+<li><input checked="" disabled="" type="checkbox"> 테스팅 그룹 생성</li>
+</ul>
+<pre><code class="hljs language-ruby">firebase_app_distribution(
+  <span class="hljs-comment"># 테스터 그룹 지정</span>
+  <span class="hljs-symbol">groups:</span> <span class="hljs-string">&#x27;살지로&#x27;</span>,
+)
+</code></pre></li>
+</ul>
+<h3 id="ios">ios</h3>
+<ul>
+<li><a href="react-native">react-native</a> 프로젝트로 진행<pre><code class="hljs language-sh"><span class="hljs-built_in">cd</span> ios
+bundle <span class="hljs-built_in">exec</span> fastlane init
+</code></pre><ul>
+<li><strong>Automate beta distribution to TestFlight</strong> 선택</li>
+</ul>
+</li>
+<li>문서 <code class="span">Podfile</code> 에 UTF-8 설정을 요구하고 있음, 설정하진 않음<pre><code class="hljs language-ruby">export <span class="hljs-variable constant_">LC_ALL</span>=en_US.<span class="hljs-variable constant_">UTF</span>-<span class="hljs-number">8</span>
+export <span class="hljs-variable constant_">LANG</span>=en_US.<span class="hljs-variable constant_">UTF</span>-<span class="hljs-number">8</span>
+</code></pre><ul>
+<li><a href="https://docs.fastlane.tools/getting-started/ios/setup/" target="_blank">[URL] https://docs.fastlane.tools/getting-started/ios/setup/</a></li>
+</ul>
+</li>
+<li>아래 [[#인증]] 참조하여 진행</li>
+<li>빌드 후 icon 에러, 아래 에러 참조</li>
+<li>testflight 에 올라간 것은 확인 되나 <code class="span">No build_beta_detail included</code> [[#error]] 가 발생<ul>
+<li>appstoreconnect -&gt; TestFlight -&gt; 베타 정보 입력</li>
+</ul>
+</li>
+<li>성공</li>
+</ul>
+<h4 id="인증">인증</h4>
+<blockquote><p>인증을 처리하지 않으면 진행되는 중간에 인터렉션을 해줘야한다<br>인증 방법은 여러가지가 있으나 여기서는 fastlane 문서에서 권장하는 <strong>App Store connect API Key</strong> 를 사용
+<strong>App Store Connect API Key</strong> 를 권장하나 fastlane 에서 <code class="span">produce</code>, <code class="span">pem</code> action 혹은 tool 을 지원하지 못한다</p></blockquote><ul>
+<li><a href="https://appstoreconnect.apple.com/access/api" target="_blank">[URL] https://appstoreconnect.apple.com/access/api</a></li>
+</ul>
+<ul>
+<li>사용자 및 엑세스 -&gt; App Store Connect API -&gt; <em>App Store Connect API 액세스 요청</em> -&gt; 바로 승인됨<ul>
+<li><code class="span">*.p8</code> 파일을 다운로드 받아 아래서 사용</li>
+</ul>
+</li>
+<li><em>API 키 생성</em> role 은 <strong>앱 관리</strong> 로 줘봄<pre><code class="hljs language-sh">[01:36:03]: ✅  Logging <span class="hljs-keyword">in</span> with your Apple ID was successful
+[01:36:03]: Checking <span class="hljs-keyword">if</span> the app <span class="hljs-string">&#x27;[BUNDLE_ID]&#x27;</span> exists <span class="hljs-keyword">in</span> your Apple Developer Portal...
+[01:36:04]: ✅  Your app <span class="hljs-string">&#x27;[BUNDLE_ID]&#x27;</span> is available <span class="hljs-keyword">in</span> your Apple Developer Portal
+[01:36:04]: Checking <span class="hljs-keyword">if</span> the app <span class="hljs-string">&#x27;[BUNDLE_ID]&#x27;</span> exists on App Store Connect...
+[01:36:04]: Looks like the app <span class="hljs-string">&#x27;[BUNDLE_ID]&#x27;</span> isn<span class="hljs-string">&#x27;t available on App Store Connect
+[01:36:04]: for the team ID &#x27;</span>000000000<span class="hljs-string">&#x27; on Apple ID &#x27;</span>deptno@gmail.com<span class="hljs-string">&#x27;
+[01:36:04]: Would you like fastlane to create the App on App Store Connect for you? (y/n)</span>
+</code></pre></li>
+<li><code class="span">y</code> 를 누르면 생성해주기도 하는데 직접 생성하기로 한다<ul>
+<li>SKU 는 고유 아이디로 외부에 노출되지 않는다. <code class="span">AAAA_0001</code> 이런식으로 생성이 가능</li>
+</ul>
+</li>
+<li>앱생성후에 <code class="span">fastlane init</code> 을 이어가면 <code class="span">Gemfile</code>과 함께 <code class="span">fastlane/{App,Fast}File</code> 이 생성된다</li>
+<li><code class="span">bundle exec fastlane beta</code> achive 이 후 에러가 발생<pre><code class="hljs language-sh">[02:04:08]: ▸ Archive Succeeded
+<span class="hljs-comment"># ...</span>
+error: exportArchive: No profiles <span class="hljs-keyword">for</span> <span class="hljs-string">&#x27;[BUNDLE_ID]&#x27;</span> were found
+
+Error Domain=IDEProfileLocatorErrorDomain Code=1 <span class="hljs-string">&quot;No profiles for &#x27;[BUNDLE_ID]&#x27; were found&quot;</span> UserInfo={IDEDistributionIssueSeverity=3, NSLocalizedDescription=No profiles <span class="hljs-keyword">for</span> <span class="hljs-string">&#x27;[BUNDLE_ID]&#x27;</span> were found, NSLocalizedRecoverySuggestion=Xcode couldn<span class="hljs-string">&#x27;t find any iOS App Store provisioning profiles matching &#x27;</span>[BUNDLE_ID]<span class="hljs-string">&#x27;. Automatic signing is disabled and unable to generate a profile. To enable automatic signing, pass -allowProvisioningUpdates to xcodebuild.}
+
+** EXPORT FAILED **
+[02:04:19]: Exit status: 70
+
+# ...
+
+[02:04:20]: fastlane finished with errors
+
+[!] Error packaging up the application</span>
+</code></pre><ul>
+<li><strong>Provisioning Profile</strong> 이 없어서 나는 에러로 디펄로퍼 콘솔에서 생성하면된다 <strong>개발목적과 배포목적이 따로 필요</strong>한데 여기선 <a href="testflight">testflight</a> <strong>배포</strong> 목적이니 <strong>Ad Hoc</strong> 으로 생성<ul>
+<li><input disabled="" type="checkbox"> 생성 후 <em>Automatically manage signing</em> 을 체크 해제하고 <em>Download Profile</em> 을 선택해서 방금 생성한 프로파일을 선택</li>
+<li><input checked="" disabled="" type="checkbox"> 수동은 알아만 두고 자동으로한다</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><em>App Store Connect API Key</em>를 <code class="span">lane</code> 안에 추가<pre><code class="hljs language-sh">app_store_connect_api_key(
+  key_id: <span class="hljs-string">&quot;[API KEY ID]&quot;</span>,
+  issuer_id: <span class="hljs-string">&quot;[API KEY ISSUER]&quot;</span>,
+  key_filepath: <span class="hljs-string">&quot;./[생성한 API KEY].p8&quot;</span>,
+  duration: 1200, <span class="hljs-comment"># optional (maximum 1200)</span>
+  in_house: <span class="hljs-literal">false</span> <span class="hljs-comment"># optional but may be required if using match/sigh</span>
+)
+</code></pre></li>
+</ul>
+<h3 id="android">android</h3>
+<ul>
+<li><a href="react-native">react-native</a> 프로젝트로 진행<pre><code class="hljs language-sh"><span class="hljs-built_in">cd</span> android
+bundle <span class="hljs-built_in">exec</span> fastlane init <span class="hljs-comment"># 대충 기본만 하고 나머진 모두 생략 supply 도 하지 않음, fastlane/{AppFile,FastFile} 이 생성됨</span>
+bundle <span class="hljs-built_in">exec</span> fastlane <span class="hljs-built_in">test</span> <span class="hljs-comment"># fastlane/README.md 가 지금 생성됨</span>
+</code></pre></li>
+<li><code class="span">fastlane</code> 파일을 열어보면 <code class="span">lane</code> 이 있어서 <code class="span">bundle exec fastlane beta</code> 테스트<pre><code class="hljs language-sh">bundle <span class="hljs-built_in">exec</span> fastlane [android] beta
+[05:46:33]: fastlane finished with errors
+
+[!] Could not find action, lane or variable <span class="hljs-string">&#x27;crashlytics&#x27;</span>. Check out the documentation <span class="hljs-keyword">for</span> more details: https://docs.fastlane.tools/actions
+</code></pre><ul>
+<li><code class="span">crashlytics</code> 에러가 발생 아무래도 <a href="../firebase">firebase</a> 서비스를 이야기하는것 같은데 구글 계정 설정을 안해서 나는 것으로 보인다 이것부터 설정</li>
+<li>주석처리</li>
+</ul>
+</li>
+<li>firebase app distribution 배포를 위한 <code class="span">firebase app distribution</code> 플러그인 추가<ul>
+<li><a href="https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ko" target="_blank">[URL] https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ko</a></li>
+</ul>
+<pre><code class="hljs language-sh">fastlane add_plugin firebase_app_distribution
+</code></pre></li>
+<li>계정 정보 추가<ul>
+<li><a href="https://docs.fastlane.tools/actions/supply/" target="_blank">[URL] https://docs.fastlane.tools/actions/supply/</a></li>
+</ul>
+<ul>
+<li><em>구글 클라우드 콘솔</em>에서 <em>Google Play Android Developer API</em> 활성화</li>
+<li><em>구글 클라우드 콘솔</em>에서 <em>Service Account</em> 생성<ul>
+<li>fastlane-supply 와 같은 알아보기 쉬운 이름,  이메일은 해당 페이지에 있는 생성기 돌릴 것 -&gt; <strong>DONE</strong></li>
+</ul>
+</li>
+<li>생성된 계정의 메뉴로 들어가 <code class="span">Manage keys</code> 선택<ul>
+<li>ADD KEY -&gt; Create New Key(JSON)</li>
+</ul>
+</li>
+<li><em>구글 플레이 콘솔</em>에서 <em>Users and Permissions</em> 진입<ul>
+<li>Invite new users -&gt; 위에서 생성한 서비스 어카운트 이메일 입력 -&gt; Account Permissions 에서 admin 권한 후 초대</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs language-sh">bundle <span class="hljs-built_in">exec</span> fastlane run validate_play_store_json_key json_key:[아까 다운로드 받은.json]
+</code></pre><ul>
+<li>성공 확인되면 AppFile <code class="span">json_key_file(&quot;[아까 다운로드 받은.json]&quot;)</code> 로 수정</li>
+<li>이것으로 <code class="span">crashlytics</code> 에러가 해결되지는 않음</li>
+<li><code class="span">fastlane supply init</code> <ul>
+<li><code class="span">[!] Google Api Error: Invalid request - Package not found: [package.name].</code> 에러가 발생<ul>
+<li><em>구글 플레이 콘솔</em>  에서 앱을 아직 생성하지 않았고 한번은 업로드해야한다는 글들이 있음<ul>
+<li><a href="https://stackoverflow.com/questions/69073389/fastlane-google-api-error-invalid-request-package-not-found-com-example" target="_blank">[URL] https://stackoverflow.com/questions/69073389/fastlane-google-api-error-invalid-request-package-not-found-com-example</a></li>
+</ul>
+</li>
+<li><a href="../wip">wip</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="error"><a href="error">error</a></h2>
+<h3 id="invalid-username-and-password-combination-used-xxxxxxxxcom-as-the-username">Invalid username and password combination. Used &#39;<a href="mailto:XXXX@XXXX.com" target="_blank">XXXX@XXXX.com</a> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=XXXX@XXXX.com&body=from deptno.dev" target="_blank">[지메일로 보내기]</a>&#39; as the username.</h3>
+<blockquote><p>계정이슈</p></blockquote><pre><code class="hljs language-sh">[10:19:46]: fastlane finished with errors
+
+Looking <span class="hljs-keyword">for</span> related GitHub issues on fastlane/fastlane...
+
+Found no similar issues. To create a new issue, please visit:
+https://github.com/fastlane/fastlane/issues/new
+Run `fastlane <span class="hljs-built_in">env</span>` to append the fastlane environment to your issue
+
+[!] The request could not be completed because:
+    Invalid username and password combination. Used <span class="hljs-string">&#x27;XXXX@XXXX.com&#x27;</span> as the username.
+</code></pre><pre><code class="hljs language-sh">fastlane fastlane-credentials remove --username XXXX@XXXX.com
+</code></pre><h3 id="fatal-error-runtime-bsdthread_register-error">fatal error: runtime: bsdthread_register error</h3>
+<pre><code class="hljs language-sh">▸ Running script <span class="hljs-string">&#x27;Unity Process symbols&#x27;</span>
+
+❌  fatal error: runtime: bsdthread_register error
+
+
+** ARCHIVE FAILED **
+
+
+The following build commands failed:
+        PhaseScriptExecution Unity\ Process\ symbols /Users/deptno/Library/Developer/Xcode/DerivedData/[APP_NAME]-afpmodexeqnqytfpispoaxqrjqft/Build/Intermediates.noindex/ArchiveIntermediates/[APP_NAME]/IntermediateBuildFilesPath/Unity-iPhone.build/Release-iphoneos/UnityFramework.build/Script-84294926AA792CC5C43FB36D.sh (<span class="hljs-keyword">in</span> target <span class="hljs-string">&#x27;UnityFramework&#x27;</span> from project <span class="hljs-string">&#x27;Unity-iPhone&#x27;</span>)
+(1 failure)
+[12:14:32]: Exit status: 65
+
++---------------+-------------------------+
+|            Build environment            |
++---------------+-------------------------+
+| xcode_path    | /Applications/Xcode.app |
+| gym_version   | 2.199.0                 |
+| export_method | app-store               |
+| sdk           | iPhoneOS15.0.sdk        |
++---------------+-------------------------+
+
+[12:14:32]: ▸ runtime.schedinit()
+[12:14:32]: ▸   /usr/local/go/src/runtime/proc.go:492 +0xa1 fp=0x7ff7bfef50d0 sp=0x7ff7bfef5090 pc=0x102c651
+[12:14:32]: ▸ runtime.rt0_go(0x7ff7bfef5100, 0x3, 0x7ff7bfef5100, 0x1000000, 0x3, 0x7ff7bfef6360, 0x7ff7bfef63ce, 0x7ff7bfef63da, 0x0, 0x7ff7bfef64b1, ...)
+[12:14:32]: ▸   /usr/local/go/src/runtime/asm_amd64.s:175 +0x1eb fp=0x7ff7bfef50d8 sp=0x7ff7bfef50d0 pc=0x10540fb
+[12:14:32]: ▸ Command PhaseScriptExecution failed with a nonzero <span class="hljs-built_in">exit</span> code
+[12:14:32]:
+[12:14:32]: ⬆️  Check out the few lines of raw `xcodebuild` output above <span class="hljs-keyword">for</span> potential hints on how to solve this error
+[12:14:32]: 📋  For the complete and more detailed error <span class="hljs-built_in">log</span>, check the full <span class="hljs-built_in">log</span> at:
+[12:14:32]: 📋  /Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].<span class="hljs-built_in">log</span>
+</code></pre><p><code class="span">/Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log</code> 형태로 로그가 저장되니 여기서 확인하면 된다.
+<a href="unity">unity</a> 항목 확인</p>
+<h3 id="error-asset-validation-failed-missing-required-icon-file">Error: Asset validation failed Missing required icon file</h3>
+<pre><code class="hljs language-sh">[04:02:20]: [altool] 2023-12-27 04:02:20.553 *** Error: Asset validation failed Missing required icon file. The bundle does not contain an app icon <span class="hljs-keyword">for</span> iPhone / iPod Touch of exactly <span class="hljs-string">&#x27;120x120&#x27;</span> pixels, <span class="hljs-keyword">in</span> .png format <span class="hljs-keyword">for</span> iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required <span class="hljs-keyword">in</span> the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx) (90022)
+[04:02:20]: [altool]  {
+[04:02:20]: [altool]     NSLocalizedDescription = <span class="hljs-string">&quot;Asset validation failed&quot;</span>;
+[04:02:20]: [altool]     NSLocalizedFailureReason = <span class="hljs-string">&quot;Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: e19b1052-837f-4d5a-b7a2-98a288cc04e5)&quot;</span>;
+[04:02:20]: [altool]     NSUnderlyingError = <span class="hljs-string">&quot;Error Domain=IrisAPI Code=-19241 \&quot;Asset validation failed\&quot; UserInfo={status=409, detail=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, id=e19b1052-837f-4d5a-b7a2-98a288cc04e5, code=STATE_ERROR.VALIDATION_ERROR.90022, title=Asset validation failed, NSLocalizedFailureReason=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly &#x27;120x120&#x27; pixels, in .png format for iOS versions &gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, NSLocalizedDescription=Asset validation failed}&quot;</span>;
+[04:02:20]: [altool]     <span class="hljs-string">&quot;iris-code&quot;</span> = <span class="hljs-string">&quot;STATE_ERROR.VALIDATION_ERROR.90022&quot;</span>;
+[04:02:20]: [altool] }
+
+[04:02:20]: Application Loader output above ^
+[04:02:20]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90713) Missing Info.plist value. A value <span class="hljs-keyword">for</span> the Info.plist key <span class="hljs-string">&#x27;CFBundleIconName&#x27;</span> is missing <span class="hljs-keyword">in</span> the bundle <span class="hljs-string">&#x27;ro.salji.app&#x27;</span>. Apps built with iOS 11 or later SDK must supply app icons <span class="hljs-keyword">in</span> an asset catalog and must also provide a value <span class="hljs-keyword">for</span> this Info.plist key. For more information see http://help.apple.com/xcode/mac/current/<span class="hljs-comment">#/dev10510b1f7. (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)</span>
+</code></pre><ul>
+<li>앱 아이콘에 없어서나는 에러로 구글에서 <code class="span">app icon generator</code> 를 검색해서 아무거나 선택하면 될 것으로 보인다 사용한 링크는 아래추가<ul>
+<li><a href="https://easyappicon.com" target="_blank">[URL] https://easyappicon.com/</a> <a href="ios">ios</a> <a href="android">android</a> <a href="react-native">react-native</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="no-build_beta_detail-included">No build_beta_detail included</h3>
+<ul>
+<li>베타에 대한 정보가 없어서 나는 것으로 추측</li>
+<li>appstoreconnect -&gt; TestFlight -&gt; 베타 정보 입력</li>
+</ul>
+<h3 id="missing-authentication-credentials">Missing authentication credentials</h3>
+<pre><code class="hljs language-sh">Missing authentication credentials. Set up Application Default Credentials, your Firebase refresh token, or sign <span class="hljs-keyword">in</span> with the Firebase CLI, and try again.
+</code></pre><ul>
+<li><strong>구글 클라우드 콘솔</strong> -&gt; 서비스 계정(<strong>firebase 앱 배포</strong> 권한이 있어야함) -&gt; 배포에 사용되는 계정 -&gt;  API KEY 생성된 것을 사용</li>
+<li><code class="span">fastlane/FastFile</code> 에서 인자로 인증키 위치 입력<pre><code class="hljs language-ruby">release = firebase_app_distribution(
+  <span class="hljs-comment"># ...</span>
+  <span class="hljs-symbol">service_credentials_file:</span> <span class="hljs-string">&#x27;../[PROJECT-NAME]-[SERVICE_ACCOUNT_API_KEY].json&#x27;</span>,
+)
+</code></pre></li>
+</ul>
+<h3 id="the-server-responded-with-status-403">the server responded with status 403</h3>
+<pre><code class="hljs language-sh">the server responded with status 403
+</code></pre><ul>
+<li><del><a href="https://stackoverflow.com/a/77438947" target="_blank">[URL] https://stackoverflow.com/a/77438947</a></del></li>
+<li><a href="https://stackoverflow.com/questions/62385911/firebase-app-distribution-failed-to-fetch-app-information-403-the-caller-do" target="_blank">[URL] https://stackoverflow.com/questions/62385911/firebase-app-distribution-failed-to-fetch-app-information-403-the-caller-do</a></li>
+</ul>
+<ul>
+<li>구글 클라우드 콘솔 -&gt;  프로젝트 -&gt;  IAM -&gt; 서비스계정에 firebase 배포에 사용되는 계정 이메일 선택 -&gt; <strong>Firebase 앱 배포</strong> role 추가</li>
+</ul>
+<h3 id="the-server-responded-with-status-404">the server responded with status 404</h3>
+<pre><code class="hljs language-sh">the server responded with status 404
+</code></pre><ul>
+<li><a href="firebase">firebase</a> console -&gt; Release &amp; Monitor 에서 서비스가 시작된 것인지 확인(대시보드가 보여야함)<ul>
+<li><a href="android">android</a> / <a href="ios">ios</a> 를 <strong>별도로 설정</strong>해야하니 이 부분에 유의</li>
+</ul>
+</li>
+</ul>
+<h3 id="ios-다운로드-불가">ios 다운로드 불가</h3>
+<ul>
+<li><a href="https://firebase.google.com/codelabs/appdistribution-udid-collection?hl=ko#2" target="_blank">[URL] https://firebase.google.com/codelabs/appdistribution-udid-collection?hl=ko#2</a></li>
+</ul>
+<ul>
+<li>메일도 오고 테스트도 등록되었으나 다운로드 불가</li>
+</ul>
+<pre><code class="hljs language-txt">기기가등록되었으며이제준비가끝났습니다
+앱을테스트할준비가되면이메일이전송됩니다.
+</code></pre><ul>
+<li>프로비저닝 이슈로 개인이 사용하는 경우라면 아래와 같이 인증서와 프로비저닝 설정을 추가하면 과정에서 필요한 것들이 자동으로 만들어지며 진행된다</li>
+<li><code class="span">fastlane/AppFile</code> 에 설정 확인<pre><code class="hljs language-ruby">app_identifier(<span class="hljs-string">&quot;&lt;your app&#x27;s bundle identifier&gt;&quot;</span>)
+apple_id(<span class="hljs-string">&quot;&lt;your Apple id&gt;&quot;</span>)
+</code></pre></li>
+<li><code class="span">fastlane/FastFile</code> 에 설정 확인</li>
+</ul>
+<pre><code class="hljs language-ruby">lane <span class="hljs-symbol">:lane_name</span> <span class="hljs-keyword">do</span>
+  get_certificates()
+  get_provisioning_profile(<span class="hljs-symbol">adhoc:</span> <span class="hljs-literal">true</span>)
+  build_app(<span class="hljs-symbol">export_method:</span> <span class="hljs-string">&quot;ad-hoc&quot;</span>)
+</code></pre><ul>
+<li>아래와 같이 처리된다</li>
+</ul>
+<pre><code class="hljs language-sh">[14:00:01]: Driving the lane <span class="hljs-string">&#x27;ios firebase&#x27;</span> 🚀
+[14:00:01]: ------------------------------
+[14:00:01]: --- Step: get_certificates ---
+[14:00:01]: ------------------------------
+
++-----------------------------------------------------------------------------+
+|                          Summary <span class="hljs-keyword">for</span> cert 2.217.0                           |
++-------------------------+---------------------------------------------------+
+| development             | <span class="hljs-literal">false</span>                                             |
+| force                   | <span class="hljs-literal">false</span>                                             |
+| generate_apple_certs    | <span class="hljs-literal">true</span>                                              |
+| username                | deptno@gmail.com                                  |
+| team_id                 | xxxxxxxxxx                                        |
+| keychain_path           | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |
+| skip_set_partition_list | <span class="hljs-literal">false</span>                                             |
+| platform                | ios                                               |
++-------------------------+---------------------------------------------------+
+
+[14:00:11]: Found the certificate xxxxxxxxxx (Bonggyun Lee) <span class="hljs-built_in">which</span> is installed on the <span class="hljs-built_in">local</span> machine. Using this one.
+[14:00:11]: Verifying the certificate is properly installed locally...
+[14:00:11]: Successfully installed certificate xxxxxxxxxx
+[14:00:11]: Use signing certificate <span class="hljs-string">&#x27;xxxxxxxxxx&#x27;</span> from now on!
+</code></pre><ul>
+<li><a href="https://developer.apple.com" target="_blank">[URL] https://developer.apple.com/</a><ul>
+<li>인증서 생성된 것 확인 가능 TYPE: <strong>Distribution</strong></li>
+<li>프로파일 생성된 것 확인 가능 TYPE: <strong>Ad hoc</strong></li>
+<li>이후 배포되는 것들에대해서는 다운로드가 가능한 것이 확인된다</li>
+<li>추가적인 디바이스가 필요한 경우에는 <strong>앱스토어 커넥트 콘솔</strong> 에서 디바이스 추가해서 진행<ul>
+<li><a href="../udid">udid</a> 등록확인</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> 여러 기기에서 빌드가 필요한 경우에는 <a href="match">match</a> 필요 한것으로 보인다</li>
+</ul>
+</li>
+</ul>
+<h2 id="releated">releated</h2>
+<ul>
+<li><a href="ios">ios</a></li>
+<li><a href="cert">cert</a></li>
+<li><a href="github">github</a></li>
+<li><a href="unity">unity</a></li>
+<li><a href="firebase">firebase</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-39c74ed669a18122.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-1939e229d7d9d28d.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"fastlane\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"YZITKW6vEo-03LGfrK9vS\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/fastlane\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"fastlane\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"fastlane\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"fastlane\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T69b8,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"fastlane\"\u003efastlane\u003c/h1\u003e\n\u003cblockquote\u003e\u003cp\u003e앱 배포과정을 자동화, 코드 사이닝,  배포등의 과정을 포함\u003cbr\u003e배포까지 자동화해야하기 때문에 개발자 등록을 마친 이후에 진행\u003c/p\u003e\u003c/blockquote\u003e\u003ch2 id=\"setup\"\u003esetup\u003c/h2\u003e\n\u003cblockquote\u003e\u003cp\u003e\u003ca href=\"react-native\"\u003ereact-native\u003c/a\u003e 로 진행함\u003cbr\u003e\u003ccode class=\"span\"\u003efastlane\u003c/code\u003e 설치는 프로젝트 루트에 각각에 대한 \u003ccode class=\"span\"\u003efastlane init\u003c/code\u003e 은 \u003ccode class=\"span\"\u003e/ios\u003c/code\u003e, \u003ccode class=\"span\"\u003e/android\u003c/code\u003e 에서 진행\u003cbr\u003esystem 으로 설치하는게 맞을수도 있을 것은 같은데 공식 문서에서 추천하지 않아서 \u003cdel\u003ebrew 설치\u003c/del\u003e 하려했으나 \u003ca href=\"react-native\"\u003ereact-native\u003c/a\u003e 프로젝트 루트에 있는 \u003ccode class=\"span\"\u003eGemfile\u003c/code\u003e 에 \u003ccode class=\"span\"\u003egem \u0026#39;fastlane\u0026#39;\u003c/code\u003e 을 추가하여 \u003ccode class=\"span\"\u003ebundle install\u003c/code\u003e 을 통해 설치\u003c/p\u003e\u003c/blockquote\u003e\u003ch3 id=\"설치-방법\"\u003e설치 방법\u003c/h3\u003e\n\u003cblockquote\u003e\u003cp\u003e\u003ca href=\"macos\"\u003emacos\u003c/a\u003e 기준\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e system ruby 사용, 공식 문서에서 권장하지 않음\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"brew\"\u003ebrew\u003c/a\u003e 사용, \u003ccode class=\"span\"\u003ebrew install fastlane\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e Gemfile 수정, \u003ca href=\"react-native\"\u003ereact-native\u003c/a\u003e 에서 기본적으로 사용하고 있으므로 여기에서 함께 처리함\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"testflight-사용시-테스터-그룹-설정\"\u003e\u003ca href=\"testflight\"\u003etestflight\u003c/a\u003e 사용시, 테스터 그룹 설정\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003etestflight 를 사용하는 경\u003c/li\u003e\n\u003cli\u003eappstoreconnect\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 내부 테스팅 그룹 생성\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"firebase-app-distribution-사용시-테스터-그룹-생성\"\u003efirebase app distribution 사용시, 테스터 그룹 생성\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003efirebase app distribution 콘솔\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 테스팅 그룹 생성\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-ruby\"\u003efirebase_app_distribution(\n  \u003cspan class=\"hljs-comment\"\u003e# 테스터 그룹 지정\u003c/span\u003e\n  \u003cspan class=\"hljs-symbol\"\u003egroups:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026#x27;살지로\u0026#x27;\u003c/span\u003e,\n)\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"ios\"\u003eios\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"react-native\"\u003ereact-native\u003c/a\u003e 프로젝트로 진행\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e\u003cspan class=\"hljs-built_in\"\u003ecd\u003c/span\u003e ios\nbundle \u003cspan class=\"hljs-built_in\"\u003eexec\u003c/span\u003e fastlane init\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003eAutomate beta distribution to TestFlight\u003c/strong\u003e 선택\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e문서 \u003ccode class=\"span\"\u003ePodfile\u003c/code\u003e 에 UTF-8 설정을 요구하고 있음, 설정하진 않음\u003cpre\u003e\u003ccode class=\"hljs language-ruby\"\u003eexport \u003cspan class=\"hljs-variable constant_\"\u003eLC_ALL\u003c/span\u003e=en_US.\u003cspan class=\"hljs-variable constant_\"\u003eUTF\u003c/span\u003e-\u003cspan class=\"hljs-number\"\u003e8\u003c/span\u003e\nexport \u003cspan class=\"hljs-variable constant_\"\u003eLANG\u003c/span\u003e=en_US.\u003cspan class=\"hljs-variable constant_\"\u003eUTF\u003c/span\u003e-\u003cspan class=\"hljs-number\"\u003e8\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://docs.fastlane.tools/getting-started/ios/setup/\" target=\"_blank\"\u003e[URL] https://docs.fastlane.tools/getting-started/ios/setup/\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e아래 [[#인증]] 참조하여 진행\u003c/li\u003e\n\u003cli\u003e빌드 후 icon 에러, 아래 에러 참조\u003c/li\u003e\n\u003cli\u003etestflight 에 올라간 것은 확인 되나 \u003ccode class=\"span\"\u003eNo build_beta_detail included\u003c/code\u003e [[#error]] 가 발생\u003cul\u003e\n\u003cli\u003eappstoreconnect -\u0026gt; TestFlight -\u0026gt; 베타 정보 입력\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e성공\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"인증\"\u003e인증\u003c/h4\u003e\n\u003cblockquote\u003e\u003cp\u003e인증을 처리하지 않으면 진행되는 중간에 인터렉션을 해줘야한다\u003cbr\u003e인증 방법은 여러가지가 있으나 여기서는 fastlane 문서에서 권장하는 \u003cstrong\u003eApp Store connect API Key\u003c/strong\u003e 를 사용\n\u003cstrong\u003eApp Store Connect API Key\u003c/strong\u003e 를 권장하나 fastlane 에서 \u003ccode class=\"span\"\u003eproduce\u003c/code\u003e, \u003ccode class=\"span\"\u003epem\u003c/code\u003e action 혹은 tool 을 지원하지 못한다\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://appstoreconnect.apple.com/access/api\" target=\"_blank\"\u003e[URL] https://appstoreconnect.apple.com/access/api\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e사용자 및 엑세스 -\u0026gt; App Store Connect API -\u0026gt; \u003cem\u003eApp Store Connect API 액세스 요청\u003c/em\u003e -\u0026gt; 바로 승인됨\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e*.p8\u003c/code\u003e 파일을 다운로드 받아 아래서 사용\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cem\u003eAPI 키 생성\u003c/em\u003e role 은 \u003cstrong\u003e앱 관리\u003c/strong\u003e 로 줘봄\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e[01:36:03]: ✅  Logging \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e with your Apple ID was successful\n[01:36:03]: Checking \u003cspan class=\"hljs-keyword\"\u003eif\u003c/span\u003e the app \u003cspan class=\"hljs-string\"\u003e\u0026#x27;[BUNDLE_ID]\u0026#x27;\u003c/span\u003e exists \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e your Apple Developer Portal...\n[01:36:04]: ✅  Your app \u003cspan class=\"hljs-string\"\u003e\u0026#x27;[BUNDLE_ID]\u0026#x27;\u003c/span\u003e is available \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e your Apple Developer Portal\n[01:36:04]: Checking \u003cspan class=\"hljs-keyword\"\u003eif\u003c/span\u003e the app \u003cspan class=\"hljs-string\"\u003e\u0026#x27;[BUNDLE_ID]\u0026#x27;\u003c/span\u003e exists on App Store Connect...\n[01:36:04]: Looks like the app \u003cspan class=\"hljs-string\"\u003e\u0026#x27;[BUNDLE_ID]\u0026#x27;\u003c/span\u003e isn\u003cspan class=\"hljs-string\"\u003e\u0026#x27;t available on App Store Connect\n[01:36:04]: for the team ID \u0026#x27;\u003c/span\u003e000000000\u003cspan class=\"hljs-string\"\u003e\u0026#x27; on Apple ID \u0026#x27;\u003c/span\u003edeptno@gmail.com\u003cspan class=\"hljs-string\"\u003e\u0026#x27;\n[01:36:04]: Would you like fastlane to create the App on App Store Connect for you? (y/n)\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ey\u003c/code\u003e 를 누르면 생성해주기도 하는데 직접 생성하기로 한다\u003cul\u003e\n\u003cli\u003eSKU 는 고유 아이디로 외부에 노출되지 않는다. \u003ccode class=\"span\"\u003eAAAA_0001\u003c/code\u003e 이런식으로 생성이 가능\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e앱생성후에 \u003ccode class=\"span\"\u003efastlane init\u003c/code\u003e 을 이어가면 \u003ccode class=\"span\"\u003eGemfile\u003c/code\u003e과 함께 \u003ccode class=\"span\"\u003efastlane/{App,Fast}File\u003c/code\u003e 이 생성된다\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ebundle exec fastlane beta\u003c/code\u003e achive 이 후 에러가 발생\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e[02:04:08]: ▸ Archive Succeeded\n\u003cspan class=\"hljs-comment\"\u003e# ...\u003c/span\u003e\nerror: exportArchive: No profiles \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026#x27;[BUNDLE_ID]\u0026#x27;\u003c/span\u003e were found\n\nError Domain=IDEProfileLocatorErrorDomain Code=1 \u003cspan class=\"hljs-string\"\u003e\u0026quot;No profiles for \u0026#x27;[BUNDLE_ID]\u0026#x27; were found\u0026quot;\u003c/span\u003e UserInfo={IDEDistributionIssueSeverity=3, NSLocalizedDescription=No profiles \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026#x27;[BUNDLE_ID]\u0026#x27;\u003c/span\u003e were found, NSLocalizedRecoverySuggestion=Xcode couldn\u003cspan class=\"hljs-string\"\u003e\u0026#x27;t find any iOS App Store provisioning profiles matching \u0026#x27;\u003c/span\u003e[BUNDLE_ID]\u003cspan class=\"hljs-string\"\u003e\u0026#x27;. Automatic signing is disabled and unable to generate a profile. To enable automatic signing, pass -allowProvisioningUpdates to xcodebuild.}\n\n** EXPORT FAILED **\n[02:04:19]: Exit status: 70\n\n# ...\n\n[02:04:20]: fastlane finished with errors\n\n[!] Error packaging up the application\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003eProvisioning Profile\u003c/strong\u003e 이 없어서 나는 에러로 디펄로퍼 콘솔에서 생성하면된다 \u003cstrong\u003e개발목적과 배포목적이 따로 필요\u003c/strong\u003e한데 여기선 \u003ca href=\"testflight\"\u003etestflight\u003c/a\u003e \u003cstrong\u003e배포\u003c/strong\u003e 목적이니 \u003cstrong\u003eAd Hoc\u003c/strong\u003e 으로 생성\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 생성 후 \u003cem\u003eAutomatically manage signing\u003c/em\u003e 을 체크 해제하고 \u003cem\u003eDownload Profile\u003c/em\u003e 을 선택해서 방금 생성한 프로파일을 선택\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 수동은 알아만 두고 자동으로한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cem\u003eApp Store Connect API Key\u003c/em\u003e를 \u003ccode class=\"span\"\u003elane\u003c/code\u003e 안에 추가\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eapp_store_connect_api_key(\n  key_id: \u003cspan class=\"hljs-string\"\u003e\u0026quot;[API KEY ID]\u0026quot;\u003c/span\u003e,\n  issuer_id: \u003cspan class=\"hljs-string\"\u003e\u0026quot;[API KEY ISSUER]\u0026quot;\u003c/span\u003e,\n  key_filepath: \u003cspan class=\"hljs-string\"\u003e\u0026quot;./[생성한 API KEY].p8\u0026quot;\u003c/span\u003e,\n  duration: 1200, \u003cspan class=\"hljs-comment\"\u003e# optional (maximum 1200)\u003c/span\u003e\n  in_house: \u003cspan class=\"hljs-literal\"\u003efalse\u003c/span\u003e \u003cspan class=\"hljs-comment\"\u003e# optional but may be required if using match/sigh\u003c/span\u003e\n)\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"android\"\u003eandroid\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"react-native\"\u003ereact-native\u003c/a\u003e 프로젝트로 진행\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e\u003cspan class=\"hljs-built_in\"\u003ecd\u003c/span\u003e android\nbundle \u003cspan class=\"hljs-built_in\"\u003eexec\u003c/span\u003e fastlane init \u003cspan class=\"hljs-comment\"\u003e# 대충 기본만 하고 나머진 모두 생략 supply 도 하지 않음, fastlane/{AppFile,FastFile} 이 생성됨\u003c/span\u003e\nbundle \u003cspan class=\"hljs-built_in\"\u003eexec\u003c/span\u003e fastlane \u003cspan class=\"hljs-built_in\"\u003etest\u003c/span\u003e \u003cspan class=\"hljs-comment\"\u003e# fastlane/README.md 가 지금 생성됨\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efastlane\u003c/code\u003e 파일을 열어보면 \u003ccode class=\"span\"\u003elane\u003c/code\u003e 이 있어서 \u003ccode class=\"span\"\u003ebundle exec fastlane beta\u003c/code\u003e 테스트\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ebundle \u003cspan class=\"hljs-built_in\"\u003eexec\u003c/span\u003e fastlane [android] beta\n[05:46:33]: fastlane finished with errors\n\n[!] Could not find action, lane or variable \u003cspan class=\"hljs-string\"\u003e\u0026#x27;crashlytics\u0026#x27;\u003c/span\u003e. Check out the documentation \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e more details: https://docs.fastlane.tools/actions\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ecrashlytics\u003c/code\u003e 에러가 발생 아무래도 \u003ca href=\"../firebase\"\u003efirebase\u003c/a\u003e 서비스를 이야기하는것 같은데 구글 계정 설정을 안해서 나는 것으로 보인다 이것부터 설정\u003c/li\u003e\n\u003cli\u003e주석처리\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003efirebase app distribution 배포를 위한 \u003ccode class=\"span\"\u003efirebase app distribution\u003c/code\u003e 플러그인 추가\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ko\" target=\"_blank\"\u003e[URL] https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ko\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003efastlane add_plugin firebase_app_distribution\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003e계정 정보 추가\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://docs.fastlane.tools/actions/supply/\" target=\"_blank\"\u003e[URL] https://docs.fastlane.tools/actions/supply/\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cem\u003e구글 클라우드 콘솔\u003c/em\u003e에서 \u003cem\u003eGoogle Play Android Developer API\u003c/em\u003e 활성화\u003c/li\u003e\n\u003cli\u003e\u003cem\u003e구글 클라우드 콘솔\u003c/em\u003e에서 \u003cem\u003eService Account\u003c/em\u003e 생성\u003cul\u003e\n\u003cli\u003efastlane-supply 와 같은 알아보기 쉬운 이름,  이메일은 해당 페이지에 있는 생성기 돌릴 것 -\u0026gt; \u003cstrong\u003eDONE\u003c/strong\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e생성된 계정의 메뉴로 들어가 \u003ccode class=\"span\"\u003eManage keys\u003c/code\u003e 선택\u003cul\u003e\n\u003cli\u003eADD KEY -\u0026gt; Create New Key(JSON)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cem\u003e구글 플레이 콘솔\u003c/em\u003e에서 \u003cem\u003eUsers and Permissions\u003c/em\u003e 진입\u003cul\u003e\n\u003cli\u003eInvite new users -\u0026gt; 위에서 생성한 서비스 어카운트 이메일 입력 -\u0026gt; Account Permissions 에서 admin 권한 후 초대\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ebundle \u003cspan class=\"hljs-built_in\"\u003eexec\u003c/span\u003e fastlane run validate_play_store_json_key json_key:[아까 다운로드 받은.json]\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e성공 확인되면 AppFile \u003ccode class=\"span\"\u003ejson_key_file(\u0026quot;[아까 다운로드 받은.json]\u0026quot;)\u003c/code\u003e 로 수정\u003c/li\u003e\n\u003cli\u003e이것으로 \u003ccode class=\"span\"\u003ecrashlytics\u003c/code\u003e 에러가 해결되지는 않음\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efastlane supply init\u003c/code\u003e \u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e[!] Google Api Error: Invalid request - Package not found: [package.name].\u003c/code\u003e 에러가 발생\u003cul\u003e\n\u003cli\u003e\u003cem\u003e구글 플레이 콘솔\u003c/em\u003e  에서 앱을 아직 생성하지 않았고 한번은 업로드해야한다는 글들이 있음\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://stackoverflow.com/questions/69073389/fastlane-google-api-error-invalid-request-package-not-found-com-example\" target=\"_blank\"\u003e[URL] https://stackoverflow.com/questions/69073389/fastlane-google-api-error-invalid-request-package-not-found-com-example\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../wip\"\u003ewip\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"error\"\u003e\u003ca href=\"error\"\u003eerror\u003c/a\u003e\u003c/h2\u003e\n\u003ch3 id=\"invalid-username-and-password-combination-used-xxxxxxxxcom-as-the-username\"\u003eInvalid username and password combination. Used \u0026#39;\u003ca href=\"mailto:XXXX@XXXX.com\" target=\"_blank\"\u003eXXXX@XXXX.com\u003c/a\u003e \u003ca href=\"https://mail.google.com/mail/?view=cm\u0026fs=1\u0026to=XXXX@XXXX.com\u0026body=from deptno.dev\" target=\"_blank\"\u003e[지메일로 보내기]\u003c/a\u003e\u0026#39; as the username.\u003c/h3\u003e\n\u003cblockquote\u003e\u003cp\u003e계정이슈\u003c/p\u003e\u003c/blockquote\u003e\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e[10:19:46]: fastlane finished with errors\n\nLooking \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e related GitHub issues on fastlane/fastlane...\n\nFound no similar issues. To create a new issue, please visit:\nhttps://github.com/fastlane/fastlane/issues/new\nRun `fastlane \u003cspan class=\"hljs-built_in\"\u003eenv\u003c/span\u003e` to append the fastlane environment to your issue\n\n[!] The request could not be completed because:\n    Invalid username and password combination. Used \u003cspan class=\"hljs-string\"\u003e\u0026#x27;XXXX@XXXX.com\u0026#x27;\u003c/span\u003e as the username.\n\u003c/code\u003e\u003c/pre\u003e\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003efastlane fastlane-credentials remove --username XXXX@XXXX.com\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"fatal-error-runtime-bsdthread_register-error\"\u003efatal error: runtime: bsdthread_register error\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e▸ Running script \u003cspan class=\"hljs-string\"\u003e\u0026#x27;Unity Process symbols\u0026#x27;\u003c/span\u003e\n\n❌  fatal error: runtime: bsdthread_register error\n\n\n** ARCHIVE FAILED **\n\n\nThe following build commands failed:\n        PhaseScriptExecution Unity\\ Process\\ symbols /Users/deptno/Library/Developer/Xcode/DerivedData/[APP_NAME]-afpmodexeqnqytfpispoaxqrjqft/Build/Intermediates.noindex/ArchiveIntermediates/[APP_NAME]/IntermediateBuildFilesPath/Unity-iPhone.build/Release-iphoneos/UnityFramework.build/Script-84294926AA792CC5C43FB36D.sh (\u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e target \u003cspan class=\"hljs-string\"\u003e\u0026#x27;UnityFramework\u0026#x27;\u003c/span\u003e from project \u003cspan class=\"hljs-string\"\u003e\u0026#x27;Unity-iPhone\u0026#x27;\u003c/span\u003e)\n(1 failure)\n[12:14:32]: Exit status: 65\n\n+---------------+-------------------------+\n|            Build environment            |\n+---------------+-------------------------+\n| xcode_path    | /Applications/Xcode.app |\n| gym_version   | 2.199.0                 |\n| export_method | app-store               |\n| sdk           | iPhoneOS15.0.sdk        |\n+---------------+-------------------------+\n\n[12:14:32]: ▸ runtime.schedinit()\n[12:14:32]: ▸   /usr/local/go/src/runtime/proc.go:492 +0xa1 fp=0x7ff7bfef50d0 sp=0x7ff7bfef5090 pc=0x102c651\n[12:14:32]: ▸ runtime.rt0_go(0x7ff7bfef5100, 0x3, 0x7ff7bfef5100, 0x1000000, 0x3, 0x7ff7bfef6360, 0x7ff7bfef63ce, 0x7ff7bfef63da, 0x0, 0x7ff7bfef64b1, ...)\n[12:14:32]: ▸   /usr/local/go/src/runtime/asm_amd64.s:175 +0x1eb fp=0x7ff7bfef50d8 sp=0x7ff7bfef50d0 pc=0x10540fb\n[12:14:32]: ▸ Command PhaseScriptExecution failed with a nonzero \u003cspan class=\"hljs-built_in\"\u003eexit\u003c/span\u003e code\n[12:14:32]:\n[12:14:32]: ⬆️  Check out the few lines of raw `xcodebuild` output above \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e potential hints on how to solve this error\n[12:14:32]: 📋  For the complete and more detailed error \u003cspan class=\"hljs-built_in\"\u003elog\u003c/span\u003e, check the full \u003cspan class=\"hljs-built_in\"\u003elog\u003c/span\u003e at:\n[12:14:32]: 📋  /Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].\u003cspan class=\"hljs-built_in\"\u003elog\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003e\u003ccode class=\"span\"\u003e/Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log\u003c/code\u003e 형태로 로그가 저장되니 여기서 확인하면 된다.\n\u003ca href=\"unity\"\u003eunity\u003c/a\u003e 항목 확인\u003c/p\u003e\n\u003ch3 id=\"error-asset-validation-failed-missing-required-icon-file\"\u003eError: Asset validation failed Missing required icon file\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e[04:02:20]: [altool] 2023-12-27 04:02:20.553 *** Error: Asset validation failed Missing required icon file. The bundle does not contain an app icon \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e iPhone / iPod Touch of exactly \u003cspan class=\"hljs-string\"\u003e\u0026#x27;120x120\u0026#x27;\u003c/span\u003e pixels, \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e .png format \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e iOS versions \u0026gt;= 10.0. To support older versions of iOS, the icon may be required \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx) (90022)\n[04:02:20]: [altool]  {\n[04:02:20]: [altool]     NSLocalizedDescription = \u003cspan class=\"hljs-string\"\u003e\u0026quot;Asset validation failed\u0026quot;\u003c/span\u003e;\n[04:02:20]: [altool]     NSLocalizedFailureReason = \u003cspan class=\"hljs-string\"\u003e\u0026quot;Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly \u0026#x27;120x120\u0026#x27; pixels, in .png format for iOS versions \u0026gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: e19b1052-837f-4d5a-b7a2-98a288cc04e5)\u0026quot;\u003c/span\u003e;\n[04:02:20]: [altool]     NSUnderlyingError = \u003cspan class=\"hljs-string\"\u003e\u0026quot;Error Domain=IrisAPI Code=-19241 \\\u0026quot;Asset validation failed\\\u0026quot; UserInfo={status=409, detail=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly \u0026#x27;120x120\u0026#x27; pixels, in .png format for iOS versions \u0026gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, id=e19b1052-837f-4d5a-b7a2-98a288cc04e5, code=STATE_ERROR.VALIDATION_ERROR.90022, title=Asset validation failed, NSLocalizedFailureReason=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly \u0026#x27;120x120\u0026#x27; pixels, in .png format for iOS versions \u0026gt;= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, NSLocalizedDescription=Asset validation failed}\u0026quot;\u003c/span\u003e;\n[04:02:20]: [altool]     \u003cspan class=\"hljs-string\"\u003e\u0026quot;iris-code\u0026quot;\u003c/span\u003e = \u003cspan class=\"hljs-string\"\u003e\u0026quot;STATE_ERROR.VALIDATION_ERROR.90022\u0026quot;\u003c/span\u003e;\n[04:02:20]: [altool] }\n\n[04:02:20]: Application Loader output above ^\n[04:02:20]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90713) Missing Info.plist value. A value \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e the Info.plist key \u003cspan class=\"hljs-string\"\u003e\u0026#x27;CFBundleIconName\u0026#x27;\u003c/span\u003e is missing \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e the bundle \u003cspan class=\"hljs-string\"\u003e\u0026#x27;ro.salji.app\u0026#x27;\u003c/span\u003e. Apps built with iOS 11 or later SDK must supply app icons \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e an asset catalog and must also provide a value \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e this Info.plist key. For more information see http://help.apple.com/xcode/mac/current/\u003cspan class=\"hljs-comment\"\u003e#/dev10510b1f7. (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e앱 아이콘에 없어서나는 에러로 구글에서 \u003ccode class=\"span\"\u003eapp icon generator\u003c/code\u003e 를 검색해서 아무거나 선택하면 될 것으로 보인다 사용한 링크는 아래추가\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://easyappicon.com\" target=\"_blank\"\u003e[URL] https://easyappicon.com/\u003c/a\u003e \u003ca href=\"ios\"\u003eios\u003c/a\u003e \u003ca href=\"android\"\u003eandroid\u003c/a\u003e \u003ca href=\"react-native\"\u003ereact-native\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"no-build_beta_detail-included\"\u003eNo build_beta_detail included\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e베타에 대한 정보가 없어서 나는 것으로 추측\u003c/li\u003e\n\u003cli\u003eappstoreconnect -\u0026gt; TestFlight -\u0026gt; 베타 정보 입력\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"missing-authentication-credentials\"\u003eMissing authentication credentials\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eMissing authentication credentials. Set up Application Default Credentials, your Firebase refresh token, or sign \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e with the Firebase CLI, and try again.\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003e구글 클라우드 콘솔\u003c/strong\u003e -\u0026gt; 서비스 계정(\u003cstrong\u003efirebase 앱 배포\u003c/strong\u003e 권한이 있어야함) -\u0026gt; 배포에 사용되는 계정 -\u0026gt;  API KEY 생성된 것을 사용\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efastlane/FastFile\u003c/code\u003e 에서 인자로 인증키 위치 입력\u003cpre\u003e\u003ccode class=\"hljs language-ruby\"\u003erelease = firebase_app_distribution(\n  \u003cspan class=\"hljs-comment\"\u003e# ...\u003c/span\u003e\n  \u003cspan class=\"hljs-symbol\"\u003eservice_credentials_file:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026#x27;../[PROJECT-NAME]-[SERVICE_ACCOUNT_API_KEY].json\u0026#x27;\u003c/span\u003e,\n)\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"the-server-responded-with-status-403\"\u003ethe server responded with status 403\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ethe server responded with status 403\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003cdel\u003e\u003ca href=\"https://stackoverflow.com/a/77438947\" target=\"_blank\"\u003e[URL] https://stackoverflow.com/a/77438947\u003c/a\u003e\u003c/del\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"https://stackoverflow.com/questions/62385911/firebase-app-distribution-failed-to-fetch-app-information-403-the-caller-do\" target=\"_blank\"\u003e[URL] https://stackoverflow.com/questions/62385911/firebase-app-distribution-failed-to-fetch-app-information-403-the-caller-do\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e구글 클라우드 콘솔 -\u0026gt;  프로젝트 -\u0026gt;  IAM -\u0026gt; 서비스계정에 firebase 배포에 사용되는 계정 이메일 선택 -\u0026gt; \u003cstrong\u003eFirebase 앱 배포\u003c/strong\u003e role 추가\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"the-server-responded-with-status-404\"\u003ethe server responded with status 404\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ethe server responded with status 404\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"firebase\"\u003efirebase\u003c/a\u003e console -\u0026gt; Release \u0026amp; Monitor 에서 서비스가 시작된 것인지 확인(대시보드가 보여야함)\u003cul\u003e\n\u003cli\u003e\u003ca href=\"android\"\u003eandroid\u003c/a\u003e / \u003ca href=\"ios\"\u003eios\u003c/a\u003e 를 \u003cstrong\u003e별도로 설정\u003c/strong\u003e해야하니 이 부분에 유의\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"ios-다운로드-불가\"\u003eios 다운로드 불가\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://firebase.google.com/codelabs/appdistribution-udid-collection?hl=ko#2\" target=\"_blank\"\u003e[URL] https://firebase.google.com/codelabs/appdistribution-udid-collection?hl=ko#2\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e메일도 오고 테스트도 등록되었으나 다운로드 불가\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-txt\"\u003e기기가등록되었으며이제준비가끝났습니다\n앱을테스트할준비가되면이메일이전송됩니다.\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e프로비저닝 이슈로 개인이 사용하는 경우라면 아래와 같이 인증서와 프로비저닝 설정을 추가하면 과정에서 필요한 것들이 자동으로 만들어지며 진행된다\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efastlane/AppFile\u003c/code\u003e 에 설정 확인\u003cpre\u003e\u003ccode class=\"hljs language-ruby\"\u003eapp_identifier(\u003cspan class=\"hljs-string\"\u003e\u0026quot;\u0026lt;your app\u0026#x27;s bundle identifier\u0026gt;\u0026quot;\u003c/span\u003e)\napple_id(\u003cspan class=\"hljs-string\"\u003e\u0026quot;\u0026lt;your Apple id\u0026gt;\u0026quot;\u003c/span\u003e)\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efastlane/FastFile\u003c/code\u003e 에 설정 확인\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-ruby\"\u003elane \u003cspan class=\"hljs-symbol\"\u003e:lane_name\u003c/span\u003e \u003cspan class=\"hljs-keyword\"\u003edo\u003c/span\u003e\n  get_certificates()\n  get_provisioning_profile(\u003cspan class=\"hljs-symbol\"\u003eadhoc:\u003c/span\u003e \u003cspan class=\"hljs-literal\"\u003etrue\u003c/span\u003e)\n  build_app(\u003cspan class=\"hljs-symbol\"\u003eexport_method:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;ad-hoc\u0026quot;\u003c/span\u003e)\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e아래와 같이 처리된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e[14:00:01]: Driving the lane \u003cspan class=\"hljs-string\"\u003e\u0026#x27;ios firebase\u0026#x27;\u003c/span\u003e 🚀\n[14:00:01]: ------------------------------\n[14:00:01]: --- Step: get_certificates ---\n[14:00:01]: ------------------------------\n\n+-----------------------------------------------------------------------------+\n|                          Summary \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e cert 2.217.0                           |\n+-------------------------+---------------------------------------------------+\n| development             | \u003cspan class=\"hljs-literal\"\u003efalse\u003c/span\u003e                                             |\n| force                   | \u003cspan class=\"hljs-literal\"\u003efalse\u003c/span\u003e                                             |\n| generate_apple_certs    | \u003cspan class=\"hljs-literal\"\u003etrue\u003c/span\u003e                                              |\n| username                | deptno@gmail.com                                  |\n| team_id                 | xxxxxxxxxx                                        |\n| keychain_path           | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |\n| skip_set_partition_list | \u003cspan class=\"hljs-literal\"\u003efalse\u003c/span\u003e                                             |\n| platform                | ios                                               |\n+-------------------------+---------------------------------------------------+\n\n[14:00:11]: Found the certificate xxxxxxxxxx (Bonggyun Lee) \u003cspan class=\"hljs-built_in\"\u003ewhich\u003c/span\u003e is installed on the \u003cspan class=\"hljs-built_in\"\u003elocal\u003c/span\u003e machine. Using this one.\n[14:00:11]: Verifying the certificate is properly installed locally...\n[14:00:11]: Successfully installed certificate xxxxxxxxxx\n[14:00:11]: Use signing certificate \u003cspan class=\"hljs-string\"\u003e\u0026#x27;xxxxxxxxxx\u0026#x27;\u003c/span\u003e from now on!\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://developer.apple.com\" target=\"_blank\"\u003e[URL] https://developer.apple.com/\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e인증서 생성된 것 확인 가능 TYPE: \u003cstrong\u003eDistribution\u003c/strong\u003e\u003c/li\u003e\n\u003cli\u003e프로파일 생성된 것 확인 가능 TYPE: \u003cstrong\u003eAd hoc\u003c/strong\u003e\u003c/li\u003e\n\u003cli\u003e이후 배포되는 것들에대해서는 다운로드가 가능한 것이 확인된다\u003c/li\u003e\n\u003cli\u003e추가적인 디바이스가 필요한 경우에는 \u003cstrong\u003e앱스토어 커넥트 콘솔\u003c/strong\u003e 에서 디바이스 추가해서 진행\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../udid\"\u003eudid\u003c/a\u003e 등록확인\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 여러 기기에서 빌드가 필요한 경우에는 \u003ca href=\"match\"\u003ematch\u003c/a\u003e 필요 한것으로 보인다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"releated\"\u003ereleated\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"ios\"\u003eios\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"cert\"\u003ecert\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"github\"\u003egithub\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"unity\"\u003eunity\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"firebase\"\u003efirebase\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/0733487\\n\",\"className\":\"bg-white text-black\",\"children\":\"0733487\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/fastlane.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/fastlane.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/fastlane.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"fastlane\",\"name\":\"fastlane\",\"val\":26},{\"id\":\"react-native\",\"name\":\"react-native\",\"val\":90},{\"id\":\"macos\",\"name\":\"macos\",\"val\":13},{\"id\":\"brew\",\"name\":\"brew\",\"val\":2},{\"id\":\"testflight\",\"name\":\"testflight\",\"val\":\"$undefined\"},{\"id\":\"../firebase\",\"name\":\"../firebase\",\"val\":\"$undefined\"},{\"id\":\"../wip\",\"name\":\"../wip\",\"val\":\"$undefined\"},{\"id\":\"error\",\"name\":\"error\",\"val\":4},{\"id\":\"unity\",\"name\":\"unity\",\"val\":13},{\"id\":\"ios\",\"name\":\"ios\",\"val\":11},{\"id\":\"android\",\"name\":\"android\",\"val\":23},{\"id\":\"firebase\",\"name\":\"firebase\",\"val\":14},{\"id\":\"../udid\",\"name\":\"../udid\",\"val\":\"$undefined\"},{\"id\":\"match\",\"name\":\"match\",\"val\":\"$undefined\"},{\"id\":\"cert\",\"name\":\"cert\",\"val\":1},{\"id\":\"github\",\"name\":\"github\",\"val\":6},{\"id\":\"devide-app-by-development-env\",\"name\":\"devide-app-by-development-env\",\"val\":30},{\"id\":\"mobile\",\"name\":\"mobile\",\"val\":8},{\"id\":\"play-console\",\"name\":\"play-console\",\"val\":8},{\"id\":\"diary/2023-12-26\",\"name\":\"diary/2023-12-26\",\"val\":9},{\"id\":\"diary/2023-12-27\",\"name\":\"diary/2023-12-27\",\"val\":5},{\"id\":\"diary/2023-12-29\",\"name\":\"diary/2023-12-29\",\"val\":10},{\"id\":\"diary/2023-12-31\",\"name\":\"diary/2023-12-31\",\"val\":93},{\"id\":\"diary/2024-01-15\",\"name\":\"diary/2024-01-15\",\"val\":14},{\"id\":\"diary/2024-01-16\",\"name\":\"diary/2024-01-16\",\"val\":15},{\"id\":\"diary/2024-01-19\",\"name\":\"diary/2024-01-19\",\"val\":5},{\"id\":\"diary/2024-01-25\",\"name\":\"diary/2024-01-25\",\"val\":59},{\"id\":\"diary/2024-02-25\",\"name\":\"diary/2024-02-25\",\"val\":4}],\"links\":[{\"source\":\"fastlane\",\"target\":\"react-native\"},{\"source\":\"fastlane\",\"target\":\"react-native\"},{\"source\":\"fastlane\",\"target\":\"macos\"},{\"source\":\"fastlane\",\"target\":\"brew\"},{\"source\":\"fastlane\",\"target\":\"react-native\"},{\"source\":\"fastlane\",\"target\":\"testflight\"},{\"source\":\"fastlane\",\"target\":\"react-native\"},{\"source\":\"fastlane\",\"target\":\"testflight\"},{\"source\":\"fastlane\",\"target\":\"react-native\"},{\"source\":\"fastlane\",\"target\":\"../firebase\"},{\"source\":\"fastlane\",\"target\":\"../wip\"},{\"source\":\"fastlane\",\"target\":\"error\"},{\"source\":\"fastlane\",\"target\":\"unity\"},{\"source\":\"fastlane\",\"target\":\"ios\"},{\"source\":\"fastlane\",\"target\":\"android\"},{\"source\":\"fastlane\",\"target\":\"react-native\"},{\"source\":\"fastlane\",\"target\":\"firebase\"},{\"source\":\"fastlane\",\"target\":\"android\"},{\"source\":\"fastlane\",\"target\":\"ios\"},{\"source\":\"fastlane\",\"target\":\"../udid\"},{\"source\":\"fastlane\",\"target\":\"match\"},{\"source\":\"fastlane\",\"target\":\"ios\"},{\"source\":\"fastlane\",\"target\":\"cert\"},{\"source\":\"fastlane\",\"target\":\"github\"},{\"source\":\"fastlane\",\"target\":\"unity\"},{\"source\":\"fastlane\",\"target\":\"firebase\"},{\"source\":\"cert\",\"target\":\"fastlane\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"fastlane\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"fastlane\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"fastlane\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"fastlane\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"fastlane\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"fastlane\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"fastlane\"},{\"source\":\"ios\",\"target\":\"fastlane\"},{\"source\":\"mobile\",\"target\":\"fastlane\"},{\"source\":\"play-console\",\"target\":\"fastlane\"},{\"source\":\"react-native\",\"target\":\"fastlane\"},{\"source\":\"unity\",\"target\":\"fastlane\"},{\"source\":\"diary/2023-12-26\",\"target\":\"fastlane\"},{\"source\":\"diary/2023-12-27\",\"target\":\"fastlane\"},{\"source\":\"diary/2023-12-29\",\"target\":\"fastlane\"},{\"source\":\"diary/2023-12-31\",\"target\":\"fastlane\"},{\"source\":\"diary/2024-01-15\",\"target\":\"fastlane\"},{\"source\":\"diary/2024-01-16\",\"target\":\"fastlane\"},{\"source\":\"diary/2024-01-16\",\"target\":\"fastlane\"},{\"source\":\"diary/2024-01-16\",\"target\":\"fastlane\"},{\"source\":\"diary/2024-01-19\",\"target\":\"fastlane\"},{\"source\":\"diary/2024-01-25\",\"target\":\"fastlane\"},{\"source\":\"diary/2024-01-25\",\"target\":\"fastlane\"},{\"source\":\"diary/2024-01-25\",\"target\":\"fastlane\"},{\"source\":\"diary/2024-02-25\",\"target\":\"fastlane\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"fastlane\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/fastlane\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"fastlane\"}],[\"$\",\"sup\",null,{\"children\":26}]]}]}],[\"$\",\"span\",\"react-native\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/react-native\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"react-native\"}],[\"$\",\"sup\",null,{\"children\":90}]]}]}],[\"$\",\"span\",\"macos\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/macos\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"macos\"}],[\"$\",\"sup\",null,{\"children\":13}]]}]}],[\"$\",\"span\",\"brew\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/brew\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"brew\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"testflight\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/testflight\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"testflight\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"../firebase\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/../firebase\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"../firebase\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"../wip\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/../wip\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"../wip\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"error\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/error\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"error\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"unity\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/unity\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"unity\"}],[\"$\",\"sup\",null,{\"children\":13}]]}]}],[\"$\",\"span\",\"ios\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ios\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ios\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"android\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/android\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"android\"}],[\"$\",\"sup\",null,{\"children\":23}]]}]}],[\"$\",\"span\",\"firebase\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/firebase\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"firebase\"}],[\"$\",\"sup\",null,{\"children\":14}]]}]}],[\"$\",\"span\",\"../udid\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/../udid\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"../udid\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"match\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/match\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"match\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"cert\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/cert\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"cert\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"github\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/github\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"github\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"devide-app-by-development-env\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/devide-app-by-development-env\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"devide-app-by-development-env\"}],[\"$\",\"sup\",null,{\"children\":30}]]}]}],[\"$\",\"span\",\"mobile\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/mobile\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"mobile\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"play-console\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/play-console\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"play-console\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"diary/2023-12-26\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-26\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-26\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"diary/2023-12-27\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-27\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-27\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"diary/2023-12-29\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-29\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-29\"}],[\"$\",\"sup\",null,{\"children\":10}]]}]}],[\"$\",\"span\",\"diary/2023-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-31\"}],[\"$\",\"sup\",null,{\"children\":93}]]}]}],[\"$\",\"span\",\"diary/2024-01-15\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-15\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-15\"}],[\"$\",\"sup\",null,{\"children\":14}]]}]}],[\"$\",\"span\",\"diary/2024-01-16\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-16\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-16\"}],[\"$\",\"sup\",null,{\"children\":15}]]}]}],[\"$\",\"span\",\"diary/2024-01-19\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-19\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-19\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"diary/2024-01-25\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-25\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-25\"}],[\"$\",\"sup\",null,{\"children\":59}]]}]}],[\"$\",\"span\",\"diary/2024-02-25\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-02-25\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-02-25\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"fastlane\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#fastlane\",\"children\":\"fastlane\"}]}],[\"$\",\"div\",\"setup\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#setup\",\"children\":\"setup\"}]}],[\"$\",\"div\",\"설치-방법\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#설치-방법\",\"children\":\"설치 방법\"}]}],[\"$\",\"div\",\"testflight-사용시-테스터-그룹-설정\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#testflight-사용시-테스터-그룹-설정\",\"children\":\"testflight 사용시, 테스터 그룹 설정\"}]}],[\"$\",\"div\",\"firebase-app-distribution-사용시-테스터-그룹-생성\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#firebase-app-distribution-사용시-테스터-그룹-생성\",\"children\":\"firebase app distribution 사용시, 테스터 그룹 생성\"}]}],[\"$\",\"div\",\"ios\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#ios\",\"children\":\"ios\"}]}],[\"$\",\"div\",\"인증\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#인증\",\"children\":\"인증\"}]}],[\"$\",\"div\",\"android\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#android\",\"children\":\"android\"}]}],[\"$\",\"div\",\"error\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error\",\"children\":\"error\"}]}],[\"$\",\"div\",\"invalid-username-and-password-combination-used-xxxxxxxxcom-지메일로-보내기-as-the-username\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#invalid-username-and-password-combination-used-xxxxxxxxcom-지메일로-보내기-as-the-username\",\"children\":\"Invalid username and password combination. Used 'XXXX@XXXX.com [지메일로 보내기]' as the username.\"}]}],[\"$\",\"div\",\"fatal-error-runtime-bsdthread_register-error\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#fatal-error-runtime-bsdthread_register-error\",\"children\":\"fatal error: runtime: bsdthread_register error\"}]}],[\"$\",\"div\",\"error-asset-validation-failed-missing-required-icon-file\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error-asset-validation-failed-missing-required-icon-file\",\"children\":\"Error: Asset validation failed Missing required icon file\"}]}],[\"$\",\"div\",\"no-build_beta_detail-included\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#no-build_beta_detail-included\",\"children\":\"No build_beta_detail included\"}]}],[\"$\",\"div\",\"missing-authentication-credentials\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#missing-authentication-credentials\",\"children\":\"Missing authentication credentials\"}]}],[\"$\",\"div\",\"the-server-responded-with-status-403\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#the-server-responded-with-status-403\",\"children\":\"the server responded with status 403\"}]}],[\"$\",\"div\",\"the-server-responded-with-status-404\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#the-server-responded-with-status-404\",\"children\":\"the server responded with status 404\"}]}],[\"$\",\"div\",\"ios-다운로드-불가\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#ios-다운로드-불가\",\"children\":\"ios 다운로드 불가\"}]}],[\"$\",\"div\",\"releated\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#releated\",\"children\":\"releated\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T453b,"])</script><script>self.__next_f.push([1,"\u003e 앱 배포과정을 자동화, 코드 사이닝,  배포등의 과정을 포함  \n\u003e 배포까지 자동화해야하기 때문에 개발자 등록을 마친 이후에 진행\n\n## setup\n\u003e [[react-native]] 로 진행함  \n\u003e `fastlane` 설치는 프로젝트 루트에 각각에 대한 `fastlane init` 은 `/ios`, `/android` 에서 진행  \n\u003e system 으로 설치하는게 맞을수도 있을 것은 같은데 공식 문서에서 추천하지 않아서 ~~brew 설치~~ 하려했으나 [[react-native]] 프로젝트 루트에 있는 `Gemfile` 에 `gem 'fastlane'` 을 추가하여 `bundle install` 을 통해 설치\n\n### 설치 방법\n\u003e [[macos]] 기준\n- [ ] system ruby 사용, 공식 문서에서 권장하지 않음\n- [ ] [[brew]] 사용, `brew install fastlane`\n- [X] Gemfile 수정, [[react-native]] 에서 기본적으로 사용하고 있으므로 여기에서 함께 처리함\n\n### [[testflight]] 사용시, 테스터 그룹 설정\n- testflight 를 사용하는 경\n- appstoreconnect\n  - [X] 내부 테스팅 그룹 생성\n\n### firebase app distribution 사용시, 테스터 그룹 생성\n- firebase app distribution 콘솔\n  - [X] 테스팅 그룹 생성\n  ```ruby\n  firebase_app_distribution(\n    # 테스터 그룹 지정\n    groups: '살지로',\n  )\n  ```\n\n### ios\n- [[react-native]] 프로젝트로 진행\n  ```sh \n  cd ios\n  bundle exec fastlane init\n  ```\n  - **Automate beta distribution to TestFlight** 선택\n- 문서 `Podfile` 에 UTF-8 설정을 요구하고 있음, 설정하진 않음\n  ```ruby \n  export LC_ALL=en_US.UTF-8\n  export LANG=en_US.UTF-8\n  ```\n    + https://docs.fastlane.tools/getting-started/ios/setup/\n- 아래 [[#인증]] 참조하여 진행\n- 빌드 후 icon 에러, 아래 에러 참조\n- testflight 에 올라간 것은 확인 되나 `No build_beta_detail included` [[#error]] 가 발생\n  - appstoreconnect -\u003e TestFlight -\u003e 베타 정보 입력\n- 성공\n\n#### 인증\n\u003e 인증을 처리하지 않으면 진행되는 중간에 인터렉션을 해줘야한다  \n\u003e 인증 방법은 여러가지가 있으나 여기서는 fastlane 문서에서 권장하는 **App Store connect API Key** 를 사용\n\u003e **App Store Connect API Key** 를 권장하나 fastlane 에서 `produce`, `pem` action 혹은 tool 을 지원하지 못한다\n  + https://appstoreconnect.apple.com/access/api\n\n- 사용자 및 엑세스 -\u003e App Store Connect API -\u003e *App Store Connect API 액세스 요청* -\u003e 바로 승인됨\n  - `*.p8` 파일을 다운로드 받아 아래서 사용\n- *API 키 생성* role 은 **앱 관리** 로 줘봄\n  ```sh \n  [01:36:03]: ✅  Logging in with your Apple ID was successful\n  [01:36:03]: Checking if the app '[BUNDLE_ID]' exists in your Apple Developer Portal...\n  [01:36:04]: ✅  Your app '[BUNDLE_ID]' is available in your Apple Developer Portal\n  [01:36:04]: Checking if the app '[BUNDLE_ID]' exists on App Store Connect...\n  [01:36:04]: Looks like the app '[BUNDLE_ID]' isn't available on App Store Connect\n  [01:36:04]: for the team ID '000000000' on Apple ID 'deptno@gmail.com'\n  [01:36:04]: Would you like fastlane to create the App on App Store Connect for you? (y/n)\n  ```\n- `y` 를 누르면 생성해주기도 하는데 직접 생성하기로 한다\n  - SKU 는 고유 아이디로 외부에 노출되지 않는다. `AAAA_0001` 이런식으로 생성이 가능\n- 앱생성후에 `fastlane init` 을 이어가면 `Gemfile`과 함께 `fastlane/{App,Fast}File` 이 생성된다\n- `bundle exec fastlane beta` achive 이 후 에러가 발생\n  ```sh \n  [02:04:08]: ▸ Archive Succeeded\n  # ...\n  error: exportArchive: No profiles for '[BUNDLE_ID]' were found\n\n  Error Domain=IDEProfileLocatorErrorDomain Code=1 \"No profiles for '[BUNDLE_ID]' were found\" UserInfo={IDEDistributionIssueSeverity=3, NSLocalizedDescription=No profiles for '[BUNDLE_ID]' were found, NSLocalizedRecoverySuggestion=Xcode couldn't find any iOS App Store provisioning profiles matching '[BUNDLE_ID]'. Automatic signing is disabled and unable to generate a profile. To enable automatic signing, pass -allowProvisioningUpdates to xcodebuild.}\n\n  ** EXPORT FAILED **\n  [02:04:19]: Exit status: 70\n\n  # ...\n\n  [02:04:20]: fastlane finished with errors\n\n  [!] Error packaging up the application\n  ```\n  - **Provisioning Profile** 이 없어서 나는 에러로 디펄로퍼 콘솔에서 생성하면된다 **개발목적과 배포목적이 따로 필요**한데 여기선 [[testflight]] **배포** 목적이니 **Ad Hoc** 으로 생성\n    - [ ] 생성 후 *Automatically manage signing* 을 체크 해제하고 *Download Profile* 을 선택해서 방금 생성한 프로파일을 선택\n    - [X] 수동은 알아만 두고 자동으로한다\n- *App Store Connect API Key*를 `lane` 안에 추가\n  ```sh \n  app_store_connect_api_key(\n    key_id: \"[API KEY ID]\",\n    issuer_id: \"[API KEY ISSUER]\",\n    key_filepath: \"./[생성한 API KEY].p8\",\n    duration: 1200, # optional (maximum 1200)\n    in_house: false # optional but may be required if using match/sigh\n  )\n  ```\n\n### android\n- [[react-native]] 프로젝트로 진행\n  ```sh \n  cd android\n  bundle exec fastlane init # 대충 기본만 하고 나머진 모두 생략 supply 도 하지 않음, fastlane/{AppFile,FastFile} 이 생성됨\n  bundle exec fastlane test # fastlane/README.md 가 지금 생성됨\n  ```\n- `fastlane` 파일을 열어보면 `lane` 이 있어서 `bundle exec fastlane beta` 테스트\n  ```sh \n  bundle exec fastlane [android] beta\n  [05:46:33]: fastlane finished with errors\n\n  [!] Could not find action, lane or variable 'crashlytics'. Check out the documentation for more details: https://docs.fastlane.tools/actions\n  ```\n  - `crashlytics` 에러가 발생 아무래도 [[../firebase|firebase]] 서비스를 이야기하는것 같은데 구글 계정 설정을 안해서 나는 것으로 보인다 이것부터 설정\n  - 주석처리\n- firebase app distribution 배포를 위한 `firebase app distribution` 플러그인 추가\n  + https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ko\n  ```sh \n  fastlane add_plugin firebase_app_distribution\n  ```\n- 계정 정보 추가\n  + https://docs.fastlane.tools/actions/supply/\n  - *구글 클라우드 콘솔*에서 *Google Play Android Developer API* 활성화\n  - *구글 클라우드 콘솔*에서 *Service Account* 생성\n    - fastlane-supply 와 같은 알아보기 쉬운 이름,  이메일은 해당 페이지에 있는 생성기 돌릴 것 -\u003e **DONE**\n  - 생성된 계정의 메뉴로 들어가 `Manage keys` 선택\n    - ADD KEY -\u003e Create New Key(JSON)\n  - *구글 플레이 콘솔*에서 *Users and Permissions* 진입\n    - Invite new users -\u003e 위에서 생성한 서비스 어카운트 이메일 입력 -\u003e Account Permissions 에서 admin 권한 후 초대\n  ```sh\n  bundle exec fastlane run validate_play_store_json_key json_key:[아까 다운로드 받은.json]\n  ```\n  - 성공 확인되면 AppFile `json_key_file(\"[아까 다운로드 받은.json]\")` 로 수정\n  - 이것으로 `crashlytics` 에러가 해결되지는 않음\n  - `fastlane supply init` \n    - `[!] Google Api Error: Invalid request - Package not found: [package.name].` 에러가 발생\n      - *구글 플레이 콘솔*  에서 앱을 아직 생성하지 않았고 한번은 업로드해야한다는 글들이 있음\n        + https://stackoverflow.com/questions/69073389/fastlane-google-api-error-invalid-request-package-not-found-com-example\n      - [[../wip|wip]]\n\n## [[error]]\n\n### Invalid username and password combination. Used 'XXXX@XXXX.com' as the username.\n\u003e 계정이슈\n```sh\n[10:19:46]: fastlane finished with errors\n\nLooking for related GitHub issues on fastlane/fastlane...\n\nFound no similar issues. To create a new issue, please visit:\nhttps://github.com/fastlane/fastlane/issues/new\nRun `fastlane env` to append the fastlane environment to your issue\n\n[!] The request could not be completed because:\n\tInvalid username and password combination. Used 'XXXX@XXXX.com' as the username.\n```\n```sh\nfastlane fastlane-credentials remove --username XXXX@XXXX.com\n```\n\n### fatal error: runtime: bsdthread_register error\n```sh\n▸ Running script 'Unity Process symbols'\n\n❌  fatal error: runtime: bsdthread_register error\n\n\n** ARCHIVE FAILED **\n\n\nThe following build commands failed:\n        PhaseScriptExecution Unity\\ Process\\ symbols /Users/deptno/Library/Developer/Xcode/DerivedData/[APP_NAME]-afpmodexeqnqytfpispoaxqrjqft/Build/Intermediates.noindex/ArchiveIntermediates/[APP_NAME]/IntermediateBuildFilesPath/Unity-iPhone.build/Release-iphoneos/UnityFramework.build/Script-84294926AA792CC5C43FB36D.sh (in target 'UnityFramework' from project 'Unity-iPhone')\n(1 failure)\n[12:14:32]: Exit status: 65\n\n+---------------+-------------------------+\n|            Build environment            |\n+---------------+-------------------------+\n| xcode_path    | /Applications/Xcode.app |\n| gym_version   | 2.199.0                 |\n| export_method | app-store               |\n| sdk           | iPhoneOS15.0.sdk        |\n+---------------+-------------------------+\n\n[12:14:32]: ▸ runtime.schedinit()\n[12:14:32]: ▸   /usr/local/go/src/runtime/proc.go:492 +0xa1 fp=0x7ff7bfef50d0 sp=0x7ff7bfef5090 pc=0x102c651\n[12:14:32]: ▸ runtime.rt0_go(0x7ff7bfef5100, 0x3, 0x7ff7bfef5100, 0x1000000, 0x3, 0x7ff7bfef6360, 0x7ff7bfef63ce, 0x7ff7bfef63da, 0x0, 0x7ff7bfef64b1, ...)\n[12:14:32]: ▸   /usr/local/go/src/runtime/asm_amd64.s:175 +0x1eb fp=0x7ff7bfef50d8 sp=0x7ff7bfef50d0 pc=0x10540fb\n[12:14:32]: ▸ Command PhaseScriptExecution failed with a nonzero exit code\n[12:14:32]:\n[12:14:32]: ⬆️  Check out the few lines of raw `xcodebuild` output above for potential hints on how to solve this error\n[12:14:32]: 📋  For the complete and more detailed error log, check the full log at:\n[12:14:32]: 📋  /Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log\n```\n\n`/Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log` 형태로 로그가 저장되니 여기서 확인하면 된다.\n[[unity]] 항목 확인\n\n### Error: Asset validation failed Missing required icon file\n```sh \n[04:02:20]: [altool] 2023-12-27 04:02:20.553 *** Error: Asset validation failed Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly '120x120' pixels, in .png format for iOS versions \u003e= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx) (90022)\n[04:02:20]: [altool]  {\n[04:02:20]: [altool]     NSLocalizedDescription = \"Asset validation failed\";\n[04:02:20]: [altool]     NSLocalizedFailureReason = \"Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly '120x120' pixels, in .png format for iOS versions \u003e= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: e19b1052-837f-4d5a-b7a2-98a288cc04e5)\";\n[04:02:20]: [altool]     NSUnderlyingError = \"Error Domain=IrisAPI Code=-19241 \\\"Asset validation failed\\\" UserInfo={status=409, detail=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly '120x120' pixels, in .png format for iOS versions \u003e= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, id=e19b1052-837f-4d5a-b7a2-98a288cc04e5, code=STATE_ERROR.VALIDATION_ERROR.90022, title=Asset validation failed, NSLocalizedFailureReason=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly '120x120' pixels, in .png format for iOS versions \u003e= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, NSLocalizedDescription=Asset validation failed}\";\n[04:02:20]: [altool]     \"iris-code\" = \"STATE_ERROR.VALIDATION_ERROR.90022\";\n[04:02:20]: [altool] }\n\n[04:02:20]: Application Loader output above ^\n[04:02:20]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90713) Missing Info.plist value. A value for the Info.plist key 'CFBundleIconName' is missing in the bundle 'ro.salji.app'. Apps built with iOS 11 or later SDK must supply app icons in an asset catalog and must also provide a value for this Info.plist key. For more information see http://help.apple.com/xcode/mac/current/#/dev10510b1f7. (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)\n```\n- 앱 아이콘에 없어서나는 에러로 구글에서 `app icon generator` 를 검색해서 아무거나 선택하면 될 것으로 보인다 사용한 링크는 아래추가\n  + https://easyappicon.com [[ios]] [[android]] [[react-native]]\n\n### No build_beta_detail included\n- 베타에 대한 정보가 없어서 나는 것으로 추측\n- appstoreconnect -\u003e TestFlight -\u003e 베타 정보 입력\n\n### Missing authentication credentials\n```sh \nMissing authentication credentials. Set up Application Default Credentials, your Firebase refresh token, or sign in with the Firebase CLI, and try again.\n```\n- **구글 클라우드 콘솔** -\u003e 서비스 계정(**firebase 앱 배포** 권한이 있어야함) -\u003e 배포에 사용되는 계정 -\u003e  API KEY 생성된 것을 사용\n- `fastlane/FastFile` 에서 인자로 인증키 위치 입력\n  ```ruby \n  release = firebase_app_distribution(\n    # ...\n    service_credentials_file: '../[PROJECT-NAME]-[SERVICE_ACCOUNT_API_KEY].json',\n  )\n  ```\n\n### the server responded with status 403\n```sh \nthe server responded with status 403\n```\n+ ~~https://stackoverflow.com/a/77438947~~\n+ https://stackoverflow.com/questions/62385911/firebase-app-distribution-failed-to-fetch-app-information-403-the-caller-do\n- 구글 클라우드 콘솔 -\u003e  프로젝트 -\u003e  IAM -\u003e 서비스계정에 firebase 배포에 사용되는 계정 이메일 선택 -\u003e **Firebase 앱 배포** role 추가\n        \n### the server responded with status 404\n```sh \nthe server responded with status 404\n```\n- [[firebase]] console -\u003e Release \u0026 Monitor 에서 서비스가 시작된 것인지 확인(대시보드가 보여야함)\n  - [[android]] / [[ios]] 를 **별도로 설정**해야하니 이 부분에 유의\n\n### ios 다운로드 불가\n+ https://firebase.google.com/codelabs/appdistribution-udid-collection?hl=ko#2\n- 메일도 오고 테스트도 등록되었으나 다운로드 불가 \n```txt \n기기가등록되었으며이제준비가끝났습니다\n앱을테스트할준비가되면이메일이전송됩니다.\n```\n- 프로비저닝 이슈로 개인이 사용하는 경우라면 아래와 같이 인증서와 프로비저닝 설정을 추가하면 과정에서 필요한 것들이 자동으로 만들어지며 진행된다\n- `fastlane/AppFile` 에 설정 확인\n  ```ruby\n  app_identifier(\"\u003cyour app's bundle identifier\u003e\")\n  apple_id(\"\u003cyour Apple id\u003e\")\n  ```\n- `fastlane/FastFile` 에 설정 확인\n```ruby\nlane :lane_name do\n  get_certificates()\n  get_provisioning_profile(adhoc: true)\n  build_app(export_method: \"ad-hoc\")\n```\n- 아래와 같이 처리된다\n```sh \n[14:00:01]: Driving the lane 'ios firebase' 🚀\n[14:00:01]: ------------------------------\n[14:00:01]: --- Step: get_certificates ---\n[14:00:01]: ------------------------------\n\n+-----------------------------------------------------------------------------+\n|                          Summary for cert 2.217.0                           |\n+-------------------------+---------------------------------------------------+\n| development             | false                                             |\n| force                   | false                                             |\n| generate_apple_certs    | true                                              |\n| username                | deptno@gmail.com                                  |\n| team_id                 | xxxxxxxxxx                                        |\n| keychain_path           | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |\n| skip_set_partition_list | false                                             |\n| platform                | ios                                               |\n+-------------------------+---------------------------------------------------+\n\n[14:00:11]: Found the certificate xxxxxxxxxx (Bonggyun Lee) which is installed on the local machine. Using this one.\n[14:00:11]: Verifying the certificate is properly installed locally...\n[14:00:11]: Successfully installed certificate xxxxxxxxxx\n[14:00:11]: Use signing certificate 'xxxxxxxxxx' from now on!\n```\n  + https://developer.apple.com\n    - 인증서 생성된 것 확인 가능 TYPE: **Distribution**\n    - 프로파일 생성된 것 확인 가능 TYPE: **Ad hoc**\n    - 이후 배포되는 것들에대해서는 다운로드가 가능한 것이 확인된다\n    - 추가적인 디바이스가 필요한 경우에는 **앱스토어 커넥트 콘솔** 에서 디바이스 추가해서 진행\n      - [[../udid|udid]] 등록확인\n    - [ ] 여러 기기에서 빌드가 필요한 경우에는 [[match]] 필요 한것으로 보인다\n\n## releated\n- [[ios]]\n- [[cert]]\n- [[github]]\n- [[unity]]\n- [[firebase]]\n"])</script><script>self.__next_f.push([1,"16:T453b,"])</script><script>self.__next_f.push([1,"\u003e 앱 배포과정을 자동화, 코드 사이닝,  배포등의 과정을 포함  \n\u003e 배포까지 자동화해야하기 때문에 개발자 등록을 마친 이후에 진행\n\n## setup\n\u003e [[react-native]] 로 진행함  \n\u003e `fastlane` 설치는 프로젝트 루트에 각각에 대한 `fastlane init` 은 `/ios`, `/android` 에서 진행  \n\u003e system 으로 설치하는게 맞을수도 있을 것은 같은데 공식 문서에서 추천하지 않아서 ~~brew 설치~~ 하려했으나 [[react-native]] 프로젝트 루트에 있는 `Gemfile` 에 `gem 'fastlane'` 을 추가하여 `bundle install` 을 통해 설치\n\n### 설치 방법\n\u003e [[macos]] 기준\n- [ ] system ruby 사용, 공식 문서에서 권장하지 않음\n- [ ] [[brew]] 사용, `brew install fastlane`\n- [X] Gemfile 수정, [[react-native]] 에서 기본적으로 사용하고 있으므로 여기에서 함께 처리함\n\n### [[testflight]] 사용시, 테스터 그룹 설정\n- testflight 를 사용하는 경\n- appstoreconnect\n  - [X] 내부 테스팅 그룹 생성\n\n### firebase app distribution 사용시, 테스터 그룹 생성\n- firebase app distribution 콘솔\n  - [X] 테스팅 그룹 생성\n  ```ruby\n  firebase_app_distribution(\n    # 테스터 그룹 지정\n    groups: '살지로',\n  )\n  ```\n\n### ios\n- [[react-native]] 프로젝트로 진행\n  ```sh \n  cd ios\n  bundle exec fastlane init\n  ```\n  - **Automate beta distribution to TestFlight** 선택\n- 문서 `Podfile` 에 UTF-8 설정을 요구하고 있음, 설정하진 않음\n  ```ruby \n  export LC_ALL=en_US.UTF-8\n  export LANG=en_US.UTF-8\n  ```\n    + https://docs.fastlane.tools/getting-started/ios/setup/\n- 아래 [[#인증]] 참조하여 진행\n- 빌드 후 icon 에러, 아래 에러 참조\n- testflight 에 올라간 것은 확인 되나 `No build_beta_detail included` [[#error]] 가 발생\n  - appstoreconnect -\u003e TestFlight -\u003e 베타 정보 입력\n- 성공\n\n#### 인증\n\u003e 인증을 처리하지 않으면 진행되는 중간에 인터렉션을 해줘야한다  \n\u003e 인증 방법은 여러가지가 있으나 여기서는 fastlane 문서에서 권장하는 **App Store connect API Key** 를 사용\n\u003e **App Store Connect API Key** 를 권장하나 fastlane 에서 `produce`, `pem` action 혹은 tool 을 지원하지 못한다\n  + https://appstoreconnect.apple.com/access/api\n\n- 사용자 및 엑세스 -\u003e App Store Connect API -\u003e *App Store Connect API 액세스 요청* -\u003e 바로 승인됨\n  - `*.p8` 파일을 다운로드 받아 아래서 사용\n- *API 키 생성* role 은 **앱 관리** 로 줘봄\n  ```sh \n  [01:36:03]: ✅  Logging in with your Apple ID was successful\n  [01:36:03]: Checking if the app '[BUNDLE_ID]' exists in your Apple Developer Portal...\n  [01:36:04]: ✅  Your app '[BUNDLE_ID]' is available in your Apple Developer Portal\n  [01:36:04]: Checking if the app '[BUNDLE_ID]' exists on App Store Connect...\n  [01:36:04]: Looks like the app '[BUNDLE_ID]' isn't available on App Store Connect\n  [01:36:04]: for the team ID '000000000' on Apple ID 'deptno@gmail.com'\n  [01:36:04]: Would you like fastlane to create the App on App Store Connect for you? (y/n)\n  ```\n- `y` 를 누르면 생성해주기도 하는데 직접 생성하기로 한다\n  - SKU 는 고유 아이디로 외부에 노출되지 않는다. `AAAA_0001` 이런식으로 생성이 가능\n- 앱생성후에 `fastlane init` 을 이어가면 `Gemfile`과 함께 `fastlane/{App,Fast}File` 이 생성된다\n- `bundle exec fastlane beta` achive 이 후 에러가 발생\n  ```sh \n  [02:04:08]: ▸ Archive Succeeded\n  # ...\n  error: exportArchive: No profiles for '[BUNDLE_ID]' were found\n\n  Error Domain=IDEProfileLocatorErrorDomain Code=1 \"No profiles for '[BUNDLE_ID]' were found\" UserInfo={IDEDistributionIssueSeverity=3, NSLocalizedDescription=No profiles for '[BUNDLE_ID]' were found, NSLocalizedRecoverySuggestion=Xcode couldn't find any iOS App Store provisioning profiles matching '[BUNDLE_ID]'. Automatic signing is disabled and unable to generate a profile. To enable automatic signing, pass -allowProvisioningUpdates to xcodebuild.}\n\n  ** EXPORT FAILED **\n  [02:04:19]: Exit status: 70\n\n  # ...\n\n  [02:04:20]: fastlane finished with errors\n\n  [!] Error packaging up the application\n  ```\n  - **Provisioning Profile** 이 없어서 나는 에러로 디펄로퍼 콘솔에서 생성하면된다 **개발목적과 배포목적이 따로 필요**한데 여기선 [[testflight]] **배포** 목적이니 **Ad Hoc** 으로 생성\n    - [ ] 생성 후 *Automatically manage signing* 을 체크 해제하고 *Download Profile* 을 선택해서 방금 생성한 프로파일을 선택\n    - [X] 수동은 알아만 두고 자동으로한다\n- *App Store Connect API Key*를 `lane` 안에 추가\n  ```sh \n  app_store_connect_api_key(\n    key_id: \"[API KEY ID]\",\n    issuer_id: \"[API KEY ISSUER]\",\n    key_filepath: \"./[생성한 API KEY].p8\",\n    duration: 1200, # optional (maximum 1200)\n    in_house: false # optional but may be required if using match/sigh\n  )\n  ```\n\n### android\n- [[react-native]] 프로젝트로 진행\n  ```sh \n  cd android\n  bundle exec fastlane init # 대충 기본만 하고 나머진 모두 생략 supply 도 하지 않음, fastlane/{AppFile,FastFile} 이 생성됨\n  bundle exec fastlane test # fastlane/README.md 가 지금 생성됨\n  ```\n- `fastlane` 파일을 열어보면 `lane` 이 있어서 `bundle exec fastlane beta` 테스트\n  ```sh \n  bundle exec fastlane [android] beta\n  [05:46:33]: fastlane finished with errors\n\n  [!] Could not find action, lane or variable 'crashlytics'. Check out the documentation for more details: https://docs.fastlane.tools/actions\n  ```\n  - `crashlytics` 에러가 발생 아무래도 [[../firebase|firebase]] 서비스를 이야기하는것 같은데 구글 계정 설정을 안해서 나는 것으로 보인다 이것부터 설정\n  - 주석처리\n- firebase app distribution 배포를 위한 `firebase app distribution` 플러그인 추가\n  + https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ko\n  ```sh \n  fastlane add_plugin firebase_app_distribution\n  ```\n- 계정 정보 추가\n  + https://docs.fastlane.tools/actions/supply/\n  - *구글 클라우드 콘솔*에서 *Google Play Android Developer API* 활성화\n  - *구글 클라우드 콘솔*에서 *Service Account* 생성\n    - fastlane-supply 와 같은 알아보기 쉬운 이름,  이메일은 해당 페이지에 있는 생성기 돌릴 것 -\u003e **DONE**\n  - 생성된 계정의 메뉴로 들어가 `Manage keys` 선택\n    - ADD KEY -\u003e Create New Key(JSON)\n  - *구글 플레이 콘솔*에서 *Users and Permissions* 진입\n    - Invite new users -\u003e 위에서 생성한 서비스 어카운트 이메일 입력 -\u003e Account Permissions 에서 admin 권한 후 초대\n  ```sh\n  bundle exec fastlane run validate_play_store_json_key json_key:[아까 다운로드 받은.json]\n  ```\n  - 성공 확인되면 AppFile `json_key_file(\"[아까 다운로드 받은.json]\")` 로 수정\n  - 이것으로 `crashlytics` 에러가 해결되지는 않음\n  - `fastlane supply init` \n    - `[!] Google Api Error: Invalid request - Package not found: [package.name].` 에러가 발생\n      - *구글 플레이 콘솔*  에서 앱을 아직 생성하지 않았고 한번은 업로드해야한다는 글들이 있음\n        + https://stackoverflow.com/questions/69073389/fastlane-google-api-error-invalid-request-package-not-found-com-example\n      - [[../wip|wip]]\n\n## [[error]]\n\n### Invalid username and password combination. Used 'XXXX@XXXX.com' as the username.\n\u003e 계정이슈\n```sh\n[10:19:46]: fastlane finished with errors\n\nLooking for related GitHub issues on fastlane/fastlane...\n\nFound no similar issues. To create a new issue, please visit:\nhttps://github.com/fastlane/fastlane/issues/new\nRun `fastlane env` to append the fastlane environment to your issue\n\n[!] The request could not be completed because:\n\tInvalid username and password combination. Used 'XXXX@XXXX.com' as the username.\n```\n```sh\nfastlane fastlane-credentials remove --username XXXX@XXXX.com\n```\n\n### fatal error: runtime: bsdthread_register error\n```sh\n▸ Running script 'Unity Process symbols'\n\n❌  fatal error: runtime: bsdthread_register error\n\n\n** ARCHIVE FAILED **\n\n\nThe following build commands failed:\n        PhaseScriptExecution Unity\\ Process\\ symbols /Users/deptno/Library/Developer/Xcode/DerivedData/[APP_NAME]-afpmodexeqnqytfpispoaxqrjqft/Build/Intermediates.noindex/ArchiveIntermediates/[APP_NAME]/IntermediateBuildFilesPath/Unity-iPhone.build/Release-iphoneos/UnityFramework.build/Script-84294926AA792CC5C43FB36D.sh (in target 'UnityFramework' from project 'Unity-iPhone')\n(1 failure)\n[12:14:32]: Exit status: 65\n\n+---------------+-------------------------+\n|            Build environment            |\n+---------------+-------------------------+\n| xcode_path    | /Applications/Xcode.app |\n| gym_version   | 2.199.0                 |\n| export_method | app-store               |\n| sdk           | iPhoneOS15.0.sdk        |\n+---------------+-------------------------+\n\n[12:14:32]: ▸ runtime.schedinit()\n[12:14:32]: ▸   /usr/local/go/src/runtime/proc.go:492 +0xa1 fp=0x7ff7bfef50d0 sp=0x7ff7bfef5090 pc=0x102c651\n[12:14:32]: ▸ runtime.rt0_go(0x7ff7bfef5100, 0x3, 0x7ff7bfef5100, 0x1000000, 0x3, 0x7ff7bfef6360, 0x7ff7bfef63ce, 0x7ff7bfef63da, 0x0, 0x7ff7bfef64b1, ...)\n[12:14:32]: ▸   /usr/local/go/src/runtime/asm_amd64.s:175 +0x1eb fp=0x7ff7bfef50d8 sp=0x7ff7bfef50d0 pc=0x10540fb\n[12:14:32]: ▸ Command PhaseScriptExecution failed with a nonzero exit code\n[12:14:32]:\n[12:14:32]: ⬆️  Check out the few lines of raw `xcodebuild` output above for potential hints on how to solve this error\n[12:14:32]: 📋  For the complete and more detailed error log, check the full log at:\n[12:14:32]: 📋  /Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log\n```\n\n`/Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log` 형태로 로그가 저장되니 여기서 확인하면 된다.\n[[unity]] 항목 확인\n\n### Error: Asset validation failed Missing required icon file\n```sh \n[04:02:20]: [altool] 2023-12-27 04:02:20.553 *** Error: Asset validation failed Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly '120x120' pixels, in .png format for iOS versions \u003e= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx) (90022)\n[04:02:20]: [altool]  {\n[04:02:20]: [altool]     NSLocalizedDescription = \"Asset validation failed\";\n[04:02:20]: [altool]     NSLocalizedFailureReason = \"Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly '120x120' pixels, in .png format for iOS versions \u003e= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: e19b1052-837f-4d5a-b7a2-98a288cc04e5)\";\n[04:02:20]: [altool]     NSUnderlyingError = \"Error Domain=IrisAPI Code=-19241 \\\"Asset validation failed\\\" UserInfo={status=409, detail=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly '120x120' pixels, in .png format for iOS versions \u003e= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, id=e19b1052-837f-4d5a-b7a2-98a288cc04e5, code=STATE_ERROR.VALIDATION_ERROR.90022, title=Asset validation failed, NSLocalizedFailureReason=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly '120x120' pixels, in .png format for iOS versions \u003e= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, NSLocalizedDescription=Asset validation failed}\";\n[04:02:20]: [altool]     \"iris-code\" = \"STATE_ERROR.VALIDATION_ERROR.90022\";\n[04:02:20]: [altool] }\n\n[04:02:20]: Application Loader output above ^\n[04:02:20]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90713) Missing Info.plist value. A value for the Info.plist key 'CFBundleIconName' is missing in the bundle 'ro.salji.app'. Apps built with iOS 11 or later SDK must supply app icons in an asset catalog and must also provide a value for this Info.plist key. For more information see http://help.apple.com/xcode/mac/current/#/dev10510b1f7. (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)\n```\n- 앱 아이콘에 없어서나는 에러로 구글에서 `app icon generator` 를 검색해서 아무거나 선택하면 될 것으로 보인다 사용한 링크는 아래추가\n  + https://easyappicon.com [[ios]] [[android]] [[react-native]]\n\n### No build_beta_detail included\n- 베타에 대한 정보가 없어서 나는 것으로 추측\n- appstoreconnect -\u003e TestFlight -\u003e 베타 정보 입력\n\n### Missing authentication credentials\n```sh \nMissing authentication credentials. Set up Application Default Credentials, your Firebase refresh token, or sign in with the Firebase CLI, and try again.\n```\n- **구글 클라우드 콘솔** -\u003e 서비스 계정(**firebase 앱 배포** 권한이 있어야함) -\u003e 배포에 사용되는 계정 -\u003e  API KEY 생성된 것을 사용\n- `fastlane/FastFile` 에서 인자로 인증키 위치 입력\n  ```ruby \n  release = firebase_app_distribution(\n    # ...\n    service_credentials_file: '../[PROJECT-NAME]-[SERVICE_ACCOUNT_API_KEY].json',\n  )\n  ```\n\n### the server responded with status 403\n```sh \nthe server responded with status 403\n```\n+ ~~https://stackoverflow.com/a/77438947~~\n+ https://stackoverflow.com/questions/62385911/firebase-app-distribution-failed-to-fetch-app-information-403-the-caller-do\n- 구글 클라우드 콘솔 -\u003e  프로젝트 -\u003e  IAM -\u003e 서비스계정에 firebase 배포에 사용되는 계정 이메일 선택 -\u003e **Firebase 앱 배포** role 추가\n        \n### the server responded with status 404\n```sh \nthe server responded with status 404\n```\n- [[firebase]] console -\u003e Release \u0026 Monitor 에서 서비스가 시작된 것인지 확인(대시보드가 보여야함)\n  - [[android]] / [[ios]] 를 **별도로 설정**해야하니 이 부분에 유의\n\n### ios 다운로드 불가\n+ https://firebase.google.com/codelabs/appdistribution-udid-collection?hl=ko#2\n- 메일도 오고 테스트도 등록되었으나 다운로드 불가 \n```txt \n기기가등록되었으며이제준비가끝났습니다\n앱을테스트할준비가되면이메일이전송됩니다.\n```\n- 프로비저닝 이슈로 개인이 사용하는 경우라면 아래와 같이 인증서와 프로비저닝 설정을 추가하면 과정에서 필요한 것들이 자동으로 만들어지며 진행된다\n- `fastlane/AppFile` 에 설정 확인\n  ```ruby\n  app_identifier(\"\u003cyour app's bundle identifier\u003e\")\n  apple_id(\"\u003cyour Apple id\u003e\")\n  ```\n- `fastlane/FastFile` 에 설정 확인\n```ruby\nlane :lane_name do\n  get_certificates()\n  get_provisioning_profile(adhoc: true)\n  build_app(export_method: \"ad-hoc\")\n```\n- 아래와 같이 처리된다\n```sh \n[14:00:01]: Driving the lane 'ios firebase' 🚀\n[14:00:01]: ------------------------------\n[14:00:01]: --- Step: get_certificates ---\n[14:00:01]: ------------------------------\n\n+-----------------------------------------------------------------------------+\n|                          Summary for cert 2.217.0                           |\n+-------------------------+---------------------------------------------------+\n| development             | false                                             |\n| force                   | false                                             |\n| generate_apple_certs    | true                                              |\n| username                | deptno@gmail.com                                  |\n| team_id                 | xxxxxxxxxx                                        |\n| keychain_path           | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |\n| skip_set_partition_list | false                                             |\n| platform                | ios                                               |\n+-------------------------+---------------------------------------------------+\n\n[14:00:11]: Found the certificate xxxxxxxxxx (Bonggyun Lee) which is installed on the local machine. Using this one.\n[14:00:11]: Verifying the certificate is properly installed locally...\n[14:00:11]: Successfully installed certificate xxxxxxxxxx\n[14:00:11]: Use signing certificate 'xxxxxxxxxx' from now on!\n```\n  + https://developer.apple.com\n    - 인증서 생성된 것 확인 가능 TYPE: **Distribution**\n    - 프로파일 생성된 것 확인 가능 TYPE: **Ad hoc**\n    - 이후 배포되는 것들에대해서는 다운로드가 가능한 것이 확인된다\n    - 추가적인 디바이스가 필요한 경우에는 **앱스토어 커넥트 콘솔** 에서 디바이스 추가해서 진행\n      - [[../udid|udid]] 등록확인\n    - [ ] 여러 기기에서 빌드가 필요한 경우에는 [[match]] 필요 한것으로 보인다\n\n## releated\n- [[ios]]\n- [[cert]]\n- [[github]]\n- [[unity]]\n- [[firebase]]\n"])</script><script>self.__next_f.push([1,"17:T453b,"])</script><script>self.__next_f.push([1,"\u003e 앱 배포과정을 자동화, 코드 사이닝,  배포등의 과정을 포함  \n\u003e 배포까지 자동화해야하기 때문에 개발자 등록을 마친 이후에 진행\n\n## setup\n\u003e [[react-native]] 로 진행함  \n\u003e `fastlane` 설치는 프로젝트 루트에 각각에 대한 `fastlane init` 은 `/ios`, `/android` 에서 진행  \n\u003e system 으로 설치하는게 맞을수도 있을 것은 같은데 공식 문서에서 추천하지 않아서 ~~brew 설치~~ 하려했으나 [[react-native]] 프로젝트 루트에 있는 `Gemfile` 에 `gem 'fastlane'` 을 추가하여 `bundle install` 을 통해 설치\n\n### 설치 방법\n\u003e [[macos]] 기준\n- [ ] system ruby 사용, 공식 문서에서 권장하지 않음\n- [ ] [[brew]] 사용, `brew install fastlane`\n- [X] Gemfile 수정, [[react-native]] 에서 기본적으로 사용하고 있으므로 여기에서 함께 처리함\n\n### [[testflight]] 사용시, 테스터 그룹 설정\n- testflight 를 사용하는 경\n- appstoreconnect\n  - [X] 내부 테스팅 그룹 생성\n\n### firebase app distribution 사용시, 테스터 그룹 생성\n- firebase app distribution 콘솔\n  - [X] 테스팅 그룹 생성\n  ```ruby\n  firebase_app_distribution(\n    # 테스터 그룹 지정\n    groups: '살지로',\n  )\n  ```\n\n### ios\n- [[react-native]] 프로젝트로 진행\n  ```sh \n  cd ios\n  bundle exec fastlane init\n  ```\n  - **Automate beta distribution to TestFlight** 선택\n- 문서 `Podfile` 에 UTF-8 설정을 요구하고 있음, 설정하진 않음\n  ```ruby \n  export LC_ALL=en_US.UTF-8\n  export LANG=en_US.UTF-8\n  ```\n    + https://docs.fastlane.tools/getting-started/ios/setup/\n- 아래 [[#인증]] 참조하여 진행\n- 빌드 후 icon 에러, 아래 에러 참조\n- testflight 에 올라간 것은 확인 되나 `No build_beta_detail included` [[#error]] 가 발생\n  - appstoreconnect -\u003e TestFlight -\u003e 베타 정보 입력\n- 성공\n\n#### 인증\n\u003e 인증을 처리하지 않으면 진행되는 중간에 인터렉션을 해줘야한다  \n\u003e 인증 방법은 여러가지가 있으나 여기서는 fastlane 문서에서 권장하는 **App Store connect API Key** 를 사용\n\u003e **App Store Connect API Key** 를 권장하나 fastlane 에서 `produce`, `pem` action 혹은 tool 을 지원하지 못한다\n  + https://appstoreconnect.apple.com/access/api\n\n- 사용자 및 엑세스 -\u003e App Store Connect API -\u003e *App Store Connect API 액세스 요청* -\u003e 바로 승인됨\n  - `*.p8` 파일을 다운로드 받아 아래서 사용\n- *API 키 생성* role 은 **앱 관리** 로 줘봄\n  ```sh \n  [01:36:03]: ✅  Logging in with your Apple ID was successful\n  [01:36:03]: Checking if the app '[BUNDLE_ID]' exists in your Apple Developer Portal...\n  [01:36:04]: ✅  Your app '[BUNDLE_ID]' is available in your Apple Developer Portal\n  [01:36:04]: Checking if the app '[BUNDLE_ID]' exists on App Store Connect...\n  [01:36:04]: Looks like the app '[BUNDLE_ID]' isn't available on App Store Connect\n  [01:36:04]: for the team ID '000000000' on Apple ID 'deptno@gmail.com'\n  [01:36:04]: Would you like fastlane to create the App on App Store Connect for you? (y/n)\n  ```\n- `y` 를 누르면 생성해주기도 하는데 직접 생성하기로 한다\n  - SKU 는 고유 아이디로 외부에 노출되지 않는다. `AAAA_0001` 이런식으로 생성이 가능\n- 앱생성후에 `fastlane init` 을 이어가면 `Gemfile`과 함께 `fastlane/{App,Fast}File` 이 생성된다\n- `bundle exec fastlane beta` achive 이 후 에러가 발생\n  ```sh \n  [02:04:08]: ▸ Archive Succeeded\n  # ...\n  error: exportArchive: No profiles for '[BUNDLE_ID]' were found\n\n  Error Domain=IDEProfileLocatorErrorDomain Code=1 \"No profiles for '[BUNDLE_ID]' were found\" UserInfo={IDEDistributionIssueSeverity=3, NSLocalizedDescription=No profiles for '[BUNDLE_ID]' were found, NSLocalizedRecoverySuggestion=Xcode couldn't find any iOS App Store provisioning profiles matching '[BUNDLE_ID]'. Automatic signing is disabled and unable to generate a profile. To enable automatic signing, pass -allowProvisioningUpdates to xcodebuild.}\n\n  ** EXPORT FAILED **\n  [02:04:19]: Exit status: 70\n\n  # ...\n\n  [02:04:20]: fastlane finished with errors\n\n  [!] Error packaging up the application\n  ```\n  - **Provisioning Profile** 이 없어서 나는 에러로 디펄로퍼 콘솔에서 생성하면된다 **개발목적과 배포목적이 따로 필요**한데 여기선 [[testflight]] **배포** 목적이니 **Ad Hoc** 으로 생성\n    - [ ] 생성 후 *Automatically manage signing* 을 체크 해제하고 *Download Profile* 을 선택해서 방금 생성한 프로파일을 선택\n    - [X] 수동은 알아만 두고 자동으로한다\n- *App Store Connect API Key*를 `lane` 안에 추가\n  ```sh \n  app_store_connect_api_key(\n    key_id: \"[API KEY ID]\",\n    issuer_id: \"[API KEY ISSUER]\",\n    key_filepath: \"./[생성한 API KEY].p8\",\n    duration: 1200, # optional (maximum 1200)\n    in_house: false # optional but may be required if using match/sigh\n  )\n  ```\n\n### android\n- [[react-native]] 프로젝트로 진행\n  ```sh \n  cd android\n  bundle exec fastlane init # 대충 기본만 하고 나머진 모두 생략 supply 도 하지 않음, fastlane/{AppFile,FastFile} 이 생성됨\n  bundle exec fastlane test # fastlane/README.md 가 지금 생성됨\n  ```\n- `fastlane` 파일을 열어보면 `lane` 이 있어서 `bundle exec fastlane beta` 테스트\n  ```sh \n  bundle exec fastlane [android] beta\n  [05:46:33]: fastlane finished with errors\n\n  [!] Could not find action, lane or variable 'crashlytics'. Check out the documentation for more details: https://docs.fastlane.tools/actions\n  ```\n  - `crashlytics` 에러가 발생 아무래도 [[../firebase|firebase]] 서비스를 이야기하는것 같은데 구글 계정 설정을 안해서 나는 것으로 보인다 이것부터 설정\n  - 주석처리\n- firebase app distribution 배포를 위한 `firebase app distribution` 플러그인 추가\n  + https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ko\n  ```sh \n  fastlane add_plugin firebase_app_distribution\n  ```\n- 계정 정보 추가\n  + https://docs.fastlane.tools/actions/supply/\n  - *구글 클라우드 콘솔*에서 *Google Play Android Developer API* 활성화\n  - *구글 클라우드 콘솔*에서 *Service Account* 생성\n    - fastlane-supply 와 같은 알아보기 쉬운 이름,  이메일은 해당 페이지에 있는 생성기 돌릴 것 -\u003e **DONE**\n  - 생성된 계정의 메뉴로 들어가 `Manage keys` 선택\n    - ADD KEY -\u003e Create New Key(JSON)\n  - *구글 플레이 콘솔*에서 *Users and Permissions* 진입\n    - Invite new users -\u003e 위에서 생성한 서비스 어카운트 이메일 입력 -\u003e Account Permissions 에서 admin 권한 후 초대\n  ```sh\n  bundle exec fastlane run validate_play_store_json_key json_key:[아까 다운로드 받은.json]\n  ```\n  - 성공 확인되면 AppFile `json_key_file(\"[아까 다운로드 받은.json]\")` 로 수정\n  - 이것으로 `crashlytics` 에러가 해결되지는 않음\n  - `fastlane supply init` \n    - `[!] Google Api Error: Invalid request - Package not found: [package.name].` 에러가 발생\n      - *구글 플레이 콘솔*  에서 앱을 아직 생성하지 않았고 한번은 업로드해야한다는 글들이 있음\n        + https://stackoverflow.com/questions/69073389/fastlane-google-api-error-invalid-request-package-not-found-com-example\n      - [[../wip|wip]]\n\n## [[error]]\n\n### Invalid username and password combination. Used 'XXXX@XXXX.com' as the username.\n\u003e 계정이슈\n```sh\n[10:19:46]: fastlane finished with errors\n\nLooking for related GitHub issues on fastlane/fastlane...\n\nFound no similar issues. To create a new issue, please visit:\nhttps://github.com/fastlane/fastlane/issues/new\nRun `fastlane env` to append the fastlane environment to your issue\n\n[!] The request could not be completed because:\n\tInvalid username and password combination. Used 'XXXX@XXXX.com' as the username.\n```\n```sh\nfastlane fastlane-credentials remove --username XXXX@XXXX.com\n```\n\n### fatal error: runtime: bsdthread_register error\n```sh\n▸ Running script 'Unity Process symbols'\n\n❌  fatal error: runtime: bsdthread_register error\n\n\n** ARCHIVE FAILED **\n\n\nThe following build commands failed:\n        PhaseScriptExecution Unity\\ Process\\ symbols /Users/deptno/Library/Developer/Xcode/DerivedData/[APP_NAME]-afpmodexeqnqytfpispoaxqrjqft/Build/Intermediates.noindex/ArchiveIntermediates/[APP_NAME]/IntermediateBuildFilesPath/Unity-iPhone.build/Release-iphoneos/UnityFramework.build/Script-84294926AA792CC5C43FB36D.sh (in target 'UnityFramework' from project 'Unity-iPhone')\n(1 failure)\n[12:14:32]: Exit status: 65\n\n+---------------+-------------------------+\n|            Build environment            |\n+---------------+-------------------------+\n| xcode_path    | /Applications/Xcode.app |\n| gym_version   | 2.199.0                 |\n| export_method | app-store               |\n| sdk           | iPhoneOS15.0.sdk        |\n+---------------+-------------------------+\n\n[12:14:32]: ▸ runtime.schedinit()\n[12:14:32]: ▸   /usr/local/go/src/runtime/proc.go:492 +0xa1 fp=0x7ff7bfef50d0 sp=0x7ff7bfef5090 pc=0x102c651\n[12:14:32]: ▸ runtime.rt0_go(0x7ff7bfef5100, 0x3, 0x7ff7bfef5100, 0x1000000, 0x3, 0x7ff7bfef6360, 0x7ff7bfef63ce, 0x7ff7bfef63da, 0x0, 0x7ff7bfef64b1, ...)\n[12:14:32]: ▸   /usr/local/go/src/runtime/asm_amd64.s:175 +0x1eb fp=0x7ff7bfef50d8 sp=0x7ff7bfef50d0 pc=0x10540fb\n[12:14:32]: ▸ Command PhaseScriptExecution failed with a nonzero exit code\n[12:14:32]:\n[12:14:32]: ⬆️  Check out the few lines of raw `xcodebuild` output above for potential hints on how to solve this error\n[12:14:32]: 📋  For the complete and more detailed error log, check the full log at:\n[12:14:32]: 📋  /Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log\n```\n\n`/Users/deptno/Library/Logs/gym/[APP_NAME]-[APP_NAME].log` 형태로 로그가 저장되니 여기서 확인하면 된다.\n[[unity]] 항목 확인\n\n### Error: Asset validation failed Missing required icon file\n```sh \n[04:02:20]: [altool] 2023-12-27 04:02:20.553 *** Error: Asset validation failed Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly '120x120' pixels, in .png format for iOS versions \u003e= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx) (90022)\n[04:02:20]: [altool]  {\n[04:02:20]: [altool]     NSLocalizedDescription = \"Asset validation failed\";\n[04:02:20]: [altool]     NSLocalizedFailureReason = \"Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly '120x120' pixels, in .png format for iOS versions \u003e= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface (ID: e19b1052-837f-4d5a-b7a2-98a288cc04e5)\";\n[04:02:20]: [altool]     NSUnderlyingError = \"Error Domain=IrisAPI Code=-19241 \\\"Asset validation failed\\\" UserInfo={status=409, detail=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly '120x120' pixels, in .png format for iOS versions \u003e= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, id=e19b1052-837f-4d5a-b7a2-98a288cc04e5, code=STATE_ERROR.VALIDATION_ERROR.90022, title=Asset validation failed, NSLocalizedFailureReason=Missing required icon file. The bundle does not contain an app icon for iPhone / iPod Touch of exactly '120x120' pixels, in .png format for iOS versions \u003e= 10.0. To support older versions of iOS, the icon may be required in the bundle outside of an asset catalog. Make sure the Info.plist file includes appropriate entries referencing the file. See https://developer.apple.com/documentation/bundleresources/information_property_list/user_interface, NSLocalizedDescription=Asset validation failed}\";\n[04:02:20]: [altool]     \"iris-code\" = \"STATE_ERROR.VALIDATION_ERROR.90022\";\n[04:02:20]: [altool] }\n\n[04:02:20]: Application Loader output above ^\n[04:02:20]: ERROR: [ContentDelivery.Uploader] Asset validation failed (90713) Missing Info.plist value. A value for the Info.plist key 'CFBundleIconName' is missing in the bundle 'ro.salji.app'. Apps built with iOS 11 or later SDK must supply app icons in an asset catalog and must also provide a value for this Info.plist key. For more information see http://help.apple.com/xcode/mac/current/#/dev10510b1f7. (ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)\n```\n- 앱 아이콘에 없어서나는 에러로 구글에서 `app icon generator` 를 검색해서 아무거나 선택하면 될 것으로 보인다 사용한 링크는 아래추가\n  + https://easyappicon.com [[ios]] [[android]] [[react-native]]\n\n### No build_beta_detail included\n- 베타에 대한 정보가 없어서 나는 것으로 추측\n- appstoreconnect -\u003e TestFlight -\u003e 베타 정보 입력\n\n### Missing authentication credentials\n```sh \nMissing authentication credentials. Set up Application Default Credentials, your Firebase refresh token, or sign in with the Firebase CLI, and try again.\n```\n- **구글 클라우드 콘솔** -\u003e 서비스 계정(**firebase 앱 배포** 권한이 있어야함) -\u003e 배포에 사용되는 계정 -\u003e  API KEY 생성된 것을 사용\n- `fastlane/FastFile` 에서 인자로 인증키 위치 입력\n  ```ruby \n  release = firebase_app_distribution(\n    # ...\n    service_credentials_file: '../[PROJECT-NAME]-[SERVICE_ACCOUNT_API_KEY].json',\n  )\n  ```\n\n### the server responded with status 403\n```sh \nthe server responded with status 403\n```\n+ ~~https://stackoverflow.com/a/77438947~~\n+ https://stackoverflow.com/questions/62385911/firebase-app-distribution-failed-to-fetch-app-information-403-the-caller-do\n- 구글 클라우드 콘솔 -\u003e  프로젝트 -\u003e  IAM -\u003e 서비스계정에 firebase 배포에 사용되는 계정 이메일 선택 -\u003e **Firebase 앱 배포** role 추가\n        \n### the server responded with status 404\n```sh \nthe server responded with status 404\n```\n- [[firebase]] console -\u003e Release \u0026 Monitor 에서 서비스가 시작된 것인지 확인(대시보드가 보여야함)\n  - [[android]] / [[ios]] 를 **별도로 설정**해야하니 이 부분에 유의\n\n### ios 다운로드 불가\n+ https://firebase.google.com/codelabs/appdistribution-udid-collection?hl=ko#2\n- 메일도 오고 테스트도 등록되었으나 다운로드 불가 \n```txt \n기기가등록되었으며이제준비가끝났습니다\n앱을테스트할준비가되면이메일이전송됩니다.\n```\n- 프로비저닝 이슈로 개인이 사용하는 경우라면 아래와 같이 인증서와 프로비저닝 설정을 추가하면 과정에서 필요한 것들이 자동으로 만들어지며 진행된다\n- `fastlane/AppFile` 에 설정 확인\n  ```ruby\n  app_identifier(\"\u003cyour app's bundle identifier\u003e\")\n  apple_id(\"\u003cyour Apple id\u003e\")\n  ```\n- `fastlane/FastFile` 에 설정 확인\n```ruby\nlane :lane_name do\n  get_certificates()\n  get_provisioning_profile(adhoc: true)\n  build_app(export_method: \"ad-hoc\")\n```\n- 아래와 같이 처리된다\n```sh \n[14:00:01]: Driving the lane 'ios firebase' 🚀\n[14:00:01]: ------------------------------\n[14:00:01]: --- Step: get_certificates ---\n[14:00:01]: ------------------------------\n\n+-----------------------------------------------------------------------------+\n|                          Summary for cert 2.217.0                           |\n+-------------------------+---------------------------------------------------+\n| development             | false                                             |\n| force                   | false                                             |\n| generate_apple_certs    | true                                              |\n| username                | deptno@gmail.com                                  |\n| team_id                 | xxxxxxxxxx                                        |\n| keychain_path           | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx |\n| skip_set_partition_list | false                                             |\n| platform                | ios                                               |\n+-------------------------+---------------------------------------------------+\n\n[14:00:11]: Found the certificate xxxxxxxxxx (Bonggyun Lee) which is installed on the local machine. Using this one.\n[14:00:11]: Verifying the certificate is properly installed locally...\n[14:00:11]: Successfully installed certificate xxxxxxxxxx\n[14:00:11]: Use signing certificate 'xxxxxxxxxx' from now on!\n```\n  + https://developer.apple.com\n    - 인증서 생성된 것 확인 가능 TYPE: **Distribution**\n    - 프로파일 생성된 것 확인 가능 TYPE: **Ad hoc**\n    - 이후 배포되는 것들에대해서는 다운로드가 가능한 것이 확인된다\n    - 추가적인 디바이스가 필요한 경우에는 **앱스토어 커넥트 콘솔** 에서 디바이스 추가해서 진행\n      - [[../udid|udid]] 등록확인\n    - [ ] 여러 기기에서 빌드가 필요한 경우에는 [[match]] 필요 한것으로 보인다\n\n## releated\n- [[ios]]\n- [[cert]]\n- [[github]]\n- [[unity]]\n- [[firebase]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# fastlane\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# fastlane\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/fastlane\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# fastlane\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

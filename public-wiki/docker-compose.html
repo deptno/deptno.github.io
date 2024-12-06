@@ -1,0 +1,278 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-39c74ed669a18122.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-1939e229d7d9d28d.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># docker-compose</title><meta name="description" content="- 여러 종류의 인스턴스를 동시에 띄워야하는경우, eg. server, client
+- 각 service([[pod]]) 간에 name 으로 통신이 가능하다 eg. http://db:1111
+- 하나의 서버만 재시작도 가능
+
+## usage
+- `docker-compose.yml` 파일 작성 후
+  ```sh 
+  docker-compose up
+  docker-compose up --build # docker image 재 빌드 필요시
+  docker-compose up --build [service name] # 특정 서비스만 재빌드 후 실행
+  ```
+- 이미 `docker-compose up` 으로 실행된 상태에서
+  - `docker-compose up` 죽은 컨테이너만 재시작
+  - `docker-compose up [service name]` 실행시 해당 서비스에 attach
+  - `docker-compose up --build [service name]` 빌드 후 재실 후 attach
+
+## example
+- mlops 프로젝틀 하면서 설정했던 `docker-compose.yml`
+```yaml
+services:
+  mlflow:
+    # 제공되는 이미지 그대로 사용
+    image: &quot;ghcr.io/mlflow/mlflow:v2.16.2&quot;
+    ports:
+      # host:container
+      - &quot;5001:5000&quot;
+    volumes:
+      # host:container
+      - &quot;./mlflow:/mlruns&quot;
+      - &quot;./mlartifacts:/mlartifacts&quot;
+    command: [&quot;mlflow&quot; , &quot;ui&quot; , &quot;--host&quot; , &quot;0.0.0.0&quot;]
+  airflow-web-server:
+    image: &quot;apache/airflow:2.10.2-python3.10&quot;
+    # user 설정
+    user: &quot;0:0&quot;
+    ports:
+      - &quot;5002:8080&quot;
+    volumes:
+      - &quot;./airflow:/opt/airflow&quot;
+    command: [&quot;airflow&quot;, &quot;webserver&quot;]
+  airflow-scheduler:
+    # dockerfile 을 통한 직접 빌드 시
+    build:
+      context: &quot;.&quot;
+      dockerfile: &quot;Dockerfile.mlops_airflow&quot;
+    # dockerfile 을 통한 직접 빌드 시, 이미지 명이 된다
+    image: &quot;mlops_airflow:latest&quot;
+    volumes:
+      - &quot;./airflow:/opt/airflow&quot;
+      - &quot;./src/datasets:/opt/airflow/datasets&quot;
+    # service 실행 순서 보장
+    depends_on:
+      - &quot;airflow-web-server&quot;
+    command: [&quot;airflow&quot;, &quot;scheduler&quot;]
+  api:
+    build:
+      context: &quot;.&quot;
+      dockerfile: &quot;Dockerfile.mlops_api&quot;
+    image: &quot;mlops_api:latest&quot;
+    volumes:
+      - &quot;./mlartifacts:/mlartifacts&quot;
+    ports:
+      - &quot;8000:8000&quot;
+```
+
+## link
+- [[docker]]
+- [[diary:2024-10-08]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# docker-compose"/><meta property="og:description" content="- 여러 종류의 인스턴스를 동시에 띄워야하는경우, eg. server, client
+- 각 service([[pod]]) 간에 name 으로 통신이 가능하다 eg. http://db:1111
+- 하나의 서버만 재시작도 가능
+
+## usage
+- `docker-compose.yml` 파일 작성 후
+  ```sh 
+  docker-compose up
+  docker-compose up --build # docker image 재 빌드 필요시
+  docker-compose up --build [service name] # 특정 서비스만 재빌드 후 실행
+  ```
+- 이미 `docker-compose up` 으로 실행된 상태에서
+  - `docker-compose up` 죽은 컨테이너만 재시작
+  - `docker-compose up [service name]` 실행시 해당 서비스에 attach
+  - `docker-compose up --build [service name]` 빌드 후 재실 후 attach
+
+## example
+- mlops 프로젝틀 하면서 설정했던 `docker-compose.yml`
+```yaml
+services:
+  mlflow:
+    # 제공되는 이미지 그대로 사용
+    image: &quot;ghcr.io/mlflow/mlflow:v2.16.2&quot;
+    ports:
+      # host:container
+      - &quot;5001:5000&quot;
+    volumes:
+      # host:container
+      - &quot;./mlflow:/mlruns&quot;
+      - &quot;./mlartifacts:/mlartifacts&quot;
+    command: [&quot;mlflow&quot; , &quot;ui&quot; , &quot;--host&quot; , &quot;0.0.0.0&quot;]
+  airflow-web-server:
+    image: &quot;apache/airflow:2.10.2-python3.10&quot;
+    # user 설정
+    user: &quot;0:0&quot;
+    ports:
+      - &quot;5002:8080&quot;
+    volumes:
+      - &quot;./airflow:/opt/airflow&quot;
+    command: [&quot;airflow&quot;, &quot;webserver&quot;]
+  airflow-scheduler:
+    # dockerfile 을 통한 직접 빌드 시
+    build:
+      context: &quot;.&quot;
+      dockerfile: &quot;Dockerfile.mlops_airflow&quot;
+    # dockerfile 을 통한 직접 빌드 시, 이미지 명이 된다
+    image: &quot;mlops_airflow:latest&quot;
+    volumes:
+      - &quot;./airflow:/opt/airflow&quot;
+      - &quot;./src/datasets:/opt/airflow/datasets&quot;
+    # service 실행 순서 보장
+    depends_on:
+      - &quot;airflow-web-server&quot;
+    command: [&quot;airflow&quot;, &quot;scheduler&quot;]
+  api:
+    build:
+      context: &quot;.&quot;
+      dockerfile: &quot;Dockerfile.mlops_api&quot;
+    image: &quot;mlops_api:latest&quot;
+    volumes:
+      - &quot;./mlartifacts:/mlartifacts&quot;
+    ports:
+      - &quot;8000:8000&quot;
+```
+
+## link
+- [[docker]]
+- [[diary:2024-10-08]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/docker-compose"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# docker-compose"/><meta name="twitter:description" content="- 여러 종류의 인스턴스를 동시에 띄워야하는경우, eg. server, client
+- 각 service([[pod]]) 간에 name 으로 통신이 가능하다 eg. http://db:1111
+- 하나의 서버만 재시작도 가능
+
+## usage
+- `docker-compose.yml` 파일 작성 후
+  ```sh 
+  docker-compose up
+  docker-compose up --build # docker image 재 빌드 필요시
+  docker-compose up --build [service name] # 특정 서비스만 재빌드 후 실행
+  ```
+- 이미 `docker-compose up` 으로 실행된 상태에서
+  - `docker-compose up` 죽은 컨테이너만 재시작
+  - `docker-compose up [service name]` 실행시 해당 서비스에 attach
+  - `docker-compose up --build [service name]` 빌드 후 재실 후 attach
+
+## example
+- mlops 프로젝틀 하면서 설정했던 `docker-compose.yml`
+```yaml
+services:
+  mlflow:
+    # 제공되는 이미지 그대로 사용
+    image: &quot;ghcr.io/mlflow/mlflow:v2.16.2&quot;
+    ports:
+      # host:container
+      - &quot;5001:5000&quot;
+    volumes:
+      # host:container
+      - &quot;./mlflow:/mlruns&quot;
+      - &quot;./mlartifacts:/mlartifacts&quot;
+    command: [&quot;mlflow&quot; , &quot;ui&quot; , &quot;--host&quot; , &quot;0.0.0.0&quot;]
+  airflow-web-server:
+    image: &quot;apache/airflow:2.10.2-python3.10&quot;
+    # user 설정
+    user: &quot;0:0&quot;
+    ports:
+      - &quot;5002:8080&quot;
+    volumes:
+      - &quot;./airflow:/opt/airflow&quot;
+    command: [&quot;airflow&quot;, &quot;webserver&quot;]
+  airflow-scheduler:
+    # dockerfile 을 통한 직접 빌드 시
+    build:
+      context: &quot;.&quot;
+      dockerfile: &quot;Dockerfile.mlops_airflow&quot;
+    # dockerfile 을 통한 직접 빌드 시, 이미지 명이 된다
+    image: &quot;mlops_airflow:latest&quot;
+    volumes:
+      - &quot;./airflow:/opt/airflow&quot;
+      - &quot;./src/datasets:/opt/airflow/datasets&quot;
+    # service 실행 순서 보장
+    depends_on:
+      - &quot;airflow-web-server&quot;
+    command: [&quot;airflow&quot;, &quot;scheduler&quot;]
+  api:
+    build:
+      context: &quot;.&quot;
+      dockerfile: &quot;Dockerfile.mlops_api&quot;
+    image: &quot;mlops_api:latest&quot;
+    volumes:
+      - &quot;./mlartifacts:/mlartifacts&quot;
+    ports:
+      - &quot;8000:8000&quot;
+```
+
+## link
+- [[docker]]
+- [[diary:2024-10-08]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/0733487
+" class="bg-white text-black">0733487</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/docker-compose.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/docker-compose.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/docker-compose.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/docker-compose"><span class="underline">docker-compose</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/pod"><span class="underline">pod</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/docker"><span class="underline">docker</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-10-08"><span class="underline">diary/2024-10-08</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-57"><span class="underline">upstage-ai-lab-day-57</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-62"><span class="underline">upstage-ai-lab-day-62</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-77"><span class="underline">upstage-ai-lab-day-77</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-92"><span class="underline">upstage-ai-lab-day-92</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-project-03"><span class="underline">upstage-ai-lab-project-03</span><sup>36</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-project-04"><span class="underline">upstage-ai-lab-project-04</span><sup>31</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-project-05"><span class="underline">upstage-ai-lab-project-05</span><sup>27</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#docker-compose">docker-compose</a></div><div class="pl-2"><a href="#usage">usage</a></div><div class="pl-2"><a href="#example">example</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="docker-compose">docker-compose</h1>
+<ul>
+<li>여러 종류의 인스턴스를 동시에 띄워야하는경우, eg. server, client</li>
+<li>각 service(<a href="pod">pod</a>) 간에 name 으로 통신이 가능하다 eg. <a href="http://db:1111" target="_blank">[URL] http://db:1111/</a></li>
+<li>하나의 서버만 재시작도 가능</li>
+</ul>
+<h2 id="usage">usage</h2>
+<ul>
+<li><code class="span">docker-compose.yml</code> 파일 작성 후<pre><code class="hljs language-sh">docker-compose up
+docker-compose up --build <span class="hljs-comment"># docker image 재 빌드 필요시</span>
+docker-compose up --build [service name] <span class="hljs-comment"># 특정 서비스만 재빌드 후 실행</span>
+</code></pre></li>
+<li>이미 <code class="span">docker-compose up</code> 으로 실행된 상태에서<ul>
+<li><code class="span">docker-compose up</code> 죽은 컨테이너만 재시작</li>
+<li><code class="span">docker-compose up [service name]</code> 실행시 해당 서비스에 attach</li>
+<li><code class="span">docker-compose up --build [service name]</code> 빌드 후 재실 후 attach</li>
+</ul>
+</li>
+</ul>
+<h2 id="example">example</h2>
+<ul>
+<li>mlops 프로젝틀 하면서 설정했던 <code class="span">docker-compose.yml</code></li>
+</ul>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">services:</span>
+  <span class="hljs-attr">mlflow:</span>
+    <span class="hljs-comment"># 제공되는 이미지 그대로 사용</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">&quot;ghcr.io/mlflow/mlflow:v2.16.2&quot;</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-comment"># host:container</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;5001:5000&quot;</span>
+    <span class="hljs-attr">volumes:</span>
+      <span class="hljs-comment"># host:container</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;./mlflow:/mlruns&quot;</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;./mlartifacts:/mlartifacts&quot;</span>
+    <span class="hljs-attr">command:</span> [<span class="hljs-string">&quot;mlflow&quot;</span> , <span class="hljs-string">&quot;ui&quot;</span> , <span class="hljs-string">&quot;--host&quot;</span> , <span class="hljs-string">&quot;0.0.0.0&quot;</span>]
+  <span class="hljs-attr">airflow-web-server:</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">&quot;apache/airflow:2.10.2-python3.10&quot;</span>
+    <span class="hljs-comment"># user 설정</span>
+    <span class="hljs-attr">user:</span> <span class="hljs-string">&quot;0:0&quot;</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;5002:8080&quot;</span>
+    <span class="hljs-attr">volumes:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;./airflow:/opt/airflow&quot;</span>
+    <span class="hljs-attr">command:</span> [<span class="hljs-string">&quot;airflow&quot;</span>, <span class="hljs-string">&quot;webserver&quot;</span>]
+  <span class="hljs-attr">airflow-scheduler:</span>
+    <span class="hljs-comment"># dockerfile 을 통한 직접 빌드 시</span>
+    <span class="hljs-attr">build:</span>
+      <span class="hljs-attr">context:</span> <span class="hljs-string">&quot;.&quot;</span>
+      <span class="hljs-attr">dockerfile:</span> <span class="hljs-string">&quot;Dockerfile.mlops_airflow&quot;</span>
+    <span class="hljs-comment"># dockerfile 을 통한 직접 빌드 시, 이미지 명이 된다</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">&quot;mlops_airflow:latest&quot;</span>
+    <span class="hljs-attr">volumes:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;./airflow:/opt/airflow&quot;</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;./src/datasets:/opt/airflow/datasets&quot;</span>
+    <span class="hljs-comment"># service 실행 순서 보장</span>
+    <span class="hljs-attr">depends_on:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;airflow-web-server&quot;</span>
+    <span class="hljs-attr">command:</span> [<span class="hljs-string">&quot;airflow&quot;</span>, <span class="hljs-string">&quot;scheduler&quot;</span>]
+  <span class="hljs-attr">api:</span>
+    <span class="hljs-attr">build:</span>
+      <span class="hljs-attr">context:</span> <span class="hljs-string">&quot;.&quot;</span>
+      <span class="hljs-attr">dockerfile:</span> <span class="hljs-string">&quot;Dockerfile.mlops_api&quot;</span>
+    <span class="hljs-attr">image:</span> <span class="hljs-string">&quot;mlops_api:latest&quot;</span>
+    <span class="hljs-attr">volumes:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;./mlartifacts:/mlartifacts&quot;</span>
+    <span class="hljs-attr">ports:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;8000:8000&quot;</span>
+</code></pre><h2 id="link">link</h2>
+<ul>
+<li><a href="docker">docker</a></li>
+<li><a href="/public-wiki/diary/2024-10-08">[diary] diary:2024-10-08</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-39c74ed669a18122.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-1939e229d7d9d28d.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"docker-compose\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"YZITKW6vEo-03LGfrK9vS\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/docker-compose\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"docker-compose\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"docker-compose\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"docker-compose\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T146b,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"docker-compose\"\u003edocker-compose\u003c/h1\u003e\n\u003cul\u003e\n\u003cli\u003e여러 종류의 인스턴스를 동시에 띄워야하는경우, eg. server, client\u003c/li\u003e\n\u003cli\u003e각 service(\u003ca href=\"pod\"\u003epod\u003c/a\u003e) 간에 name 으로 통신이 가능하다 eg. \u003ca href=\"http://db:1111\" target=\"_blank\"\u003e[URL] http://db:1111/\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e하나의 서버만 재시작도 가능\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"usage\"\u003eusage\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003edocker-compose.yml\u003c/code\u003e 파일 작성 후\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003edocker-compose up\ndocker-compose up --build \u003cspan class=\"hljs-comment\"\u003e# docker image 재 빌드 필요시\u003c/span\u003e\ndocker-compose up --build [service name] \u003cspan class=\"hljs-comment\"\u003e# 특정 서비스만 재빌드 후 실행\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003e이미 \u003ccode class=\"span\"\u003edocker-compose up\u003c/code\u003e 으로 실행된 상태에서\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003edocker-compose up\u003c/code\u003e 죽은 컨테이너만 재시작\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003edocker-compose up [service name]\u003c/code\u003e 실행시 해당 서비스에 attach\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003edocker-compose up --build [service name]\u003c/code\u003e 빌드 후 재실 후 attach\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"example\"\u003eexample\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003emlops 프로젝틀 하면서 설정했던 \u003ccode class=\"span\"\u003edocker-compose.yml\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-yaml\"\u003e\u003cspan class=\"hljs-attr\"\u003eservices:\u003c/span\u003e\n  \u003cspan class=\"hljs-attr\"\u003emlflow:\u003c/span\u003e\n    \u003cspan class=\"hljs-comment\"\u003e# 제공되는 이미지 그대로 사용\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003eimage:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;ghcr.io/mlflow/mlflow:v2.16.2\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003eports:\u003c/span\u003e\n      \u003cspan class=\"hljs-comment\"\u003e# host:container\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;5001:5000\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003evolumes:\u003c/span\u003e\n      \u003cspan class=\"hljs-comment\"\u003e# host:container\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;./mlflow:/mlruns\u0026quot;\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;./mlartifacts:/mlartifacts\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003ecommand:\u003c/span\u003e [\u003cspan class=\"hljs-string\"\u003e\u0026quot;mlflow\u0026quot;\u003c/span\u003e , \u003cspan class=\"hljs-string\"\u003e\u0026quot;ui\u0026quot;\u003c/span\u003e , \u003cspan class=\"hljs-string\"\u003e\u0026quot;--host\u0026quot;\u003c/span\u003e , \u003cspan class=\"hljs-string\"\u003e\u0026quot;0.0.0.0\u0026quot;\u003c/span\u003e]\n  \u003cspan class=\"hljs-attr\"\u003eairflow-web-server:\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003eimage:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;apache/airflow:2.10.2-python3.10\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-comment\"\u003e# user 설정\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003euser:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;0:0\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003eports:\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;5002:8080\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003evolumes:\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;./airflow:/opt/airflow\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003ecommand:\u003c/span\u003e [\u003cspan class=\"hljs-string\"\u003e\u0026quot;airflow\u0026quot;\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e\u0026quot;webserver\u0026quot;\u003c/span\u003e]\n  \u003cspan class=\"hljs-attr\"\u003eairflow-scheduler:\u003c/span\u003e\n    \u003cspan class=\"hljs-comment\"\u003e# dockerfile 을 통한 직접 빌드 시\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003ebuild:\u003c/span\u003e\n      \u003cspan class=\"hljs-attr\"\u003econtext:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;.\u0026quot;\u003c/span\u003e\n      \u003cspan class=\"hljs-attr\"\u003edockerfile:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;Dockerfile.mlops_airflow\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-comment\"\u003e# dockerfile 을 통한 직접 빌드 시, 이미지 명이 된다\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003eimage:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;mlops_airflow:latest\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003evolumes:\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;./airflow:/opt/airflow\u0026quot;\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;./src/datasets:/opt/airflow/datasets\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-comment\"\u003e# service 실행 순서 보장\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003edepends_on:\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;airflow-web-server\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003ecommand:\u003c/span\u003e [\u003cspan class=\"hljs-string\"\u003e\u0026quot;airflow\u0026quot;\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e\u0026quot;scheduler\u0026quot;\u003c/span\u003e]\n  \u003cspan class=\"hljs-attr\"\u003eapi:\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003ebuild:\u003c/span\u003e\n      \u003cspan class=\"hljs-attr\"\u003econtext:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;.\u0026quot;\u003c/span\u003e\n      \u003cspan class=\"hljs-attr\"\u003edockerfile:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;Dockerfile.mlops_api\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003eimage:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;mlops_api:latest\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003evolumes:\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;./mlartifacts:/mlartifacts\u0026quot;\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003eports:\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;8000:8000\u0026quot;\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"docker\"\u003edocker\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"/public-wiki/diary/2024-10-08\"\u003e[diary] diary:2024-10-08\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/0733487\\n\",\"className\":\"bg-white text-black\",\"children\":\"0733487\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/docker-compose.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/docker-compose.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/docker-compose.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"docker-compose\",\"name\":\"docker-compose\",\"val\":3},{\"id\":\"pod\",\"name\":\"pod\",\"val\":6},{\"id\":\"docker\",\"name\":\"docker\",\"val\":7},{\"id\":\"diary/2024-10-08\",\"name\":\"diary/2024-10-08\",\"val\":2},{\"id\":\"upstage-ai-lab-day-57\",\"name\":\"upstage-ai-lab-day-57\",\"val\":8},{\"id\":\"upstage-ai-lab-day-62\",\"name\":\"upstage-ai-lab-day-62\",\"val\":8},{\"id\":\"upstage-ai-lab-day-77\",\"name\":\"upstage-ai-lab-day-77\",\"val\":9},{\"id\":\"upstage-ai-lab-day-92\",\"name\":\"upstage-ai-lab-day-92\",\"val\":9},{\"id\":\"upstage-ai-lab-project-03\",\"name\":\"upstage-ai-lab-project-03\",\"val\":36},{\"id\":\"upstage-ai-lab-project-04\",\"name\":\"upstage-ai-lab-project-04\",\"val\":31},{\"id\":\"upstage-ai-lab-project-05\",\"name\":\"upstage-ai-lab-project-05\",\"val\":27}],\"links\":[{\"source\":\"docker-compose\",\"target\":\"pod\"},{\"source\":\"docker-compose\",\"target\":\"docker\"},{\"source\":\"docker-compose\",\"target\":\"diary/2024-10-08\"},{\"source\":\"docker\",\"target\":\"docker-compose\"},{\"source\":\"upstage-ai-lab-day-57\",\"target\":\"docker-compose\"},{\"source\":\"upstage-ai-lab-day-62\",\"target\":\"docker-compose\"},{\"source\":\"upstage-ai-lab-day-77\",\"target\":\"docker-compose\"},{\"source\":\"upstage-ai-lab-day-92\",\"target\":\"docker-compose\"},{\"source\":\"upstage-ai-lab-project-03\",\"target\":\"docker-compose\"},{\"source\":\"upstage-ai-lab-project-03\",\"target\":\"docker-compose\"},{\"source\":\"upstage-ai-lab-project-03\",\"target\":\"docker-compose\"},{\"source\":\"upstage-ai-lab-project-03\",\"target\":\"docker-compose\"},{\"source\":\"upstage-ai-lab-project-03\",\"target\":\"docker-compose\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"docker-compose\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"docker-compose\"},{\"source\":\"diary/2024-10-08\",\"target\":\"docker-compose\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"docker-compose\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/docker-compose\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"docker-compose\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"pod\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/pod\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"pod\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"docker\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/docker\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"docker\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"diary/2024-10-08\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-10-08\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-10-08\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-day-57\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-57\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-57\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-day-62\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-62\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-62\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-day-77\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-77\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-77\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-day-92\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-92\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-92\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-project-03\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-project-03\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-project-03\"}],[\"$\",\"sup\",null,{\"children\":36}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-project-04\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-project-04\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-project-04\"}],[\"$\",\"sup\",null,{\"children\":31}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-project-05\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-project-05\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-project-05\"}],[\"$\",\"sup\",null,{\"children\":27}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"docker-compose\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#docker-compose\",\"children\":\"docker-compose\"}]}],[\"$\",\"div\",\"usage\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#usage\",\"children\":\"usage\"}]}],[\"$\",\"div\",\"example\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#example\",\"children\":\"example\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T7f0,"])</script><script>self.__next_f.push([1,"- 여러 종류의 인스턴스를 동시에 띄워야하는경우, eg. server, client\n- 각 service([[pod]]) 간에 name 으로 통신이 가능하다 eg. http://db:1111\n- 하나의 서버만 재시작도 가능\n\n## usage\n- `docker-compose.yml` 파일 작성 후\n  ```sh \n  docker-compose up\n  docker-compose up --build # docker image 재 빌드 필요시\n  docker-compose up --build [service name] # 특정 서비스만 재빌드 후 실행\n  ```\n- 이미 `docker-compose up` 으로 실행된 상태에서\n  - `docker-compose up` 죽은 컨테이너만 재시작\n  - `docker-compose up [service name]` 실행시 해당 서비스에 attach\n  - `docker-compose up --build [service name]` 빌드 후 재실 후 attach\n\n## example\n- mlops 프로젝틀 하면서 설정했던 `docker-compose.yml`\n```yaml\nservices:\n  mlflow:\n    # 제공되는 이미지 그대로 사용\n    image: \"ghcr.io/mlflow/mlflow:v2.16.2\"\n    ports:\n      # host:container\n      - \"5001:5000\"\n    volumes:\n      # host:container\n      - \"./mlflow:/mlruns\"\n      - \"./mlartifacts:/mlartifacts\"\n    command: [\"mlflow\" , \"ui\" , \"--host\" , \"0.0.0.0\"]\n  airflow-web-server:\n    image: \"apache/airflow:2.10.2-python3.10\"\n    # user 설정\n    user: \"0:0\"\n    ports:\n      - \"5002:8080\"\n    volumes:\n      - \"./airflow:/opt/airflow\"\n    command: [\"airflow\", \"webserver\"]\n  airflow-scheduler:\n    # dockerfile 을 통한 직접 빌드 시\n    build:\n      context: \".\"\n      dockerfile: \"Dockerfile.mlops_airflow\"\n    # dockerfile 을 통한 직접 빌드 시, 이미지 명이 된다\n    image: \"mlops_airflow:latest\"\n    volumes:\n      - \"./airflow:/opt/airflow\"\n      - \"./src/datasets:/opt/airflow/datasets\"\n    # service 실행 순서 보장\n    depends_on:\n      - \"airflow-web-server\"\n    command: [\"airflow\", \"scheduler\"]\n  api:\n    build:\n      context: \".\"\n      dockerfile: \"Dockerfile.mlops_api\"\n    image: \"mlops_api:latest\"\n    volumes:\n      - \"./mlartifacts:/mlartifacts\"\n    ports:\n      - \"8000:8000\"\n```\n\n## link\n- [[docker]]\n- [[diary:2024-10-08]]\n"])</script><script>self.__next_f.push([1,"16:T7f0,"])</script><script>self.__next_f.push([1,"- 여러 종류의 인스턴스를 동시에 띄워야하는경우, eg. server, client\n- 각 service([[pod]]) 간에 name 으로 통신이 가능하다 eg. http://db:1111\n- 하나의 서버만 재시작도 가능\n\n## usage\n- `docker-compose.yml` 파일 작성 후\n  ```sh \n  docker-compose up\n  docker-compose up --build # docker image 재 빌드 필요시\n  docker-compose up --build [service name] # 특정 서비스만 재빌드 후 실행\n  ```\n- 이미 `docker-compose up` 으로 실행된 상태에서\n  - `docker-compose up` 죽은 컨테이너만 재시작\n  - `docker-compose up [service name]` 실행시 해당 서비스에 attach\n  - `docker-compose up --build [service name]` 빌드 후 재실 후 attach\n\n## example\n- mlops 프로젝틀 하면서 설정했던 `docker-compose.yml`\n```yaml\nservices:\n  mlflow:\n    # 제공되는 이미지 그대로 사용\n    image: \"ghcr.io/mlflow/mlflow:v2.16.2\"\n    ports:\n      # host:container\n      - \"5001:5000\"\n    volumes:\n      # host:container\n      - \"./mlflow:/mlruns\"\n      - \"./mlartifacts:/mlartifacts\"\n    command: [\"mlflow\" , \"ui\" , \"--host\" , \"0.0.0.0\"]\n  airflow-web-server:\n    image: \"apache/airflow:2.10.2-python3.10\"\n    # user 설정\n    user: \"0:0\"\n    ports:\n      - \"5002:8080\"\n    volumes:\n      - \"./airflow:/opt/airflow\"\n    command: [\"airflow\", \"webserver\"]\n  airflow-scheduler:\n    # dockerfile 을 통한 직접 빌드 시\n    build:\n      context: \".\"\n      dockerfile: \"Dockerfile.mlops_airflow\"\n    # dockerfile 을 통한 직접 빌드 시, 이미지 명이 된다\n    image: \"mlops_airflow:latest\"\n    volumes:\n      - \"./airflow:/opt/airflow\"\n      - \"./src/datasets:/opt/airflow/datasets\"\n    # service 실행 순서 보장\n    depends_on:\n      - \"airflow-web-server\"\n    command: [\"airflow\", \"scheduler\"]\n  api:\n    build:\n      context: \".\"\n      dockerfile: \"Dockerfile.mlops_api\"\n    image: \"mlops_api:latest\"\n    volumes:\n      - \"./mlartifacts:/mlartifacts\"\n    ports:\n      - \"8000:8000\"\n```\n\n## link\n- [[docker]]\n- [[diary:2024-10-08]]\n"])</script><script>self.__next_f.push([1,"17:T7f0,"])</script><script>self.__next_f.push([1,"- 여러 종류의 인스턴스를 동시에 띄워야하는경우, eg. server, client\n- 각 service([[pod]]) 간에 name 으로 통신이 가능하다 eg. http://db:1111\n- 하나의 서버만 재시작도 가능\n\n## usage\n- `docker-compose.yml` 파일 작성 후\n  ```sh \n  docker-compose up\n  docker-compose up --build # docker image 재 빌드 필요시\n  docker-compose up --build [service name] # 특정 서비스만 재빌드 후 실행\n  ```\n- 이미 `docker-compose up` 으로 실행된 상태에서\n  - `docker-compose up` 죽은 컨테이너만 재시작\n  - `docker-compose up [service name]` 실행시 해당 서비스에 attach\n  - `docker-compose up --build [service name]` 빌드 후 재실 후 attach\n\n## example\n- mlops 프로젝틀 하면서 설정했던 `docker-compose.yml`\n```yaml\nservices:\n  mlflow:\n    # 제공되는 이미지 그대로 사용\n    image: \"ghcr.io/mlflow/mlflow:v2.16.2\"\n    ports:\n      # host:container\n      - \"5001:5000\"\n    volumes:\n      # host:container\n      - \"./mlflow:/mlruns\"\n      - \"./mlartifacts:/mlartifacts\"\n    command: [\"mlflow\" , \"ui\" , \"--host\" , \"0.0.0.0\"]\n  airflow-web-server:\n    image: \"apache/airflow:2.10.2-python3.10\"\n    # user 설정\n    user: \"0:0\"\n    ports:\n      - \"5002:8080\"\n    volumes:\n      - \"./airflow:/opt/airflow\"\n    command: [\"airflow\", \"webserver\"]\n  airflow-scheduler:\n    # dockerfile 을 통한 직접 빌드 시\n    build:\n      context: \".\"\n      dockerfile: \"Dockerfile.mlops_airflow\"\n    # dockerfile 을 통한 직접 빌드 시, 이미지 명이 된다\n    image: \"mlops_airflow:latest\"\n    volumes:\n      - \"./airflow:/opt/airflow\"\n      - \"./src/datasets:/opt/airflow/datasets\"\n    # service 실행 순서 보장\n    depends_on:\n      - \"airflow-web-server\"\n    command: [\"airflow\", \"scheduler\"]\n  api:\n    build:\n      context: \".\"\n      dockerfile: \"Dockerfile.mlops_api\"\n    image: \"mlops_api:latest\"\n    volumes:\n      - \"./mlartifacts:/mlartifacts\"\n    ports:\n      - \"8000:8000\"\n```\n\n## link\n- [[docker]]\n- [[diary:2024-10-08]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# docker-compose\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# docker-compose\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/docker-compose\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# docker-compose\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
