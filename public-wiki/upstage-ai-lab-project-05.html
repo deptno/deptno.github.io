@@ -1,0 +1,860 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/51cae7d269711d54.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-fc7b02681ce1a837.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-a049f68e7ea32292.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># NLP Summary 대회</title><meta name="description" content="
+## 대회
+### 개요
+- DialogSum 번역 데이터를 통해 요약문을 생성하여 정답지와의 ROUGE-F1 스코어를 높인다
+- 요약문은 원문의 20% 내외
+
+### 분석
+- 평가는 dialogue 하나당 각기 다른 포커스를 가진 3개의 summary 가 있고 이를 통해 점수를 낸다고함
+  - 설명이 두루뭉실하여 완전히 파악 못함
+- 데이터셋은 dialogue, summary 외에도 핵심 단어일 것으로 추측되는 topic 이 주어짐
+- wandb 경험을 위해 제공된 `baseline` 의 코드에서 `wandb` 설정을 가지고 있음
+
+### 제공 환경
+- [[vpn]]
+- [[ssh]]
+- AMD Ryzen Threadripper 3970X 32-Core Processor
+- RTX 3090, 24Gb
+
+## 개인적인 목표
+- [X] 대회전에 강의 다 듣기
+- [X] 시스템
+  - [X] mlflow 적용
+  - [X] server 에 job queue 적용
+- [ ] 대회 잘 해보기
+
+## 팀
+### 운영
+- 각자 해보고 증강 데이터는 공유
+- 2주에 걸친 대회기간 중 1주는 수업이 이 겹치므로 이 기간은 각자해보고 마지막 한주는 공유하면서 진행
+
+## EDA
+|      | dataset | dialogue | summary |                            |
+|------|---------|----------|---------|----------------------------|
+| 왜도 |         | right    | right   |                            |
+| 크기 | train   | 12457    | 12457   | `topic` 포함               |
+|      | valid   | 499      | 499     | `topic` 포함               |
+|      | test    | 499      | 499     | public(250) / private(249) |
+| 어체 |         | 구어체   | 평문    |                            |
+
+
+## 계획
+- GPU 사용 시간을 최적화 할 수 있는 시스템을 가지고 시작
+- 대회의 점수 방식과 유사한 방식의 평가 방식을 로컬에 적용후 시작
+- [[mlflow]] 활용을 잘 해보기
+
+## 멘토링 :mentoring:
+- 여러가지 코멘트가 많았지만 중요한 점을 요약해 본다면 2가지
+- 모델 추천
+  - 한국어 모델 써봐라, llm, back translation 을 위한 번역 모델, 요약 모델
+    - lg exaone
+    - nllb en ko
+    - m2m
+    - pko-t5 등
+- 내가 궁금한 점에 대한 답변
+  - 강화학습은 훈련데이터로 한번 더하는거냐
+    - 그렇다 근데 하지마라
+  - 생성해야하는 길이가 다 다른데
+    - data collator 를 사용하면 유사한 길이 끼리 모아준다
+- 그리고
+  - 증강된 데이터의 품질이 좋아야한다
+  - 요약 대회라기보단 요약 정답지에 맞추는게 목표
+  - 하이퍼파라메터 튜닝은 마지막에 하는 것
+
+## 진행
+### 팀원
+- 데이터 증강, 특히 back translation에 집중
+  - 시도
+    - Random Masking Insertion
+    - 여러가지 adverb 교체
+    - back translation
+  - back translation 외에는 효과가 별로
+    - 영어 to 한글 외에도 어순이 다른 언어를 적용
+- kogamza 등 다른 kobart 시도
+- pko-t5 계열 시도
+
+### 나
+- [[mlflow]], [[wandb]] 적용
+  - [[mlflow]] 적용하면서 [[kubernetes]] 에 오리는데 여러가지 try-and-error 가 있었음
+  - [[mlflow]] 는 하나하나 해줘야하는 설정이 많음, 마지막까지 시간 관계상 처리하지 못한건 시스템 로그 보기
+- [[vscode]], [[vim]] binding을 사용하는데 함수를 못 따라가는 것이 너무 치명적이고 왔다가 갔다하기 어려워서 스크립트 코드로 진행
+  - 이 부분은 아래 [[#retrospective]]
+- local ROUGE-F1 스코어가 public score 와 괴리가 심함
+  - rouge score 계산시에 kkma 형태소 분석기를 적용하여 점수를 근접하게 맞춤
+    - konlpy 에 다섯개의 형태소 분석기 중 가장 점수가 높게나온 kkma 를 사용
+    - 2개는 에러가 나서 사용하지 못했는데 그중 mecab 이 표준일 거라함, [[#mentoring]]
+- 스페셜 토큰은 전체 16개로 검색되었지만 적용시에 점수가 오히려 떨어졌음
+- 팀원과 겹치지 않는 증강 시도
+  - solar credit($10)를 사용하여
+    - solar LLM 을 이용
+      - pro 는 영어 전용 모델인 것 같고 mini 로 진행
+      - 말을 알아듣는거같으나 뒤에 쓸때 없는 문장들이 끌려 오는 문제
+      - 프롬프트 엔지니어링을 고도화 할 것이냐 -&gt; 그냥 번역 전용 api를 사용하기로함
+    - back translation 진행
+      - translation 전용 api로 진행
+        - 방심한 나머지 제공된 $10 로는 데이터 데이터셋 bt가 불가능한 걸 늦게 인지, ~~왜준겨~~..
+        - 그나마 확인된 결과도 few shot 주입이 안되서 special token 도 같이 번역되어 버림
+          - 전, 후처리를 하거나 여러가지 복잡한 처리가 필요
+          - 아 이러면 그냥 프롬프트 엔지니어링을 했어야
+  - 학습시에 summary 길이를 스페셜 토큰으로 만들어 원문에 삽입
+    - 멘토링시 답변이 회의적이라 적용하지 않음
+- 멘토링 이후 추천받은 적용
+  - pko-t5 적용
+    - 막상 적용을 하려고보니 그냥 모델만 갈아끼면 되는게 아니라 데이터 입력형식이 모델마다 존쟇는 것으로 보임
+    - 이를 돌릴때는 이미 팀원이 조금 상위권의 점수를 확보
+    - 딱히 같은 모델+데이터 돌리는 것이 없을 껏 같아 시스템 고도화 몰입
+
+## 최종 결과
+- 2등
+  - leader board
+    - public 2등(0.5855	0.4070	0.5167	50.3062)
+    - private 2등(	0.5715	0.3799	0.4826	47.8024)
+
+## 결과 피드백
+### 다른팀
+- 데이터가 커지고 llm이 커지면서 데이터 클리닝의 중요성이 줄고 있긴하다
+- 정성 분석이 필요하다, 데이터건 결과건
+- automl 파트가 죽어간다, [[optuna]] 와 같은 파라메터 튜너
+  - 데이터도 적고, 모델크기가 작아서 여러번할수있었다
+  - 하나하나의 실험의 부담이 크다보니 그렇게하지 않는 것 같다
+- 데이터에 노이즈가 있었다.
+  - 중복 샘플
+  - 다른 요약문
+
+### 우리팀
+- 데이터 증강후 해당 데이터마다 정성평가를 하고 점수를 트랙킹한 부분이 좋았다.
+  - `왜` 가 약한 것은 아쉽다
+
+## 회고 :retrospective:
+- llm 분야에서는 상용 llm 파인튜닝이 최고의 결과를 도출할 것 같다.
+  - 목표를 한정해서 하나의 타스크를 수행한다면 못할 것은 없어보인다
+  - 다만 이번대회가 이런 경험을 가져가기에는 어렵게 설계된 느낌이 있다.
+- 베이스라인을 넘기는것 자체가 어려웠고, 처음에 시드 고정이 안되서 조금 헤멘 느낌이 있다.
+  - 반드시 시드고정 먼저 진행
+- data 기반이 어려운 문제라(원문 -&gt; 영어 번역으로 대회 진행)
+  - 결국 모델 싸움으로 가는 느낌이고 그런경우 상용모델을 이기기 어려워 동기부여가 떨어졌다
+- back translate 등을 진행할때 너무 오래걸려서 처음으로 async 코드 작성 시작
+- 아래 내용은 이전 회고로 부터의 피드백 반영
+  - 이전 프로 젝트 회고
+    + [[upstage-ai-lab-project-04#retrospective]]
+  - ssh 개발 환경
+    - 이번엔 스크립트로 워커 큐를 만들어서 py 스크립트를 큐에쌓아서 지속적으로 실행할 수 있도록했다
+      - 이를 위해 처음에는 [[jupyter#nbconvert]] 를 활용한 스크립트 변환 활용
+      - 이후에는 eda 를 제외한 영역은 스크립트로 작성해사 사용했다.
+    - [[chatgpt]] 가 코드에디어와 협업을 지원하기 시작
+      - 시작 시점에는 [[vscode]] 만 지원 -&gt; 대회 도중에 [[pycharm]] 지원이 업데이트 됨
+      - 로컬만 프로젝트만 지원해서 로컬 코드 작성후 -&gt; [[scp]] 를 활용한 파일 복사를 사용
+    - 저번에 서버 터졌으므로 [[git]] 에 차곡차곡 저장
+  - eda
+    - 데이터를 시각화를 먼저하고 가설 설계
+      - 길이 토큰
+  - 일정 관리
+    - 대회 시작전 강의 먼저 모두 수강하여 시간 확보
+  - 코드 익숙도
+    - 코드를 먼저 분석하고 들어갔으나 여전히 jupyter 로 큰파일을 진행하기에는 ide도움이 너무 떨어지는 문제
+    - 다음 프로젝트 에서는
+      - [ ] [[mlflow]] 나 저장, 평가등 일부 루틴화된 영역을 처음에 분리하고 수정포인트 업데이트 하는 방식이 좋겠다
+  - 모델링
+    - 역시 모델링 선택에 대한 근거는 여전히 부족
+  - 툴
+    - wandb 사용을 하며 서로 비교할 수 있었다
+    - [[mlflow]]
+      - 많은 해결을 하였고 다음엔 system log만 추가적으로 저장하면 될 것같다
+      - wandb 와 달리 sweep 이 없어서 이부분은 [[optuna]] 를 적용해 보았다
+        - 파라메터 튜닝 별로 할게 없어서 적용하는 경험에 의의
+  - 결과
+    - 이번엔 저번과 달리 데이터 증강이나, 앙상블에 의한 변화가 적은 프로젝트
+    - 모델의 중요성을 크다는 것을 느낌
+    - 무엇보다 반복실험에 있어서는 효율적인 시스템과 툴 사용을 통한 기록의 시각화가 많은 도움이 되었음
+    - [ ] 다음에는 반복적인 실험에 대한 계획을 잘짜서 만들어진 시스템을 활용해 보아야겠다
+
+## link
+- [[upstage-ai-lab]]
+- [[fastapi]]
+- [[docker]]
+- [[docker-compose]]
+- [[upstage-ai-lab-project-04]]
+- [[upstage-ai-lab-project-06]]
+- [[wn.private:upstage-ai-lab-project-05]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# NLP Summary 대회"/><meta property="og:description" content="
+## 대회
+### 개요
+- DialogSum 번역 데이터를 통해 요약문을 생성하여 정답지와의 ROUGE-F1 스코어를 높인다
+- 요약문은 원문의 20% 내외
+
+### 분석
+- 평가는 dialogue 하나당 각기 다른 포커스를 가진 3개의 summary 가 있고 이를 통해 점수를 낸다고함
+  - 설명이 두루뭉실하여 완전히 파악 못함
+- 데이터셋은 dialogue, summary 외에도 핵심 단어일 것으로 추측되는 topic 이 주어짐
+- wandb 경험을 위해 제공된 `baseline` 의 코드에서 `wandb` 설정을 가지고 있음
+
+### 제공 환경
+- [[vpn]]
+- [[ssh]]
+- AMD Ryzen Threadripper 3970X 32-Core Processor
+- RTX 3090, 24Gb
+
+## 개인적인 목표
+- [X] 대회전에 강의 다 듣기
+- [X] 시스템
+  - [X] mlflow 적용
+  - [X] server 에 job queue 적용
+- [ ] 대회 잘 해보기
+
+## 팀
+### 운영
+- 각자 해보고 증강 데이터는 공유
+- 2주에 걸친 대회기간 중 1주는 수업이 이 겹치므로 이 기간은 각자해보고 마지막 한주는 공유하면서 진행
+
+## EDA
+|      | dataset | dialogue | summary |                            |
+|------|---------|----------|---------|----------------------------|
+| 왜도 |         | right    | right   |                            |
+| 크기 | train   | 12457    | 12457   | `topic` 포함               |
+|      | valid   | 499      | 499     | `topic` 포함               |
+|      | test    | 499      | 499     | public(250) / private(249) |
+| 어체 |         | 구어체   | 평문    |                            |
+
+
+## 계획
+- GPU 사용 시간을 최적화 할 수 있는 시스템을 가지고 시작
+- 대회의 점수 방식과 유사한 방식의 평가 방식을 로컬에 적용후 시작
+- [[mlflow]] 활용을 잘 해보기
+
+## 멘토링 :mentoring:
+- 여러가지 코멘트가 많았지만 중요한 점을 요약해 본다면 2가지
+- 모델 추천
+  - 한국어 모델 써봐라, llm, back translation 을 위한 번역 모델, 요약 모델
+    - lg exaone
+    - nllb en ko
+    - m2m
+    - pko-t5 등
+- 내가 궁금한 점에 대한 답변
+  - 강화학습은 훈련데이터로 한번 더하는거냐
+    - 그렇다 근데 하지마라
+  - 생성해야하는 길이가 다 다른데
+    - data collator 를 사용하면 유사한 길이 끼리 모아준다
+- 그리고
+  - 증강된 데이터의 품질이 좋아야한다
+  - 요약 대회라기보단 요약 정답지에 맞추는게 목표
+  - 하이퍼파라메터 튜닝은 마지막에 하는 것
+
+## 진행
+### 팀원
+- 데이터 증강, 특히 back translation에 집중
+  - 시도
+    - Random Masking Insertion
+    - 여러가지 adverb 교체
+    - back translation
+  - back translation 외에는 효과가 별로
+    - 영어 to 한글 외에도 어순이 다른 언어를 적용
+- kogamza 등 다른 kobart 시도
+- pko-t5 계열 시도
+
+### 나
+- [[mlflow]], [[wandb]] 적용
+  - [[mlflow]] 적용하면서 [[kubernetes]] 에 오리는데 여러가지 try-and-error 가 있었음
+  - [[mlflow]] 는 하나하나 해줘야하는 설정이 많음, 마지막까지 시간 관계상 처리하지 못한건 시스템 로그 보기
+- [[vscode]], [[vim]] binding을 사용하는데 함수를 못 따라가는 것이 너무 치명적이고 왔다가 갔다하기 어려워서 스크립트 코드로 진행
+  - 이 부분은 아래 [[#retrospective]]
+- local ROUGE-F1 스코어가 public score 와 괴리가 심함
+  - rouge score 계산시에 kkma 형태소 분석기를 적용하여 점수를 근접하게 맞춤
+    - konlpy 에 다섯개의 형태소 분석기 중 가장 점수가 높게나온 kkma 를 사용
+    - 2개는 에러가 나서 사용하지 못했는데 그중 mecab 이 표준일 거라함, [[#mentoring]]
+- 스페셜 토큰은 전체 16개로 검색되었지만 적용시에 점수가 오히려 떨어졌음
+- 팀원과 겹치지 않는 증강 시도
+  - solar credit($10)를 사용하여
+    - solar LLM 을 이용
+      - pro 는 영어 전용 모델인 것 같고 mini 로 진행
+      - 말을 알아듣는거같으나 뒤에 쓸때 없는 문장들이 끌려 오는 문제
+      - 프롬프트 엔지니어링을 고도화 할 것이냐 -&gt; 그냥 번역 전용 api를 사용하기로함
+    - back translation 진행
+      - translation 전용 api로 진행
+        - 방심한 나머지 제공된 $10 로는 데이터 데이터셋 bt가 불가능한 걸 늦게 인지, ~~왜준겨~~..
+        - 그나마 확인된 결과도 few shot 주입이 안되서 special token 도 같이 번역되어 버림
+          - 전, 후처리를 하거나 여러가지 복잡한 처리가 필요
+          - 아 이러면 그냥 프롬프트 엔지니어링을 했어야
+  - 학습시에 summary 길이를 스페셜 토큰으로 만들어 원문에 삽입
+    - 멘토링시 답변이 회의적이라 적용하지 않음
+- 멘토링 이후 추천받은 적용
+  - pko-t5 적용
+    - 막상 적용을 하려고보니 그냥 모델만 갈아끼면 되는게 아니라 데이터 입력형식이 모델마다 존쟇는 것으로 보임
+    - 이를 돌릴때는 이미 팀원이 조금 상위권의 점수를 확보
+    - 딱히 같은 모델+데이터 돌리는 것이 없을 껏 같아 시스템 고도화 몰입
+
+## 최종 결과
+- 2등
+  - leader board
+    - public 2등(0.5855	0.4070	0.5167	50.3062)
+    - private 2등(	0.5715	0.3799	0.4826	47.8024)
+
+## 결과 피드백
+### 다른팀
+- 데이터가 커지고 llm이 커지면서 데이터 클리닝의 중요성이 줄고 있긴하다
+- 정성 분석이 필요하다, 데이터건 결과건
+- automl 파트가 죽어간다, [[optuna]] 와 같은 파라메터 튜너
+  - 데이터도 적고, 모델크기가 작아서 여러번할수있었다
+  - 하나하나의 실험의 부담이 크다보니 그렇게하지 않는 것 같다
+- 데이터에 노이즈가 있었다.
+  - 중복 샘플
+  - 다른 요약문
+
+### 우리팀
+- 데이터 증강후 해당 데이터마다 정성평가를 하고 점수를 트랙킹한 부분이 좋았다.
+  - `왜` 가 약한 것은 아쉽다
+
+## 회고 :retrospective:
+- llm 분야에서는 상용 llm 파인튜닝이 최고의 결과를 도출할 것 같다.
+  - 목표를 한정해서 하나의 타스크를 수행한다면 못할 것은 없어보인다
+  - 다만 이번대회가 이런 경험을 가져가기에는 어렵게 설계된 느낌이 있다.
+- 베이스라인을 넘기는것 자체가 어려웠고, 처음에 시드 고정이 안되서 조금 헤멘 느낌이 있다.
+  - 반드시 시드고정 먼저 진행
+- data 기반이 어려운 문제라(원문 -&gt; 영어 번역으로 대회 진행)
+  - 결국 모델 싸움으로 가는 느낌이고 그런경우 상용모델을 이기기 어려워 동기부여가 떨어졌다
+- back translate 등을 진행할때 너무 오래걸려서 처음으로 async 코드 작성 시작
+- 아래 내용은 이전 회고로 부터의 피드백 반영
+  - 이전 프로 젝트 회고
+    + [[upstage-ai-lab-project-04#retrospective]]
+  - ssh 개발 환경
+    - 이번엔 스크립트로 워커 큐를 만들어서 py 스크립트를 큐에쌓아서 지속적으로 실행할 수 있도록했다
+      - 이를 위해 처음에는 [[jupyter#nbconvert]] 를 활용한 스크립트 변환 활용
+      - 이후에는 eda 를 제외한 영역은 스크립트로 작성해사 사용했다.
+    - [[chatgpt]] 가 코드에디어와 협업을 지원하기 시작
+      - 시작 시점에는 [[vscode]] 만 지원 -&gt; 대회 도중에 [[pycharm]] 지원이 업데이트 됨
+      - 로컬만 프로젝트만 지원해서 로컬 코드 작성후 -&gt; [[scp]] 를 활용한 파일 복사를 사용
+    - 저번에 서버 터졌으므로 [[git]] 에 차곡차곡 저장
+  - eda
+    - 데이터를 시각화를 먼저하고 가설 설계
+      - 길이 토큰
+  - 일정 관리
+    - 대회 시작전 강의 먼저 모두 수강하여 시간 확보
+  - 코드 익숙도
+    - 코드를 먼저 분석하고 들어갔으나 여전히 jupyter 로 큰파일을 진행하기에는 ide도움이 너무 떨어지는 문제
+    - 다음 프로젝트 에서는
+      - [ ] [[mlflow]] 나 저장, 평가등 일부 루틴화된 영역을 처음에 분리하고 수정포인트 업데이트 하는 방식이 좋겠다
+  - 모델링
+    - 역시 모델링 선택에 대한 근거는 여전히 부족
+  - 툴
+    - wandb 사용을 하며 서로 비교할 수 있었다
+    - [[mlflow]]
+      - 많은 해결을 하였고 다음엔 system log만 추가적으로 저장하면 될 것같다
+      - wandb 와 달리 sweep 이 없어서 이부분은 [[optuna]] 를 적용해 보았다
+        - 파라메터 튜닝 별로 할게 없어서 적용하는 경험에 의의
+  - 결과
+    - 이번엔 저번과 달리 데이터 증강이나, 앙상블에 의한 변화가 적은 프로젝트
+    - 모델의 중요성을 크다는 것을 느낌
+    - 무엇보다 반복실험에 있어서는 효율적인 시스템과 툴 사용을 통한 기록의 시각화가 많은 도움이 되었음
+    - [ ] 다음에는 반복적인 실험에 대한 계획을 잘짜서 만들어진 시스템을 활용해 보아야겠다
+
+## link
+- [[upstage-ai-lab]]
+- [[fastapi]]
+- [[docker]]
+- [[docker-compose]]
+- [[upstage-ai-lab-project-04]]
+- [[upstage-ai-lab-project-06]]
+- [[wn.private:upstage-ai-lab-project-05]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/upstage-ai-lab-project-05"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# NLP Summary 대회"/><meta name="twitter:description" content="
+## 대회
+### 개요
+- DialogSum 번역 데이터를 통해 요약문을 생성하여 정답지와의 ROUGE-F1 스코어를 높인다
+- 요약문은 원문의 20% 내외
+
+### 분석
+- 평가는 dialogue 하나당 각기 다른 포커스를 가진 3개의 summary 가 있고 이를 통해 점수를 낸다고함
+  - 설명이 두루뭉실하여 완전히 파악 못함
+- 데이터셋은 dialogue, summary 외에도 핵심 단어일 것으로 추측되는 topic 이 주어짐
+- wandb 경험을 위해 제공된 `baseline` 의 코드에서 `wandb` 설정을 가지고 있음
+
+### 제공 환경
+- [[vpn]]
+- [[ssh]]
+- AMD Ryzen Threadripper 3970X 32-Core Processor
+- RTX 3090, 24Gb
+
+## 개인적인 목표
+- [X] 대회전에 강의 다 듣기
+- [X] 시스템
+  - [X] mlflow 적용
+  - [X] server 에 job queue 적용
+- [ ] 대회 잘 해보기
+
+## 팀
+### 운영
+- 각자 해보고 증강 데이터는 공유
+- 2주에 걸친 대회기간 중 1주는 수업이 이 겹치므로 이 기간은 각자해보고 마지막 한주는 공유하면서 진행
+
+## EDA
+|      | dataset | dialogue | summary |                            |
+|------|---------|----------|---------|----------------------------|
+| 왜도 |         | right    | right   |                            |
+| 크기 | train   | 12457    | 12457   | `topic` 포함               |
+|      | valid   | 499      | 499     | `topic` 포함               |
+|      | test    | 499      | 499     | public(250) / private(249) |
+| 어체 |         | 구어체   | 평문    |                            |
+
+
+## 계획
+- GPU 사용 시간을 최적화 할 수 있는 시스템을 가지고 시작
+- 대회의 점수 방식과 유사한 방식의 평가 방식을 로컬에 적용후 시작
+- [[mlflow]] 활용을 잘 해보기
+
+## 멘토링 :mentoring:
+- 여러가지 코멘트가 많았지만 중요한 점을 요약해 본다면 2가지
+- 모델 추천
+  - 한국어 모델 써봐라, llm, back translation 을 위한 번역 모델, 요약 모델
+    - lg exaone
+    - nllb en ko
+    - m2m
+    - pko-t5 등
+- 내가 궁금한 점에 대한 답변
+  - 강화학습은 훈련데이터로 한번 더하는거냐
+    - 그렇다 근데 하지마라
+  - 생성해야하는 길이가 다 다른데
+    - data collator 를 사용하면 유사한 길이 끼리 모아준다
+- 그리고
+  - 증강된 데이터의 품질이 좋아야한다
+  - 요약 대회라기보단 요약 정답지에 맞추는게 목표
+  - 하이퍼파라메터 튜닝은 마지막에 하는 것
+
+## 진행
+### 팀원
+- 데이터 증강, 특히 back translation에 집중
+  - 시도
+    - Random Masking Insertion
+    - 여러가지 adverb 교체
+    - back translation
+  - back translation 외에는 효과가 별로
+    - 영어 to 한글 외에도 어순이 다른 언어를 적용
+- kogamza 등 다른 kobart 시도
+- pko-t5 계열 시도
+
+### 나
+- [[mlflow]], [[wandb]] 적용
+  - [[mlflow]] 적용하면서 [[kubernetes]] 에 오리는데 여러가지 try-and-error 가 있었음
+  - [[mlflow]] 는 하나하나 해줘야하는 설정이 많음, 마지막까지 시간 관계상 처리하지 못한건 시스템 로그 보기
+- [[vscode]], [[vim]] binding을 사용하는데 함수를 못 따라가는 것이 너무 치명적이고 왔다가 갔다하기 어려워서 스크립트 코드로 진행
+  - 이 부분은 아래 [[#retrospective]]
+- local ROUGE-F1 스코어가 public score 와 괴리가 심함
+  - rouge score 계산시에 kkma 형태소 분석기를 적용하여 점수를 근접하게 맞춤
+    - konlpy 에 다섯개의 형태소 분석기 중 가장 점수가 높게나온 kkma 를 사용
+    - 2개는 에러가 나서 사용하지 못했는데 그중 mecab 이 표준일 거라함, [[#mentoring]]
+- 스페셜 토큰은 전체 16개로 검색되었지만 적용시에 점수가 오히려 떨어졌음
+- 팀원과 겹치지 않는 증강 시도
+  - solar credit($10)를 사용하여
+    - solar LLM 을 이용
+      - pro 는 영어 전용 모델인 것 같고 mini 로 진행
+      - 말을 알아듣는거같으나 뒤에 쓸때 없는 문장들이 끌려 오는 문제
+      - 프롬프트 엔지니어링을 고도화 할 것이냐 -&gt; 그냥 번역 전용 api를 사용하기로함
+    - back translation 진행
+      - translation 전용 api로 진행
+        - 방심한 나머지 제공된 $10 로는 데이터 데이터셋 bt가 불가능한 걸 늦게 인지, ~~왜준겨~~..
+        - 그나마 확인된 결과도 few shot 주입이 안되서 special token 도 같이 번역되어 버림
+          - 전, 후처리를 하거나 여러가지 복잡한 처리가 필요
+          - 아 이러면 그냥 프롬프트 엔지니어링을 했어야
+  - 학습시에 summary 길이를 스페셜 토큰으로 만들어 원문에 삽입
+    - 멘토링시 답변이 회의적이라 적용하지 않음
+- 멘토링 이후 추천받은 적용
+  - pko-t5 적용
+    - 막상 적용을 하려고보니 그냥 모델만 갈아끼면 되는게 아니라 데이터 입력형식이 모델마다 존쟇는 것으로 보임
+    - 이를 돌릴때는 이미 팀원이 조금 상위권의 점수를 확보
+    - 딱히 같은 모델+데이터 돌리는 것이 없을 껏 같아 시스템 고도화 몰입
+
+## 최종 결과
+- 2등
+  - leader board
+    - public 2등(0.5855	0.4070	0.5167	50.3062)
+    - private 2등(	0.5715	0.3799	0.4826	47.8024)
+
+## 결과 피드백
+### 다른팀
+- 데이터가 커지고 llm이 커지면서 데이터 클리닝의 중요성이 줄고 있긴하다
+- 정성 분석이 필요하다, 데이터건 결과건
+- automl 파트가 죽어간다, [[optuna]] 와 같은 파라메터 튜너
+  - 데이터도 적고, 모델크기가 작아서 여러번할수있었다
+  - 하나하나의 실험의 부담이 크다보니 그렇게하지 않는 것 같다
+- 데이터에 노이즈가 있었다.
+  - 중복 샘플
+  - 다른 요약문
+
+### 우리팀
+- 데이터 증강후 해당 데이터마다 정성평가를 하고 점수를 트랙킹한 부분이 좋았다.
+  - `왜` 가 약한 것은 아쉽다
+
+## 회고 :retrospective:
+- llm 분야에서는 상용 llm 파인튜닝이 최고의 결과를 도출할 것 같다.
+  - 목표를 한정해서 하나의 타스크를 수행한다면 못할 것은 없어보인다
+  - 다만 이번대회가 이런 경험을 가져가기에는 어렵게 설계된 느낌이 있다.
+- 베이스라인을 넘기는것 자체가 어려웠고, 처음에 시드 고정이 안되서 조금 헤멘 느낌이 있다.
+  - 반드시 시드고정 먼저 진행
+- data 기반이 어려운 문제라(원문 -&gt; 영어 번역으로 대회 진행)
+  - 결국 모델 싸움으로 가는 느낌이고 그런경우 상용모델을 이기기 어려워 동기부여가 떨어졌다
+- back translate 등을 진행할때 너무 오래걸려서 처음으로 async 코드 작성 시작
+- 아래 내용은 이전 회고로 부터의 피드백 반영
+  - 이전 프로 젝트 회고
+    + [[upstage-ai-lab-project-04#retrospective]]
+  - ssh 개발 환경
+    - 이번엔 스크립트로 워커 큐를 만들어서 py 스크립트를 큐에쌓아서 지속적으로 실행할 수 있도록했다
+      - 이를 위해 처음에는 [[jupyter#nbconvert]] 를 활용한 스크립트 변환 활용
+      - 이후에는 eda 를 제외한 영역은 스크립트로 작성해사 사용했다.
+    - [[chatgpt]] 가 코드에디어와 협업을 지원하기 시작
+      - 시작 시점에는 [[vscode]] 만 지원 -&gt; 대회 도중에 [[pycharm]] 지원이 업데이트 됨
+      - 로컬만 프로젝트만 지원해서 로컬 코드 작성후 -&gt; [[scp]] 를 활용한 파일 복사를 사용
+    - 저번에 서버 터졌으므로 [[git]] 에 차곡차곡 저장
+  - eda
+    - 데이터를 시각화를 먼저하고 가설 설계
+      - 길이 토큰
+  - 일정 관리
+    - 대회 시작전 강의 먼저 모두 수강하여 시간 확보
+  - 코드 익숙도
+    - 코드를 먼저 분석하고 들어갔으나 여전히 jupyter 로 큰파일을 진행하기에는 ide도움이 너무 떨어지는 문제
+    - 다음 프로젝트 에서는
+      - [ ] [[mlflow]] 나 저장, 평가등 일부 루틴화된 영역을 처음에 분리하고 수정포인트 업데이트 하는 방식이 좋겠다
+  - 모델링
+    - 역시 모델링 선택에 대한 근거는 여전히 부족
+  - 툴
+    - wandb 사용을 하며 서로 비교할 수 있었다
+    - [[mlflow]]
+      - 많은 해결을 하였고 다음엔 system log만 추가적으로 저장하면 될 것같다
+      - wandb 와 달리 sweep 이 없어서 이부분은 [[optuna]] 를 적용해 보았다
+        - 파라메터 튜닝 별로 할게 없어서 적용하는 경험에 의의
+  - 결과
+    - 이번엔 저번과 달리 데이터 증강이나, 앙상블에 의한 변화가 적은 프로젝트
+    - 모델의 중요성을 크다는 것을 느낌
+    - 무엇보다 반복실험에 있어서는 효율적인 시스템과 툴 사용을 통한 기록의 시각화가 많은 도움이 되었음
+    - [ ] 다음에는 반복적인 실험에 대한 계획을 잘짜서 만들어진 시스템을 활용해 보아야겠다
+
+## link
+- [[upstage-ai-lab]]
+- [[fastapi]]
+- [[docker]]
+- [[docker-compose]]
+- [[upstage-ai-lab-project-04]]
+- [[upstage-ai-lab-project-06]]
+- [[wn.private:upstage-ai-lab-project-05]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/12bca9b
+" class="bg-white text-black">12bca9b</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/upstage-ai-lab-project-05.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/upstage-ai-lab-project-05.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/upstage-ai-lab-project-05.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-project-05"><span class="underline">upstage-ai-lab-project-05</span><sup>27</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vpn"><span class="underline">vpn</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ssh"><span class="underline">ssh</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/mlflow"><span class="underline">mlflow</span><sup>20</sup></a></span><span><a class="text-blue-600" href="/public-wiki/wandb"><span class="underline">wandb</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/kubernetes"><span class="underline">kubernetes</span><sup>40</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vscode"><span class="underline">vscode</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vim"><span class="underline">vim</span><sup>20</sup></a></span><span><a class="text-blue-600" href="/public-wiki/optuna"><span class="underline">optuna</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-project-04"><span class="underline">upstage-ai-lab-project-04</span><sup>31</sup></a></span><span><a class="text-blue-600" href="/public-wiki/jupyter"><span class="underline">jupyter</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/chatgpt"><span class="underline">chatgpt</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/pycharm"><span class="underline">pycharm</span><sup>13</sup></a></span><span><a class="text-blue-600" href="/public-wiki/scp"><span class="underline">scp</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git"><span class="underline">git</span><sup>44</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab"><span class="underline">upstage-ai-lab</span><sup>19</sup></a></span><span><a class="text-blue-600" href="/public-wiki/fastapi"><span class="underline">fastapi</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/docker"><span class="underline">docker</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/docker-compose"><span class="underline">docker-compose</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-project-06"><span class="underline">upstage-ai-lab-project-06</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-92"><span class="underline">upstage-ai-lab-day-92</span><sup>9</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#nlp-summary-대회">NLP Summary 대회</a></div><div class="pl-2"><a href="#대회">대회</a></div><div class="pl-4"><a href="#개요">개요</a></div><div class="pl-4"><a href="#분석">분석</a></div><div class="pl-4"><a href="#제공-환경">제공 환경</a></div><div class="pl-2"><a href="#개인적인-목표">개인적인 목표</a></div><div class="pl-2"><a href="#팀">팀</a></div><div class="pl-4"><a href="#운영">운영</a></div><div class="pl-2"><a href="#eda">EDA</a></div><div class="pl-2"><a href="#계획">계획</a></div><div class="pl-2"><a href="#멘토링-mentoring">멘토링 :mentoring:</a></div><div class="pl-2"><a href="#진행">진행</a></div><div class="pl-4"><a href="#팀원">팀원</a></div><div class="pl-4"><a href="#나">나</a></div><div class="pl-2"><a href="#최종-결과">최종 결과</a></div><div class="pl-2"><a href="#결과-피드백">결과 피드백</a></div><div class="pl-4"><a href="#다른팀">다른팀</a></div><div class="pl-4"><a href="#우리팀">우리팀</a></div><div class="pl-2"><a href="#회고-retrospective">회고 :retrospective:</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="nlp-summary-대회">NLP Summary 대회</h1>
+<h2 id="대회">대회</h2>
+<h3 id="개요">개요</h3>
+<ul>
+<li>DialogSum 번역 데이터를 통해 요약문을 생성하여 정답지와의 ROUGE-F1 스코어를 높인다</li>
+<li>요약문은 원문의 20% 내외</li>
+</ul>
+<h3 id="분석">분석</h3>
+<ul>
+<li>평가는 dialogue 하나당 각기 다른 포커스를 가진 3개의 summary 가 있고 이를 통해 점수를 낸다고함<ul>
+<li>설명이 두루뭉실하여 완전히 파악 못함</li>
+</ul>
+</li>
+<li>데이터셋은 dialogue, summary 외에도 핵심 단어일 것으로 추측되는 topic 이 주어짐</li>
+<li>wandb 경험을 위해 제공된 <code class="span">baseline</code> 의 코드에서 <code class="span">wandb</code> 설정을 가지고 있음</li>
+</ul>
+<h3 id="제공-환경">제공 환경</h3>
+<ul>
+<li><a href="vpn">vpn</a></li>
+<li><a href="ssh">ssh</a></li>
+<li>AMD Ryzen Threadripper 3970X 32-Core Processor</li>
+<li>RTX 3090, 24Gb</li>
+</ul>
+<h2 id="개인적인-목표">개인적인 목표</h2>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 대회전에 강의 다 듣기</li>
+<li><input checked="" disabled="" type="checkbox"> 시스템<ul>
+<li><input checked="" disabled="" type="checkbox"> mlflow 적용</li>
+<li><input checked="" disabled="" type="checkbox"> server 에 job queue 적용</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> 대회 잘 해보기</li>
+</ul>
+<h2 id="팀">팀</h2>
+<h3 id="운영">운영</h3>
+<ul>
+<li>각자 해보고 증강 데이터는 공유</li>
+<li>2주에 걸친 대회기간 중 1주는 수업이 이 겹치므로 이 기간은 각자해보고 마지막 한주는 공유하면서 진행</li>
+</ul>
+<h2 id="eda">EDA</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>dataset</th>
+<th>dialogue</th>
+<th>summary</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>왜도</td>
+<td></td>
+<td>right</td>
+<td>right</td>
+<td></td>
+</tr>
+<tr>
+<td>크기</td>
+<td>train</td>
+<td>12457</td>
+<td>12457</td>
+<td><code class="span">topic</code> 포함</td>
+</tr>
+<tr>
+<td></td>
+<td>valid</td>
+<td>499</td>
+<td>499</td>
+<td><code class="span">topic</code> 포함</td>
+</tr>
+<tr>
+<td></td>
+<td>test</td>
+<td>499</td>
+<td>499</td>
+<td>public(250) / private(249)</td>
+</tr>
+<tr>
+<td>어체</td>
+<td></td>
+<td>구어체</td>
+<td>평문</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="계획">계획</h2>
+<ul>
+<li>GPU 사용 시간을 최적화 할 수 있는 시스템을 가지고 시작</li>
+<li>대회의 점수 방식과 유사한 방식의 평가 방식을 로컬에 적용후 시작</li>
+<li><a href="mlflow">mlflow</a> 활용을 잘 해보기</li>
+</ul>
+<h2 id="멘토링-mentoring">멘토링 :mentoring:</h2>
+<ul>
+<li>여러가지 코멘트가 많았지만 중요한 점을 요약해 본다면 2가지</li>
+<li>모델 추천<ul>
+<li>한국어 모델 써봐라, llm, back translation 을 위한 번역 모델, 요약 모델<ul>
+<li>lg exaone</li>
+<li>nllb en ko</li>
+<li>m2m</li>
+<li>pko-t5 등</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>내가 궁금한 점에 대한 답변<ul>
+<li>강화학습은 훈련데이터로 한번 더하는거냐<ul>
+<li>그렇다 근데 하지마라</li>
+</ul>
+</li>
+<li>생성해야하는 길이가 다 다른데<ul>
+<li>data collator 를 사용하면 유사한 길이 끼리 모아준다</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>그리고<ul>
+<li>증강된 데이터의 품질이 좋아야한다</li>
+<li>요약 대회라기보단 요약 정답지에 맞추는게 목표</li>
+<li>하이퍼파라메터 튜닝은 마지막에 하는 것</li>
+</ul>
+</li>
+</ul>
+<h2 id="진행">진행</h2>
+<h3 id="팀원">팀원</h3>
+<ul>
+<li>데이터 증강, 특히 back translation에 집중<ul>
+<li>시도<ul>
+<li>Random Masking Insertion</li>
+<li>여러가지 adverb 교체</li>
+<li>back translation</li>
+</ul>
+</li>
+<li>back translation 외에는 효과가 별로<ul>
+<li>영어 to 한글 외에도 어순이 다른 언어를 적용</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>kogamza 등 다른 kobart 시도</li>
+<li>pko-t5 계열 시도</li>
+</ul>
+<h3 id="나">나</h3>
+<ul>
+<li><a href="mlflow">mlflow</a>, <a href="wandb">wandb</a> 적용<ul>
+<li><a href="mlflow">mlflow</a> 적용하면서 <a href="kubernetes">kubernetes</a> 에 오리는데 여러가지 try-and-error 가 있었음</li>
+<li><a href="mlflow">mlflow</a> 는 하나하나 해줘야하는 설정이 많음, 마지막까지 시간 관계상 처리하지 못한건 시스템 로그 보기</li>
+</ul>
+</li>
+<li><a href="vscode">vscode</a>, <a href="vim">vim</a> binding을 사용하는데 함수를 못 따라가는 것이 너무 치명적이고 왔다가 갔다하기 어려워서 스크립트 코드로 진행<ul>
+<li>이 부분은 아래 [[#retrospective]]</li>
+</ul>
+</li>
+<li>local ROUGE-F1 스코어가 public score 와 괴리가 심함<ul>
+<li>rouge score 계산시에 kkma 형태소 분석기를 적용하여 점수를 근접하게 맞춤<ul>
+<li>konlpy 에 다섯개의 형태소 분석기 중 가장 점수가 높게나온 kkma 를 사용</li>
+<li>2개는 에러가 나서 사용하지 못했는데 그중 mecab 이 표준일 거라함, [[#mentoring]]</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>스페셜 토큰은 전체 16개로 검색되었지만 적용시에 점수가 오히려 떨어졌음</li>
+<li>팀원과 겹치지 않는 증강 시도<ul>
+<li>solar credit($10)를 사용하여<ul>
+<li>solar LLM 을 이용<ul>
+<li>pro 는 영어 전용 모델인 것 같고 mini 로 진행</li>
+<li>말을 알아듣는거같으나 뒤에 쓸때 없는 문장들이 끌려 오는 문제</li>
+<li>프롬프트 엔지니어링을 고도화 할 것이냐 -&gt; 그냥 번역 전용 api를 사용하기로함</li>
+</ul>
+</li>
+<li>back translation 진행<ul>
+<li>translation 전용 api로 진행<ul>
+<li>방심한 나머지 제공된 $10 로는 데이터 데이터셋 bt가 불가능한 걸 늦게 인지, <del>왜준겨</del>..</li>
+<li>그나마 확인된 결과도 few shot 주입이 안되서 special token 도 같이 번역되어 버림<ul>
+<li>전, 후처리를 하거나 여러가지 복잡한 처리가 필요</li>
+<li>아 이러면 그냥 프롬프트 엔지니어링을 했어야</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>학습시에 summary 길이를 스페셜 토큰으로 만들어 원문에 삽입<ul>
+<li>멘토링시 답변이 회의적이라 적용하지 않음</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>멘토링 이후 추천받은 적용<ul>
+<li>pko-t5 적용<ul>
+<li>막상 적용을 하려고보니 그냥 모델만 갈아끼면 되는게 아니라 데이터 입력형식이 모델마다 존쟇는 것으로 보임</li>
+<li>이를 돌릴때는 이미 팀원이 조금 상위권의 점수를 확보</li>
+<li>딱히 같은 모델+데이터 돌리는 것이 없을 껏 같아 시스템 고도화 몰입</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="최종-결과">최종 결과</h2>
+<ul>
+<li>2등<ul>
+<li>leader board<ul>
+<li>public 2등(0.5855	0.4070	0.5167	50.3062)</li>
+<li>private 2등(	0.5715	0.3799	0.4826	47.8024)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="결과-피드백">결과 피드백</h2>
+<h3 id="다른팀">다른팀</h3>
+<ul>
+<li>데이터가 커지고 llm이 커지면서 데이터 클리닝의 중요성이 줄고 있긴하다</li>
+<li>정성 분석이 필요하다, 데이터건 결과건</li>
+<li>automl 파트가 죽어간다, <a href="optuna">optuna</a> 와 같은 파라메터 튜너<ul>
+<li>데이터도 적고, 모델크기가 작아서 여러번할수있었다</li>
+<li>하나하나의 실험의 부담이 크다보니 그렇게하지 않는 것 같다</li>
+</ul>
+</li>
+<li>데이터에 노이즈가 있었다.<ul>
+<li>중복 샘플</li>
+<li>다른 요약문</li>
+</ul>
+</li>
+</ul>
+<h3 id="우리팀">우리팀</h3>
+<ul>
+<li>데이터 증강후 해당 데이터마다 정성평가를 하고 점수를 트랙킹한 부분이 좋았다.<ul>
+<li><code class="span">왜</code> 가 약한 것은 아쉽다</li>
+</ul>
+</li>
+</ul>
+<h2 id="회고-retrospective">회고 :retrospective:</h2>
+<ul>
+<li>llm 분야에서는 상용 llm 파인튜닝이 최고의 결과를 도출할 것 같다.<ul>
+<li>목표를 한정해서 하나의 타스크를 수행한다면 못할 것은 없어보인다</li>
+<li>다만 이번대회가 이런 경험을 가져가기에는 어렵게 설계된 느낌이 있다.</li>
+</ul>
+</li>
+<li>베이스라인을 넘기는것 자체가 어려웠고, 처음에 시드 고정이 안되서 조금 헤멘 느낌이 있다.<ul>
+<li>반드시 시드고정 먼저 진행</li>
+</ul>
+</li>
+<li>data 기반이 어려운 문제라(원문 -&gt; 영어 번역으로 대회 진행)<ul>
+<li>결국 모델 싸움으로 가는 느낌이고 그런경우 상용모델을 이기기 어려워 동기부여가 떨어졌다</li>
+</ul>
+</li>
+<li>back translate 등을 진행할때 너무 오래걸려서 처음으로 async 코드 작성 시작</li>
+<li>아래 내용은 이전 회고로 부터의 피드백 반영<ul>
+<li>이전 프로 젝트 회고<ul>
+<li><a href="upstage-ai-lab-project-04#retrospective">upstage-ai-lab-project-04#retrospective</a></li>
+</ul>
+</li>
+<li>ssh 개발 환경<ul>
+<li>이번엔 스크립트로 워커 큐를 만들어서 py 스크립트를 큐에쌓아서 지속적으로 실행할 수 있도록했다<ul>
+<li>이를 위해 처음에는 <a href="jupyter#nbconvert">jupyter#nbconvert</a> 를 활용한 스크립트 변환 활용</li>
+<li>이후에는 eda 를 제외한 영역은 스크립트로 작성해사 사용했다.</li>
+</ul>
+</li>
+<li><a href="chatgpt">chatgpt</a> 가 코드에디어와 협업을 지원하기 시작<ul>
+<li>시작 시점에는 <a href="vscode">vscode</a> 만 지원 -&gt; 대회 도중에 <a href="pycharm">pycharm</a> 지원이 업데이트 됨</li>
+<li>로컬만 프로젝트만 지원해서 로컬 코드 작성후 -&gt; <a href="scp">scp</a> 를 활용한 파일 복사를 사용</li>
+</ul>
+</li>
+<li>저번에 서버 터졌으므로 <a href="git">git</a> 에 차곡차곡 저장</li>
+</ul>
+</li>
+<li>eda<ul>
+<li>데이터를 시각화를 먼저하고 가설 설계<ul>
+<li>길이 토큰</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>일정 관리<ul>
+<li>대회 시작전 강의 먼저 모두 수강하여 시간 확보</li>
+</ul>
+</li>
+<li>코드 익숙도<ul>
+<li>코드를 먼저 분석하고 들어갔으나 여전히 jupyter 로 큰파일을 진행하기에는 ide도움이 너무 떨어지는 문제</li>
+<li>다음 프로젝트 에서는<ul>
+<li><input disabled="" type="checkbox"> <a href="mlflow">mlflow</a> 나 저장, 평가등 일부 루틴화된 영역을 처음에 분리하고 수정포인트 업데이트 하는 방식이 좋겠다</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>모델링<ul>
+<li>역시 모델링 선택에 대한 근거는 여전히 부족</li>
+</ul>
+</li>
+<li>툴<ul>
+<li>wandb 사용을 하며 서로 비교할 수 있었다</li>
+<li><a href="mlflow">mlflow</a><ul>
+<li>많은 해결을 하였고 다음엔 system log만 추가적으로 저장하면 될 것같다</li>
+<li>wandb 와 달리 sweep 이 없어서 이부분은 <a href="optuna">optuna</a> 를 적용해 보았다<ul>
+<li>파라메터 튜닝 별로 할게 없어서 적용하는 경험에 의의</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>결과<ul>
+<li>이번엔 저번과 달리 데이터 증강이나, 앙상블에 의한 변화가 적은 프로젝트</li>
+<li>모델의 중요성을 크다는 것을 느낌</li>
+<li>무엇보다 반복실험에 있어서는 효율적인 시스템과 툴 사용을 통한 기록의 시각화가 많은 도움이 되었음</li>
+<li><input disabled="" type="checkbox"> 다음에는 반복적인 실험에 대한 계획을 잘짜서 만들어진 시스템을 활용해 보아야겠다</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="upstage-ai-lab">upstage-ai-lab</a></li>
+<li><a href="fastapi">fastapi</a></li>
+<li><a href="docker">docker</a></li>
+<li><a href="docker-compose">docker-compose</a></li>
+<li><a href="upstage-ai-lab-project-04">upstage-ai-lab-project-04</a></li>
+<li><a href="upstage-ai-lab-project-06">upstage-ai-lab-project-06</a></li>
+<li><strike>[wn.private] wn.private:upstage-ai-lab-project-05</strike></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-fc7b02681ce1a837.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/51cae7d269711d54.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-a049f68e7ea32292.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"upstage-ai-lab-project-05\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/51cae7d269711d54.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"wam_HoKGh8W15hAjQWMp4\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/upstage-ai-lab-project-05\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"upstage-ai-lab-project-05\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"upstage-ai-lab-project-05\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"upstage-ai-lab-project-05\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T2f3a,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"nlp-summary-대회\"\u003eNLP Summary 대회\u003c/h1\u003e\n\u003ch2 id=\"대회\"\u003e대회\u003c/h2\u003e\n\u003ch3 id=\"개요\"\u003e개요\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eDialogSum 번역 데이터를 통해 요약문을 생성하여 정답지와의 ROUGE-F1 스코어를 높인다\u003c/li\u003e\n\u003cli\u003e요약문은 원문의 20% 내외\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"분석\"\u003e분석\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e평가는 dialogue 하나당 각기 다른 포커스를 가진 3개의 summary 가 있고 이를 통해 점수를 낸다고함\u003cul\u003e\n\u003cli\u003e설명이 두루뭉실하여 완전히 파악 못함\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터셋은 dialogue, summary 외에도 핵심 단어일 것으로 추측되는 topic 이 주어짐\u003c/li\u003e\n\u003cli\u003ewandb 경험을 위해 제공된 \u003ccode class=\"span\"\u003ebaseline\u003c/code\u003e 의 코드에서 \u003ccode class=\"span\"\u003ewandb\u003c/code\u003e 설정을 가지고 있음\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"제공-환경\"\u003e제공 환경\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"vpn\"\u003evpn\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"ssh\"\u003essh\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003eAMD Ryzen Threadripper 3970X 32-Core Processor\u003c/li\u003e\n\u003cli\u003eRTX 3090, 24Gb\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"개인적인-목표\"\u003e개인적인 목표\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 대회전에 강의 다 듣기\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 시스템\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e mlflow 적용\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e server 에 job queue 적용\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 대회 잘 해보기\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"팀\"\u003e팀\u003c/h2\u003e\n\u003ch3 id=\"운영\"\u003e운영\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e각자 해보고 증강 데이터는 공유\u003c/li\u003e\n\u003cli\u003e2주에 걸친 대회기간 중 1주는 수업이 이 겹치므로 이 기간은 각자해보고 마지막 한주는 공유하면서 진행\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"eda\"\u003eEDA\u003c/h2\u003e\n\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003e\u003c/th\u003e\n\u003cth\u003edataset\u003c/th\u003e\n\u003cth\u003edialogue\u003c/th\u003e\n\u003cth\u003esummary\u003c/th\u003e\n\u003cth\u003e\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\u003ctr\u003e\n\u003ctd\u003e왜도\u003c/td\u003e\n\u003ctd\u003e\u003c/td\u003e\n\u003ctd\u003eright\u003c/td\u003e\n\u003ctd\u003eright\u003c/td\u003e\n\u003ctd\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e크기\u003c/td\u003e\n\u003ctd\u003etrain\u003c/td\u003e\n\u003ctd\u003e12457\u003c/td\u003e\n\u003ctd\u003e12457\u003c/td\u003e\n\u003ctd\u003e\u003ccode class=\"span\"\u003etopic\u003c/code\u003e 포함\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003c/td\u003e\n\u003ctd\u003evalid\u003c/td\u003e\n\u003ctd\u003e499\u003c/td\u003e\n\u003ctd\u003e499\u003c/td\u003e\n\u003ctd\u003e\u003ccode class=\"span\"\u003etopic\u003c/code\u003e 포함\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003c/td\u003e\n\u003ctd\u003etest\u003c/td\u003e\n\u003ctd\u003e499\u003c/td\u003e\n\u003ctd\u003e499\u003c/td\u003e\n\u003ctd\u003epublic(250) / private(249)\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e어체\u003c/td\u003e\n\u003ctd\u003e\u003c/td\u003e\n\u003ctd\u003e구어체\u003c/td\u003e\n\u003ctd\u003e평문\u003c/td\u003e\n\u003ctd\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\u003c/table\u003e\n\u003ch2 id=\"계획\"\u003e계획\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eGPU 사용 시간을 최적화 할 수 있는 시스템을 가지고 시작\u003c/li\u003e\n\u003cli\u003e대회의 점수 방식과 유사한 방식의 평가 방식을 로컬에 적용후 시작\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"mlflow\"\u003emlflow\u003c/a\u003e 활용을 잘 해보기\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"멘토링-mentoring\"\u003e멘토링 :mentoring:\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e여러가지 코멘트가 많았지만 중요한 점을 요약해 본다면 2가지\u003c/li\u003e\n\u003cli\u003e모델 추천\u003cul\u003e\n\u003cli\u003e한국어 모델 써봐라, llm, back translation 을 위한 번역 모델, 요약 모델\u003cul\u003e\n\u003cli\u003elg exaone\u003c/li\u003e\n\u003cli\u003enllb en ko\u003c/li\u003e\n\u003cli\u003em2m\u003c/li\u003e\n\u003cli\u003epko-t5 등\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e내가 궁금한 점에 대한 답변\u003cul\u003e\n\u003cli\u003e강화학습은 훈련데이터로 한번 더하는거냐\u003cul\u003e\n\u003cli\u003e그렇다 근데 하지마라\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e생성해야하는 길이가 다 다른데\u003cul\u003e\n\u003cli\u003edata collator 를 사용하면 유사한 길이 끼리 모아준다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e그리고\u003cul\u003e\n\u003cli\u003e증강된 데이터의 품질이 좋아야한다\u003c/li\u003e\n\u003cli\u003e요약 대회라기보단 요약 정답지에 맞추는게 목표\u003c/li\u003e\n\u003cli\u003e하이퍼파라메터 튜닝은 마지막에 하는 것\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"진행\"\u003e진행\u003c/h2\u003e\n\u003ch3 id=\"팀원\"\u003e팀원\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e데이터 증강, 특히 back translation에 집중\u003cul\u003e\n\u003cli\u003e시도\u003cul\u003e\n\u003cli\u003eRandom Masking Insertion\u003c/li\u003e\n\u003cli\u003e여러가지 adverb 교체\u003c/li\u003e\n\u003cli\u003eback translation\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eback translation 외에는 효과가 별로\u003cul\u003e\n\u003cli\u003e영어 to 한글 외에도 어순이 다른 언어를 적용\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003ekogamza 등 다른 kobart 시도\u003c/li\u003e\n\u003cli\u003epko-t5 계열 시도\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"나\"\u003e나\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"mlflow\"\u003emlflow\u003c/a\u003e, \u003ca href=\"wandb\"\u003ewandb\u003c/a\u003e 적용\u003cul\u003e\n\u003cli\u003e\u003ca href=\"mlflow\"\u003emlflow\u003c/a\u003e 적용하면서 \u003ca href=\"kubernetes\"\u003ekubernetes\u003c/a\u003e 에 오리는데 여러가지 try-and-error 가 있었음\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"mlflow\"\u003emlflow\u003c/a\u003e 는 하나하나 해줘야하는 설정이 많음, 마지막까지 시간 관계상 처리하지 못한건 시스템 로그 보기\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"vscode\"\u003evscode\u003c/a\u003e, \u003ca href=\"vim\"\u003evim\u003c/a\u003e binding을 사용하는데 함수를 못 따라가는 것이 너무 치명적이고 왔다가 갔다하기 어려워서 스크립트 코드로 진행\u003cul\u003e\n\u003cli\u003e이 부분은 아래 [[#retrospective]]\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003elocal ROUGE-F1 스코어가 public score 와 괴리가 심함\u003cul\u003e\n\u003cli\u003erouge score 계산시에 kkma 형태소 분석기를 적용하여 점수를 근접하게 맞춤\u003cul\u003e\n\u003cli\u003ekonlpy 에 다섯개의 형태소 분석기 중 가장 점수가 높게나온 kkma 를 사용\u003c/li\u003e\n\u003cli\u003e2개는 에러가 나서 사용하지 못했는데 그중 mecab 이 표준일 거라함, [[#mentoring]]\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e스페셜 토큰은 전체 16개로 검색되었지만 적용시에 점수가 오히려 떨어졌음\u003c/li\u003e\n\u003cli\u003e팀원과 겹치지 않는 증강 시도\u003cul\u003e\n\u003cli\u003esolar credit($10)를 사용하여\u003cul\u003e\n\u003cli\u003esolar LLM 을 이용\u003cul\u003e\n\u003cli\u003epro 는 영어 전용 모델인 것 같고 mini 로 진행\u003c/li\u003e\n\u003cli\u003e말을 알아듣는거같으나 뒤에 쓸때 없는 문장들이 끌려 오는 문제\u003c/li\u003e\n\u003cli\u003e프롬프트 엔지니어링을 고도화 할 것이냐 -\u0026gt; 그냥 번역 전용 api를 사용하기로함\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eback translation 진행\u003cul\u003e\n\u003cli\u003etranslation 전용 api로 진행\u003cul\u003e\n\u003cli\u003e방심한 나머지 제공된 $10 로는 데이터 데이터셋 bt가 불가능한 걸 늦게 인지, \u003cdel\u003e왜준겨\u003c/del\u003e..\u003c/li\u003e\n\u003cli\u003e그나마 확인된 결과도 few shot 주입이 안되서 special token 도 같이 번역되어 버림\u003cul\u003e\n\u003cli\u003e전, 후처리를 하거나 여러가지 복잡한 처리가 필요\u003c/li\u003e\n\u003cli\u003e아 이러면 그냥 프롬프트 엔지니어링을 했어야\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e학습시에 summary 길이를 스페셜 토큰으로 만들어 원문에 삽입\u003cul\u003e\n\u003cli\u003e멘토링시 답변이 회의적이라 적용하지 않음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e멘토링 이후 추천받은 적용\u003cul\u003e\n\u003cli\u003epko-t5 적용\u003cul\u003e\n\u003cli\u003e막상 적용을 하려고보니 그냥 모델만 갈아끼면 되는게 아니라 데이터 입력형식이 모델마다 존쟇는 것으로 보임\u003c/li\u003e\n\u003cli\u003e이를 돌릴때는 이미 팀원이 조금 상위권의 점수를 확보\u003c/li\u003e\n\u003cli\u003e딱히 같은 모델+데이터 돌리는 것이 없을 껏 같아 시스템 고도화 몰입\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"최종-결과\"\u003e최종 결과\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e2등\u003cul\u003e\n\u003cli\u003eleader board\u003cul\u003e\n\u003cli\u003epublic 2등(0.5855\t0.4070\t0.5167\t50.3062)\u003c/li\u003e\n\u003cli\u003eprivate 2등(\t0.5715\t0.3799\t0.4826\t47.8024)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"결과-피드백\"\u003e결과 피드백\u003c/h2\u003e\n\u003ch3 id=\"다른팀\"\u003e다른팀\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e데이터가 커지고 llm이 커지면서 데이터 클리닝의 중요성이 줄고 있긴하다\u003c/li\u003e\n\u003cli\u003e정성 분석이 필요하다, 데이터건 결과건\u003c/li\u003e\n\u003cli\u003eautoml 파트가 죽어간다, \u003ca href=\"optuna\"\u003eoptuna\u003c/a\u003e 와 같은 파라메터 튜너\u003cul\u003e\n\u003cli\u003e데이터도 적고, 모델크기가 작아서 여러번할수있었다\u003c/li\u003e\n\u003cli\u003e하나하나의 실험의 부담이 크다보니 그렇게하지 않는 것 같다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터에 노이즈가 있었다.\u003cul\u003e\n\u003cli\u003e중복 샘플\u003c/li\u003e\n\u003cli\u003e다른 요약문\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"우리팀\"\u003e우리팀\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e데이터 증강후 해당 데이터마다 정성평가를 하고 점수를 트랙킹한 부분이 좋았다.\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e왜\u003c/code\u003e 가 약한 것은 아쉽다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"회고-retrospective\"\u003e회고 :retrospective:\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003ellm 분야에서는 상용 llm 파인튜닝이 최고의 결과를 도출할 것 같다.\u003cul\u003e\n\u003cli\u003e목표를 한정해서 하나의 타스크를 수행한다면 못할 것은 없어보인다\u003c/li\u003e\n\u003cli\u003e다만 이번대회가 이런 경험을 가져가기에는 어렵게 설계된 느낌이 있다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e베이스라인을 넘기는것 자체가 어려웠고, 처음에 시드 고정이 안되서 조금 헤멘 느낌이 있다.\u003cul\u003e\n\u003cli\u003e반드시 시드고정 먼저 진행\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003edata 기반이 어려운 문제라(원문 -\u0026gt; 영어 번역으로 대회 진행)\u003cul\u003e\n\u003cli\u003e결국 모델 싸움으로 가는 느낌이고 그런경우 상용모델을 이기기 어려워 동기부여가 떨어졌다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eback translate 등을 진행할때 너무 오래걸려서 처음으로 async 코드 작성 시작\u003c/li\u003e\n\u003cli\u003e아래 내용은 이전 회고로 부터의 피드백 반영\u003cul\u003e\n\u003cli\u003e이전 프로 젝트 회고\u003cul\u003e\n\u003cli\u003e\u003ca href=\"upstage-ai-lab-project-04#retrospective\"\u003eupstage-ai-lab-project-04#retrospective\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003essh 개발 환경\u003cul\u003e\n\u003cli\u003e이번엔 스크립트로 워커 큐를 만들어서 py 스크립트를 큐에쌓아서 지속적으로 실행할 수 있도록했다\u003cul\u003e\n\u003cli\u003e이를 위해 처음에는 \u003ca href=\"jupyter#nbconvert\"\u003ejupyter#nbconvert\u003c/a\u003e 를 활용한 스크립트 변환 활용\u003c/li\u003e\n\u003cli\u003e이후에는 eda 를 제외한 영역은 스크립트로 작성해사 사용했다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"chatgpt\"\u003echatgpt\u003c/a\u003e 가 코드에디어와 협업을 지원하기 시작\u003cul\u003e\n\u003cli\u003e시작 시점에는 \u003ca href=\"vscode\"\u003evscode\u003c/a\u003e 만 지원 -\u0026gt; 대회 도중에 \u003ca href=\"pycharm\"\u003epycharm\u003c/a\u003e 지원이 업데이트 됨\u003c/li\u003e\n\u003cli\u003e로컬만 프로젝트만 지원해서 로컬 코드 작성후 -\u0026gt; \u003ca href=\"scp\"\u003escp\u003c/a\u003e 를 활용한 파일 복사를 사용\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e저번에 서버 터졌으므로 \u003ca href=\"git\"\u003egit\u003c/a\u003e 에 차곡차곡 저장\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eeda\u003cul\u003e\n\u003cli\u003e데이터를 시각화를 먼저하고 가설 설계\u003cul\u003e\n\u003cli\u003e길이 토큰\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e일정 관리\u003cul\u003e\n\u003cli\u003e대회 시작전 강의 먼저 모두 수강하여 시간 확보\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e코드 익숙도\u003cul\u003e\n\u003cli\u003e코드를 먼저 분석하고 들어갔으나 여전히 jupyter 로 큰파일을 진행하기에는 ide도움이 너무 떨어지는 문제\u003c/li\u003e\n\u003cli\u003e다음 프로젝트 에서는\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"mlflow\"\u003emlflow\u003c/a\u003e 나 저장, 평가등 일부 루틴화된 영역을 처음에 분리하고 수정포인트 업데이트 하는 방식이 좋겠다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e모델링\u003cul\u003e\n\u003cli\u003e역시 모델링 선택에 대한 근거는 여전히 부족\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e툴\u003cul\u003e\n\u003cli\u003ewandb 사용을 하며 서로 비교할 수 있었다\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"mlflow\"\u003emlflow\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e많은 해결을 하였고 다음엔 system log만 추가적으로 저장하면 될 것같다\u003c/li\u003e\n\u003cli\u003ewandb 와 달리 sweep 이 없어서 이부분은 \u003ca href=\"optuna\"\u003eoptuna\u003c/a\u003e 를 적용해 보았다\u003cul\u003e\n\u003cli\u003e파라메터 튜닝 별로 할게 없어서 적용하는 경험에 의의\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e결과\u003cul\u003e\n\u003cli\u003e이번엔 저번과 달리 데이터 증강이나, 앙상블에 의한 변화가 적은 프로젝트\u003c/li\u003e\n\u003cli\u003e모델의 중요성을 크다는 것을 느낌\u003c/li\u003e\n\u003cli\u003e무엇보다 반복실험에 있어서는 효율적인 시스템과 툴 사용을 통한 기록의 시각화가 많은 도움이 되었음\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 다음에는 반복적인 실험에 대한 계획을 잘짜서 만들어진 시스템을 활용해 보아야겠다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"upstage-ai-lab\"\u003eupstage-ai-lab\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"fastapi\"\u003efastapi\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"docker\"\u003edocker\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"docker-compose\"\u003edocker-compose\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"upstage-ai-lab-project-04\"\u003eupstage-ai-lab-project-04\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"upstage-ai-lab-project-06\"\u003eupstage-ai-lab-project-06\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cstrike\u003e[wn.private] wn.private:upstage-ai-lab-project-05\u003c/strike\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/12bca9b\\n\",\"className\":\"bg-white text-black\",\"children\":\"12bca9b\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/upstage-ai-lab-project-05.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/upstage-ai-lab-project-05.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/upstage-ai-lab-project-05.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"upstage-ai-lab-project-05\",\"name\":\"upstage-ai-lab-project-05\",\"val\":27},{\"id\":\"vpn\",\"name\":\"vpn\",\"val\":8},{\"id\":\"ssh\",\"name\":\"ssh\",\"val\":6},{\"id\":\"mlflow\",\"name\":\"mlflow\",\"val\":20},{\"id\":\"wandb\",\"name\":\"wandb\",\"val\":\"$undefined\"},{\"id\":\"kubernetes\",\"name\":\"kubernetes\",\"val\":40},{\"id\":\"vscode\",\"name\":\"vscode\",\"val\":1},{\"id\":\"vim\",\"name\":\"vim\",\"val\":20},{\"id\":\"optuna\",\"name\":\"optuna\",\"val\":3},{\"id\":\"upstage-ai-lab-project-04\",\"name\":\"upstage-ai-lab-project-04\",\"val\":31},{\"id\":\"jupyter\",\"name\":\"jupyter\",\"val\":8},{\"id\":\"chatgpt\",\"name\":\"chatgpt\",\"val\":5},{\"id\":\"pycharm\",\"name\":\"pycharm\",\"val\":13},{\"id\":\"scp\",\"name\":\"scp\",\"val\":2},{\"id\":\"git\",\"name\":\"git\",\"val\":44},{\"id\":\"upstage-ai-lab\",\"name\":\"upstage-ai-lab\",\"val\":19},{\"id\":\"fastapi\",\"name\":\"fastapi\",\"val\":2},{\"id\":\"docker\",\"name\":\"docker\",\"val\":7},{\"id\":\"docker-compose\",\"name\":\"docker-compose\",\"val\":3},{\"id\":\"upstage-ai-lab-project-06\",\"name\":\"upstage-ai-lab-project-06\",\"val\":\"$undefined\"},{\"id\":\"upstage-ai-lab-day-92\",\"name\":\"upstage-ai-lab-day-92\",\"val\":9}],\"links\":[{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"vpn\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"ssh\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"mlflow\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"mlflow\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"wandb\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"mlflow\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"kubernetes\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"mlflow\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"vscode\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"vim\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"optuna\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"upstage-ai-lab-project-04\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"jupyter\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"chatgpt\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"vscode\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"pycharm\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"scp\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"git\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"mlflow\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"mlflow\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"optuna\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"upstage-ai-lab\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"fastapi\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"docker\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"docker-compose\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"upstage-ai-lab-project-04\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"upstage-ai-lab-project-06\"},{\"source\":\"upstage-ai-lab-day-92\",\"target\":\"upstage-ai-lab-project-05\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"upstage-ai-lab-project-05\"},{\"source\":\"upstage-ai-lab\",\"target\":\"upstage-ai-lab-project-05\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"upstage-ai-lab-project-05\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-project-05\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-project-05\"}],[\"$\",\"sup\",null,{\"children\":27}]]}]}],[\"$\",\"span\",\"vpn\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vpn\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vpn\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"ssh\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ssh\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ssh\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"mlflow\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/mlflow\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"mlflow\"}],[\"$\",\"sup\",null,{\"children\":20}]]}]}],[\"$\",\"span\",\"wandb\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/wandb\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"wandb\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"kubernetes\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/kubernetes\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"kubernetes\"}],[\"$\",\"sup\",null,{\"children\":40}]]}]}],[\"$\",\"span\",\"vscode\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vscode\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vscode\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"vim\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vim\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vim\"}],[\"$\",\"sup\",null,{\"children\":20}]]}]}],[\"$\",\"span\",\"optuna\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/optuna\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"optuna\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-project-04\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-project-04\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-project-04\"}],[\"$\",\"sup\",null,{\"children\":31}]]}]}],[\"$\",\"span\",\"jupyter\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/jupyter\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"jupyter\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"chatgpt\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/chatgpt\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"chatgpt\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"pycharm\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/pycharm\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"pycharm\"}],[\"$\",\"sup\",null,{\"children\":13}]]}]}],[\"$\",\"span\",\"scp\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/scp\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"scp\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"git\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git\"}],[\"$\",\"sup\",null,{\"children\":44}]]}]}],[\"$\",\"span\",\"upstage-ai-lab\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab\"}],[\"$\",\"sup\",null,{\"children\":19}]]}]}],[\"$\",\"span\",\"fastapi\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/fastapi\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"fastapi\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"docker\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/docker\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"docker\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"docker-compose\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/docker-compose\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"docker-compose\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-project-06\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-project-06\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-project-06\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-day-92\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-92\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-92\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"nlp-summary-대회\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#nlp-summary-대회\",\"children\":\"NLP Summary 대회\"}]}],[\"$\",\"div\",\"대회\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#대회\",\"children\":\"대회\"}]}],[\"$\",\"div\",\"개요\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#개요\",\"children\":\"개요\"}]}],[\"$\",\"div\",\"분석\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#분석\",\"children\":\"분석\"}]}],[\"$\",\"div\",\"제공-환경\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#제공-환경\",\"children\":\"제공 환경\"}]}],[\"$\",\"div\",\"개인적인-목표\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#개인적인-목표\",\"children\":\"개인적인 목표\"}]}],[\"$\",\"div\",\"팀\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#팀\",\"children\":\"팀\"}]}],[\"$\",\"div\",\"운영\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#운영\",\"children\":\"운영\"}]}],[\"$\",\"div\",\"eda\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#eda\",\"children\":\"EDA\"}]}],[\"$\",\"div\",\"계획\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#계획\",\"children\":\"계획\"}]}],[\"$\",\"div\",\"멘토링-mentoring\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#멘토링-mentoring\",\"children\":\"멘토링 :mentoring:\"}]}],[\"$\",\"div\",\"진행\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#진행\",\"children\":\"진행\"}]}],[\"$\",\"div\",\"팀원\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#팀원\",\"children\":\"팀원\"}]}],[\"$\",\"div\",\"나\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#나\",\"children\":\"나\"}]}],[\"$\",\"div\",\"최종-결과\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#최종-결과\",\"children\":\"최종 결과\"}]}],[\"$\",\"div\",\"결과-피드백\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#결과-피드백\",\"children\":\"결과 피드백\"}]}],[\"$\",\"div\",\"다른팀\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#다른팀\",\"children\":\"다른팀\"}]}],[\"$\",\"div\",\"우리팀\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#우리팀\",\"children\":\"우리팀\"}]}],[\"$\",\"div\",\"회고-retrospective\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#회고-retrospective\",\"children\":\"회고 :retrospective:\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T2461,"])</script><script>self.__next_f.push([1,"\n## 대회\n### 개요\n- DialogSum 번역 데이터를 통해 요약문을 생성하여 정답지와의 ROUGE-F1 스코어를 높인다\n- 요약문은 원문의 20% 내외\n\n### 분석\n- 평가는 dialogue 하나당 각기 다른 포커스를 가진 3개의 summary 가 있고 이를 통해 점수를 낸다고함\n  - 설명이 두루뭉실하여 완전히 파악 못함\n- 데이터셋은 dialogue, summary 외에도 핵심 단어일 것으로 추측되는 topic 이 주어짐\n- wandb 경험을 위해 제공된 `baseline` 의 코드에서 `wandb` 설정을 가지고 있음\n\n### 제공 환경\n- [[vpn]]\n- [[ssh]]\n- AMD Ryzen Threadripper 3970X 32-Core Processor\n- RTX 3090, 24Gb\n\n## 개인적인 목표\n- [X] 대회전에 강의 다 듣기\n- [X] 시스템\n  - [X] mlflow 적용\n  - [X] server 에 job queue 적용\n- [ ] 대회 잘 해보기\n\n## 팀\n### 운영\n- 각자 해보고 증강 데이터는 공유\n- 2주에 걸친 대회기간 중 1주는 수업이 이 겹치므로 이 기간은 각자해보고 마지막 한주는 공유하면서 진행\n\n## EDA\n|      | dataset | dialogue | summary |                            |\n|------|---------|----------|---------|----------------------------|\n| 왜도 |         | right    | right   |                            |\n| 크기 | train   | 12457    | 12457   | `topic` 포함               |\n|      | valid   | 499      | 499     | `topic` 포함               |\n|      | test    | 499      | 499     | public(250) / private(249) |\n| 어체 |         | 구어체   | 평문    |                            |\n\n\n## 계획\n- GPU 사용 시간을 최적화 할 수 있는 시스템을 가지고 시작\n- 대회의 점수 방식과 유사한 방식의 평가 방식을 로컬에 적용후 시작\n- [[mlflow]] 활용을 잘 해보기\n\n## 멘토링 :mentoring:\n- 여러가지 코멘트가 많았지만 중요한 점을 요약해 본다면 2가지\n- 모델 추천\n  - 한국어 모델 써봐라, llm, back translation 을 위한 번역 모델, 요약 모델\n    - lg exaone\n    - nllb en ko\n    - m2m\n    - pko-t5 등\n- 내가 궁금한 점에 대한 답변\n  - 강화학습은 훈련데이터로 한번 더하는거냐\n    - 그렇다 근데 하지마라\n  - 생성해야하는 길이가 다 다른데\n    - data collator 를 사용하면 유사한 길이 끼리 모아준다\n- 그리고\n  - 증강된 데이터의 품질이 좋아야한다\n  - 요약 대회라기보단 요약 정답지에 맞추는게 목표\n  - 하이퍼파라메터 튜닝은 마지막에 하는 것\n\n## 진행\n### 팀원\n- 데이터 증강, 특히 back translation에 집중\n  - 시도\n    - Random Masking Insertion\n    - 여러가지 adverb 교체\n    - back translation\n  - back translation 외에는 효과가 별로\n    - 영어 to 한글 외에도 어순이 다른 언어를 적용\n- kogamza 등 다른 kobart 시도\n- pko-t5 계열 시도\n\n### 나\n- [[mlflow]], [[wandb]] 적용\n  - [[mlflow]] 적용하면서 [[kubernetes]] 에 오리는데 여러가지 try-and-error 가 있었음\n  - [[mlflow]] 는 하나하나 해줘야하는 설정이 많음, 마지막까지 시간 관계상 처리하지 못한건 시스템 로그 보기\n- [[vscode]], [[vim]] binding을 사용하는데 함수를 못 따라가는 것이 너무 치명적이고 왔다가 갔다하기 어려워서 스크립트 코드로 진행\n  - 이 부분은 아래 [[#retrospective]]\n- local ROUGE-F1 스코어가 public score 와 괴리가 심함\n  - rouge score 계산시에 kkma 형태소 분석기를 적용하여 점수를 근접하게 맞춤\n    - konlpy 에 다섯개의 형태소 분석기 중 가장 점수가 높게나온 kkma 를 사용\n    - 2개는 에러가 나서 사용하지 못했는데 그중 mecab 이 표준일 거라함, [[#mentoring]]\n- 스페셜 토큰은 전체 16개로 검색되었지만 적용시에 점수가 오히려 떨어졌음\n- 팀원과 겹치지 않는 증강 시도\n  - solar credit($10)를 사용하여\n    - solar LLM 을 이용\n      - pro 는 영어 전용 모델인 것 같고 mini 로 진행\n      - 말을 알아듣는거같으나 뒤에 쓸때 없는 문장들이 끌려 오는 문제\n      - 프롬프트 엔지니어링을 고도화 할 것이냐 -\u003e 그냥 번역 전용 api를 사용하기로함\n    - back translation 진행\n      - translation 전용 api로 진행\n        - 방심한 나머지 제공된 $10 로는 데이터 데이터셋 bt가 불가능한 걸 늦게 인지, ~~왜준겨~~..\n        - 그나마 확인된 결과도 few shot 주입이 안되서 special token 도 같이 번역되어 버림\n          - 전, 후처리를 하거나 여러가지 복잡한 처리가 필요\n          - 아 이러면 그냥 프롬프트 엔지니어링을 했어야\n  - 학습시에 summary 길이를 스페셜 토큰으로 만들어 원문에 삽입\n    - 멘토링시 답변이 회의적이라 적용하지 않음\n- 멘토링 이후 추천받은 적용\n  - pko-t5 적용\n    - 막상 적용을 하려고보니 그냥 모델만 갈아끼면 되는게 아니라 데이터 입력형식이 모델마다 존쟇는 것으로 보임\n    - 이를 돌릴때는 이미 팀원이 조금 상위권의 점수를 확보\n    - 딱히 같은 모델+데이터 돌리는 것이 없을 껏 같아 시스템 고도화 몰입\n\n## 최종 결과\n- 2등\n  - leader board\n    - public 2등(0.5855\t0.4070\t0.5167\t50.3062)\n    - private 2등(\t0.5715\t0.3799\t0.4826\t47.8024)\n\n## 결과 피드백\n### 다른팀\n- 데이터가 커지고 llm이 커지면서 데이터 클리닝의 중요성이 줄고 있긴하다\n- 정성 분석이 필요하다, 데이터건 결과건\n- automl 파트가 죽어간다, [[optuna]] 와 같은 파라메터 튜너\n  - 데이터도 적고, 모델크기가 작아서 여러번할수있었다\n  - 하나하나의 실험의 부담이 크다보니 그렇게하지 않는 것 같다\n- 데이터에 노이즈가 있었다.\n  - 중복 샘플\n  - 다른 요약문\n\n### 우리팀\n- 데이터 증강후 해당 데이터마다 정성평가를 하고 점수를 트랙킹한 부분이 좋았다.\n  - `왜` 가 약한 것은 아쉽다\n\n## 회고 :retrospective:\n- llm 분야에서는 상용 llm 파인튜닝이 최고의 결과를 도출할 것 같다.\n  - 목표를 한정해서 하나의 타스크를 수행한다면 못할 것은 없어보인다\n  - 다만 이번대회가 이런 경험을 가져가기에는 어렵게 설계된 느낌이 있다.\n- 베이스라인을 넘기는것 자체가 어려웠고, 처음에 시드 고정이 안되서 조금 헤멘 느낌이 있다.\n  - 반드시 시드고정 먼저 진행\n- data 기반이 어려운 문제라(원문 -\u003e 영어 번역으로 대회 진행)\n  - 결국 모델 싸움으로 가는 느낌이고 그런경우 상용모델을 이기기 어려워 동기부여가 떨어졌다\n- back translate 등을 진행할때 너무 오래걸려서 처음으로 async 코드 작성 시작\n- 아래 내용은 이전 회고로 부터의 피드백 반영\n  - 이전 프로 젝트 회고\n    + [[upstage-ai-lab-project-04#retrospective]]\n  - ssh 개발 환경\n    - 이번엔 스크립트로 워커 큐를 만들어서 py 스크립트를 큐에쌓아서 지속적으로 실행할 수 있도록했다\n      - 이를 위해 처음에는 [[jupyter#nbconvert]] 를 활용한 스크립트 변환 활용\n      - 이후에는 eda 를 제외한 영역은 스크립트로 작성해사 사용했다.\n    - [[chatgpt]] 가 코드에디어와 협업을 지원하기 시작\n      - 시작 시점에는 [[vscode]] 만 지원 -\u003e 대회 도중에 [[pycharm]] 지원이 업데이트 됨\n      - 로컬만 프로젝트만 지원해서 로컬 코드 작성후 -\u003e [[scp]] 를 활용한 파일 복사를 사용\n    - 저번에 서버 터졌으므로 [[git]] 에 차곡차곡 저장\n  - eda\n    - 데이터를 시각화를 먼저하고 가설 설계\n      - 길이 토큰\n  - 일정 관리\n    - 대회 시작전 강의 먼저 모두 수강하여 시간 확보\n  - 코드 익숙도\n    - 코드를 먼저 분석하고 들어갔으나 여전히 jupyter 로 큰파일을 진행하기에는 ide도움이 너무 떨어지는 문제\n    - 다음 프로젝트 에서는\n      - [ ] [[mlflow]] 나 저장, 평가등 일부 루틴화된 영역을 처음에 분리하고 수정포인트 업데이트 하는 방식이 좋겠다\n  - 모델링\n    - 역시 모델링 선택에 대한 근거는 여전히 부족\n  - 툴\n    - wandb 사용을 하며 서로 비교할 수 있었다\n    - [[mlflow]]\n      - 많은 해결을 하였고 다음엔 system log만 추가적으로 저장하면 될 것같다\n      - wandb 와 달리 sweep 이 없어서 이부분은 [[optuna]] 를 적용해 보았다\n        - 파라메터 튜닝 별로 할게 없어서 적용하는 경험에 의의\n  - 결과\n    - 이번엔 저번과 달리 데이터 증강이나, 앙상블에 의한 변화가 적은 프로젝트\n    - 모델의 중요성을 크다는 것을 느낌\n    - 무엇보다 반복실험에 있어서는 효율적인 시스템과 툴 사용을 통한 기록의 시각화가 많은 도움이 되었음\n    - [ ] 다음에는 반복적인 실험에 대한 계획을 잘짜서 만들어진 시스템을 활용해 보아야겠다\n\n## link\n- [[upstage-ai-lab]]\n- [[fastapi]]\n- [[docker]]\n- [[docker-compose]]\n- [[upstage-ai-lab-project-04]]\n- [[upstage-ai-lab-project-06]]\n- [[wn.private:upstage-ai-lab-project-05]]\n"])</script><script>self.__next_f.push([1,"16:T2461,"])</script><script>self.__next_f.push([1,"\n## 대회\n### 개요\n- DialogSum 번역 데이터를 통해 요약문을 생성하여 정답지와의 ROUGE-F1 스코어를 높인다\n- 요약문은 원문의 20% 내외\n\n### 분석\n- 평가는 dialogue 하나당 각기 다른 포커스를 가진 3개의 summary 가 있고 이를 통해 점수를 낸다고함\n  - 설명이 두루뭉실하여 완전히 파악 못함\n- 데이터셋은 dialogue, summary 외에도 핵심 단어일 것으로 추측되는 topic 이 주어짐\n- wandb 경험을 위해 제공된 `baseline` 의 코드에서 `wandb` 설정을 가지고 있음\n\n### 제공 환경\n- [[vpn]]\n- [[ssh]]\n- AMD Ryzen Threadripper 3970X 32-Core Processor\n- RTX 3090, 24Gb\n\n## 개인적인 목표\n- [X] 대회전에 강의 다 듣기\n- [X] 시스템\n  - [X] mlflow 적용\n  - [X] server 에 job queue 적용\n- [ ] 대회 잘 해보기\n\n## 팀\n### 운영\n- 각자 해보고 증강 데이터는 공유\n- 2주에 걸친 대회기간 중 1주는 수업이 이 겹치므로 이 기간은 각자해보고 마지막 한주는 공유하면서 진행\n\n## EDA\n|      | dataset | dialogue | summary |                            |\n|------|---------|----------|---------|----------------------------|\n| 왜도 |         | right    | right   |                            |\n| 크기 | train   | 12457    | 12457   | `topic` 포함               |\n|      | valid   | 499      | 499     | `topic` 포함               |\n|      | test    | 499      | 499     | public(250) / private(249) |\n| 어체 |         | 구어체   | 평문    |                            |\n\n\n## 계획\n- GPU 사용 시간을 최적화 할 수 있는 시스템을 가지고 시작\n- 대회의 점수 방식과 유사한 방식의 평가 방식을 로컬에 적용후 시작\n- [[mlflow]] 활용을 잘 해보기\n\n## 멘토링 :mentoring:\n- 여러가지 코멘트가 많았지만 중요한 점을 요약해 본다면 2가지\n- 모델 추천\n  - 한국어 모델 써봐라, llm, back translation 을 위한 번역 모델, 요약 모델\n    - lg exaone\n    - nllb en ko\n    - m2m\n    - pko-t5 등\n- 내가 궁금한 점에 대한 답변\n  - 강화학습은 훈련데이터로 한번 더하는거냐\n    - 그렇다 근데 하지마라\n  - 생성해야하는 길이가 다 다른데\n    - data collator 를 사용하면 유사한 길이 끼리 모아준다\n- 그리고\n  - 증강된 데이터의 품질이 좋아야한다\n  - 요약 대회라기보단 요약 정답지에 맞추는게 목표\n  - 하이퍼파라메터 튜닝은 마지막에 하는 것\n\n## 진행\n### 팀원\n- 데이터 증강, 특히 back translation에 집중\n  - 시도\n    - Random Masking Insertion\n    - 여러가지 adverb 교체\n    - back translation\n  - back translation 외에는 효과가 별로\n    - 영어 to 한글 외에도 어순이 다른 언어를 적용\n- kogamza 등 다른 kobart 시도\n- pko-t5 계열 시도\n\n### 나\n- [[mlflow]], [[wandb]] 적용\n  - [[mlflow]] 적용하면서 [[kubernetes]] 에 오리는데 여러가지 try-and-error 가 있었음\n  - [[mlflow]] 는 하나하나 해줘야하는 설정이 많음, 마지막까지 시간 관계상 처리하지 못한건 시스템 로그 보기\n- [[vscode]], [[vim]] binding을 사용하는데 함수를 못 따라가는 것이 너무 치명적이고 왔다가 갔다하기 어려워서 스크립트 코드로 진행\n  - 이 부분은 아래 [[#retrospective]]\n- local ROUGE-F1 스코어가 public score 와 괴리가 심함\n  - rouge score 계산시에 kkma 형태소 분석기를 적용하여 점수를 근접하게 맞춤\n    - konlpy 에 다섯개의 형태소 분석기 중 가장 점수가 높게나온 kkma 를 사용\n    - 2개는 에러가 나서 사용하지 못했는데 그중 mecab 이 표준일 거라함, [[#mentoring]]\n- 스페셜 토큰은 전체 16개로 검색되었지만 적용시에 점수가 오히려 떨어졌음\n- 팀원과 겹치지 않는 증강 시도\n  - solar credit($10)를 사용하여\n    - solar LLM 을 이용\n      - pro 는 영어 전용 모델인 것 같고 mini 로 진행\n      - 말을 알아듣는거같으나 뒤에 쓸때 없는 문장들이 끌려 오는 문제\n      - 프롬프트 엔지니어링을 고도화 할 것이냐 -\u003e 그냥 번역 전용 api를 사용하기로함\n    - back translation 진행\n      - translation 전용 api로 진행\n        - 방심한 나머지 제공된 $10 로는 데이터 데이터셋 bt가 불가능한 걸 늦게 인지, ~~왜준겨~~..\n        - 그나마 확인된 결과도 few shot 주입이 안되서 special token 도 같이 번역되어 버림\n          - 전, 후처리를 하거나 여러가지 복잡한 처리가 필요\n          - 아 이러면 그냥 프롬프트 엔지니어링을 했어야\n  - 학습시에 summary 길이를 스페셜 토큰으로 만들어 원문에 삽입\n    - 멘토링시 답변이 회의적이라 적용하지 않음\n- 멘토링 이후 추천받은 적용\n  - pko-t5 적용\n    - 막상 적용을 하려고보니 그냥 모델만 갈아끼면 되는게 아니라 데이터 입력형식이 모델마다 존쟇는 것으로 보임\n    - 이를 돌릴때는 이미 팀원이 조금 상위권의 점수를 확보\n    - 딱히 같은 모델+데이터 돌리는 것이 없을 껏 같아 시스템 고도화 몰입\n\n## 최종 결과\n- 2등\n  - leader board\n    - public 2등(0.5855\t0.4070\t0.5167\t50.3062)\n    - private 2등(\t0.5715\t0.3799\t0.4826\t47.8024)\n\n## 결과 피드백\n### 다른팀\n- 데이터가 커지고 llm이 커지면서 데이터 클리닝의 중요성이 줄고 있긴하다\n- 정성 분석이 필요하다, 데이터건 결과건\n- automl 파트가 죽어간다, [[optuna]] 와 같은 파라메터 튜너\n  - 데이터도 적고, 모델크기가 작아서 여러번할수있었다\n  - 하나하나의 실험의 부담이 크다보니 그렇게하지 않는 것 같다\n- 데이터에 노이즈가 있었다.\n  - 중복 샘플\n  - 다른 요약문\n\n### 우리팀\n- 데이터 증강후 해당 데이터마다 정성평가를 하고 점수를 트랙킹한 부분이 좋았다.\n  - `왜` 가 약한 것은 아쉽다\n\n## 회고 :retrospective:\n- llm 분야에서는 상용 llm 파인튜닝이 최고의 결과를 도출할 것 같다.\n  - 목표를 한정해서 하나의 타스크를 수행한다면 못할 것은 없어보인다\n  - 다만 이번대회가 이런 경험을 가져가기에는 어렵게 설계된 느낌이 있다.\n- 베이스라인을 넘기는것 자체가 어려웠고, 처음에 시드 고정이 안되서 조금 헤멘 느낌이 있다.\n  - 반드시 시드고정 먼저 진행\n- data 기반이 어려운 문제라(원문 -\u003e 영어 번역으로 대회 진행)\n  - 결국 모델 싸움으로 가는 느낌이고 그런경우 상용모델을 이기기 어려워 동기부여가 떨어졌다\n- back translate 등을 진행할때 너무 오래걸려서 처음으로 async 코드 작성 시작\n- 아래 내용은 이전 회고로 부터의 피드백 반영\n  - 이전 프로 젝트 회고\n    + [[upstage-ai-lab-project-04#retrospective]]\n  - ssh 개발 환경\n    - 이번엔 스크립트로 워커 큐를 만들어서 py 스크립트를 큐에쌓아서 지속적으로 실행할 수 있도록했다\n      - 이를 위해 처음에는 [[jupyter#nbconvert]] 를 활용한 스크립트 변환 활용\n      - 이후에는 eda 를 제외한 영역은 스크립트로 작성해사 사용했다.\n    - [[chatgpt]] 가 코드에디어와 협업을 지원하기 시작\n      - 시작 시점에는 [[vscode]] 만 지원 -\u003e 대회 도중에 [[pycharm]] 지원이 업데이트 됨\n      - 로컬만 프로젝트만 지원해서 로컬 코드 작성후 -\u003e [[scp]] 를 활용한 파일 복사를 사용\n    - 저번에 서버 터졌으므로 [[git]] 에 차곡차곡 저장\n  - eda\n    - 데이터를 시각화를 먼저하고 가설 설계\n      - 길이 토큰\n  - 일정 관리\n    - 대회 시작전 강의 먼저 모두 수강하여 시간 확보\n  - 코드 익숙도\n    - 코드를 먼저 분석하고 들어갔으나 여전히 jupyter 로 큰파일을 진행하기에는 ide도움이 너무 떨어지는 문제\n    - 다음 프로젝트 에서는\n      - [ ] [[mlflow]] 나 저장, 평가등 일부 루틴화된 영역을 처음에 분리하고 수정포인트 업데이트 하는 방식이 좋겠다\n  - 모델링\n    - 역시 모델링 선택에 대한 근거는 여전히 부족\n  - 툴\n    - wandb 사용을 하며 서로 비교할 수 있었다\n    - [[mlflow]]\n      - 많은 해결을 하였고 다음엔 system log만 추가적으로 저장하면 될 것같다\n      - wandb 와 달리 sweep 이 없어서 이부분은 [[optuna]] 를 적용해 보았다\n        - 파라메터 튜닝 별로 할게 없어서 적용하는 경험에 의의\n  - 결과\n    - 이번엔 저번과 달리 데이터 증강이나, 앙상블에 의한 변화가 적은 프로젝트\n    - 모델의 중요성을 크다는 것을 느낌\n    - 무엇보다 반복실험에 있어서는 효율적인 시스템과 툴 사용을 통한 기록의 시각화가 많은 도움이 되었음\n    - [ ] 다음에는 반복적인 실험에 대한 계획을 잘짜서 만들어진 시스템을 활용해 보아야겠다\n\n## link\n- [[upstage-ai-lab]]\n- [[fastapi]]\n- [[docker]]\n- [[docker-compose]]\n- [[upstage-ai-lab-project-04]]\n- [[upstage-ai-lab-project-06]]\n- [[wn.private:upstage-ai-lab-project-05]]\n"])</script><script>self.__next_f.push([1,"17:T2461,"])</script><script>self.__next_f.push([1,"\n## 대회\n### 개요\n- DialogSum 번역 데이터를 통해 요약문을 생성하여 정답지와의 ROUGE-F1 스코어를 높인다\n- 요약문은 원문의 20% 내외\n\n### 분석\n- 평가는 dialogue 하나당 각기 다른 포커스를 가진 3개의 summary 가 있고 이를 통해 점수를 낸다고함\n  - 설명이 두루뭉실하여 완전히 파악 못함\n- 데이터셋은 dialogue, summary 외에도 핵심 단어일 것으로 추측되는 topic 이 주어짐\n- wandb 경험을 위해 제공된 `baseline` 의 코드에서 `wandb` 설정을 가지고 있음\n\n### 제공 환경\n- [[vpn]]\n- [[ssh]]\n- AMD Ryzen Threadripper 3970X 32-Core Processor\n- RTX 3090, 24Gb\n\n## 개인적인 목표\n- [X] 대회전에 강의 다 듣기\n- [X] 시스템\n  - [X] mlflow 적용\n  - [X] server 에 job queue 적용\n- [ ] 대회 잘 해보기\n\n## 팀\n### 운영\n- 각자 해보고 증강 데이터는 공유\n- 2주에 걸친 대회기간 중 1주는 수업이 이 겹치므로 이 기간은 각자해보고 마지막 한주는 공유하면서 진행\n\n## EDA\n|      | dataset | dialogue | summary |                            |\n|------|---------|----------|---------|----------------------------|\n| 왜도 |         | right    | right   |                            |\n| 크기 | train   | 12457    | 12457   | `topic` 포함               |\n|      | valid   | 499      | 499     | `topic` 포함               |\n|      | test    | 499      | 499     | public(250) / private(249) |\n| 어체 |         | 구어체   | 평문    |                            |\n\n\n## 계획\n- GPU 사용 시간을 최적화 할 수 있는 시스템을 가지고 시작\n- 대회의 점수 방식과 유사한 방식의 평가 방식을 로컬에 적용후 시작\n- [[mlflow]] 활용을 잘 해보기\n\n## 멘토링 :mentoring:\n- 여러가지 코멘트가 많았지만 중요한 점을 요약해 본다면 2가지\n- 모델 추천\n  - 한국어 모델 써봐라, llm, back translation 을 위한 번역 모델, 요약 모델\n    - lg exaone\n    - nllb en ko\n    - m2m\n    - pko-t5 등\n- 내가 궁금한 점에 대한 답변\n  - 강화학습은 훈련데이터로 한번 더하는거냐\n    - 그렇다 근데 하지마라\n  - 생성해야하는 길이가 다 다른데\n    - data collator 를 사용하면 유사한 길이 끼리 모아준다\n- 그리고\n  - 증강된 데이터의 품질이 좋아야한다\n  - 요약 대회라기보단 요약 정답지에 맞추는게 목표\n  - 하이퍼파라메터 튜닝은 마지막에 하는 것\n\n## 진행\n### 팀원\n- 데이터 증강, 특히 back translation에 집중\n  - 시도\n    - Random Masking Insertion\n    - 여러가지 adverb 교체\n    - back translation\n  - back translation 외에는 효과가 별로\n    - 영어 to 한글 외에도 어순이 다른 언어를 적용\n- kogamza 등 다른 kobart 시도\n- pko-t5 계열 시도\n\n### 나\n- [[mlflow]], [[wandb]] 적용\n  - [[mlflow]] 적용하면서 [[kubernetes]] 에 오리는데 여러가지 try-and-error 가 있었음\n  - [[mlflow]] 는 하나하나 해줘야하는 설정이 많음, 마지막까지 시간 관계상 처리하지 못한건 시스템 로그 보기\n- [[vscode]], [[vim]] binding을 사용하는데 함수를 못 따라가는 것이 너무 치명적이고 왔다가 갔다하기 어려워서 스크립트 코드로 진행\n  - 이 부분은 아래 [[#retrospective]]\n- local ROUGE-F1 스코어가 public score 와 괴리가 심함\n  - rouge score 계산시에 kkma 형태소 분석기를 적용하여 점수를 근접하게 맞춤\n    - konlpy 에 다섯개의 형태소 분석기 중 가장 점수가 높게나온 kkma 를 사용\n    - 2개는 에러가 나서 사용하지 못했는데 그중 mecab 이 표준일 거라함, [[#mentoring]]\n- 스페셜 토큰은 전체 16개로 검색되었지만 적용시에 점수가 오히려 떨어졌음\n- 팀원과 겹치지 않는 증강 시도\n  - solar credit($10)를 사용하여\n    - solar LLM 을 이용\n      - pro 는 영어 전용 모델인 것 같고 mini 로 진행\n      - 말을 알아듣는거같으나 뒤에 쓸때 없는 문장들이 끌려 오는 문제\n      - 프롬프트 엔지니어링을 고도화 할 것이냐 -\u003e 그냥 번역 전용 api를 사용하기로함\n    - back translation 진행\n      - translation 전용 api로 진행\n        - 방심한 나머지 제공된 $10 로는 데이터 데이터셋 bt가 불가능한 걸 늦게 인지, ~~왜준겨~~..\n        - 그나마 확인된 결과도 few shot 주입이 안되서 special token 도 같이 번역되어 버림\n          - 전, 후처리를 하거나 여러가지 복잡한 처리가 필요\n          - 아 이러면 그냥 프롬프트 엔지니어링을 했어야\n  - 학습시에 summary 길이를 스페셜 토큰으로 만들어 원문에 삽입\n    - 멘토링시 답변이 회의적이라 적용하지 않음\n- 멘토링 이후 추천받은 적용\n  - pko-t5 적용\n    - 막상 적용을 하려고보니 그냥 모델만 갈아끼면 되는게 아니라 데이터 입력형식이 모델마다 존쟇는 것으로 보임\n    - 이를 돌릴때는 이미 팀원이 조금 상위권의 점수를 확보\n    - 딱히 같은 모델+데이터 돌리는 것이 없을 껏 같아 시스템 고도화 몰입\n\n## 최종 결과\n- 2등\n  - leader board\n    - public 2등(0.5855\t0.4070\t0.5167\t50.3062)\n    - private 2등(\t0.5715\t0.3799\t0.4826\t47.8024)\n\n## 결과 피드백\n### 다른팀\n- 데이터가 커지고 llm이 커지면서 데이터 클리닝의 중요성이 줄고 있긴하다\n- 정성 분석이 필요하다, 데이터건 결과건\n- automl 파트가 죽어간다, [[optuna]] 와 같은 파라메터 튜너\n  - 데이터도 적고, 모델크기가 작아서 여러번할수있었다\n  - 하나하나의 실험의 부담이 크다보니 그렇게하지 않는 것 같다\n- 데이터에 노이즈가 있었다.\n  - 중복 샘플\n  - 다른 요약문\n\n### 우리팀\n- 데이터 증강후 해당 데이터마다 정성평가를 하고 점수를 트랙킹한 부분이 좋았다.\n  - `왜` 가 약한 것은 아쉽다\n\n## 회고 :retrospective:\n- llm 분야에서는 상용 llm 파인튜닝이 최고의 결과를 도출할 것 같다.\n  - 목표를 한정해서 하나의 타스크를 수행한다면 못할 것은 없어보인다\n  - 다만 이번대회가 이런 경험을 가져가기에는 어렵게 설계된 느낌이 있다.\n- 베이스라인을 넘기는것 자체가 어려웠고, 처음에 시드 고정이 안되서 조금 헤멘 느낌이 있다.\n  - 반드시 시드고정 먼저 진행\n- data 기반이 어려운 문제라(원문 -\u003e 영어 번역으로 대회 진행)\n  - 결국 모델 싸움으로 가는 느낌이고 그런경우 상용모델을 이기기 어려워 동기부여가 떨어졌다\n- back translate 등을 진행할때 너무 오래걸려서 처음으로 async 코드 작성 시작\n- 아래 내용은 이전 회고로 부터의 피드백 반영\n  - 이전 프로 젝트 회고\n    + [[upstage-ai-lab-project-04#retrospective]]\n  - ssh 개발 환경\n    - 이번엔 스크립트로 워커 큐를 만들어서 py 스크립트를 큐에쌓아서 지속적으로 실행할 수 있도록했다\n      - 이를 위해 처음에는 [[jupyter#nbconvert]] 를 활용한 스크립트 변환 활용\n      - 이후에는 eda 를 제외한 영역은 스크립트로 작성해사 사용했다.\n    - [[chatgpt]] 가 코드에디어와 협업을 지원하기 시작\n      - 시작 시점에는 [[vscode]] 만 지원 -\u003e 대회 도중에 [[pycharm]] 지원이 업데이트 됨\n      - 로컬만 프로젝트만 지원해서 로컬 코드 작성후 -\u003e [[scp]] 를 활용한 파일 복사를 사용\n    - 저번에 서버 터졌으므로 [[git]] 에 차곡차곡 저장\n  - eda\n    - 데이터를 시각화를 먼저하고 가설 설계\n      - 길이 토큰\n  - 일정 관리\n    - 대회 시작전 강의 먼저 모두 수강하여 시간 확보\n  - 코드 익숙도\n    - 코드를 먼저 분석하고 들어갔으나 여전히 jupyter 로 큰파일을 진행하기에는 ide도움이 너무 떨어지는 문제\n    - 다음 프로젝트 에서는\n      - [ ] [[mlflow]] 나 저장, 평가등 일부 루틴화된 영역을 처음에 분리하고 수정포인트 업데이트 하는 방식이 좋겠다\n  - 모델링\n    - 역시 모델링 선택에 대한 근거는 여전히 부족\n  - 툴\n    - wandb 사용을 하며 서로 비교할 수 있었다\n    - [[mlflow]]\n      - 많은 해결을 하였고 다음엔 system log만 추가적으로 저장하면 될 것같다\n      - wandb 와 달리 sweep 이 없어서 이부분은 [[optuna]] 를 적용해 보았다\n        - 파라메터 튜닝 별로 할게 없어서 적용하는 경험에 의의\n  - 결과\n    - 이번엔 저번과 달리 데이터 증강이나, 앙상블에 의한 변화가 적은 프로젝트\n    - 모델의 중요성을 크다는 것을 느낌\n    - 무엇보다 반복실험에 있어서는 효율적인 시스템과 툴 사용을 통한 기록의 시각화가 많은 도움이 되었음\n    - [ ] 다음에는 반복적인 실험에 대한 계획을 잘짜서 만들어진 시스템을 활용해 보아야겠다\n\n## link\n- [[upstage-ai-lab]]\n- [[fastapi]]\n- [[docker]]\n- [[docker-compose]]\n- [[upstage-ai-lab-project-04]]\n- [[upstage-ai-lab-project-06]]\n- [[wn.private:upstage-ai-lab-project-05]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# NLP Summary 대회\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# NLP Summary 대회\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/upstage-ai-lab-project-05\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# NLP Summary 대회\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
