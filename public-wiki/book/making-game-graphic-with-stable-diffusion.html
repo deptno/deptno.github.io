@@ -1,0 +1,931 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-01aa3a540a9b10a9.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-3d58b54f94d3602b.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># 스테이블 디퓨전으로 만드는 게임 그래픽</title><meta name="description" content="
+## 용어정리 
+- VAE | Variation Auto-Encoder
+- CFG | Classifier-free Guidance
+- Denoising strength | 0에 가까울수록 현재 이미지를 유지한다
+- ControlNet | input 이미지를 통해서 생성이미지의 동작을 주입하는 플러그인
+- LoRA | Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning
+
+## prompt
+&gt; 학습데이터에 매칭되는 키워드가 가지는 벡터와 관계가 있으므로 학습시에 사용된 AAA 게임 이름, 사이트 이름 그대로 영향을 발휘할 수 있다  
+&gt; 프롬프트 하나만을 입력했을 떄 결과가 원하지 않는 것이 나온다면 학습되지 않은 키워드일 수 있으며 이런 경우는 키워드를 변경해야한다
+
+### 사용법
+- **[prompt1:prompt2:ratio]** 형태로 sampling steps 을 기준으로 ratio 를 나눠서 사용이 가능하다
+  ```
+  beautiful [cat:bird:0.4]
+  ```
+  - 샘플링 20 스텝을 기준으로 8스텝까지는 고양이를 이후스탭은 새를 기준으로 생성한다
+  - `[p1::0.5]`, `[:p2:0.5]` 형식으로 특정 스텝에서는 프롬프트를 제거하는 방식도 유효하다
+- **(word:ratio)** 형태의 강조도 가능하다 `(cat:1.1)` 형태며 `1` 이하로 가게되면 효과가 비율만큼 약화된다
+- 프롬프트는 앞에 나오는 순서대로 우선순위를 받는다
+- 추가 script 를 통해서 outpaint(확대)  등에 대한 추가작업이 가능하다
+
+### 대상
+- 일반 명사, 형용사와 함께 작성
+
+### 구도
+- portratit
+
+### 화질
+&gt; 동시에 사이트명으로 구글에 처보면 알 수 있다.  일종의 화풍과 비슷
+
+- artstation
+- deviantart
+- trending artstation
+- trending on deviantart
+- pixiv ranking 1st
+
+### 품질
+- masterpiece
+- best quailty
+- concept artstation
+- extreamly detailed
+- ultra detailed
+- brillant photo
+- beautiful composition
+- sharp focus
+- 4k
+- 8k
+- ray tracing
+- cinematic lighting
+- cinematic postprocessing
+- realism
+
+### 기타
+- kawaii cute girl
+- cute eye
+- small nose
+- small mouth
+- beautiful face
+- brillant face
+- perfect symmetrical face
+- find detailed face
+- aesthetic eyes
+
+### 화풍
+&gt; stable-diffusion@2.x 버전에서는 유효하지 않을 수 있다
+
+```
+style of [화풍,화가] 
+```
+
+#### 스타일
+- gothic
+- renaissance
+- baroque
+- rococo
+- chinoiserie
+- romanticism
+- realism
+- victorian painting
+- japonisme
+- impressionism
+- art nouveau
+- cubism
+- art deco
+- surrealism
+- pop art
+- japanese anime
+- line art
+
+#### 애니메이션 
+- cygames
+- shinkai makoto
+- kyoto animation
+- a-1 pictures
+- p.a. works
+- atelier-ryza
+- granblue fantasy
+- genshin impact
+- azur lane
+- love live!
+- final fantasyarknights
+
+#### 페인팅 기법
+- digital painting
+- oil paintingwatercolor
+- watercolor painting
+- ink watercolor
+- acrylic painting
+- crayon painting
+- pen art
+- ball-point pen art
+- drawing
+- pencil sketch
+- pencil drawing
+- ukiyo-e painting
+- etching
+- pointillism
+- pixel art
+- stained glass
+- woodcut
+- bold line painting
+
+### 시점과 빛
+&gt; 사진을 찍을때 피사체와의 거리 카메라의 옵션을 지정하는 것과 유사하다
+
+#### 거리
+- far long short
+- long shot
+- very wide shot
+- wide shot
+- medium shot
+- west shot
+- bust shot
+- close up shot
+- close up front shot
+- close-up shot
+- closeup
+- head shot
+- face closeup photo
+
+#### 각도
+- below view
+- overhead view
+- near view
+- bird view
+- selfie shot angle
+- wide shot angle
+- shot from a birds eye camera angle
+
+#### 빛 및 구도 기타
+- portrait
+- snap shot
+- landscape
+- upper sunlight
+- golden sun
+- upper sunlight and golden sun
+- beatiful composition
+- sharp focus
+- bright color contrast
+
+#### 조명
+- soft lighting
+- cinematic lighting
+- golden hour lighting
+- strong rim light
+- volumetric top lighting
+- atmospheric lighting
+- cinematic postprocessing top light
+- brillant photo
+- best shot
+- beautiful background
+
+### 세부 조작
+&gt; 얇은것들, 화살, 손가락 등은 실패할 가능성이 높으니 구도를 조절해야한다
+
+- 큰 부부분 부터 세부적인 부분 순으로 작성
+- 가중치 조정
+
+## ControlNet
+- 동작을 입히기 위해서 사용하는 것으로 동작이미지를 주입해서 생성이미지의 동작을 제한한다
+
+## LoRA
+- Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning
+- 추가학습을 통해 이미지 생성시 특정 성격을 주입할 수 있다
+- 추가학습을 위해 사용될 키워드와 이미지를 통해 학습한다 학습 결과 파일은 `*.safetensors`
+- 추가학습시 기존 키워드를 오염시킬 수 있으므로 이 경우에는 정규화 이미지를 준비해서 학습한다
+  - 정규화 준비시 학습용:정규화 이미지의 비율은 **1:5** 정도가 적당하다는 의견이 있다
+- 학습된 LoRA를 적용하면 특정 캐릭터, 고정된 스타일을 주입가능할 것으로 추측한다
+
+## 사용
+- txt2img
+  - {positive,negative} prompt
+  - sampling method: steps 이 높을수록 노이즈 제거 단계가 많다
+    - `a` 로 끝나는 경우 무작위성이 높다, 정교한 이미지에는 적합하지 **않다**
+    - `a` 로 끝나는 경우 무작위성이 높다 
+  - Hires. fix
+    - 생성후 img2img 로 고해상도로 변환
+  - Batch count: 한번에 생성할 이미지 수 4정도로 시작해서 프롬프트가 유효한거같은데 16-64정도로 생산시작
+  - Batch size: 동시에 생성하는 이미지 수로 병렬이지만 vram 소모가 크다
+  - CFG Scale: 
+- settings
+  - face restoration: 얼굴 품질을 높임, 사진에 적합
+  - tiling: 배경 무늬등에 반복할 이미지 생성
+
+## 사용루틴
+- 작은이미지로 빠르게 대량 생산
+- 눈으로 확인
+- 확대 ai
+  + https://replicate.com/nightmareai/real-esrgan
+
+## 이해
+- 학습된 정보를 바탕으로 각각의 텍스트는 방향과 크기를 가지는 벡터로 저장된다
+- 예를 들어 개, 고양이라는 단어는 각기 다른 고양이 같다는 방향과 크기로 저장
+- 때문에 학습한 데이터에 따라 각기 단어에 매핑되는 벡터가 다르다 -&gt;  결과가 다르다
+- 노이즈를 먼저 생성하고 여기서 노이즈를 제거하면서 깨끗한 이미지를 만들어낸다
+- 랜덤 시드는 이 노이즈 이미지와 관련되며 초기값이 다르면 다른이미지가 생성되게된다
+
+## 모델
+- 학습 모델에 따라서 화풍,  퀄러티가 변경된다
+- 특정 목표를 가지고 설계된 모델들이 여럿 존재
+- stable diffusion 모델은 1.x 에서 특정 화풍을 모방, 화풍 재현에 적합, `512x512` 로 학습
+- stable diffusion 모델은 2.x 에서 모방 논란을 대응하여 더 창의적이고 디테일한 묘사가 가능 `768x768` 로 학습
+
+## link
+- [[../stable-diffusion]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# 스테이블 디퓨전으로 만드는 게임 그래픽"/><meta property="og:description" content="
+## 용어정리 
+- VAE | Variation Auto-Encoder
+- CFG | Classifier-free Guidance
+- Denoising strength | 0에 가까울수록 현재 이미지를 유지한다
+- ControlNet | input 이미지를 통해서 생성이미지의 동작을 주입하는 플러그인
+- LoRA | Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning
+
+## prompt
+&gt; 학습데이터에 매칭되는 키워드가 가지는 벡터와 관계가 있으므로 학습시에 사용된 AAA 게임 이름, 사이트 이름 그대로 영향을 발휘할 수 있다  
+&gt; 프롬프트 하나만을 입력했을 떄 결과가 원하지 않는 것이 나온다면 학습되지 않은 키워드일 수 있으며 이런 경우는 키워드를 변경해야한다
+
+### 사용법
+- **[prompt1:prompt2:ratio]** 형태로 sampling steps 을 기준으로 ratio 를 나눠서 사용이 가능하다
+  ```
+  beautiful [cat:bird:0.4]
+  ```
+  - 샘플링 20 스텝을 기준으로 8스텝까지는 고양이를 이후스탭은 새를 기준으로 생성한다
+  - `[p1::0.5]`, `[:p2:0.5]` 형식으로 특정 스텝에서는 프롬프트를 제거하는 방식도 유효하다
+- **(word:ratio)** 형태의 강조도 가능하다 `(cat:1.1)` 형태며 `1` 이하로 가게되면 효과가 비율만큼 약화된다
+- 프롬프트는 앞에 나오는 순서대로 우선순위를 받는다
+- 추가 script 를 통해서 outpaint(확대)  등에 대한 추가작업이 가능하다
+
+### 대상
+- 일반 명사, 형용사와 함께 작성
+
+### 구도
+- portratit
+
+### 화질
+&gt; 동시에 사이트명으로 구글에 처보면 알 수 있다.  일종의 화풍과 비슷
+
+- artstation
+- deviantart
+- trending artstation
+- trending on deviantart
+- pixiv ranking 1st
+
+### 품질
+- masterpiece
+- best quailty
+- concept artstation
+- extreamly detailed
+- ultra detailed
+- brillant photo
+- beautiful composition
+- sharp focus
+- 4k
+- 8k
+- ray tracing
+- cinematic lighting
+- cinematic postprocessing
+- realism
+
+### 기타
+- kawaii cute girl
+- cute eye
+- small nose
+- small mouth
+- beautiful face
+- brillant face
+- perfect symmetrical face
+- find detailed face
+- aesthetic eyes
+
+### 화풍
+&gt; stable-diffusion@2.x 버전에서는 유효하지 않을 수 있다
+
+```
+style of [화풍,화가] 
+```
+
+#### 스타일
+- gothic
+- renaissance
+- baroque
+- rococo
+- chinoiserie
+- romanticism
+- realism
+- victorian painting
+- japonisme
+- impressionism
+- art nouveau
+- cubism
+- art deco
+- surrealism
+- pop art
+- japanese anime
+- line art
+
+#### 애니메이션 
+- cygames
+- shinkai makoto
+- kyoto animation
+- a-1 pictures
+- p.a. works
+- atelier-ryza
+- granblue fantasy
+- genshin impact
+- azur lane
+- love live!
+- final fantasyarknights
+
+#### 페인팅 기법
+- digital painting
+- oil paintingwatercolor
+- watercolor painting
+- ink watercolor
+- acrylic painting
+- crayon painting
+- pen art
+- ball-point pen art
+- drawing
+- pencil sketch
+- pencil drawing
+- ukiyo-e painting
+- etching
+- pointillism
+- pixel art
+- stained glass
+- woodcut
+- bold line painting
+
+### 시점과 빛
+&gt; 사진을 찍을때 피사체와의 거리 카메라의 옵션을 지정하는 것과 유사하다
+
+#### 거리
+- far long short
+- long shot
+- very wide shot
+- wide shot
+- medium shot
+- west shot
+- bust shot
+- close up shot
+- close up front shot
+- close-up shot
+- closeup
+- head shot
+- face closeup photo
+
+#### 각도
+- below view
+- overhead view
+- near view
+- bird view
+- selfie shot angle
+- wide shot angle
+- shot from a birds eye camera angle
+
+#### 빛 및 구도 기타
+- portrait
+- snap shot
+- landscape
+- upper sunlight
+- golden sun
+- upper sunlight and golden sun
+- beatiful composition
+- sharp focus
+- bright color contrast
+
+#### 조명
+- soft lighting
+- cinematic lighting
+- golden hour lighting
+- strong rim light
+- volumetric top lighting
+- atmospheric lighting
+- cinematic postprocessing top light
+- brillant photo
+- best shot
+- beautiful background
+
+### 세부 조작
+&gt; 얇은것들, 화살, 손가락 등은 실패할 가능성이 높으니 구도를 조절해야한다
+
+- 큰 부부분 부터 세부적인 부분 순으로 작성
+- 가중치 조정
+
+## ControlNet
+- 동작을 입히기 위해서 사용하는 것으로 동작이미지를 주입해서 생성이미지의 동작을 제한한다
+
+## LoRA
+- Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning
+- 추가학습을 통해 이미지 생성시 특정 성격을 주입할 수 있다
+- 추가학습을 위해 사용될 키워드와 이미지를 통해 학습한다 학습 결과 파일은 `*.safetensors`
+- 추가학습시 기존 키워드를 오염시킬 수 있으므로 이 경우에는 정규화 이미지를 준비해서 학습한다
+  - 정규화 준비시 학습용:정규화 이미지의 비율은 **1:5** 정도가 적당하다는 의견이 있다
+- 학습된 LoRA를 적용하면 특정 캐릭터, 고정된 스타일을 주입가능할 것으로 추측한다
+
+## 사용
+- txt2img
+  - {positive,negative} prompt
+  - sampling method: steps 이 높을수록 노이즈 제거 단계가 많다
+    - `a` 로 끝나는 경우 무작위성이 높다, 정교한 이미지에는 적합하지 **않다**
+    - `a` 로 끝나는 경우 무작위성이 높다 
+  - Hires. fix
+    - 생성후 img2img 로 고해상도로 변환
+  - Batch count: 한번에 생성할 이미지 수 4정도로 시작해서 프롬프트가 유효한거같은데 16-64정도로 생산시작
+  - Batch size: 동시에 생성하는 이미지 수로 병렬이지만 vram 소모가 크다
+  - CFG Scale: 
+- settings
+  - face restoration: 얼굴 품질을 높임, 사진에 적합
+  - tiling: 배경 무늬등에 반복할 이미지 생성
+
+## 사용루틴
+- 작은이미지로 빠르게 대량 생산
+- 눈으로 확인
+- 확대 ai
+  + https://replicate.com/nightmareai/real-esrgan
+
+## 이해
+- 학습된 정보를 바탕으로 각각의 텍스트는 방향과 크기를 가지는 벡터로 저장된다
+- 예를 들어 개, 고양이라는 단어는 각기 다른 고양이 같다는 방향과 크기로 저장
+- 때문에 학습한 데이터에 따라 각기 단어에 매핑되는 벡터가 다르다 -&gt;  결과가 다르다
+- 노이즈를 먼저 생성하고 여기서 노이즈를 제거하면서 깨끗한 이미지를 만들어낸다
+- 랜덤 시드는 이 노이즈 이미지와 관련되며 초기값이 다르면 다른이미지가 생성되게된다
+
+## 모델
+- 학습 모델에 따라서 화풍,  퀄러티가 변경된다
+- 특정 목표를 가지고 설계된 모델들이 여럿 존재
+- stable diffusion 모델은 1.x 에서 특정 화풍을 모방, 화풍 재현에 적합, `512x512` 로 학습
+- stable diffusion 모델은 2.x 에서 모방 논란을 대응하여 더 창의적이고 디테일한 묘사가 가능 `768x768` 로 학습
+
+## link
+- [[../stable-diffusion]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/book/making-game-graphic-with-stable-diffusion"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# 스테이블 디퓨전으로 만드는 게임 그래픽"/><meta name="twitter:description" content="
+## 용어정리 
+- VAE | Variation Auto-Encoder
+- CFG | Classifier-free Guidance
+- Denoising strength | 0에 가까울수록 현재 이미지를 유지한다
+- ControlNet | input 이미지를 통해서 생성이미지의 동작을 주입하는 플러그인
+- LoRA | Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning
+
+## prompt
+&gt; 학습데이터에 매칭되는 키워드가 가지는 벡터와 관계가 있으므로 학습시에 사용된 AAA 게임 이름, 사이트 이름 그대로 영향을 발휘할 수 있다  
+&gt; 프롬프트 하나만을 입력했을 떄 결과가 원하지 않는 것이 나온다면 학습되지 않은 키워드일 수 있으며 이런 경우는 키워드를 변경해야한다
+
+### 사용법
+- **[prompt1:prompt2:ratio]** 형태로 sampling steps 을 기준으로 ratio 를 나눠서 사용이 가능하다
+  ```
+  beautiful [cat:bird:0.4]
+  ```
+  - 샘플링 20 스텝을 기준으로 8스텝까지는 고양이를 이후스탭은 새를 기준으로 생성한다
+  - `[p1::0.5]`, `[:p2:0.5]` 형식으로 특정 스텝에서는 프롬프트를 제거하는 방식도 유효하다
+- **(word:ratio)** 형태의 강조도 가능하다 `(cat:1.1)` 형태며 `1` 이하로 가게되면 효과가 비율만큼 약화된다
+- 프롬프트는 앞에 나오는 순서대로 우선순위를 받는다
+- 추가 script 를 통해서 outpaint(확대)  등에 대한 추가작업이 가능하다
+
+### 대상
+- 일반 명사, 형용사와 함께 작성
+
+### 구도
+- portratit
+
+### 화질
+&gt; 동시에 사이트명으로 구글에 처보면 알 수 있다.  일종의 화풍과 비슷
+
+- artstation
+- deviantart
+- trending artstation
+- trending on deviantart
+- pixiv ranking 1st
+
+### 품질
+- masterpiece
+- best quailty
+- concept artstation
+- extreamly detailed
+- ultra detailed
+- brillant photo
+- beautiful composition
+- sharp focus
+- 4k
+- 8k
+- ray tracing
+- cinematic lighting
+- cinematic postprocessing
+- realism
+
+### 기타
+- kawaii cute girl
+- cute eye
+- small nose
+- small mouth
+- beautiful face
+- brillant face
+- perfect symmetrical face
+- find detailed face
+- aesthetic eyes
+
+### 화풍
+&gt; stable-diffusion@2.x 버전에서는 유효하지 않을 수 있다
+
+```
+style of [화풍,화가] 
+```
+
+#### 스타일
+- gothic
+- renaissance
+- baroque
+- rococo
+- chinoiserie
+- romanticism
+- realism
+- victorian painting
+- japonisme
+- impressionism
+- art nouveau
+- cubism
+- art deco
+- surrealism
+- pop art
+- japanese anime
+- line art
+
+#### 애니메이션 
+- cygames
+- shinkai makoto
+- kyoto animation
+- a-1 pictures
+- p.a. works
+- atelier-ryza
+- granblue fantasy
+- genshin impact
+- azur lane
+- love live!
+- final fantasyarknights
+
+#### 페인팅 기법
+- digital painting
+- oil paintingwatercolor
+- watercolor painting
+- ink watercolor
+- acrylic painting
+- crayon painting
+- pen art
+- ball-point pen art
+- drawing
+- pencil sketch
+- pencil drawing
+- ukiyo-e painting
+- etching
+- pointillism
+- pixel art
+- stained glass
+- woodcut
+- bold line painting
+
+### 시점과 빛
+&gt; 사진을 찍을때 피사체와의 거리 카메라의 옵션을 지정하는 것과 유사하다
+
+#### 거리
+- far long short
+- long shot
+- very wide shot
+- wide shot
+- medium shot
+- west shot
+- bust shot
+- close up shot
+- close up front shot
+- close-up shot
+- closeup
+- head shot
+- face closeup photo
+
+#### 각도
+- below view
+- overhead view
+- near view
+- bird view
+- selfie shot angle
+- wide shot angle
+- shot from a birds eye camera angle
+
+#### 빛 및 구도 기타
+- portrait
+- snap shot
+- landscape
+- upper sunlight
+- golden sun
+- upper sunlight and golden sun
+- beatiful composition
+- sharp focus
+- bright color contrast
+
+#### 조명
+- soft lighting
+- cinematic lighting
+- golden hour lighting
+- strong rim light
+- volumetric top lighting
+- atmospheric lighting
+- cinematic postprocessing top light
+- brillant photo
+- best shot
+- beautiful background
+
+### 세부 조작
+&gt; 얇은것들, 화살, 손가락 등은 실패할 가능성이 높으니 구도를 조절해야한다
+
+- 큰 부부분 부터 세부적인 부분 순으로 작성
+- 가중치 조정
+
+## ControlNet
+- 동작을 입히기 위해서 사용하는 것으로 동작이미지를 주입해서 생성이미지의 동작을 제한한다
+
+## LoRA
+- Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning
+- 추가학습을 통해 이미지 생성시 특정 성격을 주입할 수 있다
+- 추가학습을 위해 사용될 키워드와 이미지를 통해 학습한다 학습 결과 파일은 `*.safetensors`
+- 추가학습시 기존 키워드를 오염시킬 수 있으므로 이 경우에는 정규화 이미지를 준비해서 학습한다
+  - 정규화 준비시 학습용:정규화 이미지의 비율은 **1:5** 정도가 적당하다는 의견이 있다
+- 학습된 LoRA를 적용하면 특정 캐릭터, 고정된 스타일을 주입가능할 것으로 추측한다
+
+## 사용
+- txt2img
+  - {positive,negative} prompt
+  - sampling method: steps 이 높을수록 노이즈 제거 단계가 많다
+    - `a` 로 끝나는 경우 무작위성이 높다, 정교한 이미지에는 적합하지 **않다**
+    - `a` 로 끝나는 경우 무작위성이 높다 
+  - Hires. fix
+    - 생성후 img2img 로 고해상도로 변환
+  - Batch count: 한번에 생성할 이미지 수 4정도로 시작해서 프롬프트가 유효한거같은데 16-64정도로 생산시작
+  - Batch size: 동시에 생성하는 이미지 수로 병렬이지만 vram 소모가 크다
+  - CFG Scale: 
+- settings
+  - face restoration: 얼굴 품질을 높임, 사진에 적합
+  - tiling: 배경 무늬등에 반복할 이미지 생성
+
+## 사용루틴
+- 작은이미지로 빠르게 대량 생산
+- 눈으로 확인
+- 확대 ai
+  + https://replicate.com/nightmareai/real-esrgan
+
+## 이해
+- 학습된 정보를 바탕으로 각각의 텍스트는 방향과 크기를 가지는 벡터로 저장된다
+- 예를 들어 개, 고양이라는 단어는 각기 다른 고양이 같다는 방향과 크기로 저장
+- 때문에 학습한 데이터에 따라 각기 단어에 매핑되는 벡터가 다르다 -&gt;  결과가 다르다
+- 노이즈를 먼저 생성하고 여기서 노이즈를 제거하면서 깨끗한 이미지를 만들어낸다
+- 랜덤 시드는 이 노이즈 이미지와 관련되며 초기값이 다르면 다른이미지가 생성되게된다
+
+## 모델
+- 학습 모델에 따라서 화풍,  퀄러티가 변경된다
+- 특정 목표를 가지고 설계된 모델들이 여럿 존재
+- stable diffusion 모델은 1.x 에서 특정 화풍을 모방, 화풍 재현에 적합, `512x512` 로 학습
+- stable diffusion 모델은 2.x 에서 모방 논란을 대응하여 더 창의적이고 디테일한 묘사가 가능 `768x768` 로 학습
+
+## link
+- [[../stable-diffusion]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/824ce01
+" class="bg-white text-black">824ce01</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki/book">book<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/book/making-game-graphic-with-stable-diffusion.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/book/making-game-graphic-with-stable-diffusion.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/book/making-game-graphic-with-stable-diffusion.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/book/making-game-graphic-with-stable-diffusion"><span class="underline">book/making-game-graphic-with-stable-diffusion</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/stable-diffusion"><span class="underline">stable-diffusion</span><sup>19</sup></a></span><span><a class="text-blue-600" href="/public-wiki/huggingface-ml-for-games"><span class="underline">huggingface-ml-for-games</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/stable-diffusion-webui"><span class="underline">stable-diffusion-webui</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/book/index"><span class="underline">book/index</span><sup>13</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#스테이블-디퓨전으로-만드는-게임-그래픽">스테이블 디퓨전으로 만드는 게임 그래픽</a></div><div class="pl-2"><a href="#용어정리">용어정리</a></div><div class="pl-2"><a href="#prompt">prompt</a></div><div class="pl-4"><a href="#사용법">사용법</a></div><div class="pl-4"><a href="#대상">대상</a></div><div class="pl-4"><a href="#구도">구도</a></div><div class="pl-4"><a href="#화질">화질</a></div><div class="pl-4"><a href="#품질">품질</a></div><div class="pl-4"><a href="#기타">기타</a></div><div class="pl-4"><a href="#화풍">화풍</a></div><div class="pl-6"><a href="#스타일">스타일</a></div><div class="pl-6"><a href="#애니메이션">애니메이션</a></div><div class="pl-6"><a href="#페인팅-기법">페인팅 기법</a></div><div class="pl-4"><a href="#시점과-빛">시점과 빛</a></div><div class="pl-6"><a href="#거리">거리</a></div><div class="pl-6"><a href="#각도">각도</a></div><div class="pl-6"><a href="#빛-및-구도-기타">빛 및 구도 기타</a></div><div class="pl-6"><a href="#조명">조명</a></div><div class="pl-4"><a href="#세부-조작">세부 조작</a></div><div class="pl-2"><a href="#controlnet">ControlNet</a></div><div class="pl-2"><a href="#lora">LoRA</a></div><div class="pl-2"><a href="#사용">사용</a></div><div class="pl-2"><a href="#사용루틴">사용루틴</a></div><div class="pl-2"><a href="#이해">이해</a></div><div class="pl-2"><a href="#모델">모델</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="스테이블-디퓨전으로-만드는-게임-그래픽">스테이블 디퓨전으로 만드는 게임 그래픽</h1>
+<h2 id="용어정리">용어정리</h2>
+<ul>
+<li>VAE | Variation Auto-Encoder</li>
+<li>CFG | Classifier-free Guidance</li>
+<li>Denoising strength | 0에 가까울수록 현재 이미지를 유지한다</li>
+<li>ControlNet | input 이미지를 통해서 생성이미지의 동작을 주입하는 플러그인</li>
+<li>LoRA | Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning</li>
+</ul>
+<h2 id="prompt">prompt</h2>
+<blockquote><p>학습데이터에 매칭되는 키워드가 가지는 벡터와 관계가 있으므로 학습시에 사용된 AAA 게임 이름, 사이트 이름 그대로 영향을 발휘할 수 있다<br>프롬프트 하나만을 입력했을 떄 결과가 원하지 않는 것이 나온다면 학습되지 않은 키워드일 수 있으며 이런 경우는 키워드를 변경해야한다</p></blockquote><h3 id="사용법">사용법</h3>
+<ul>
+<li><strong>[prompt1:prompt2:ratio]</strong> 형태로 sampling steps 을 기준으로 ratio 를 나눠서 사용이 가능하다<pre><code>beautiful [cat:bird:0.4]
+</code></pre><ul>
+<li>샘플링 20 스텝을 기준으로 8스텝까지는 고양이를 이후스탭은 새를 기준으로 생성한다</li>
+<li><code class="span">[p1::0.5]</code>, <code class="span">[:p2:0.5]</code> 형식으로 특정 스텝에서는 프롬프트를 제거하는 방식도 유효하다</li>
+</ul>
+</li>
+<li><strong>(word:ratio)</strong> 형태의 강조도 가능하다 <code class="span">(cat:1.1)</code> 형태며 <code class="span">1</code> 이하로 가게되면 효과가 비율만큼 약화된다</li>
+<li>프롬프트는 앞에 나오는 순서대로 우선순위를 받는다</li>
+<li>추가 script 를 통해서 outpaint(확대)  등에 대한 추가작업이 가능하다</li>
+</ul>
+<h3 id="대상">대상</h3>
+<ul>
+<li>일반 명사, 형용사와 함께 작성</li>
+</ul>
+<h3 id="구도">구도</h3>
+<ul>
+<li>portratit</li>
+</ul>
+<h3 id="화질">화질</h3>
+<blockquote><p>동시에 사이트명으로 구글에 처보면 알 수 있다.  일종의 화풍과 비슷</p></blockquote><ul>
+<li>artstation</li>
+<li>deviantart</li>
+<li>trending artstation</li>
+<li>trending on deviantart</li>
+<li>pixiv ranking 1st</li>
+</ul>
+<h3 id="품질">품질</h3>
+<ul>
+<li>masterpiece</li>
+<li>best quailty</li>
+<li>concept artstation</li>
+<li>extreamly detailed</li>
+<li>ultra detailed</li>
+<li>brillant photo</li>
+<li>beautiful composition</li>
+<li>sharp focus</li>
+<li>4k</li>
+<li>8k</li>
+<li>ray tracing</li>
+<li>cinematic lighting</li>
+<li>cinematic postprocessing</li>
+<li>realism</li>
+</ul>
+<h3 id="기타">기타</h3>
+<ul>
+<li>kawaii cute girl</li>
+<li>cute eye</li>
+<li>small nose</li>
+<li>small mouth</li>
+<li>beautiful face</li>
+<li>brillant face</li>
+<li>perfect symmetrical face</li>
+<li>find detailed face</li>
+<li>aesthetic eyes</li>
+</ul>
+<h3 id="화풍">화풍</h3>
+<blockquote><p><a href="mailto:stable-diffusion@2.x" target="_blank">stable-diffusion@2.x</a> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=stable-diffusion@2.x&body=from deptno.dev" target="_blank">[지메일로 보내기]</a> 버전에서는 유효하지 않을 수 있다</p></blockquote><pre><code>style of [화풍,화가] 
+</code></pre><h4 id="스타일">스타일</h4>
+<ul>
+<li>gothic</li>
+<li>renaissance</li>
+<li>baroque</li>
+<li>rococo</li>
+<li>chinoiserie</li>
+<li>romanticism</li>
+<li>realism</li>
+<li>victorian painting</li>
+<li>japonisme</li>
+<li>impressionism</li>
+<li>art nouveau</li>
+<li>cubism</li>
+<li>art deco</li>
+<li>surrealism</li>
+<li>pop art</li>
+<li>japanese anime</li>
+<li>line art</li>
+</ul>
+<h4 id="애니메이션">애니메이션</h4>
+<ul>
+<li>cygames</li>
+<li>shinkai makoto</li>
+<li>kyoto animation</li>
+<li>a-1 pictures</li>
+<li>p.a. works</li>
+<li>atelier-ryza</li>
+<li>granblue fantasy</li>
+<li>genshin impact</li>
+<li>azur lane</li>
+<li>love live!</li>
+<li>final fantasyarknights</li>
+</ul>
+<h4 id="페인팅-기법">페인팅 기법</h4>
+<ul>
+<li>digital painting</li>
+<li>oil paintingwatercolor</li>
+<li>watercolor painting</li>
+<li>ink watercolor</li>
+<li>acrylic painting</li>
+<li>crayon painting</li>
+<li>pen art</li>
+<li>ball-point pen art</li>
+<li>drawing</li>
+<li>pencil sketch</li>
+<li>pencil drawing</li>
+<li>ukiyo-e painting</li>
+<li>etching</li>
+<li>pointillism</li>
+<li>pixel art</li>
+<li>stained glass</li>
+<li>woodcut</li>
+<li>bold line painting</li>
+</ul>
+<h3 id="시점과-빛">시점과 빛</h3>
+<blockquote><p>사진을 찍을때 피사체와의 거리 카메라의 옵션을 지정하는 것과 유사하다</p></blockquote><h4 id="거리">거리</h4>
+<ul>
+<li>far long short</li>
+<li>long shot</li>
+<li>very wide shot</li>
+<li>wide shot</li>
+<li>medium shot</li>
+<li>west shot</li>
+<li>bust shot</li>
+<li>close up shot</li>
+<li>close up front shot</li>
+<li>close-up shot</li>
+<li>closeup</li>
+<li>head shot</li>
+<li>face closeup photo</li>
+</ul>
+<h4 id="각도">각도</h4>
+<ul>
+<li>below view</li>
+<li>overhead view</li>
+<li>near view</li>
+<li>bird view</li>
+<li>selfie shot angle</li>
+<li>wide shot angle</li>
+<li>shot from a birds eye camera angle</li>
+</ul>
+<h4 id="빛-및-구도-기타">빛 및 구도 기타</h4>
+<ul>
+<li>portrait</li>
+<li>snap shot</li>
+<li>landscape</li>
+<li>upper sunlight</li>
+<li>golden sun</li>
+<li>upper sunlight and golden sun</li>
+<li>beatiful composition</li>
+<li>sharp focus</li>
+<li>bright color contrast</li>
+</ul>
+<h4 id="조명">조명</h4>
+<ul>
+<li>soft lighting</li>
+<li>cinematic lighting</li>
+<li>golden hour lighting</li>
+<li>strong rim light</li>
+<li>volumetric top lighting</li>
+<li>atmospheric lighting</li>
+<li>cinematic postprocessing top light</li>
+<li>brillant photo</li>
+<li>best shot</li>
+<li>beautiful background</li>
+</ul>
+<h3 id="세부-조작">세부 조작</h3>
+<blockquote><p>얇은것들, 화살, 손가락 등은 실패할 가능성이 높으니 구도를 조절해야한다</p></blockquote><ul>
+<li>큰 부부분 부터 세부적인 부분 순으로 작성</li>
+<li>가중치 조정</li>
+</ul>
+<h2 id="controlnet">ControlNet</h2>
+<ul>
+<li>동작을 입히기 위해서 사용하는 것으로 동작이미지를 주입해서 생성이미지의 동작을 제한한다</li>
+</ul>
+<h2 id="lora">LoRA</h2>
+<ul>
+<li>Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning</li>
+<li>추가학습을 통해 이미지 생성시 특정 성격을 주입할 수 있다</li>
+<li>추가학습을 위해 사용될 키워드와 이미지를 통해 학습한다 학습 결과 파일은 <code class="span">*.safetensors</code></li>
+<li>추가학습시 기존 키워드를 오염시킬 수 있으므로 이 경우에는 정규화 이미지를 준비해서 학습한다<ul>
+<li>정규화 준비시 학습용:정규화 이미지의 비율은 <strong>1:5</strong> 정도가 적당하다는 의견이 있다</li>
+</ul>
+</li>
+<li>학습된 LoRA를 적용하면 특정 캐릭터, 고정된 스타일을 주입가능할 것으로 추측한다</li>
+</ul>
+<h2 id="사용">사용</h2>
+<ul>
+<li>txt2img<ul>
+<li>{positive,negative} prompt</li>
+<li>sampling method: steps 이 높을수록 노이즈 제거 단계가 많다<ul>
+<li><code class="span">a</code> 로 끝나는 경우 무작위성이 높다, 정교한 이미지에는 적합하지 <strong>않다</strong></li>
+<li><code class="span">a</code> 로 끝나는 경우 무작위성이 높다</li>
+</ul>
+</li>
+<li>Hires. fix<ul>
+<li>생성후 img2img 로 고해상도로 변환</li>
+</ul>
+</li>
+<li>Batch count: 한번에 생성할 이미지 수 4정도로 시작해서 프롬프트가 유효한거같은데 16-64정도로 생산시작</li>
+<li>Batch size: 동시에 생성하는 이미지 수로 병렬이지만 vram 소모가 크다</li>
+<li>CFG Scale:</li>
+</ul>
+</li>
+<li>settings<ul>
+<li>face restoration: 얼굴 품질을 높임, 사진에 적합</li>
+<li>tiling: 배경 무늬등에 반복할 이미지 생성</li>
+</ul>
+</li>
+</ul>
+<h2 id="사용루틴">사용루틴</h2>
+<ul>
+<li>작은이미지로 빠르게 대량 생산</li>
+<li>눈으로 확인</li>
+<li>확대 ai<ul>
+<li><a href="https://replicate.com/nightmareai/real-esrgan" target="_blank">[URL] https://replicate.com/nightmareai/real-esrgan</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="이해">이해</h2>
+<ul>
+<li>학습된 정보를 바탕으로 각각의 텍스트는 방향과 크기를 가지는 벡터로 저장된다</li>
+<li>예를 들어 개, 고양이라는 단어는 각기 다른 고양이 같다는 방향과 크기로 저장</li>
+<li>때문에 학습한 데이터에 따라 각기 단어에 매핑되는 벡터가 다르다 -&gt;  결과가 다르다</li>
+<li>노이즈를 먼저 생성하고 여기서 노이즈를 제거하면서 깨끗한 이미지를 만들어낸다</li>
+<li>랜덤 시드는 이 노이즈 이미지와 관련되며 초기값이 다르면 다른이미지가 생성되게된다</li>
+</ul>
+<h2 id="모델">모델</h2>
+<ul>
+<li>학습 모델에 따라서 화풍,  퀄러티가 변경된다</li>
+<li>특정 목표를 가지고 설계된 모델들이 여럿 존재</li>
+<li>stable diffusion 모델은 1.x 에서 특정 화풍을 모방, 화풍 재현에 적합, <code class="span">512x512</code> 로 학습</li>
+<li>stable diffusion 모델은 2.x 에서 모방 논란을 대응하여 더 창의적이고 디테일한 묘사가 가능 <code class="span">768x768</code> 로 학습</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="../stable-diffusion">../stable-diffusion</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-01aa3a540a9b10a9.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-3d58b54f94d3602b.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"book/making-game-graphic-with-stable-diffusion\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"PQ1Y9JFLMeZ9AEzD_lf7v\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/book/making-game-graphic-with-stable-diffusion\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"book/making-game-graphic-with-stable-diffusion\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"book\\\",\\\"making-game-graphic-with-stable-diffusion\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"book/making-game-graphic-with-stable-diffusion\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T2519,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"스테이블-디퓨전으로-만드는-게임-그래픽\"\u003e스테이블 디퓨전으로 만드는 게임 그래픽\u003c/h1\u003e\n\u003ch2 id=\"용어정리\"\u003e용어정리\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eVAE | Variation Auto-Encoder\u003c/li\u003e\n\u003cli\u003eCFG | Classifier-free Guidance\u003c/li\u003e\n\u003cli\u003eDenoising strength | 0에 가까울수록 현재 이미지를 유지한다\u003c/li\u003e\n\u003cli\u003eControlNet | input 이미지를 통해서 생성이미지의 동작을 주입하는 플러그인\u003c/li\u003e\n\u003cli\u003eLoRA | Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"prompt\"\u003eprompt\u003c/h2\u003e\n\u003cblockquote\u003e\u003cp\u003e학습데이터에 매칭되는 키워드가 가지는 벡터와 관계가 있으므로 학습시에 사용된 AAA 게임 이름, 사이트 이름 그대로 영향을 발휘할 수 있다\u003cbr\u003e프롬프트 하나만을 입력했을 떄 결과가 원하지 않는 것이 나온다면 학습되지 않은 키워드일 수 있으며 이런 경우는 키워드를 변경해야한다\u003c/p\u003e\u003c/blockquote\u003e\u003ch3 id=\"사용법\"\u003e사용법\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003e[prompt1:prompt2:ratio]\u003c/strong\u003e 형태로 sampling steps 을 기준으로 ratio 를 나눠서 사용이 가능하다\u003cpre\u003e\u003ccode\u003ebeautiful [cat:bird:0.4]\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e샘플링 20 스텝을 기준으로 8스텝까지는 고양이를 이후스탭은 새를 기준으로 생성한다\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e[p1::0.5]\u003c/code\u003e, \u003ccode class=\"span\"\u003e[:p2:0.5]\u003c/code\u003e 형식으로 특정 스텝에서는 프롬프트를 제거하는 방식도 유효하다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003e(word:ratio)\u003c/strong\u003e 형태의 강조도 가능하다 \u003ccode class=\"span\"\u003e(cat:1.1)\u003c/code\u003e 형태며 \u003ccode class=\"span\"\u003e1\u003c/code\u003e 이하로 가게되면 효과가 비율만큼 약화된다\u003c/li\u003e\n\u003cli\u003e프롬프트는 앞에 나오는 순서대로 우선순위를 받는다\u003c/li\u003e\n\u003cli\u003e추가 script 를 통해서 outpaint(확대)  등에 대한 추가작업이 가능하다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"대상\"\u003e대상\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e일반 명사, 형용사와 함께 작성\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"구도\"\u003e구도\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eportratit\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"화질\"\u003e화질\u003c/h3\u003e\n\u003cblockquote\u003e\u003cp\u003e동시에 사이트명으로 구글에 처보면 알 수 있다.  일종의 화풍과 비슷\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003eartstation\u003c/li\u003e\n\u003cli\u003edeviantart\u003c/li\u003e\n\u003cli\u003etrending artstation\u003c/li\u003e\n\u003cli\u003etrending on deviantart\u003c/li\u003e\n\u003cli\u003epixiv ranking 1st\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"품질\"\u003e품질\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003emasterpiece\u003c/li\u003e\n\u003cli\u003ebest quailty\u003c/li\u003e\n\u003cli\u003econcept artstation\u003c/li\u003e\n\u003cli\u003eextreamly detailed\u003c/li\u003e\n\u003cli\u003eultra detailed\u003c/li\u003e\n\u003cli\u003ebrillant photo\u003c/li\u003e\n\u003cli\u003ebeautiful composition\u003c/li\u003e\n\u003cli\u003esharp focus\u003c/li\u003e\n\u003cli\u003e4k\u003c/li\u003e\n\u003cli\u003e8k\u003c/li\u003e\n\u003cli\u003eray tracing\u003c/li\u003e\n\u003cli\u003ecinematic lighting\u003c/li\u003e\n\u003cli\u003ecinematic postprocessing\u003c/li\u003e\n\u003cli\u003erealism\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"기타\"\u003e기타\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003ekawaii cute girl\u003c/li\u003e\n\u003cli\u003ecute eye\u003c/li\u003e\n\u003cli\u003esmall nose\u003c/li\u003e\n\u003cli\u003esmall mouth\u003c/li\u003e\n\u003cli\u003ebeautiful face\u003c/li\u003e\n\u003cli\u003ebrillant face\u003c/li\u003e\n\u003cli\u003eperfect symmetrical face\u003c/li\u003e\n\u003cli\u003efind detailed face\u003c/li\u003e\n\u003cli\u003eaesthetic eyes\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"화풍\"\u003e화풍\u003c/h3\u003e\n\u003cblockquote\u003e\u003cp\u003e\u003ca href=\"mailto:stable-diffusion@2.x\" target=\"_blank\"\u003estable-diffusion@2.x\u003c/a\u003e \u003ca href=\"https://mail.google.com/mail/?view=cm\u0026fs=1\u0026to=stable-diffusion@2.x\u0026body=from deptno.dev\" target=\"_blank\"\u003e[지메일로 보내기]\u003c/a\u003e 버전에서는 유효하지 않을 수 있다\u003c/p\u003e\u003c/blockquote\u003e\u003cpre\u003e\u003ccode\u003estyle of [화풍,화가] \n\u003c/code\u003e\u003c/pre\u003e\u003ch4 id=\"스타일\"\u003e스타일\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003egothic\u003c/li\u003e\n\u003cli\u003erenaissance\u003c/li\u003e\n\u003cli\u003ebaroque\u003c/li\u003e\n\u003cli\u003erococo\u003c/li\u003e\n\u003cli\u003echinoiserie\u003c/li\u003e\n\u003cli\u003eromanticism\u003c/li\u003e\n\u003cli\u003erealism\u003c/li\u003e\n\u003cli\u003evictorian painting\u003c/li\u003e\n\u003cli\u003ejaponisme\u003c/li\u003e\n\u003cli\u003eimpressionism\u003c/li\u003e\n\u003cli\u003eart nouveau\u003c/li\u003e\n\u003cli\u003ecubism\u003c/li\u003e\n\u003cli\u003eart deco\u003c/li\u003e\n\u003cli\u003esurrealism\u003c/li\u003e\n\u003cli\u003epop art\u003c/li\u003e\n\u003cli\u003ejapanese anime\u003c/li\u003e\n\u003cli\u003eline art\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"애니메이션\"\u003e애니메이션\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003ecygames\u003c/li\u003e\n\u003cli\u003eshinkai makoto\u003c/li\u003e\n\u003cli\u003ekyoto animation\u003c/li\u003e\n\u003cli\u003ea-1 pictures\u003c/li\u003e\n\u003cli\u003ep.a. works\u003c/li\u003e\n\u003cli\u003eatelier-ryza\u003c/li\u003e\n\u003cli\u003egranblue fantasy\u003c/li\u003e\n\u003cli\u003egenshin impact\u003c/li\u003e\n\u003cli\u003eazur lane\u003c/li\u003e\n\u003cli\u003elove live!\u003c/li\u003e\n\u003cli\u003efinal fantasyarknights\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"페인팅-기법\"\u003e페인팅 기법\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003edigital painting\u003c/li\u003e\n\u003cli\u003eoil paintingwatercolor\u003c/li\u003e\n\u003cli\u003ewatercolor painting\u003c/li\u003e\n\u003cli\u003eink watercolor\u003c/li\u003e\n\u003cli\u003eacrylic painting\u003c/li\u003e\n\u003cli\u003ecrayon painting\u003c/li\u003e\n\u003cli\u003epen art\u003c/li\u003e\n\u003cli\u003eball-point pen art\u003c/li\u003e\n\u003cli\u003edrawing\u003c/li\u003e\n\u003cli\u003epencil sketch\u003c/li\u003e\n\u003cli\u003epencil drawing\u003c/li\u003e\n\u003cli\u003eukiyo-e painting\u003c/li\u003e\n\u003cli\u003eetching\u003c/li\u003e\n\u003cli\u003epointillism\u003c/li\u003e\n\u003cli\u003epixel art\u003c/li\u003e\n\u003cli\u003estained glass\u003c/li\u003e\n\u003cli\u003ewoodcut\u003c/li\u003e\n\u003cli\u003ebold line painting\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"시점과-빛\"\u003e시점과 빛\u003c/h3\u003e\n\u003cblockquote\u003e\u003cp\u003e사진을 찍을때 피사체와의 거리 카메라의 옵션을 지정하는 것과 유사하다\u003c/p\u003e\u003c/blockquote\u003e\u003ch4 id=\"거리\"\u003e거리\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003efar long short\u003c/li\u003e\n\u003cli\u003elong shot\u003c/li\u003e\n\u003cli\u003every wide shot\u003c/li\u003e\n\u003cli\u003ewide shot\u003c/li\u003e\n\u003cli\u003emedium shot\u003c/li\u003e\n\u003cli\u003ewest shot\u003c/li\u003e\n\u003cli\u003ebust shot\u003c/li\u003e\n\u003cli\u003eclose up shot\u003c/li\u003e\n\u003cli\u003eclose up front shot\u003c/li\u003e\n\u003cli\u003eclose-up shot\u003c/li\u003e\n\u003cli\u003ecloseup\u003c/li\u003e\n\u003cli\u003ehead shot\u003c/li\u003e\n\u003cli\u003eface closeup photo\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"각도\"\u003e각도\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003ebelow view\u003c/li\u003e\n\u003cli\u003eoverhead view\u003c/li\u003e\n\u003cli\u003enear view\u003c/li\u003e\n\u003cli\u003ebird view\u003c/li\u003e\n\u003cli\u003eselfie shot angle\u003c/li\u003e\n\u003cli\u003ewide shot angle\u003c/li\u003e\n\u003cli\u003eshot from a birds eye camera angle\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"빛-및-구도-기타\"\u003e빛 및 구도 기타\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003eportrait\u003c/li\u003e\n\u003cli\u003esnap shot\u003c/li\u003e\n\u003cli\u003elandscape\u003c/li\u003e\n\u003cli\u003eupper sunlight\u003c/li\u003e\n\u003cli\u003egolden sun\u003c/li\u003e\n\u003cli\u003eupper sunlight and golden sun\u003c/li\u003e\n\u003cli\u003ebeatiful composition\u003c/li\u003e\n\u003cli\u003esharp focus\u003c/li\u003e\n\u003cli\u003ebright color contrast\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"조명\"\u003e조명\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003esoft lighting\u003c/li\u003e\n\u003cli\u003ecinematic lighting\u003c/li\u003e\n\u003cli\u003egolden hour lighting\u003c/li\u003e\n\u003cli\u003estrong rim light\u003c/li\u003e\n\u003cli\u003evolumetric top lighting\u003c/li\u003e\n\u003cli\u003eatmospheric lighting\u003c/li\u003e\n\u003cli\u003ecinematic postprocessing top light\u003c/li\u003e\n\u003cli\u003ebrillant photo\u003c/li\u003e\n\u003cli\u003ebest shot\u003c/li\u003e\n\u003cli\u003ebeautiful background\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"세부-조작\"\u003e세부 조작\u003c/h3\u003e\n\u003cblockquote\u003e\u003cp\u003e얇은것들, 화살, 손가락 등은 실패할 가능성이 높으니 구도를 조절해야한다\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003e큰 부부분 부터 세부적인 부분 순으로 작성\u003c/li\u003e\n\u003cli\u003e가중치 조정\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"controlnet\"\u003eControlNet\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e동작을 입히기 위해서 사용하는 것으로 동작이미지를 주입해서 생성이미지의 동작을 제한한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"lora\"\u003eLoRA\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eLow-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning\u003c/li\u003e\n\u003cli\u003e추가학습을 통해 이미지 생성시 특정 성격을 주입할 수 있다\u003c/li\u003e\n\u003cli\u003e추가학습을 위해 사용될 키워드와 이미지를 통해 학습한다 학습 결과 파일은 \u003ccode class=\"span\"\u003e*.safetensors\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e추가학습시 기존 키워드를 오염시킬 수 있으므로 이 경우에는 정규화 이미지를 준비해서 학습한다\u003cul\u003e\n\u003cli\u003e정규화 준비시 학습용:정규화 이미지의 비율은 \u003cstrong\u003e1:5\u003c/strong\u003e 정도가 적당하다는 의견이 있다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e학습된 LoRA를 적용하면 특정 캐릭터, 고정된 스타일을 주입가능할 것으로 추측한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"사용\"\u003e사용\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003etxt2img\u003cul\u003e\n\u003cli\u003e{positive,negative} prompt\u003c/li\u003e\n\u003cli\u003esampling method: steps 이 높을수록 노이즈 제거 단계가 많다\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ea\u003c/code\u003e 로 끝나는 경우 무작위성이 높다, 정교한 이미지에는 적합하지 \u003cstrong\u003e않다\u003c/strong\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ea\u003c/code\u003e 로 끝나는 경우 무작위성이 높다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eHires. fix\u003cul\u003e\n\u003cli\u003e생성후 img2img 로 고해상도로 변환\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eBatch count: 한번에 생성할 이미지 수 4정도로 시작해서 프롬프트가 유효한거같은데 16-64정도로 생산시작\u003c/li\u003e\n\u003cli\u003eBatch size: 동시에 생성하는 이미지 수로 병렬이지만 vram 소모가 크다\u003c/li\u003e\n\u003cli\u003eCFG Scale:\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003esettings\u003cul\u003e\n\u003cli\u003eface restoration: 얼굴 품질을 높임, 사진에 적합\u003c/li\u003e\n\u003cli\u003etiling: 배경 무늬등에 반복할 이미지 생성\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"사용루틴\"\u003e사용루틴\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e작은이미지로 빠르게 대량 생산\u003c/li\u003e\n\u003cli\u003e눈으로 확인\u003c/li\u003e\n\u003cli\u003e확대 ai\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://replicate.com/nightmareai/real-esrgan\" target=\"_blank\"\u003e[URL] https://replicate.com/nightmareai/real-esrgan\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"이해\"\u003e이해\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e학습된 정보를 바탕으로 각각의 텍스트는 방향과 크기를 가지는 벡터로 저장된다\u003c/li\u003e\n\u003cli\u003e예를 들어 개, 고양이라는 단어는 각기 다른 고양이 같다는 방향과 크기로 저장\u003c/li\u003e\n\u003cli\u003e때문에 학습한 데이터에 따라 각기 단어에 매핑되는 벡터가 다르다 -\u0026gt;  결과가 다르다\u003c/li\u003e\n\u003cli\u003e노이즈를 먼저 생성하고 여기서 노이즈를 제거하면서 깨끗한 이미지를 만들어낸다\u003c/li\u003e\n\u003cli\u003e랜덤 시드는 이 노이즈 이미지와 관련되며 초기값이 다르면 다른이미지가 생성되게된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"모델\"\u003e모델\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e학습 모델에 따라서 화풍,  퀄러티가 변경된다\u003c/li\u003e\n\u003cli\u003e특정 목표를 가지고 설계된 모델들이 여럿 존재\u003c/li\u003e\n\u003cli\u003estable diffusion 모델은 1.x 에서 특정 화풍을 모방, 화풍 재현에 적합, \u003ccode class=\"span\"\u003e512x512\u003c/code\u003e 로 학습\u003c/li\u003e\n\u003cli\u003estable diffusion 모델은 2.x 에서 모방 논란을 대응하여 더 창의적이고 디테일한 묘사가 가능 \u003ccode class=\"span\"\u003e768x768\u003c/code\u003e 로 학습\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../stable-diffusion\"\u003e../stable-diffusion\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/824ce01\\n\",\"className\":\"bg-white text-black\",\"children\":\"824ce01\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/book/making-game-graphic-with-stable-diffusion.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/book/making-game-graphic-with-stable-diffusion.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/book/making-game-graphic-with-stable-diffusion.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"book/making-game-graphic-with-stable-diffusion\",\"name\":\"book/making-game-graphic-with-stable-diffusion\",\"val\":1},{\"id\":\"stable-diffusion\",\"name\":\"stable-diffusion\",\"val\":19},{\"id\":\"huggingface-ml-for-games\",\"name\":\"huggingface-ml-for-games\",\"val\":7},{\"id\":\"stable-diffusion-webui\",\"name\":\"stable-diffusion-webui\",\"val\":11},{\"id\":\"book/index\",\"name\":\"book/index\",\"val\":13}],\"links\":[{\"source\":\"book/making-game-graphic-with-stable-diffusion\",\"target\":\"stable-diffusion\"},{\"source\":\"huggingface-ml-for-games\",\"target\":\"book/making-game-graphic-with-stable-diffusion\"},{\"source\":\"stable-diffusion-webui\",\"target\":\"book/making-game-graphic-with-stable-diffusion\"},{\"source\":\"stable-diffusion\",\"target\":\"book/making-game-graphic-with-stable-diffusion\"},{\"source\":\"book/index\",\"target\":\"book/making-game-graphic-with-stable-diffusion\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"book/making-game-graphic-with-stable-diffusion\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/book/making-game-graphic-with-stable-diffusion\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"book/making-game-graphic-with-stable-diffusion\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"stable-diffusion\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/stable-diffusion\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"stable-diffusion\"}],[\"$\",\"sup\",null,{\"children\":19}]]}]}],[\"$\",\"span\",\"huggingface-ml-for-games\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/huggingface-ml-for-games\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"huggingface-ml-for-games\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"stable-diffusion-webui\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/stable-diffusion-webui\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"stable-diffusion-webui\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"book/index\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/book/index\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"book/index\"}],[\"$\",\"sup\",null,{\"children\":13}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"스테이블-디퓨전으로-만드는-게임-그래픽\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#스테이블-디퓨전으로-만드는-게임-그래픽\",\"children\":\"스테이블 디퓨전으로 만드는 게임 그래픽\"}]}],[\"$\",\"div\",\"용어정리\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#용어정리\",\"children\":\"용어정리\"}]}],[\"$\",\"div\",\"prompt\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#prompt\",\"children\":\"prompt\"}]}],[\"$\",\"div\",\"사용법\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#사용법\",\"children\":\"사용법\"}]}],[\"$\",\"div\",\"대상\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#대상\",\"children\":\"대상\"}]}],[\"$\",\"div\",\"구도\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#구도\",\"children\":\"구도\"}]}],[\"$\",\"div\",\"화질\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#화질\",\"children\":\"화질\"}]}],[\"$\",\"div\",\"품질\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#품질\",\"children\":\"품질\"}]}],[\"$\",\"div\",\"기타\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#기타\",\"children\":\"기타\"}]}],[\"$\",\"div\",\"화풍\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#화풍\",\"children\":\"화풍\"}]}],[\"$\",\"div\",\"스타일\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#스타일\",\"children\":\"스타일\"}]}],[\"$\",\"div\",\"애니메이션\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#애니메이션\",\"children\":\"애니메이션\"}]}],[\"$\",\"div\",\"페인팅-기법\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#페인팅-기법\",\"children\":\"페인팅 기법\"}]}],[\"$\",\"div\",\"시점과-빛\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#시점과-빛\",\"children\":\"시점과 빛\"}]}],[\"$\",\"div\",\"거리\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#거리\",\"children\":\"거리\"}]}],[\"$\",\"div\",\"각도\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#각도\",\"children\":\"각도\"}]}],[\"$\",\"div\",\"빛-및-구도-기타\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#빛-및-구도-기타\",\"children\":\"빛 및 구도 기타\"}]}],[\"$\",\"div\",\"조명\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#조명\",\"children\":\"조명\"}]}],[\"$\",\"div\",\"세부-조작\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#세부-조작\",\"children\":\"세부 조작\"}]}],[\"$\",\"div\",\"controlnet\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#controlnet\",\"children\":\"ControlNet\"}]}],[\"$\",\"div\",\"lora\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#lora\",\"children\":\"LoRA\"}]}],[\"$\",\"div\",\"사용\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#사용\",\"children\":\"사용\"}]}],[\"$\",\"div\",\"사용루틴\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#사용루틴\",\"children\":\"사용루틴\"}]}],[\"$\",\"div\",\"이해\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#이해\",\"children\":\"이해\"}]}],[\"$\",\"div\",\"모델\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#모델\",\"children\":\"모델\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T1a53,"])</script><script>self.__next_f.push([1,"\n## 용어정리 \n- VAE | Variation Auto-Encoder\n- CFG | Classifier-free Guidance\n- Denoising strength | 0에 가까울수록 현재 이미지를 유지한다\n- ControlNet | input 이미지를 통해서 생성이미지의 동작을 주입하는 플러그인\n- LoRA | Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning\n\n## prompt\n\u003e 학습데이터에 매칭되는 키워드가 가지는 벡터와 관계가 있으므로 학습시에 사용된 AAA 게임 이름, 사이트 이름 그대로 영향을 발휘할 수 있다  \n\u003e 프롬프트 하나만을 입력했을 떄 결과가 원하지 않는 것이 나온다면 학습되지 않은 키워드일 수 있으며 이런 경우는 키워드를 변경해야한다\n\n### 사용법\n- **[prompt1:prompt2:ratio]** 형태로 sampling steps 을 기준으로 ratio 를 나눠서 사용이 가능하다\n  ```\n  beautiful [cat:bird:0.4]\n  ```\n  - 샘플링 20 스텝을 기준으로 8스텝까지는 고양이를 이후스탭은 새를 기준으로 생성한다\n  - `[p1::0.5]`, `[:p2:0.5]` 형식으로 특정 스텝에서는 프롬프트를 제거하는 방식도 유효하다\n- **(word:ratio)** 형태의 강조도 가능하다 `(cat:1.1)` 형태며 `1` 이하로 가게되면 효과가 비율만큼 약화된다\n- 프롬프트는 앞에 나오는 순서대로 우선순위를 받는다\n- 추가 script 를 통해서 outpaint(확대)  등에 대한 추가작업이 가능하다\n\n### 대상\n- 일반 명사, 형용사와 함께 작성\n\n### 구도\n- portratit\n\n### 화질\n\u003e 동시에 사이트명으로 구글에 처보면 알 수 있다.  일종의 화풍과 비슷\n\n- artstation\n- deviantart\n- trending artstation\n- trending on deviantart\n- pixiv ranking 1st\n\n### 품질\n- masterpiece\n- best quailty\n- concept artstation\n- extreamly detailed\n- ultra detailed\n- brillant photo\n- beautiful composition\n- sharp focus\n- 4k\n- 8k\n- ray tracing\n- cinematic lighting\n- cinematic postprocessing\n- realism\n\n### 기타\n- kawaii cute girl\n- cute eye\n- small nose\n- small mouth\n- beautiful face\n- brillant face\n- perfect symmetrical face\n- find detailed face\n- aesthetic eyes\n\n### 화풍\n\u003e stable-diffusion@2.x 버전에서는 유효하지 않을 수 있다\n\n```\nstyle of [화풍,화가] \n```\n\n#### 스타일\n- gothic\n- renaissance\n- baroque\n- rococo\n- chinoiserie\n- romanticism\n- realism\n- victorian painting\n- japonisme\n- impressionism\n- art nouveau\n- cubism\n- art deco\n- surrealism\n- pop art\n- japanese anime\n- line art\n\n#### 애니메이션 \n- cygames\n- shinkai makoto\n- kyoto animation\n- a-1 pictures\n- p.a. works\n- atelier-ryza\n- granblue fantasy\n- genshin impact\n- azur lane\n- love live!\n- final fantasyarknights\n\n#### 페인팅 기법\n- digital painting\n- oil paintingwatercolor\n- watercolor painting\n- ink watercolor\n- acrylic painting\n- crayon painting\n- pen art\n- ball-point pen art\n- drawing\n- pencil sketch\n- pencil drawing\n- ukiyo-e painting\n- etching\n- pointillism\n- pixel art\n- stained glass\n- woodcut\n- bold line painting\n\n### 시점과 빛\n\u003e 사진을 찍을때 피사체와의 거리 카메라의 옵션을 지정하는 것과 유사하다\n\n#### 거리\n- far long short\n- long shot\n- very wide shot\n- wide shot\n- medium shot\n- west shot\n- bust shot\n- close up shot\n- close up front shot\n- close-up shot\n- closeup\n- head shot\n- face closeup photo\n\n#### 각도\n- below view\n- overhead view\n- near view\n- bird view\n- selfie shot angle\n- wide shot angle\n- shot from a birds eye camera angle\n\n#### 빛 및 구도 기타\n- portrait\n- snap shot\n- landscape\n- upper sunlight\n- golden sun\n- upper sunlight and golden sun\n- beatiful composition\n- sharp focus\n- bright color contrast\n\n#### 조명\n- soft lighting\n- cinematic lighting\n- golden hour lighting\n- strong rim light\n- volumetric top lighting\n- atmospheric lighting\n- cinematic postprocessing top light\n- brillant photo\n- best shot\n- beautiful background\n\n### 세부 조작\n\u003e 얇은것들, 화살, 손가락 등은 실패할 가능성이 높으니 구도를 조절해야한다\n\n- 큰 부부분 부터 세부적인 부분 순으로 작성\n- 가중치 조정\n\n## ControlNet\n- 동작을 입히기 위해서 사용하는 것으로 동작이미지를 주입해서 생성이미지의 동작을 제한한다\n\n## LoRA\n- Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning\n- 추가학습을 통해 이미지 생성시 특정 성격을 주입할 수 있다\n- 추가학습을 위해 사용될 키워드와 이미지를 통해 학습한다 학습 결과 파일은 `*.safetensors`\n- 추가학습시 기존 키워드를 오염시킬 수 있으므로 이 경우에는 정규화 이미지를 준비해서 학습한다\n  - 정규화 준비시 학습용:정규화 이미지의 비율은 **1:5** 정도가 적당하다는 의견이 있다\n- 학습된 LoRA를 적용하면 특정 캐릭터, 고정된 스타일을 주입가능할 것으로 추측한다\n\n## 사용\n- txt2img\n  - {positive,negative} prompt\n  - sampling method: steps 이 높을수록 노이즈 제거 단계가 많다\n    - `a` 로 끝나는 경우 무작위성이 높다, 정교한 이미지에는 적합하지 **않다**\n    - `a` 로 끝나는 경우 무작위성이 높다 \n  - Hires. fix\n    - 생성후 img2img 로 고해상도로 변환\n  - Batch count: 한번에 생성할 이미지 수 4정도로 시작해서 프롬프트가 유효한거같은데 16-64정도로 생산시작\n  - Batch size: 동시에 생성하는 이미지 수로 병렬이지만 vram 소모가 크다\n  - CFG Scale: \n- settings\n  - face restoration: 얼굴 품질을 높임, 사진에 적합\n  - tiling: 배경 무늬등에 반복할 이미지 생성\n\n## 사용루틴\n- 작은이미지로 빠르게 대량 생산\n- 눈으로 확인\n- 확대 ai\n  + https://replicate.com/nightmareai/real-esrgan\n\n## 이해\n- 학습된 정보를 바탕으로 각각의 텍스트는 방향과 크기를 가지는 벡터로 저장된다\n- 예를 들어 개, 고양이라는 단어는 각기 다른 고양이 같다는 방향과 크기로 저장\n- 때문에 학습한 데이터에 따라 각기 단어에 매핑되는 벡터가 다르다 -\u003e  결과가 다르다\n- 노이즈를 먼저 생성하고 여기서 노이즈를 제거하면서 깨끗한 이미지를 만들어낸다\n- 랜덤 시드는 이 노이즈 이미지와 관련되며 초기값이 다르면 다른이미지가 생성되게된다\n\n## 모델\n- 학습 모델에 따라서 화풍,  퀄러티가 변경된다\n- 특정 목표를 가지고 설계된 모델들이 여럿 존재\n- stable diffusion 모델은 1.x 에서 특정 화풍을 모방, 화풍 재현에 적합, `512x512` 로 학습\n- stable diffusion 모델은 2.x 에서 모방 논란을 대응하여 더 창의적이고 디테일한 묘사가 가능 `768x768` 로 학습\n\n## link\n- [[../stable-diffusion]]\n"])</script><script>self.__next_f.push([1,"16:T1a53,"])</script><script>self.__next_f.push([1,"\n## 용어정리 \n- VAE | Variation Auto-Encoder\n- CFG | Classifier-free Guidance\n- Denoising strength | 0에 가까울수록 현재 이미지를 유지한다\n- ControlNet | input 이미지를 통해서 생성이미지의 동작을 주입하는 플러그인\n- LoRA | Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning\n\n## prompt\n\u003e 학습데이터에 매칭되는 키워드가 가지는 벡터와 관계가 있으므로 학습시에 사용된 AAA 게임 이름, 사이트 이름 그대로 영향을 발휘할 수 있다  \n\u003e 프롬프트 하나만을 입력했을 떄 결과가 원하지 않는 것이 나온다면 학습되지 않은 키워드일 수 있으며 이런 경우는 키워드를 변경해야한다\n\n### 사용법\n- **[prompt1:prompt2:ratio]** 형태로 sampling steps 을 기준으로 ratio 를 나눠서 사용이 가능하다\n  ```\n  beautiful [cat:bird:0.4]\n  ```\n  - 샘플링 20 스텝을 기준으로 8스텝까지는 고양이를 이후스탭은 새를 기준으로 생성한다\n  - `[p1::0.5]`, `[:p2:0.5]` 형식으로 특정 스텝에서는 프롬프트를 제거하는 방식도 유효하다\n- **(word:ratio)** 형태의 강조도 가능하다 `(cat:1.1)` 형태며 `1` 이하로 가게되면 효과가 비율만큼 약화된다\n- 프롬프트는 앞에 나오는 순서대로 우선순위를 받는다\n- 추가 script 를 통해서 outpaint(확대)  등에 대한 추가작업이 가능하다\n\n### 대상\n- 일반 명사, 형용사와 함께 작성\n\n### 구도\n- portratit\n\n### 화질\n\u003e 동시에 사이트명으로 구글에 처보면 알 수 있다.  일종의 화풍과 비슷\n\n- artstation\n- deviantart\n- trending artstation\n- trending on deviantart\n- pixiv ranking 1st\n\n### 품질\n- masterpiece\n- best quailty\n- concept artstation\n- extreamly detailed\n- ultra detailed\n- brillant photo\n- beautiful composition\n- sharp focus\n- 4k\n- 8k\n- ray tracing\n- cinematic lighting\n- cinematic postprocessing\n- realism\n\n### 기타\n- kawaii cute girl\n- cute eye\n- small nose\n- small mouth\n- beautiful face\n- brillant face\n- perfect symmetrical face\n- find detailed face\n- aesthetic eyes\n\n### 화풍\n\u003e stable-diffusion@2.x 버전에서는 유효하지 않을 수 있다\n\n```\nstyle of [화풍,화가] \n```\n\n#### 스타일\n- gothic\n- renaissance\n- baroque\n- rococo\n- chinoiserie\n- romanticism\n- realism\n- victorian painting\n- japonisme\n- impressionism\n- art nouveau\n- cubism\n- art deco\n- surrealism\n- pop art\n- japanese anime\n- line art\n\n#### 애니메이션 \n- cygames\n- shinkai makoto\n- kyoto animation\n- a-1 pictures\n- p.a. works\n- atelier-ryza\n- granblue fantasy\n- genshin impact\n- azur lane\n- love live!\n- final fantasyarknights\n\n#### 페인팅 기법\n- digital painting\n- oil paintingwatercolor\n- watercolor painting\n- ink watercolor\n- acrylic painting\n- crayon painting\n- pen art\n- ball-point pen art\n- drawing\n- pencil sketch\n- pencil drawing\n- ukiyo-e painting\n- etching\n- pointillism\n- pixel art\n- stained glass\n- woodcut\n- bold line painting\n\n### 시점과 빛\n\u003e 사진을 찍을때 피사체와의 거리 카메라의 옵션을 지정하는 것과 유사하다\n\n#### 거리\n- far long short\n- long shot\n- very wide shot\n- wide shot\n- medium shot\n- west shot\n- bust shot\n- close up shot\n- close up front shot\n- close-up shot\n- closeup\n- head shot\n- face closeup photo\n\n#### 각도\n- below view\n- overhead view\n- near view\n- bird view\n- selfie shot angle\n- wide shot angle\n- shot from a birds eye camera angle\n\n#### 빛 및 구도 기타\n- portrait\n- snap shot\n- landscape\n- upper sunlight\n- golden sun\n- upper sunlight and golden sun\n- beatiful composition\n- sharp focus\n- bright color contrast\n\n#### 조명\n- soft lighting\n- cinematic lighting\n- golden hour lighting\n- strong rim light\n- volumetric top lighting\n- atmospheric lighting\n- cinematic postprocessing top light\n- brillant photo\n- best shot\n- beautiful background\n\n### 세부 조작\n\u003e 얇은것들, 화살, 손가락 등은 실패할 가능성이 높으니 구도를 조절해야한다\n\n- 큰 부부분 부터 세부적인 부분 순으로 작성\n- 가중치 조정\n\n## ControlNet\n- 동작을 입히기 위해서 사용하는 것으로 동작이미지를 주입해서 생성이미지의 동작을 제한한다\n\n## LoRA\n- Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning\n- 추가학습을 통해 이미지 생성시 특정 성격을 주입할 수 있다\n- 추가학습을 위해 사용될 키워드와 이미지를 통해 학습한다 학습 결과 파일은 `*.safetensors`\n- 추가학습시 기존 키워드를 오염시킬 수 있으므로 이 경우에는 정규화 이미지를 준비해서 학습한다\n  - 정규화 준비시 학습용:정규화 이미지의 비율은 **1:5** 정도가 적당하다는 의견이 있다\n- 학습된 LoRA를 적용하면 특정 캐릭터, 고정된 스타일을 주입가능할 것으로 추측한다\n\n## 사용\n- txt2img\n  - {positive,negative} prompt\n  - sampling method: steps 이 높을수록 노이즈 제거 단계가 많다\n    - `a` 로 끝나는 경우 무작위성이 높다, 정교한 이미지에는 적합하지 **않다**\n    - `a` 로 끝나는 경우 무작위성이 높다 \n  - Hires. fix\n    - 생성후 img2img 로 고해상도로 변환\n  - Batch count: 한번에 생성할 이미지 수 4정도로 시작해서 프롬프트가 유효한거같은데 16-64정도로 생산시작\n  - Batch size: 동시에 생성하는 이미지 수로 병렬이지만 vram 소모가 크다\n  - CFG Scale: \n- settings\n  - face restoration: 얼굴 품질을 높임, 사진에 적합\n  - tiling: 배경 무늬등에 반복할 이미지 생성\n\n## 사용루틴\n- 작은이미지로 빠르게 대량 생산\n- 눈으로 확인\n- 확대 ai\n  + https://replicate.com/nightmareai/real-esrgan\n\n## 이해\n- 학습된 정보를 바탕으로 각각의 텍스트는 방향과 크기를 가지는 벡터로 저장된다\n- 예를 들어 개, 고양이라는 단어는 각기 다른 고양이 같다는 방향과 크기로 저장\n- 때문에 학습한 데이터에 따라 각기 단어에 매핑되는 벡터가 다르다 -\u003e  결과가 다르다\n- 노이즈를 먼저 생성하고 여기서 노이즈를 제거하면서 깨끗한 이미지를 만들어낸다\n- 랜덤 시드는 이 노이즈 이미지와 관련되며 초기값이 다르면 다른이미지가 생성되게된다\n\n## 모델\n- 학습 모델에 따라서 화풍,  퀄러티가 변경된다\n- 특정 목표를 가지고 설계된 모델들이 여럿 존재\n- stable diffusion 모델은 1.x 에서 특정 화풍을 모방, 화풍 재현에 적합, `512x512` 로 학습\n- stable diffusion 모델은 2.x 에서 모방 논란을 대응하여 더 창의적이고 디테일한 묘사가 가능 `768x768` 로 학습\n\n## link\n- [[../stable-diffusion]]\n"])</script><script>self.__next_f.push([1,"17:T1a53,"])</script><script>self.__next_f.push([1,"\n## 용어정리 \n- VAE | Variation Auto-Encoder\n- CFG | Classifier-free Guidance\n- Denoising strength | 0에 가까울수록 현재 이미지를 유지한다\n- ControlNet | input 이미지를 통해서 생성이미지의 동작을 주입하는 플러그인\n- LoRA | Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning\n\n## prompt\n\u003e 학습데이터에 매칭되는 키워드가 가지는 벡터와 관계가 있으므로 학습시에 사용된 AAA 게임 이름, 사이트 이름 그대로 영향을 발휘할 수 있다  \n\u003e 프롬프트 하나만을 입력했을 떄 결과가 원하지 않는 것이 나온다면 학습되지 않은 키워드일 수 있으며 이런 경우는 키워드를 변경해야한다\n\n### 사용법\n- **[prompt1:prompt2:ratio]** 형태로 sampling steps 을 기준으로 ratio 를 나눠서 사용이 가능하다\n  ```\n  beautiful [cat:bird:0.4]\n  ```\n  - 샘플링 20 스텝을 기준으로 8스텝까지는 고양이를 이후스탭은 새를 기준으로 생성한다\n  - `[p1::0.5]`, `[:p2:0.5]` 형식으로 특정 스텝에서는 프롬프트를 제거하는 방식도 유효하다\n- **(word:ratio)** 형태의 강조도 가능하다 `(cat:1.1)` 형태며 `1` 이하로 가게되면 효과가 비율만큼 약화된다\n- 프롬프트는 앞에 나오는 순서대로 우선순위를 받는다\n- 추가 script 를 통해서 outpaint(확대)  등에 대한 추가작업이 가능하다\n\n### 대상\n- 일반 명사, 형용사와 함께 작성\n\n### 구도\n- portratit\n\n### 화질\n\u003e 동시에 사이트명으로 구글에 처보면 알 수 있다.  일종의 화풍과 비슷\n\n- artstation\n- deviantart\n- trending artstation\n- trending on deviantart\n- pixiv ranking 1st\n\n### 품질\n- masterpiece\n- best quailty\n- concept artstation\n- extreamly detailed\n- ultra detailed\n- brillant photo\n- beautiful composition\n- sharp focus\n- 4k\n- 8k\n- ray tracing\n- cinematic lighting\n- cinematic postprocessing\n- realism\n\n### 기타\n- kawaii cute girl\n- cute eye\n- small nose\n- small mouth\n- beautiful face\n- brillant face\n- perfect symmetrical face\n- find detailed face\n- aesthetic eyes\n\n### 화풍\n\u003e stable-diffusion@2.x 버전에서는 유효하지 않을 수 있다\n\n```\nstyle of [화풍,화가] \n```\n\n#### 스타일\n- gothic\n- renaissance\n- baroque\n- rococo\n- chinoiserie\n- romanticism\n- realism\n- victorian painting\n- japonisme\n- impressionism\n- art nouveau\n- cubism\n- art deco\n- surrealism\n- pop art\n- japanese anime\n- line art\n\n#### 애니메이션 \n- cygames\n- shinkai makoto\n- kyoto animation\n- a-1 pictures\n- p.a. works\n- atelier-ryza\n- granblue fantasy\n- genshin impact\n- azur lane\n- love live!\n- final fantasyarknights\n\n#### 페인팅 기법\n- digital painting\n- oil paintingwatercolor\n- watercolor painting\n- ink watercolor\n- acrylic painting\n- crayon painting\n- pen art\n- ball-point pen art\n- drawing\n- pencil sketch\n- pencil drawing\n- ukiyo-e painting\n- etching\n- pointillism\n- pixel art\n- stained glass\n- woodcut\n- bold line painting\n\n### 시점과 빛\n\u003e 사진을 찍을때 피사체와의 거리 카메라의 옵션을 지정하는 것과 유사하다\n\n#### 거리\n- far long short\n- long shot\n- very wide shot\n- wide shot\n- medium shot\n- west shot\n- bust shot\n- close up shot\n- close up front shot\n- close-up shot\n- closeup\n- head shot\n- face closeup photo\n\n#### 각도\n- below view\n- overhead view\n- near view\n- bird view\n- selfie shot angle\n- wide shot angle\n- shot from a birds eye camera angle\n\n#### 빛 및 구도 기타\n- portrait\n- snap shot\n- landscape\n- upper sunlight\n- golden sun\n- upper sunlight and golden sun\n- beatiful composition\n- sharp focus\n- bright color contrast\n\n#### 조명\n- soft lighting\n- cinematic lighting\n- golden hour lighting\n- strong rim light\n- volumetric top lighting\n- atmospheric lighting\n- cinematic postprocessing top light\n- brillant photo\n- best shot\n- beautiful background\n\n### 세부 조작\n\u003e 얇은것들, 화살, 손가락 등은 실패할 가능성이 높으니 구도를 조절해야한다\n\n- 큰 부부분 부터 세부적인 부분 순으로 작성\n- 가중치 조정\n\n## ControlNet\n- 동작을 입히기 위해서 사용하는 것으로 동작이미지를 주입해서 생성이미지의 동작을 제한한다\n\n## LoRA\n- Low-rank Adaption for Fast Text-to-Image Diffusion Fine-tuning\n- 추가학습을 통해 이미지 생성시 특정 성격을 주입할 수 있다\n- 추가학습을 위해 사용될 키워드와 이미지를 통해 학습한다 학습 결과 파일은 `*.safetensors`\n- 추가학습시 기존 키워드를 오염시킬 수 있으므로 이 경우에는 정규화 이미지를 준비해서 학습한다\n  - 정규화 준비시 학습용:정규화 이미지의 비율은 **1:5** 정도가 적당하다는 의견이 있다\n- 학습된 LoRA를 적용하면 특정 캐릭터, 고정된 스타일을 주입가능할 것으로 추측한다\n\n## 사용\n- txt2img\n  - {positive,negative} prompt\n  - sampling method: steps 이 높을수록 노이즈 제거 단계가 많다\n    - `a` 로 끝나는 경우 무작위성이 높다, 정교한 이미지에는 적합하지 **않다**\n    - `a` 로 끝나는 경우 무작위성이 높다 \n  - Hires. fix\n    - 생성후 img2img 로 고해상도로 변환\n  - Batch count: 한번에 생성할 이미지 수 4정도로 시작해서 프롬프트가 유효한거같은데 16-64정도로 생산시작\n  - Batch size: 동시에 생성하는 이미지 수로 병렬이지만 vram 소모가 크다\n  - CFG Scale: \n- settings\n  - face restoration: 얼굴 품질을 높임, 사진에 적합\n  - tiling: 배경 무늬등에 반복할 이미지 생성\n\n## 사용루틴\n- 작은이미지로 빠르게 대량 생산\n- 눈으로 확인\n- 확대 ai\n  + https://replicate.com/nightmareai/real-esrgan\n\n## 이해\n- 학습된 정보를 바탕으로 각각의 텍스트는 방향과 크기를 가지는 벡터로 저장된다\n- 예를 들어 개, 고양이라는 단어는 각기 다른 고양이 같다는 방향과 크기로 저장\n- 때문에 학습한 데이터에 따라 각기 단어에 매핑되는 벡터가 다르다 -\u003e  결과가 다르다\n- 노이즈를 먼저 생성하고 여기서 노이즈를 제거하면서 깨끗한 이미지를 만들어낸다\n- 랜덤 시드는 이 노이즈 이미지와 관련되며 초기값이 다르면 다른이미지가 생성되게된다\n\n## 모델\n- 학습 모델에 따라서 화풍,  퀄러티가 변경된다\n- 특정 목표를 가지고 설계된 모델들이 여럿 존재\n- stable diffusion 모델은 1.x 에서 특정 화풍을 모방, 화풍 재현에 적합, `512x512` 로 학습\n- stable diffusion 모델은 2.x 에서 모방 논란을 대응하여 더 창의적이고 디테일한 묘사가 가능 `768x768` 로 학습\n\n## link\n- [[../stable-diffusion]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# 스테이블 디퓨전으로 만드는 게임 그래픽\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# 스테이블 디퓨전으로 만드는 게임 그래픽\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/book/making-game-graphic-with-stable-diffusion\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# 스테이블 디퓨전으로 만드는 게임 그래픽\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

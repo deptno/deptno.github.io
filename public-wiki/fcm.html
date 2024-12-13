@@ -1,0 +1,645 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-01aa3a540a9b10a9.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-3d58b54f94d3602b.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># fcm</title><meta name="description" content="firebase cloud message
+
+## overview
++ https://seungwoolog.tistory.com/88 참조
+
+## 사용패턴
+- notification
+- data sync
+  - [ ] 활용패턴이 있을 것 같음 특정 ui 버전을 보게 한다던가, de-feature 해버린다던가
+- updating ui
+
+## 사용
+- 프로젝트생성
+  + https://console.firebase.google.com/u/0/?hl=ko
+- 프로젝트화면에서 *앱에 Firebase를 추가하여 시작하기* 를 통해 [[iOS]], [[android]] 관련 설정
+- [[android]] 앱에 Firebase 추가
+  - 패키지 네임 [[react-native]] 프로젝트 기준으로 `android/app/build.gradle` 확인
+  - 및 디버그 서명 인증서 SHA-1 은 [[keytool]] 을 통해 정보 확인
+  - 확인 된 정보로 앱등록 -&gt; google-service.json 다운로드 -&gt; android/app 폴더에 추가
+- client
+  + https://rnfirebase.io/messaging/usage
+- server
+  + https://rnfirebase.io/messaging/server-integration
+
+### client
+- *중요* 백그라운드 메시지 처리에 제약사항으로 인해 코드가 로딩되는 이른 시점에 firebase 설정이 되어야한다
+- [[ios]] 는 백그라운드에서 메시지를 받았을때 리액트 루트가 마운트되며 이로인한 문제를 방지하기 위한 설정이 필요하다
+  + https://rnfirebase.io/messaging/usage#background-application-state
+
+#### firebase.json
+&gt; 추가 설정을 위해서 자동으로 해주는 것들을 `disabled` 시키는 등, 특정 설정 가능
+- [[ios]]
+  - disable APNs auto registration
+  - foreground presentation options - notification 보여지는 방식
+- [[android]]
+  - background handler timeout 설정, background, quit 상태에서 메시지를 핸들링할 타입지정 -&gt;  지나면 앱 quit으로 추정
+  - Notification Channel ID
+    - [ ] 학습 필요 [[@todo]]
+  - Notification Color
+- Auto initialization
+
+#### app 의 상태따른 행동
+- 상태
+  - foreground
+    - `messaging().onMessage()`
+  - background
+    - `messaging().setBackgroundMessageHandler()`
+  - quit - 종료된 경우
+- 상태에 따라 다르게 행동하게되며 이해가 중요하다고 함 읽어볼 것
+  + https://firebase.google.com/docs/cloud-messaging/concept-options?hl=ko
+
+#### 메시지 타입
+&gt; data only 메시지는 low priority 로 간주되며 앱을 깨우지 않는다,  우선순위를 강제하면 깨울 수 있다
+- data + notification
+- data
+
+### server
++ https://firebase.google.com/docs/cloud-messaging/ios/first-message?hl=ko
++ https://rnfirebase.io/messaging/server-integration
+- 메시지를 보내는 방식
+  - 메시지를 특정 디바이스에 보내는 방식
+  - 메시지를 토픽에 발송하는 방식
+    - 토픽을 구독하는 주체는 앱
+    - 서버가 토픽에 메시지를 발송(한번에 최대 5개 토픽)
+    - *주의*  특정 유저를 위한 토픽을 만들지 말것
+    - [ ] [[@todo]] 많은 유저가 구독중인 알람으로 인한 서버부담을 줄이고자 유저를 토픽 유저를 그룹으로 나눠서 시간차로 보낼 수 있는지 확인
+- [[ios]]
+  - [[firebase]] 프로젝트 설정에서 [[APNs]] 등록 필요
+  - [ ] [[xcode]] 에서 push 활성화 필요할 것
+
+#### firebase-admin
+- `sendTo` 로 시작하면 레거시 api 이므로 사용불가, `send` 를 사용
+- `sendEachForMulticast` 여러 토큰에 한번에 전송이 필요한 경우 사용
+
+### rest 
+#### fcm access token 발급
+- oauth 토큰이 필요하다 아래서 발급이 가능하다
+  + https://developers.google.com/oauthplayground/
+    + https://stackoverflow.com/questions/50399170/what-bearer-token-should-i-be-using-for-firebase-cloud-messaging-testing
+    - [X] Firebase Cloud Messaging API v1
+
+#### 사용
+- vim rest 형태니 알아서 변경해서 쓴다
+  ```sh 
+  https://fcm.googleapis.com
+
+  Content-Type: application/json
+  Authorization: Bearer [위에서 발급받은 accessToken]
+
+  POST /v1/projects/saljiro/messages:send
+
+  {
+    &quot;message&quot;: {
+      &quot;data&quot;:{
+        &quot;deepLink&quot;:&quot;myscheme://path&quot;,
+      },
+      &quot;notification&quot;:{
+        &quot;body&quot;:&quot;1&quot;,
+        &quot;title&quot;:&quot;leserrafim&quot;
+      },
+      &quot;token&quot; : &quot;[발송 대상의 fcm token]&quot;
+    }
+  }
+  ```
+
+## 언급되는 라이브러리
+- https://github.com/invertase/notifee
+  - android notification ux 까지 변경지원하는 것으로 언급됨
+  - 이전에 사용되던 https://github.com/zo0r/react-native-push-notification 는 버전 업데이트 멈춘듯 2021-10-01
+
+## 구현
+- 유저의 디바이스가 여러개일 수 있으므로 user, token 관계는 **1:n** 
+- 로그인을 가정
+```mermaid
+sequenceDiagram
+  participant a as app
+  participant u as auth
+  participant b as backend
+  participant f as firebase
+  participant d as db
+  u --&gt;&gt; a: login
+  f --&gt;&gt; a: token
+  a --&gt;&gt; b: setToken: login 정보 + device 정보
+  b --&gt;&gt; d: 동일디바이스 기존 토큰 제거 및 신규 토큰 추가
+  par 구독
+    a --&gt;&gt; b: 구독
+    b --&gt;&gt; f: topic*n 구독
+    f --&gt;&gt; b: 200
+    b --&gt;&gt; d: 200: 구독 키워드 기록
+    par 실패한 토큰 처리
+      b --&gt;&gt; d: `messaging/registration-token-not-registered`: 토큰 제거
+    end
+  end
+  par push
+    b --&gt;&gt; f: push 요청
+    b --&gt;&gt; d: 4xx,5xx: 토큰 제거
+    f --&gt;&gt; a: push notification
+  end
+```
+
+## link
+- [[firebase]]
+- [[iOS]]
+- [[android]]
+- [[react-native]]
+- [[apns]]
+- [[push-notification]]
+- [[google]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# fcm"/><meta property="og:description" content="firebase cloud message
+
+## overview
++ https://seungwoolog.tistory.com/88 참조
+
+## 사용패턴
+- notification
+- data sync
+  - [ ] 활용패턴이 있을 것 같음 특정 ui 버전을 보게 한다던가, de-feature 해버린다던가
+- updating ui
+
+## 사용
+- 프로젝트생성
+  + https://console.firebase.google.com/u/0/?hl=ko
+- 프로젝트화면에서 *앱에 Firebase를 추가하여 시작하기* 를 통해 [[iOS]], [[android]] 관련 설정
+- [[android]] 앱에 Firebase 추가
+  - 패키지 네임 [[react-native]] 프로젝트 기준으로 `android/app/build.gradle` 확인
+  - 및 디버그 서명 인증서 SHA-1 은 [[keytool]] 을 통해 정보 확인
+  - 확인 된 정보로 앱등록 -&gt; google-service.json 다운로드 -&gt; android/app 폴더에 추가
+- client
+  + https://rnfirebase.io/messaging/usage
+- server
+  + https://rnfirebase.io/messaging/server-integration
+
+### client
+- *중요* 백그라운드 메시지 처리에 제약사항으로 인해 코드가 로딩되는 이른 시점에 firebase 설정이 되어야한다
+- [[ios]] 는 백그라운드에서 메시지를 받았을때 리액트 루트가 마운트되며 이로인한 문제를 방지하기 위한 설정이 필요하다
+  + https://rnfirebase.io/messaging/usage#background-application-state
+
+#### firebase.json
+&gt; 추가 설정을 위해서 자동으로 해주는 것들을 `disabled` 시키는 등, 특정 설정 가능
+- [[ios]]
+  - disable APNs auto registration
+  - foreground presentation options - notification 보여지는 방식
+- [[android]]
+  - background handler timeout 설정, background, quit 상태에서 메시지를 핸들링할 타입지정 -&gt;  지나면 앱 quit으로 추정
+  - Notification Channel ID
+    - [ ] 학습 필요 [[@todo]]
+  - Notification Color
+- Auto initialization
+
+#### app 의 상태따른 행동
+- 상태
+  - foreground
+    - `messaging().onMessage()`
+  - background
+    - `messaging().setBackgroundMessageHandler()`
+  - quit - 종료된 경우
+- 상태에 따라 다르게 행동하게되며 이해가 중요하다고 함 읽어볼 것
+  + https://firebase.google.com/docs/cloud-messaging/concept-options?hl=ko
+
+#### 메시지 타입
+&gt; data only 메시지는 low priority 로 간주되며 앱을 깨우지 않는다,  우선순위를 강제하면 깨울 수 있다
+- data + notification
+- data
+
+### server
++ https://firebase.google.com/docs/cloud-messaging/ios/first-message?hl=ko
++ https://rnfirebase.io/messaging/server-integration
+- 메시지를 보내는 방식
+  - 메시지를 특정 디바이스에 보내는 방식
+  - 메시지를 토픽에 발송하는 방식
+    - 토픽을 구독하는 주체는 앱
+    - 서버가 토픽에 메시지를 발송(한번에 최대 5개 토픽)
+    - *주의*  특정 유저를 위한 토픽을 만들지 말것
+    - [ ] [[@todo]] 많은 유저가 구독중인 알람으로 인한 서버부담을 줄이고자 유저를 토픽 유저를 그룹으로 나눠서 시간차로 보낼 수 있는지 확인
+- [[ios]]
+  - [[firebase]] 프로젝트 설정에서 [[APNs]] 등록 필요
+  - [ ] [[xcode]] 에서 push 활성화 필요할 것
+
+#### firebase-admin
+- `sendTo` 로 시작하면 레거시 api 이므로 사용불가, `send` 를 사용
+- `sendEachForMulticast` 여러 토큰에 한번에 전송이 필요한 경우 사용
+
+### rest 
+#### fcm access token 발급
+- oauth 토큰이 필요하다 아래서 발급이 가능하다
+  + https://developers.google.com/oauthplayground/
+    + https://stackoverflow.com/questions/50399170/what-bearer-token-should-i-be-using-for-firebase-cloud-messaging-testing
+    - [X] Firebase Cloud Messaging API v1
+
+#### 사용
+- vim rest 형태니 알아서 변경해서 쓴다
+  ```sh 
+  https://fcm.googleapis.com
+
+  Content-Type: application/json
+  Authorization: Bearer [위에서 발급받은 accessToken]
+
+  POST /v1/projects/saljiro/messages:send
+
+  {
+    &quot;message&quot;: {
+      &quot;data&quot;:{
+        &quot;deepLink&quot;:&quot;myscheme://path&quot;,
+      },
+      &quot;notification&quot;:{
+        &quot;body&quot;:&quot;1&quot;,
+        &quot;title&quot;:&quot;leserrafim&quot;
+      },
+      &quot;token&quot; : &quot;[발송 대상의 fcm token]&quot;
+    }
+  }
+  ```
+
+## 언급되는 라이브러리
+- https://github.com/invertase/notifee
+  - android notification ux 까지 변경지원하는 것으로 언급됨
+  - 이전에 사용되던 https://github.com/zo0r/react-native-push-notification 는 버전 업데이트 멈춘듯 2021-10-01
+
+## 구현
+- 유저의 디바이스가 여러개일 수 있으므로 user, token 관계는 **1:n** 
+- 로그인을 가정
+```mermaid
+sequenceDiagram
+  participant a as app
+  participant u as auth
+  participant b as backend
+  participant f as firebase
+  participant d as db
+  u --&gt;&gt; a: login
+  f --&gt;&gt; a: token
+  a --&gt;&gt; b: setToken: login 정보 + device 정보
+  b --&gt;&gt; d: 동일디바이스 기존 토큰 제거 및 신규 토큰 추가
+  par 구독
+    a --&gt;&gt; b: 구독
+    b --&gt;&gt; f: topic*n 구독
+    f --&gt;&gt; b: 200
+    b --&gt;&gt; d: 200: 구독 키워드 기록
+    par 실패한 토큰 처리
+      b --&gt;&gt; d: `messaging/registration-token-not-registered`: 토큰 제거
+    end
+  end
+  par push
+    b --&gt;&gt; f: push 요청
+    b --&gt;&gt; d: 4xx,5xx: 토큰 제거
+    f --&gt;&gt; a: push notification
+  end
+```
+
+## link
+- [[firebase]]
+- [[iOS]]
+- [[android]]
+- [[react-native]]
+- [[apns]]
+- [[push-notification]]
+- [[google]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/fcm"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# fcm"/><meta name="twitter:description" content="firebase cloud message
+
+## overview
++ https://seungwoolog.tistory.com/88 참조
+
+## 사용패턴
+- notification
+- data sync
+  - [ ] 활용패턴이 있을 것 같음 특정 ui 버전을 보게 한다던가, de-feature 해버린다던가
+- updating ui
+
+## 사용
+- 프로젝트생성
+  + https://console.firebase.google.com/u/0/?hl=ko
+- 프로젝트화면에서 *앱에 Firebase를 추가하여 시작하기* 를 통해 [[iOS]], [[android]] 관련 설정
+- [[android]] 앱에 Firebase 추가
+  - 패키지 네임 [[react-native]] 프로젝트 기준으로 `android/app/build.gradle` 확인
+  - 및 디버그 서명 인증서 SHA-1 은 [[keytool]] 을 통해 정보 확인
+  - 확인 된 정보로 앱등록 -&gt; google-service.json 다운로드 -&gt; android/app 폴더에 추가
+- client
+  + https://rnfirebase.io/messaging/usage
+- server
+  + https://rnfirebase.io/messaging/server-integration
+
+### client
+- *중요* 백그라운드 메시지 처리에 제약사항으로 인해 코드가 로딩되는 이른 시점에 firebase 설정이 되어야한다
+- [[ios]] 는 백그라운드에서 메시지를 받았을때 리액트 루트가 마운트되며 이로인한 문제를 방지하기 위한 설정이 필요하다
+  + https://rnfirebase.io/messaging/usage#background-application-state
+
+#### firebase.json
+&gt; 추가 설정을 위해서 자동으로 해주는 것들을 `disabled` 시키는 등, 특정 설정 가능
+- [[ios]]
+  - disable APNs auto registration
+  - foreground presentation options - notification 보여지는 방식
+- [[android]]
+  - background handler timeout 설정, background, quit 상태에서 메시지를 핸들링할 타입지정 -&gt;  지나면 앱 quit으로 추정
+  - Notification Channel ID
+    - [ ] 학습 필요 [[@todo]]
+  - Notification Color
+- Auto initialization
+
+#### app 의 상태따른 행동
+- 상태
+  - foreground
+    - `messaging().onMessage()`
+  - background
+    - `messaging().setBackgroundMessageHandler()`
+  - quit - 종료된 경우
+- 상태에 따라 다르게 행동하게되며 이해가 중요하다고 함 읽어볼 것
+  + https://firebase.google.com/docs/cloud-messaging/concept-options?hl=ko
+
+#### 메시지 타입
+&gt; data only 메시지는 low priority 로 간주되며 앱을 깨우지 않는다,  우선순위를 강제하면 깨울 수 있다
+- data + notification
+- data
+
+### server
++ https://firebase.google.com/docs/cloud-messaging/ios/first-message?hl=ko
++ https://rnfirebase.io/messaging/server-integration
+- 메시지를 보내는 방식
+  - 메시지를 특정 디바이스에 보내는 방식
+  - 메시지를 토픽에 발송하는 방식
+    - 토픽을 구독하는 주체는 앱
+    - 서버가 토픽에 메시지를 발송(한번에 최대 5개 토픽)
+    - *주의*  특정 유저를 위한 토픽을 만들지 말것
+    - [ ] [[@todo]] 많은 유저가 구독중인 알람으로 인한 서버부담을 줄이고자 유저를 토픽 유저를 그룹으로 나눠서 시간차로 보낼 수 있는지 확인
+- [[ios]]
+  - [[firebase]] 프로젝트 설정에서 [[APNs]] 등록 필요
+  - [ ] [[xcode]] 에서 push 활성화 필요할 것
+
+#### firebase-admin
+- `sendTo` 로 시작하면 레거시 api 이므로 사용불가, `send` 를 사용
+- `sendEachForMulticast` 여러 토큰에 한번에 전송이 필요한 경우 사용
+
+### rest 
+#### fcm access token 발급
+- oauth 토큰이 필요하다 아래서 발급이 가능하다
+  + https://developers.google.com/oauthplayground/
+    + https://stackoverflow.com/questions/50399170/what-bearer-token-should-i-be-using-for-firebase-cloud-messaging-testing
+    - [X] Firebase Cloud Messaging API v1
+
+#### 사용
+- vim rest 형태니 알아서 변경해서 쓴다
+  ```sh 
+  https://fcm.googleapis.com
+
+  Content-Type: application/json
+  Authorization: Bearer [위에서 발급받은 accessToken]
+
+  POST /v1/projects/saljiro/messages:send
+
+  {
+    &quot;message&quot;: {
+      &quot;data&quot;:{
+        &quot;deepLink&quot;:&quot;myscheme://path&quot;,
+      },
+      &quot;notification&quot;:{
+        &quot;body&quot;:&quot;1&quot;,
+        &quot;title&quot;:&quot;leserrafim&quot;
+      },
+      &quot;token&quot; : &quot;[발송 대상의 fcm token]&quot;
+    }
+  }
+  ```
+
+## 언급되는 라이브러리
+- https://github.com/invertase/notifee
+  - android notification ux 까지 변경지원하는 것으로 언급됨
+  - 이전에 사용되던 https://github.com/zo0r/react-native-push-notification 는 버전 업데이트 멈춘듯 2021-10-01
+
+## 구현
+- 유저의 디바이스가 여러개일 수 있으므로 user, token 관계는 **1:n** 
+- 로그인을 가정
+```mermaid
+sequenceDiagram
+  participant a as app
+  participant u as auth
+  participant b as backend
+  participant f as firebase
+  participant d as db
+  u --&gt;&gt; a: login
+  f --&gt;&gt; a: token
+  a --&gt;&gt; b: setToken: login 정보 + device 정보
+  b --&gt;&gt; d: 동일디바이스 기존 토큰 제거 및 신규 토큰 추가
+  par 구독
+    a --&gt;&gt; b: 구독
+    b --&gt;&gt; f: topic*n 구독
+    f --&gt;&gt; b: 200
+    b --&gt;&gt; d: 200: 구독 키워드 기록
+    par 실패한 토큰 처리
+      b --&gt;&gt; d: `messaging/registration-token-not-registered`: 토큰 제거
+    end
+  end
+  par push
+    b --&gt;&gt; f: push 요청
+    b --&gt;&gt; d: 4xx,5xx: 토큰 제거
+    f --&gt;&gt; a: push notification
+  end
+```
+
+## link
+- [[firebase]]
+- [[iOS]]
+- [[android]]
+- [[react-native]]
+- [[apns]]
+- [[push-notification]]
+- [[google]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/824ce01
+" class="bg-white text-black">824ce01</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/fcm.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/fcm.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/fcm.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/fcm"><span class="underline">fcm</span><sup>21</sup></a></span><span><a class="text-blue-600" href="/public-wiki/iOS"><span class="underline">iOS</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/android"><span class="underline">android</span><sup>23</sup></a></span><span><a class="text-blue-600" href="/public-wiki/react-native"><span class="underline">react-native</span><sup>90</sup></a></span><span><a class="text-blue-600" href="/public-wiki/keytool"><span class="underline">keytool</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ios"><span class="underline">ios</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/@todo"><span class="underline">@todo</span><sup>30</sup></a></span><span><a class="text-blue-600" href="/public-wiki/firebase"><span class="underline">firebase</span><sup>14</sup></a></span><span><a class="text-blue-600" href="/public-wiki/APNs"><span class="underline">APNs</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/xcode"><span class="underline">xcode</span><sup>16</sup></a></span><span><a class="text-blue-600" href="/public-wiki/apns"><span class="underline">apns</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/push-notification"><span class="underline">push-notification</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/google"><span class="underline">google</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/devide-app-by-development-env"><span class="underline">devide-app-by-development-env</span><sup>30</sup></a></span><span><a class="text-blue-600" href="/public-wiki/index"><span class="underline">index</span><sup>106</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-31"><span class="underline">diary/2023-12-31</span><sup>93</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-02"><span class="underline">diary/2024-01-02</span><sup>10</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-05"><span class="underline">diary/2024-01-05</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-10"><span class="underline">diary/2024-01-10</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-11"><span class="underline">diary/2024-01-11</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-12"><span class="underline">diary/2024-01-12</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-15"><span class="underline">diary/2024-01-15</span><sup>14</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-18"><span class="underline">diary/2024-01-18</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-23"><span class="underline">diary/2024-01-23</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-25"><span class="underline">diary/2024-01-25</span><sup>59</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-27"><span class="underline">diary/2024-01-27</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-02-02"><span class="underline">diary/2024-02-02</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-03-08"><span class="underline">diary/2024-03-08</span><sup>5</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#fcm">fcm</a></div><div class="pl-2"><a href="#overview">overview</a></div><div class="pl-2"><a href="#사용패턴">사용패턴</a></div><div class="pl-2"><a href="#사용">사용</a></div><div class="pl-4"><a href="#client">client</a></div><div class="pl-6"><a href="#firebasejson">firebase.json</a></div><div class="pl-6"><a href="#app-의-상태따른-행동">app 의 상태따른 행동</a></div><div class="pl-6"><a href="#메시지-타입">메시지 타입</a></div><div class="pl-4"><a href="#server">server</a></div><div class="pl-6"><a href="#firebase-admin">firebase-admin</a></div><div class="pl-4"><a href="#rest">rest</a></div><div class="pl-6"><a href="#fcm-access-token-발급">fcm access token 발급</a></div><div class="pl-6"><a href="#사용-1">사용</a></div><div class="pl-2"><a href="#언급되는-라이브러리">언급되는 라이브러리</a></div><div class="pl-2"><a href="#구현">구현</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="fcm">fcm</h1>
+<p>firebase cloud message</p>
+<h2 id="overview">overview</h2>
+<ul>
+<li><a href="https://seungwoolog.tistory.com/88" target="_blank">[URL] https://seungwoolog.tistory.com/88</a> 참조</li>
+</ul>
+<h2 id="사용패턴">사용패턴</h2>
+<ul>
+<li>notification</li>
+<li>data sync<ul>
+<li><input disabled="" type="checkbox"> 활용패턴이 있을 것 같음 특정 ui 버전을 보게 한다던가, de-feature 해버린다던가</li>
+</ul>
+</li>
+<li>updating ui</li>
+</ul>
+<h2 id="사용">사용</h2>
+<ul>
+<li>프로젝트생성<ul>
+<li><a href="https://console.firebase.google.com/u/0/?hl=ko" target="_blank">[URL] https://console.firebase.google.com/u/0/?hl=ko</a></li>
+</ul>
+</li>
+<li>프로젝트화면에서 <em>앱에 Firebase를 추가하여 시작하기</em> 를 통해 <a href="iOS">iOS</a>, <a href="android">android</a> 관련 설정</li>
+<li><a href="android">android</a> 앱에 Firebase 추가<ul>
+<li>패키지 네임 <a href="react-native">react-native</a> 프로젝트 기준으로 <code class="span">android/app/build.gradle</code> 확인</li>
+<li>및 디버그 서명 인증서 SHA-1 은 <a href="keytool">keytool</a> 을 통해 정보 확인</li>
+<li>확인 된 정보로 앱등록 -&gt; google-service.json 다운로드 -&gt; android/app 폴더에 추가</li>
+</ul>
+</li>
+<li>client<ul>
+<li><a href="https://rnfirebase.io/messaging/usage" target="_blank">[URL] https://rnfirebase.io/messaging/usage</a></li>
+</ul>
+</li>
+<li>server<ul>
+<li><a href="https://rnfirebase.io/messaging/server-integration" target="_blank">[URL] https://rnfirebase.io/messaging/server-integration</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="client">client</h3>
+<ul>
+<li><em>중요</em> 백그라운드 메시지 처리에 제약사항으로 인해 코드가 로딩되는 이른 시점에 firebase 설정이 되어야한다</li>
+<li><a href="ios">ios</a> 는 백그라운드에서 메시지를 받았을때 리액트 루트가 마운트되며 이로인한 문제를 방지하기 위한 설정이 필요하다<ul>
+<li><a href="https://rnfirebase.io/messaging/usage#background-application-state" target="_blank">[URL] https://rnfirebase.io/messaging/usage#background-application-state</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="firebasejson">firebase.json</h4>
+<blockquote><p>추가 설정을 위해서 자동으로 해주는 것들을 <code class="span">disabled</code> 시키는 등, 특정 설정 가능</p></blockquote><ul>
+<li><a href="ios">ios</a><ul>
+<li>disable APNs auto registration</li>
+<li>foreground presentation options - notification 보여지는 방식</li>
+</ul>
+</li>
+<li><a href="android">android</a><ul>
+<li>background handler timeout 설정, background, quit 상태에서 메시지를 핸들링할 타입지정 -&gt;  지나면 앱 quit으로 추정</li>
+<li>Notification Channel ID<ul>
+<li><input disabled="" type="checkbox"> 학습 필요 <a href="@todo">@todo</a></li>
+</ul>
+</li>
+<li>Notification Color</li>
+</ul>
+</li>
+<li>Auto initialization</li>
+</ul>
+<h4 id="app-의-상태따른-행동">app 의 상태따른 행동</h4>
+<ul>
+<li>상태<ul>
+<li>foreground<ul>
+<li><code class="span">messaging().onMessage()</code></li>
+</ul>
+</li>
+<li>background<ul>
+<li><code class="span">messaging().setBackgroundMessageHandler()</code></li>
+</ul>
+</li>
+<li>quit - 종료된 경우</li>
+</ul>
+</li>
+<li>상태에 따라 다르게 행동하게되며 이해가 중요하다고 함 읽어볼 것<ul>
+<li><a href="https://firebase.google.com/docs/cloud-messaging/concept-options?hl=ko" target="_blank">[URL] https://firebase.google.com/docs/cloud-messaging/concept-options?hl=ko</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="메시지-타입">메시지 타입</h4>
+<blockquote><p>data only 메시지는 low priority 로 간주되며 앱을 깨우지 않는다,  우선순위를 강제하면 깨울 수 있다</p></blockquote><ul>
+<li>data + notification</li>
+<li>data</li>
+</ul>
+<h3 id="server">server</h3>
+<ul>
+<li><a href="https://firebase.google.com/docs/cloud-messaging/ios/first-message?hl=ko" target="_blank">[URL] https://firebase.google.com/docs/cloud-messaging/ios/first-message?hl=ko</a></li>
+<li><a href="https://rnfirebase.io/messaging/server-integration" target="_blank">[URL] https://rnfirebase.io/messaging/server-integration</a></li>
+</ul>
+<ul>
+<li>메시지를 보내는 방식<ul>
+<li>메시지를 특정 디바이스에 보내는 방식</li>
+<li>메시지를 토픽에 발송하는 방식<ul>
+<li>토픽을 구독하는 주체는 앱</li>
+<li>서버가 토픽에 메시지를 발송(한번에 최대 5개 토픽)</li>
+<li><em>주의</em>  특정 유저를 위한 토픽을 만들지 말것</li>
+<li><input disabled="" type="checkbox"> <a href="@todo">@todo</a> 많은 유저가 구독중인 알람으로 인한 서버부담을 줄이고자 유저를 토픽 유저를 그룹으로 나눠서 시간차로 보낼 수 있는지 확인</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="ios">ios</a><ul>
+<li><a href="firebase">firebase</a> 프로젝트 설정에서 <a href="APNs">APNs</a> 등록 필요</li>
+<li><input disabled="" type="checkbox"> <a href="xcode">xcode</a> 에서 push 활성화 필요할 것</li>
+</ul>
+</li>
+</ul>
+<h4 id="firebase-admin">firebase-admin</h4>
+<ul>
+<li><code class="span">sendTo</code> 로 시작하면 레거시 api 이므로 사용불가, <code class="span">send</code> 를 사용</li>
+<li><code class="span">sendEachForMulticast</code> 여러 토큰에 한번에 전송이 필요한 경우 사용</li>
+</ul>
+<h3 id="rest">rest</h3>
+<h4 id="fcm-access-token-발급">fcm access token 발급</h4>
+<ul>
+<li>oauth 토큰이 필요하다 아래서 발급이 가능하다<ul>
+<li><a href="https://developers.google.com/oauthplayground/" target="_blank">[URL] https://developers.google.com/oauthplayground/</a><ul>
+<li><a href="https://stackoverflow.com/questions/50399170/what-bearer-token-should-i-be-using-for-firebase-cloud-messaging-testing" target="_blank">[URL] https://stackoverflow.com/questions/50399170/what-bearer-token-should-i-be-using-for-firebase-cloud-messaging-testing</a></li>
+</ul>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> Firebase Cloud Messaging API v1</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="사용-1">사용</h4>
+<ul>
+<li>vim rest 형태니 알아서 변경해서 쓴다<pre><code class="hljs language-sh">https://fcm.googleapis.com
+
+Content-Type: application/json
+Authorization: Bearer [위에서 발급받은 accessToken]
+
+POST /v1/projects/saljiro/messages:send
+
+{
+  <span class="hljs-string">&quot;message&quot;</span>: {
+    <span class="hljs-string">&quot;data&quot;</span>:{
+      <span class="hljs-string">&quot;deepLink&quot;</span>:<span class="hljs-string">&quot;myscheme://path&quot;</span>,
+    },
+    <span class="hljs-string">&quot;notification&quot;</span>:{
+      <span class="hljs-string">&quot;body&quot;</span>:<span class="hljs-string">&quot;1&quot;</span>,
+      <span class="hljs-string">&quot;title&quot;</span>:<span class="hljs-string">&quot;leserrafim&quot;</span>
+    },
+    <span class="hljs-string">&quot;token&quot;</span> : <span class="hljs-string">&quot;[발송 대상의 fcm token]&quot;</span>
+  }
+}
+</code></pre></li>
+</ul>
+<h2 id="언급되는-라이브러리">언급되는 라이브러리</h2>
+<ul>
+<li><a href="https://github.com/invertase/notifee" target="_blank">[URL] https://github.com/invertase/notifee</a><ul>
+<li>android notification ux 까지 변경지원하는 것으로 언급됨</li>
+<li>이전에 사용되던 <a href="https://github.com/zo0r/react-native-push-notification" target="_blank">[URL] https://github.com/zo0r/react-native-push-notification</a> 는 버전 업데이트 멈춘듯 2021-10-01</li>
+</ul>
+</li>
+</ul>
+<h2 id="구현">구현</h2>
+<ul>
+<li>유저의 디바이스가 여러개일 수 있으므로 user, token 관계는 <strong>1:n</strong> </li>
+<li>로그인을 가정</li>
+</ul>
+<pre><code class="hljs language-mermaid">sequenceDiagram
+  participant a as app
+  participant u as auth
+  participant b as backend
+  participant f as firebase
+  participant d as db
+  u --&gt;&gt; a: login
+  f --&gt;&gt; a: token
+  a --&gt;&gt; b: setToken: login 정보 + device 정보
+  b --&gt;&gt; d: 동일디바이스 기존 토큰 제거 및 신규 토큰 추가
+  par 구독
+    a --&gt;&gt; b: 구독
+    b --&gt;&gt; f: topic*n 구독
+    f --&gt;&gt; b: 200
+    b --&gt;&gt; d: 200: 구독 키워드 기록
+    par 실패한 토큰 처리
+      b --&gt;&gt; d: `messaging/registration-token-not-registered`: 토큰 제거
+    end
+  end
+  par push
+    b --&gt;&gt; f: push 요청
+    b --&gt;&gt; d: 4xx,5xx: 토큰 제거
+    f --&gt;&gt; a: push notification
+  end
+</code></pre><h2 id="link">link</h2>
+<ul>
+<li><a href="firebase">firebase</a></li>
+<li><a href="iOS">iOS</a></li>
+<li><a href="android">android</a></li>
+<li><a href="react-native">react-native</a></li>
+<li><a href="apns">apns</a></li>
+<li><a href="push-notification">push-notification</a></li>
+<li><a href="google">google</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-01aa3a540a9b10a9.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-3d58b54f94d3602b.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"fcm\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"PQ1Y9JFLMeZ9AEzD_lf7v\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/fcm\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"fcm\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"fcm\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"fcm\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T22e7,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"fcm\"\u003efcm\u003c/h1\u003e\n\u003cp\u003efirebase cloud message\u003c/p\u003e\n\u003ch2 id=\"overview\"\u003eoverview\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://seungwoolog.tistory.com/88\" target=\"_blank\"\u003e[URL] https://seungwoolog.tistory.com/88\u003c/a\u003e 참조\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"사용패턴\"\u003e사용패턴\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003enotification\u003c/li\u003e\n\u003cli\u003edata sync\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 활용패턴이 있을 것 같음 특정 ui 버전을 보게 한다던가, de-feature 해버린다던가\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eupdating ui\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"사용\"\u003e사용\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e프로젝트생성\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://console.firebase.google.com/u/0/?hl=ko\" target=\"_blank\"\u003e[URL] https://console.firebase.google.com/u/0/?hl=ko\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e프로젝트화면에서 \u003cem\u003e앱에 Firebase를 추가하여 시작하기\u003c/em\u003e 를 통해 \u003ca href=\"iOS\"\u003eiOS\u003c/a\u003e, \u003ca href=\"android\"\u003eandroid\u003c/a\u003e 관련 설정\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"android\"\u003eandroid\u003c/a\u003e 앱에 Firebase 추가\u003cul\u003e\n\u003cli\u003e패키지 네임 \u003ca href=\"react-native\"\u003ereact-native\u003c/a\u003e 프로젝트 기준으로 \u003ccode class=\"span\"\u003eandroid/app/build.gradle\u003c/code\u003e 확인\u003c/li\u003e\n\u003cli\u003e및 디버그 서명 인증서 SHA-1 은 \u003ca href=\"keytool\"\u003ekeytool\u003c/a\u003e 을 통해 정보 확인\u003c/li\u003e\n\u003cli\u003e확인 된 정보로 앱등록 -\u0026gt; google-service.json 다운로드 -\u0026gt; android/app 폴더에 추가\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eclient\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://rnfirebase.io/messaging/usage\" target=\"_blank\"\u003e[URL] https://rnfirebase.io/messaging/usage\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eserver\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://rnfirebase.io/messaging/server-integration\" target=\"_blank\"\u003e[URL] https://rnfirebase.io/messaging/server-integration\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"client\"\u003eclient\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cem\u003e중요\u003c/em\u003e 백그라운드 메시지 처리에 제약사항으로 인해 코드가 로딩되는 이른 시점에 firebase 설정이 되어야한다\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"ios\"\u003eios\u003c/a\u003e 는 백그라운드에서 메시지를 받았을때 리액트 루트가 마운트되며 이로인한 문제를 방지하기 위한 설정이 필요하다\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://rnfirebase.io/messaging/usage#background-application-state\" target=\"_blank\"\u003e[URL] https://rnfirebase.io/messaging/usage#background-application-state\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"firebasejson\"\u003efirebase.json\u003c/h4\u003e\n\u003cblockquote\u003e\u003cp\u003e추가 설정을 위해서 자동으로 해주는 것들을 \u003ccode class=\"span\"\u003edisabled\u003c/code\u003e 시키는 등, 특정 설정 가능\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"ios\"\u003eios\u003c/a\u003e\u003cul\u003e\n\u003cli\u003edisable APNs auto registration\u003c/li\u003e\n\u003cli\u003eforeground presentation options - notification 보여지는 방식\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"android\"\u003eandroid\u003c/a\u003e\u003cul\u003e\n\u003cli\u003ebackground handler timeout 설정, background, quit 상태에서 메시지를 핸들링할 타입지정 -\u0026gt;  지나면 앱 quit으로 추정\u003c/li\u003e\n\u003cli\u003eNotification Channel ID\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 학습 필요 \u003ca href=\"@todo\"\u003e@todo\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eNotification Color\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eAuto initialization\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"app-의-상태따른-행동\"\u003eapp 의 상태따른 행동\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e상태\u003cul\u003e\n\u003cli\u003eforeground\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003emessaging().onMessage()\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003ebackground\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003emessaging().setBackgroundMessageHandler()\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003equit - 종료된 경우\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e상태에 따라 다르게 행동하게되며 이해가 중요하다고 함 읽어볼 것\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://firebase.google.com/docs/cloud-messaging/concept-options?hl=ko\" target=\"_blank\"\u003e[URL] https://firebase.google.com/docs/cloud-messaging/concept-options?hl=ko\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"메시지-타입\"\u003e메시지 타입\u003c/h4\u003e\n\u003cblockquote\u003e\u003cp\u003edata only 메시지는 low priority 로 간주되며 앱을 깨우지 않는다,  우선순위를 강제하면 깨울 수 있다\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003edata + notification\u003c/li\u003e\n\u003cli\u003edata\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"server\"\u003eserver\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://firebase.google.com/docs/cloud-messaging/ios/first-message?hl=ko\" target=\"_blank\"\u003e[URL] https://firebase.google.com/docs/cloud-messaging/ios/first-message?hl=ko\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"https://rnfirebase.io/messaging/server-integration\" target=\"_blank\"\u003e[URL] https://rnfirebase.io/messaging/server-integration\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e메시지를 보내는 방식\u003cul\u003e\n\u003cli\u003e메시지를 특정 디바이스에 보내는 방식\u003c/li\u003e\n\u003cli\u003e메시지를 토픽에 발송하는 방식\u003cul\u003e\n\u003cli\u003e토픽을 구독하는 주체는 앱\u003c/li\u003e\n\u003cli\u003e서버가 토픽에 메시지를 발송(한번에 최대 5개 토픽)\u003c/li\u003e\n\u003cli\u003e\u003cem\u003e주의\u003c/em\u003e  특정 유저를 위한 토픽을 만들지 말것\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"@todo\"\u003e@todo\u003c/a\u003e 많은 유저가 구독중인 알람으로 인한 서버부담을 줄이고자 유저를 토픽 유저를 그룹으로 나눠서 시간차로 보낼 수 있는지 확인\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"ios\"\u003eios\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"firebase\"\u003efirebase\u003c/a\u003e 프로젝트 설정에서 \u003ca href=\"APNs\"\u003eAPNs\u003c/a\u003e 등록 필요\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"xcode\"\u003excode\u003c/a\u003e 에서 push 활성화 필요할 것\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"firebase-admin\"\u003efirebase-admin\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003esendTo\u003c/code\u003e 로 시작하면 레거시 api 이므로 사용불가, \u003ccode class=\"span\"\u003esend\u003c/code\u003e 를 사용\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003esendEachForMulticast\u003c/code\u003e 여러 토큰에 한번에 전송이 필요한 경우 사용\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"rest\"\u003erest\u003c/h3\u003e\n\u003ch4 id=\"fcm-access-token-발급\"\u003efcm access token 발급\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003eoauth 토큰이 필요하다 아래서 발급이 가능하다\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://developers.google.com/oauthplayground/\" target=\"_blank\"\u003e[URL] https://developers.google.com/oauthplayground/\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://stackoverflow.com/questions/50399170/what-bearer-token-should-i-be-using-for-firebase-cloud-messaging-testing\" target=\"_blank\"\u003e[URL] https://stackoverflow.com/questions/50399170/what-bearer-token-should-i-be-using-for-firebase-cloud-messaging-testing\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e Firebase Cloud Messaging API v1\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"사용-1\"\u003e사용\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003evim rest 형태니 알아서 변경해서 쓴다\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ehttps://fcm.googleapis.com\n\nContent-Type: application/json\nAuthorization: Bearer [위에서 발급받은 accessToken]\n\nPOST /v1/projects/saljiro/messages:send\n\n{\n  \u003cspan class=\"hljs-string\"\u003e\u0026quot;message\u0026quot;\u003c/span\u003e: {\n    \u003cspan class=\"hljs-string\"\u003e\u0026quot;data\u0026quot;\u003c/span\u003e:{\n      \u003cspan class=\"hljs-string\"\u003e\u0026quot;deepLink\u0026quot;\u003c/span\u003e:\u003cspan class=\"hljs-string\"\u003e\u0026quot;myscheme://path\u0026quot;\u003c/span\u003e,\n    },\n    \u003cspan class=\"hljs-string\"\u003e\u0026quot;notification\u0026quot;\u003c/span\u003e:{\n      \u003cspan class=\"hljs-string\"\u003e\u0026quot;body\u0026quot;\u003c/span\u003e:\u003cspan class=\"hljs-string\"\u003e\u0026quot;1\u0026quot;\u003c/span\u003e,\n      \u003cspan class=\"hljs-string\"\u003e\u0026quot;title\u0026quot;\u003c/span\u003e:\u003cspan class=\"hljs-string\"\u003e\u0026quot;leserrafim\u0026quot;\u003c/span\u003e\n    },\n    \u003cspan class=\"hljs-string\"\u003e\u0026quot;token\u0026quot;\u003c/span\u003e : \u003cspan class=\"hljs-string\"\u003e\u0026quot;[발송 대상의 fcm token]\u0026quot;\u003c/span\u003e\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"언급되는-라이브러리\"\u003e언급되는 라이브러리\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/invertase/notifee\" target=\"_blank\"\u003e[URL] https://github.com/invertase/notifee\u003c/a\u003e\u003cul\u003e\n\u003cli\u003eandroid notification ux 까지 변경지원하는 것으로 언급됨\u003c/li\u003e\n\u003cli\u003e이전에 사용되던 \u003ca href=\"https://github.com/zo0r/react-native-push-notification\" target=\"_blank\"\u003e[URL] https://github.com/zo0r/react-native-push-notification\u003c/a\u003e 는 버전 업데이트 멈춘듯 2021-10-01\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"구현\"\u003e구현\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e유저의 디바이스가 여러개일 수 있으므로 user, token 관계는 \u003cstrong\u003e1:n\u003c/strong\u003e \u003c/li\u003e\n\u003cli\u003e로그인을 가정\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-mermaid\"\u003esequenceDiagram\n  participant a as app\n  participant u as auth\n  participant b as backend\n  participant f as firebase\n  participant d as db\n  u --\u0026gt;\u0026gt; a: login\n  f --\u0026gt;\u0026gt; a: token\n  a --\u0026gt;\u0026gt; b: setToken: login 정보 + device 정보\n  b --\u0026gt;\u0026gt; d: 동일디바이스 기존 토큰 제거 및 신규 토큰 추가\n  par 구독\n    a --\u0026gt;\u0026gt; b: 구독\n    b --\u0026gt;\u0026gt; f: topic*n 구독\n    f --\u0026gt;\u0026gt; b: 200\n    b --\u0026gt;\u0026gt; d: 200: 구독 키워드 기록\n    par 실패한 토큰 처리\n      b --\u0026gt;\u0026gt; d: `messaging/registration-token-not-registered`: 토큰 제거\n    end\n  end\n  par push\n    b --\u0026gt;\u0026gt; f: push 요청\n    b --\u0026gt;\u0026gt; d: 4xx,5xx: 토큰 제거\n    f --\u0026gt;\u0026gt; a: push notification\n  end\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"firebase\"\u003efirebase\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"iOS\"\u003eiOS\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"android\"\u003eandroid\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"react-native\"\u003ereact-native\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"apns\"\u003eapns\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"push-notification\"\u003epush-notification\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"google\"\u003egoogle\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/824ce01\\n\",\"className\":\"bg-white text-black\",\"children\":\"824ce01\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/fcm.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/fcm.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/fcm.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"fcm\",\"name\":\"fcm\",\"val\":21},{\"id\":\"iOS\",\"name\":\"iOS\",\"val\":\"$undefined\"},{\"id\":\"android\",\"name\":\"android\",\"val\":23},{\"id\":\"react-native\",\"name\":\"react-native\",\"val\":90},{\"id\":\"keytool\",\"name\":\"keytool\",\"val\":5},{\"id\":\"ios\",\"name\":\"ios\",\"val\":11},{\"id\":\"@todo\",\"name\":\"@todo\",\"val\":30},{\"id\":\"firebase\",\"name\":\"firebase\",\"val\":14},{\"id\":\"APNs\",\"name\":\"APNs\",\"val\":\"$undefined\"},{\"id\":\"xcode\",\"name\":\"xcode\",\"val\":16},{\"id\":\"apns\",\"name\":\"apns\",\"val\":8},{\"id\":\"push-notification\",\"name\":\"push-notification\",\"val\":6},{\"id\":\"google\",\"name\":\"google\",\"val\":8},{\"id\":\"devide-app-by-development-env\",\"name\":\"devide-app-by-development-env\",\"val\":30},{\"id\":\"index\",\"name\":\"index\",\"val\":106},{\"id\":\"diary/2023-12-31\",\"name\":\"diary/2023-12-31\",\"val\":93},{\"id\":\"diary/2024-01-02\",\"name\":\"diary/2024-01-02\",\"val\":10},{\"id\":\"diary/2024-01-05\",\"name\":\"diary/2024-01-05\",\"val\":5},{\"id\":\"diary/2024-01-10\",\"name\":\"diary/2024-01-10\",\"val\":7},{\"id\":\"diary/2024-01-11\",\"name\":\"diary/2024-01-11\",\"val\":9},{\"id\":\"diary/2024-01-12\",\"name\":\"diary/2024-01-12\",\"val\":3},{\"id\":\"diary/2024-01-15\",\"name\":\"diary/2024-01-15\",\"val\":14},{\"id\":\"diary/2024-01-18\",\"name\":\"diary/2024-01-18\",\"val\":7},{\"id\":\"diary/2024-01-23\",\"name\":\"diary/2024-01-23\",\"val\":7},{\"id\":\"diary/2024-01-25\",\"name\":\"diary/2024-01-25\",\"val\":59},{\"id\":\"diary/2024-01-27\",\"name\":\"diary/2024-01-27\",\"val\":6},{\"id\":\"diary/2024-02-02\",\"name\":\"diary/2024-02-02\",\"val\":3},{\"id\":\"diary/2024-03-08\",\"name\":\"diary/2024-03-08\",\"val\":5}],\"links\":[{\"source\":\"fcm\",\"target\":\"iOS\"},{\"source\":\"fcm\",\"target\":\"android\"},{\"source\":\"fcm\",\"target\":\"android\"},{\"source\":\"fcm\",\"target\":\"react-native\"},{\"source\":\"fcm\",\"target\":\"keytool\"},{\"source\":\"fcm\",\"target\":\"ios\"},{\"source\":\"fcm\",\"target\":\"ios\"},{\"source\":\"fcm\",\"target\":\"android\"},{\"source\":\"fcm\",\"target\":\"@todo\"},{\"source\":\"fcm\",\"target\":\"@todo\"},{\"source\":\"fcm\",\"target\":\"ios\"},{\"source\":\"fcm\",\"target\":\"firebase\"},{\"source\":\"fcm\",\"target\":\"APNs\"},{\"source\":\"fcm\",\"target\":\"xcode\"},{\"source\":\"fcm\",\"target\":\"firebase\"},{\"source\":\"fcm\",\"target\":\"iOS\"},{\"source\":\"fcm\",\"target\":\"android\"},{\"source\":\"fcm\",\"target\":\"react-native\"},{\"source\":\"fcm\",\"target\":\"apns\"},{\"source\":\"fcm\",\"target\":\"push-notification\"},{\"source\":\"fcm\",\"target\":\"google\"},{\"source\":\"apns\",\"target\":\"fcm\"},{\"source\":\"apns\",\"target\":\"fcm\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"fcm\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"fcm\"},{\"source\":\"firebase\",\"target\":\"fcm\"},{\"source\":\"index\",\"target\":\"fcm\"},{\"source\":\"keytool\",\"target\":\"fcm\"},{\"source\":\"push-notification\",\"target\":\"fcm\"},{\"source\":\"push-notification\",\"target\":\"fcm\"},{\"source\":\"react-native\",\"target\":\"fcm\"},{\"source\":\"diary/2023-12-31\",\"target\":\"fcm\"},{\"source\":\"diary/2023-12-31\",\"target\":\"fcm\"},{\"source\":\"diary/2023-12-31\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-02\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-05\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-10\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-10\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-11\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-12\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-15\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-18\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-18\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-23\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-25\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-25\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-25\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-27\",\"target\":\"fcm\"},{\"source\":\"diary/2024-02-02\",\"target\":\"fcm\"},{\"source\":\"diary/2024-02-02\",\"target\":\"fcm\"},{\"source\":\"diary/2024-03-08\",\"target\":\"fcm\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"fcm\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/fcm\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"fcm\"}],[\"$\",\"sup\",null,{\"children\":21}]]}]}],[\"$\",\"span\",\"iOS\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/iOS\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"iOS\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"android\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/android\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"android\"}],[\"$\",\"sup\",null,{\"children\":23}]]}]}],[\"$\",\"span\",\"react-native\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/react-native\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"react-native\"}],[\"$\",\"sup\",null,{\"children\":90}]]}]}],[\"$\",\"span\",\"keytool\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/keytool\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"keytool\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"ios\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ios\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ios\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"@todo\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/@todo\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"@todo\"}],[\"$\",\"sup\",null,{\"children\":30}]]}]}],[\"$\",\"span\",\"firebase\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/firebase\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"firebase\"}],[\"$\",\"sup\",null,{\"children\":14}]]}]}],[\"$\",\"span\",\"APNs\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/APNs\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"APNs\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"xcode\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/xcode\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"xcode\"}],[\"$\",\"sup\",null,{\"children\":16}]]}]}],[\"$\",\"span\",\"apns\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/apns\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"apns\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"push-notification\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/push-notification\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"push-notification\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"google\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/google\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"google\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"devide-app-by-development-env\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/devide-app-by-development-env\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"devide-app-by-development-env\"}],[\"$\",\"sup\",null,{\"children\":30}]]}]}],[\"$\",\"span\",\"index\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/index\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"index\"}],[\"$\",\"sup\",null,{\"children\":106}]]}]}],[\"$\",\"span\",\"diary/2023-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-31\"}],[\"$\",\"sup\",null,{\"children\":93}]]}]}],[\"$\",\"span\",\"diary/2024-01-02\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-02\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-02\"}],[\"$\",\"sup\",null,{\"children\":10}]]}]}],[\"$\",\"span\",\"diary/2024-01-05\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-05\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-05\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"diary/2024-01-10\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-10\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-10\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"diary/2024-01-11\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-11\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-11\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"diary/2024-01-12\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-12\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-12\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2024-01-15\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-15\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-15\"}],[\"$\",\"sup\",null,{\"children\":14}]]}]}],[\"$\",\"span\",\"diary/2024-01-18\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-18\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-18\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"diary/2024-01-23\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-23\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-23\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"diary/2024-01-25\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-25\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-25\"}],[\"$\",\"sup\",null,{\"children\":59}]]}]}],[\"$\",\"span\",\"diary/2024-01-27\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-27\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-27\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"diary/2024-02-02\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-02-02\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-02-02\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2024-03-08\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-03-08\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-03-08\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"fcm\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#fcm\",\"children\":\"fcm\"}]}],[\"$\",\"div\",\"overview\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#overview\",\"children\":\"overview\"}]}],[\"$\",\"div\",\"사용패턴\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#사용패턴\",\"children\":\"사용패턴\"}]}],[\"$\",\"div\",\"사용\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#사용\",\"children\":\"사용\"}]}],[\"$\",\"div\",\"client\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#client\",\"children\":\"client\"}]}],[\"$\",\"div\",\"firebasejson\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#firebasejson\",\"children\":\"firebase.json\"}]}],[\"$\",\"div\",\"app-의-상태따른-행동\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#app-의-상태따른-행동\",\"children\":\"app 의 상태따른 행동\"}]}],[\"$\",\"div\",\"메시지-타입\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#메시지-타입\",\"children\":\"메시지 타입\"}]}],[\"$\",\"div\",\"server\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#server\",\"children\":\"server\"}]}],[\"$\",\"div\",\"firebase-admin\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#firebase-admin\",\"children\":\"firebase-admin\"}]}],[\"$\",\"div\",\"rest\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#rest\",\"children\":\"rest\"}]}],[\"$\",\"div\",\"fcm-access-token-발급\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#fcm-access-token-발급\",\"children\":\"fcm access token 발급\"}]}],[\"$\",\"div\",\"사용-1\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#사용-1\",\"children\":\"사용\"}]}],[\"$\",\"div\",\"언급되는-라이브러리\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#언급되는-라이브러리\",\"children\":\"언급되는 라이브러리\"}]}],[\"$\",\"div\",\"구현\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#구현\",\"children\":\"구현\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T149d,"])</script><script>self.__next_f.push([1,"firebase cloud message\n\n## overview\n+ https://seungwoolog.tistory.com/88 참조\n\n## 사용패턴\n- notification\n- data sync\n  - [ ] 활용패턴이 있을 것 같음 특정 ui 버전을 보게 한다던가, de-feature 해버린다던가\n- updating ui\n\n## 사용\n- 프로젝트생성\n  + https://console.firebase.google.com/u/0/?hl=ko\n- 프로젝트화면에서 *앱에 Firebase를 추가하여 시작하기* 를 통해 [[iOS]], [[android]] 관련 설정\n- [[android]] 앱에 Firebase 추가\n  - 패키지 네임 [[react-native]] 프로젝트 기준으로 `android/app/build.gradle` 확인\n  - 및 디버그 서명 인증서 SHA-1 은 [[keytool]] 을 통해 정보 확인\n  - 확인 된 정보로 앱등록 -\u003e google-service.json 다운로드 -\u003e android/app 폴더에 추가\n- client\n  + https://rnfirebase.io/messaging/usage\n- server\n  + https://rnfirebase.io/messaging/server-integration\n\n### client\n- *중요* 백그라운드 메시지 처리에 제약사항으로 인해 코드가 로딩되는 이른 시점에 firebase 설정이 되어야한다\n- [[ios]] 는 백그라운드에서 메시지를 받았을때 리액트 루트가 마운트되며 이로인한 문제를 방지하기 위한 설정이 필요하다\n  + https://rnfirebase.io/messaging/usage#background-application-state\n\n#### firebase.json\n\u003e 추가 설정을 위해서 자동으로 해주는 것들을 `disabled` 시키는 등, 특정 설정 가능\n- [[ios]]\n  - disable APNs auto registration\n  - foreground presentation options - notification 보여지는 방식\n- [[android]]\n  - background handler timeout 설정, background, quit 상태에서 메시지를 핸들링할 타입지정 -\u003e  지나면 앱 quit으로 추정\n  - Notification Channel ID\n    - [ ] 학습 필요 [[@todo]]\n  - Notification Color\n- Auto initialization\n\n#### app 의 상태따른 행동\n- 상태\n  - foreground\n    - `messaging().onMessage()`\n  - background\n    - `messaging().setBackgroundMessageHandler()`\n  - quit - 종료된 경우\n- 상태에 따라 다르게 행동하게되며 이해가 중요하다고 함 읽어볼 것\n  + https://firebase.google.com/docs/cloud-messaging/concept-options?hl=ko\n\n#### 메시지 타입\n\u003e data only 메시지는 low priority 로 간주되며 앱을 깨우지 않는다,  우선순위를 강제하면 깨울 수 있다\n- data + notification\n- data\n\n### server\n+ https://firebase.google.com/docs/cloud-messaging/ios/first-message?hl=ko\n+ https://rnfirebase.io/messaging/server-integration\n- 메시지를 보내는 방식\n  - 메시지를 특정 디바이스에 보내는 방식\n  - 메시지를 토픽에 발송하는 방식\n    - 토픽을 구독하는 주체는 앱\n    - 서버가 토픽에 메시지를 발송(한번에 최대 5개 토픽)\n    - *주의*  특정 유저를 위한 토픽을 만들지 말것\n    - [ ] [[@todo]] 많은 유저가 구독중인 알람으로 인한 서버부담을 줄이고자 유저를 토픽 유저를 그룹으로 나눠서 시간차로 보낼 수 있는지 확인\n- [[ios]]\n  - [[firebase]] 프로젝트 설정에서 [[APNs]] 등록 필요\n  - [ ] [[xcode]] 에서 push 활성화 필요할 것\n\n#### firebase-admin\n- `sendTo` 로 시작하면 레거시 api 이므로 사용불가, `send` 를 사용\n- `sendEachForMulticast` 여러 토큰에 한번에 전송이 필요한 경우 사용\n\n### rest \n#### fcm access token 발급\n- oauth 토큰이 필요하다 아래서 발급이 가능하다\n  + https://developers.google.com/oauthplayground/\n    + https://stackoverflow.com/questions/50399170/what-bearer-token-should-i-be-using-for-firebase-cloud-messaging-testing\n    - [X] Firebase Cloud Messaging API v1\n\n#### 사용\n- vim rest 형태니 알아서 변경해서 쓴다\n  ```sh \n  https://fcm.googleapis.com\n\n  Content-Type: application/json\n  Authorization: Bearer [위에서 발급받은 accessToken]\n\n  POST /v1/projects/saljiro/messages:send\n\n  {\n    \"message\": {\n      \"data\":{\n        \"deepLink\":\"myscheme://path\",\n      },\n      \"notification\":{\n        \"body\":\"1\",\n        \"title\":\"leserrafim\"\n      },\n      \"token\" : \"[발송 대상의 fcm token]\"\n    }\n  }\n  ```\n\n## 언급되는 라이브러리\n- https://github.com/invertase/notifee\n  - android notification ux 까지 변경지원하는 것으로 언급됨\n  - 이전에 사용되던 https://github.com/zo0r/react-native-push-notification 는 버전 업데이트 멈춘듯 2021-10-01\n\n## 구현\n- 유저의 디바이스가 여러개일 수 있으므로 user, token 관계는 **1:n** \n- 로그인을 가정\n```mermaid\nsequenceDiagram\n  participant a as app\n  participant u as auth\n  participant b as backend\n  participant f as firebase\n  participant d as db\n  u --\u003e\u003e a: login\n  f --\u003e\u003e a: token\n  a --\u003e\u003e b: setToken: login 정보 + device 정보\n  b --\u003e\u003e d: 동일디바이스 기존 토큰 제거 및 신규 토큰 추가\n  par 구독\n    a --\u003e\u003e b: 구독\n    b --\u003e\u003e f: topic*n 구독\n    f --\u003e\u003e b: 200\n    b --\u003e\u003e d: 200: 구독 키워드 기록\n    par 실패한 토큰 처리\n      b --\u003e\u003e d: `messaging/registration-token-not-registered`: 토큰 제거\n    end\n  end\n  par push\n    b --\u003e\u003e f: push 요청\n    b --\u003e\u003e d: 4xx,5xx: 토큰 제거\n    f --\u003e\u003e a: push notification\n  end\n```\n\n## link\n- [[firebase]]\n- [[iOS]]\n- [[android]]\n- [[react-native]]\n- [[apns]]\n- [[push-notification]]\n- [[google]]\n"])</script><script>self.__next_f.push([1,"16:T149d,"])</script><script>self.__next_f.push([1,"firebase cloud message\n\n## overview\n+ https://seungwoolog.tistory.com/88 참조\n\n## 사용패턴\n- notification\n- data sync\n  - [ ] 활용패턴이 있을 것 같음 특정 ui 버전을 보게 한다던가, de-feature 해버린다던가\n- updating ui\n\n## 사용\n- 프로젝트생성\n  + https://console.firebase.google.com/u/0/?hl=ko\n- 프로젝트화면에서 *앱에 Firebase를 추가하여 시작하기* 를 통해 [[iOS]], [[android]] 관련 설정\n- [[android]] 앱에 Firebase 추가\n  - 패키지 네임 [[react-native]] 프로젝트 기준으로 `android/app/build.gradle` 확인\n  - 및 디버그 서명 인증서 SHA-1 은 [[keytool]] 을 통해 정보 확인\n  - 확인 된 정보로 앱등록 -\u003e google-service.json 다운로드 -\u003e android/app 폴더에 추가\n- client\n  + https://rnfirebase.io/messaging/usage\n- server\n  + https://rnfirebase.io/messaging/server-integration\n\n### client\n- *중요* 백그라운드 메시지 처리에 제약사항으로 인해 코드가 로딩되는 이른 시점에 firebase 설정이 되어야한다\n- [[ios]] 는 백그라운드에서 메시지를 받았을때 리액트 루트가 마운트되며 이로인한 문제를 방지하기 위한 설정이 필요하다\n  + https://rnfirebase.io/messaging/usage#background-application-state\n\n#### firebase.json\n\u003e 추가 설정을 위해서 자동으로 해주는 것들을 `disabled` 시키는 등, 특정 설정 가능\n- [[ios]]\n  - disable APNs auto registration\n  - foreground presentation options - notification 보여지는 방식\n- [[android]]\n  - background handler timeout 설정, background, quit 상태에서 메시지를 핸들링할 타입지정 -\u003e  지나면 앱 quit으로 추정\n  - Notification Channel ID\n    - [ ] 학습 필요 [[@todo]]\n  - Notification Color\n- Auto initialization\n\n#### app 의 상태따른 행동\n- 상태\n  - foreground\n    - `messaging().onMessage()`\n  - background\n    - `messaging().setBackgroundMessageHandler()`\n  - quit - 종료된 경우\n- 상태에 따라 다르게 행동하게되며 이해가 중요하다고 함 읽어볼 것\n  + https://firebase.google.com/docs/cloud-messaging/concept-options?hl=ko\n\n#### 메시지 타입\n\u003e data only 메시지는 low priority 로 간주되며 앱을 깨우지 않는다,  우선순위를 강제하면 깨울 수 있다\n- data + notification\n- data\n\n### server\n+ https://firebase.google.com/docs/cloud-messaging/ios/first-message?hl=ko\n+ https://rnfirebase.io/messaging/server-integration\n- 메시지를 보내는 방식\n  - 메시지를 특정 디바이스에 보내는 방식\n  - 메시지를 토픽에 발송하는 방식\n    - 토픽을 구독하는 주체는 앱\n    - 서버가 토픽에 메시지를 발송(한번에 최대 5개 토픽)\n    - *주의*  특정 유저를 위한 토픽을 만들지 말것\n    - [ ] [[@todo]] 많은 유저가 구독중인 알람으로 인한 서버부담을 줄이고자 유저를 토픽 유저를 그룹으로 나눠서 시간차로 보낼 수 있는지 확인\n- [[ios]]\n  - [[firebase]] 프로젝트 설정에서 [[APNs]] 등록 필요\n  - [ ] [[xcode]] 에서 push 활성화 필요할 것\n\n#### firebase-admin\n- `sendTo` 로 시작하면 레거시 api 이므로 사용불가, `send` 를 사용\n- `sendEachForMulticast` 여러 토큰에 한번에 전송이 필요한 경우 사용\n\n### rest \n#### fcm access token 발급\n- oauth 토큰이 필요하다 아래서 발급이 가능하다\n  + https://developers.google.com/oauthplayground/\n    + https://stackoverflow.com/questions/50399170/what-bearer-token-should-i-be-using-for-firebase-cloud-messaging-testing\n    - [X] Firebase Cloud Messaging API v1\n\n#### 사용\n- vim rest 형태니 알아서 변경해서 쓴다\n  ```sh \n  https://fcm.googleapis.com\n\n  Content-Type: application/json\n  Authorization: Bearer [위에서 발급받은 accessToken]\n\n  POST /v1/projects/saljiro/messages:send\n\n  {\n    \"message\": {\n      \"data\":{\n        \"deepLink\":\"myscheme://path\",\n      },\n      \"notification\":{\n        \"body\":\"1\",\n        \"title\":\"leserrafim\"\n      },\n      \"token\" : \"[발송 대상의 fcm token]\"\n    }\n  }\n  ```\n\n## 언급되는 라이브러리\n- https://github.com/invertase/notifee\n  - android notification ux 까지 변경지원하는 것으로 언급됨\n  - 이전에 사용되던 https://github.com/zo0r/react-native-push-notification 는 버전 업데이트 멈춘듯 2021-10-01\n\n## 구현\n- 유저의 디바이스가 여러개일 수 있으므로 user, token 관계는 **1:n** \n- 로그인을 가정\n```mermaid\nsequenceDiagram\n  participant a as app\n  participant u as auth\n  participant b as backend\n  participant f as firebase\n  participant d as db\n  u --\u003e\u003e a: login\n  f --\u003e\u003e a: token\n  a --\u003e\u003e b: setToken: login 정보 + device 정보\n  b --\u003e\u003e d: 동일디바이스 기존 토큰 제거 및 신규 토큰 추가\n  par 구독\n    a --\u003e\u003e b: 구독\n    b --\u003e\u003e f: topic*n 구독\n    f --\u003e\u003e b: 200\n    b --\u003e\u003e d: 200: 구독 키워드 기록\n    par 실패한 토큰 처리\n      b --\u003e\u003e d: `messaging/registration-token-not-registered`: 토큰 제거\n    end\n  end\n  par push\n    b --\u003e\u003e f: push 요청\n    b --\u003e\u003e d: 4xx,5xx: 토큰 제거\n    f --\u003e\u003e a: push notification\n  end\n```\n\n## link\n- [[firebase]]\n- [[iOS]]\n- [[android]]\n- [[react-native]]\n- [[apns]]\n- [[push-notification]]\n- [[google]]\n"])</script><script>self.__next_f.push([1,"17:T149d,"])</script><script>self.__next_f.push([1,"firebase cloud message\n\n## overview\n+ https://seungwoolog.tistory.com/88 참조\n\n## 사용패턴\n- notification\n- data sync\n  - [ ] 활용패턴이 있을 것 같음 특정 ui 버전을 보게 한다던가, de-feature 해버린다던가\n- updating ui\n\n## 사용\n- 프로젝트생성\n  + https://console.firebase.google.com/u/0/?hl=ko\n- 프로젝트화면에서 *앱에 Firebase를 추가하여 시작하기* 를 통해 [[iOS]], [[android]] 관련 설정\n- [[android]] 앱에 Firebase 추가\n  - 패키지 네임 [[react-native]] 프로젝트 기준으로 `android/app/build.gradle` 확인\n  - 및 디버그 서명 인증서 SHA-1 은 [[keytool]] 을 통해 정보 확인\n  - 확인 된 정보로 앱등록 -\u003e google-service.json 다운로드 -\u003e android/app 폴더에 추가\n- client\n  + https://rnfirebase.io/messaging/usage\n- server\n  + https://rnfirebase.io/messaging/server-integration\n\n### client\n- *중요* 백그라운드 메시지 처리에 제약사항으로 인해 코드가 로딩되는 이른 시점에 firebase 설정이 되어야한다\n- [[ios]] 는 백그라운드에서 메시지를 받았을때 리액트 루트가 마운트되며 이로인한 문제를 방지하기 위한 설정이 필요하다\n  + https://rnfirebase.io/messaging/usage#background-application-state\n\n#### firebase.json\n\u003e 추가 설정을 위해서 자동으로 해주는 것들을 `disabled` 시키는 등, 특정 설정 가능\n- [[ios]]\n  - disable APNs auto registration\n  - foreground presentation options - notification 보여지는 방식\n- [[android]]\n  - background handler timeout 설정, background, quit 상태에서 메시지를 핸들링할 타입지정 -\u003e  지나면 앱 quit으로 추정\n  - Notification Channel ID\n    - [ ] 학습 필요 [[@todo]]\n  - Notification Color\n- Auto initialization\n\n#### app 의 상태따른 행동\n- 상태\n  - foreground\n    - `messaging().onMessage()`\n  - background\n    - `messaging().setBackgroundMessageHandler()`\n  - quit - 종료된 경우\n- 상태에 따라 다르게 행동하게되며 이해가 중요하다고 함 읽어볼 것\n  + https://firebase.google.com/docs/cloud-messaging/concept-options?hl=ko\n\n#### 메시지 타입\n\u003e data only 메시지는 low priority 로 간주되며 앱을 깨우지 않는다,  우선순위를 강제하면 깨울 수 있다\n- data + notification\n- data\n\n### server\n+ https://firebase.google.com/docs/cloud-messaging/ios/first-message?hl=ko\n+ https://rnfirebase.io/messaging/server-integration\n- 메시지를 보내는 방식\n  - 메시지를 특정 디바이스에 보내는 방식\n  - 메시지를 토픽에 발송하는 방식\n    - 토픽을 구독하는 주체는 앱\n    - 서버가 토픽에 메시지를 발송(한번에 최대 5개 토픽)\n    - *주의*  특정 유저를 위한 토픽을 만들지 말것\n    - [ ] [[@todo]] 많은 유저가 구독중인 알람으로 인한 서버부담을 줄이고자 유저를 토픽 유저를 그룹으로 나눠서 시간차로 보낼 수 있는지 확인\n- [[ios]]\n  - [[firebase]] 프로젝트 설정에서 [[APNs]] 등록 필요\n  - [ ] [[xcode]] 에서 push 활성화 필요할 것\n\n#### firebase-admin\n- `sendTo` 로 시작하면 레거시 api 이므로 사용불가, `send` 를 사용\n- `sendEachForMulticast` 여러 토큰에 한번에 전송이 필요한 경우 사용\n\n### rest \n#### fcm access token 발급\n- oauth 토큰이 필요하다 아래서 발급이 가능하다\n  + https://developers.google.com/oauthplayground/\n    + https://stackoverflow.com/questions/50399170/what-bearer-token-should-i-be-using-for-firebase-cloud-messaging-testing\n    - [X] Firebase Cloud Messaging API v1\n\n#### 사용\n- vim rest 형태니 알아서 변경해서 쓴다\n  ```sh \n  https://fcm.googleapis.com\n\n  Content-Type: application/json\n  Authorization: Bearer [위에서 발급받은 accessToken]\n\n  POST /v1/projects/saljiro/messages:send\n\n  {\n    \"message\": {\n      \"data\":{\n        \"deepLink\":\"myscheme://path\",\n      },\n      \"notification\":{\n        \"body\":\"1\",\n        \"title\":\"leserrafim\"\n      },\n      \"token\" : \"[발송 대상의 fcm token]\"\n    }\n  }\n  ```\n\n## 언급되는 라이브러리\n- https://github.com/invertase/notifee\n  - android notification ux 까지 변경지원하는 것으로 언급됨\n  - 이전에 사용되던 https://github.com/zo0r/react-native-push-notification 는 버전 업데이트 멈춘듯 2021-10-01\n\n## 구현\n- 유저의 디바이스가 여러개일 수 있으므로 user, token 관계는 **1:n** \n- 로그인을 가정\n```mermaid\nsequenceDiagram\n  participant a as app\n  participant u as auth\n  participant b as backend\n  participant f as firebase\n  participant d as db\n  u --\u003e\u003e a: login\n  f --\u003e\u003e a: token\n  a --\u003e\u003e b: setToken: login 정보 + device 정보\n  b --\u003e\u003e d: 동일디바이스 기존 토큰 제거 및 신규 토큰 추가\n  par 구독\n    a --\u003e\u003e b: 구독\n    b --\u003e\u003e f: topic*n 구독\n    f --\u003e\u003e b: 200\n    b --\u003e\u003e d: 200: 구독 키워드 기록\n    par 실패한 토큰 처리\n      b --\u003e\u003e d: `messaging/registration-token-not-registered`: 토큰 제거\n    end\n  end\n  par push\n    b --\u003e\u003e f: push 요청\n    b --\u003e\u003e d: 4xx,5xx: 토큰 제거\n    f --\u003e\u003e a: push notification\n  end\n```\n\n## link\n- [[firebase]]\n- [[iOS]]\n- [[android]]\n- [[react-native]]\n- [[apns]]\n- [[push-notification]]\n- [[google]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# fcm\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# fcm\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/fcm\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# fcm\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

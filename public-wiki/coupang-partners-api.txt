@@ -1,0 +1,227 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-3d58b54f94d3602b.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","coupang-partners-api","c"]
+0:["PQ1Y9JFLMeZ9AEzD_lf7v",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","coupang-partners-api","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"coupang-partners-api\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","coupang-partners-api","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:T8f1,<h1 id="coupang-partners-api">coupang-partners-api</h1>
+<h2 id="승인">승인</h2>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 15만원 이상의 판매 금액 발생 이후 api 사용 가능</li>
+<li><input checked="" disabled="" type="checkbox"> 컨텐츠 설명을 통한 광고 수잎 말고도 승인 받을 수 있는지 -&gt; 다른 아이디로 그냥 사도됨</li>
+</ul>
+<h2 id="링크생성api-x">링크생성(api x)</h2>
+<table>
+<thead>
+<tr>
+<th>메뉴</th>
+<th>사이즈</th>
+<th>타입</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>상품링크</td>
+<td>120x240</td>
+<td>iframe, a, url</td>
+<td>제품 직접 선택, 보더라인 선택가능</td>
+</tr>
+<tr>
+<td>간편링크</td>
+<td></td>
+<td>url</td>
+<td>쿠팡의 특정 페이지로의 링크</td>
+</tr>
+<tr>
+<td>다이나믹배너</td>
+<td>지정 가능</td>
+<td>iframe, script</td>
+<td>파트너스 추천, 카테고리 추천, 고객 관심 기반, 혹은 직접 선택(20개 까지)선택 가능</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>가로길에 맞춰서 롤링되는 타입, 테두리 선택 가능</td>
+</tr>
+<tr>
+<td>카테고리배너</td>
+<td>728x90</td>
+<td></td>
+<td>로켓 직구, 골드 박스 등 쿠팡의 피쳐 홍보</td>
+</tr>
+<tr>
+<td></td>
+<td>600x900</td>
+<td></td>
+<td>골드 박스는 특정시간에만 유효한 피쳐라 시간이 명시되어있음</td>
+</tr>
+<tr>
+<td></td>
+<td>320x480</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>320x100</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>320x50</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>300x250</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>200x200</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>160x600</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>150x60</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>120x60</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>검색/위젯</td>
+<td></td>
+<td>input</td>
+<td>검색하면 결과를 새창에서 열어줌</td>
+</tr>
+<tr>
+<td>이벤트 프로모션 링크</td>
+<td>580x580</td>
+<td></td>
+<td>개별 타이밍의 배너, 3월 세일 등</td>
+</tr>
+<tr>
+<td></td>
+<td>371x371</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="google-adsense">google-adsense</a></li>
+<li><a href="api">api</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/824ce01\n","className":"bg-white text-black","children":"824ce01"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/coupang-partners-api.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/coupang-partners-api.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/coupang-partners-api.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"coupang-partners-api","name":"coupang-partners-api","val":2},{"id":"google-adsense","name":"google-adsense","val":3},{"id":"api","name":"api","val":1},{"id":"diary/2024-02-02","name":"diary/2024-02-02","val":3},{"id":"diary/2024-03-19","name":"diary/2024-03-19","val":4}],"links":[{"source":"coupang-partners-api","target":"google-adsense"},{"source":"coupang-partners-api","target":"api"},{"source":"api","target":"coupang-partners-api"},{"source":"google-adsense","target":"coupang-partners-api"},{"source":"diary/2024-02-02","target":"coupang-partners-api"},{"source":"diary/2024-03-19","target":"coupang-partners-api"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","coupang-partners-api",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/coupang-partners-api","children":[["$","span",null,{"className":"underline","children":"coupang-partners-api"}],["$","sup",null,{"children":2}]]}]}],["$","span","google-adsense",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/google-adsense","children":[["$","span",null,{"className":"underline","children":"google-adsense"}],["$","sup",null,{"children":3}]]}]}],["$","span","api",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/api","children":[["$","span",null,{"className":"underline","children":"api"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2024-02-02",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-02-02","children":[["$","span",null,{"className":"underline","children":"diary/2024-02-02"}],["$","sup",null,{"children":3}]]}]}],["$","span","diary/2024-03-19",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-03-19","children":[["$","span",null,{"className":"underline","children":"diary/2024-03-19"}],["$","sup",null,{"children":4}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","coupang-partners-api",{"className":"pl-0","children":["$","a",null,{"href":"#coupang-partners-api","children":"coupang-partners-api"}]}],["$","div","승인",{"className":"pl-2","children":["$","a",null,{"href":"#승인","children":"승인"}]}],["$","div","링크생성api-x",{"className":"pl-2","children":["$","a",null,{"href":"#링크생성api-x","children":"링크생성(api x)"}]}],["$","div","link",{"className":"pl-2","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:Tc1f,
+## 승인
+- [X] 15만원 이상의 판매 금액 발생 이후 api 사용 가능
+- [X] 컨텐츠 설명을 통한 광고 수잎 말고도 승인 받을 수 있는지 -> 다른 아이디로 그냥 사도됨
+
+## 링크생성(api x)
+| 메뉴                   | 사이즈    | 타입           | 비고                                                                             |
+| ---------------------- | --------- | -------------- | -------------------------------------------------------------------------------- |
+| 상품링크               | 120x240   | iframe, a, url | 제품 직접 선택, 보더라인 선택가능                                                |
+| 간편링크               |           | url            | 쿠팡의 특정 페이지로의 링크                                                      |
+| 다이나믹배너           | 지정 가능 | iframe, script | 파트너스 추천, 카테고리 추천, 고객 관심 기반, 혹은 직접 선택(20개 까지)선택 가능 |
+|                        |           |                | 가로길에 맞춰서 롤링되는 타입, 테두리 선택 가능                                  |
+| 카테고리배너           | 728x90    |                | 로켓 직구, 골드 박스 등 쿠팡의 피쳐 홍보                                         |
+|                        | 600x900   |                | 골드 박스는 특정시간에만 유효한 피쳐라 시간이 명시되어있음                       |
+|                        | 320x480   |                |                                                                                  |
+|                        | 320x100   |                |                                                                                  |
+|                        | 320x50    |                |                                                                                  |
+|                        | 300x250   |                |                                                                                  |
+|                        | 200x200   |                |                                                                                  |
+|                        | 160x600   |                |                                                                                  |
+|                        | 150x60    |                |                                                                                  |
+|                        | 120x60    |                |                                                                                  |
+| 검색/위젯              |           | input          | 검색하면 결과를 새창에서 열어줌                                                  |
+| 이벤트 프로모션 링크   | 580x580   |                | 개별 타이밍의 배너, 3월 세일 등                                                  |
+|                        | 371x371   |                |                                                                                  |
+
+## link
+- [[google-adsense]]
+- [[api]]
+12:Tc1f,
+## 승인
+- [X] 15만원 이상의 판매 금액 발생 이후 api 사용 가능
+- [X] 컨텐츠 설명을 통한 광고 수잎 말고도 승인 받을 수 있는지 -> 다른 아이디로 그냥 사도됨
+
+## 링크생성(api x)
+| 메뉴                   | 사이즈    | 타입           | 비고                                                                             |
+| ---------------------- | --------- | -------------- | -------------------------------------------------------------------------------- |
+| 상품링크               | 120x240   | iframe, a, url | 제품 직접 선택, 보더라인 선택가능                                                |
+| 간편링크               |           | url            | 쿠팡의 특정 페이지로의 링크                                                      |
+| 다이나믹배너           | 지정 가능 | iframe, script | 파트너스 추천, 카테고리 추천, 고객 관심 기반, 혹은 직접 선택(20개 까지)선택 가능 |
+|                        |           |                | 가로길에 맞춰서 롤링되는 타입, 테두리 선택 가능                                  |
+| 카테고리배너           | 728x90    |                | 로켓 직구, 골드 박스 등 쿠팡의 피쳐 홍보                                         |
+|                        | 600x900   |                | 골드 박스는 특정시간에만 유효한 피쳐라 시간이 명시되어있음                       |
+|                        | 320x480   |                |                                                                                  |
+|                        | 320x100   |                |                                                                                  |
+|                        | 320x50    |                |                                                                                  |
+|                        | 300x250   |                |                                                                                  |
+|                        | 200x200   |                |                                                                                  |
+|                        | 160x600   |                |                                                                                  |
+|                        | 150x60    |                |                                                                                  |
+|                        | 120x60    |                |                                                                                  |
+| 검색/위젯              |           | input          | 검색하면 결과를 새창에서 열어줌                                                  |
+| 이벤트 프로모션 링크   | 580x580   |                | 개별 타이밍의 배너, 3월 세일 등                                                  |
+|                        | 371x371   |                |                                                                                  |
+
+## link
+- [[google-adsense]]
+- [[api]]
+13:Tc1f,
+## 승인
+- [X] 15만원 이상의 판매 금액 발생 이후 api 사용 가능
+- [X] 컨텐츠 설명을 통한 광고 수잎 말고도 승인 받을 수 있는지 -> 다른 아이디로 그냥 사도됨
+
+## 링크생성(api x)
+| 메뉴                   | 사이즈    | 타입           | 비고                                                                             |
+| ---------------------- | --------- | -------------- | -------------------------------------------------------------------------------- |
+| 상품링크               | 120x240   | iframe, a, url | 제품 직접 선택, 보더라인 선택가능                                                |
+| 간편링크               |           | url            | 쿠팡의 특정 페이지로의 링크                                                      |
+| 다이나믹배너           | 지정 가능 | iframe, script | 파트너스 추천, 카테고리 추천, 고객 관심 기반, 혹은 직접 선택(20개 까지)선택 가능 |
+|                        |           |                | 가로길에 맞춰서 롤링되는 타입, 테두리 선택 가능                                  |
+| 카테고리배너           | 728x90    |                | 로켓 직구, 골드 박스 등 쿠팡의 피쳐 홍보                                         |
+|                        | 600x900   |                | 골드 박스는 특정시간에만 유효한 피쳐라 시간이 명시되어있음                       |
+|                        | 320x480   |                |                                                                                  |
+|                        | 320x100   |                |                                                                                  |
+|                        | 320x50    |                |                                                                                  |
+|                        | 300x250   |                |                                                                                  |
+|                        | 200x200   |                |                                                                                  |
+|                        | 160x600   |                |                                                                                  |
+|                        | 150x60    |                |                                                                                  |
+|                        | 120x60    |                |                                                                                  |
+| 검색/위젯              |           | input          | 검색하면 결과를 새창에서 열어줌                                                  |
+| 이벤트 프로모션 링크   | 580x580   |                | 개별 타이밍의 배너, 3월 세일 등                                                  |
+|                        | 371x371   |                |                                                                                  |
+
+## link
+- [[google-adsense]]
+- [[api]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# coupang-partners-api"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# coupang-partners-api"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/coupang-partners-api"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# coupang-partners-api"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null
