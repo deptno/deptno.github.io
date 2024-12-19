@@ -1,0 +1,1991 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-1939e229d7d9d28d.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","rust","c"]
+0:["RVp-sixGV62Df6ZqM_iNo",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","rust","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"rust\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","rust","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:T7290,<h1 id="rust">rust</h1>
+<h2 id="공부">공부</h2>
+<ul>
+<li><a href="node-to-rust">node-to-rust</a></li>
+<li><a href="book/the-rust-programming-language">book/the-rust-programming-language</a></li>
+<li><a href="rustling">rustling</a></li>
+</ul>
+<h2 id="정리-필요">정리 필요</h2>
+<ul>
+<li>closure definition 시점에 borrow rule 이 동작한다<ul>
+<li>closure 가 mutable borrow 인 경우 call 할때까지 코드상으로 print 를 찍지 못한다(borrow rule 위반)</li>
+</ul>
+</li>
+<li>workspace<ul>
+<li>Cargo.toml 에 먼저 <code class="span">member</code> 를 명시하고 <code class="span">cargo new project_name --lib</code> 을 추가</li>
+<li>dependencies 에 relative path 로 추가 </li>
+<li>다른 디렉토리에서 <code class="span">cargo run</code> 을 할 경우 <code class="span">-p project_name</code> 을 추가해서 실행</li>
+</ul>
+</li>
+</ul>
+<h3 id="module모듈">module|모듈</h3>
+<pre><code class="hljs language-rust"><span class="hljs-comment">// https://doc.rust-lang.org/rust-by-example/mod/visibility.html</span>
+<span class="hljs-comment">// 상위 모듈(parent or ancestor module) 에만 노출</span>
+<span class="hljs-title function_ invoke__">pub</span>(<span class="hljs-keyword">in</span> create::my_mod) <span class="hljs-keyword">fn</span> <span class="hljs-title function_">private_function</span>() {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;private_function&quot;</span>);
+}
+<span class="hljs-comment">// == private fn</span>
+<span class="hljs-title function_ invoke__">pub</span>(<span class="hljs-keyword">self</span>) <span class="hljs-keyword">fn</span> <span class="hljs-title function_">function_name</span>() {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;function_name&quot;</span>);
+}
+<span class="hljs-comment">// parent</span>
+<span class="hljs-title function_ invoke__">pub</span>(<span class="hljs-keyword">super</span>) <span class="hljs-keyword">fn</span> <span class="hljs-title function_">function_name</span>() {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;function_name&quot;</span>);
+}
+<span class="hljs-comment">// crate</span>
+<span class="hljs-title function_ invoke__">pub</span>(<span class="hljs-keyword">crate</span>) <span class="hljs-keyword">fn</span> <span class="hljs-title function_">function_name</span>() {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;function_name&quot;</span>);
+}
+</code></pre><p>모듈의 구조는 파일구조와 같다.
+<code class="span">mod a;</code> 선언된 경우 <code class="span">a.rs</code> 혹은 <code class="span">a/mod.rs</code> 파일을 참조한다.</p>
+<h3 id="crete">crete</h3>
+<p>컴파일 단위</p>
+<h2 id="설치">설치</h2>
+<pre><code class="hljs language-sh">curl https://sh.rustup.rs -sSf | sh
+</code></pre><h3 id="툴">툴</h3>
+<h4 id="rustup">rustup</h4>
+<pre><code class="hljs language-sh">rust update
+rustup self uninstall
+rustup docs --book
+</code></pre><h4 id="rustc">rustc</h4>
+<pre><code class="hljs language-sh">rustc --version
+rustc main.rs
+</code></pre><h4 id="cargo">cargo</h4>
+<blockquote><p>cargo 는 러스트의 패키지 매니저</p></blockquote><pre><code class="hljs language-sh">cargo --version
+cargo new hello_cargo <span class="hljs-comment"># git 도 함께 초기화된다.</span>
+cargo run <span class="hljs-comment"># </span>
+cargo build
+cargo build --release
+cargo check <span class="hljs-comment"># 빌드보다 빠르다, 컴파일 확인</span>
+cargo update <span class="hljs-comment"># Cargo.lock 을 무시하고 miner 업데이트, mager 업데이트는 파일 자체를 수정한다.</span>
+</code></pre><pre><code class="hljs language-toml"><span class="hljs-attr">name</span> = <span class="hljs-string">&quot;hello_cargo&quot;</span>
+<span class="hljs-attr">version</span> = <span class="hljs-string">&quot;0.1.0&quot;</span>
+<span class="hljs-attr">authors</span> = [<span class="hljs-string">&quot;deptno &lt;deptno@gmail.com&gt;&quot;</span>]
+<span class="hljs-attr">edition</span> = <span class="hljs-string">&quot;2018&quot;</span>
+
+<span class="hljs-section">[dependencies]</span>
+
+<span class="hljs-attr">rand</span> = <span class="hljs-string">&quot;0.6.1&quot;</span>
+</code></pre><p><a href="cargo.toml">cargo.toml</a>, <a href="toml">toml</a> 포맷</p>
+<h2 id="언어">언어</h2>
+<p><code class="span">cargo new</code> 를 통해 패키지가 생성되면 src/{main,lib}.rs 파일을 통해 실행파일 혹은 라이브러리 빌드 엔트리를 작성할 수 있다(둘다 가능).</p>
+<h3 id="속성-attribute">속성 attribute</h3>
+<ul>
+<li>#![allow(dead_code)] - 안쓰는 코드 경고 하지 않음</li>
+<li>#![allow(unused)] - 안쓰는 변수 경고 하지 않음</li>
+<li>#[allow(non_camel_case_types)] - 경고 안함</li>
+</ul>
+<h3 id="use">use</h3>
+<pre><code class="hljs language-rust"><span class="hljs-keyword">use</span> std::io;
+</code></pre><h3 id="type타입">type|타입</h3>
+<ul>
+<li>primitive type<ul>
+<li>bool</li>
+<li>char</li>
+<li>integer<ul>
+<li><strong>2023-08-27</strong> 명시적 overflow 핸들링(release 기본은 <code class="span">wrapping_</code>)을 위해 아래 메소드를 사용할 수 있다.<ul>
+<li>wrapping_* - maximum value + 1 == minimum value</li>
+<li>checked* - Option<T></li>
+<li>overflowing_* - (value, is_overflow)</li>
+<li>saturating_* - 한계를 넘어가게 되면 maximum or minimum 값을 리턴</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>float</li>
+<li>unit - 튜플이지만 primitive type 이다.</li>
+</ul>
+</li>
+<li>compound type<ul>
+<li>array</li>
+<li>slice, array 와는 다르게 컴파일타임에 length 를 알 수 없다.</li>
+<li>tuple</li>
+<li>struct</li>
+<li>enum</li>
+</ul>
+</li>
+</ul>
+<h3 id="casting캐스팅">casting|캐스팅</h3>
+<ul>
+<li>i &lt;-&gt; u 정수간의 변환은 해당 값을 표현하는 형식에 따라 그대로 적용된다.</li>
+<li>floating &lt;-&gt; integer 변환은 floating 변수가 표현하는 근사값을 내림하여 정수 변환한다. <code class="span">saturating cast</code><ul>
+<li><a href="https://doc.rust-lang.org/rust-by-example/types/cast.html" target="_blank">[URL] https://doc.rust-lang.org/rust-by-example/types/cast.html</a></li>
+</ul>
+</li>
+</ul>
+<p>primitive 타입은 cast 를 통해서 변경된다.
+custom 타입은 trait <code class="span">From</code> 이나 <code class="span">Into</code> 를 통해서 변경된다.</p>
+<h3 id="특성trait">특성|trait</h3>
+<ul>
+<li>Copy<ul>
+<li>copy trait 이 구현되어 있는 경우, 변수 대입 이후에도 유효하다.</li>
+<li>drop trait 이 구현되어 있는 경우, copy trait annotation 을 할 수 없다.</li>
+<li>copy 가능한 타입<ul>
+<li>정수형 타입</li>
+<li>부동 소수점 타입</li>
+<li>bool</li>
+<li>char</li>
+<li>copy 가능한 타입으로만 묶인 튜플</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="형변환">형변환</h4>
+<ul>
+<li>From<ul>
+<li>String::from(&quot;hello&quot;) 와 같이 from 을 구현하여 타입 변환을 가능하게 한다.</li>
+</ul>
+</li>
+<li>Into<ul>
+<li>From 의 짝으로 필요한 시점에 From 을 호출하도록한다.  </li>
+<li><code class="span">into</code> 메서드를 호출 하는 순간 대입할 변수의 타입에 맞춰서 <code class="span">from</code> 을 역으로 호출한다.</li>
+</ul>
+<pre><code class="hljs language-rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">x</span>: <span class="hljs-type">i32</span> = <span class="hljs-number">5</span>;
+<span class="hljs-keyword">let</span> <span class="hljs-variable">y</span>: <span class="hljs-type">u32</span> = x.<span class="hljs-title function_ invoke__">into</span>(); <span class="hljs-comment">// u32::from(x) 와 같은 표현</span>
+</code></pre></li>
+<li>TryFrom
+From 과 같으나 실패할 수 있는 경우에 사용된다. 따라서 리턴 타입은 Result&lt;T, E&gt; 이다.</li>
+<li>TryInto
+TryFrom 의 짝으로 사용된다.<pre><code class="hljs language-rust">x.<span class="hljs-title function_ invoke__">try_into</span>()
+</code></pre></li>
+<li>ToString<ul>
+<li>std::fmt::Display 을 구현하면 <code class="span">to_string</code> 호출시 이를 통해 <code class="span">String</code> 으로 변환된다.</li>
+</ul>
+</li>
+<li>FromStr<ul>
+<li><code class="span">parse</code> 메서드 호출시 해당 타입에 구현되어있는 <code class="span">FromStr</code> 을 통해 변환된다.</li>
+</ul>
+<pre><code class="hljs language-rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">parsed</span>: <span class="hljs-type">i32</span> = <span class="hljs-string">&quot;5&quot;</span>.<span class="hljs-title function_ invoke__">parse</span>().<span class="hljs-title function_ invoke__">unwrap</span>();
+<span class="hljs-keyword">let</span> <span class="hljs-variable">turbo_parsed</span> = <span class="hljs-string">&quot;10&quot;</span>.parse::&lt;<span class="hljs-type">i32</span>&gt;().<span class="hljs-title function_ invoke__">unwrap</span>();
+</code></pre></li>
+<li></li>
+</ul>
+<h3 id="ownership소유권">ownership|소유권</h3>
+<h4 id="참조">&amp; 참조</h4>
+<p>참조는 소유권을 갖지 않는다.</p>
+<ul>
+<li>불편 참조는 여러개가 가능하다.</li>
+<li>가변 참조는 하나만 가능하다.</li>
+<li>불변 참조가 존재하는 경우 가변 참조는 불가능하다. -&gt; 값이 변경되면 불변 참조의 값도 변경되어 물결성이 깨지기 때문</li>
+</ul>
+<h4 id="타입-변환">타입 변환</h4>
+<p>&amp;String[..] === &amp;str</p>
+<h4 id="impl">impl</h4>
+<ul>
+<li>enum<ul>
+<li>첫인수로 &amp;self <a href="https://doc.rust-lang.org/rust-by-example/custom_types/enum.html" target="_blank">[URL] https://doc.rust-lang.org/rust-by-example/custom_types/enum.html</a></li>
+<li>첫인수로 self <a href="https://doc.rust-lang.org/rust-by-example/custom_types/enum/testcase_linked_list.html" target="_blank">[URL] https://doc.rust-lang.org/rust-by-example/custom_types/enum/testcase_linked_list.html</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="ref">ref</h4>
+<p><code class="span">&amp;</code> borrow 와 같다.</p>
+<pre><code class="hljs language-rust">  <span class="hljs-keyword">let</span> <span class="hljs-variable">c</span> = <span class="hljs-string">&#x27;Q&#x27;</span>;
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">ref</span> ref_c1 = c;
+  <span class="hljs-keyword">let</span> <span class="hljs-variable">ref_c2</span> = &amp;c;
+</code></pre><p>destructure 를 통해서 변수를 가져오는 경우에도 소유권은 이동된다. 
+<code class="span">ref</code> 키워드를 prefix 로 사용하면 소유권 이동을 막을 수 있다. stack value 에서는 효과가 없다.</p>
+<h3 id="variable변수">variable|변수</h3>
+<pre><code class="hljs language-rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">5</span>; # 불변
+<span class="hljs-keyword">let</span> <span class="hljs-variable">x</span> = <span class="hljs-number">5.0</span>; # 이전 변수는 가려진다(shadowing), 이전 타입 무시 가능. 사용되지 않는 변수는 컴파일러가 제거한다.
+
+<span class="hljs-keyword">const</span> CONSTANT: <span class="hljs-type">u32</span> = <span class="hljs-number">100_000</span>; # 항상 타입 지정
+
+<span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">y</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">new</span>(); # 가변
+y = <span class="hljs-number">1</span>; # 타입 에러
+</code></pre><h3 id="function함수">function|함수</h3>
+<pre><code class="hljs language-rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Hello, world!&quot;</span>);
+}
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">get_name</span>() <span class="hljs-punctuation">-&gt;</span> <span class="hljs-type">String</span>;
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">get_name</span>&lt;T: AType&gt;(a: T) <span class="hljs-punctuation">-&gt;</span> T;
+</code></pre><ul>
+<li>연관 함수 associated : 타입에 연관</li>
+<li>메서드 method : 인스턴스에 연관<ul>
+<li>sugar<ul>
+<li>stack : (&amp;self) : (self: &amp;Self)</li>
+<li>heap : (self) : (self: Self)
+stack, heap 에따라 method 의 인자 타입이 달라지는지는 확인필요 <a href="@todo">@todo</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="클로저-closure">클로저 closure</h4>
+<p>인자는 기본적으로 참조 빌리기(&amp; borrow) 시작하여 필요성이 요구될 때만 더 낮은 단계로 간다.
+<a href="https://doc.rust-lang.org/rust-by-example/fn/closures/capture.html" target="_blank">[URL] https://doc.rust-lang.org/rust-by-example/fn/closures/capture.html</a></p>
+<p>non-copy 타입에 대해서 클로저를 선언하면 기본적으로 &amp;로 참조된다.<br>하지만 mutable 행동(std::mem::drop 등을 사용)을 취하면 <code class="span">move</code> 된다.<br>혹은 명시적으로 <code class="span">move</code> 를 할 수 있다.</p>
+<p><code class="span">move</code> 된 이후는 소유권이 이동되었기 때문에 캡쳐된 변수를 더이상 사용할 수 없다.</p>
+<h5 id="입력-파라메터로서의-클로저-as-input-parameters">입력 파라메터로서의 클로저 as input parameters</h5>
+<p>3가지 trait 중 하나로 표현되어야 한다.</p>
+<ul>
+<li>Fn (&amp;T) - capture by reference</li>
+<li>FnMut (&amp;mut T) - captures by mutable reference</li>
+<li>FnOnce (T) - captures by value</li>
+</ul>
+<p>FnOnce(via <code class="span">move</code>) 는 Fn, FnMut 의 superset 이므로 언제나 사용이 가능하지만 상황에 맞는 가장 큰 제약을 주어야한다.</p>
+<h4 id="구문">구문</h4>
+<p>결괏값이 없다. 세미콜론으로 끝난다.</p>
+<h4 id="표현식">표현식</h4>
+<p>결괏값이 있고 때문에 대입이 가능하다. 세미콜론으로 끝나지 않는다. <code class="span">함수 리턴시 주의</code></p>
+<ul>
+<li>if 는 세미콜론으로 끝나는듯.</li>
+<li>loop 도 break 문과 함께 값 리턴이 가능</li>
+</ul>
+<h3 id="주석-comment">주석 comment</h3>
+<p>//</p>
+<h3 id="데이터-타입">데이터 타입</h3>
+<h4 id="스칼라">스칼라</h4>
+<ul>
+<li>integer {i,u}{8,16,32,64,size}<ul>
+<li>리터럴  <ul>
+<li>decimal - 98_222</li>
+<li>hex - 0xff</li>
+<li>octal - 0o77</li>
+<li>binary - 0b1111_0000</li>
+<li>byte(u8) - b&#39;A&#39;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>floating point numbers  <ul>
+<li>f64 - default</li>
+<li>f32</li>
+</ul>
+</li>
+<li>boolean  <ul>
+<li>true</li>
+<li>false</li>
+</ul>
+</li>
+<li>characters<br>utf-8<ul>
+<li>&#39;z&#39;</li>
+<li>&#39;불&#39; - 3 bytes</li>
+</ul>
+</li>
+</ul>
+<h4 id="컴파운드-타입">컴파운드 타입</h4>
+<ul>
+<li>튜플<ul>
+<li>(i32, f64, u8) - 다른 타입도 가능</li>
+<li>a.0 으로 접근 가능</li>
+</ul>
+</li>
+<li>배열<ul>
+<li>[i32; 10] - 같은 타입만 가능</li>
+<li>[3; 5]</li>
+<li>a[0] 으로 접근 가능</li>
+</ul>
+</li>
+</ul>
+<h5 id="정수-오버플로">정수 오버플로</h5>
+<p>타입의 값을 넘어가는 경우 Warpping 타입을 통해 255 -&gt; 0 으로 동작한다. --release 빌드 시에는 명시적으로 선언하지 않으면 자동적으로 선언된다.</p>
+<h4 id="참">참</h4>
+<p>프렐류드에 포함되지 않는 타입을 사용하려면 <code class="span">use</code> 를 사용해야 한다.</p>
+<h3 id="반복문">반복문</h3>
+<pre><code class="hljs language-rust"><span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> <span class="hljs-number">0</span>..<span class="hljs-number">10</span> {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, i);
+}
+<span class="hljs-keyword">for</span> <span class="hljs-variable">i</span> <span class="hljs-keyword">in</span> (<span class="hljs-number">1</span>..<span class="hljs-number">10</span>).<span class="hljs-title function_ invoke__">rev</span>() {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, i);
+<span class="hljs-keyword">loop</span> {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;loop&quot;</span>);
+    <span class="hljs-keyword">break</span>;
+}
+<span class="hljs-keyword">while</span> i &lt; <span class="hljs-number">10</span> {
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, i);
+    i += <span class="hljs-number">1</span>;
+}
+</code></pre><h3 id="매크로">매크로</h3>
+<pre><code class="hljs language-rust"><span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;hello, world!&quot;</span>);
+</code></pre><p><code class="span">!</code> 가 붙은 함수는 매크로다.</p>
+<pre><code class="hljs language-rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">foo</span> = <span class="hljs-number">5</span> <span class="hljs-comment">// 불변</span>
+<span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">foo</span> = <span class="hljs-number">5</span> <span class="hljs-comment">// 가변</span>
+</code></pre><ul>
+<li>cfg!</li>
+<li>print!</li>
+<li>println!</li>
+<li>eprint!</li>
+<li>eprintln!</li>
+</ul>
+<h3 id="연관-함수-associated-function-static-method">연관 함수, associated function, static method</h3>
+<pre><code class="hljs language-rust"><span class="hljs-type">String</span>::new
+</code></pre><p><code class="span">new</code> associated function 이라고 불리며 타 언어의 static method 와 같다.</p>
+<h3 id="std">std</h3>
+<pre><code class="hljs language-rust"><span class="hljs-keyword">use</span> std::io;
+<span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">guess</span> = <span class="hljs-type">String</span>::<span class="hljs-title function_ invoke__">new</span>();
+io:<span class="hljs-title function_ invoke__">stdin</span>().<span class="hljs-title function_ invoke__">read_line</span>(&amp;<span class="hljs-keyword">mut</span> guess).<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;Failed to read line&quot;</span>);
+<span class="hljs-keyword">let</span> <span class="hljs-variable">guess</span>: <span class="hljs-type">u32</span> = guess.<span class="hljs-title function_ invoke__">trim</span>().<span class="hljs-title function_ invoke__">parse</span>().<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">&quot;Please type a number!&quot;</span>);
+
+<span class="hljs-keyword">use</span> std::cmp::Ordering;
+<span class="hljs-keyword">match</span> guess.<span class="hljs-title function_ invoke__">cmp</span>(&amp;secret_number) {
+    Ordering::Less =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Too small!&quot;</span>),
+    Ordering::Greater =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Too big!&quot;</span>),
+    Ordering::Equal =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;You win!&quot;</span>),
+}
+</code></pre><h4 id="stdstr">std::str</h4>
+<pre><code class="hljs language-rust"><span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">raw_str</span> = <span class="hljs-string">r&quot;Escapes don&#x27;t work here: \x3F \u{211D}&quot;</span>;
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, raw_str);
+
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">quotes</span> = <span class="hljs-string">r#&quot;And then I said: &quot;There is no escape!&quot;&quot;#</span>;
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, quotes);
+
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">longer_delimiter</span> = <span class="hljs-string">r###&quot;A string with &quot;# in it. And even &quot;##!&quot;###</span>;
+    <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, longer_delimiter);
+}
+</code></pre><p>토큰으로 사용될 <code class="span">#</code> 갯수는 제한이 없음</p>
+<h4 id="stdcollectionshashmap">std::collections:HashMap</h4>
+<h4 id="stdcollectionshashset">std::collections:HashSet</h4>
+<p>HashMap&lt;T, ()&gt;</p>
+<h5 id="methods">methods</h5>
+<ul>
+<li>union</li>
+<li>difference</li>
+<li>intersection</li>
+<li>symmetric_difference - xor</li>
+</ul>
+<h4 id="stdrcrc">std::rc::Rc</h4>
+<p>여러 소유권이 필요한 경우를 위해 reference count 사용된다.</p>
+<pre><code class="hljs language-rust"><span class="hljs-keyword">use</span> std::rc::Rc;
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">rc_examples</span> = <span class="hljs-string">&quot;Rc examples&quot;</span>.<span class="hljs-title function_ invoke__">to_string</span>();
+    {
+        <span class="hljs-keyword">let</span> <span class="hljs-variable">rc_a</span>: Rc&lt;<span class="hljs-type">String</span>&gt; = Rc::<span class="hljs-title function_ invoke__">new</span>(rc_examples);
+        {
+            <span class="hljs-keyword">let</span> <span class="hljs-variable">rc_b</span>: Rc&lt;<span class="hljs-type">String</span>&gt; = Rc::<span class="hljs-title function_ invoke__">clone</span>(&amp;rc_a);
+            <span class="hljs-comment">// Two `Rc`s are equal if their inner values are equal</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;rc_a and rc_b are equal: {}&quot;</span>, rc_a.<span class="hljs-title function_ invoke__">eq</span>(&amp;rc_b));
+            
+            <span class="hljs-comment">// We can use methods of a value directly</span>
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Length of the value inside rc_a: {}&quot;</span>, rc_a.<span class="hljs-title function_ invoke__">len</span>());
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;Value of rc_b: {}&quot;</span>, rc_b);
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;--- rc_b is dropped out of scope ---&quot;</span>);
+        }
+    }
+}
+</code></pre><h4 id="stdrcrc-1">std::rc::Rc</h4>
+<p>atomic refernece counted, </p>
+<h4 id="stdsyncmpsc">std::sync::mpsc</h4>
+<p>multiple producer single consumer
+producer(tx) 가 여럿인 것은 허용된다.</p>
+<pre><code class="hljs language-rust"><span class="hljs-keyword">use</span> std::sync::mpsc::{Sender, Receiver};
+
+<span class="hljs-keyword">let</span> (tx, rx): (Sender&lt;<span class="hljs-type">i32</span>&gt;, Receiver&lt;<span class="hljs-type">i32</span>&gt;) = mpsc::<span class="hljs-title function_ invoke__">channel</span>();
+<span class="hljs-keyword">let</span> <span class="hljs-variable">thread_tx</span> = tx.<span class="hljs-title function_ invoke__">clone</span>();
+</code></pre><pre><code class="hljs language-rust">tx.<span class="hljs-title function_ invoke__">send</span>(<span class="hljs-number">1</span>).<span class="hljs-title function_ invoke__">unwrap</span>(); <span class="hljs-comment">// non-blocking send</span>
+rx.<span class="hljs-title function_ invoke__">recv</span>().<span class="hljs-title function_ invoke__">unwrap</span>(); <span class="hljs-comment">// blocking recv</span>
+</code></pre><h4 id="stdpathpath">std::path::Path</h4>
+<ul>
+<li>posix::Path</li>
+<li>windows::path
+상황에 맞게 사용된다.
+<code class="span">to_str</code> 메서드는 utf-8 이 아닌경우 실패할 수 있다(Option).</li>
+</ul>
+<h4 id="stdfsfile">std::fs::File</h4>
+<h4 id="stdprocesscommand-stdio">std::process::{Command, Stdio}</h4>
+<h4 id="stdchild">std::Child</h4>
+<p>실행중인 자식 프로세스의 핸들을 노출한다.</p>
+<ul>
+<li>stdin</li>
+<li>stdout</li>
+<li>stderr</li>
+</ul>
+<pre><code class="hljs language-rust"><span class="hljs-keyword">let</span> <span class="hljs-variable">process</span> = <span class="hljs-keyword">match</span> Command::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">&quot;wc&quot;</span>)
+                            .<span class="hljs-title function_ invoke__">stdin</span>(Stdio::<span class="hljs-title function_ invoke__">piped</span>())
+                            .<span class="hljs-title function_ invoke__">stdout</span>(Stdio::<span class="hljs-title function_ invoke__">piped</span>())
+                            .<span class="hljs-title function_ invoke__">spawn</span>() {
+    <span class="hljs-title function_ invoke__">Err</span>(why) =&gt; <span class="hljs-built_in">panic!</span>(<span class="hljs-string">&quot;couldn&#x27;t spawn wc: {}&quot;</span>, why),
+    <span class="hljs-title function_ invoke__">Ok</span>(process) =&gt; process,
+};
+</code></pre><h4 id="stdosunix">std::os::unix</h4>
+<h4 id="stdenv">std::env</h4>
+<ul>
+<li>env::args</li>
+</ul>
+<h4 id="foreign-function-interface--ffi">foreign function interface : ffi</h4>
+<pre><code class="hljs language-rust"><span class="hljs-meta">#[link(name = <span class="hljs-string">&quot;mylib&quot;</span>)]</span>
+<span class="hljs-keyword">extern</span> {
+  <span class="hljs-keyword">fn</span> <span class="hljs-title function_">a</span>(z: Complex) <span class="hljs-punctuation">-&gt;</span> Complex;
+}
+</code></pre><p>C 바인딩을 지원, <code class="span">unsafe</code></p>
+<h4 id="매크로-macro">매크로 macro</h4>
+<pre><code class="hljs language-rust"><span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;hello, world!&quot;</span>);
+<span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{}&quot;</span>, <span class="hljs-string">&quot;hello, world!&quot;</span>);
+<span class="hljs-built_in">println!</span>(<span class="hljs-string">&quot;{} {}&quot;</span>, <span class="hljs-string">&quot;hello&quot;</span>, <span class="hljs-string">&quot;world&quot;</span>);
+</code></pre><h3 id="enum">enum</h3>
+<ul>
+<li>Result  <ul>
+<li>method  <ul>
+<li>expect(value: &amp;str)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Ordering</li>
+</ul>
+<h3 id="">?</h3>
+<p><code class="span">FromResidual</code> 이 구현된 타입에서 사용 가능, 제공되는 타입으로는 아래가 있음</p>
+<ul>
+<li>Result&lt;T, E&gt;</li>
+<li>Option<T></li>
+</ul>
+<p>함수 결괏값으로 Error가 리턴되면 <code class="span">해당 함수</code>를 <code class="span">호출하는 함수</code>에서 리턴 처리한다.</p>
+<h3 id="dyn-trait-trait-object">dyn Trait, Trait Object</h3>
+<h3 id="smart-pointer스마트-포인터">smart-pointer|스마트 포인터</h3>
+<ul>
+<li>Box<T>: usize 만 스택에 남기고 heap 에 저장한다.  </li>
+<li>Rc<T>: 다중 소유권을 허용한다. Rc.clone()<ul>
+<li>Arc<T>: Rc의 thread safe 버전</li>
+<li><code class="span">Rc::downgrade -&gt; Weak&lt;T&gt;</code></li>
+</ul>
+</li>
+<li>RefCell<T>: 다중 소유권을 허용한다. Rc.clone()<ul>
+<li>.{burrow,burrow_mut} 메서드, burrowing rule 은 runtime에 체크되며 위반하는 경우 패닉,</li>
+<li>Mutex<T>: 공유 메모리에 접근을 제어한다. thread safe</li>
+<li>RefMut<T></li>
+<li>Ref<T></li>
+</ul>
+</li>
+<li>Weak<T><ul>
+<li>Rc<T> + RefCell<T> 조합으로 사용하면 cycle을 생성할 수 있음  </li>
+<li>cycle 이 생성되면 레퍼런스 카운트가 0 이 될 수 없어, 메모리 릭이 발생</li>
+<li>Weak<T> 는 Rc<T>참조시에 생성되는 <code class="span">strong_count</code> 를 증가시키지 않고 <code class="span">strong_count</code> 가 0이 되는 경우 함게 소멸<ul>
+<li>e.g. branch &lt;-&gt; leaf 의 관계에서 상호 참조하지만 branch가 잘려나가면 leaf는 존재할 수 없는 경우</li>
+<li><code class="span">.upgrade -&gt; Option&lt;Weak&lt;T&gt;&gt;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="array-slice-vec">array, slice, vec</h3>
+<ul>
+<li>arrray: [u8; 3] primitive 타입 fixed length</li>
+<li>slice: &amp;[..] array의 참조로 존재,</li>
+<li>vec: growing array, 항상 힙에 저정된다.</li>
+</ul>
+<h3 id="question">question</h3>
+<ul>
+<li><a href="@todo">@todo</a> match { Err(ref e) =&gt; ... }, ref를 붙이는 이유</li>
+<li>iter vs into_iter</li>
+</ul>
+<h2 id="장">장</h2>
+<h2 id="용어">용어</h2>
+<ul>
+<li>프레류드 (Prelude)<br>모든 러스트 프로그램에 정의된 특별한 영역으로 해당 프로그램 또는 크레이트가 외부로 노출하는 타입을 명시한 모듈</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="rust-vim">rust-vim</a></li>
+<li><a href="book/the-rust-programming-language">러스트 프로그래밍 공식 가이드</a></li>
+<li><a href="valgrind">valgrind</a></li>
+<li><a href="functional">functional</a></li>
+<li><a href="cargo">cargo</a></li>
+<li><a href="rustling">rustling</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/4b51adf\n","className":"bg-white text-black","children":"4b51adf"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/rust.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/rust.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/rust.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"rust","name":"rust","val":13},{"id":"node-to-rust","name":"node-to-rust","val":11},{"id":"book/the-rust-programming-language","name":"book/the-rust-programming-language","val":2},{"id":"rustling","name":"rustling","val":2},{"id":"cargo.toml","name":"cargo.toml","val":"$undefined"},{"id":"toml","name":"toml","val":1},{"id":"@todo","name":"@todo","val":30},{"id":"rust-vim","name":"rust-vim","val":"$undefined"},{"id":"valgrind","name":"valgrind","val":"$undefined"},{"id":"functional","name":"functional","val":1},{"id":"cargo","name":"cargo","val":2},{"id":"alacritty","name":"alacritty","val":12},{"id":"bottom","name":"bottom","val":1},{"id":"codesign","name":"codesign","val":6},{"id":"fd","name":"fd","val":4},{"id":"frum","name":"frum","val":5},{"id":"language","name":"language","val":7},{"id":"makefile","name":"makefile","val":2},{"id":"meilisearch","name":"meilisearch","val":6},{"id":"neovim-setup","name":"neovim-setup","val":37},{"id":"tailspin","name":"tailspin","val":4},{"id":"tauri","name":"tauri","val":11},{"id":"xsv","name":"xsv","val":4},{"id":"diary/2023-08-20","name":"diary/2023-08-20","val":1},{"id":"diary/2023-12-31","name":"diary/2023-12-31","val":93}],"links":[{"source":"rust","target":"node-to-rust"},{"source":"rust","target":"book/the-rust-programming-language"},{"source":"rust","target":"rustling"},{"source":"rust","target":"cargo.toml"},{"source":"rust","target":"toml"},{"source":"rust","target":"@todo"},{"source":"rust","target":"@todo"},{"source":"rust","target":"rust-vim"},{"source":"rust","target":"book/the-rust-programming-language"},{"source":"rust","target":"valgrind"},{"source":"rust","target":"functional"},{"source":"rust","target":"cargo"},{"source":"rust","target":"rustling"},{"source":"alacritty","target":"rust"},{"source":"bottom","target":"rust"},{"source":"cargo","target":"rust"},{"source":"codesign","target":"rust"},{"source":"fd","target":"rust"},{"source":"frum","target":"rust"},{"source":"functional","target":"rust"},{"source":"language","target":"rust"},{"source":"makefile","target":"rust"},{"source":"meilisearch","target":"rust"},{"source":"meilisearch","target":"rust"},{"source":"neovim-setup","target":"rust"},{"source":"node-to-rust","target":"rust"},{"source":"rustling","target":"rust"},{"source":"tailspin","target":"rust"},{"source":"tauri","target":"rust"},{"source":"tauri","target":"rust"},{"source":"tauri","target":"rust"},{"source":"xsv","target":"rust"},{"source":"book/the-rust-programming-language","target":"rust"},{"source":"book/the-rust-programming-language","target":"rust"},{"source":"diary/2023-08-20","target":"rust"},{"source":"diary/2023-12-31","target":"rust"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","rust",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/rust","children":[["$","span",null,{"className":"underline","children":"rust"}],["$","sup",null,{"children":13}]]}]}],["$","span","node-to-rust",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/node-to-rust","children":[["$","span",null,{"className":"underline","children":"node-to-rust"}],["$","sup",null,{"children":11}]]}]}],["$","span","book/the-rust-programming-language",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/book/the-rust-programming-language","children":[["$","span",null,{"className":"underline","children":"book/the-rust-programming-language"}],["$","sup",null,{"children":2}]]}]}],["$","span","rustling",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/rustling","children":[["$","span",null,{"className":"underline","children":"rustling"}],["$","sup",null,{"children":2}]]}]}],["$","span","cargo.toml",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/cargo.toml","children":[["$","span",null,{"className":"underline","children":"cargo.toml"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","toml",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/toml","children":[["$","span",null,{"className":"underline","children":"toml"}],["$","sup",null,{"children":1}]]}]}],["$","span","@todo",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/@todo","children":[["$","span",null,{"className":"underline","children":"@todo"}],["$","sup",null,{"children":30}]]}]}],["$","span","rust-vim",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/rust-vim","children":[["$","span",null,{"className":"underline","children":"rust-vim"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","valgrind",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/valgrind","children":[["$","span",null,{"className":"underline","children":"valgrind"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","functional",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/functional","children":[["$","span",null,{"className":"underline","children":"functional"}],["$","sup",null,{"children":1}]]}]}],["$","span","cargo",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/cargo","children":[["$","span",null,{"className":"underline","children":"cargo"}],["$","sup",null,{"children":2}]]}]}],["$","span","alacritty",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/alacritty","children":[["$","span",null,{"className":"underline","children":"alacritty"}],["$","sup",null,{"children":12}]]}]}],["$","span","bottom",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/bottom","children":[["$","span",null,{"className":"underline","children":"bottom"}],["$","sup",null,{"children":1}]]}]}],["$","span","codesign",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/codesign","children":[["$","span",null,{"className":"underline","children":"codesign"}],["$","sup",null,{"children":6}]]}]}],["$","span","fd",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/fd","children":[["$","span",null,{"className":"underline","children":"fd"}],["$","sup",null,{"children":4}]]}]}],["$","span","frum",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/frum","children":[["$","span",null,{"className":"underline","children":"frum"}],["$","sup",null,{"children":5}]]}]}],["$","span","language",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/language","children":[["$","span",null,{"className":"underline","children":"language"}],["$","sup",null,{"children":7}]]}]}],["$","span","makefile",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/makefile","children":[["$","span",null,{"className":"underline","children":"makefile"}],["$","sup",null,{"children":2}]]}]}],["$","span","meilisearch",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/meilisearch","children":[["$","span",null,{"className":"underline","children":"meilisearch"}],["$","sup",null,{"children":6}]]}]}],["$","span","neovim-setup",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim-setup","children":[["$","span",null,{"className":"underline","children":"neovim-setup"}],["$","sup",null,{"children":37}]]}]}],["$","span","tailspin",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/tailspin","children":[["$","span",null,{"className":"underline","children":"tailspin"}],["$","sup",null,{"children":4}]]}]}],["$","span","tauri",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/tauri","children":[["$","span",null,{"className":"underline","children":"tauri"}],["$","sup",null,{"children":11}]]}]}],["$","span","xsv",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/xsv","children":[["$","span",null,{"className":"underline","children":"xsv"}],["$","sup",null,{"children":4}]]}]}],["$","span","diary/2023-08-20",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-08-20","children":[["$","span",null,{"className":"underline","children":"diary/2023-08-20"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2023-12-31",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-12-31","children":[["$","span",null,{"className":"underline","children":"diary/2023-12-31"}],["$","sup",null,{"children":93}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","rust",{"className":"pl-0","children":["$","a",null,{"href":"#rust","children":"rust"}]}],["$","div","공부",{"className":"pl-2","children":["$","a",null,{"href":"#공부","children":"공부"}]}],["$","div","정리-필요",{"className":"pl-2","children":["$","a",null,{"href":"#정리-필요","children":"정리 필요"}]}],["$","div","module모듈",{"className":"pl-4","children":["$","a",null,{"href":"#module모듈","children":"module|모듈"}]}],["$","div","crete",{"className":"pl-4","children":["$","a",null,{"href":"#crete","children":"crete"}]}],["$","div","설치",{"className":"pl-2","children":["$","a",null,{"href":"#설치","children":"설치"}]}],["$","div","툴",{"className":"pl-4","children":["$","a",null,{"href":"#툴","children":"툴"}]}],["$","div","rustup",{"className":"pl-6","children":["$","a",null,{"href":"#rustup","children":"rustup"}]}],["$","div","rustc",{"className":"pl-6","children":["$","a",null,{"href":"#rustc","children":"rustc"}]}],["$","div","cargo",{"className":"pl-6","children":["$","a",null,{"href":"#cargo","children":"cargo"}]}],["$","div","언어",{"className":"pl-2","children":["$","a",null,{"href":"#언어","children":"언어"}]}],["$","div","속성-attribute",{"className":"pl-4","children":["$","a",null,{"href":"#속성-attribute","children":"속성 attribute"}]}],["$","div","use",{"className":"pl-4","children":["$","a",null,{"href":"#use","children":"use"}]}],["$","div","type타입",{"className":"pl-4","children":["$","a",null,{"href":"#type타입","children":"type|타입"}]}],["$","div","casting캐스팅",{"className":"pl-4","children":["$","a",null,{"href":"#casting캐스팅","children":"casting|캐스팅"}]}],["$","div","특성trait",{"className":"pl-4","children":["$","a",null,{"href":"#특성trait","children":"특성|trait"}]}],["$","div","형변환",{"className":"pl-6","children":["$","a",null,{"href":"#형변환","children":"형변환"}]}],["$","div","ownership소유권",{"className":"pl-4","children":["$","a",null,{"href":"#ownership소유권","children":"ownership|소유권"}]}],["$","div","-참조",{"className":"pl-6","children":["$","a",null,{"href":"#-참조","children":"& 참조"}]}],["$","div","타입-변환",{"className":"pl-6","children":["$","a",null,{"href":"#타입-변환","children":"타입 변환"}]}],["$","div","impl",{"className":"pl-6","children":["$","a",null,{"href":"#impl","children":"impl"}]}],["$","div","ref",{"className":"pl-6","children":["$","a",null,{"href":"#ref","children":"ref"}]}],["$","div","variable변수",{"className":"pl-4","children":["$","a",null,{"href":"#variable변수","children":"variable|변수"}]}],["$","div","function함수",{"className":"pl-4","children":["$","a",null,{"href":"#function함수","children":"function|함수"}]}],["$","div","클로저-closure",{"className":"pl-6","children":["$","a",null,{"href":"#클로저-closure","children":"클로저 closure"}]}],["$","div","입력-파라메터로서의-클로저-as-input-parameters",{"className":"pl-8","children":["$","a",null,{"href":"#입력-파라메터로서의-클로저-as-input-parameters","children":"입력 파라메터로서의 클로저 as input parameters"}]}],["$","div","구문",{"className":"pl-6","children":["$","a",null,{"href":"#구문","children":"구문"}]}],["$","div","표현식",{"className":"pl-6","children":["$","a",null,{"href":"#표현식","children":"표현식"}]}],["$","div","주석-comment",{"className":"pl-4","children":["$","a",null,{"href":"#주석-comment","children":"주석 comment"}]}],["$","div","데이터-타입",{"className":"pl-4","children":["$","a",null,{"href":"#데이터-타입","children":"데이터 타입"}]}],["$","div","스칼라",{"className":"pl-6","children":["$","a",null,{"href":"#스칼라","children":"스칼라"}]}],["$","div","컴파운드-타입",{"className":"pl-6","children":["$","a",null,{"href":"#컴파운드-타입","children":"컴파운드 타입"}]}],["$","div","정수-오버플로",{"className":"pl-8","children":["$","a",null,{"href":"#정수-오버플로","children":"정수 오버플로"}]}],["$","div","참",{"className":"pl-6","children":["$","a",null,{"href":"#참","children":"참"}]}],["$","div","반복문",{"className":"pl-4","children":["$","a",null,{"href":"#반복문","children":"반복문"}]}],["$","div","매크로",{"className":"pl-4","children":["$","a",null,{"href":"#매크로","children":"매크로"}]}],["$","div","연관-함수-associated-function-static-method",{"className":"pl-4","children":["$","a",null,{"href":"#연관-함수-associated-function-static-method","children":"연관 함수, associated function, static method"}]}],["$","div","std",{"className":"pl-4","children":["$","a",null,{"href":"#std","children":"std"}]}],["$","div","stdstr",{"className":"pl-6","children":["$","a",null,{"href":"#stdstr","children":"std::str"}]}],["$","div","stdcollectionshashmap",{"className":"pl-6","children":["$","a",null,{"href":"#stdcollectionshashmap","children":"std::collections:HashMap"}]}],["$","div","stdcollectionshashset",{"className":"pl-6","children":["$","a",null,{"href":"#stdcollectionshashset","children":"std::collections:HashSet"}]}],["$","div","methods",{"className":"pl-8","children":["$","a",null,{"href":"#methods","children":"methods"}]}],["$","div","stdrcrc",{"className":"pl-6","children":["$","a",null,{"href":"#stdrcrc","children":"std::rc::Rc"}]}],["$","div","stdrcrc-1",{"className":"pl-6","children":["$","a",null,{"href":"#stdrcrc-1","children":"std::rc::Rc"}]}],["$","div","stdsyncmpsc",{"className":"pl-6","children":["$","a",null,{"href":"#stdsyncmpsc","children":"std::sync::mpsc"}]}],["$","div","stdpathpath",{"className":"pl-6","children":["$","a",null,{"href":"#stdpathpath","children":"std::path::Path"}]}],["$","div","stdfsfile",{"className":"pl-6","children":["$","a",null,{"href":"#stdfsfile","children":"std::fs::File"}]}],["$","div","stdprocesscommand-stdio",{"className":"pl-6","children":["$","a",null,{"href":"#stdprocesscommand-stdio","children":"std::process::{Command, Stdio}"}]}],["$","div","stdchild",{"className":"pl-6","children":["$","a",null,{"href":"#stdchild","children":"std::Child"}]}],["$","div","stdosunix",{"className":"pl-6","children":["$","a",null,{"href":"#stdosunix","children":"std::os::unix"}]}],["$","div","stdenv",{"className":"pl-6","children":["$","a",null,{"href":"#stdenv","children":"std::env"}]}],["$","div","foreign-function-interface--ffi",{"className":"pl-6","children":["$","a",null,{"href":"#foreign-function-interface--ffi","children":"foreign function interface : ffi"}]}],["$","div","매크로-macro",{"className":"pl-6","children":["$","a",null,{"href":"#매크로-macro","children":"매크로 macro"}]}],["$","div","enum",{"className":"pl-4","children":["$","a",null,{"href":"#enum","children":"enum"}]}],["$","div","",{"className":"pl-4","children":["$","a",null,{"href":"#","children":"?"}]}],["$","div","dyn-trait-trait-object",{"className":"pl-4","children":["$","a",null,{"href":"#dyn-trait-trait-object","children":"dyn Trait, Trait Object"}]}],["$","div","smart-pointer스마트-포인터",{"className":"pl-4","children":["$","a",null,{"href":"#smart-pointer스마트-포인터","children":"smart-pointer|스마트 포인터"}]}],["$","div","array-slice-vec",{"className":"pl-4","children":["$","a",null,{"href":"#array-slice-vec","children":"array, slice, vec"}]}],["$","div","question",{"className":"pl-4","children":["$","a",null,{"href":"#question","children":"question"}]}],["$","div","장",{"className":"pl-2","children":["$","a",null,{"href":"#장","children":"장"}]}],["$","div","용어",{"className":"pl-2","children":["$","a",null,{"href":"#용어","children":"용어"}]}],["$","div","link",{"className":"pl-2","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:T368f,
+## 공부
+- [[node-to-rust]]
+- [[book/the-rust-programming-language]]
+- [[rustling]]
+
+## 정리 필요
+- closure definition 시점에 borrow rule 이 동작한다
+  - closure 가 mutable borrow 인 경우 call 할때까지 코드상으로 print 를 찍지 못한다(borrow rule 위반)
+- workspace
+  - Cargo.toml 에 먼저 `member` 를 명시하고 `cargo new project_name --lib` 을 추가
+  - dependencies 에 relative path 로 추가 
+  - 다른 디렉토리에서 `cargo run` 을 할 경우 `-p project_name` 을 추가해서 실행
+
+### module|모듈
+```rust
+// https://doc.rust-lang.org/rust-by-example/mod/visibility.html
+// 상위 모듈(parent or ancestor module) 에만 노출
+pub(in create::my_mod) fn private_function() {
+    println!("private_function");
+}
+// == private fn
+pub(self) fn function_name() {
+    println!("function_name");
+}
+// parent
+pub(super) fn function_name() {
+    println!("function_name");
+}
+// crate
+pub(crate) fn function_name() {
+    println!("function_name");
+}
+```
+
+모듈의 구조는 파일구조와 같다.
+`mod a;` 선언된 경우 `a.rs` 혹은 `a/mod.rs` 파일을 참조한다.
+
+### crete
+컴파일 단위
+
+## 설치
+```sh
+curl https://sh.rustup.rs -sSf | sh
+```
+
+### 툴 
+#### rustup
+```sh
+rust update
+rustup self uninstall
+rustup docs --book
+```
+
+#### rustc
+```sh
+rustc --version
+rustc main.rs
+```
+
+#### cargo
+> cargo 는 러스트의 패키지 매니저
+
+```sh
+cargo --version
+cargo new hello_cargo # git 도 함께 초기화된다.
+cargo run # 
+cargo build
+cargo build --release
+cargo check # 빌드보다 빠르다, 컴파일 확인
+cargo update # Cargo.lock 을 무시하고 miner 업데이트, mager 업데이트는 파일 자체를 수정한다.
+```
+
+```toml
+name = "hello_cargo"
+version = "0.1.0"
+authors = ["deptno <deptno@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+
+rand = "0.6.1"
+```
+[[cargo.toml]], [[toml]] 포맷
+
+## 언어
+`cargo new` 를 통해 패키지가 생성되면 src/{main,lib}.rs 파일을 통해 실행파일 혹은 라이브러리 빌드 엔트리를 작성할 수 있다(둘다 가능).
+
+### 속성 attribute
+- #![allow(dead_code)] - 안쓰는 코드 경고 하지 않음
+- #![allow(unused)] - 안쓰는 변수 경고 하지 않음
+- #[allow(non_camel_case_types)] - 경고 안함
+
+### use
+```rust
+use std::io;
+```
+
+### type|타입 
+- primitive type
+  - bool
+  - char
+  - integer
+    - **2023-08-27** 명시적 overflow 핸들링(release 기본은 `wrapping_`)을 위해 아래 메소드를 사용할 수 있다.
+      - wrapping_* - maximum value + 1 == minimum value
+      - checked* - Option<T>
+      - overflowing_* - (value, is_overflow)
+      - saturating_* - 한계를 넘어가게 되면 maximum or minimum 값을 리턴
+  - float
+  - unit - 튜플이지만 primitive type 이다.
+- compound type
+  - array
+  - slice, array 와는 다르게 컴파일타임에 length 를 알 수 없다.
+  - tuple
+  - struct
+  - enum
+  
+
+### casting|캐스팅 
+- i <-> u 정수간의 변환은 해당 값을 표현하는 형식에 따라 그대로 적용된다.
+- floating <-> integer 변환은 floating 변수가 표현하는 근사값을 내림하여 정수 변환한다. `saturating cast`
+  - https://doc.rust-lang.org/rust-by-example/types/cast.html
+
+primitive 타입은 cast 를 통해서 변경된다.
+custom 타입은 trait `From` 이나 `Into` 를 통해서 변경된다.
+
+### 특성|trait 
+- Copy
+  - copy trait 이 구현되어 있는 경우, 변수 대입 이후에도 유효하다.
+  - drop trait 이 구현되어 있는 경우, copy trait annotation 을 할 수 없다.
+  - copy 가능한 타입
+    - 정수형 타입
+    - 부동 소수점 타입
+    - bool
+    - char
+    - copy 가능한 타입으로만 묶인 튜플
+#### 형변환
+- From
+  - String::from("hello") 와 같이 from 을 구현하여 타입 변환을 가능하게 한다.
+- Into
+  - From 의 짝으로 필요한 시점에 From 을 호출하도록한다.  
+  - `into` 메서드를 호출 하는 순간 대입할 변수의 타입에 맞춰서 `from` 을 역으로 호출한다.
+  ```rust
+  let x: i32 = 5;
+  let y: u32 = x.into(); // u32::from(x) 와 같은 표현
+  ```
+- TryFrom
+  From 과 같으나 실패할 수 있는 경우에 사용된다. 따라서 리턴 타입은 Result<T, E> 이다.
+- TryInto
+  TryFrom 의 짝으로 사용된다.
+  ```rust
+  x.try_into()
+  ```
+- ToString
+  - std::fmt::Display 을 구현하면 `to_string` 호출시 이를 통해 `String` 으로 변환된다.
+- FromStr
+  - `parse` 메서드 호출시 해당 타입에 구현되어있는 `FromStr` 을 통해 변환된다.
+  ```rust
+  let parsed: i32 = "5".parse().unwrap();
+  let turbo_parsed = "10".parse::<i32>().unwrap();
+  ```
+- 
+
+
+### ownership|소유권
+#### & 참조
+참조는 소유권을 갖지 않는다.
+- 불편 참조는 여러개가 가능하다.
+- 가변 참조는 하나만 가능하다.
+- 불변 참조가 존재하는 경우 가변 참조는 불가능하다. -> 값이 변경되면 불변 참조의 값도 변경되어 물결성이 깨지기 때문
+
+#### 타입 변환
+&String[..] === &str
+
+#### impl
+- enum
+  - 첫인수로 &self https://doc.rust-lang.org/rust-by-example/custom_types/enum.html
+  - 첫인수로 self https://doc.rust-lang.org/rust-by-example/custom_types/enum/testcase_linked_list.html
+#### ref 
+`&` borrow 와 같다.
+```rust
+  let c = 'Q';
+  let ref ref_c1 = c;
+  let ref_c2 = &c;
+```
+destructure 를 통해서 변수를 가져오는 경우에도 소유권은 이동된다. 
+`ref` 키워드를 prefix 로 사용하면 소유권 이동을 막을 수 있다. stack value 에서는 효과가 없다.
+
+### variable|변수 
+```rust
+let x = 5; # 불변
+let x = 5.0; # 이전 변수는 가려진다(shadowing), 이전 타입 무시 가능. 사용되지 않는 변수는 컴파일러가 제거한다.
+
+const CONSTANT: u32 = 100_000; # 항상 타입 지정
+
+let mut y = String::new(); # 가변
+y = 1; # 타입 에러
+```
+
+### function|함수 
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+fn get_name() -> String;
+pub fn get_name<T: AType>(a: T) -> T;
+```
+
+- 연관 함수 associated : 타입에 연관
+- 메서드 method : 인스턴스에 연관
+  - sugar
+    - stack : (&self) : (self: &Self)
+    - heap : (self) : (self: Self)
+    stack, heap 에따라 method 의 인자 타입이 달라지는지는 확인필요 [[@todo]]
+
+#### 클로저 closure
+인자는 기본적으로 참조 빌리기(& borrow) 시작하여 필요성이 요구될 때만 더 낮은 단계로 간다.
+https://doc.rust-lang.org/rust-by-example/fn/closures/capture.html
+
+non-copy 타입에 대해서 클로저를 선언하면 기본적으로 &로 참조된다.  
+하지만 mutable 행동(std::mem::drop 등을 사용)을 취하면 `move` 된다.  
+혹은 명시적으로 `move` 를 할 수 있다.
+
+`move` 된 이후는 소유권이 이동되었기 때문에 캡쳐된 변수를 더이상 사용할 수 없다.
+
+##### 입력 파라메터로서의 클로저 as input parameters
+3가지 trait 중 하나로 표현되어야 한다.
+- Fn (&T) - capture by reference
+- FnMut (&mut T) - captures by mutable reference
+- FnOnce (T) - captures by value
+
+FnOnce(via `move`) 는 Fn, FnMut 의 superset 이므로 언제나 사용이 가능하지만 상황에 맞는 가장 큰 제약을 주어야한다.
+
+#### 구문
+결괏값이 없다. 세미콜론으로 끝난다.
+
+#### 표현식
+결괏값이 있고 때문에 대입이 가능하다. 세미콜론으로 끝나지 않는다. `함수 리턴시 주의`
+- if 는 세미콜론으로 끝나는듯.
+- loop 도 break 문과 함께 값 리턴이 가능
+
+### 주석 comment
+//
+
+### 데이터 타입
+#### 스칼라
+- integer {i,u}{8,16,32,64,size}
+  - 리터럴  
+    - decimal - 98_222
+    - hex - 0xff
+    - octal - 0o77
+    - binary - 0b1111_0000
+    - byte(u8) - b'A'
+- floating point numbers  
+  - f64 - default
+  - f32
+- boolean  
+  - true
+  - false
+- characters  
+  utf-8
+  - 'z'
+  - '불' - 3 bytes
+
+#### 컴파운드 타입
+- 튜플
+  - (i32, f64, u8) - 다른 타입도 가능
+  - a.0 으로 접근 가능
+- 배열
+  - [i32; 10] - 같은 타입만 가능
+  - [3; 5]
+  - a[0] 으로 접근 가능
+
+##### 정수 오버플로
+타입의 값을 넘어가는 경우 Warpping 타입을 통해 255 -> 0 으로 동작한다. --release 빌드 시에는 명시적으로 선언하지 않으면 자동적으로 선언된다.
+#### 참
+
+프렐류드에 포함되지 않는 타입을 사용하려면 `use` 를 사용해야 한다.
+
+### 반복문
+```rust
+for i in 0..10 {
+    println!("{}", i);
+}
+for i in (1..10).rev() {
+    println!("{}", i);
+loop {
+    println!("loop");
+    break;
+}
+while i < 10 {
+    println!("{}", i);
+    i += 1;
+}
+```
+
+### 매크로
+```rust
+println!("hello, world!");
+```
+`!` 가 붙은 함수는 매크로다.
+
+```rust
+let foo = 5 // 불변
+let mut foo = 5 // 가변
+```
+- cfg!
+- print!
+- println!
+- eprint!
+- eprintln!
+
+### 연관 함수, associated function, static method
+```rust
+String::new
+```
+`new` associated function 이라고 불리며 타 언어의 static method 와 같다.
+
+### std
+```rust
+use std::io;
+let mut guess = String::new();
+io:stdin().read_line(&mut guess).expect("Failed to read line");
+let guess: u32 = guess.trim().parse().expect("Please type a number!");
+
+use std::cmp::Ordering;
+match guess.cmp(&secret_number) {
+    Ordering::Less => println!("Too small!"),
+    Ordering::Greater => println!("Too big!"),
+    Ordering::Equal => println!("You win!"),
+}
+```
+
+#### std::str
+```rust
+fn main() {
+    let raw_str = r"Escapes don't work here: \x3F \u{211D}";
+    println!("{}", raw_str);
+
+    let quotes = r#"And then I said: "There is no escape!""#;
+    println!("{}", quotes);
+
+    let longer_delimiter = r###"A string with "# in it. And even "##!"###;
+    println!("{}", longer_delimiter);
+}
+```
+토큰으로 사용될 `#` 갯수는 제한이 없음
+
+#### std::collections:HashMap
+
+#### std::collections:HashSet
+HashMap<T, ()>
+##### methods
+- union
+- difference
+- intersection
+- symmetric_difference - xor
+
+#### std::rc::Rc  
+여러 소유권이 필요한 경우를 위해 reference count 사용된다.
+```rust https://doc.rust-lang.org/rust-by-example/std/rc.html
+use std::rc::Rc;
+
+fn main() {
+    let rc_examples = "Rc examples".to_string();
+    {
+        let rc_a: Rc<String> = Rc::new(rc_examples);
+        {
+            let rc_b: Rc<String> = Rc::clone(&rc_a);
+            // Two `Rc`s are equal if their inner values are equal
+            println!("rc_a and rc_b are equal: {}", rc_a.eq(&rc_b));
+            
+            // We can use methods of a value directly
+            println!("Length of the value inside rc_a: {}", rc_a.len());
+            println!("Value of rc_b: {}", rc_b);
+            println!("--- rc_b is dropped out of scope ---");
+        }
+    }
+}
+```
+
+#### std::rc::Rc  
+atomic refernece counted, 
+
+#### std::sync::mpsc
+multiple producer single consumer
+producer(tx) 가 여럿인 것은 허용된다.
+
+```rust
+use std::sync::mpsc::{Sender, Receiver};
+
+let (tx, rx): (Sender<i32>, Receiver<i32>) = mpsc::channel();
+let thread_tx = tx.clone();
+```
+```rust
+tx.send(1).unwrap(); // non-blocking send
+rx.recv().unwrap(); // blocking recv
+```
+
+#### std::path::Path
+- posix::Path
+- windows::path
+상황에 맞게 사용된다.
+`to_str` 메서드는 utf-8 이 아닌경우 실패할 수 있다(Option).
+
+#### std::fs::File 
+#### std::process::{Command, Stdio}
+#### std::Child
+실행중인 자식 프로세스의 핸들을 노출한다.
+- stdin
+- stdout
+- stderr
+```rust
+let process = match Command::new("wc")
+                            .stdin(Stdio::piped())
+                            .stdout(Stdio::piped())
+                            .spawn() {
+    Err(why) => panic!("couldn't spawn wc: {}", why),
+    Ok(process) => process,
+};
+```
+
+#### std::os::unix
+#### std::env
+- env::args
+#### foreign function interface : ffi
+```rust
+#[link(name = "mylib")]
+extern {
+  fn a(z: Complex) -> Complex;
+}
+```
+C 바인딩을 지원, `unsafe`
+
+#### 매크로 macro
+```rust
+println!("hello, world!");
+println!("{}", "hello, world!");
+println!("{} {}", "hello", "world");
+```
+
+### enum
+- Result  
+  - method  
+    - expect(value: &str)
+- Ordering
+
+### ?
+`FromResidual` 이 구현된 타입에서 사용 가능, 제공되는 타입으로는 아래가 있음
+- Result<T, E>
+- Option<T>
+
+함수 결괏값으로 Error가 리턴되면 `해당 함수`를 `호출하는 함수`에서 리턴 처리한다.
+
+### dyn Trait, Trait Object
+
+### smart-pointer|스마트 포인터
+- Box<T>: usize 만 스택에 남기고 heap 에 저장한다.  
+- Rc<T>: 다중 소유권을 허용한다. Rc.clone()
+  - Arc<T>: Rc의 thread safe 버전
+  - `Rc::downgrade -> Weak<T>`
+- RefCell<T>: 다중 소유권을 허용한다. Rc.clone()
+  - .{burrow,burrow_mut} 메서드, burrowing rule 은 runtime에 체크되며 위반하는 경우 패닉,
+  - Mutex<T>: 공유 메모리에 접근을 제어한다. thread safe
+  - RefMut<T>
+  - Ref<T>
+- Weak<T>
+  - Rc<T> + RefCell<T> 조합으로 사용하면 cycle을 생성할 수 있음  
+  - cycle 이 생성되면 레퍼런스 카운트가 0 이 될 수 없어, 메모리 릭이 발생
+  - Weak<T> 는 Rc<T>참조시에 생성되는 `strong_count` 를 증가시키지 않고 `strong_count` 가 0이 되는 경우 함게 소멸
+    - e.g. branch <-> leaf 의 관계에서 상호 참조하지만 branch가 잘려나가면 leaf는 존재할 수 없는 경우
+    - `.upgrade -> Option<Weak<T>>`
+
+### array, slice, vec
+- arrray: [u8; 3] primitive 타입 fixed length
+- slice: &[..] array의 참조로 존재,
+- vec: growing array, 항상 힙에 저정된다.
+
+### question
+- [[@todo]] match { Err(ref e) => ... }, ref를 붙이는 이유
+- iter vs into_iter
+
+장
+---
+
+## 용어
+- 프레류드 (Prelude)  
+  모든 러스트 프로그램에 정의된 특별한 영역으로 해당 프로그램 또는 크레이트가 외부로 노출하는 타입을 명시한 모듈
+
+## link
+- [[rust-vim]]
+- [[book/the-rust-programming-language|러스트 프로그래밍 공식 가이드]]
+- [[valgrind]]
+- [[functional]]
+- [[cargo]]
+- [[rustling]]
+12:T368f,
+## 공부
+- [[node-to-rust]]
+- [[book/the-rust-programming-language]]
+- [[rustling]]
+
+## 정리 필요
+- closure definition 시점에 borrow rule 이 동작한다
+  - closure 가 mutable borrow 인 경우 call 할때까지 코드상으로 print 를 찍지 못한다(borrow rule 위반)
+- workspace
+  - Cargo.toml 에 먼저 `member` 를 명시하고 `cargo new project_name --lib` 을 추가
+  - dependencies 에 relative path 로 추가 
+  - 다른 디렉토리에서 `cargo run` 을 할 경우 `-p project_name` 을 추가해서 실행
+
+### module|모듈
+```rust
+// https://doc.rust-lang.org/rust-by-example/mod/visibility.html
+// 상위 모듈(parent or ancestor module) 에만 노출
+pub(in create::my_mod) fn private_function() {
+    println!("private_function");
+}
+// == private fn
+pub(self) fn function_name() {
+    println!("function_name");
+}
+// parent
+pub(super) fn function_name() {
+    println!("function_name");
+}
+// crate
+pub(crate) fn function_name() {
+    println!("function_name");
+}
+```
+
+모듈의 구조는 파일구조와 같다.
+`mod a;` 선언된 경우 `a.rs` 혹은 `a/mod.rs` 파일을 참조한다.
+
+### crete
+컴파일 단위
+
+## 설치
+```sh
+curl https://sh.rustup.rs -sSf | sh
+```
+
+### 툴 
+#### rustup
+```sh
+rust update
+rustup self uninstall
+rustup docs --book
+```
+
+#### rustc
+```sh
+rustc --version
+rustc main.rs
+```
+
+#### cargo
+> cargo 는 러스트의 패키지 매니저
+
+```sh
+cargo --version
+cargo new hello_cargo # git 도 함께 초기화된다.
+cargo run # 
+cargo build
+cargo build --release
+cargo check # 빌드보다 빠르다, 컴파일 확인
+cargo update # Cargo.lock 을 무시하고 miner 업데이트, mager 업데이트는 파일 자체를 수정한다.
+```
+
+```toml
+name = "hello_cargo"
+version = "0.1.0"
+authors = ["deptno <deptno@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+
+rand = "0.6.1"
+```
+[[cargo.toml]], [[toml]] 포맷
+
+## 언어
+`cargo new` 를 통해 패키지가 생성되면 src/{main,lib}.rs 파일을 통해 실행파일 혹은 라이브러리 빌드 엔트리를 작성할 수 있다(둘다 가능).
+
+### 속성 attribute
+- #![allow(dead_code)] - 안쓰는 코드 경고 하지 않음
+- #![allow(unused)] - 안쓰는 변수 경고 하지 않음
+- #[allow(non_camel_case_types)] - 경고 안함
+
+### use
+```rust
+use std::io;
+```
+
+### type|타입 
+- primitive type
+  - bool
+  - char
+  - integer
+    - **2023-08-27** 명시적 overflow 핸들링(release 기본은 `wrapping_`)을 위해 아래 메소드를 사용할 수 있다.
+      - wrapping_* - maximum value + 1 == minimum value
+      - checked* - Option<T>
+      - overflowing_* - (value, is_overflow)
+      - saturating_* - 한계를 넘어가게 되면 maximum or minimum 값을 리턴
+  - float
+  - unit - 튜플이지만 primitive type 이다.
+- compound type
+  - array
+  - slice, array 와는 다르게 컴파일타임에 length 를 알 수 없다.
+  - tuple
+  - struct
+  - enum
+  
+
+### casting|캐스팅 
+- i <-> u 정수간의 변환은 해당 값을 표현하는 형식에 따라 그대로 적용된다.
+- floating <-> integer 변환은 floating 변수가 표현하는 근사값을 내림하여 정수 변환한다. `saturating cast`
+  - https://doc.rust-lang.org/rust-by-example/types/cast.html
+
+primitive 타입은 cast 를 통해서 변경된다.
+custom 타입은 trait `From` 이나 `Into` 를 통해서 변경된다.
+
+### 특성|trait 
+- Copy
+  - copy trait 이 구현되어 있는 경우, 변수 대입 이후에도 유효하다.
+  - drop trait 이 구현되어 있는 경우, copy trait annotation 을 할 수 없다.
+  - copy 가능한 타입
+    - 정수형 타입
+    - 부동 소수점 타입
+    - bool
+    - char
+    - copy 가능한 타입으로만 묶인 튜플
+#### 형변환
+- From
+  - String::from("hello") 와 같이 from 을 구현하여 타입 변환을 가능하게 한다.
+- Into
+  - From 의 짝으로 필요한 시점에 From 을 호출하도록한다.  
+  - `into` 메서드를 호출 하는 순간 대입할 변수의 타입에 맞춰서 `from` 을 역으로 호출한다.
+  ```rust
+  let x: i32 = 5;
+  let y: u32 = x.into(); // u32::from(x) 와 같은 표현
+  ```
+- TryFrom
+  From 과 같으나 실패할 수 있는 경우에 사용된다. 따라서 리턴 타입은 Result<T, E> 이다.
+- TryInto
+  TryFrom 의 짝으로 사용된다.
+  ```rust
+  x.try_into()
+  ```
+- ToString
+  - std::fmt::Display 을 구현하면 `to_string` 호출시 이를 통해 `String` 으로 변환된다.
+- FromStr
+  - `parse` 메서드 호출시 해당 타입에 구현되어있는 `FromStr` 을 통해 변환된다.
+  ```rust
+  let parsed: i32 = "5".parse().unwrap();
+  let turbo_parsed = "10".parse::<i32>().unwrap();
+  ```
+- 
+
+
+### ownership|소유권
+#### & 참조
+참조는 소유권을 갖지 않는다.
+- 불편 참조는 여러개가 가능하다.
+- 가변 참조는 하나만 가능하다.
+- 불변 참조가 존재하는 경우 가변 참조는 불가능하다. -> 값이 변경되면 불변 참조의 값도 변경되어 물결성이 깨지기 때문
+
+#### 타입 변환
+&String[..] === &str
+
+#### impl
+- enum
+  - 첫인수로 &self https://doc.rust-lang.org/rust-by-example/custom_types/enum.html
+  - 첫인수로 self https://doc.rust-lang.org/rust-by-example/custom_types/enum/testcase_linked_list.html
+#### ref 
+`&` borrow 와 같다.
+```rust
+  let c = 'Q';
+  let ref ref_c1 = c;
+  let ref_c2 = &c;
+```
+destructure 를 통해서 변수를 가져오는 경우에도 소유권은 이동된다. 
+`ref` 키워드를 prefix 로 사용하면 소유권 이동을 막을 수 있다. stack value 에서는 효과가 없다.
+
+### variable|변수 
+```rust
+let x = 5; # 불변
+let x = 5.0; # 이전 변수는 가려진다(shadowing), 이전 타입 무시 가능. 사용되지 않는 변수는 컴파일러가 제거한다.
+
+const CONSTANT: u32 = 100_000; # 항상 타입 지정
+
+let mut y = String::new(); # 가변
+y = 1; # 타입 에러
+```
+
+### function|함수 
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+fn get_name() -> String;
+pub fn get_name<T: AType>(a: T) -> T;
+```
+
+- 연관 함수 associated : 타입에 연관
+- 메서드 method : 인스턴스에 연관
+  - sugar
+    - stack : (&self) : (self: &Self)
+    - heap : (self) : (self: Self)
+    stack, heap 에따라 method 의 인자 타입이 달라지는지는 확인필요 [[@todo]]
+
+#### 클로저 closure
+인자는 기본적으로 참조 빌리기(& borrow) 시작하여 필요성이 요구될 때만 더 낮은 단계로 간다.
+https://doc.rust-lang.org/rust-by-example/fn/closures/capture.html
+
+non-copy 타입에 대해서 클로저를 선언하면 기본적으로 &로 참조된다.  
+하지만 mutable 행동(std::mem::drop 등을 사용)을 취하면 `move` 된다.  
+혹은 명시적으로 `move` 를 할 수 있다.
+
+`move` 된 이후는 소유권이 이동되었기 때문에 캡쳐된 변수를 더이상 사용할 수 없다.
+
+##### 입력 파라메터로서의 클로저 as input parameters
+3가지 trait 중 하나로 표현되어야 한다.
+- Fn (&T) - capture by reference
+- FnMut (&mut T) - captures by mutable reference
+- FnOnce (T) - captures by value
+
+FnOnce(via `move`) 는 Fn, FnMut 의 superset 이므로 언제나 사용이 가능하지만 상황에 맞는 가장 큰 제약을 주어야한다.
+
+#### 구문
+결괏값이 없다. 세미콜론으로 끝난다.
+
+#### 표현식
+결괏값이 있고 때문에 대입이 가능하다. 세미콜론으로 끝나지 않는다. `함수 리턴시 주의`
+- if 는 세미콜론으로 끝나는듯.
+- loop 도 break 문과 함께 값 리턴이 가능
+
+### 주석 comment
+//
+
+### 데이터 타입
+#### 스칼라
+- integer {i,u}{8,16,32,64,size}
+  - 리터럴  
+    - decimal - 98_222
+    - hex - 0xff
+    - octal - 0o77
+    - binary - 0b1111_0000
+    - byte(u8) - b'A'
+- floating point numbers  
+  - f64 - default
+  - f32
+- boolean  
+  - true
+  - false
+- characters  
+  utf-8
+  - 'z'
+  - '불' - 3 bytes
+
+#### 컴파운드 타입
+- 튜플
+  - (i32, f64, u8) - 다른 타입도 가능
+  - a.0 으로 접근 가능
+- 배열
+  - [i32; 10] - 같은 타입만 가능
+  - [3; 5]
+  - a[0] 으로 접근 가능
+
+##### 정수 오버플로
+타입의 값을 넘어가는 경우 Warpping 타입을 통해 255 -> 0 으로 동작한다. --release 빌드 시에는 명시적으로 선언하지 않으면 자동적으로 선언된다.
+#### 참
+
+프렐류드에 포함되지 않는 타입을 사용하려면 `use` 를 사용해야 한다.
+
+### 반복문
+```rust
+for i in 0..10 {
+    println!("{}", i);
+}
+for i in (1..10).rev() {
+    println!("{}", i);
+loop {
+    println!("loop");
+    break;
+}
+while i < 10 {
+    println!("{}", i);
+    i += 1;
+}
+```
+
+### 매크로
+```rust
+println!("hello, world!");
+```
+`!` 가 붙은 함수는 매크로다.
+
+```rust
+let foo = 5 // 불변
+let mut foo = 5 // 가변
+```
+- cfg!
+- print!
+- println!
+- eprint!
+- eprintln!
+
+### 연관 함수, associated function, static method
+```rust
+String::new
+```
+`new` associated function 이라고 불리며 타 언어의 static method 와 같다.
+
+### std
+```rust
+use std::io;
+let mut guess = String::new();
+io:stdin().read_line(&mut guess).expect("Failed to read line");
+let guess: u32 = guess.trim().parse().expect("Please type a number!");
+
+use std::cmp::Ordering;
+match guess.cmp(&secret_number) {
+    Ordering::Less => println!("Too small!"),
+    Ordering::Greater => println!("Too big!"),
+    Ordering::Equal => println!("You win!"),
+}
+```
+
+#### std::str
+```rust
+fn main() {
+    let raw_str = r"Escapes don't work here: \x3F \u{211D}";
+    println!("{}", raw_str);
+
+    let quotes = r#"And then I said: "There is no escape!""#;
+    println!("{}", quotes);
+
+    let longer_delimiter = r###"A string with "# in it. And even "##!"###;
+    println!("{}", longer_delimiter);
+}
+```
+토큰으로 사용될 `#` 갯수는 제한이 없음
+
+#### std::collections:HashMap
+
+#### std::collections:HashSet
+HashMap<T, ()>
+##### methods
+- union
+- difference
+- intersection
+- symmetric_difference - xor
+
+#### std::rc::Rc  
+여러 소유권이 필요한 경우를 위해 reference count 사용된다.
+```rust https://doc.rust-lang.org/rust-by-example/std/rc.html
+use std::rc::Rc;
+
+fn main() {
+    let rc_examples = "Rc examples".to_string();
+    {
+        let rc_a: Rc<String> = Rc::new(rc_examples);
+        {
+            let rc_b: Rc<String> = Rc::clone(&rc_a);
+            // Two `Rc`s are equal if their inner values are equal
+            println!("rc_a and rc_b are equal: {}", rc_a.eq(&rc_b));
+            
+            // We can use methods of a value directly
+            println!("Length of the value inside rc_a: {}", rc_a.len());
+            println!("Value of rc_b: {}", rc_b);
+            println!("--- rc_b is dropped out of scope ---");
+        }
+    }
+}
+```
+
+#### std::rc::Rc  
+atomic refernece counted, 
+
+#### std::sync::mpsc
+multiple producer single consumer
+producer(tx) 가 여럿인 것은 허용된다.
+
+```rust
+use std::sync::mpsc::{Sender, Receiver};
+
+let (tx, rx): (Sender<i32>, Receiver<i32>) = mpsc::channel();
+let thread_tx = tx.clone();
+```
+```rust
+tx.send(1).unwrap(); // non-blocking send
+rx.recv().unwrap(); // blocking recv
+```
+
+#### std::path::Path
+- posix::Path
+- windows::path
+상황에 맞게 사용된다.
+`to_str` 메서드는 utf-8 이 아닌경우 실패할 수 있다(Option).
+
+#### std::fs::File 
+#### std::process::{Command, Stdio}
+#### std::Child
+실행중인 자식 프로세스의 핸들을 노출한다.
+- stdin
+- stdout
+- stderr
+```rust
+let process = match Command::new("wc")
+                            .stdin(Stdio::piped())
+                            .stdout(Stdio::piped())
+                            .spawn() {
+    Err(why) => panic!("couldn't spawn wc: {}", why),
+    Ok(process) => process,
+};
+```
+
+#### std::os::unix
+#### std::env
+- env::args
+#### foreign function interface : ffi
+```rust
+#[link(name = "mylib")]
+extern {
+  fn a(z: Complex) -> Complex;
+}
+```
+C 바인딩을 지원, `unsafe`
+
+#### 매크로 macro
+```rust
+println!("hello, world!");
+println!("{}", "hello, world!");
+println!("{} {}", "hello", "world");
+```
+
+### enum
+- Result  
+  - method  
+    - expect(value: &str)
+- Ordering
+
+### ?
+`FromResidual` 이 구현된 타입에서 사용 가능, 제공되는 타입으로는 아래가 있음
+- Result<T, E>
+- Option<T>
+
+함수 결괏값으로 Error가 리턴되면 `해당 함수`를 `호출하는 함수`에서 리턴 처리한다.
+
+### dyn Trait, Trait Object
+
+### smart-pointer|스마트 포인터
+- Box<T>: usize 만 스택에 남기고 heap 에 저장한다.  
+- Rc<T>: 다중 소유권을 허용한다. Rc.clone()
+  - Arc<T>: Rc의 thread safe 버전
+  - `Rc::downgrade -> Weak<T>`
+- RefCell<T>: 다중 소유권을 허용한다. Rc.clone()
+  - .{burrow,burrow_mut} 메서드, burrowing rule 은 runtime에 체크되며 위반하는 경우 패닉,
+  - Mutex<T>: 공유 메모리에 접근을 제어한다. thread safe
+  - RefMut<T>
+  - Ref<T>
+- Weak<T>
+  - Rc<T> + RefCell<T> 조합으로 사용하면 cycle을 생성할 수 있음  
+  - cycle 이 생성되면 레퍼런스 카운트가 0 이 될 수 없어, 메모리 릭이 발생
+  - Weak<T> 는 Rc<T>참조시에 생성되는 `strong_count` 를 증가시키지 않고 `strong_count` 가 0이 되는 경우 함게 소멸
+    - e.g. branch <-> leaf 의 관계에서 상호 참조하지만 branch가 잘려나가면 leaf는 존재할 수 없는 경우
+    - `.upgrade -> Option<Weak<T>>`
+
+### array, slice, vec
+- arrray: [u8; 3] primitive 타입 fixed length
+- slice: &[..] array의 참조로 존재,
+- vec: growing array, 항상 힙에 저정된다.
+
+### question
+- [[@todo]] match { Err(ref e) => ... }, ref를 붙이는 이유
+- iter vs into_iter
+
+장
+---
+
+## 용어
+- 프레류드 (Prelude)  
+  모든 러스트 프로그램에 정의된 특별한 영역으로 해당 프로그램 또는 크레이트가 외부로 노출하는 타입을 명시한 모듈
+
+## link
+- [[rust-vim]]
+- [[book/the-rust-programming-language|러스트 프로그래밍 공식 가이드]]
+- [[valgrind]]
+- [[functional]]
+- [[cargo]]
+- [[rustling]]
+13:T368f,
+## 공부
+- [[node-to-rust]]
+- [[book/the-rust-programming-language]]
+- [[rustling]]
+
+## 정리 필요
+- closure definition 시점에 borrow rule 이 동작한다
+  - closure 가 mutable borrow 인 경우 call 할때까지 코드상으로 print 를 찍지 못한다(borrow rule 위반)
+- workspace
+  - Cargo.toml 에 먼저 `member` 를 명시하고 `cargo new project_name --lib` 을 추가
+  - dependencies 에 relative path 로 추가 
+  - 다른 디렉토리에서 `cargo run` 을 할 경우 `-p project_name` 을 추가해서 실행
+
+### module|모듈
+```rust
+// https://doc.rust-lang.org/rust-by-example/mod/visibility.html
+// 상위 모듈(parent or ancestor module) 에만 노출
+pub(in create::my_mod) fn private_function() {
+    println!("private_function");
+}
+// == private fn
+pub(self) fn function_name() {
+    println!("function_name");
+}
+// parent
+pub(super) fn function_name() {
+    println!("function_name");
+}
+// crate
+pub(crate) fn function_name() {
+    println!("function_name");
+}
+```
+
+모듈의 구조는 파일구조와 같다.
+`mod a;` 선언된 경우 `a.rs` 혹은 `a/mod.rs` 파일을 참조한다.
+
+### crete
+컴파일 단위
+
+## 설치
+```sh
+curl https://sh.rustup.rs -sSf | sh
+```
+
+### 툴 
+#### rustup
+```sh
+rust update
+rustup self uninstall
+rustup docs --book
+```
+
+#### rustc
+```sh
+rustc --version
+rustc main.rs
+```
+
+#### cargo
+> cargo 는 러스트의 패키지 매니저
+
+```sh
+cargo --version
+cargo new hello_cargo # git 도 함께 초기화된다.
+cargo run # 
+cargo build
+cargo build --release
+cargo check # 빌드보다 빠르다, 컴파일 확인
+cargo update # Cargo.lock 을 무시하고 miner 업데이트, mager 업데이트는 파일 자체를 수정한다.
+```
+
+```toml
+name = "hello_cargo"
+version = "0.1.0"
+authors = ["deptno <deptno@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+
+rand = "0.6.1"
+```
+[[cargo.toml]], [[toml]] 포맷
+
+## 언어
+`cargo new` 를 통해 패키지가 생성되면 src/{main,lib}.rs 파일을 통해 실행파일 혹은 라이브러리 빌드 엔트리를 작성할 수 있다(둘다 가능).
+
+### 속성 attribute
+- #![allow(dead_code)] - 안쓰는 코드 경고 하지 않음
+- #![allow(unused)] - 안쓰는 변수 경고 하지 않음
+- #[allow(non_camel_case_types)] - 경고 안함
+
+### use
+```rust
+use std::io;
+```
+
+### type|타입 
+- primitive type
+  - bool
+  - char
+  - integer
+    - **2023-08-27** 명시적 overflow 핸들링(release 기본은 `wrapping_`)을 위해 아래 메소드를 사용할 수 있다.
+      - wrapping_* - maximum value + 1 == minimum value
+      - checked* - Option<T>
+      - overflowing_* - (value, is_overflow)
+      - saturating_* - 한계를 넘어가게 되면 maximum or minimum 값을 리턴
+  - float
+  - unit - 튜플이지만 primitive type 이다.
+- compound type
+  - array
+  - slice, array 와는 다르게 컴파일타임에 length 를 알 수 없다.
+  - tuple
+  - struct
+  - enum
+  
+
+### casting|캐스팅 
+- i <-> u 정수간의 변환은 해당 값을 표현하는 형식에 따라 그대로 적용된다.
+- floating <-> integer 변환은 floating 변수가 표현하는 근사값을 내림하여 정수 변환한다. `saturating cast`
+  - https://doc.rust-lang.org/rust-by-example/types/cast.html
+
+primitive 타입은 cast 를 통해서 변경된다.
+custom 타입은 trait `From` 이나 `Into` 를 통해서 변경된다.
+
+### 특성|trait 
+- Copy
+  - copy trait 이 구현되어 있는 경우, 변수 대입 이후에도 유효하다.
+  - drop trait 이 구현되어 있는 경우, copy trait annotation 을 할 수 없다.
+  - copy 가능한 타입
+    - 정수형 타입
+    - 부동 소수점 타입
+    - bool
+    - char
+    - copy 가능한 타입으로만 묶인 튜플
+#### 형변환
+- From
+  - String::from("hello") 와 같이 from 을 구현하여 타입 변환을 가능하게 한다.
+- Into
+  - From 의 짝으로 필요한 시점에 From 을 호출하도록한다.  
+  - `into` 메서드를 호출 하는 순간 대입할 변수의 타입에 맞춰서 `from` 을 역으로 호출한다.
+  ```rust
+  let x: i32 = 5;
+  let y: u32 = x.into(); // u32::from(x) 와 같은 표현
+  ```
+- TryFrom
+  From 과 같으나 실패할 수 있는 경우에 사용된다. 따라서 리턴 타입은 Result<T, E> 이다.
+- TryInto
+  TryFrom 의 짝으로 사용된다.
+  ```rust
+  x.try_into()
+  ```
+- ToString
+  - std::fmt::Display 을 구현하면 `to_string` 호출시 이를 통해 `String` 으로 변환된다.
+- FromStr
+  - `parse` 메서드 호출시 해당 타입에 구현되어있는 `FromStr` 을 통해 변환된다.
+  ```rust
+  let parsed: i32 = "5".parse().unwrap();
+  let turbo_parsed = "10".parse::<i32>().unwrap();
+  ```
+- 
+
+
+### ownership|소유권
+#### & 참조
+참조는 소유권을 갖지 않는다.
+- 불편 참조는 여러개가 가능하다.
+- 가변 참조는 하나만 가능하다.
+- 불변 참조가 존재하는 경우 가변 참조는 불가능하다. -> 값이 변경되면 불변 참조의 값도 변경되어 물결성이 깨지기 때문
+
+#### 타입 변환
+&String[..] === &str
+
+#### impl
+- enum
+  - 첫인수로 &self https://doc.rust-lang.org/rust-by-example/custom_types/enum.html
+  - 첫인수로 self https://doc.rust-lang.org/rust-by-example/custom_types/enum/testcase_linked_list.html
+#### ref 
+`&` borrow 와 같다.
+```rust
+  let c = 'Q';
+  let ref ref_c1 = c;
+  let ref_c2 = &c;
+```
+destructure 를 통해서 변수를 가져오는 경우에도 소유권은 이동된다. 
+`ref` 키워드를 prefix 로 사용하면 소유권 이동을 막을 수 있다. stack value 에서는 효과가 없다.
+
+### variable|변수 
+```rust
+let x = 5; # 불변
+let x = 5.0; # 이전 변수는 가려진다(shadowing), 이전 타입 무시 가능. 사용되지 않는 변수는 컴파일러가 제거한다.
+
+const CONSTANT: u32 = 100_000; # 항상 타입 지정
+
+let mut y = String::new(); # 가변
+y = 1; # 타입 에러
+```
+
+### function|함수 
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+fn get_name() -> String;
+pub fn get_name<T: AType>(a: T) -> T;
+```
+
+- 연관 함수 associated : 타입에 연관
+- 메서드 method : 인스턴스에 연관
+  - sugar
+    - stack : (&self) : (self: &Self)
+    - heap : (self) : (self: Self)
+    stack, heap 에따라 method 의 인자 타입이 달라지는지는 확인필요 [[@todo]]
+
+#### 클로저 closure
+인자는 기본적으로 참조 빌리기(& borrow) 시작하여 필요성이 요구될 때만 더 낮은 단계로 간다.
+https://doc.rust-lang.org/rust-by-example/fn/closures/capture.html
+
+non-copy 타입에 대해서 클로저를 선언하면 기본적으로 &로 참조된다.  
+하지만 mutable 행동(std::mem::drop 등을 사용)을 취하면 `move` 된다.  
+혹은 명시적으로 `move` 를 할 수 있다.
+
+`move` 된 이후는 소유권이 이동되었기 때문에 캡쳐된 변수를 더이상 사용할 수 없다.
+
+##### 입력 파라메터로서의 클로저 as input parameters
+3가지 trait 중 하나로 표현되어야 한다.
+- Fn (&T) - capture by reference
+- FnMut (&mut T) - captures by mutable reference
+- FnOnce (T) - captures by value
+
+FnOnce(via `move`) 는 Fn, FnMut 의 superset 이므로 언제나 사용이 가능하지만 상황에 맞는 가장 큰 제약을 주어야한다.
+
+#### 구문
+결괏값이 없다. 세미콜론으로 끝난다.
+
+#### 표현식
+결괏값이 있고 때문에 대입이 가능하다. 세미콜론으로 끝나지 않는다. `함수 리턴시 주의`
+- if 는 세미콜론으로 끝나는듯.
+- loop 도 break 문과 함께 값 리턴이 가능
+
+### 주석 comment
+//
+
+### 데이터 타입
+#### 스칼라
+- integer {i,u}{8,16,32,64,size}
+  - 리터럴  
+    - decimal - 98_222
+    - hex - 0xff
+    - octal - 0o77
+    - binary - 0b1111_0000
+    - byte(u8) - b'A'
+- floating point numbers  
+  - f64 - default
+  - f32
+- boolean  
+  - true
+  - false
+- characters  
+  utf-8
+  - 'z'
+  - '불' - 3 bytes
+
+#### 컴파운드 타입
+- 튜플
+  - (i32, f64, u8) - 다른 타입도 가능
+  - a.0 으로 접근 가능
+- 배열
+  - [i32; 10] - 같은 타입만 가능
+  - [3; 5]
+  - a[0] 으로 접근 가능
+
+##### 정수 오버플로
+타입의 값을 넘어가는 경우 Warpping 타입을 통해 255 -> 0 으로 동작한다. --release 빌드 시에는 명시적으로 선언하지 않으면 자동적으로 선언된다.
+#### 참
+
+프렐류드에 포함되지 않는 타입을 사용하려면 `use` 를 사용해야 한다.
+
+### 반복문
+```rust
+for i in 0..10 {
+    println!("{}", i);
+}
+for i in (1..10).rev() {
+    println!("{}", i);
+loop {
+    println!("loop");
+    break;
+}
+while i < 10 {
+    println!("{}", i);
+    i += 1;
+}
+```
+
+### 매크로
+```rust
+println!("hello, world!");
+```
+`!` 가 붙은 함수는 매크로다.
+
+```rust
+let foo = 5 // 불변
+let mut foo = 5 // 가변
+```
+- cfg!
+- print!
+- println!
+- eprint!
+- eprintln!
+
+### 연관 함수, associated function, static method
+```rust
+String::new
+```
+`new` associated function 이라고 불리며 타 언어의 static method 와 같다.
+
+### std
+```rust
+use std::io;
+let mut guess = String::new();
+io:stdin().read_line(&mut guess).expect("Failed to read line");
+let guess: u32 = guess.trim().parse().expect("Please type a number!");
+
+use std::cmp::Ordering;
+match guess.cmp(&secret_number) {
+    Ordering::Less => println!("Too small!"),
+    Ordering::Greater => println!("Too big!"),
+    Ordering::Equal => println!("You win!"),
+}
+```
+
+#### std::str
+```rust
+fn main() {
+    let raw_str = r"Escapes don't work here: \x3F \u{211D}";
+    println!("{}", raw_str);
+
+    let quotes = r#"And then I said: "There is no escape!""#;
+    println!("{}", quotes);
+
+    let longer_delimiter = r###"A string with "# in it. And even "##!"###;
+    println!("{}", longer_delimiter);
+}
+```
+토큰으로 사용될 `#` 갯수는 제한이 없음
+
+#### std::collections:HashMap
+
+#### std::collections:HashSet
+HashMap<T, ()>
+##### methods
+- union
+- difference
+- intersection
+- symmetric_difference - xor
+
+#### std::rc::Rc  
+여러 소유권이 필요한 경우를 위해 reference count 사용된다.
+```rust https://doc.rust-lang.org/rust-by-example/std/rc.html
+use std::rc::Rc;
+
+fn main() {
+    let rc_examples = "Rc examples".to_string();
+    {
+        let rc_a: Rc<String> = Rc::new(rc_examples);
+        {
+            let rc_b: Rc<String> = Rc::clone(&rc_a);
+            // Two `Rc`s are equal if their inner values are equal
+            println!("rc_a and rc_b are equal: {}", rc_a.eq(&rc_b));
+            
+            // We can use methods of a value directly
+            println!("Length of the value inside rc_a: {}", rc_a.len());
+            println!("Value of rc_b: {}", rc_b);
+            println!("--- rc_b is dropped out of scope ---");
+        }
+    }
+}
+```
+
+#### std::rc::Rc  
+atomic refernece counted, 
+
+#### std::sync::mpsc
+multiple producer single consumer
+producer(tx) 가 여럿인 것은 허용된다.
+
+```rust
+use std::sync::mpsc::{Sender, Receiver};
+
+let (tx, rx): (Sender<i32>, Receiver<i32>) = mpsc::channel();
+let thread_tx = tx.clone();
+```
+```rust
+tx.send(1).unwrap(); // non-blocking send
+rx.recv().unwrap(); // blocking recv
+```
+
+#### std::path::Path
+- posix::Path
+- windows::path
+상황에 맞게 사용된다.
+`to_str` 메서드는 utf-8 이 아닌경우 실패할 수 있다(Option).
+
+#### std::fs::File 
+#### std::process::{Command, Stdio}
+#### std::Child
+실행중인 자식 프로세스의 핸들을 노출한다.
+- stdin
+- stdout
+- stderr
+```rust
+let process = match Command::new("wc")
+                            .stdin(Stdio::piped())
+                            .stdout(Stdio::piped())
+                            .spawn() {
+    Err(why) => panic!("couldn't spawn wc: {}", why),
+    Ok(process) => process,
+};
+```
+
+#### std::os::unix
+#### std::env
+- env::args
+#### foreign function interface : ffi
+```rust
+#[link(name = "mylib")]
+extern {
+  fn a(z: Complex) -> Complex;
+}
+```
+C 바인딩을 지원, `unsafe`
+
+#### 매크로 macro
+```rust
+println!("hello, world!");
+println!("{}", "hello, world!");
+println!("{} {}", "hello", "world");
+```
+
+### enum
+- Result  
+  - method  
+    - expect(value: &str)
+- Ordering
+
+### ?
+`FromResidual` 이 구현된 타입에서 사용 가능, 제공되는 타입으로는 아래가 있음
+- Result<T, E>
+- Option<T>
+
+함수 결괏값으로 Error가 리턴되면 `해당 함수`를 `호출하는 함수`에서 리턴 처리한다.
+
+### dyn Trait, Trait Object
+
+### smart-pointer|스마트 포인터
+- Box<T>: usize 만 스택에 남기고 heap 에 저장한다.  
+- Rc<T>: 다중 소유권을 허용한다. Rc.clone()
+  - Arc<T>: Rc의 thread safe 버전
+  - `Rc::downgrade -> Weak<T>`
+- RefCell<T>: 다중 소유권을 허용한다. Rc.clone()
+  - .{burrow,burrow_mut} 메서드, burrowing rule 은 runtime에 체크되며 위반하는 경우 패닉,
+  - Mutex<T>: 공유 메모리에 접근을 제어한다. thread safe
+  - RefMut<T>
+  - Ref<T>
+- Weak<T>
+  - Rc<T> + RefCell<T> 조합으로 사용하면 cycle을 생성할 수 있음  
+  - cycle 이 생성되면 레퍼런스 카운트가 0 이 될 수 없어, 메모리 릭이 발생
+  - Weak<T> 는 Rc<T>참조시에 생성되는 `strong_count` 를 증가시키지 않고 `strong_count` 가 0이 되는 경우 함게 소멸
+    - e.g. branch <-> leaf 의 관계에서 상호 참조하지만 branch가 잘려나가면 leaf는 존재할 수 없는 경우
+    - `.upgrade -> Option<Weak<T>>`
+
+### array, slice, vec
+- arrray: [u8; 3] primitive 타입 fixed length
+- slice: &[..] array의 참조로 존재,
+- vec: growing array, 항상 힙에 저정된다.
+
+### question
+- [[@todo]] match { Err(ref e) => ... }, ref를 붙이는 이유
+- iter vs into_iter
+
+장
+---
+
+## 용어
+- 프레류드 (Prelude)  
+  모든 러스트 프로그램에 정의된 특별한 영역으로 해당 프로그램 또는 크레이트가 외부로 노출하는 타입을 명시한 모듈
+
+## link
+- [[rust-vim]]
+- [[book/the-rust-programming-language|러스트 프로그래밍 공식 가이드]]
+- [[valgrind]]
+- [[functional]]
+- [[cargo]]
+- [[rustling]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# rust"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# rust"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/rust"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# rust"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null

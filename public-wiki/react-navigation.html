@@ -1,0 +1,451 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-39c74ed669a18122.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-1939e229d7d9d28d.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># react-navigation</title><meta name="description" content="
+&gt; react-navigation@6 을 기반로 작성
+
+## [[typescript]] 설정
+### nested navigator
++ https://javascript.plainenglish.io/react-navigation-v6-with-typescript-nested-navigation-part-2-87844f643e37
++ https://github.com/deptno/salji.ro/commit/f91889c48a35a7ac5fb382045df77b7a4d2c4825
+
+## 문서
++ https://reactnavigation.org/docs/getting-started
+
+### Fundamentals
+#### Getting started
+- install `@react-navigation/native` 종속성
+  - `react-native-screens`
+    - android navive 파일 수정 필요, 문서 참고
+  - `react-native-safe-area-context`
+  - and run cmd `bundle exec pod install`
+- `index.js` or `App.tsx` 에서 `&lt;NavigationContainer&gt;` 로 감싸야한다
+
+#### Hello React Navigation
+- screen 간 전환 및 history 관리
+- web과 다른점은 제스쳐와 애니메이션을 제공
+- install
+  - `@react-navigation/native-stack`
+- `createNativeStackNavigator` 는 `Navigator`, `Screen` 을 리턴하고 이들로 네비게이터 구성
+  - `Navigator` 에 `initialRouteName` 을 넣어 초기 스크린을 지정할 수 있다
+  - Screen 의 component prop 에 inline 함수를 넣지 말것,  fast refresh 시에 state 유지 안됨
+  - 기본옵션은 `Navigator.screenOptions` 에 override 를 위한 옵션은 `Screen.options` 주입한다
+- `routeName` 는 case *in*sensitive
+- Component 와 함께 RouteName static property 를 넣어주면 코드에서 `map` 돌리기 편할 것으로 기대
+- `Screen` 에 children 으로 function: ReactElement 를 넣을 수 있으나 추천하지 않는다 주입은 Context 를 이용하라
+  - 퍼포먼스 optimize 가 깨진다
+
+#### Moving between screens
+- Screen Component 는 `navigation` prop 을 주입받고 이를 통해 `navigation.navigate(ROUTE_NAME)` 함수로 스크린 전환
+- `navigate` 는 동일 screen 으로의 이동을 무시한다
+  - [ ] TODO: history 스택에 있는경우 이를 찾는다고 되어있다. 히스토리에 해당 스크린 이후 스크린들은 어떻게되는건지 확인 필요
+    - summary 에 보면 해당 스크린 이후의 내용은 제거되는 것으로 보인다
+- `push` 는 동일 스크린도 history 에 있는지 여부와 상관없이 추가한다
+- `navigation.back` 버튼은 이전 스크린으로 이동, 유일한 스크린은 경우 `back` 버튼 자체가 노출되지 않음
+  - [[android]] back 버튼도 동일한 함수를 trigger 한다
+- `popToTop` 을 사용하여 *스택*의 첫번째 스크린으로 이동할 수 있다
+
+#### Passing parameters to routes
+- `navigate` 의 두번째로 `object` 를 전달
+  - Screen 컴포넌트에서는 `route.params` 를 통해 받을 수 있다
+- Screen 컴포넌트 *선언*  시에 `initialParmas` 을 주입할 수 있으며 이 경우 개별 params와 머지 후 전달된다
+- `navigation.setParams` 을 통해서 자신의 `params` 을 업데이트할 수 있다
+  - `options` 과는 다르니 주의하자,  `navigation.setOptions` 이 따로 있다
+- `params` 을 previus screen 으로 전달할때는 `navigation.naviate` 를 이용해서 전달하자
+  - [ ] TODO: `params: true` 옵션이 예제에 있는데 이건 찾아봐야한다
+- 중첩 네비게이터를 사용하는 경우는 네비게이터가 포함된 스크린의으로 naviate를 하면서 추가적으로 `screen` 속성을 전달한다
+```js
+navigation.navigate(&#x27;Account&#x27;, {
+  screen: &#x27;Settings&#x27;,
+  params: { user: &#x27;jane&#x27; },
+});
+```
+- `params` 는 화면을 표현하는데 필요한 정보가 들어가야한다.
+  - 여러 스크린에 걸친 데이터는 전역스토어로 간다.
+  - 프리미티브를 전달해서 만료된 데이터를 보여지지 않도록 한다
+  - `params` 이 후킹당했다고 생각했을때 핸들링이 가능해야한다
+  - 최소화한다
+
+#### Configuring the header bar
+- Screen Component 의 `options` prop 을 통해서 `title` 등을 헤더바에 설정할 수 있다
+  - 해당 prop 에 오브젝트 대신 함수쓰게되면 `{ navigation, route }` 를 주입받아 `route.params` 를 활용할 수 있게 된다
+- `navigation.setOptions` 를 통해서 헤더 업데이트가 가능
+- `headerStyle`, `headerTintColor`, and `headerTitleStyle` 를 통햇 헤더 스타일 제어
+- `navigation.screenOptions` 를 Screen 전역에 걸쳐 설정이 가능하다
+- `Screen.options` 에 `headerTitle` 를 통해서 ReactComponent 로 완전한 헤더 대체가 가능하다
+  - 기본값은 `&lt;Text /&gt;` 컴포넌트
+  - `headerLeft`, `headerRight` 속성을 통해서 커스텀 컴포넌트 주입이 가능하다
+    - Screen 컴포넌트와 상호작용이 필요한 경우 `setOptions` 을 통해 동일 한 UI를 한번더 그리면서 handler 를 **주입**한다
+- [ ] TODO: 백 버튼 내용은 사용할때 참조할 것
+
+#### Nesting navigators
+- nested route 에 params 을 주입한 경우 그 사이의 부모는 해당 params 에 접근하지 못한다
+- 핸들링 되지 않은 애들은 부모로 bubble up 된다
+  - *설계에 참고* 예를 들어 `navigation.toggleDrawer` 를 한경우 부모에 `DrawerNaviagor`가 존재해야지 처리된다
+  - 반대의 경우라면 `navigation.dispatch(DrawerActions.toggleDrawer())` 형태로 `dispatch` 가 가능하다
+  - 중첩된 네비게이터 안의 스크린은 부모의 이벤트를 받지 못한다 받기위해서는 명시적으로 리스너를 달아야한다
+```js
+const unsubscribe = navigation
+  .getParent(&#x27;MyTabs&#x27;)
+  .addListener(&#x27;tabPress&#x27;, (e) =&gt; {
+    // Do something
+  });
+```
+- [ ] TODO: 패턴이 많아서 사용할 때 읽어볼것
+
+#### Navigation lifecycle
+- [ ] Q: a navigate b 를 하고 b nativate a 를 한 경우 b 는 unmount 되는지?
+- `navigation` 에 `focus`, `blur` 이벤트가 존재
+  - `useFocusedEffect`
+  - `useIsFocused` 훅도 존재
+
+
+
+## link
+- [[react-native]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# react-navigation"/><meta property="og:description" content="
+&gt; react-navigation@6 을 기반로 작성
+
+## [[typescript]] 설정
+### nested navigator
++ https://javascript.plainenglish.io/react-navigation-v6-with-typescript-nested-navigation-part-2-87844f643e37
++ https://github.com/deptno/salji.ro/commit/f91889c48a35a7ac5fb382045df77b7a4d2c4825
+
+## 문서
++ https://reactnavigation.org/docs/getting-started
+
+### Fundamentals
+#### Getting started
+- install `@react-navigation/native` 종속성
+  - `react-native-screens`
+    - android navive 파일 수정 필요, 문서 참고
+  - `react-native-safe-area-context`
+  - and run cmd `bundle exec pod install`
+- `index.js` or `App.tsx` 에서 `&lt;NavigationContainer&gt;` 로 감싸야한다
+
+#### Hello React Navigation
+- screen 간 전환 및 history 관리
+- web과 다른점은 제스쳐와 애니메이션을 제공
+- install
+  - `@react-navigation/native-stack`
+- `createNativeStackNavigator` 는 `Navigator`, `Screen` 을 리턴하고 이들로 네비게이터 구성
+  - `Navigator` 에 `initialRouteName` 을 넣어 초기 스크린을 지정할 수 있다
+  - Screen 의 component prop 에 inline 함수를 넣지 말것,  fast refresh 시에 state 유지 안됨
+  - 기본옵션은 `Navigator.screenOptions` 에 override 를 위한 옵션은 `Screen.options` 주입한다
+- `routeName` 는 case *in*sensitive
+- Component 와 함께 RouteName static property 를 넣어주면 코드에서 `map` 돌리기 편할 것으로 기대
+- `Screen` 에 children 으로 function: ReactElement 를 넣을 수 있으나 추천하지 않는다 주입은 Context 를 이용하라
+  - 퍼포먼스 optimize 가 깨진다
+
+#### Moving between screens
+- Screen Component 는 `navigation` prop 을 주입받고 이를 통해 `navigation.navigate(ROUTE_NAME)` 함수로 스크린 전환
+- `navigate` 는 동일 screen 으로의 이동을 무시한다
+  - [ ] TODO: history 스택에 있는경우 이를 찾는다고 되어있다. 히스토리에 해당 스크린 이후 스크린들은 어떻게되는건지 확인 필요
+    - summary 에 보면 해당 스크린 이후의 내용은 제거되는 것으로 보인다
+- `push` 는 동일 스크린도 history 에 있는지 여부와 상관없이 추가한다
+- `navigation.back` 버튼은 이전 스크린으로 이동, 유일한 스크린은 경우 `back` 버튼 자체가 노출되지 않음
+  - [[android]] back 버튼도 동일한 함수를 trigger 한다
+- `popToTop` 을 사용하여 *스택*의 첫번째 스크린으로 이동할 수 있다
+
+#### Passing parameters to routes
+- `navigate` 의 두번째로 `object` 를 전달
+  - Screen 컴포넌트에서는 `route.params` 를 통해 받을 수 있다
+- Screen 컴포넌트 *선언*  시에 `initialParmas` 을 주입할 수 있으며 이 경우 개별 params와 머지 후 전달된다
+- `navigation.setParams` 을 통해서 자신의 `params` 을 업데이트할 수 있다
+  - `options` 과는 다르니 주의하자,  `navigation.setOptions` 이 따로 있다
+- `params` 을 previus screen 으로 전달할때는 `navigation.naviate` 를 이용해서 전달하자
+  - [ ] TODO: `params: true` 옵션이 예제에 있는데 이건 찾아봐야한다
+- 중첩 네비게이터를 사용하는 경우는 네비게이터가 포함된 스크린의으로 naviate를 하면서 추가적으로 `screen` 속성을 전달한다
+```js
+navigation.navigate(&#x27;Account&#x27;, {
+  screen: &#x27;Settings&#x27;,
+  params: { user: &#x27;jane&#x27; },
+});
+```
+- `params` 는 화면을 표현하는데 필요한 정보가 들어가야한다.
+  - 여러 스크린에 걸친 데이터는 전역스토어로 간다.
+  - 프리미티브를 전달해서 만료된 데이터를 보여지지 않도록 한다
+  - `params` 이 후킹당했다고 생각했을때 핸들링이 가능해야한다
+  - 최소화한다
+
+#### Configuring the header bar
+- Screen Component 의 `options` prop 을 통해서 `title` 등을 헤더바에 설정할 수 있다
+  - 해당 prop 에 오브젝트 대신 함수쓰게되면 `{ navigation, route }` 를 주입받아 `route.params` 를 활용할 수 있게 된다
+- `navigation.setOptions` 를 통해서 헤더 업데이트가 가능
+- `headerStyle`, `headerTintColor`, and `headerTitleStyle` 를 통햇 헤더 스타일 제어
+- `navigation.screenOptions` 를 Screen 전역에 걸쳐 설정이 가능하다
+- `Screen.options` 에 `headerTitle` 를 통해서 ReactComponent 로 완전한 헤더 대체가 가능하다
+  - 기본값은 `&lt;Text /&gt;` 컴포넌트
+  - `headerLeft`, `headerRight` 속성을 통해서 커스텀 컴포넌트 주입이 가능하다
+    - Screen 컴포넌트와 상호작용이 필요한 경우 `setOptions` 을 통해 동일 한 UI를 한번더 그리면서 handler 를 **주입**한다
+- [ ] TODO: 백 버튼 내용은 사용할때 참조할 것
+
+#### Nesting navigators
+- nested route 에 params 을 주입한 경우 그 사이의 부모는 해당 params 에 접근하지 못한다
+- 핸들링 되지 않은 애들은 부모로 bubble up 된다
+  - *설계에 참고* 예를 들어 `navigation.toggleDrawer` 를 한경우 부모에 `DrawerNaviagor`가 존재해야지 처리된다
+  - 반대의 경우라면 `navigation.dispatch(DrawerActions.toggleDrawer())` 형태로 `dispatch` 가 가능하다
+  - 중첩된 네비게이터 안의 스크린은 부모의 이벤트를 받지 못한다 받기위해서는 명시적으로 리스너를 달아야한다
+```js
+const unsubscribe = navigation
+  .getParent(&#x27;MyTabs&#x27;)
+  .addListener(&#x27;tabPress&#x27;, (e) =&gt; {
+    // Do something
+  });
+```
+- [ ] TODO: 패턴이 많아서 사용할 때 읽어볼것
+
+#### Navigation lifecycle
+- [ ] Q: a navigate b 를 하고 b nativate a 를 한 경우 b 는 unmount 되는지?
+- `navigation` 에 `focus`, `blur` 이벤트가 존재
+  - `useFocusedEffect`
+  - `useIsFocused` 훅도 존재
+
+
+
+## link
+- [[react-native]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/react-navigation"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# react-navigation"/><meta name="twitter:description" content="
+&gt; react-navigation@6 을 기반로 작성
+
+## [[typescript]] 설정
+### nested navigator
++ https://javascript.plainenglish.io/react-navigation-v6-with-typescript-nested-navigation-part-2-87844f643e37
++ https://github.com/deptno/salji.ro/commit/f91889c48a35a7ac5fb382045df77b7a4d2c4825
+
+## 문서
++ https://reactnavigation.org/docs/getting-started
+
+### Fundamentals
+#### Getting started
+- install `@react-navigation/native` 종속성
+  - `react-native-screens`
+    - android navive 파일 수정 필요, 문서 참고
+  - `react-native-safe-area-context`
+  - and run cmd `bundle exec pod install`
+- `index.js` or `App.tsx` 에서 `&lt;NavigationContainer&gt;` 로 감싸야한다
+
+#### Hello React Navigation
+- screen 간 전환 및 history 관리
+- web과 다른점은 제스쳐와 애니메이션을 제공
+- install
+  - `@react-navigation/native-stack`
+- `createNativeStackNavigator` 는 `Navigator`, `Screen` 을 리턴하고 이들로 네비게이터 구성
+  - `Navigator` 에 `initialRouteName` 을 넣어 초기 스크린을 지정할 수 있다
+  - Screen 의 component prop 에 inline 함수를 넣지 말것,  fast refresh 시에 state 유지 안됨
+  - 기본옵션은 `Navigator.screenOptions` 에 override 를 위한 옵션은 `Screen.options` 주입한다
+- `routeName` 는 case *in*sensitive
+- Component 와 함께 RouteName static property 를 넣어주면 코드에서 `map` 돌리기 편할 것으로 기대
+- `Screen` 에 children 으로 function: ReactElement 를 넣을 수 있으나 추천하지 않는다 주입은 Context 를 이용하라
+  - 퍼포먼스 optimize 가 깨진다
+
+#### Moving between screens
+- Screen Component 는 `navigation` prop 을 주입받고 이를 통해 `navigation.navigate(ROUTE_NAME)` 함수로 스크린 전환
+- `navigate` 는 동일 screen 으로의 이동을 무시한다
+  - [ ] TODO: history 스택에 있는경우 이를 찾는다고 되어있다. 히스토리에 해당 스크린 이후 스크린들은 어떻게되는건지 확인 필요
+    - summary 에 보면 해당 스크린 이후의 내용은 제거되는 것으로 보인다
+- `push` 는 동일 스크린도 history 에 있는지 여부와 상관없이 추가한다
+- `navigation.back` 버튼은 이전 스크린으로 이동, 유일한 스크린은 경우 `back` 버튼 자체가 노출되지 않음
+  - [[android]] back 버튼도 동일한 함수를 trigger 한다
+- `popToTop` 을 사용하여 *스택*의 첫번째 스크린으로 이동할 수 있다
+
+#### Passing parameters to routes
+- `navigate` 의 두번째로 `object` 를 전달
+  - Screen 컴포넌트에서는 `route.params` 를 통해 받을 수 있다
+- Screen 컴포넌트 *선언*  시에 `initialParmas` 을 주입할 수 있으며 이 경우 개별 params와 머지 후 전달된다
+- `navigation.setParams` 을 통해서 자신의 `params` 을 업데이트할 수 있다
+  - `options` 과는 다르니 주의하자,  `navigation.setOptions` 이 따로 있다
+- `params` 을 previus screen 으로 전달할때는 `navigation.naviate` 를 이용해서 전달하자
+  - [ ] TODO: `params: true` 옵션이 예제에 있는데 이건 찾아봐야한다
+- 중첩 네비게이터를 사용하는 경우는 네비게이터가 포함된 스크린의으로 naviate를 하면서 추가적으로 `screen` 속성을 전달한다
+```js
+navigation.navigate(&#x27;Account&#x27;, {
+  screen: &#x27;Settings&#x27;,
+  params: { user: &#x27;jane&#x27; },
+});
+```
+- `params` 는 화면을 표현하는데 필요한 정보가 들어가야한다.
+  - 여러 스크린에 걸친 데이터는 전역스토어로 간다.
+  - 프리미티브를 전달해서 만료된 데이터를 보여지지 않도록 한다
+  - `params` 이 후킹당했다고 생각했을때 핸들링이 가능해야한다
+  - 최소화한다
+
+#### Configuring the header bar
+- Screen Component 의 `options` prop 을 통해서 `title` 등을 헤더바에 설정할 수 있다
+  - 해당 prop 에 오브젝트 대신 함수쓰게되면 `{ navigation, route }` 를 주입받아 `route.params` 를 활용할 수 있게 된다
+- `navigation.setOptions` 를 통해서 헤더 업데이트가 가능
+- `headerStyle`, `headerTintColor`, and `headerTitleStyle` 를 통햇 헤더 스타일 제어
+- `navigation.screenOptions` 를 Screen 전역에 걸쳐 설정이 가능하다
+- `Screen.options` 에 `headerTitle` 를 통해서 ReactComponent 로 완전한 헤더 대체가 가능하다
+  - 기본값은 `&lt;Text /&gt;` 컴포넌트
+  - `headerLeft`, `headerRight` 속성을 통해서 커스텀 컴포넌트 주입이 가능하다
+    - Screen 컴포넌트와 상호작용이 필요한 경우 `setOptions` 을 통해 동일 한 UI를 한번더 그리면서 handler 를 **주입**한다
+- [ ] TODO: 백 버튼 내용은 사용할때 참조할 것
+
+#### Nesting navigators
+- nested route 에 params 을 주입한 경우 그 사이의 부모는 해당 params 에 접근하지 못한다
+- 핸들링 되지 않은 애들은 부모로 bubble up 된다
+  - *설계에 참고* 예를 들어 `navigation.toggleDrawer` 를 한경우 부모에 `DrawerNaviagor`가 존재해야지 처리된다
+  - 반대의 경우라면 `navigation.dispatch(DrawerActions.toggleDrawer())` 형태로 `dispatch` 가 가능하다
+  - 중첩된 네비게이터 안의 스크린은 부모의 이벤트를 받지 못한다 받기위해서는 명시적으로 리스너를 달아야한다
+```js
+const unsubscribe = navigation
+  .getParent(&#x27;MyTabs&#x27;)
+  .addListener(&#x27;tabPress&#x27;, (e) =&gt; {
+    // Do something
+  });
+```
+- [ ] TODO: 패턴이 많아서 사용할 때 읽어볼것
+
+#### Navigation lifecycle
+- [ ] Q: a navigate b 를 하고 b nativate a 를 한 경우 b 는 unmount 되는지?
+- `navigation` 에 `focus`, `blur` 이벤트가 존재
+  - `useFocusedEffect`
+  - `useIsFocused` 훅도 존재
+
+
+
+## link
+- [[react-native]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/4b51adf
+" class="bg-white text-black">4b51adf</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/react-navigation.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/react-navigation.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/react-navigation.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/react-navigation"><span class="underline">react-navigation</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/typescript"><span class="underline">typescript</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/android"><span class="underline">android</span><sup>23</sup></a></span><span><a class="text-blue-600" href="/public-wiki/react-native"><span class="underline">react-native</span><sup>90</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-11"><span class="underline">diary/2024-01-11</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-25"><span class="underline">diary/2024-01-25</span><sup>59</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#react-navigation">react-navigation</a></div><div class="pl-2"><a href="#typescript-설정">typescript 설정</a></div><div class="pl-4"><a href="#nested-navigator">nested navigator</a></div><div class="pl-2"><a href="#문서">문서</a></div><div class="pl-4"><a href="#fundamentals">Fundamentals</a></div><div class="pl-6"><a href="#getting-started">Getting started</a></div><div class="pl-6"><a href="#hello-react-navigation">Hello React Navigation</a></div><div class="pl-6"><a href="#moving-between-screens">Moving between screens</a></div><div class="pl-6"><a href="#passing-parameters-to-routes">Passing parameters to routes</a></div><div class="pl-6"><a href="#configuring-the-header-bar">Configuring the header bar</a></div><div class="pl-6"><a href="#nesting-navigators">Nesting navigators</a></div><div class="pl-6"><a href="#navigation-lifecycle">Navigation lifecycle</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="react-navigation">react-navigation</h1>
+<blockquote><p>react-navigation@6 을 기반로 작성</p></blockquote><h2 id="typescript-설정"><a href="typescript">typescript</a> 설정</h2>
+<h3 id="nested-navigator">nested navigator</h3>
+<ul>
+<li><a href="https://javascript.plainenglish.io/react-navigation-v6-with-typescript-nested-navigation-part-2-87844f643e37" target="_blank">[URL] https://javascript.plainenglish.io/react-navigation-v6-with-typescript-nested-navigation-part-2-87844f643e37</a></li>
+<li><a href="https://github.com/deptno/salji.ro/commit/f91889c48a35a7ac5fb382045df77b7a4d2c4825" target="_blank">[URL] https://github.com/deptno/salji.ro/commit/f91889c48a35a7ac5fb382045df77b7a4d2c4825</a></li>
+</ul>
+<h2 id="문서">문서</h2>
+<ul>
+<li><a href="https://reactnavigation.org/docs/getting-started" target="_blank">[URL] https://reactnavigation.org/docs/getting-started</a></li>
+</ul>
+<h3 id="fundamentals">Fundamentals</h3>
+<h4 id="getting-started">Getting started</h4>
+<ul>
+<li>install <code class="span">@react-navigation/native</code> 종속성<ul>
+<li><code class="span">react-native-screens</code><ul>
+<li>android navive 파일 수정 필요, 문서 참고</li>
+</ul>
+</li>
+<li><code class="span">react-native-safe-area-context</code></li>
+<li>and run cmd <code class="span">bundle exec pod install</code></li>
+</ul>
+</li>
+<li><code class="span">index.js</code> or <code class="span">App.tsx</code> 에서 <code class="span">&lt;NavigationContainer&gt;</code> 로 감싸야한다</li>
+</ul>
+<h4 id="hello-react-navigation">Hello React Navigation</h4>
+<ul>
+<li>screen 간 전환 및 history 관리</li>
+<li>web과 다른점은 제스쳐와 애니메이션을 제공</li>
+<li>install<ul>
+<li><code class="span">@react-navigation/native-stack</code></li>
+</ul>
+</li>
+<li><code class="span">createNativeStackNavigator</code> 는 <code class="span">Navigator</code>, <code class="span">Screen</code> 을 리턴하고 이들로 네비게이터 구성<ul>
+<li><code class="span">Navigator</code> 에 <code class="span">initialRouteName</code> 을 넣어 초기 스크린을 지정할 수 있다</li>
+<li>Screen 의 component prop 에 inline 함수를 넣지 말것,  fast refresh 시에 state 유지 안됨</li>
+<li>기본옵션은 <code class="span">Navigator.screenOptions</code> 에 override 를 위한 옵션은 <code class="span">Screen.options</code> 주입한다</li>
+</ul>
+</li>
+<li><code class="span">routeName</code> 는 case <em>in</em>sensitive</li>
+<li>Component 와 함께 RouteName static property 를 넣어주면 코드에서 <code class="span">map</code> 돌리기 편할 것으로 기대</li>
+<li><code class="span">Screen</code> 에 children 으로 function: ReactElement 를 넣을 수 있으나 추천하지 않는다 주입은 Context 를 이용하라<ul>
+<li>퍼포먼스 optimize 가 깨진다</li>
+</ul>
+</li>
+</ul>
+<h4 id="moving-between-screens">Moving between screens</h4>
+<ul>
+<li>Screen Component 는 <code class="span">navigation</code> prop 을 주입받고 이를 통해 <code class="span">navigation.navigate(ROUTE_NAME)</code> 함수로 스크린 전환</li>
+<li><code class="span">navigate</code> 는 동일 screen 으로의 이동을 무시한다<ul>
+<li><input disabled="" type="checkbox"> TODO: history 스택에 있는경우 이를 찾는다고 되어있다. 히스토리에 해당 스크린 이후 스크린들은 어떻게되는건지 확인 필요<ul>
+<li>summary 에 보면 해당 스크린 이후의 내용은 제거되는 것으로 보인다</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code class="span">push</code> 는 동일 스크린도 history 에 있는지 여부와 상관없이 추가한다</li>
+<li><code class="span">navigation.back</code> 버튼은 이전 스크린으로 이동, 유일한 스크린은 경우 <code class="span">back</code> 버튼 자체가 노출되지 않음<ul>
+<li><a href="android">android</a> back 버튼도 동일한 함수를 trigger 한다</li>
+</ul>
+</li>
+<li><code class="span">popToTop</code> 을 사용하여 <em>스택</em>의 첫번째 스크린으로 이동할 수 있다</li>
+</ul>
+<h4 id="passing-parameters-to-routes">Passing parameters to routes</h4>
+<ul>
+<li><code class="span">navigate</code> 의 두번째로 <code class="span">object</code> 를 전달<ul>
+<li>Screen 컴포넌트에서는 <code class="span">route.params</code> 를 통해 받을 수 있다</li>
+</ul>
+</li>
+<li>Screen 컴포넌트 <em>선언</em>  시에 <code class="span">initialParmas</code> 을 주입할 수 있으며 이 경우 개별 params와 머지 후 전달된다</li>
+<li><code class="span">navigation.setParams</code> 을 통해서 자신의 <code class="span">params</code> 을 업데이트할 수 있다<ul>
+<li><code class="span">options</code> 과는 다르니 주의하자,  <code class="span">navigation.setOptions</code> 이 따로 있다</li>
+</ul>
+</li>
+<li><code class="span">params</code> 을 previus screen 으로 전달할때는 <code class="span">navigation.naviate</code> 를 이용해서 전달하자<ul>
+<li><input disabled="" type="checkbox"> TODO: <code class="span">params: true</code> 옵션이 예제에 있는데 이건 찾아봐야한다</li>
+</ul>
+</li>
+<li>중첩 네비게이터를 사용하는 경우는 네비게이터가 포함된 스크린의으로 naviate를 하면서 추가적으로 <code class="span">screen</code> 속성을 전달한다</li>
+</ul>
+<pre><code class="hljs language-js">navigation.<span class="hljs-title function_">navigate</span>(<span class="hljs-string">&#x27;Account&#x27;</span>, {
+  <span class="hljs-attr">screen</span>: <span class="hljs-string">&#x27;Settings&#x27;</span>,
+  <span class="hljs-attr">params</span>: { <span class="hljs-attr">user</span>: <span class="hljs-string">&#x27;jane&#x27;</span> },
+});
+</code></pre><ul>
+<li><code class="span">params</code> 는 화면을 표현하는데 필요한 정보가 들어가야한다.<ul>
+<li>여러 스크린에 걸친 데이터는 전역스토어로 간다.</li>
+<li>프리미티브를 전달해서 만료된 데이터를 보여지지 않도록 한다</li>
+<li><code class="span">params</code> 이 후킹당했다고 생각했을때 핸들링이 가능해야한다</li>
+<li>최소화한다</li>
+</ul>
+</li>
+</ul>
+<h4 id="configuring-the-header-bar">Configuring the header bar</h4>
+<ul>
+<li>Screen Component 의 <code class="span">options</code> prop 을 통해서 <code class="span">title</code> 등을 헤더바에 설정할 수 있다<ul>
+<li>해당 prop 에 오브젝트 대신 함수쓰게되면 <code class="span">{ navigation, route }</code> 를 주입받아 <code class="span">route.params</code> 를 활용할 수 있게 된다</li>
+</ul>
+</li>
+<li><code class="span">navigation.setOptions</code> 를 통해서 헤더 업데이트가 가능</li>
+<li><code class="span">headerStyle</code>, <code class="span">headerTintColor</code>, and <code class="span">headerTitleStyle</code> 를 통햇 헤더 스타일 제어</li>
+<li><code class="span">navigation.screenOptions</code> 를 Screen 전역에 걸쳐 설정이 가능하다</li>
+<li><code class="span">Screen.options</code> 에 <code class="span">headerTitle</code> 를 통해서 ReactComponent 로 완전한 헤더 대체가 가능하다<ul>
+<li>기본값은 <code class="span">&lt;Text /&gt;</code> 컴포넌트</li>
+<li><code class="span">headerLeft</code>, <code class="span">headerRight</code> 속성을 통해서 커스텀 컴포넌트 주입이 가능하다<ul>
+<li>Screen 컴포넌트와 상호작용이 필요한 경우 <code class="span">setOptions</code> 을 통해 동일 한 UI를 한번더 그리면서 handler 를 <strong>주입</strong>한다</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> TODO: 백 버튼 내용은 사용할때 참조할 것</li>
+</ul>
+<h4 id="nesting-navigators">Nesting navigators</h4>
+<ul>
+<li>nested route 에 params 을 주입한 경우 그 사이의 부모는 해당 params 에 접근하지 못한다</li>
+<li>핸들링 되지 않은 애들은 부모로 bubble up 된다<ul>
+<li><em>설계에 참고</em> 예를 들어 <code class="span">navigation.toggleDrawer</code> 를 한경우 부모에 <code class="span">DrawerNaviagor</code>가 존재해야지 처리된다</li>
+<li>반대의 경우라면 <code class="span">navigation.dispatch(DrawerActions.toggleDrawer())</code> 형태로 <code class="span">dispatch</code> 가 가능하다</li>
+<li>중첩된 네비게이터 안의 스크린은 부모의 이벤트를 받지 못한다 받기위해서는 명시적으로 리스너를 달아야한다</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> unsubscribe = navigation
+  .<span class="hljs-title function_">getParent</span>(<span class="hljs-string">&#x27;MyTabs&#x27;</span>)
+  .<span class="hljs-title function_">addListener</span>(<span class="hljs-string">&#x27;tabPress&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+    <span class="hljs-comment">// Do something</span>
+  });
+</code></pre><ul>
+<li><input disabled="" type="checkbox"> TODO: 패턴이 많아서 사용할 때 읽어볼것</li>
+</ul>
+<h4 id="navigation-lifecycle">Navigation lifecycle</h4>
+<ul>
+<li><input disabled="" type="checkbox"> Q: a navigate b 를 하고 b nativate a 를 한 경우 b 는 unmount 되는지?</li>
+<li><code class="span">navigation</code> 에 <code class="span">focus</code>, <code class="span">blur</code> 이벤트가 존재<ul>
+<li><code class="span">useFocusedEffect</code></li>
+<li><code class="span">useIsFocused</code> 훅도 존재</li>
+</ul>
+</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="react-native">react-native</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-39c74ed669a18122.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-1939e229d7d9d28d.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"react-navigation\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"RVp-sixGV62Df6ZqM_iNo\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/react-navigation\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"react-navigation\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"react-navigation\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"react-navigation\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T25be,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"react-navigation\"\u003ereact-navigation\u003c/h1\u003e\n\u003cblockquote\u003e\u003cp\u003ereact-navigation@6 을 기반로 작성\u003c/p\u003e\u003c/blockquote\u003e\u003ch2 id=\"typescript-설정\"\u003e\u003ca href=\"typescript\"\u003etypescript\u003c/a\u003e 설정\u003c/h2\u003e\n\u003ch3 id=\"nested-navigator\"\u003enested navigator\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://javascript.plainenglish.io/react-navigation-v6-with-typescript-nested-navigation-part-2-87844f643e37\" target=\"_blank\"\u003e[URL] https://javascript.plainenglish.io/react-navigation-v6-with-typescript-nested-navigation-part-2-87844f643e37\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/deptno/salji.ro/commit/f91889c48a35a7ac5fb382045df77b7a4d2c4825\" target=\"_blank\"\u003e[URL] https://github.com/deptno/salji.ro/commit/f91889c48a35a7ac5fb382045df77b7a4d2c4825\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"문서\"\u003e문서\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://reactnavigation.org/docs/getting-started\" target=\"_blank\"\u003e[URL] https://reactnavigation.org/docs/getting-started\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"fundamentals\"\u003eFundamentals\u003c/h3\u003e\n\u003ch4 id=\"getting-started\"\u003eGetting started\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003einstall \u003ccode class=\"span\"\u003e@react-navigation/native\u003c/code\u003e 종속성\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ereact-native-screens\u003c/code\u003e\u003cul\u003e\n\u003cli\u003eandroid navive 파일 수정 필요, 문서 참고\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ereact-native-safe-area-context\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003eand run cmd \u003ccode class=\"span\"\u003ebundle exec pod install\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eindex.js\u003c/code\u003e or \u003ccode class=\"span\"\u003eApp.tsx\u003c/code\u003e 에서 \u003ccode class=\"span\"\u003e\u0026lt;NavigationContainer\u0026gt;\u003c/code\u003e 로 감싸야한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"hello-react-navigation\"\u003eHello React Navigation\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003escreen 간 전환 및 history 관리\u003c/li\u003e\n\u003cli\u003eweb과 다른점은 제스쳐와 애니메이션을 제공\u003c/li\u003e\n\u003cli\u003einstall\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e@react-navigation/native-stack\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ecreateNativeStackNavigator\u003c/code\u003e 는 \u003ccode class=\"span\"\u003eNavigator\u003c/code\u003e, \u003ccode class=\"span\"\u003eScreen\u003c/code\u003e 을 리턴하고 이들로 네비게이터 구성\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eNavigator\u003c/code\u003e 에 \u003ccode class=\"span\"\u003einitialRouteName\u003c/code\u003e 을 넣어 초기 스크린을 지정할 수 있다\u003c/li\u003e\n\u003cli\u003eScreen 의 component prop 에 inline 함수를 넣지 말것,  fast refresh 시에 state 유지 안됨\u003c/li\u003e\n\u003cli\u003e기본옵션은 \u003ccode class=\"span\"\u003eNavigator.screenOptions\u003c/code\u003e 에 override 를 위한 옵션은 \u003ccode class=\"span\"\u003eScreen.options\u003c/code\u003e 주입한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003erouteName\u003c/code\u003e 는 case \u003cem\u003ein\u003c/em\u003esensitive\u003c/li\u003e\n\u003cli\u003eComponent 와 함께 RouteName static property 를 넣어주면 코드에서 \u003ccode class=\"span\"\u003emap\u003c/code\u003e 돌리기 편할 것으로 기대\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eScreen\u003c/code\u003e 에 children 으로 function: ReactElement 를 넣을 수 있으나 추천하지 않는다 주입은 Context 를 이용하라\u003cul\u003e\n\u003cli\u003e퍼포먼스 optimize 가 깨진다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"moving-between-screens\"\u003eMoving between screens\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003eScreen Component 는 \u003ccode class=\"span\"\u003enavigation\u003c/code\u003e prop 을 주입받고 이를 통해 \u003ccode class=\"span\"\u003enavigation.navigate(ROUTE_NAME)\u003c/code\u003e 함수로 스크린 전환\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003enavigate\u003c/code\u003e 는 동일 screen 으로의 이동을 무시한다\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e TODO: history 스택에 있는경우 이를 찾는다고 되어있다. 히스토리에 해당 스크린 이후 스크린들은 어떻게되는건지 확인 필요\u003cul\u003e\n\u003cli\u003esummary 에 보면 해당 스크린 이후의 내용은 제거되는 것으로 보인다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003epush\u003c/code\u003e 는 동일 스크린도 history 에 있는지 여부와 상관없이 추가한다\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003enavigation.back\u003c/code\u003e 버튼은 이전 스크린으로 이동, 유일한 스크린은 경우 \u003ccode class=\"span\"\u003eback\u003c/code\u003e 버튼 자체가 노출되지 않음\u003cul\u003e\n\u003cli\u003e\u003ca href=\"android\"\u003eandroid\u003c/a\u003e back 버튼도 동일한 함수를 trigger 한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003epopToTop\u003c/code\u003e 을 사용하여 \u003cem\u003e스택\u003c/em\u003e의 첫번째 스크린으로 이동할 수 있다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"passing-parameters-to-routes\"\u003ePassing parameters to routes\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003enavigate\u003c/code\u003e 의 두번째로 \u003ccode class=\"span\"\u003eobject\u003c/code\u003e 를 전달\u003cul\u003e\n\u003cli\u003eScreen 컴포넌트에서는 \u003ccode class=\"span\"\u003eroute.params\u003c/code\u003e 를 통해 받을 수 있다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eScreen 컴포넌트 \u003cem\u003e선언\u003c/em\u003e  시에 \u003ccode class=\"span\"\u003einitialParmas\u003c/code\u003e 을 주입할 수 있으며 이 경우 개별 params와 머지 후 전달된다\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003enavigation.setParams\u003c/code\u003e 을 통해서 자신의 \u003ccode class=\"span\"\u003eparams\u003c/code\u003e 을 업데이트할 수 있다\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eoptions\u003c/code\u003e 과는 다르니 주의하자,  \u003ccode class=\"span\"\u003enavigation.setOptions\u003c/code\u003e 이 따로 있다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eparams\u003c/code\u003e 을 previus screen 으로 전달할때는 \u003ccode class=\"span\"\u003enavigation.naviate\u003c/code\u003e 를 이용해서 전달하자\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e TODO: \u003ccode class=\"span\"\u003eparams: true\u003c/code\u003e 옵션이 예제에 있는데 이건 찾아봐야한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e중첩 네비게이터를 사용하는 경우는 네비게이터가 포함된 스크린의으로 naviate를 하면서 추가적으로 \u003ccode class=\"span\"\u003escreen\u003c/code\u003e 속성을 전달한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-js\"\u003enavigation.\u003cspan class=\"hljs-title function_\"\u003enavigate\u003c/span\u003e(\u003cspan class=\"hljs-string\"\u003e\u0026#x27;Account\u0026#x27;\u003c/span\u003e, {\n  \u003cspan class=\"hljs-attr\"\u003escreen\u003c/span\u003e: \u003cspan class=\"hljs-string\"\u003e\u0026#x27;Settings\u0026#x27;\u003c/span\u003e,\n  \u003cspan class=\"hljs-attr\"\u003eparams\u003c/span\u003e: { \u003cspan class=\"hljs-attr\"\u003euser\u003c/span\u003e: \u003cspan class=\"hljs-string\"\u003e\u0026#x27;jane\u0026#x27;\u003c/span\u003e },\n});\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eparams\u003c/code\u003e 는 화면을 표현하는데 필요한 정보가 들어가야한다.\u003cul\u003e\n\u003cli\u003e여러 스크린에 걸친 데이터는 전역스토어로 간다.\u003c/li\u003e\n\u003cli\u003e프리미티브를 전달해서 만료된 데이터를 보여지지 않도록 한다\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eparams\u003c/code\u003e 이 후킹당했다고 생각했을때 핸들링이 가능해야한다\u003c/li\u003e\n\u003cli\u003e최소화한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"configuring-the-header-bar\"\u003eConfiguring the header bar\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003eScreen Component 의 \u003ccode class=\"span\"\u003eoptions\u003c/code\u003e prop 을 통해서 \u003ccode class=\"span\"\u003etitle\u003c/code\u003e 등을 헤더바에 설정할 수 있다\u003cul\u003e\n\u003cli\u003e해당 prop 에 오브젝트 대신 함수쓰게되면 \u003ccode class=\"span\"\u003e{ navigation, route }\u003c/code\u003e 를 주입받아 \u003ccode class=\"span\"\u003eroute.params\u003c/code\u003e 를 활용할 수 있게 된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003enavigation.setOptions\u003c/code\u003e 를 통해서 헤더 업데이트가 가능\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eheaderStyle\u003c/code\u003e, \u003ccode class=\"span\"\u003eheaderTintColor\u003c/code\u003e, and \u003ccode class=\"span\"\u003eheaderTitleStyle\u003c/code\u003e 를 통햇 헤더 스타일 제어\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003enavigation.screenOptions\u003c/code\u003e 를 Screen 전역에 걸쳐 설정이 가능하다\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eScreen.options\u003c/code\u003e 에 \u003ccode class=\"span\"\u003eheaderTitle\u003c/code\u003e 를 통해서 ReactComponent 로 완전한 헤더 대체가 가능하다\u003cul\u003e\n\u003cli\u003e기본값은 \u003ccode class=\"span\"\u003e\u0026lt;Text /\u0026gt;\u003c/code\u003e 컴포넌트\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eheaderLeft\u003c/code\u003e, \u003ccode class=\"span\"\u003eheaderRight\u003c/code\u003e 속성을 통해서 커스텀 컴포넌트 주입이 가능하다\u003cul\u003e\n\u003cli\u003eScreen 컴포넌트와 상호작용이 필요한 경우 \u003ccode class=\"span\"\u003esetOptions\u003c/code\u003e 을 통해 동일 한 UI를 한번더 그리면서 handler 를 \u003cstrong\u003e주입\u003c/strong\u003e한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e TODO: 백 버튼 내용은 사용할때 참조할 것\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"nesting-navigators\"\u003eNesting navigators\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003enested route 에 params 을 주입한 경우 그 사이의 부모는 해당 params 에 접근하지 못한다\u003c/li\u003e\n\u003cli\u003e핸들링 되지 않은 애들은 부모로 bubble up 된다\u003cul\u003e\n\u003cli\u003e\u003cem\u003e설계에 참고\u003c/em\u003e 예를 들어 \u003ccode class=\"span\"\u003enavigation.toggleDrawer\u003c/code\u003e 를 한경우 부모에 \u003ccode class=\"span\"\u003eDrawerNaviagor\u003c/code\u003e가 존재해야지 처리된다\u003c/li\u003e\n\u003cli\u003e반대의 경우라면 \u003ccode class=\"span\"\u003enavigation.dispatch(DrawerActions.toggleDrawer())\u003c/code\u003e 형태로 \u003ccode class=\"span\"\u003edispatch\u003c/code\u003e 가 가능하다\u003c/li\u003e\n\u003cli\u003e중첩된 네비게이터 안의 스크린은 부모의 이벤트를 받지 못한다 받기위해서는 명시적으로 리스너를 달아야한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-js\"\u003e\u003cspan class=\"hljs-keyword\"\u003econst\u003c/span\u003e unsubscribe = navigation\n  .\u003cspan class=\"hljs-title function_\"\u003egetParent\u003c/span\u003e(\u003cspan class=\"hljs-string\"\u003e\u0026#x27;MyTabs\u0026#x27;\u003c/span\u003e)\n  .\u003cspan class=\"hljs-title function_\"\u003eaddListener\u003c/span\u003e(\u003cspan class=\"hljs-string\"\u003e\u0026#x27;tabPress\u0026#x27;\u003c/span\u003e, \u003cspan class=\"hljs-function\"\u003e(\u003cspan class=\"hljs-params\"\u003ee\u003c/span\u003e) =\u0026gt;\u003c/span\u003e {\n    \u003cspan class=\"hljs-comment\"\u003e// Do something\u003c/span\u003e\n  });\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e TODO: 패턴이 많아서 사용할 때 읽어볼것\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"navigation-lifecycle\"\u003eNavigation lifecycle\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e Q: a navigate b 를 하고 b nativate a 를 한 경우 b 는 unmount 되는지?\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003enavigation\u003c/code\u003e 에 \u003ccode class=\"span\"\u003efocus\u003c/code\u003e, \u003ccode class=\"span\"\u003eblur\u003c/code\u003e 이벤트가 존재\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003euseFocusedEffect\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003euseIsFocused\u003c/code\u003e 훅도 존재\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"react-native\"\u003ereact-native\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/4b51adf\\n\",\"className\":\"bg-white text-black\",\"children\":\"4b51adf\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/react-navigation.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/react-navigation.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/react-navigation.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"react-navigation\",\"name\":\"react-navigation\",\"val\":3},{\"id\":\"typescript\",\"name\":\"typescript\",\"val\":5},{\"id\":\"android\",\"name\":\"android\",\"val\":23},{\"id\":\"react-native\",\"name\":\"react-native\",\"val\":90},{\"id\":\"diary/2024-01-11\",\"name\":\"diary/2024-01-11\",\"val\":9},{\"id\":\"diary/2024-01-25\",\"name\":\"diary/2024-01-25\",\"val\":59}],\"links\":[{\"source\":\"react-navigation\",\"target\":\"typescript\"},{\"source\":\"react-navigation\",\"target\":\"android\"},{\"source\":\"react-navigation\",\"target\":\"react-native\"},{\"source\":\"react-native\",\"target\":\"react-navigation\"},{\"source\":\"diary/2024-01-11\",\"target\":\"react-navigation\"},{\"source\":\"diary/2024-01-25\",\"target\":\"react-navigation\"},{\"source\":\"diary/2024-01-25\",\"target\":\"react-navigation\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"react-navigation\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/react-navigation\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"react-navigation\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"typescript\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/typescript\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"typescript\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"android\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/android\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"android\"}],[\"$\",\"sup\",null,{\"children\":23}]]}]}],[\"$\",\"span\",\"react-native\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/react-native\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"react-native\"}],[\"$\",\"sup\",null,{\"children\":90}]]}]}],[\"$\",\"span\",\"diary/2024-01-11\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-11\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-11\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"diary/2024-01-25\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-25\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-25\"}],[\"$\",\"sup\",null,{\"children\":59}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"react-navigation\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#react-navigation\",\"children\":\"react-navigation\"}]}],[\"$\",\"div\",\"typescript-설정\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#typescript-설정\",\"children\":\"typescript 설정\"}]}],[\"$\",\"div\",\"nested-navigator\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#nested-navigator\",\"children\":\"nested navigator\"}]}],[\"$\",\"div\",\"문서\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#문서\",\"children\":\"문서\"}]}],[\"$\",\"div\",\"fundamentals\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#fundamentals\",\"children\":\"Fundamentals\"}]}],[\"$\",\"div\",\"getting-started\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#getting-started\",\"children\":\"Getting started\"}]}],[\"$\",\"div\",\"hello-react-navigation\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#hello-react-navigation\",\"children\":\"Hello React Navigation\"}]}],[\"$\",\"div\",\"moving-between-screens\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#moving-between-screens\",\"children\":\"Moving between screens\"}]}],[\"$\",\"div\",\"passing-parameters-to-routes\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#passing-parameters-to-routes\",\"children\":\"Passing parameters to routes\"}]}],[\"$\",\"div\",\"configuring-the-header-bar\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#configuring-the-header-bar\",\"children\":\"Configuring the header bar\"}]}],[\"$\",\"div\",\"nesting-navigators\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#nesting-navigators\",\"children\":\"Nesting navigators\"}]}],[\"$\",\"div\",\"navigation-lifecycle\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#navigation-lifecycle\",\"children\":\"Navigation lifecycle\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T1693,"])</script><script>self.__next_f.push([1,"\n\u003e react-navigation@6 을 기반로 작성\n\n## [[typescript]] 설정\n### nested navigator\n+ https://javascript.plainenglish.io/react-navigation-v6-with-typescript-nested-navigation-part-2-87844f643e37\n+ https://github.com/deptno/salji.ro/commit/f91889c48a35a7ac5fb382045df77b7a4d2c4825\n\n## 문서\n+ https://reactnavigation.org/docs/getting-started\n\n### Fundamentals\n#### Getting started\n- install `@react-navigation/native` 종속성\n  - `react-native-screens`\n    - android navive 파일 수정 필요, 문서 참고\n  - `react-native-safe-area-context`\n  - and run cmd `bundle exec pod install`\n- `index.js` or `App.tsx` 에서 `\u003cNavigationContainer\u003e` 로 감싸야한다\n\n#### Hello React Navigation\n- screen 간 전환 및 history 관리\n- web과 다른점은 제스쳐와 애니메이션을 제공\n- install\n  - `@react-navigation/native-stack`\n- `createNativeStackNavigator` 는 `Navigator`, `Screen` 을 리턴하고 이들로 네비게이터 구성\n  - `Navigator` 에 `initialRouteName` 을 넣어 초기 스크린을 지정할 수 있다\n  - Screen 의 component prop 에 inline 함수를 넣지 말것,  fast refresh 시에 state 유지 안됨\n  - 기본옵션은 `Navigator.screenOptions` 에 override 를 위한 옵션은 `Screen.options` 주입한다\n- `routeName` 는 case *in*sensitive\n- Component 와 함께 RouteName static property 를 넣어주면 코드에서 `map` 돌리기 편할 것으로 기대\n- `Screen` 에 children 으로 function: ReactElement 를 넣을 수 있으나 추천하지 않는다 주입은 Context 를 이용하라\n  - 퍼포먼스 optimize 가 깨진다\n\n#### Moving between screens\n- Screen Component 는 `navigation` prop 을 주입받고 이를 통해 `navigation.navigate(ROUTE_NAME)` 함수로 스크린 전환\n- `navigate` 는 동일 screen 으로의 이동을 무시한다\n  - [ ] TODO: history 스택에 있는경우 이를 찾는다고 되어있다. 히스토리에 해당 스크린 이후 스크린들은 어떻게되는건지 확인 필요\n    - summary 에 보면 해당 스크린 이후의 내용은 제거되는 것으로 보인다\n- `push` 는 동일 스크린도 history 에 있는지 여부와 상관없이 추가한다\n- `navigation.back` 버튼은 이전 스크린으로 이동, 유일한 스크린은 경우 `back` 버튼 자체가 노출되지 않음\n  - [[android]] back 버튼도 동일한 함수를 trigger 한다\n- `popToTop` 을 사용하여 *스택*의 첫번째 스크린으로 이동할 수 있다\n\n#### Passing parameters to routes\n- `navigate` 의 두번째로 `object` 를 전달\n  - Screen 컴포넌트에서는 `route.params` 를 통해 받을 수 있다\n- Screen 컴포넌트 *선언*  시에 `initialParmas` 을 주입할 수 있으며 이 경우 개별 params와 머지 후 전달된다\n- `navigation.setParams` 을 통해서 자신의 `params` 을 업데이트할 수 있다\n  - `options` 과는 다르니 주의하자,  `navigation.setOptions` 이 따로 있다\n- `params` 을 previus screen 으로 전달할때는 `navigation.naviate` 를 이용해서 전달하자\n  - [ ] TODO: `params: true` 옵션이 예제에 있는데 이건 찾아봐야한다\n- 중첩 네비게이터를 사용하는 경우는 네비게이터가 포함된 스크린의으로 naviate를 하면서 추가적으로 `screen` 속성을 전달한다\n```js\nnavigation.navigate('Account', {\n  screen: 'Settings',\n  params: { user: 'jane' },\n});\n```\n- `params` 는 화면을 표현하는데 필요한 정보가 들어가야한다.\n  - 여러 스크린에 걸친 데이터는 전역스토어로 간다.\n  - 프리미티브를 전달해서 만료된 데이터를 보여지지 않도록 한다\n  - `params` 이 후킹당했다고 생각했을때 핸들링이 가능해야한다\n  - 최소화한다\n\n#### Configuring the header bar\n- Screen Component 의 `options` prop 을 통해서 `title` 등을 헤더바에 설정할 수 있다\n  - 해당 prop 에 오브젝트 대신 함수쓰게되면 `{ navigation, route }` 를 주입받아 `route.params` 를 활용할 수 있게 된다\n- `navigation.setOptions` 를 통해서 헤더 업데이트가 가능\n- `headerStyle`, `headerTintColor`, and `headerTitleStyle` 를 통햇 헤더 스타일 제어\n- `navigation.screenOptions` 를 Screen 전역에 걸쳐 설정이 가능하다\n- `Screen.options` 에 `headerTitle` 를 통해서 ReactComponent 로 완전한 헤더 대체가 가능하다\n  - 기본값은 `\u003cText /\u003e` 컴포넌트\n  - `headerLeft`, `headerRight` 속성을 통해서 커스텀 컴포넌트 주입이 가능하다\n    - Screen 컴포넌트와 상호작용이 필요한 경우 `setOptions` 을 통해 동일 한 UI를 한번더 그리면서 handler 를 **주입**한다\n- [ ] TODO: 백 버튼 내용은 사용할때 참조할 것\n\n#### Nesting navigators\n- nested route 에 params 을 주입한 경우 그 사이의 부모는 해당 params 에 접근하지 못한다\n- 핸들링 되지 않은 애들은 부모로 bubble up 된다\n  - *설계에 참고* 예를 들어 `navigation.toggleDrawer` 를 한경우 부모에 `DrawerNaviagor`가 존재해야지 처리된다\n  - 반대의 경우라면 `navigation.dispatch(DrawerActions.toggleDrawer())` 형태로 `dispatch` 가 가능하다\n  - 중첩된 네비게이터 안의 스크린은 부모의 이벤트를 받지 못한다 받기위해서는 명시적으로 리스너를 달아야한다\n```js\nconst unsubscribe = navigation\n  .getParent('MyTabs')\n  .addListener('tabPress', (e) =\u003e {\n    // Do something\n  });\n```\n- [ ] TODO: 패턴이 많아서 사용할 때 읽어볼것\n\n#### Navigation lifecycle\n- [ ] Q: a navigate b 를 하고 b nativate a 를 한 경우 b 는 unmount 되는지?\n- `navigation` 에 `focus`, `blur` 이벤트가 존재\n  - `useFocusedEffect`\n  - `useIsFocused` 훅도 존재\n\n\n\n## link\n- [[react-native]]\n"])</script><script>self.__next_f.push([1,"16:T1693,"])</script><script>self.__next_f.push([1,"\n\u003e react-navigation@6 을 기반로 작성\n\n## [[typescript]] 설정\n### nested navigator\n+ https://javascript.plainenglish.io/react-navigation-v6-with-typescript-nested-navigation-part-2-87844f643e37\n+ https://github.com/deptno/salji.ro/commit/f91889c48a35a7ac5fb382045df77b7a4d2c4825\n\n## 문서\n+ https://reactnavigation.org/docs/getting-started\n\n### Fundamentals\n#### Getting started\n- install `@react-navigation/native` 종속성\n  - `react-native-screens`\n    - android navive 파일 수정 필요, 문서 참고\n  - `react-native-safe-area-context`\n  - and run cmd `bundle exec pod install`\n- `index.js` or `App.tsx` 에서 `\u003cNavigationContainer\u003e` 로 감싸야한다\n\n#### Hello React Navigation\n- screen 간 전환 및 history 관리\n- web과 다른점은 제스쳐와 애니메이션을 제공\n- install\n  - `@react-navigation/native-stack`\n- `createNativeStackNavigator` 는 `Navigator`, `Screen` 을 리턴하고 이들로 네비게이터 구성\n  - `Navigator` 에 `initialRouteName` 을 넣어 초기 스크린을 지정할 수 있다\n  - Screen 의 component prop 에 inline 함수를 넣지 말것,  fast refresh 시에 state 유지 안됨\n  - 기본옵션은 `Navigator.screenOptions` 에 override 를 위한 옵션은 `Screen.options` 주입한다\n- `routeName` 는 case *in*sensitive\n- Component 와 함께 RouteName static property 를 넣어주면 코드에서 `map` 돌리기 편할 것으로 기대\n- `Screen` 에 children 으로 function: ReactElement 를 넣을 수 있으나 추천하지 않는다 주입은 Context 를 이용하라\n  - 퍼포먼스 optimize 가 깨진다\n\n#### Moving between screens\n- Screen Component 는 `navigation` prop 을 주입받고 이를 통해 `navigation.navigate(ROUTE_NAME)` 함수로 스크린 전환\n- `navigate` 는 동일 screen 으로의 이동을 무시한다\n  - [ ] TODO: history 스택에 있는경우 이를 찾는다고 되어있다. 히스토리에 해당 스크린 이후 스크린들은 어떻게되는건지 확인 필요\n    - summary 에 보면 해당 스크린 이후의 내용은 제거되는 것으로 보인다\n- `push` 는 동일 스크린도 history 에 있는지 여부와 상관없이 추가한다\n- `navigation.back` 버튼은 이전 스크린으로 이동, 유일한 스크린은 경우 `back` 버튼 자체가 노출되지 않음\n  - [[android]] back 버튼도 동일한 함수를 trigger 한다\n- `popToTop` 을 사용하여 *스택*의 첫번째 스크린으로 이동할 수 있다\n\n#### Passing parameters to routes\n- `navigate` 의 두번째로 `object` 를 전달\n  - Screen 컴포넌트에서는 `route.params` 를 통해 받을 수 있다\n- Screen 컴포넌트 *선언*  시에 `initialParmas` 을 주입할 수 있으며 이 경우 개별 params와 머지 후 전달된다\n- `navigation.setParams` 을 통해서 자신의 `params` 을 업데이트할 수 있다\n  - `options` 과는 다르니 주의하자,  `navigation.setOptions` 이 따로 있다\n- `params` 을 previus screen 으로 전달할때는 `navigation.naviate` 를 이용해서 전달하자\n  - [ ] TODO: `params: true` 옵션이 예제에 있는데 이건 찾아봐야한다\n- 중첩 네비게이터를 사용하는 경우는 네비게이터가 포함된 스크린의으로 naviate를 하면서 추가적으로 `screen` 속성을 전달한다\n```js\nnavigation.navigate('Account', {\n  screen: 'Settings',\n  params: { user: 'jane' },\n});\n```\n- `params` 는 화면을 표현하는데 필요한 정보가 들어가야한다.\n  - 여러 스크린에 걸친 데이터는 전역스토어로 간다.\n  - 프리미티브를 전달해서 만료된 데이터를 보여지지 않도록 한다\n  - `params` 이 후킹당했다고 생각했을때 핸들링이 가능해야한다\n  - 최소화한다\n\n#### Configuring the header bar\n- Screen Component 의 `options` prop 을 통해서 `title` 등을 헤더바에 설정할 수 있다\n  - 해당 prop 에 오브젝트 대신 함수쓰게되면 `{ navigation, route }` 를 주입받아 `route.params` 를 활용할 수 있게 된다\n- `navigation.setOptions` 를 통해서 헤더 업데이트가 가능\n- `headerStyle`, `headerTintColor`, and `headerTitleStyle` 를 통햇 헤더 스타일 제어\n- `navigation.screenOptions` 를 Screen 전역에 걸쳐 설정이 가능하다\n- `Screen.options` 에 `headerTitle` 를 통해서 ReactComponent 로 완전한 헤더 대체가 가능하다\n  - 기본값은 `\u003cText /\u003e` 컴포넌트\n  - `headerLeft`, `headerRight` 속성을 통해서 커스텀 컴포넌트 주입이 가능하다\n    - Screen 컴포넌트와 상호작용이 필요한 경우 `setOptions` 을 통해 동일 한 UI를 한번더 그리면서 handler 를 **주입**한다\n- [ ] TODO: 백 버튼 내용은 사용할때 참조할 것\n\n#### Nesting navigators\n- nested route 에 params 을 주입한 경우 그 사이의 부모는 해당 params 에 접근하지 못한다\n- 핸들링 되지 않은 애들은 부모로 bubble up 된다\n  - *설계에 참고* 예를 들어 `navigation.toggleDrawer` 를 한경우 부모에 `DrawerNaviagor`가 존재해야지 처리된다\n  - 반대의 경우라면 `navigation.dispatch(DrawerActions.toggleDrawer())` 형태로 `dispatch` 가 가능하다\n  - 중첩된 네비게이터 안의 스크린은 부모의 이벤트를 받지 못한다 받기위해서는 명시적으로 리스너를 달아야한다\n```js\nconst unsubscribe = navigation\n  .getParent('MyTabs')\n  .addListener('tabPress', (e) =\u003e {\n    // Do something\n  });\n```\n- [ ] TODO: 패턴이 많아서 사용할 때 읽어볼것\n\n#### Navigation lifecycle\n- [ ] Q: a navigate b 를 하고 b nativate a 를 한 경우 b 는 unmount 되는지?\n- `navigation` 에 `focus`, `blur` 이벤트가 존재\n  - `useFocusedEffect`\n  - `useIsFocused` 훅도 존재\n\n\n\n## link\n- [[react-native]]\n"])</script><script>self.__next_f.push([1,"17:T1693,"])</script><script>self.__next_f.push([1,"\n\u003e react-navigation@6 을 기반로 작성\n\n## [[typescript]] 설정\n### nested navigator\n+ https://javascript.plainenglish.io/react-navigation-v6-with-typescript-nested-navigation-part-2-87844f643e37\n+ https://github.com/deptno/salji.ro/commit/f91889c48a35a7ac5fb382045df77b7a4d2c4825\n\n## 문서\n+ https://reactnavigation.org/docs/getting-started\n\n### Fundamentals\n#### Getting started\n- install `@react-navigation/native` 종속성\n  - `react-native-screens`\n    - android navive 파일 수정 필요, 문서 참고\n  - `react-native-safe-area-context`\n  - and run cmd `bundle exec pod install`\n- `index.js` or `App.tsx` 에서 `\u003cNavigationContainer\u003e` 로 감싸야한다\n\n#### Hello React Navigation\n- screen 간 전환 및 history 관리\n- web과 다른점은 제스쳐와 애니메이션을 제공\n- install\n  - `@react-navigation/native-stack`\n- `createNativeStackNavigator` 는 `Navigator`, `Screen` 을 리턴하고 이들로 네비게이터 구성\n  - `Navigator` 에 `initialRouteName` 을 넣어 초기 스크린을 지정할 수 있다\n  - Screen 의 component prop 에 inline 함수를 넣지 말것,  fast refresh 시에 state 유지 안됨\n  - 기본옵션은 `Navigator.screenOptions` 에 override 를 위한 옵션은 `Screen.options` 주입한다\n- `routeName` 는 case *in*sensitive\n- Component 와 함께 RouteName static property 를 넣어주면 코드에서 `map` 돌리기 편할 것으로 기대\n- `Screen` 에 children 으로 function: ReactElement 를 넣을 수 있으나 추천하지 않는다 주입은 Context 를 이용하라\n  - 퍼포먼스 optimize 가 깨진다\n\n#### Moving between screens\n- Screen Component 는 `navigation` prop 을 주입받고 이를 통해 `navigation.navigate(ROUTE_NAME)` 함수로 스크린 전환\n- `navigate` 는 동일 screen 으로의 이동을 무시한다\n  - [ ] TODO: history 스택에 있는경우 이를 찾는다고 되어있다. 히스토리에 해당 스크린 이후 스크린들은 어떻게되는건지 확인 필요\n    - summary 에 보면 해당 스크린 이후의 내용은 제거되는 것으로 보인다\n- `push` 는 동일 스크린도 history 에 있는지 여부와 상관없이 추가한다\n- `navigation.back` 버튼은 이전 스크린으로 이동, 유일한 스크린은 경우 `back` 버튼 자체가 노출되지 않음\n  - [[android]] back 버튼도 동일한 함수를 trigger 한다\n- `popToTop` 을 사용하여 *스택*의 첫번째 스크린으로 이동할 수 있다\n\n#### Passing parameters to routes\n- `navigate` 의 두번째로 `object` 를 전달\n  - Screen 컴포넌트에서는 `route.params` 를 통해 받을 수 있다\n- Screen 컴포넌트 *선언*  시에 `initialParmas` 을 주입할 수 있으며 이 경우 개별 params와 머지 후 전달된다\n- `navigation.setParams` 을 통해서 자신의 `params` 을 업데이트할 수 있다\n  - `options` 과는 다르니 주의하자,  `navigation.setOptions` 이 따로 있다\n- `params` 을 previus screen 으로 전달할때는 `navigation.naviate` 를 이용해서 전달하자\n  - [ ] TODO: `params: true` 옵션이 예제에 있는데 이건 찾아봐야한다\n- 중첩 네비게이터를 사용하는 경우는 네비게이터가 포함된 스크린의으로 naviate를 하면서 추가적으로 `screen` 속성을 전달한다\n```js\nnavigation.navigate('Account', {\n  screen: 'Settings',\n  params: { user: 'jane' },\n});\n```\n- `params` 는 화면을 표현하는데 필요한 정보가 들어가야한다.\n  - 여러 스크린에 걸친 데이터는 전역스토어로 간다.\n  - 프리미티브를 전달해서 만료된 데이터를 보여지지 않도록 한다\n  - `params` 이 후킹당했다고 생각했을때 핸들링이 가능해야한다\n  - 최소화한다\n\n#### Configuring the header bar\n- Screen Component 의 `options` prop 을 통해서 `title` 등을 헤더바에 설정할 수 있다\n  - 해당 prop 에 오브젝트 대신 함수쓰게되면 `{ navigation, route }` 를 주입받아 `route.params` 를 활용할 수 있게 된다\n- `navigation.setOptions` 를 통해서 헤더 업데이트가 가능\n- `headerStyle`, `headerTintColor`, and `headerTitleStyle` 를 통햇 헤더 스타일 제어\n- `navigation.screenOptions` 를 Screen 전역에 걸쳐 설정이 가능하다\n- `Screen.options` 에 `headerTitle` 를 통해서 ReactComponent 로 완전한 헤더 대체가 가능하다\n  - 기본값은 `\u003cText /\u003e` 컴포넌트\n  - `headerLeft`, `headerRight` 속성을 통해서 커스텀 컴포넌트 주입이 가능하다\n    - Screen 컴포넌트와 상호작용이 필요한 경우 `setOptions` 을 통해 동일 한 UI를 한번더 그리면서 handler 를 **주입**한다\n- [ ] TODO: 백 버튼 내용은 사용할때 참조할 것\n\n#### Nesting navigators\n- nested route 에 params 을 주입한 경우 그 사이의 부모는 해당 params 에 접근하지 못한다\n- 핸들링 되지 않은 애들은 부모로 bubble up 된다\n  - *설계에 참고* 예를 들어 `navigation.toggleDrawer` 를 한경우 부모에 `DrawerNaviagor`가 존재해야지 처리된다\n  - 반대의 경우라면 `navigation.dispatch(DrawerActions.toggleDrawer())` 형태로 `dispatch` 가 가능하다\n  - 중첩된 네비게이터 안의 스크린은 부모의 이벤트를 받지 못한다 받기위해서는 명시적으로 리스너를 달아야한다\n```js\nconst unsubscribe = navigation\n  .getParent('MyTabs')\n  .addListener('tabPress', (e) =\u003e {\n    // Do something\n  });\n```\n- [ ] TODO: 패턴이 많아서 사용할 때 읽어볼것\n\n#### Navigation lifecycle\n- [ ] Q: a navigate b 를 하고 b nativate a 를 한 경우 b 는 unmount 되는지?\n- `navigation` 에 `focus`, `blur` 이벤트가 존재\n  - `useFocusedEffect`\n  - `useIsFocused` 훅도 존재\n\n\n\n## link\n- [[react-native]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# react-navigation\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# react-navigation\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/react-navigation\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# react-navigation\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
