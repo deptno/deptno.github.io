@@ -1,0 +1,203 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-bc971df7080b641f.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","iam","c"]
+0:["RNVjrwq2dSJDzlbiALfEr",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","iam","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"iam\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","iam","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:T942,<h1 id="iam">iam</h1>
+<h2 id="aws-에서의-api-인증">AWS 에서의 API 인증</h2>
+<ul>
+<li>API에 Authorization, Crendential 헤더가 포함된다.</li>
+<li>Authorization 에는 알고리즘이, Crendential 에는 access key + 알고리즘으로 서명된 sceret + 토큰(옵셔널) 이 포함된다.</li>
+<li>AWS SDK 는 이와같은 일을 자체적으로 처리해준다.</li>
+</ul>
+<h2 id="iam-identity-access-managment">IAM: identity access managment</h2>
+<h3 id="root-user">Root user</h3>
+<p>첫번째 IAM 유저를 생성한후 access key 자체를 비활성화 하는 것을 추천
+MFA 도 활성화 할 것</p>
+<h3 id="iam-policy">IAM Policy</h3>
+<ul>
+<li>Principle: 대상</li>
+<li>Effect: Allow or Deny</li>
+<li>Action: 허용할 액션</li>
+<li>Resource: 타겟 리소스(s3 등)</li>
+<li>Condition: 조건을 걸어 대상을 좁힐수 있음</li>
+</ul>
+<h3 id="principle---대상-타입">Principle - 대상 타입</h3>
+<ul>
+<li>aws access key</li>
+<li>iam user</li>
+<li>iam role - 서비스에 부여되는 정책으로 보면됨</li>
+</ul>
+<p>sts(session token)을 사용하면 더 안전한 사용이 가능</p>
+<p>RBAC -&gt; ABAC</p>
+<ul>
+<li>Role Based Access Control</li>
+<li>Attribute Based Access Control</li>
+</ul>
+<p>ABAC 을 하면 태그를 통해서 접근을 제어하는 IAM Policy 를 작성하는 것으로 편리하게 관리가 가능<br>뭘 만들때마다 중복적으로 policy 생성을 하지 않아도 됨</p>
+<h3 id="identity-based-policy-vs-resource-based-policy">Identity-based policy vs Resource-based policy</h3>
+<ul>
+<li>Identity-based policy 은 대상에 연결된다.</li>
+<li>Resource-based policy 은 타겟 리소스에 연결된다.</li>
+<li>policy에서 principle 에 <strong>빠지면</strong> resource-based policy 로 간주된다.</li>
+<li>동일 aws account 내에서는 두 policy 의 <strong>합집합</strong>으로 퍼미션이 결정된다.</li>
+<li>크로스 aws account 에서는 두 policy 의 <strong>교집합</strong>으로 퍼미션이 결정된다.</li>
+</ul>
+<h2 id="계정-권한-부여를-위한-롤">계정 권한 부여를 위한 롤</h2>
+<ul>
+<li>iam:PassRole - 권한 부여</li>
+<li>sts:AssumeRole</li>
+</ul>
+<h2 id="reference">reference</h2>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=c70glL9Znzs" target="_blank">[URL] https://www.youtube.com/watch?v=c70glL9Znzs</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/cb50144\n","className":"bg-white text-black","children":"cb50144"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/iam.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/iam.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/iam.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"iam","name":"iam","val":"$undefined"},{"id":"aws","name":"aws","val":9}],"links":[{"source":"aws","target":"iam"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","iam",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/iam","children":[["$","span",null,{"className":"underline","children":"iam"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","aws",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/aws","children":[["$","span",null,{"className":"underline","children":"aws"}],["$","sup",null,{"children":9}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","iam",{"className":"pl-0","children":["$","a",null,{"href":"#iam","children":"iam"}]}],["$","div","aws-에서의-api-인증",{"className":"pl-2","children":["$","a",null,{"href":"#aws-에서의-api-인증","children":"AWS 에서의 API 인증"}]}],["$","div","iam-identity-access-managment",{"className":"pl-2","children":["$","a",null,{"href":"#iam-identity-access-managment","children":"IAM: identity access managment"}]}],["$","div","root-user",{"className":"pl-4","children":["$","a",null,{"href":"#root-user","children":"Root user"}]}],["$","div","iam-policy",{"className":"pl-4","children":["$","a",null,{"href":"#iam-policy","children":"IAM Policy"}]}],["$","div","principle---대상-타입",{"className":"pl-4","children":["$","a",null,{"href":"#principle---대상-타입","children":"Principle - 대상 타입"}]}],["$","div","identity-based-policy-vs-resource-based-policy",{"className":"pl-4","children":["$","a",null,{"href":"#identity-based-policy-vs-resource-based-policy","children":"Identity-based policy vs Resource-based policy"}]}],["$","div","계정-권한-부여를-위한-롤",{"className":"pl-2","children":["$","a",null,{"href":"#계정-권한-부여를-위한-롤","children":"계정 권한 부여를 위한 롤"}]}],["$","div","reference",{"className":"pl-2","children":["$","a",null,{"href":"#reference","children":"reference"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:T6d1,
+## AWS 에서의 API 인증
+- API에 Authorization, Crendential 헤더가 포함된다.
+- Authorization 에는 알고리즘이, Crendential 에는 access key + 알고리즘으로 서명된 sceret + 토큰(옵셔널) 이 포함된다.
+- AWS SDK 는 이와같은 일을 자체적으로 처리해준다.
+
+## IAM: identity access managment
+### Root user
+첫번째 IAM 유저를 생성한후 access key 자체를 비활성화 하는 것을 추천
+MFA 도 활성화 할 것
+
+### IAM Policy
+- Principle: 대상
+- Effect: Allow or Deny
+- Action: 허용할 액션
+- Resource: 타겟 리소스(s3 등)
+- Condition: 조건을 걸어 대상을 좁힐수 있음
+
+### Principle - 대상 타입
+- aws access key
+- iam user
+- iam role - 서비스에 부여되는 정책으로 보면됨
+
+sts(session token)을 사용하면 더 안전한 사용이 가능
+
+RBAC -> ABAC
+
+- Role Based Access Control
+- Attribute Based Access Control
+
+ABAC 을 하면 태그를 통해서 접근을 제어하는 IAM Policy 를 작성하는 것으로 편리하게 관리가 가능  
+뭘 만들때마다 중복적으로 policy 생성을 하지 않아도 됨
+
+### Identity-based policy vs Resource-based policy
+- Identity-based policy 은 대상에 연결된다.
+- Resource-based policy 은 타겟 리소스에 연결된다.
+- policy에서 principle 에 **빠지면** resource-based policy 로 간주된다.
+- 동일 aws account 내에서는 두 policy 의 **합집합**으로 퍼미션이 결정된다.
+- 크로스 aws account 에서는 두 policy 의 **교집합**으로 퍼미션이 결정된다.
+
+## 계정 권한 부여를 위한 롤
+- iam:PassRole - 권한 부여
+- sts:AssumeRole
+
+## reference
+- [AWS IAM과 친해지기 - 김태수](https://www.youtube.com/watch?v=c70glL9Znzs)
+12:T6d1,
+## AWS 에서의 API 인증
+- API에 Authorization, Crendential 헤더가 포함된다.
+- Authorization 에는 알고리즘이, Crendential 에는 access key + 알고리즘으로 서명된 sceret + 토큰(옵셔널) 이 포함된다.
+- AWS SDK 는 이와같은 일을 자체적으로 처리해준다.
+
+## IAM: identity access managment
+### Root user
+첫번째 IAM 유저를 생성한후 access key 자체를 비활성화 하는 것을 추천
+MFA 도 활성화 할 것
+
+### IAM Policy
+- Principle: 대상
+- Effect: Allow or Deny
+- Action: 허용할 액션
+- Resource: 타겟 리소스(s3 등)
+- Condition: 조건을 걸어 대상을 좁힐수 있음
+
+### Principle - 대상 타입
+- aws access key
+- iam user
+- iam role - 서비스에 부여되는 정책으로 보면됨
+
+sts(session token)을 사용하면 더 안전한 사용이 가능
+
+RBAC -> ABAC
+
+- Role Based Access Control
+- Attribute Based Access Control
+
+ABAC 을 하면 태그를 통해서 접근을 제어하는 IAM Policy 를 작성하는 것으로 편리하게 관리가 가능  
+뭘 만들때마다 중복적으로 policy 생성을 하지 않아도 됨
+
+### Identity-based policy vs Resource-based policy
+- Identity-based policy 은 대상에 연결된다.
+- Resource-based policy 은 타겟 리소스에 연결된다.
+- policy에서 principle 에 **빠지면** resource-based policy 로 간주된다.
+- 동일 aws account 내에서는 두 policy 의 **합집합**으로 퍼미션이 결정된다.
+- 크로스 aws account 에서는 두 policy 의 **교집합**으로 퍼미션이 결정된다.
+
+## 계정 권한 부여를 위한 롤
+- iam:PassRole - 권한 부여
+- sts:AssumeRole
+
+## reference
+- [AWS IAM과 친해지기 - 김태수](https://www.youtube.com/watch?v=c70glL9Znzs)
+13:T6d1,
+## AWS 에서의 API 인증
+- API에 Authorization, Crendential 헤더가 포함된다.
+- Authorization 에는 알고리즘이, Crendential 에는 access key + 알고리즘으로 서명된 sceret + 토큰(옵셔널) 이 포함된다.
+- AWS SDK 는 이와같은 일을 자체적으로 처리해준다.
+
+## IAM: identity access managment
+### Root user
+첫번째 IAM 유저를 생성한후 access key 자체를 비활성화 하는 것을 추천
+MFA 도 활성화 할 것
+
+### IAM Policy
+- Principle: 대상
+- Effect: Allow or Deny
+- Action: 허용할 액션
+- Resource: 타겟 리소스(s3 등)
+- Condition: 조건을 걸어 대상을 좁힐수 있음
+
+### Principle - 대상 타입
+- aws access key
+- iam user
+- iam role - 서비스에 부여되는 정책으로 보면됨
+
+sts(session token)을 사용하면 더 안전한 사용이 가능
+
+RBAC -> ABAC
+
+- Role Based Access Control
+- Attribute Based Access Control
+
+ABAC 을 하면 태그를 통해서 접근을 제어하는 IAM Policy 를 작성하는 것으로 편리하게 관리가 가능  
+뭘 만들때마다 중복적으로 policy 생성을 하지 않아도 됨
+
+### Identity-based policy vs Resource-based policy
+- Identity-based policy 은 대상에 연결된다.
+- Resource-based policy 은 타겟 리소스에 연결된다.
+- policy에서 principle 에 **빠지면** resource-based policy 로 간주된다.
+- 동일 aws account 내에서는 두 policy 의 **합집합**으로 퍼미션이 결정된다.
+- 크로스 aws account 에서는 두 policy 의 **교집합**으로 퍼미션이 결정된다.
+
+## 계정 권한 부여를 위한 롤
+- iam:PassRole - 권한 부여
+- sts:AssumeRole
+
+## reference
+- [AWS IAM과 친해지기 - 김태수](https://www.youtube.com/watch?v=c70glL9Znzs)
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# iam"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# iam"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/iam"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# iam"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null

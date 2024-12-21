@@ -1,0 +1,984 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-bc971df7080b641f.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","ruby","c"]
+0:["RNVjrwq2dSJDzlbiALfEr",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","ruby","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"ruby\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","ruby","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+10:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+f:{"source":"ruby","target":"ruby"}
+11:T52b8,<h1 id="ruby">ruby</h1>
+<h2 id="system-ruby">system ruby</h2>
+<p>mac 을 설치하면 기본적으로 루비가 설치되어있다. </p>
+<h2 id="support-archtecture">support archtecture</h2>
+<pre><code class="hljs language-sh">$ ruby -v
+ruby 2.6.8p205 (2021-07-07 revision 67951) [universal.x86_64-darwin21]
+</code></pre><p><a href="universal">universal</a> 을 참고한다.</p>
+<pre><code class="hljs language-sh">$ <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;ruby-3.1.0&quot;</span> &gt; .ruby-version
+$ ruby -v
+ruby 3.1.0p0 (2021-12-25 revision fb4df44d16) [arm64-darwin21]
+</code></pre><p><a href="chruby">chruby</a> 를 사용하여 버전을 변경해보았따. 여기에는 <a href="arm64">arm64</a> 가 찍혀있다.</p>
+<p>native 빌드가 당연히 성능적인 이점이 있겠지만,<br>관련된 <a href="gem">gem</a> 들이 모든 호환성이 보장되는지는 알 수 없다.</p>
+<h2 id="ruby-gems-vs-bundler-정확하지-않음"><a href="ruby">ruby</a> gems vs <a href="bundler">bundler</a> <em>정확하지 않음</em></h2>
+<p>루비는 <a href="ruby-gems">ruby-gems</a> 를 가지고 있지만 패키지 파일(<a href="path">Gemfile</a>, <a href="path">Gemfile.lock</a>)을 지원하지 않는다.</p>
+<p>때문에 정확히 동일한 버저닝을 통해 여러 디펜던시를 관리하기 위해서는 이를 관리할 매니저가 필요한데 <a href="bundler">bundler</a> 가 이를 행한다.
+<a href="bundler">bundler</a> 또한 하나의 <a href="gem">gem</a> 으로 버전을 가진다.</p>
+<p>일단 <a href="bundler">bundler</a> 가 설치되면 이후부터는 <code class="span">bundle install</code> 을 통해 <a href="gem">gem</a> 들의 로컬(프로젝트 스코프) 설치가 가능해진다.
+각 <a href="gem">gem</a> 들은 <code class="span">bundle exe GEM</code> 와 같은 형태로 사용이 가능하다.</p>
+<h2 id="env"><a href="env">env</a></h2>
+<ul>
+<li><code class="span">GEM_PATH</code></li>
+<li><code class="span">GEM_HOME</code></li>
+</ul>
+<h2 id="트러블슈팅"><a href="error">트러블슈팅</a></h2>
+<p>system ruby 를 사용해서 설치를 하는 경우 bundler 가 존재하지 않고 이를 설치하려고하면 결국 시스템 퍼미션 권한을 요구한다.
+<a href="frum">frum</a> 같은 ruby version manager 를 사용해서 따로 버전을 설치하고 로컬로 관리하는 것이 좋을 것으로 생각된다.</p>
+<pre><code class="hljs language-sh">$ bundle <span class="hljs-built_in">exec</span> pod install
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:283:<span class="hljs-keyword">in</span> `find_spec_for_exe<span class="hljs-string">&#x27;: Could not find &#x27;</span>bundler<span class="hljs-string">&#x27; (2.2.20) required by your /APP/ios/Gemfile.lock. (Gem::GemNotFoundException)
+To update to the latest version installed on your system, run `bundle update --bundler`.
+To install the missing version, run `gem install bundler:2.2.20`
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:302:in `activate_bin_path&#x27;</span>
+        from /usr/bin/bundle:23:<span class="hljs-keyword">in</span> `&lt;main&gt;`<span class="hljs-string">&#x27;
+        
+$ bundle install
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:283:in `find_spec_for_exe&#x27;</span>: Could not find <span class="hljs-string">&#x27;bundler&#x27;</span> (2.2.20) required by your /APP/ios/Gemfile.lock. (Gem::GemNotFoundException)
+To update to the latest version installed on your system, run `bundle update --bundler`.
+To install the missing version, run `gem install bundler:2.2.20`
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:302:<span class="hljs-keyword">in</span> `activate_bin_path<span class="hljs-string">&#x27;
+        from /usr/bin/bundle:23:in `&lt;main&gt;`&#x27;</span>
+        
+$ gem install bundler:2.2.20
+ERROR:  While executing gem ... (Gem::FilePermissionError)
+    You don<span class="hljs-string">&#x27;t have write permissions for the /Library/Ruby/Gems/2.6.0 directory.</span>
+</code></pre><h3 id="ffi">ffi</h3>
+<pre><code class="hljs language-sh"> ~/.gem/ruby/2.6.8/gems/ffi-1.13.1/lib  <span class="hljs-built_in">ls</span>                                                                                      ok  17:54:54
+ffi          ffi.rb       ffi_c.bundle
+ ~/.gem/ruby/2.6.8/gems/ffi-1.13.1/lib  file ./ffi                                                                              ok  17:54:56
+./ffi: directory
+ ~/.gem/ruby/2.6.8/gems/ffi-1.13.1/lib  file ffi_c.bundle                                                                       ok  17:55:03
+ffi_c.bundle: Mach-O 64-bit bundle x86_64
+</code></pre><pre><code class="hljs language-sh">gem dependency -R
+Gem ffi-1.13.1
+  rake (~&gt; 13.0, development)
+  rake-compiler (~&gt; 1.0, development)
+  rake-compiler-dock (~&gt; 1.0, development)
+  rspec (~&gt; 2.14.1, development)
+  rubygems-tasks (~&gt; 0.2.4, development)
+  Used by
+    ethon-0.12.0 (ffi (&gt;= 1.3.0))
+</code></pre><h3 id="mac13-ventura">mac13 ventura</h3>
+<pre><code class="hljs language-sh">Installing json 2.6.2 with native extensions
+Installing unf_ext 0.0.8.2 with native extensions
+Installing ffi 1.15.5 with native extensions
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+
+    current directory: /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2/ext/json/ext/generator
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0 -r ./siteconf20221031-78847-d4qa86.rb extconf.rb
+creating Makefile
+
+current directory: /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2/ext/json/ext/generator
+make <span class="hljs-string">&quot;DESTDIR=&quot;</span> clean
+
+current directory: /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2/ext/json/ext/generator
+make <span class="hljs-string">&quot;DESTDIR=&quot;</span>
+compiling generator.c
+In file included from generator.c:1:
+In file included from ./../fbuffer/fbuffer.h:5:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/ruby.h:33:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/ruby/ruby.h:24:10: fatal error: <span class="hljs-string">&#x27;ruby/config.h&#x27;</span>
+file not found
+<span class="hljs-comment">#include &quot;ruby/config.h&quot;</span>
+         ^~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/ruby/ruby.h:24:10: note: did not find header
+<span class="hljs-string">&#x27;config.h&#x27;</span> <span class="hljs-keyword">in</span> framework <span class="hljs-string">&#x27;ruby&#x27;</span> (loaded from <span class="hljs-string">&#x27;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks&#x27;</span>)
+1 error generated.
+make: *** [generator.o] Error 1
+
+make failed, <span class="hljs-built_in">exit</span> code 2
+
+Gem files will remain installed <span class="hljs-keyword">in</span> /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2 <span class="hljs-keyword">for</span> inspection.
+Results logged to /Users/deptno/.gem/ruby/2.6.8/extensions/universal-darwin-22/2.6.0/json-2.6.2/gem_make.out
+
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:99:<span class="hljs-keyword">in</span> `run<span class="hljs-string">&#x27;
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:51:in `block in make&#x27;</span>
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:43:<span class="hljs-keyword">in</span> `each<span class="hljs-string">&#x27;
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:43:in `make&#x27;</span>
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:62:<span class="hljs-keyword">in</span> `block <span class="hljs-keyword">in</span> build<span class="hljs-string">&#x27;
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/tempfile.rb:295:in `open&#x27;</span>
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:29:<span class="hljs-keyword">in</span> `build<span class="hljs-string">&#x27;
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:185:in `block in build_extension&#x27;</span>
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/monitor.rb:235:<span class="hljs-keyword">in</span> `mon_synchronize<span class="hljs-string">&#x27;
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:181:in `build_extension&#x27;</span>
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:229:<span class="hljs-keyword">in</span> `block <span class="hljs-keyword">in</span> build_extensions<span class="hljs-string">&#x27;
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `each&#x27;</span>
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:<span class="hljs-keyword">in</span> `build_extensions<span class="hljs-string">&#x27;
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/installer.rb:830:in `build_extensions&#x27;</span>
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:71:<span class="hljs-keyword">in</span> `build_extensions<span class="hljs-string">&#x27;
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:28:in `install&#x27;</span>
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/source/rubygems.rb:204:<span class="hljs-keyword">in</span> `install<span class="hljs-string">&#x27;
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:54:in `install&#x27;</span>
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:16:<span class="hljs-keyword">in</span> `install_from_spec<span class="hljs-string">&#x27;
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:186:in `do_install&#x27;</span>
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:177:<span class="hljs-keyword">in</span> `block <span class="hljs-keyword">in</span> worker_pool<span class="hljs-string">&#x27;
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:62:in `apply_func&#x27;</span>
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:57:<span class="hljs-keyword">in</span> `block <span class="hljs-keyword">in</span> process_queue<span class="hljs-string">&#x27;
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `loop&#x27;</span>
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:<span class="hljs-keyword">in</span> `process_queue<span class="hljs-string">&#x27;
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:91:in `block (2 levels) in create_threads&#x27;</span>
+
+An error occurred <span class="hljs-keyword">while</span> installing json (2.6.2), and Bundler cannot <span class="hljs-built_in">continue</span>.
+
+In Gemfile:
+  cocoapods was resolved to 1.11.2, <span class="hljs-built_in">which</span> depends on
+    cocoapods-core was resolved to 1.11.2, <span class="hljs-built_in">which</span> depends on
+      algoliasearch was resolved to 1.27.5, <span class="hljs-built_in">which</span> depends on
+        json
+
+
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+
+    current directory: /Users/deptno/.gem/ruby/2.6.8/gems/unf_ext-0.0.8.2/ext/unf_ext
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0 -r ./siteconf20221031-78847-fkkg4h.rb extconf.rb
+checking <span class="hljs-keyword">for</span> -lstdc++... *** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of necessary
+libraries and/or headers.  Check the mkmf.log file <span class="hljs-keyword">for</span> more details.  You may
+need configuration options.
+
+Provided configuration options:
+        --with-opt-dir
+        --without-opt-dir
+        --with-opt-include
+        --without-opt-include=<span class="hljs-variable">${opt-dir}</span>/include
+        --with-opt-lib
+        --without-opt-lib=<span class="hljs-variable">${opt-dir}</span>/lib
+        --with-make-prog
+        --without-make-prog
+        --srcdir=.
+        --curdir
+        --ruby=/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/$(RUBY_BASE_NAME)
+        --with-static-libstdc++
+        --without-static-libstdc++
+        --with-stdc++lib
+        --without-stdc++lib
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:467:<span class="hljs-keyword">in</span> `try_do<span class="hljs-string">&#x27;: The compiler failed to generate an executable file. (RuntimeError)
+You have to install development tools first.
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:546:in `block in try_link0&#x27;</span>
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/tmpdir.rb:93:<span class="hljs-keyword">in</span> `mktmpdir<span class="hljs-string">&#x27;
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:543:in `try_link0&#x27;</span>
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:570:<span class="hljs-keyword">in</span> `try_link<span class="hljs-string">&#x27;
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:789:in `try_func&#x27;</span>
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:1016:<span class="hljs-keyword">in</span> `block <span class="hljs-keyword">in</span> have_library<span class="hljs-string">&#x27;
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:959:in `block in checking_for&#x27;</span>
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:361:<span class="hljs-keyword">in</span> `block (2 levels) <span class="hljs-keyword">in</span> postpone<span class="hljs-string">&#x27;
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:331:in `open&#x27;</span>
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:361:<span class="hljs-keyword">in</span> `block <span class="hljs-keyword">in</span> postpone<span class="hljs-string">&#x27;
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:331:in `open&#x27;</span>
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:357:<span class="hljs-keyword">in</span> `postpone<span class="hljs-string">&#x27;
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:958:in `checking_for&#x27;</span>
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:1011:<span class="hljs-keyword">in</span> `have_library<span class="hljs-string">&#x27;
+        from extconf.rb:6:in `&lt;main&gt;&#x27;</span>
+
+To see why this extension failed to compile, please check the mkmf.log <span class="hljs-built_in">which</span> can be found here:
+
+  /Users/deptno/.gem/ruby/2.6.8/extensions/universal-darwin-22/2.6.0/unf_ext-0.0.8.2/mkmf.log
+
+extconf failed, <span class="hljs-built_in">exit</span> code 1
+
+Gem files will remain installed <span class="hljs-keyword">in</span> /Users/deptno/.gem/ruby/2.6.8/gems/unf_ext-0.0.8.2 <span class="hljs-keyword">for</span> inspection.
+Results logged to /Users/deptno/.gem/ruby/2.6.8/extensions/universal-darwin-22/2.6.0/unf_ext-0.0.8.2/gem_make.out
+
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:99:<span class="hljs-keyword">in</span> `run<span class="hljs-string">&#x27;
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:47:in `block in build&#x27;</span>
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/tempfile.rb:295:<span class="hljs-keyword">in</span> `open<span class="hljs-string">&#x27;
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:29:in `build&#x27;</span>
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:185:<span class="hljs-keyword">in</span> `block <span class="hljs-keyword">in</span> build_extension<span class="hljs-string">&#x27;
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/monitor.rb:235:in `mon_synchronize&#x27;</span>
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:181:<span class="hljs-keyword">in</span> `build_extension<span class="hljs-string">&#x27;
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:229:in `block in build_extensions&#x27;</span>
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:<span class="hljs-keyword">in</span> `each<span class="hljs-string">&#x27;
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `build_extensions&#x27;</span>
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/installer.rb:830:<span class="hljs-keyword">in</span> `build_extensions<span class="hljs-string">&#x27;
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:71:in `build_extensions&#x27;</span>
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:28:<span class="hljs-keyword">in</span> `install<span class="hljs-string">&#x27;
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/source/rubygems.rb:204:in `install&#x27;</span>
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:54:<span class="hljs-keyword">in</span> `install<span class="hljs-string">&#x27;
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:16:in `install_from_spec&#x27;</span>
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:186:<span class="hljs-keyword">in</span> `do_install<span class="hljs-string">&#x27;
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:177:in `block in worker_pool&#x27;</span>
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:62:<span class="hljs-keyword">in</span> `apply_func<span class="hljs-string">&#x27;
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:57:in `block in process_queue&#x27;</span>
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:<span class="hljs-keyword">in</span> `loop<span class="hljs-string">&#x27;
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `process_queue&#x27;</span>
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:91:<span class="hljs-keyword">in</span> `block (2 levels) <span class="hljs-keyword">in</span> create_threads<span class="hljs-string">&#x27;
+
+An error occurred while installing unf_ext (0.0.8.2), and Bundler cannot continue.
+
+In Gemfile:
+  fastlane was resolved to 2.210.1, which depends on
+    faraday-cookie_jar was resolved to 0.0.7, which depends on
+      http-cookie was resolved to 1.0.5, which depends on
+        domain_name was resolved to 0.5.20190701, which depends on
+          unf was resolved to 0.1.4, which depends on
+            unf_ext</span>
+</code></pre><p>-&gt; <a href="chruby">chruby</a> 를 사용해서 <a href="ruby">ruby</a> 2.7.5 버전으로 업데이트
+-&gt; <a href="bundler">bundler</a> 2.3.8 버전 업데이트
+-&gt; 해결</p>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="bundler">bundler</a></li>
+<li><a href="ruby-gems">ruby-gems</a></li>
+<li><a href="frum">frum</a></li>
+<li><a href="chruby">chruby</a></li>
+<li><a href="universal">universal</a></li>
+<li><a href="x86_64">x86_64</a></li>
+<li><a href="arm64">arm64</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/cb50144\n","className":"bg-white text-black","children":"cb50144"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/ruby.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/ruby.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/ruby.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"ruby","name":"ruby","val":28},{"id":"universal","name":"universal","val":5},{"id":"chruby","name":"chruby","val":4},{"id":"arm64","name":"arm64","val":1},{"id":"gem","name":"gem","val":4},{"id":"ruby-gems","name":"ruby-gems","val":1},{"id":"bundler","name":"bundler","val":8},{"id":"path","name":"path","val":1},{"id":"env","name":"env","val":5},{"id":"error","name":"error","val":4},{"id":"frum","name":"frum","val":5},{"id":"x86_64","name":"x86_64","val":2},{"id":"language","name":"language","val":7},{"id":"react-native","name":"react-native","val":90},{"id":"ruby-install","name":"ruby-install","val":6},{"id":"setup-terminal","name":"setup-terminal","val":16},{"id":"diary/2024-01-25","name":"diary/2024-01-25","val":59},{"id":"diary/2024-06-01","name":"diary/2024-06-01","val":8}],"links":[{"source":"ruby","target":"universal"},{"source":"ruby","target":"chruby"},{"source":"ruby","target":"arm64"},{"source":"ruby","target":"gem"},{"source":"ruby","target":"ruby-gems"},{"source":"ruby","target":"bundler"},{"source":"ruby","target":"ruby-gems"},{"source":"ruby","target":"path"},{"source":"ruby","target":"path"},{"source":"ruby","target":"bundler"},{"source":"ruby","target":"bundler"},{"source":"ruby","target":"gem"},{"source":"ruby","target":"bundler"},{"source":"ruby","target":"gem"},{"source":"ruby","target":"gem"},{"source":"ruby","target":"env"},{"source":"ruby","target":"error"},{"source":"ruby","target":"frum"},{"source":"ruby","target":"chruby"},{"source":"ruby","target":"ruby"},{"source":"ruby","target":"bundler"},{"source":"ruby","target":"bundler"},{"source":"ruby","target":"ruby-gems"},{"source":"ruby","target":"frum"},{"source":"ruby","target":"chruby"},{"source":"ruby","target":"universal"},{"source":"ruby","target":"x86_64"},{"source":"ruby","target":"arm64"},{"source":"bundler","target":"ruby"},{"source":"frum","target":"ruby"},{"source":"gem","target":"ruby"},{"source":"language","target":"ruby"},{"source":"react-native","target":"ruby"},{"source":"ruby-install","target":"ruby"},"$f",{"source":"setup-terminal","target":"ruby"},{"source":"universal","target":"ruby"},{"source":"diary/2024-01-25","target":"ruby"},{"source":"diary/2024-06-01","target":"ruby"},{"source":"diary/2024-06-01","target":"ruby"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","ruby",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/ruby","children":[["$","span",null,{"className":"underline","children":"ruby"}],["$","sup",null,{"children":28}]]}]}],["$","span","universal",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/universal","children":[["$","span",null,{"className":"underline","children":"universal"}],["$","sup",null,{"children":5}]]}]}],["$","span","chruby",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/chruby","children":[["$","span",null,{"className":"underline","children":"chruby"}],["$","sup",null,{"children":4}]]}]}],["$","span","arm64",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/arm64","children":[["$","span",null,{"className":"underline","children":"arm64"}],["$","sup",null,{"children":1}]]}]}],["$","span","gem",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/gem","children":[["$","span",null,{"className":"underline","children":"gem"}],["$","sup",null,{"children":4}]]}]}],["$","span","ruby-gems",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/ruby-gems","children":[["$","span",null,{"className":"underline","children":"ruby-gems"}],["$","sup",null,{"children":1}]]}]}],["$","span","bundler",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/bundler","children":[["$","span",null,{"className":"underline","children":"bundler"}],["$","sup",null,{"children":8}]]}]}],["$","span","path",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/path","children":[["$","span",null,{"className":"underline","children":"path"}],["$","sup",null,{"children":1}]]}]}],["$","span","env",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/env","children":[["$","span",null,{"className":"underline","children":"env"}],["$","sup",null,{"children":5}]]}]}],["$","span","error",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/error","children":[["$","span",null,{"className":"underline","children":"error"}],["$","sup",null,{"children":4}]]}]}],["$","span","frum",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/frum","children":[["$","span",null,{"className":"underline","children":"frum"}],["$","sup",null,{"children":5}]]}]}],["$","span","x86_64",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/x86_64","children":[["$","span",null,{"className":"underline","children":"x86_64"}],["$","sup",null,{"children":2}]]}]}],["$","span","language",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/language","children":[["$","span",null,{"className":"underline","children":"language"}],["$","sup",null,{"children":7}]]}]}],["$","span","react-native",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/react-native","children":[["$","span",null,{"className":"underline","children":"react-native"}],["$","sup",null,{"children":90}]]}]}],["$","span","ruby-install",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/ruby-install","children":[["$","span",null,{"className":"underline","children":"ruby-install"}],["$","sup",null,{"children":6}]]}]}],["$","span","setup-terminal",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/setup-terminal","children":[["$","span",null,{"className":"underline","children":"setup-terminal"}],["$","sup",null,{"children":16}]]}]}],["$","span","diary/2024-01-25",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-01-25","children":[["$","span",null,{"className":"underline","children":"diary/2024-01-25"}],["$","sup",null,{"children":59}]]}]}],["$","span","diary/2024-06-01",{"children":["$","$L10",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-06-01","children":[["$","span",null,{"className":"underline","children":"diary/2024-06-01"}],["$","sup",null,{"children":8}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","ruby",{"className":"pl-0","children":["$","a",null,{"href":"#ruby","children":"ruby"}]}],["$","div","system-ruby",{"className":"pl-2","children":["$","a",null,{"href":"#system-ruby","children":"system ruby"}]}],["$","div","support-archtecture",{"className":"pl-2","children":["$","a",null,{"href":"#support-archtecture","children":"support archtecture"}]}],["$","div","ruby-gems-vs-bundler-정확하지-않음",{"className":"pl-2","children":["$","a",null,{"href":"#ruby-gems-vs-bundler-정확하지-않음","children":"ruby gems vs bundler 정확하지 않음"}]}],["$","div","env",{"className":"pl-2","children":["$","a",null,{"href":"#env","children":"env"}]}],["$","div","트러블슈팅",{"className":"pl-2","children":["$","a",null,{"href":"#트러블슈팅","children":"트러블슈팅"}]}],["$","div","ffi",{"className":"pl-4","children":["$","a",null,{"href":"#ffi","children":"ffi"}]}],["$","div","mac13-ventura",{"className":"pl-4","children":["$","a",null,{"href":"#mac13-ventura","children":"mac13 ventura"}]}],["$","div","link",{"className":"pl-2","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$11"}}]]}]]
+12:T3d8e,
+## system ruby
+mac 을 설치하면 기본적으로 루비가 설치되어있다. 
+
+## support archtecture
+```sh
+$ ruby -v
+ruby 2.6.8p205 (2021-07-07 revision 67951) [universal.x86_64-darwin21]
+```
+[[universal]] 을 참고한다.
+
+```sh
+$ echo "ruby-3.1.0" > .ruby-version
+$ ruby -v
+ruby 3.1.0p0 (2021-12-25 revision fb4df44d16) [arm64-darwin21]
+ ```
+[[chruby]] 를 사용하여 버전을 변경해보았따. 여기에는 [[arm64]] 가 찍혀있다.
+
+native 빌드가 당연히 성능적인 이점이 있겠지만,  
+관련된 [[gem]] 들이 모든 호환성이 보장되는지는 알 수 없다.
+
+## [[ruby-gems|ruby]] gems vs [[bundler]] *정확하지 않음*
+루비는 [[ruby-gems]] 를 가지고 있지만 패키지 파일([[path|Gemfile]], [[path|Gemfile.lock]])을 지원하지 않는다.
+
+때문에 정확히 동일한 버저닝을 통해 여러 디펜던시를 관리하기 위해서는 이를 관리할 매니저가 필요한데 [[bundler]] 가 이를 행한다.
+[[bundler]] 또한 하나의 [[gem]] 으로 버전을 가진다.
+
+일단 [[bundler]] 가 설치되면 이후부터는 `bundle install` 을 통해 [[gem]] 들의 로컬(프로젝트 스코프) 설치가 가능해진다.
+각 [[gem]] 들은 `bundle exe GEM` 와 같은 형태로 사용이 가능하다.
+
+## [[env]]
+- `GEM_PATH`
+- `GEM_HOME`
+
+## [[error|트러블슈팅]]
+system ruby 를 사용해서 설치를 하는 경우 bundler 가 존재하지 않고 이를 설치하려고하면 결국 시스템 퍼미션 권한을 요구한다.
+[[frum]] 같은 ruby version manager 를 사용해서 따로 버전을 설치하고 로컬로 관리하는 것이 좋을 것으로 생각된다.
+
+```sh
+$ bundle exec pod install
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:283:in `find_spec_for_exe': Could not find 'bundler' (2.2.20) required by your /APP/ios/Gemfile.lock. (Gem::GemNotFoundException)
+To update to the latest version installed on your system, run `bundle update --bundler`.
+To install the missing version, run `gem install bundler:2.2.20`
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:302:in `activate_bin_path'
+        from /usr/bin/bundle:23:in `<main>`'
+        
+$ bundle install
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:283:in `find_spec_for_exe': Could not find 'bundler' (2.2.20) required by your /APP/ios/Gemfile.lock. (Gem::GemNotFoundException)
+To update to the latest version installed on your system, run `bundle update --bundler`.
+To install the missing version, run `gem install bundler:2.2.20`
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:302:in `activate_bin_path'
+        from /usr/bin/bundle:23:in `<main>`'
+        
+$ gem install bundler:2.2.20
+ERROR:  While executing gem ... (Gem::FilePermissionError)
+    You don't have write permissions for the /Library/Ruby/Gems/2.6.0 directory.
+```
+
+### ffi
+```sh
+ ~/.gem/ruby/2.6.8/gems/ffi-1.13.1/lib  ls                                                                                      ok  17:54:54
+ffi          ffi.rb       ffi_c.bundle
+ ~/.gem/ruby/2.6.8/gems/ffi-1.13.1/lib  file ./ffi                                                                              ok  17:54:56
+./ffi: directory
+ ~/.gem/ruby/2.6.8/gems/ffi-1.13.1/lib  file ffi_c.bundle                                                                       ok  17:55:03
+ffi_c.bundle: Mach-O 64-bit bundle x86_64
+```
+```sh
+gem dependency -R
+Gem ffi-1.13.1
+  rake (~> 13.0, development)
+  rake-compiler (~> 1.0, development)
+  rake-compiler-dock (~> 1.0, development)
+  rspec (~> 2.14.1, development)
+  rubygems-tasks (~> 0.2.4, development)
+  Used by
+    ethon-0.12.0 (ffi (>= 1.3.0))
+```
+
+### mac13 ventura
+```sh
+Installing json 2.6.2 with native extensions
+Installing unf_ext 0.0.8.2 with native extensions
+Installing ffi 1.15.5 with native extensions
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+
+    current directory: /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2/ext/json/ext/generator
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0 -r ./siteconf20221031-78847-d4qa86.rb extconf.rb
+creating Makefile
+
+current directory: /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2/ext/json/ext/generator
+make "DESTDIR=" clean
+
+current directory: /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2/ext/json/ext/generator
+make "DESTDIR="
+compiling generator.c
+In file included from generator.c:1:
+In file included from ./../fbuffer/fbuffer.h:5:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/ruby.h:33:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/ruby/ruby.h:24:10: fatal error: 'ruby/config.h'
+file not found
+#include "ruby/config.h"
+         ^~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/ruby/ruby.h:24:10: note: did not find header
+'config.h' in framework 'ruby' (loaded from '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks')
+1 error generated.
+make: *** [generator.o] Error 1
+
+make failed, exit code 2
+
+Gem files will remain installed in /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2 for inspection.
+Results logged to /Users/deptno/.gem/ruby/2.6.8/extensions/universal-darwin-22/2.6.0/json-2.6.2/gem_make.out
+
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:99:in `run'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:51:in `block in make'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:43:in `each'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:43:in `make'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:62:in `block in build'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/tempfile.rb:295:in `open'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:29:in `build'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:185:in `block in build_extension'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/monitor.rb:235:in `mon_synchronize'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:181:in `build_extension'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:229:in `block in build_extensions'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `each'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `build_extensions'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/installer.rb:830:in `build_extensions'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:71:in `build_extensions'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:28:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/source/rubygems.rb:204:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:54:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:16:in `install_from_spec'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:186:in `do_install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:177:in `block in worker_pool'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:62:in `apply_func'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:57:in `block in process_queue'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `loop'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `process_queue'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:91:in `block (2 levels) in create_threads'
+
+An error occurred while installing json (2.6.2), and Bundler cannot continue.
+
+In Gemfile:
+  cocoapods was resolved to 1.11.2, which depends on
+    cocoapods-core was resolved to 1.11.2, which depends on
+      algoliasearch was resolved to 1.27.5, which depends on
+        json
+
+
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+
+    current directory: /Users/deptno/.gem/ruby/2.6.8/gems/unf_ext-0.0.8.2/ext/unf_ext
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0 -r ./siteconf20221031-78847-fkkg4h.rb extconf.rb
+checking for -lstdc++... *** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of necessary
+libraries and/or headers.  Check the mkmf.log file for more details.  You may
+need configuration options.
+
+Provided configuration options:
+        --with-opt-dir
+        --without-opt-dir
+        --with-opt-include
+        --without-opt-include=${opt-dir}/include
+        --with-opt-lib
+        --without-opt-lib=${opt-dir}/lib
+        --with-make-prog
+        --without-make-prog
+        --srcdir=.
+        --curdir
+        --ruby=/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/$(RUBY_BASE_NAME)
+        --with-static-libstdc++
+        --without-static-libstdc++
+        --with-stdc++lib
+        --without-stdc++lib
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:467:in `try_do': The compiler failed to generate an executable file. (RuntimeError)
+You have to install development tools first.
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:546:in `block in try_link0'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/tmpdir.rb:93:in `mktmpdir'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:543:in `try_link0'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:570:in `try_link'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:789:in `try_func'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:1016:in `block in have_library'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:959:in `block in checking_for'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:361:in `block (2 levels) in postpone'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:331:in `open'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:361:in `block in postpone'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:331:in `open'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:357:in `postpone'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:958:in `checking_for'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:1011:in `have_library'
+        from extconf.rb:6:in `<main>'
+
+To see why this extension failed to compile, please check the mkmf.log which can be found here:
+
+  /Users/deptno/.gem/ruby/2.6.8/extensions/universal-darwin-22/2.6.0/unf_ext-0.0.8.2/mkmf.log
+
+extconf failed, exit code 1
+
+Gem files will remain installed in /Users/deptno/.gem/ruby/2.6.8/gems/unf_ext-0.0.8.2 for inspection.
+Results logged to /Users/deptno/.gem/ruby/2.6.8/extensions/universal-darwin-22/2.6.0/unf_ext-0.0.8.2/gem_make.out
+
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:99:in `run'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:47:in `block in build'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/tempfile.rb:295:in `open'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:29:in `build'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:185:in `block in build_extension'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/monitor.rb:235:in `mon_synchronize'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:181:in `build_extension'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:229:in `block in build_extensions'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `each'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `build_extensions'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/installer.rb:830:in `build_extensions'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:71:in `build_extensions'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:28:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/source/rubygems.rb:204:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:54:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:16:in `install_from_spec'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:186:in `do_install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:177:in `block in worker_pool'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:62:in `apply_func'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:57:in `block in process_queue'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `loop'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `process_queue'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:91:in `block (2 levels) in create_threads'
+
+An error occurred while installing unf_ext (0.0.8.2), and Bundler cannot continue.
+
+In Gemfile:
+  fastlane was resolved to 2.210.1, which depends on
+    faraday-cookie_jar was resolved to 0.0.7, which depends on
+      http-cookie was resolved to 1.0.5, which depends on
+        domain_name was resolved to 0.5.20190701, which depends on
+          unf was resolved to 0.1.4, which depends on
+            unf_ext
+```
+-> [[chruby]] 를 사용해서 [[ruby]] 2.7.5 버전으로 업데이트
+-> [[bundler]] 2.3.8 버전 업데이트
+-> 해결
+
+## link
+- [[bundler]]
+- [[ruby-gems]]
+- [[frum]]
+- [[chruby]]
+- [[universal]]
+- [[x86_64]]
+- [[arm64]]
+13:T3d8e,
+## system ruby
+mac 을 설치하면 기본적으로 루비가 설치되어있다. 
+
+## support archtecture
+```sh
+$ ruby -v
+ruby 2.6.8p205 (2021-07-07 revision 67951) [universal.x86_64-darwin21]
+```
+[[universal]] 을 참고한다.
+
+```sh
+$ echo "ruby-3.1.0" > .ruby-version
+$ ruby -v
+ruby 3.1.0p0 (2021-12-25 revision fb4df44d16) [arm64-darwin21]
+ ```
+[[chruby]] 를 사용하여 버전을 변경해보았따. 여기에는 [[arm64]] 가 찍혀있다.
+
+native 빌드가 당연히 성능적인 이점이 있겠지만,  
+관련된 [[gem]] 들이 모든 호환성이 보장되는지는 알 수 없다.
+
+## [[ruby-gems|ruby]] gems vs [[bundler]] *정확하지 않음*
+루비는 [[ruby-gems]] 를 가지고 있지만 패키지 파일([[path|Gemfile]], [[path|Gemfile.lock]])을 지원하지 않는다.
+
+때문에 정확히 동일한 버저닝을 통해 여러 디펜던시를 관리하기 위해서는 이를 관리할 매니저가 필요한데 [[bundler]] 가 이를 행한다.
+[[bundler]] 또한 하나의 [[gem]] 으로 버전을 가진다.
+
+일단 [[bundler]] 가 설치되면 이후부터는 `bundle install` 을 통해 [[gem]] 들의 로컬(프로젝트 스코프) 설치가 가능해진다.
+각 [[gem]] 들은 `bundle exe GEM` 와 같은 형태로 사용이 가능하다.
+
+## [[env]]
+- `GEM_PATH`
+- `GEM_HOME`
+
+## [[error|트러블슈팅]]
+system ruby 를 사용해서 설치를 하는 경우 bundler 가 존재하지 않고 이를 설치하려고하면 결국 시스템 퍼미션 권한을 요구한다.
+[[frum]] 같은 ruby version manager 를 사용해서 따로 버전을 설치하고 로컬로 관리하는 것이 좋을 것으로 생각된다.
+
+```sh
+$ bundle exec pod install
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:283:in `find_spec_for_exe': Could not find 'bundler' (2.2.20) required by your /APP/ios/Gemfile.lock. (Gem::GemNotFoundException)
+To update to the latest version installed on your system, run `bundle update --bundler`.
+To install the missing version, run `gem install bundler:2.2.20`
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:302:in `activate_bin_path'
+        from /usr/bin/bundle:23:in `<main>`'
+        
+$ bundle install
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:283:in `find_spec_for_exe': Could not find 'bundler' (2.2.20) required by your /APP/ios/Gemfile.lock. (Gem::GemNotFoundException)
+To update to the latest version installed on your system, run `bundle update --bundler`.
+To install the missing version, run `gem install bundler:2.2.20`
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:302:in `activate_bin_path'
+        from /usr/bin/bundle:23:in `<main>`'
+        
+$ gem install bundler:2.2.20
+ERROR:  While executing gem ... (Gem::FilePermissionError)
+    You don't have write permissions for the /Library/Ruby/Gems/2.6.0 directory.
+```
+
+### ffi
+```sh
+ ~/.gem/ruby/2.6.8/gems/ffi-1.13.1/lib  ls                                                                                      ok  17:54:54
+ffi          ffi.rb       ffi_c.bundle
+ ~/.gem/ruby/2.6.8/gems/ffi-1.13.1/lib  file ./ffi                                                                              ok  17:54:56
+./ffi: directory
+ ~/.gem/ruby/2.6.8/gems/ffi-1.13.1/lib  file ffi_c.bundle                                                                       ok  17:55:03
+ffi_c.bundle: Mach-O 64-bit bundle x86_64
+```
+```sh
+gem dependency -R
+Gem ffi-1.13.1
+  rake (~> 13.0, development)
+  rake-compiler (~> 1.0, development)
+  rake-compiler-dock (~> 1.0, development)
+  rspec (~> 2.14.1, development)
+  rubygems-tasks (~> 0.2.4, development)
+  Used by
+    ethon-0.12.0 (ffi (>= 1.3.0))
+```
+
+### mac13 ventura
+```sh
+Installing json 2.6.2 with native extensions
+Installing unf_ext 0.0.8.2 with native extensions
+Installing ffi 1.15.5 with native extensions
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+
+    current directory: /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2/ext/json/ext/generator
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0 -r ./siteconf20221031-78847-d4qa86.rb extconf.rb
+creating Makefile
+
+current directory: /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2/ext/json/ext/generator
+make "DESTDIR=" clean
+
+current directory: /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2/ext/json/ext/generator
+make "DESTDIR="
+compiling generator.c
+In file included from generator.c:1:
+In file included from ./../fbuffer/fbuffer.h:5:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/ruby.h:33:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/ruby/ruby.h:24:10: fatal error: 'ruby/config.h'
+file not found
+#include "ruby/config.h"
+         ^~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/ruby/ruby.h:24:10: note: did not find header
+'config.h' in framework 'ruby' (loaded from '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks')
+1 error generated.
+make: *** [generator.o] Error 1
+
+make failed, exit code 2
+
+Gem files will remain installed in /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2 for inspection.
+Results logged to /Users/deptno/.gem/ruby/2.6.8/extensions/universal-darwin-22/2.6.0/json-2.6.2/gem_make.out
+
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:99:in `run'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:51:in `block in make'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:43:in `each'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:43:in `make'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:62:in `block in build'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/tempfile.rb:295:in `open'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:29:in `build'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:185:in `block in build_extension'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/monitor.rb:235:in `mon_synchronize'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:181:in `build_extension'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:229:in `block in build_extensions'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `each'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `build_extensions'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/installer.rb:830:in `build_extensions'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:71:in `build_extensions'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:28:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/source/rubygems.rb:204:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:54:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:16:in `install_from_spec'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:186:in `do_install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:177:in `block in worker_pool'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:62:in `apply_func'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:57:in `block in process_queue'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `loop'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `process_queue'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:91:in `block (2 levels) in create_threads'
+
+An error occurred while installing json (2.6.2), and Bundler cannot continue.
+
+In Gemfile:
+  cocoapods was resolved to 1.11.2, which depends on
+    cocoapods-core was resolved to 1.11.2, which depends on
+      algoliasearch was resolved to 1.27.5, which depends on
+        json
+
+
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+
+    current directory: /Users/deptno/.gem/ruby/2.6.8/gems/unf_ext-0.0.8.2/ext/unf_ext
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0 -r ./siteconf20221031-78847-fkkg4h.rb extconf.rb
+checking for -lstdc++... *** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of necessary
+libraries and/or headers.  Check the mkmf.log file for more details.  You may
+need configuration options.
+
+Provided configuration options:
+        --with-opt-dir
+        --without-opt-dir
+        --with-opt-include
+        --without-opt-include=${opt-dir}/include
+        --with-opt-lib
+        --without-opt-lib=${opt-dir}/lib
+        --with-make-prog
+        --without-make-prog
+        --srcdir=.
+        --curdir
+        --ruby=/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/$(RUBY_BASE_NAME)
+        --with-static-libstdc++
+        --without-static-libstdc++
+        --with-stdc++lib
+        --without-stdc++lib
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:467:in `try_do': The compiler failed to generate an executable file. (RuntimeError)
+You have to install development tools first.
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:546:in `block in try_link0'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/tmpdir.rb:93:in `mktmpdir'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:543:in `try_link0'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:570:in `try_link'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:789:in `try_func'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:1016:in `block in have_library'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:959:in `block in checking_for'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:361:in `block (2 levels) in postpone'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:331:in `open'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:361:in `block in postpone'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:331:in `open'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:357:in `postpone'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:958:in `checking_for'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:1011:in `have_library'
+        from extconf.rb:6:in `<main>'
+
+To see why this extension failed to compile, please check the mkmf.log which can be found here:
+
+  /Users/deptno/.gem/ruby/2.6.8/extensions/universal-darwin-22/2.6.0/unf_ext-0.0.8.2/mkmf.log
+
+extconf failed, exit code 1
+
+Gem files will remain installed in /Users/deptno/.gem/ruby/2.6.8/gems/unf_ext-0.0.8.2 for inspection.
+Results logged to /Users/deptno/.gem/ruby/2.6.8/extensions/universal-darwin-22/2.6.0/unf_ext-0.0.8.2/gem_make.out
+
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:99:in `run'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:47:in `block in build'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/tempfile.rb:295:in `open'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:29:in `build'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:185:in `block in build_extension'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/monitor.rb:235:in `mon_synchronize'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:181:in `build_extension'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:229:in `block in build_extensions'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `each'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `build_extensions'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/installer.rb:830:in `build_extensions'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:71:in `build_extensions'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:28:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/source/rubygems.rb:204:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:54:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:16:in `install_from_spec'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:186:in `do_install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:177:in `block in worker_pool'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:62:in `apply_func'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:57:in `block in process_queue'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `loop'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `process_queue'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:91:in `block (2 levels) in create_threads'
+
+An error occurred while installing unf_ext (0.0.8.2), and Bundler cannot continue.
+
+In Gemfile:
+  fastlane was resolved to 2.210.1, which depends on
+    faraday-cookie_jar was resolved to 0.0.7, which depends on
+      http-cookie was resolved to 1.0.5, which depends on
+        domain_name was resolved to 0.5.20190701, which depends on
+          unf was resolved to 0.1.4, which depends on
+            unf_ext
+```
+-> [[chruby]] 를 사용해서 [[ruby]] 2.7.5 버전으로 업데이트
+-> [[bundler]] 2.3.8 버전 업데이트
+-> 해결
+
+## link
+- [[bundler]]
+- [[ruby-gems]]
+- [[frum]]
+- [[chruby]]
+- [[universal]]
+- [[x86_64]]
+- [[arm64]]
+14:T3d8e,
+## system ruby
+mac 을 설치하면 기본적으로 루비가 설치되어있다. 
+
+## support archtecture
+```sh
+$ ruby -v
+ruby 2.6.8p205 (2021-07-07 revision 67951) [universal.x86_64-darwin21]
+```
+[[universal]] 을 참고한다.
+
+```sh
+$ echo "ruby-3.1.0" > .ruby-version
+$ ruby -v
+ruby 3.1.0p0 (2021-12-25 revision fb4df44d16) [arm64-darwin21]
+ ```
+[[chruby]] 를 사용하여 버전을 변경해보았따. 여기에는 [[arm64]] 가 찍혀있다.
+
+native 빌드가 당연히 성능적인 이점이 있겠지만,  
+관련된 [[gem]] 들이 모든 호환성이 보장되는지는 알 수 없다.
+
+## [[ruby-gems|ruby]] gems vs [[bundler]] *정확하지 않음*
+루비는 [[ruby-gems]] 를 가지고 있지만 패키지 파일([[path|Gemfile]], [[path|Gemfile.lock]])을 지원하지 않는다.
+
+때문에 정확히 동일한 버저닝을 통해 여러 디펜던시를 관리하기 위해서는 이를 관리할 매니저가 필요한데 [[bundler]] 가 이를 행한다.
+[[bundler]] 또한 하나의 [[gem]] 으로 버전을 가진다.
+
+일단 [[bundler]] 가 설치되면 이후부터는 `bundle install` 을 통해 [[gem]] 들의 로컬(프로젝트 스코프) 설치가 가능해진다.
+각 [[gem]] 들은 `bundle exe GEM` 와 같은 형태로 사용이 가능하다.
+
+## [[env]]
+- `GEM_PATH`
+- `GEM_HOME`
+
+## [[error|트러블슈팅]]
+system ruby 를 사용해서 설치를 하는 경우 bundler 가 존재하지 않고 이를 설치하려고하면 결국 시스템 퍼미션 권한을 요구한다.
+[[frum]] 같은 ruby version manager 를 사용해서 따로 버전을 설치하고 로컬로 관리하는 것이 좋을 것으로 생각된다.
+
+```sh
+$ bundle exec pod install
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:283:in `find_spec_for_exe': Could not find 'bundler' (2.2.20) required by your /APP/ios/Gemfile.lock. (Gem::GemNotFoundException)
+To update to the latest version installed on your system, run `bundle update --bundler`.
+To install the missing version, run `gem install bundler:2.2.20`
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:302:in `activate_bin_path'
+        from /usr/bin/bundle:23:in `<main>`'
+        
+$ bundle install
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:283:in `find_spec_for_exe': Could not find 'bundler' (2.2.20) required by your /APP/ios/Gemfile.lock. (Gem::GemNotFoundException)
+To update to the latest version installed on your system, run `bundle update --bundler`.
+To install the missing version, run `gem install bundler:2.2.20`
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems.rb:302:in `activate_bin_path'
+        from /usr/bin/bundle:23:in `<main>`'
+        
+$ gem install bundler:2.2.20
+ERROR:  While executing gem ... (Gem::FilePermissionError)
+    You don't have write permissions for the /Library/Ruby/Gems/2.6.0 directory.
+```
+
+### ffi
+```sh
+ ~/.gem/ruby/2.6.8/gems/ffi-1.13.1/lib  ls                                                                                      ok  17:54:54
+ffi          ffi.rb       ffi_c.bundle
+ ~/.gem/ruby/2.6.8/gems/ffi-1.13.1/lib  file ./ffi                                                                              ok  17:54:56
+./ffi: directory
+ ~/.gem/ruby/2.6.8/gems/ffi-1.13.1/lib  file ffi_c.bundle                                                                       ok  17:55:03
+ffi_c.bundle: Mach-O 64-bit bundle x86_64
+```
+```sh
+gem dependency -R
+Gem ffi-1.13.1
+  rake (~> 13.0, development)
+  rake-compiler (~> 1.0, development)
+  rake-compiler-dock (~> 1.0, development)
+  rspec (~> 2.14.1, development)
+  rubygems-tasks (~> 0.2.4, development)
+  Used by
+    ethon-0.12.0 (ffi (>= 1.3.0))
+```
+
+### mac13 ventura
+```sh
+Installing json 2.6.2 with native extensions
+Installing unf_ext 0.0.8.2 with native extensions
+Installing ffi 1.15.5 with native extensions
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+
+    current directory: /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2/ext/json/ext/generator
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0 -r ./siteconf20221031-78847-d4qa86.rb extconf.rb
+creating Makefile
+
+current directory: /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2/ext/json/ext/generator
+make "DESTDIR=" clean
+
+current directory: /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2/ext/json/ext/generator
+make "DESTDIR="
+compiling generator.c
+In file included from generator.c:1:
+In file included from ./../fbuffer/fbuffer.h:5:
+In file included from /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/ruby.h:33:
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/ruby/ruby.h:24:10: fatal error: 'ruby/config.h'
+file not found
+#include "ruby/config.h"
+         ^~~~~~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/ruby/ruby.h:24:10: note: did not find header
+'config.h' in framework 'ruby' (loaded from '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks')
+1 error generated.
+make: *** [generator.o] Error 1
+
+make failed, exit code 2
+
+Gem files will remain installed in /Users/deptno/.gem/ruby/2.6.8/gems/json-2.6.2 for inspection.
+Results logged to /Users/deptno/.gem/ruby/2.6.8/extensions/universal-darwin-22/2.6.0/json-2.6.2/gem_make.out
+
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:99:in `run'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:51:in `block in make'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:43:in `each'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:43:in `make'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:62:in `block in build'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/tempfile.rb:295:in `open'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:29:in `build'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:185:in `block in build_extension'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/monitor.rb:235:in `mon_synchronize'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:181:in `build_extension'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:229:in `block in build_extensions'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `each'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `build_extensions'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/installer.rb:830:in `build_extensions'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:71:in `build_extensions'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:28:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/source/rubygems.rb:204:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:54:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:16:in `install_from_spec'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:186:in `do_install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:177:in `block in worker_pool'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:62:in `apply_func'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:57:in `block in process_queue'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `loop'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `process_queue'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:91:in `block (2 levels) in create_threads'
+
+An error occurred while installing json (2.6.2), and Bundler cannot continue.
+
+In Gemfile:
+  cocoapods was resolved to 1.11.2, which depends on
+    cocoapods-core was resolved to 1.11.2, which depends on
+      algoliasearch was resolved to 1.27.5, which depends on
+        json
+
+
+Gem::Ext::BuildError: ERROR: Failed to build gem native extension.
+
+    current directory: /Users/deptno/.gem/ruby/2.6.8/gems/unf_ext-0.0.8.2/ext/unf_ext
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0 -r ./siteconf20221031-78847-fkkg4h.rb extconf.rb
+checking for -lstdc++... *** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of necessary
+libraries and/or headers.  Check the mkmf.log file for more details.  You may
+need configuration options.
+
+Provided configuration options:
+        --with-opt-dir
+        --without-opt-dir
+        --with-opt-include
+        --without-opt-include=${opt-dir}/include
+        --with-opt-lib
+        --without-opt-lib=${opt-dir}/lib
+        --with-make-prog
+        --without-make-prog
+        --srcdir=.
+        --curdir
+        --ruby=/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/$(RUBY_BASE_NAME)
+        --with-static-libstdc++
+        --without-static-libstdc++
+        --with-stdc++lib
+        --without-stdc++lib
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:467:in `try_do': The compiler failed to generate an executable file. (RuntimeError)
+You have to install development tools first.
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:546:in `block in try_link0'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/tmpdir.rb:93:in `mktmpdir'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:543:in `try_link0'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:570:in `try_link'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:789:in `try_func'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:1016:in `block in have_library'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:959:in `block in checking_for'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:361:in `block (2 levels) in postpone'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:331:in `open'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:361:in `block in postpone'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:331:in `open'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:357:in `postpone'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:958:in `checking_for'
+        from /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/mkmf.rb:1011:in `have_library'
+        from extconf.rb:6:in `<main>'
+
+To see why this extension failed to compile, please check the mkmf.log which can be found here:
+
+  /Users/deptno/.gem/ruby/2.6.8/extensions/universal-darwin-22/2.6.0/unf_ext-0.0.8.2/mkmf.log
+
+extconf failed, exit code 1
+
+Gem files will remain installed in /Users/deptno/.gem/ruby/2.6.8/gems/unf_ext-0.0.8.2 for inspection.
+Results logged to /Users/deptno/.gem/ruby/2.6.8/extensions/universal-darwin-22/2.6.0/unf_ext-0.0.8.2/gem_make.out
+
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:99:in `run'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:47:in `block in build'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/tempfile.rb:295:in `open'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/ext_conf_builder.rb:29:in `build'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:185:in `block in build_extension'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/monitor.rb:235:in `mon_synchronize'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:181:in `build_extension'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:229:in `block in build_extensions'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `each'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/ext/builder.rb:226:in `build_extensions'
+  /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/rubygems/installer.rb:830:in `build_extensions'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:71:in `build_extensions'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/rubygems_gem_installer.rb:28:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/source/rubygems.rb:204:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:54:in `install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/gem_installer.rb:16:in `install_from_spec'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:186:in `do_install'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/installer/parallel_installer.rb:177:in `block in worker_pool'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:62:in `apply_func'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:57:in `block in process_queue'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `loop'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:54:in `process_queue'
+  /Users/deptno/.gem/ruby/2.6.8/gems/bundler-2.3.5/lib/bundler/worker.rb:91:in `block (2 levels) in create_threads'
+
+An error occurred while installing unf_ext (0.0.8.2), and Bundler cannot continue.
+
+In Gemfile:
+  fastlane was resolved to 2.210.1, which depends on
+    faraday-cookie_jar was resolved to 0.0.7, which depends on
+      http-cookie was resolved to 1.0.5, which depends on
+        domain_name was resolved to 0.5.20190701, which depends on
+          unf was resolved to 0.1.4, which depends on
+            unf_ext
+```
+-> [[chruby]] 를 사용해서 [[ruby]] 2.7.5 버전으로 업데이트
+-> [[bundler]] 2.3.8 버전 업데이트
+-> 해결
+
+## link
+- [[bundler]]
+- [[ruby-gems]]
+- [[frum]]
+- [[chruby]]
+- [[universal]]
+- [[x86_64]]
+- [[arm64]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# ruby"}],["$","meta","3",{"name":"description","content":"$12"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# ruby"}],["$","meta","15",{"property":"og:description","content":"$13"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/ruby"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# ruby"}],["$","meta","19",{"name":"twitter:description","content":"$14"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null

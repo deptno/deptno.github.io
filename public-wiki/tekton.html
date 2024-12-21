@@ -1,0 +1,1665 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-0d2541f49ad9d59a.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-bc971df7080b641f.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># tekton</title><meta name="description" content="
+[[kubernetes]] 베이스의 ci/cd
+- [ ] TODO: 모듈화가 잘 되어 있지만 해당 파이브라인 관리 코드를 프로젝트에 놓아야할지 인프라쪽에 놓아야할지 고민 필요
+
+---
+## 구조
+### 흐름도
+```mermaid
+erDiagram
+  EXTERNAL-EVENT ||--|| Service : receive-from-external-event
+  Service ||--|| EventListener : &quot;&quot;
+  EventListener ||--|{ TriggerGroups : &quot;&quot;
+  TriggerGroups ||--|{ Trigger: &quot;by selector&quot;
+  Trigger ||--|| TriggerTemplate : ref-or-embed
+  Trigger ||--o{ TriggerBinding : &quot;&quot;
+  Trigger ||--o{ Interceptor : &quot;&quot;
+  Interceptor ||--o{ TriggerBinding : &quot;modify, filter, validate&quot;
+  Trigger ||--o| ServiceAccount : ref
+  EventListener ||--o{ TriggerBinding : &quot;implicit ref event as body&quot;
+  EventListener ||--o{ Interceptor : &quot;implicit ref event as body&quot;
+  TriggerTemplate ||--|{ PipelineRun : embed
+  EventListener ||--|| ServiceAccount : ref
+  PipelineRun ||--o| ServiceAccount : ref
+  PipelineRun }|--|| Pipeline : pipelinerun-ref-or-embed-pipeline
+  PipelineRun ||--|{ Resource : ref
+  PipelineRun ||--|{ Workspace : ref
+  Pipeline ||--|{ Task: ref
+  ServiceAccount }|--|| RoleBinding : ref
+  ServiceAccount }|--|| ClusterRoleBinding : ref
+  RoleBinding ||--o| Role : ref
+  RoleBinding ||--o| ClusterRole : ref
+  ClusterRoleBinding ||--o| ClusterRole : ref
+  ServiceAccount ||--|{ Secret : ref
+  
+  EventListener {
+    TriggerList triggers
+    Resource resources
+  }
+  Trigger {
+    TriggerBindingList bindings
+    TriggerTemplate template
+    InterceptorList interceptors
+    ServiceAccount serviceAccountName
+  }
+  Resource {
+    kubernetesResource o
+    customResource o
+    kubernetesResource o
+  }
+```
+
+- 대체가능
+  - TriggerBinding &lt;-&gt; ClusterTriggerBinding
+  - TriggerTemplate &lt;-&gt; ClusterTriggerTemplate
+  - TriggerTemplate 은 PipelineRun 외에 다른 오브젝트 참조가 가능
+    - PipelineRun
+    - Pipeline
+    - TaskRun
+    - Task
+    - CustumTask
+- [ ] TriggerBinding &lt;-&gt; TriggerTemplate
+  - [ ] n..1 관계로 Trigger 에서 만나는데 TriggerBinding 수 많은 TriggerTemplate 을 호출되는지 확인이 필요
+
+### 흐름도 단순화 버전
+&gt; 2023-01-29 에 타 프로젝트에서 비슷한 걸 그린 단순화 버전이 있어서 이쪽으로 이동
+
++ https://github.com/deptno/wiki/blob/723c94917898fc9bf99e4475196dc2a67fa60de4/project.md#tekton
+#### tekton
+```mermaid
+flowchart TD
+  subgraph external
+    a{{httpEvent}}
+  end
+  subgraph cluster
+  subgraph sa
+    ServiceAccount
+    ClusterRole --&gt; ClusterRoleBinding --&gt; ServiceAccount
+    Role --&gt; RoleBinding --&gt; ServiceAccount
+    Role --&gt; ClusterRoleBinding
+    Secret --&gt; ServiceAccount
+  end
+  
+  subgraph tekton
+    a{{httpEvent}} --&gt; EventListener --&gt; Trigger --&gt; TriggerBinding
+                                    Trigger --&gt; TriggerTemplate --&gt; PipelineRun --&gt; Pipeline --&gt; Task
+                                    Trigger --&gt; _(Interceptor) -..-&gt; TriggerBinding -...-&gt; TriggerTemplate
+                                    
+    ServiceAccount -..-&gt; EventListener
+    ServiceAccount -..-&gt; PipelineRun
+    ServiceAccount -..-&gt; Trigger
+  end
+  end
+```
+- 생성 오브젝트
+  - external
+  - clsuter
+    - EventListeer
+    - EventListeer
+    - EventListeer
+    - EventListeer
+---
+
+### CRD
+EventListener &gt; TriggerBinding &gt; TriggerTemplate &gt; PipelineRun &gt; Pipeline &gt; Task
+
+- EventListener
+- TriggerBinding 
+- TriggerTemplate 
+- PipelineRun 
+- Pipeline 
+- Task
+
+### Trigger
++ https://tekton.dev/docs/getting-started/triggers/
+- EventListener
+  - PipelineBinding 
+  - PipelineTemplate 
+    - Pipeline 
+- RoleBinding
+  - ServiceAccount
+  - ClusterRole
+- ClusterRoleBinding
+  - ServiceAccount
+  - ClusterRole
+
+| CRD              | 설명                     |
+|------------------|--------------------------|
+| Event            | 트리거                   |
+| PipelineBinding  | 파이프라인에 변수 바인딩 |
+| PipelineTemplate |                          |
+| PipelineRun      | 파이프라인의 실행        |
+| Pipeline         | Task 콜렉션              |
+| Task             |                          |
+
+
+## install
+- [X] pipelines
+- [X] triggers
+- [ ] results 실행 결과?
+
+---
+- [[diary:2023-01-19]] 
+- tutorial
+  + https://tekton.dev/docs/how-to-guides/clone-repository/
+    - `tkn hub install task git-clone` 에러가 나므로 `kubectl apply -f` 를 통한 직접 설치가 필요 2023-01-20 
+    
+## pipeline
++ https://tekton.dev/docs/pipelines/install/#installing-tekton-pipelines-on-kubernetes
+```sh
+kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
+```
+`tecton-pipelines` namepsace 로 설치됨
+
+- pvc 설정
+```sh
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/part-of: tekton-pipelines
+  name: config-artifact-pvc
+  namespace: tekton-pipelines
+data:
+  storageClassName: &quot;openebs-hostpath&quot;
+  size: &quot;10GiB&quot;
+```
+
+- private repo 설정
++ https://tekton.dev/docs/installation/pipelines/#configuring-cloudevents-notifications
+
+- pipeline 설정 `cm/feature-flags` 에 있다
+  - [ ] require-git-ssh-secret-known-hosts
+  - disable-creds-init credential initialization 을 스킵하고 secret 로드로 대체
+
+## dashboard
+```sh 
+kubectl apply --filename \
+https://storage.googleapis.com/tekton-releases/dashboard/latest/tekton-dashboard-release.yaml
+```
+
+## cli
++ https://github.com/tektoncd/cli
+```sh
+brew install tektoncd-cli
+```
+
+## github 
+[[ssh-keygen]] 후 github 에 [[ssh]] 등록
+
+1. `Secret` 생성
+```sh 
+ssh-keygen -t ed25519 -C &quot;[deptno@service.domain]&quot;
+# save current directory
+kubectl create secret generic [secret_name] --from-file=ssh-privatekey=./id_ed25519.tekton.dev --type=kubernetes.io/ssh-auth
+kubectl annotate secret [secret_name] tekton.dev/git-0=github.com
+```
+2. `ServiceAccount` 생성
+```sh 
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tekton-deptno
+secrets:
+  - name: [secret_name]
+```
+3. `PipelineRun` 에 주입하여 사용
+
+tekton hub 에 있는 `git-clone` task 로 확인 DONE: 2023-01-24
+
+## 구현
+### trigger 를 통한 github private 레포지터리 클론 파이프라인 실행
+`ssh-github` 아래와 같은 형태
+```sh
+Name:         ssh-github-deptno
+Namespace:    project-things
+Labels:       &lt;none&gt;
+Annotations:  tekton.dev/git-0: github.com
+
+Type:  kubernetes.io/ssh-auth
+
+Data
+====
+ssh-privatekey:  411 bytes
+```
+
+`git-clone` task 는 hub에서 설치했다
+  + https://hub.tekton.dev/tekton/task/git-clone
+
+```sh 
+apiVersion: v1 
+kind: ServiceAccount
+metadata:
+  name: tt-sa
+secrets:
+  - name: ssh-github # `sh-privatekey` 를 데이터로 갖는다
+---
+apiVersion: rbac.authorization.k8s.io/v1 
+kind: RoleBinding
+metadata:
+  name: tt-rb
+  namespace: project-things
+subjects:
+- kind: ServiceAccount
+  name: tt-sa
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tekton-triggers-eventlistener-roles
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tt-crb
+subjects:
+- kind: ServiceAccount
+  name: tt-sa
+  namespace: project-things
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tekton-triggers-eventlistener-clusterroles
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: tt-ev
+spec:
+  serviceAccountName: tt-sa
+  triggers:
+  - triggerRef: tt-tr
+  resources:
+    kubernetesResource:
+      serviceType: ClusterIP
+      servicePort: 80
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: Trigger
+metadata:
+  name: tt-tr
+spec:
+  bindings:
+  - ref: tt-tb
+  template:
+    ref: tt-tt
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: tt-tb
+spec:
+  params:
+  - name: url
+    value: $(body.url)
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: tt-tt
+spec:
+  params:
+  - name: url
+  resourceTemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      generateName: tt-tt-pr
+    spec:
+      serviceAccountName: tt-sa
+      pipelineRef:
+        name: tt-pl
+      params:
+      - name: repo-url
+        value: $(tt.params.url)
+      workspaces:
+      - name: shared-data
+        emptyDir: {}
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: tt-pl
+  namespace: project-things
+spec:
+  description: clone git repository
+  params:
+  - name: repo-url
+    type: string
+    description: https://github.com/[username]/[reponame].git
+  workspaces:
+  - name: shared-data
+    description: working directory
+  tasks:
+  - name: fetch-source
+    taskRef:
+      name: git-clone
+    params:
+    - name: url
+      value: $(params.repo-url)
+    workspaces:
+    - name: output
+      workspace: shared-data
+```
+
+- 실행
+```sh 
+$ curl -X POST \                                                                                                                                               ok  4s  16.15.0 node  1.59.0 rust  01:12:56
+  http://localhost:8080 \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -d &#x27;{ &quot;url&quot;: &quot;git@github.com:deptno/private-repo.git&quot; }&#x27;
+{&quot;eventListener&quot;:&quot;tt-ev&quot;,&quot;namespace&quot;:&quot;project-things&quot;,&quot;eventListenerUID&quot;:&quot;54001b1f-1859-48a3-802b-d220a954f23c&quot;,&quot;eventID&quot;:&quot;19375452-32d1-4650-aa03-beb73f7f7538&quot;}
+$ tkn pr logs                                                                                                                                                      ok  16.15.0 node  1.59.0 rust  01:13:07
+? Select pipelinerun: tt-tt-prkbpb2 started 1 second ago
+Pipeline still running ...
+task fetch-source has failed: &quot;step-clone&quot; exited with code 1 (image: &quot;gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init@sha256:28ff94e63e4058afc3f15b4c11c08cf3b54fa91faa646a4bbac90380cd7158df&quot;); for logs run: kubectl -n project-things logs tt-tt-prkbpb2-fetch-source-pod -c step-clone
+
+[... logs]
+```
+
+## error
+- pipelinerun 을 통해서 pod 생성 후 계속 pending 상태라 보니 pvc 가 바운드되지 않는 문제
+```sh
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  2m8s  default-scheduler  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1
+ nodes are available: 1 No preemption victims found for incoming pod..
+```
+  1. pvc 를 가보니 storageClassName 이 비어있다, 현 세팅은 `openebs-hostpath` 를 지정해야 사용이 가능한 상태
+  2. manifest 에서 pvc 설정에 storageClassName 을 설정했음에도 동작하지 않았다.
+  3. pvc 에서 `spec.storageClassName: openebs-hostpath` 를 주입하니 정상 실행된다.
+  4. `PipelineRun` 에서 `storageClassName` 을 주입하면 동작한다
+```yaml
+  workspaces:
+  - name: shared-data
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: openebs-hostpath
+```
++ https://tekton.dev/docs/pipelines/workspaces/#using-persistent-volumes-within-a-pipelinerun
+
+---
+
+```sh 
+{
+    &quot;severity&quot;: &quot;fatal&quot;,
+    &quot;timestamp&quot;: &quot;2023-01-28T08:55:54.927Z&quot;,
+    &quot;logger&quot;: &quot;eventlistener&quot;,
+    &quot;caller&quot;: &quot;v2/main.go:205&quot;,
+    &quot;message&quot;: &quot;Start returned an error&quot;,
+    &quot;error&quot;: &quot;Timed out waiting on CaBundle to available for clusterInterceptor: Timed out waiting on CaBundle to available for Interceptor: clusterinterceptors. triggers.tekton.dev is forbidden: User \&quot;system:serviceaccount:project-things:default\&quot; cannot list resource \&quot;clusterinterceptors\&quot; in API group \&quot;triggers.tekton.dev\&quot; at the cluster scope&quot;
+}
+```
+- account 에 tekton에서 제공하는 ClusterRole, Role 이 제대로 되어 있는지 확인한다
+  + https://github.com/tektoncd/triggers/blob/main/examples/rbac.yaml
+
+## releated
+- [[kubernetes]]
+- [[metrics-server]]
+- [[ci]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# tekton"/><meta property="og:description" content="
+[[kubernetes]] 베이스의 ci/cd
+- [ ] TODO: 모듈화가 잘 되어 있지만 해당 파이브라인 관리 코드를 프로젝트에 놓아야할지 인프라쪽에 놓아야할지 고민 필요
+
+---
+## 구조
+### 흐름도
+```mermaid
+erDiagram
+  EXTERNAL-EVENT ||--|| Service : receive-from-external-event
+  Service ||--|| EventListener : &quot;&quot;
+  EventListener ||--|{ TriggerGroups : &quot;&quot;
+  TriggerGroups ||--|{ Trigger: &quot;by selector&quot;
+  Trigger ||--|| TriggerTemplate : ref-or-embed
+  Trigger ||--o{ TriggerBinding : &quot;&quot;
+  Trigger ||--o{ Interceptor : &quot;&quot;
+  Interceptor ||--o{ TriggerBinding : &quot;modify, filter, validate&quot;
+  Trigger ||--o| ServiceAccount : ref
+  EventListener ||--o{ TriggerBinding : &quot;implicit ref event as body&quot;
+  EventListener ||--o{ Interceptor : &quot;implicit ref event as body&quot;
+  TriggerTemplate ||--|{ PipelineRun : embed
+  EventListener ||--|| ServiceAccount : ref
+  PipelineRun ||--o| ServiceAccount : ref
+  PipelineRun }|--|| Pipeline : pipelinerun-ref-or-embed-pipeline
+  PipelineRun ||--|{ Resource : ref
+  PipelineRun ||--|{ Workspace : ref
+  Pipeline ||--|{ Task: ref
+  ServiceAccount }|--|| RoleBinding : ref
+  ServiceAccount }|--|| ClusterRoleBinding : ref
+  RoleBinding ||--o| Role : ref
+  RoleBinding ||--o| ClusterRole : ref
+  ClusterRoleBinding ||--o| ClusterRole : ref
+  ServiceAccount ||--|{ Secret : ref
+  
+  EventListener {
+    TriggerList triggers
+    Resource resources
+  }
+  Trigger {
+    TriggerBindingList bindings
+    TriggerTemplate template
+    InterceptorList interceptors
+    ServiceAccount serviceAccountName
+  }
+  Resource {
+    kubernetesResource o
+    customResource o
+    kubernetesResource o
+  }
+```
+
+- 대체가능
+  - TriggerBinding &lt;-&gt; ClusterTriggerBinding
+  - TriggerTemplate &lt;-&gt; ClusterTriggerTemplate
+  - TriggerTemplate 은 PipelineRun 외에 다른 오브젝트 참조가 가능
+    - PipelineRun
+    - Pipeline
+    - TaskRun
+    - Task
+    - CustumTask
+- [ ] TriggerBinding &lt;-&gt; TriggerTemplate
+  - [ ] n..1 관계로 Trigger 에서 만나는데 TriggerBinding 수 많은 TriggerTemplate 을 호출되는지 확인이 필요
+
+### 흐름도 단순화 버전
+&gt; 2023-01-29 에 타 프로젝트에서 비슷한 걸 그린 단순화 버전이 있어서 이쪽으로 이동
+
++ https://github.com/deptno/wiki/blob/723c94917898fc9bf99e4475196dc2a67fa60de4/project.md#tekton
+#### tekton
+```mermaid
+flowchart TD
+  subgraph external
+    a{{httpEvent}}
+  end
+  subgraph cluster
+  subgraph sa
+    ServiceAccount
+    ClusterRole --&gt; ClusterRoleBinding --&gt; ServiceAccount
+    Role --&gt; RoleBinding --&gt; ServiceAccount
+    Role --&gt; ClusterRoleBinding
+    Secret --&gt; ServiceAccount
+  end
+  
+  subgraph tekton
+    a{{httpEvent}} --&gt; EventListener --&gt; Trigger --&gt; TriggerBinding
+                                    Trigger --&gt; TriggerTemplate --&gt; PipelineRun --&gt; Pipeline --&gt; Task
+                                    Trigger --&gt; _(Interceptor) -..-&gt; TriggerBinding -...-&gt; TriggerTemplate
+                                    
+    ServiceAccount -..-&gt; EventListener
+    ServiceAccount -..-&gt; PipelineRun
+    ServiceAccount -..-&gt; Trigger
+  end
+  end
+```
+- 생성 오브젝트
+  - external
+  - clsuter
+    - EventListeer
+    - EventListeer
+    - EventListeer
+    - EventListeer
+---
+
+### CRD
+EventListener &gt; TriggerBinding &gt; TriggerTemplate &gt; PipelineRun &gt; Pipeline &gt; Task
+
+- EventListener
+- TriggerBinding 
+- TriggerTemplate 
+- PipelineRun 
+- Pipeline 
+- Task
+
+### Trigger
++ https://tekton.dev/docs/getting-started/triggers/
+- EventListener
+  - PipelineBinding 
+  - PipelineTemplate 
+    - Pipeline 
+- RoleBinding
+  - ServiceAccount
+  - ClusterRole
+- ClusterRoleBinding
+  - ServiceAccount
+  - ClusterRole
+
+| CRD              | 설명                     |
+|------------------|--------------------------|
+| Event            | 트리거                   |
+| PipelineBinding  | 파이프라인에 변수 바인딩 |
+| PipelineTemplate |                          |
+| PipelineRun      | 파이프라인의 실행        |
+| Pipeline         | Task 콜렉션              |
+| Task             |                          |
+
+
+## install
+- [X] pipelines
+- [X] triggers
+- [ ] results 실행 결과?
+
+---
+- [[diary:2023-01-19]] 
+- tutorial
+  + https://tekton.dev/docs/how-to-guides/clone-repository/
+    - `tkn hub install task git-clone` 에러가 나므로 `kubectl apply -f` 를 통한 직접 설치가 필요 2023-01-20 
+    
+## pipeline
++ https://tekton.dev/docs/pipelines/install/#installing-tekton-pipelines-on-kubernetes
+```sh
+kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
+```
+`tecton-pipelines` namepsace 로 설치됨
+
+- pvc 설정
+```sh
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/part-of: tekton-pipelines
+  name: config-artifact-pvc
+  namespace: tekton-pipelines
+data:
+  storageClassName: &quot;openebs-hostpath&quot;
+  size: &quot;10GiB&quot;
+```
+
+- private repo 설정
++ https://tekton.dev/docs/installation/pipelines/#configuring-cloudevents-notifications
+
+- pipeline 설정 `cm/feature-flags` 에 있다
+  - [ ] require-git-ssh-secret-known-hosts
+  - disable-creds-init credential initialization 을 스킵하고 secret 로드로 대체
+
+## dashboard
+```sh 
+kubectl apply --filename \
+https://storage.googleapis.com/tekton-releases/dashboard/latest/tekton-dashboard-release.yaml
+```
+
+## cli
++ https://github.com/tektoncd/cli
+```sh
+brew install tektoncd-cli
+```
+
+## github 
+[[ssh-keygen]] 후 github 에 [[ssh]] 등록
+
+1. `Secret` 생성
+```sh 
+ssh-keygen -t ed25519 -C &quot;[deptno@service.domain]&quot;
+# save current directory
+kubectl create secret generic [secret_name] --from-file=ssh-privatekey=./id_ed25519.tekton.dev --type=kubernetes.io/ssh-auth
+kubectl annotate secret [secret_name] tekton.dev/git-0=github.com
+```
+2. `ServiceAccount` 생성
+```sh 
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tekton-deptno
+secrets:
+  - name: [secret_name]
+```
+3. `PipelineRun` 에 주입하여 사용
+
+tekton hub 에 있는 `git-clone` task 로 확인 DONE: 2023-01-24
+
+## 구현
+### trigger 를 통한 github private 레포지터리 클론 파이프라인 실행
+`ssh-github` 아래와 같은 형태
+```sh
+Name:         ssh-github-deptno
+Namespace:    project-things
+Labels:       &lt;none&gt;
+Annotations:  tekton.dev/git-0: github.com
+
+Type:  kubernetes.io/ssh-auth
+
+Data
+====
+ssh-privatekey:  411 bytes
+```
+
+`git-clone` task 는 hub에서 설치했다
+  + https://hub.tekton.dev/tekton/task/git-clone
+
+```sh 
+apiVersion: v1 
+kind: ServiceAccount
+metadata:
+  name: tt-sa
+secrets:
+  - name: ssh-github # `sh-privatekey` 를 데이터로 갖는다
+---
+apiVersion: rbac.authorization.k8s.io/v1 
+kind: RoleBinding
+metadata:
+  name: tt-rb
+  namespace: project-things
+subjects:
+- kind: ServiceAccount
+  name: tt-sa
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tekton-triggers-eventlistener-roles
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tt-crb
+subjects:
+- kind: ServiceAccount
+  name: tt-sa
+  namespace: project-things
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tekton-triggers-eventlistener-clusterroles
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: tt-ev
+spec:
+  serviceAccountName: tt-sa
+  triggers:
+  - triggerRef: tt-tr
+  resources:
+    kubernetesResource:
+      serviceType: ClusterIP
+      servicePort: 80
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: Trigger
+metadata:
+  name: tt-tr
+spec:
+  bindings:
+  - ref: tt-tb
+  template:
+    ref: tt-tt
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: tt-tb
+spec:
+  params:
+  - name: url
+    value: $(body.url)
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: tt-tt
+spec:
+  params:
+  - name: url
+  resourceTemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      generateName: tt-tt-pr
+    spec:
+      serviceAccountName: tt-sa
+      pipelineRef:
+        name: tt-pl
+      params:
+      - name: repo-url
+        value: $(tt.params.url)
+      workspaces:
+      - name: shared-data
+        emptyDir: {}
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: tt-pl
+  namespace: project-things
+spec:
+  description: clone git repository
+  params:
+  - name: repo-url
+    type: string
+    description: https://github.com/[username]/[reponame].git
+  workspaces:
+  - name: shared-data
+    description: working directory
+  tasks:
+  - name: fetch-source
+    taskRef:
+      name: git-clone
+    params:
+    - name: url
+      value: $(params.repo-url)
+    workspaces:
+    - name: output
+      workspace: shared-data
+```
+
+- 실행
+```sh 
+$ curl -X POST \                                                                                                                                               ok  4s  16.15.0 node  1.59.0 rust  01:12:56
+  http://localhost:8080 \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -d &#x27;{ &quot;url&quot;: &quot;git@github.com:deptno/private-repo.git&quot; }&#x27;
+{&quot;eventListener&quot;:&quot;tt-ev&quot;,&quot;namespace&quot;:&quot;project-things&quot;,&quot;eventListenerUID&quot;:&quot;54001b1f-1859-48a3-802b-d220a954f23c&quot;,&quot;eventID&quot;:&quot;19375452-32d1-4650-aa03-beb73f7f7538&quot;}
+$ tkn pr logs                                                                                                                                                      ok  16.15.0 node  1.59.0 rust  01:13:07
+? Select pipelinerun: tt-tt-prkbpb2 started 1 second ago
+Pipeline still running ...
+task fetch-source has failed: &quot;step-clone&quot; exited with code 1 (image: &quot;gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init@sha256:28ff94e63e4058afc3f15b4c11c08cf3b54fa91faa646a4bbac90380cd7158df&quot;); for logs run: kubectl -n project-things logs tt-tt-prkbpb2-fetch-source-pod -c step-clone
+
+[... logs]
+```
+
+## error
+- pipelinerun 을 통해서 pod 생성 후 계속 pending 상태라 보니 pvc 가 바운드되지 않는 문제
+```sh
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  2m8s  default-scheduler  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1
+ nodes are available: 1 No preemption victims found for incoming pod..
+```
+  1. pvc 를 가보니 storageClassName 이 비어있다, 현 세팅은 `openebs-hostpath` 를 지정해야 사용이 가능한 상태
+  2. manifest 에서 pvc 설정에 storageClassName 을 설정했음에도 동작하지 않았다.
+  3. pvc 에서 `spec.storageClassName: openebs-hostpath` 를 주입하니 정상 실행된다.
+  4. `PipelineRun` 에서 `storageClassName` 을 주입하면 동작한다
+```yaml
+  workspaces:
+  - name: shared-data
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: openebs-hostpath
+```
++ https://tekton.dev/docs/pipelines/workspaces/#using-persistent-volumes-within-a-pipelinerun
+
+---
+
+```sh 
+{
+    &quot;severity&quot;: &quot;fatal&quot;,
+    &quot;timestamp&quot;: &quot;2023-01-28T08:55:54.927Z&quot;,
+    &quot;logger&quot;: &quot;eventlistener&quot;,
+    &quot;caller&quot;: &quot;v2/main.go:205&quot;,
+    &quot;message&quot;: &quot;Start returned an error&quot;,
+    &quot;error&quot;: &quot;Timed out waiting on CaBundle to available for clusterInterceptor: Timed out waiting on CaBundle to available for Interceptor: clusterinterceptors. triggers.tekton.dev is forbidden: User \&quot;system:serviceaccount:project-things:default\&quot; cannot list resource \&quot;clusterinterceptors\&quot; in API group \&quot;triggers.tekton.dev\&quot; at the cluster scope&quot;
+}
+```
+- account 에 tekton에서 제공하는 ClusterRole, Role 이 제대로 되어 있는지 확인한다
+  + https://github.com/tektoncd/triggers/blob/main/examples/rbac.yaml
+
+## releated
+- [[kubernetes]]
+- [[metrics-server]]
+- [[ci]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/tekton"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# tekton"/><meta name="twitter:description" content="
+[[kubernetes]] 베이스의 ci/cd
+- [ ] TODO: 모듈화가 잘 되어 있지만 해당 파이브라인 관리 코드를 프로젝트에 놓아야할지 인프라쪽에 놓아야할지 고민 필요
+
+---
+## 구조
+### 흐름도
+```mermaid
+erDiagram
+  EXTERNAL-EVENT ||--|| Service : receive-from-external-event
+  Service ||--|| EventListener : &quot;&quot;
+  EventListener ||--|{ TriggerGroups : &quot;&quot;
+  TriggerGroups ||--|{ Trigger: &quot;by selector&quot;
+  Trigger ||--|| TriggerTemplate : ref-or-embed
+  Trigger ||--o{ TriggerBinding : &quot;&quot;
+  Trigger ||--o{ Interceptor : &quot;&quot;
+  Interceptor ||--o{ TriggerBinding : &quot;modify, filter, validate&quot;
+  Trigger ||--o| ServiceAccount : ref
+  EventListener ||--o{ TriggerBinding : &quot;implicit ref event as body&quot;
+  EventListener ||--o{ Interceptor : &quot;implicit ref event as body&quot;
+  TriggerTemplate ||--|{ PipelineRun : embed
+  EventListener ||--|| ServiceAccount : ref
+  PipelineRun ||--o| ServiceAccount : ref
+  PipelineRun }|--|| Pipeline : pipelinerun-ref-or-embed-pipeline
+  PipelineRun ||--|{ Resource : ref
+  PipelineRun ||--|{ Workspace : ref
+  Pipeline ||--|{ Task: ref
+  ServiceAccount }|--|| RoleBinding : ref
+  ServiceAccount }|--|| ClusterRoleBinding : ref
+  RoleBinding ||--o| Role : ref
+  RoleBinding ||--o| ClusterRole : ref
+  ClusterRoleBinding ||--o| ClusterRole : ref
+  ServiceAccount ||--|{ Secret : ref
+  
+  EventListener {
+    TriggerList triggers
+    Resource resources
+  }
+  Trigger {
+    TriggerBindingList bindings
+    TriggerTemplate template
+    InterceptorList interceptors
+    ServiceAccount serviceAccountName
+  }
+  Resource {
+    kubernetesResource o
+    customResource o
+    kubernetesResource o
+  }
+```
+
+- 대체가능
+  - TriggerBinding &lt;-&gt; ClusterTriggerBinding
+  - TriggerTemplate &lt;-&gt; ClusterTriggerTemplate
+  - TriggerTemplate 은 PipelineRun 외에 다른 오브젝트 참조가 가능
+    - PipelineRun
+    - Pipeline
+    - TaskRun
+    - Task
+    - CustumTask
+- [ ] TriggerBinding &lt;-&gt; TriggerTemplate
+  - [ ] n..1 관계로 Trigger 에서 만나는데 TriggerBinding 수 많은 TriggerTemplate 을 호출되는지 확인이 필요
+
+### 흐름도 단순화 버전
+&gt; 2023-01-29 에 타 프로젝트에서 비슷한 걸 그린 단순화 버전이 있어서 이쪽으로 이동
+
++ https://github.com/deptno/wiki/blob/723c94917898fc9bf99e4475196dc2a67fa60de4/project.md#tekton
+#### tekton
+```mermaid
+flowchart TD
+  subgraph external
+    a{{httpEvent}}
+  end
+  subgraph cluster
+  subgraph sa
+    ServiceAccount
+    ClusterRole --&gt; ClusterRoleBinding --&gt; ServiceAccount
+    Role --&gt; RoleBinding --&gt; ServiceAccount
+    Role --&gt; ClusterRoleBinding
+    Secret --&gt; ServiceAccount
+  end
+  
+  subgraph tekton
+    a{{httpEvent}} --&gt; EventListener --&gt; Trigger --&gt; TriggerBinding
+                                    Trigger --&gt; TriggerTemplate --&gt; PipelineRun --&gt; Pipeline --&gt; Task
+                                    Trigger --&gt; _(Interceptor) -..-&gt; TriggerBinding -...-&gt; TriggerTemplate
+                                    
+    ServiceAccount -..-&gt; EventListener
+    ServiceAccount -..-&gt; PipelineRun
+    ServiceAccount -..-&gt; Trigger
+  end
+  end
+```
+- 생성 오브젝트
+  - external
+  - clsuter
+    - EventListeer
+    - EventListeer
+    - EventListeer
+    - EventListeer
+---
+
+### CRD
+EventListener &gt; TriggerBinding &gt; TriggerTemplate &gt; PipelineRun &gt; Pipeline &gt; Task
+
+- EventListener
+- TriggerBinding 
+- TriggerTemplate 
+- PipelineRun 
+- Pipeline 
+- Task
+
+### Trigger
++ https://tekton.dev/docs/getting-started/triggers/
+- EventListener
+  - PipelineBinding 
+  - PipelineTemplate 
+    - Pipeline 
+- RoleBinding
+  - ServiceAccount
+  - ClusterRole
+- ClusterRoleBinding
+  - ServiceAccount
+  - ClusterRole
+
+| CRD              | 설명                     |
+|------------------|--------------------------|
+| Event            | 트리거                   |
+| PipelineBinding  | 파이프라인에 변수 바인딩 |
+| PipelineTemplate |                          |
+| PipelineRun      | 파이프라인의 실행        |
+| Pipeline         | Task 콜렉션              |
+| Task             |                          |
+
+
+## install
+- [X] pipelines
+- [X] triggers
+- [ ] results 실행 결과?
+
+---
+- [[diary:2023-01-19]] 
+- tutorial
+  + https://tekton.dev/docs/how-to-guides/clone-repository/
+    - `tkn hub install task git-clone` 에러가 나므로 `kubectl apply -f` 를 통한 직접 설치가 필요 2023-01-20 
+    
+## pipeline
++ https://tekton.dev/docs/pipelines/install/#installing-tekton-pipelines-on-kubernetes
+```sh
+kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
+```
+`tecton-pipelines` namepsace 로 설치됨
+
+- pvc 설정
+```sh
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/part-of: tekton-pipelines
+  name: config-artifact-pvc
+  namespace: tekton-pipelines
+data:
+  storageClassName: &quot;openebs-hostpath&quot;
+  size: &quot;10GiB&quot;
+```
+
+- private repo 설정
++ https://tekton.dev/docs/installation/pipelines/#configuring-cloudevents-notifications
+
+- pipeline 설정 `cm/feature-flags` 에 있다
+  - [ ] require-git-ssh-secret-known-hosts
+  - disable-creds-init credential initialization 을 스킵하고 secret 로드로 대체
+
+## dashboard
+```sh 
+kubectl apply --filename \
+https://storage.googleapis.com/tekton-releases/dashboard/latest/tekton-dashboard-release.yaml
+```
+
+## cli
++ https://github.com/tektoncd/cli
+```sh
+brew install tektoncd-cli
+```
+
+## github 
+[[ssh-keygen]] 후 github 에 [[ssh]] 등록
+
+1. `Secret` 생성
+```sh 
+ssh-keygen -t ed25519 -C &quot;[deptno@service.domain]&quot;
+# save current directory
+kubectl create secret generic [secret_name] --from-file=ssh-privatekey=./id_ed25519.tekton.dev --type=kubernetes.io/ssh-auth
+kubectl annotate secret [secret_name] tekton.dev/git-0=github.com
+```
+2. `ServiceAccount` 생성
+```sh 
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tekton-deptno
+secrets:
+  - name: [secret_name]
+```
+3. `PipelineRun` 에 주입하여 사용
+
+tekton hub 에 있는 `git-clone` task 로 확인 DONE: 2023-01-24
+
+## 구현
+### trigger 를 통한 github private 레포지터리 클론 파이프라인 실행
+`ssh-github` 아래와 같은 형태
+```sh
+Name:         ssh-github-deptno
+Namespace:    project-things
+Labels:       &lt;none&gt;
+Annotations:  tekton.dev/git-0: github.com
+
+Type:  kubernetes.io/ssh-auth
+
+Data
+====
+ssh-privatekey:  411 bytes
+```
+
+`git-clone` task 는 hub에서 설치했다
+  + https://hub.tekton.dev/tekton/task/git-clone
+
+```sh 
+apiVersion: v1 
+kind: ServiceAccount
+metadata:
+  name: tt-sa
+secrets:
+  - name: ssh-github # `sh-privatekey` 를 데이터로 갖는다
+---
+apiVersion: rbac.authorization.k8s.io/v1 
+kind: RoleBinding
+metadata:
+  name: tt-rb
+  namespace: project-things
+subjects:
+- kind: ServiceAccount
+  name: tt-sa
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tekton-triggers-eventlistener-roles
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tt-crb
+subjects:
+- kind: ServiceAccount
+  name: tt-sa
+  namespace: project-things
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tekton-triggers-eventlistener-clusterroles
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: tt-ev
+spec:
+  serviceAccountName: tt-sa
+  triggers:
+  - triggerRef: tt-tr
+  resources:
+    kubernetesResource:
+      serviceType: ClusterIP
+      servicePort: 80
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: Trigger
+metadata:
+  name: tt-tr
+spec:
+  bindings:
+  - ref: tt-tb
+  template:
+    ref: tt-tt
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: tt-tb
+spec:
+  params:
+  - name: url
+    value: $(body.url)
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: tt-tt
+spec:
+  params:
+  - name: url
+  resourceTemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      generateName: tt-tt-pr
+    spec:
+      serviceAccountName: tt-sa
+      pipelineRef:
+        name: tt-pl
+      params:
+      - name: repo-url
+        value: $(tt.params.url)
+      workspaces:
+      - name: shared-data
+        emptyDir: {}
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: tt-pl
+  namespace: project-things
+spec:
+  description: clone git repository
+  params:
+  - name: repo-url
+    type: string
+    description: https://github.com/[username]/[reponame].git
+  workspaces:
+  - name: shared-data
+    description: working directory
+  tasks:
+  - name: fetch-source
+    taskRef:
+      name: git-clone
+    params:
+    - name: url
+      value: $(params.repo-url)
+    workspaces:
+    - name: output
+      workspace: shared-data
+```
+
+- 실행
+```sh 
+$ curl -X POST \                                                                                                                                               ok  4s  16.15.0 node  1.59.0 rust  01:12:56
+  http://localhost:8080 \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -d &#x27;{ &quot;url&quot;: &quot;git@github.com:deptno/private-repo.git&quot; }&#x27;
+{&quot;eventListener&quot;:&quot;tt-ev&quot;,&quot;namespace&quot;:&quot;project-things&quot;,&quot;eventListenerUID&quot;:&quot;54001b1f-1859-48a3-802b-d220a954f23c&quot;,&quot;eventID&quot;:&quot;19375452-32d1-4650-aa03-beb73f7f7538&quot;}
+$ tkn pr logs                                                                                                                                                      ok  16.15.0 node  1.59.0 rust  01:13:07
+? Select pipelinerun: tt-tt-prkbpb2 started 1 second ago
+Pipeline still running ...
+task fetch-source has failed: &quot;step-clone&quot; exited with code 1 (image: &quot;gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init@sha256:28ff94e63e4058afc3f15b4c11c08cf3b54fa91faa646a4bbac90380cd7158df&quot;); for logs run: kubectl -n project-things logs tt-tt-prkbpb2-fetch-source-pod -c step-clone
+
+[... logs]
+```
+
+## error
+- pipelinerun 을 통해서 pod 생성 후 계속 pending 상태라 보니 pvc 가 바운드되지 않는 문제
+```sh
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  2m8s  default-scheduler  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1
+ nodes are available: 1 No preemption victims found for incoming pod..
+```
+  1. pvc 를 가보니 storageClassName 이 비어있다, 현 세팅은 `openebs-hostpath` 를 지정해야 사용이 가능한 상태
+  2. manifest 에서 pvc 설정에 storageClassName 을 설정했음에도 동작하지 않았다.
+  3. pvc 에서 `spec.storageClassName: openebs-hostpath` 를 주입하니 정상 실행된다.
+  4. `PipelineRun` 에서 `storageClassName` 을 주입하면 동작한다
+```yaml
+  workspaces:
+  - name: shared-data
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: openebs-hostpath
+```
++ https://tekton.dev/docs/pipelines/workspaces/#using-persistent-volumes-within-a-pipelinerun
+
+---
+
+```sh 
+{
+    &quot;severity&quot;: &quot;fatal&quot;,
+    &quot;timestamp&quot;: &quot;2023-01-28T08:55:54.927Z&quot;,
+    &quot;logger&quot;: &quot;eventlistener&quot;,
+    &quot;caller&quot;: &quot;v2/main.go:205&quot;,
+    &quot;message&quot;: &quot;Start returned an error&quot;,
+    &quot;error&quot;: &quot;Timed out waiting on CaBundle to available for clusterInterceptor: Timed out waiting on CaBundle to available for Interceptor: clusterinterceptors. triggers.tekton.dev is forbidden: User \&quot;system:serviceaccount:project-things:default\&quot; cannot list resource \&quot;clusterinterceptors\&quot; in API group \&quot;triggers.tekton.dev\&quot; at the cluster scope&quot;
+}
+```
+- account 에 tekton에서 제공하는 ClusterRole, Role 이 제대로 되어 있는지 확인한다
+  + https://github.com/tektoncd/triggers/blob/main/examples/rbac.yaml
+
+## releated
+- [[kubernetes]]
+- [[metrics-server]]
+- [[ci]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/cb50144
+" class="bg-white text-black">cb50144</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/tekton.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/tekton.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/tekton.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/tekton"><span class="underline">tekton</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/kubernetes"><span class="underline">kubernetes</span><sup>40</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-01-19"><span class="underline">diary/2023-01-19</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ssh-keygen"><span class="underline">ssh-keygen</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ssh"><span class="underline">ssh</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/metrics-server"><span class="underline">metrics-server</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ci"><span class="underline">ci</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-01-20"><span class="underline">diary/2023-01-20</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-01-24"><span class="underline">diary/2023-01-24</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-01-25"><span class="underline">diary/2023-01-25</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-31"><span class="underline">diary/2023-12-31</span><sup>93</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#tekton">tekton</a></div><div class="pl-2"><a href="#구조">구조</a></div><div class="pl-4"><a href="#흐름도">흐름도</a></div><div class="pl-4"><a href="#흐름도-단순화-버전">흐름도 단순화 버전</a></div><div class="pl-6"><a href="#tekton-1">tekton</a></div><div class="pl-4"><a href="#crd">CRD</a></div><div class="pl-4"><a href="#trigger">Trigger</a></div><div class="pl-2"><a href="#install">install</a></div><div class="pl-2"><a href="#pipeline">pipeline</a></div><div class="pl-2"><a href="#dashboard">dashboard</a></div><div class="pl-2"><a href="#cli">cli</a></div><div class="pl-2"><a href="#github">github</a></div><div class="pl-2"><a href="#구현">구현</a></div><div class="pl-4"><a href="#trigger-를-통한-github-private-레포지터리-클론-파이프라인-실행">trigger 를 통한 github private 레포지터리 클론 파이프라인 실행</a></div><div class="pl-2"><a href="#error">error</a></div><div class="pl-2"><a href="#releated">releated</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="tekton">tekton</h1>
+<p><a href="kubernetes">kubernetes</a> 베이스의 ci/cd</p>
+<ul>
+<li><input disabled="" type="checkbox"> TODO: 모듈화가 잘 되어 있지만 해당 파이브라인 관리 코드를 프로젝트에 놓아야할지 인프라쪽에 놓아야할지 고민 필요</li>
+</ul>
+<hr>
+<h2 id="구조">구조</h2>
+<h3 id="흐름도">흐름도</h3>
+<pre><code class="hljs language-mermaid">erDiagram
+  EXTERNAL-EVENT ||--|| Service : receive-from-external-event
+  Service ||--|| EventListener : &quot;&quot;
+  EventListener ||--|{ TriggerGroups : &quot;&quot;
+  TriggerGroups ||--|{ Trigger: &quot;by selector&quot;
+  Trigger ||--|| TriggerTemplate : ref-or-embed
+  Trigger ||--o{ TriggerBinding : &quot;&quot;
+  Trigger ||--o{ Interceptor : &quot;&quot;
+  Interceptor ||--o{ TriggerBinding : &quot;modify, filter, validate&quot;
+  Trigger ||--o| ServiceAccount : ref
+  EventListener ||--o{ TriggerBinding : &quot;implicit ref event as body&quot;
+  EventListener ||--o{ Interceptor : &quot;implicit ref event as body&quot;
+  TriggerTemplate ||--|{ PipelineRun : embed
+  EventListener ||--|| ServiceAccount : ref
+  PipelineRun ||--o| ServiceAccount : ref
+  PipelineRun }|--|| Pipeline : pipelinerun-ref-or-embed-pipeline
+  PipelineRun ||--|{ Resource : ref
+  PipelineRun ||--|{ Workspace : ref
+  Pipeline ||--|{ Task: ref
+  ServiceAccount }|--|| RoleBinding : ref
+  ServiceAccount }|--|| ClusterRoleBinding : ref
+  RoleBinding ||--o| Role : ref
+  RoleBinding ||--o| ClusterRole : ref
+  ClusterRoleBinding ||--o| ClusterRole : ref
+  ServiceAccount ||--|{ Secret : ref
+  
+  EventListener {
+    TriggerList triggers
+    Resource resources
+  }
+  Trigger {
+    TriggerBindingList bindings
+    TriggerTemplate template
+    InterceptorList interceptors
+    ServiceAccount serviceAccountName
+  }
+  Resource {
+    kubernetesResource o
+    customResource o
+    kubernetesResource o
+  }
+</code></pre><ul>
+<li>대체가능<ul>
+<li>TriggerBinding &lt;-&gt; ClusterTriggerBinding</li>
+<li>TriggerTemplate &lt;-&gt; ClusterTriggerTemplate</li>
+<li>TriggerTemplate 은 PipelineRun 외에 다른 오브젝트 참조가 가능<ul>
+<li>PipelineRun</li>
+<li>Pipeline</li>
+<li>TaskRun</li>
+<li>Task</li>
+<li>CustumTask</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> TriggerBinding &lt;-&gt; TriggerTemplate<ul>
+<li><input disabled="" type="checkbox"> n..1 관계로 Trigger 에서 만나는데 TriggerBinding 수 많은 TriggerTemplate 을 호출되는지 확인이 필요</li>
+</ul>
+</li>
+</ul>
+<h3 id="흐름도-단순화-버전">흐름도 단순화 버전</h3>
+<blockquote><p>2023-01-29 에 타 프로젝트에서 비슷한 걸 그린 단순화 버전이 있어서 이쪽으로 이동</p></blockquote><ul>
+<li><a href="https://github.com/deptno/wiki/blob/723c94917898fc9bf99e4475196dc2a67fa60de4/project.md#tekton" target="_blank">[URL] https://github.com/deptno/wiki/blob/723c94917898fc9bf99e4475196dc2a67fa60de4/project.md#tekton</a></li>
+</ul>
+<h4 id="tekton-1">tekton</h4>
+<pre><code class="hljs language-mermaid">flowchart TD
+  subgraph external
+    a{{httpEvent}}
+  end
+  subgraph cluster
+  subgraph sa
+    ServiceAccount
+    ClusterRole --&gt; ClusterRoleBinding --&gt; ServiceAccount
+    Role --&gt; RoleBinding --&gt; ServiceAccount
+    Role --&gt; ClusterRoleBinding
+    Secret --&gt; ServiceAccount
+  end
+  
+  subgraph tekton
+    a{{httpEvent}} --&gt; EventListener --&gt; Trigger --&gt; TriggerBinding
+                                    Trigger --&gt; TriggerTemplate --&gt; PipelineRun --&gt; Pipeline --&gt; Task
+                                    Trigger --&gt; _(Interceptor) -..-&gt; TriggerBinding -...-&gt; TriggerTemplate
+                                    
+    ServiceAccount -..-&gt; EventListener
+    ServiceAccount -..-&gt; PipelineRun
+    ServiceAccount -..-&gt; Trigger
+  end
+  end
+</code></pre><ul>
+<li>생성 오브젝트<ul>
+<li>external</li>
+<li>clsuter<ul>
+<li>EventListeer</li>
+<li>EventListeer</li>
+<li>EventListeer</li>
+<li>EventListeer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="crd">CRD</h3>
+<p>EventListener &gt; TriggerBinding &gt; TriggerTemplate &gt; PipelineRun &gt; Pipeline &gt; Task</p>
+<ul>
+<li>EventListener</li>
+<li>TriggerBinding </li>
+<li>TriggerTemplate </li>
+<li>PipelineRun </li>
+<li>Pipeline </li>
+<li>Task</li>
+</ul>
+<h3 id="trigger">Trigger</h3>
+<ul>
+<li><a href="https://tekton.dev/docs/getting-started/triggers/" target="_blank">[URL] https://tekton.dev/docs/getting-started/triggers/</a></li>
+</ul>
+<ul>
+<li>EventListener<ul>
+<li>PipelineBinding </li>
+<li>PipelineTemplate <ul>
+<li>Pipeline</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>RoleBinding<ul>
+<li>ServiceAccount</li>
+<li>ClusterRole</li>
+</ul>
+</li>
+<li>ClusterRoleBinding<ul>
+<li>ServiceAccount</li>
+<li>ClusterRole</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>CRD</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Event</td>
+<td>트리거</td>
+</tr>
+<tr>
+<td>PipelineBinding</td>
+<td>파이프라인에 변수 바인딩</td>
+</tr>
+<tr>
+<td>PipelineTemplate</td>
+<td></td>
+</tr>
+<tr>
+<td>PipelineRun</td>
+<td>파이프라인의 실행</td>
+</tr>
+<tr>
+<td>Pipeline</td>
+<td>Task 콜렉션</td>
+</tr>
+<tr>
+<td>Task</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="install">install</h2>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> pipelines</li>
+<li><input checked="" disabled="" type="checkbox"> triggers</li>
+<li><input disabled="" type="checkbox"> results 실행 결과?</li>
+</ul>
+<hr>
+<ul>
+<li><a href="/public-wiki/diary/2023-01-19">[diary] diary:2023-01-19</a> </li>
+<li>tutorial<ul>
+<li><a href="https://tekton.dev/docs/how-to-guides/clone-repository/" target="_blank">[URL] https://tekton.dev/docs/how-to-guides/clone-repository/</a><ul>
+<li><code class="span">tkn hub install task git-clone</code> 에러가 나므로 <code class="span">kubectl apply -f</code> 를 통한 직접 설치가 필요 2023-01-20</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="pipeline">pipeline</h2>
+<ul>
+<li><a href="https://tekton.dev/docs/pipelines/install/#installing-tekton-pipelines-on-kubernetes" target="_blank">[URL] https://tekton.dev/docs/pipelines/install/#installing-tekton-pipelines-on-kubernetes</a></li>
+</ul>
+<pre><code class="hljs language-sh">kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
+</code></pre><p><code class="span">tecton-pipelines</code> namepsace 로 설치됨</p>
+<ul>
+<li>pvc 설정</li>
+</ul>
+<pre><code class="hljs language-sh">apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/part-of: tekton-pipelines
+  name: config-artifact-pvc
+  namespace: tekton-pipelines
+data:
+  storageClassName: <span class="hljs-string">&quot;openebs-hostpath&quot;</span>
+  size: <span class="hljs-string">&quot;10GiB&quot;</span>
+</code></pre><ul>
+<li>private repo 설정</li>
+</ul>
+<ul>
+<li><a href="https://tekton.dev/docs/installation/pipelines/#configuring-cloudevents-notifications" target="_blank">[URL] https://tekton.dev/docs/installation/pipelines/#configuring-cloudevents-notifications</a></li>
+</ul>
+<ul>
+<li>pipeline 설정 <code class="span">cm/feature-flags</code> 에 있다<ul>
+<li><input disabled="" type="checkbox"> require-git-ssh-secret-known-hosts</li>
+<li>disable-creds-init credential initialization 을 스킵하고 secret 로드로 대체</li>
+</ul>
+</li>
+</ul>
+<h2 id="dashboard">dashboard</h2>
+<pre><code class="hljs language-sh">kubectl apply --filename \
+https://storage.googleapis.com/tekton-releases/dashboard/latest/tekton-dashboard-release.yaml
+</code></pre><h2 id="cli">cli</h2>
+<ul>
+<li><a href="https://github.com/tektoncd/cli" target="_blank">[URL] https://github.com/tektoncd/cli</a></li>
+</ul>
+<pre><code class="hljs language-sh">brew install tektoncd-cli
+</code></pre><h2 id="github">github</h2>
+<p><a href="ssh-keygen">ssh-keygen</a> 후 github 에 <a href="ssh">ssh</a> 등록</p>
+<ol>
+<li><code class="span">Secret</code> 생성</li>
+</ol>
+<pre><code class="hljs language-sh">ssh-keygen -t ed25519 -C <span class="hljs-string">&quot;[deptno@service.domain]&quot;</span>
+<span class="hljs-comment"># save current directory</span>
+kubectl create secret generic [secret_name] --from-file=ssh-privatekey=./id_ed25519.tekton.dev --<span class="hljs-built_in">type</span>=kubernetes.io/ssh-auth
+kubectl annotate secret [secret_name] tekton.dev/git-0=github.com
+</code></pre><ol start="2">
+<li><code class="span">ServiceAccount</code> 생성</li>
+</ol>
+<pre><code class="hljs language-sh">apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tekton-deptno
+secrets:
+  - name: [secret_name]
+</code></pre><ol start="3">
+<li><code class="span">PipelineRun</code> 에 주입하여 사용</li>
+</ol>
+<p>tekton hub 에 있는 <code class="span">git-clone</code> task 로 확인 DONE: 2023-01-24</p>
+<h2 id="구현">구현</h2>
+<h3 id="trigger-를-통한-github-private-레포지터리-클론-파이프라인-실행">trigger 를 통한 github private 레포지터리 클론 파이프라인 실행</h3>
+<p><code class="span">ssh-github</code> 아래와 같은 형태</p>
+<pre><code class="hljs language-sh">Name:         ssh-github-deptno
+Namespace:    project-things
+Labels:       &lt;none&gt;
+Annotations:  tekton.dev/git-0: github.com
+
+Type:  kubernetes.io/ssh-auth
+
+Data
+====
+ssh-privatekey:  411 bytes
+</code></pre><p><code class="span">git-clone</code> task 는 hub에서 설치했다</p>
+<ul>
+<li><a href="https://hub.tekton.dev/tekton/task/git-clone" target="_blank">[URL] https://hub.tekton.dev/tekton/task/git-clone</a></li>
+</ul>
+<pre><code class="hljs language-sh">apiVersion: v1 
+kind: ServiceAccount
+metadata:
+  name: tt-sa
+secrets:
+  - name: ssh-github <span class="hljs-comment"># `sh-privatekey` 를 데이터로 갖는다</span>
+---
+apiVersion: rbac.authorization.k8s.io/v1 
+kind: RoleBinding
+metadata:
+  name: tt-rb
+  namespace: project-things
+subjects:
+- kind: ServiceAccount
+  name: tt-sa
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tekton-triggers-eventlistener-roles
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tt-crb
+subjects:
+- kind: ServiceAccount
+  name: tt-sa
+  namespace: project-things
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: tekton-triggers-eventlistener-clusterroles
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: tt-ev
+spec:
+  serviceAccountName: tt-sa
+  triggers:
+  - triggerRef: tt-tr
+  resources:
+    kubernetesResource:
+      serviceType: ClusterIP
+      servicePort: 80
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: Trigger
+metadata:
+  name: tt-tr
+spec:
+  bindings:
+  - ref: tt-tb
+  template:
+    ref: tt-tt
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: tt-tb
+spec:
+  params:
+  - name: url
+    value: $(body.url)
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: tt-tt
+spec:
+  params:
+  - name: url
+  resourceTemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      generateName: tt-tt-pr
+    spec:
+      serviceAccountName: tt-sa
+      pipelineRef:
+        name: tt-pl
+      params:
+      - name: repo-url
+        value: $(tt.params.url)
+      workspaces:
+      - name: shared-data
+        emptyDir: {}
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: tt-pl
+  namespace: project-things
+spec:
+  description: <span class="hljs-built_in">clone</span> git repository
+  params:
+  - name: repo-url
+    <span class="hljs-built_in">type</span>: string
+    description: https://github.com/[username]/[reponame].git
+  workspaces:
+  - name: shared-data
+    description: working directory
+  tasks:
+  - name: fetch-source
+    taskRef:
+      name: git-clone
+    params:
+    - name: url
+      value: $(params.repo-url)
+    workspaces:
+    - name: output
+      workspace: shared-data
+</code></pre><ul>
+<li>실행</li>
+</ul>
+<pre><code class="hljs language-sh">$ curl -X POST \                                                                                                                                               ok  4s  16.15.0 node  1.59.0 rust  01:12:56
+  http://localhost:8080 \
+  -H <span class="hljs-string">&#x27;Content-Type: application/json&#x27;</span> \
+  -d <span class="hljs-string">&#x27;{ &quot;url&quot;: &quot;git@github.com:deptno/private-repo.git&quot; }&#x27;</span>
+{<span class="hljs-string">&quot;eventListener&quot;</span>:<span class="hljs-string">&quot;tt-ev&quot;</span>,<span class="hljs-string">&quot;namespace&quot;</span>:<span class="hljs-string">&quot;project-things&quot;</span>,<span class="hljs-string">&quot;eventListenerUID&quot;</span>:<span class="hljs-string">&quot;54001b1f-1859-48a3-802b-d220a954f23c&quot;</span>,<span class="hljs-string">&quot;eventID&quot;</span>:<span class="hljs-string">&quot;19375452-32d1-4650-aa03-beb73f7f7538&quot;</span>}
+$ tkn <span class="hljs-built_in">pr</span> logs                                                                                                                                                      ok  16.15.0 node  1.59.0 rust  01:13:07
+? Select pipelinerun: tt-tt-prkbpb2 started 1 second ago
+Pipeline still running ...
+task fetch-source has failed: <span class="hljs-string">&quot;step-clone&quot;</span> exited with code 1 (image: <span class="hljs-string">&quot;gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init@sha256:28ff94e63e4058afc3f15b4c11c08cf3b54fa91faa646a4bbac90380cd7158df&quot;</span>); <span class="hljs-keyword">for</span> logs run: kubectl -n project-things logs tt-tt-prkbpb2-fetch-source-pod -c step-clone
+
+[... logs]
+</code></pre><h2 id="error">error</h2>
+<ul>
+<li>pipelinerun 을 통해서 pod 생성 후 계속 pending 상태라 보니 pvc 가 바운드되지 않는 문제</li>
+</ul>
+<pre><code class="hljs language-sh">Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  2m8s  default-scheduler  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1
+ nodes are available: 1 No preemption victims found <span class="hljs-keyword">for</span> incoming pod..
+</code></pre><ol>
+<li>pvc 를 가보니 storageClassName 이 비어있다, 현 세팅은 <code class="span">openebs-hostpath</code> 를 지정해야 사용이 가능한 상태</li>
+<li>manifest 에서 pvc 설정에 storageClassName 을 설정했음에도 동작하지 않았다.</li>
+<li>pvc 에서 <code class="span">spec.storageClassName: openebs-hostpath</code> 를 주입하니 정상 실행된다.</li>
+<li><code class="span">PipelineRun</code> 에서 <code class="span">storageClassName</code> 을 주입하면 동작한다</li>
+</ol>
+<pre><code class="hljs language-yaml">  <span class="hljs-attr">workspaces:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">shared-data</span>
+    <span class="hljs-attr">volumeClaimTemplate:</span>
+      <span class="hljs-attr">spec:</span>
+        <span class="hljs-attr">accessModes:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-string">ReadWriteOnce</span>
+        <span class="hljs-attr">resources:</span>
+          <span class="hljs-attr">requests:</span>
+            <span class="hljs-attr">storage:</span> <span class="hljs-string">1Gi</span>
+        <span class="hljs-attr">storageClassName:</span> <span class="hljs-string">openebs-hostpath</span>
+</code></pre><ul>
+<li><a href="https://tekton.dev/docs/pipelines/workspaces/#using-persistent-volumes-within-a-pipelinerun" target="_blank">[URL] https://tekton.dev/docs/pipelines/workspaces/#using-persistent-volumes-within-a-pipelinerun</a></li>
+</ul>
+<hr>
+<pre><code class="hljs language-sh">{
+    <span class="hljs-string">&quot;severity&quot;</span>: <span class="hljs-string">&quot;fatal&quot;</span>,
+    <span class="hljs-string">&quot;timestamp&quot;</span>: <span class="hljs-string">&quot;2023-01-28T08:55:54.927Z&quot;</span>,
+    <span class="hljs-string">&quot;logger&quot;</span>: <span class="hljs-string">&quot;eventlistener&quot;</span>,
+    <span class="hljs-string">&quot;caller&quot;</span>: <span class="hljs-string">&quot;v2/main.go:205&quot;</span>,
+    <span class="hljs-string">&quot;message&quot;</span>: <span class="hljs-string">&quot;Start returned an error&quot;</span>,
+    <span class="hljs-string">&quot;error&quot;</span>: <span class="hljs-string">&quot;Timed out waiting on CaBundle to available for clusterInterceptor: Timed out waiting on CaBundle to available for Interceptor: clusterinterceptors. triggers.tekton.dev is forbidden: User \&quot;system:serviceaccount:project-things:default\&quot; cannot list resource \&quot;clusterinterceptors\&quot; in API group \&quot;triggers.tekton.dev\&quot; at the cluster scope&quot;</span>
+}
+</code></pre><ul>
+<li>account 에 tekton에서 제공하는 ClusterRole, Role 이 제대로 되어 있는지 확인한다<ul>
+<li><a href="https://github.com/tektoncd/triggers/blob/main/examples/rbac.yaml" target="_blank">[URL] https://github.com/tektoncd/triggers/blob/main/examples/rbac.yaml</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="releated">releated</h2>
+<ul>
+<li><a href="kubernetes">kubernetes</a></li>
+<li><a href="metrics-server">metrics-server</a></li>
+<li><a href="ci">ci</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-0d2541f49ad9d59a.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-bc971df7080b641f.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"tekton\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"RNVjrwq2dSJDzlbiALfEr\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/tekton\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"tekton\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"tekton\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"tekton\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T43de,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"tekton\"\u003etekton\u003c/h1\u003e\n\u003cp\u003e\u003ca href=\"kubernetes\"\u003ekubernetes\u003c/a\u003e 베이스의 ci/cd\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e TODO: 모듈화가 잘 되어 있지만 해당 파이브라인 관리 코드를 프로젝트에 놓아야할지 인프라쪽에 놓아야할지 고민 필요\u003c/li\u003e\n\u003c/ul\u003e\n\u003chr\u003e\n\u003ch2 id=\"구조\"\u003e구조\u003c/h2\u003e\n\u003ch3 id=\"흐름도\"\u003e흐름도\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-mermaid\"\u003eerDiagram\n  EXTERNAL-EVENT ||--|| Service : receive-from-external-event\n  Service ||--|| EventListener : \u0026quot;\u0026quot;\n  EventListener ||--|{ TriggerGroups : \u0026quot;\u0026quot;\n  TriggerGroups ||--|{ Trigger: \u0026quot;by selector\u0026quot;\n  Trigger ||--|| TriggerTemplate : ref-or-embed\n  Trigger ||--o{ TriggerBinding : \u0026quot;\u0026quot;\n  Trigger ||--o{ Interceptor : \u0026quot;\u0026quot;\n  Interceptor ||--o{ TriggerBinding : \u0026quot;modify, filter, validate\u0026quot;\n  Trigger ||--o| ServiceAccount : ref\n  EventListener ||--o{ TriggerBinding : \u0026quot;implicit ref event as body\u0026quot;\n  EventListener ||--o{ Interceptor : \u0026quot;implicit ref event as body\u0026quot;\n  TriggerTemplate ||--|{ PipelineRun : embed\n  EventListener ||--|| ServiceAccount : ref\n  PipelineRun ||--o| ServiceAccount : ref\n  PipelineRun }|--|| Pipeline : pipelinerun-ref-or-embed-pipeline\n  PipelineRun ||--|{ Resource : ref\n  PipelineRun ||--|{ Workspace : ref\n  Pipeline ||--|{ Task: ref\n  ServiceAccount }|--|| RoleBinding : ref\n  ServiceAccount }|--|| ClusterRoleBinding : ref\n  RoleBinding ||--o| Role : ref\n  RoleBinding ||--o| ClusterRole : ref\n  ClusterRoleBinding ||--o| ClusterRole : ref\n  ServiceAccount ||--|{ Secret : ref\n  \n  EventListener {\n    TriggerList triggers\n    Resource resources\n  }\n  Trigger {\n    TriggerBindingList bindings\n    TriggerTemplate template\n    InterceptorList interceptors\n    ServiceAccount serviceAccountName\n  }\n  Resource {\n    kubernetesResource o\n    customResource o\n    kubernetesResource o\n  }\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e대체가능\u003cul\u003e\n\u003cli\u003eTriggerBinding \u0026lt;-\u0026gt; ClusterTriggerBinding\u003c/li\u003e\n\u003cli\u003eTriggerTemplate \u0026lt;-\u0026gt; ClusterTriggerTemplate\u003c/li\u003e\n\u003cli\u003eTriggerTemplate 은 PipelineRun 외에 다른 오브젝트 참조가 가능\u003cul\u003e\n\u003cli\u003ePipelineRun\u003c/li\u003e\n\u003cli\u003ePipeline\u003c/li\u003e\n\u003cli\u003eTaskRun\u003c/li\u003e\n\u003cli\u003eTask\u003c/li\u003e\n\u003cli\u003eCustumTask\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e TriggerBinding \u0026lt;-\u0026gt; TriggerTemplate\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e n..1 관계로 Trigger 에서 만나는데 TriggerBinding 수 많은 TriggerTemplate 을 호출되는지 확인이 필요\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"흐름도-단순화-버전\"\u003e흐름도 단순화 버전\u003c/h3\u003e\n\u003cblockquote\u003e\u003cp\u003e2023-01-29 에 타 프로젝트에서 비슷한 걸 그린 단순화 버전이 있어서 이쪽으로 이동\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/deptno/wiki/blob/723c94917898fc9bf99e4475196dc2a67fa60de4/project.md#tekton\" target=\"_blank\"\u003e[URL] https://github.com/deptno/wiki/blob/723c94917898fc9bf99e4475196dc2a67fa60de4/project.md#tekton\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"tekton-1\"\u003etekton\u003c/h4\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-mermaid\"\u003eflowchart TD\n  subgraph external\n    a{{httpEvent}}\n  end\n  subgraph cluster\n  subgraph sa\n    ServiceAccount\n    ClusterRole --\u0026gt; ClusterRoleBinding --\u0026gt; ServiceAccount\n    Role --\u0026gt; RoleBinding --\u0026gt; ServiceAccount\n    Role --\u0026gt; ClusterRoleBinding\n    Secret --\u0026gt; ServiceAccount\n  end\n  \n  subgraph tekton\n    a{{httpEvent}} --\u0026gt; EventListener --\u0026gt; Trigger --\u0026gt; TriggerBinding\n                                    Trigger --\u0026gt; TriggerTemplate --\u0026gt; PipelineRun --\u0026gt; Pipeline --\u0026gt; Task\n                                    Trigger --\u0026gt; _(Interceptor) -..-\u0026gt; TriggerBinding -...-\u0026gt; TriggerTemplate\n                                    \n    ServiceAccount -..-\u0026gt; EventListener\n    ServiceAccount -..-\u0026gt; PipelineRun\n    ServiceAccount -..-\u0026gt; Trigger\n  end\n  end\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e생성 오브젝트\u003cul\u003e\n\u003cli\u003eexternal\u003c/li\u003e\n\u003cli\u003eclsuter\u003cul\u003e\n\u003cli\u003eEventListeer\u003c/li\u003e\n\u003cli\u003eEventListeer\u003c/li\u003e\n\u003cli\u003eEventListeer\u003c/li\u003e\n\u003cli\u003eEventListeer\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003chr\u003e\n\u003ch3 id=\"crd\"\u003eCRD\u003c/h3\u003e\n\u003cp\u003eEventListener \u0026gt; TriggerBinding \u0026gt; TriggerTemplate \u0026gt; PipelineRun \u0026gt; Pipeline \u0026gt; Task\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eEventListener\u003c/li\u003e\n\u003cli\u003eTriggerBinding \u003c/li\u003e\n\u003cli\u003eTriggerTemplate \u003c/li\u003e\n\u003cli\u003ePipelineRun \u003c/li\u003e\n\u003cli\u003ePipeline \u003c/li\u003e\n\u003cli\u003eTask\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"trigger\"\u003eTrigger\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://tekton.dev/docs/getting-started/triggers/\" target=\"_blank\"\u003e[URL] https://tekton.dev/docs/getting-started/triggers/\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003eEventListener\u003cul\u003e\n\u003cli\u003ePipelineBinding \u003c/li\u003e\n\u003cli\u003ePipelineTemplate \u003cul\u003e\n\u003cli\u003ePipeline\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eRoleBinding\u003cul\u003e\n\u003cli\u003eServiceAccount\u003c/li\u003e\n\u003cli\u003eClusterRole\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eClusterRoleBinding\u003cul\u003e\n\u003cli\u003eServiceAccount\u003c/li\u003e\n\u003cli\u003eClusterRole\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003eCRD\u003c/th\u003e\n\u003cth\u003e설명\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\u003ctr\u003e\n\u003ctd\u003eEvent\u003c/td\u003e\n\u003ctd\u003e트리거\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003ePipelineBinding\u003c/td\u003e\n\u003ctd\u003e파이프라인에 변수 바인딩\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003ePipelineTemplate\u003c/td\u003e\n\u003ctd\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003ePipelineRun\u003c/td\u003e\n\u003ctd\u003e파이프라인의 실행\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003ePipeline\u003c/td\u003e\n\u003ctd\u003eTask 콜렉션\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eTask\u003c/td\u003e\n\u003ctd\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\u003c/table\u003e\n\u003ch2 id=\"install\"\u003einstall\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e pipelines\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e triggers\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e results 실행 결과?\u003c/li\u003e\n\u003c/ul\u003e\n\u003chr\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"/public-wiki/diary/2023-01-19\"\u003e[diary] diary:2023-01-19\u003c/a\u003e \u003c/li\u003e\n\u003cli\u003etutorial\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://tekton.dev/docs/how-to-guides/clone-repository/\" target=\"_blank\"\u003e[URL] https://tekton.dev/docs/how-to-guides/clone-repository/\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003etkn hub install task git-clone\u003c/code\u003e 에러가 나므로 \u003ccode class=\"span\"\u003ekubectl apply -f\u003c/code\u003e 를 통한 직접 설치가 필요 2023-01-20\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"pipeline\"\u003epipeline\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://tekton.dev/docs/pipelines/install/#installing-tekton-pipelines-on-kubernetes\" target=\"_blank\"\u003e[URL] https://tekton.dev/docs/pipelines/install/#installing-tekton-pipelines-on-kubernetes\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ekubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003e\u003ccode class=\"span\"\u003etecton-pipelines\u003c/code\u003e namepsace 로 설치됨\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003epvc 설정\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eapiVersion: v1\nkind: ConfigMap\nmetadata:\n  labels:\n    app.kubernetes.io/instance: default\n    app.kubernetes.io/part-of: tekton-pipelines\n  name: config-artifact-pvc\n  namespace: tekton-pipelines\ndata:\n  storageClassName: \u003cspan class=\"hljs-string\"\u003e\u0026quot;openebs-hostpath\u0026quot;\u003c/span\u003e\n  size: \u003cspan class=\"hljs-string\"\u003e\u0026quot;10GiB\u0026quot;\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003eprivate repo 설정\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://tekton.dev/docs/installation/pipelines/#configuring-cloudevents-notifications\" target=\"_blank\"\u003e[URL] https://tekton.dev/docs/installation/pipelines/#configuring-cloudevents-notifications\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003epipeline 설정 \u003ccode class=\"span\"\u003ecm/feature-flags\u003c/code\u003e 에 있다\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e require-git-ssh-secret-known-hosts\u003c/li\u003e\n\u003cli\u003edisable-creds-init credential initialization 을 스킵하고 secret 로드로 대체\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"dashboard\"\u003edashboard\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ekubectl apply --filename \\\nhttps://storage.googleapis.com/tekton-releases/dashboard/latest/tekton-dashboard-release.yaml\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"cli\"\u003ecli\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/tektoncd/cli\" target=\"_blank\"\u003e[URL] https://github.com/tektoncd/cli\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ebrew install tektoncd-cli\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"github\"\u003egithub\u003c/h2\u003e\n\u003cp\u003e\u003ca href=\"ssh-keygen\"\u003essh-keygen\u003c/a\u003e 후 github 에 \u003ca href=\"ssh\"\u003essh\u003c/a\u003e 등록\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eSecret\u003c/code\u003e 생성\u003c/li\u003e\n\u003c/ol\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003essh-keygen -t ed25519 -C \u003cspan class=\"hljs-string\"\u003e\u0026quot;[deptno@service.domain]\u0026quot;\u003c/span\u003e\n\u003cspan class=\"hljs-comment\"\u003e# save current directory\u003c/span\u003e\nkubectl create secret generic [secret_name] --from-file=ssh-privatekey=./id_ed25519.tekton.dev --\u003cspan class=\"hljs-built_in\"\u003etype\u003c/span\u003e=kubernetes.io/ssh-auth\nkubectl annotate secret [secret_name] tekton.dev/git-0=github.com\n\u003c/code\u003e\u003c/pre\u003e\u003col start=\"2\"\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eServiceAccount\u003c/code\u003e 생성\u003c/li\u003e\n\u003c/ol\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eapiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: tekton-deptno\nsecrets:\n  - name: [secret_name]\n\u003c/code\u003e\u003c/pre\u003e\u003col start=\"3\"\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ePipelineRun\u003c/code\u003e 에 주입하여 사용\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003etekton hub 에 있는 \u003ccode class=\"span\"\u003egit-clone\u003c/code\u003e task 로 확인 DONE: 2023-01-24\u003c/p\u003e\n\u003ch2 id=\"구현\"\u003e구현\u003c/h2\u003e\n\u003ch3 id=\"trigger-를-통한-github-private-레포지터리-클론-파이프라인-실행\"\u003etrigger 를 통한 github private 레포지터리 클론 파이프라인 실행\u003c/h3\u003e\n\u003cp\u003e\u003ccode class=\"span\"\u003essh-github\u003c/code\u003e 아래와 같은 형태\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eName:         ssh-github-deptno\nNamespace:    project-things\nLabels:       \u0026lt;none\u0026gt;\nAnnotations:  tekton.dev/git-0: github.com\n\nType:  kubernetes.io/ssh-auth\n\nData\n====\nssh-privatekey:  411 bytes\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003e\u003ccode class=\"span\"\u003egit-clone\u003c/code\u003e task 는 hub에서 설치했다\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://hub.tekton.dev/tekton/task/git-clone\" target=\"_blank\"\u003e[URL] https://hub.tekton.dev/tekton/task/git-clone\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eapiVersion: v1 \nkind: ServiceAccount\nmetadata:\n  name: tt-sa\nsecrets:\n  - name: ssh-github \u003cspan class=\"hljs-comment\"\u003e# `sh-privatekey` 를 데이터로 갖는다\u003c/span\u003e\n---\napiVersion: rbac.authorization.k8s.io/v1 \nkind: RoleBinding\nmetadata:\n  name: tt-rb\n  namespace: project-things\nsubjects:\n- kind: ServiceAccount\n  name: tt-sa\nroleRef:\n  apiGroup: rbac.authorization.k8s.io\n  kind: ClusterRole\n  name: tekton-triggers-eventlistener-roles\n---\napiVersion: rbac.authorization.k8s.io/v1\nkind: ClusterRoleBinding\nmetadata:\n  name: tt-crb\nsubjects:\n- kind: ServiceAccount\n  name: tt-sa\n  namespace: project-things\nroleRef:\n  apiGroup: rbac.authorization.k8s.io\n  kind: ClusterRole\n  name: tekton-triggers-eventlistener-clusterroles\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: EventListener\nmetadata:\n  name: tt-ev\nspec:\n  serviceAccountName: tt-sa\n  triggers:\n  - triggerRef: tt-tr\n  resources:\n    kubernetesResource:\n      serviceType: ClusterIP\n      servicePort: 80\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: Trigger\nmetadata:\n  name: tt-tr\nspec:\n  bindings:\n  - ref: tt-tb\n  template:\n    ref: tt-tt\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: TriggerBinding\nmetadata:\n  name: tt-tb\nspec:\n  params:\n  - name: url\n    value: $(body.url)\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: TriggerTemplate\nmetadata:\n  name: tt-tt\nspec:\n  params:\n  - name: url\n  resourceTemplates:\n  - apiVersion: tekton.dev/v1beta1\n    kind: PipelineRun\n    metadata:\n      generateName: tt-tt-pr\n    spec:\n      serviceAccountName: tt-sa\n      pipelineRef:\n        name: tt-pl\n      params:\n      - name: repo-url\n        value: $(tt.params.url)\n      workspaces:\n      - name: shared-data\n        emptyDir: {}\n---\napiVersion: tekton.dev/v1beta1\nkind: Pipeline\nmetadata:\n  name: tt-pl\n  namespace: project-things\nspec:\n  description: \u003cspan class=\"hljs-built_in\"\u003eclone\u003c/span\u003e git repository\n  params:\n  - name: repo-url\n    \u003cspan class=\"hljs-built_in\"\u003etype\u003c/span\u003e: string\n    description: https://github.com/[username]/[reponame].git\n  workspaces:\n  - name: shared-data\n    description: working directory\n  tasks:\n  - name: fetch-source\n    taskRef:\n      name: git-clone\n    params:\n    - name: url\n      value: $(params.repo-url)\n    workspaces:\n    - name: output\n      workspace: shared-data\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e실행\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ curl -X POST \\                                                                                                                                               ok  4s  16.15.0 node  1.59.0 rust  01:12:56\n  http://localhost:8080 \\\n  -H \u003cspan class=\"hljs-string\"\u003e\u0026#x27;Content-Type: application/json\u0026#x27;\u003c/span\u003e \\\n  -d \u003cspan class=\"hljs-string\"\u003e\u0026#x27;{ \u0026quot;url\u0026quot;: \u0026quot;git@github.com:deptno/private-repo.git\u0026quot; }\u0026#x27;\u003c/span\u003e\n{\u003cspan class=\"hljs-string\"\u003e\u0026quot;eventListener\u0026quot;\u003c/span\u003e:\u003cspan class=\"hljs-string\"\u003e\u0026quot;tt-ev\u0026quot;\u003c/span\u003e,\u003cspan class=\"hljs-string\"\u003e\u0026quot;namespace\u0026quot;\u003c/span\u003e:\u003cspan class=\"hljs-string\"\u003e\u0026quot;project-things\u0026quot;\u003c/span\u003e,\u003cspan class=\"hljs-string\"\u003e\u0026quot;eventListenerUID\u0026quot;\u003c/span\u003e:\u003cspan class=\"hljs-string\"\u003e\u0026quot;54001b1f-1859-48a3-802b-d220a954f23c\u0026quot;\u003c/span\u003e,\u003cspan class=\"hljs-string\"\u003e\u0026quot;eventID\u0026quot;\u003c/span\u003e:\u003cspan class=\"hljs-string\"\u003e\u0026quot;19375452-32d1-4650-aa03-beb73f7f7538\u0026quot;\u003c/span\u003e}\n$ tkn \u003cspan class=\"hljs-built_in\"\u003epr\u003c/span\u003e logs                                                                                                                                                      ok  16.15.0 node  1.59.0 rust  01:13:07\n? Select pipelinerun: tt-tt-prkbpb2 started 1 second ago\nPipeline still running ...\ntask fetch-source has failed: \u003cspan class=\"hljs-string\"\u003e\u0026quot;step-clone\u0026quot;\u003c/span\u003e exited with code 1 (image: \u003cspan class=\"hljs-string\"\u003e\u0026quot;gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init@sha256:28ff94e63e4058afc3f15b4c11c08cf3b54fa91faa646a4bbac90380cd7158df\u0026quot;\u003c/span\u003e); \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e logs run: kubectl -n project-things logs tt-tt-prkbpb2-fetch-source-pod -c step-clone\n\n[... logs]\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"error\"\u003eerror\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003epipelinerun 을 통해서 pod 생성 후 계속 pending 상태라 보니 pvc 가 바운드되지 않는 문제\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eEvents:\n  Type     Reason            Age   From               Message\n  ----     ------            ----  ----               -------\n  Warning  FailedScheduling  2m8s  default-scheduler  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1\n nodes are available: 1 No preemption victims found \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e incoming pod..\n\u003c/code\u003e\u003c/pre\u003e\u003col\u003e\n\u003cli\u003epvc 를 가보니 storageClassName 이 비어있다, 현 세팅은 \u003ccode class=\"span\"\u003eopenebs-hostpath\u003c/code\u003e 를 지정해야 사용이 가능한 상태\u003c/li\u003e\n\u003cli\u003emanifest 에서 pvc 설정에 storageClassName 을 설정했음에도 동작하지 않았다.\u003c/li\u003e\n\u003cli\u003epvc 에서 \u003ccode class=\"span\"\u003espec.storageClassName: openebs-hostpath\u003c/code\u003e 를 주입하니 정상 실행된다.\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ePipelineRun\u003c/code\u003e 에서 \u003ccode class=\"span\"\u003estorageClassName\u003c/code\u003e 을 주입하면 동작한다\u003c/li\u003e\n\u003c/ol\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-yaml\"\u003e  \u003cspan class=\"hljs-attr\"\u003eworkspaces:\u003c/span\u003e\n  \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003ename:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003eshared-data\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003evolumeClaimTemplate:\u003c/span\u003e\n      \u003cspan class=\"hljs-attr\"\u003espec:\u003c/span\u003e\n        \u003cspan class=\"hljs-attr\"\u003eaccessModes:\u003c/span\u003e\n        \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003eReadWriteOnce\u003c/span\u003e\n        \u003cspan class=\"hljs-attr\"\u003eresources:\u003c/span\u003e\n          \u003cspan class=\"hljs-attr\"\u003erequests:\u003c/span\u003e\n            \u003cspan class=\"hljs-attr\"\u003estorage:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e1Gi\u003c/span\u003e\n        \u003cspan class=\"hljs-attr\"\u003estorageClassName:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003eopenebs-hostpath\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://tekton.dev/docs/pipelines/workspaces/#using-persistent-volumes-within-a-pipelinerun\" target=\"_blank\"\u003e[URL] https://tekton.dev/docs/pipelines/workspaces/#using-persistent-volumes-within-a-pipelinerun\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003chr\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e{\n    \u003cspan class=\"hljs-string\"\u003e\u0026quot;severity\u0026quot;\u003c/span\u003e: \u003cspan class=\"hljs-string\"\u003e\u0026quot;fatal\u0026quot;\u003c/span\u003e,\n    \u003cspan class=\"hljs-string\"\u003e\u0026quot;timestamp\u0026quot;\u003c/span\u003e: \u003cspan class=\"hljs-string\"\u003e\u0026quot;2023-01-28T08:55:54.927Z\u0026quot;\u003c/span\u003e,\n    \u003cspan class=\"hljs-string\"\u003e\u0026quot;logger\u0026quot;\u003c/span\u003e: \u003cspan class=\"hljs-string\"\u003e\u0026quot;eventlistener\u0026quot;\u003c/span\u003e,\n    \u003cspan class=\"hljs-string\"\u003e\u0026quot;caller\u0026quot;\u003c/span\u003e: \u003cspan class=\"hljs-string\"\u003e\u0026quot;v2/main.go:205\u0026quot;\u003c/span\u003e,\n    \u003cspan class=\"hljs-string\"\u003e\u0026quot;message\u0026quot;\u003c/span\u003e: \u003cspan class=\"hljs-string\"\u003e\u0026quot;Start returned an error\u0026quot;\u003c/span\u003e,\n    \u003cspan class=\"hljs-string\"\u003e\u0026quot;error\u0026quot;\u003c/span\u003e: \u003cspan class=\"hljs-string\"\u003e\u0026quot;Timed out waiting on CaBundle to available for clusterInterceptor: Timed out waiting on CaBundle to available for Interceptor: clusterinterceptors. triggers.tekton.dev is forbidden: User \\\u0026quot;system:serviceaccount:project-things:default\\\u0026quot; cannot list resource \\\u0026quot;clusterinterceptors\\\u0026quot; in API group \\\u0026quot;triggers.tekton.dev\\\u0026quot; at the cluster scope\u0026quot;\u003c/span\u003e\n}\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003eaccount 에 tekton에서 제공하는 ClusterRole, Role 이 제대로 되어 있는지 확인한다\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/tektoncd/triggers/blob/main/examples/rbac.yaml\" target=\"_blank\"\u003e[URL] https://github.com/tektoncd/triggers/blob/main/examples/rbac.yaml\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"releated\"\u003ereleated\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"kubernetes\"\u003ekubernetes\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"metrics-server\"\u003emetrics-server\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"ci\"\u003eci\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/cb50144\\n\",\"className\":\"bg-white text-black\",\"children\":\"cb50144\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/tekton.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/tekton.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/tekton.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"tekton\",\"name\":\"tekton\",\"val\":7},{\"id\":\"kubernetes\",\"name\":\"kubernetes\",\"val\":40},{\"id\":\"diary/2023-01-19\",\"name\":\"diary/2023-01-19\",\"val\":3},{\"id\":\"ssh-keygen\",\"name\":\"ssh-keygen\",\"val\":3},{\"id\":\"ssh\",\"name\":\"ssh\",\"val\":6},{\"id\":\"metrics-server\",\"name\":\"metrics-server\",\"val\":3},{\"id\":\"ci\",\"name\":\"ci\",\"val\":6},{\"id\":\"diary/2023-01-20\",\"name\":\"diary/2023-01-20\",\"val\":2},{\"id\":\"diary/2023-01-24\",\"name\":\"diary/2023-01-24\",\"val\":3},{\"id\":\"diary/2023-01-25\",\"name\":\"diary/2023-01-25\",\"val\":1},{\"id\":\"diary/2023-12-31\",\"name\":\"diary/2023-12-31\",\"val\":93}],\"links\":[{\"source\":\"tekton\",\"target\":\"kubernetes\"},{\"source\":\"tekton\",\"target\":\"diary/2023-01-19\"},{\"source\":\"tekton\",\"target\":\"ssh-keygen\"},{\"source\":\"tekton\",\"target\":\"ssh\"},{\"source\":\"tekton\",\"target\":\"kubernetes\"},{\"source\":\"tekton\",\"target\":\"metrics-server\"},{\"source\":\"tekton\",\"target\":\"ci\"},{\"source\":\"ci\",\"target\":\"tekton\"},{\"source\":\"metrics-server\",\"target\":\"tekton\"},{\"source\":\"ssh-keygen\",\"target\":\"tekton\"},{\"source\":\"diary/2023-01-19\",\"target\":\"tekton\"},{\"source\":\"diary/2023-01-20\",\"target\":\"tekton\"},{\"source\":\"diary/2023-01-24\",\"target\":\"tekton\"},{\"source\":\"diary/2023-01-25\",\"target\":\"tekton\"},{\"source\":\"diary/2023-12-31\",\"target\":\"tekton\"},{\"source\":\"diary/2023-12-31\",\"target\":\"tekton\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"tekton\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/tekton\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"tekton\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"kubernetes\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/kubernetes\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"kubernetes\"}],[\"$\",\"sup\",null,{\"children\":40}]]}]}],[\"$\",\"span\",\"diary/2023-01-19\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-01-19\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-01-19\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"ssh-keygen\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ssh-keygen\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ssh-keygen\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"ssh\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ssh\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ssh\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"metrics-server\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/metrics-server\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"metrics-server\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"ci\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ci\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ci\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"diary/2023-01-20\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-01-20\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-01-20\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2023-01-24\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-01-24\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-01-24\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2023-01-25\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-01-25\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-01-25\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"diary/2023-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-31\"}],[\"$\",\"sup\",null,{\"children\":93}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"tekton\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#tekton\",\"children\":\"tekton\"}]}],[\"$\",\"div\",\"구조\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#구조\",\"children\":\"구조\"}]}],[\"$\",\"div\",\"흐름도\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#흐름도\",\"children\":\"흐름도\"}]}],[\"$\",\"div\",\"흐름도-단순화-버전\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#흐름도-단순화-버전\",\"children\":\"흐름도 단순화 버전\"}]}],[\"$\",\"div\",\"tekton-1\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#tekton-1\",\"children\":\"tekton\"}]}],[\"$\",\"div\",\"crd\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#crd\",\"children\":\"CRD\"}]}],[\"$\",\"div\",\"trigger\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#trigger\",\"children\":\"Trigger\"}]}],[\"$\",\"div\",\"install\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#install\",\"children\":\"install\"}]}],[\"$\",\"div\",\"pipeline\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#pipeline\",\"children\":\"pipeline\"}]}],[\"$\",\"div\",\"dashboard\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#dashboard\",\"children\":\"dashboard\"}]}],[\"$\",\"div\",\"cli\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#cli\",\"children\":\"cli\"}]}],[\"$\",\"div\",\"github\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#github\",\"children\":\"github\"}]}],[\"$\",\"div\",\"구현\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#구현\",\"children\":\"구현\"}]}],[\"$\",\"div\",\"trigger-를-통한-github-private-레포지터리-클론-파이프라인-실행\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#trigger-를-통한-github-private-레포지터리-클론-파이프라인-실행\",\"children\":\"trigger 를 통한 github private 레포지터리 클론 파이프라인 실행\"}]}],[\"$\",\"div\",\"error\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error\",\"children\":\"error\"}]}],[\"$\",\"div\",\"releated\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#releated\",\"children\":\"releated\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T2dea,"])</script><script>self.__next_f.push([1,"\n[[kubernetes]] 베이스의 ci/cd\n- [ ] TODO: 모듈화가 잘 되어 있지만 해당 파이브라인 관리 코드를 프로젝트에 놓아야할지 인프라쪽에 놓아야할지 고민 필요\n\n---\n## 구조\n### 흐름도\n```mermaid\nerDiagram\n  EXTERNAL-EVENT ||--|| Service : receive-from-external-event\n  Service ||--|| EventListener : \"\"\n  EventListener ||--|{ TriggerGroups : \"\"\n  TriggerGroups ||--|{ Trigger: \"by selector\"\n  Trigger ||--|| TriggerTemplate : ref-or-embed\n  Trigger ||--o{ TriggerBinding : \"\"\n  Trigger ||--o{ Interceptor : \"\"\n  Interceptor ||--o{ TriggerBinding : \"modify, filter, validate\"\n  Trigger ||--o| ServiceAccount : ref\n  EventListener ||--o{ TriggerBinding : \"implicit ref event as body\"\n  EventListener ||--o{ Interceptor : \"implicit ref event as body\"\n  TriggerTemplate ||--|{ PipelineRun : embed\n  EventListener ||--|| ServiceAccount : ref\n  PipelineRun ||--o| ServiceAccount : ref\n  PipelineRun }|--|| Pipeline : pipelinerun-ref-or-embed-pipeline\n  PipelineRun ||--|{ Resource : ref\n  PipelineRun ||--|{ Workspace : ref\n  Pipeline ||--|{ Task: ref\n  ServiceAccount }|--|| RoleBinding : ref\n  ServiceAccount }|--|| ClusterRoleBinding : ref\n  RoleBinding ||--o| Role : ref\n  RoleBinding ||--o| ClusterRole : ref\n  ClusterRoleBinding ||--o| ClusterRole : ref\n  ServiceAccount ||--|{ Secret : ref\n  \n  EventListener {\n    TriggerList triggers\n    Resource resources\n  }\n  Trigger {\n    TriggerBindingList bindings\n    TriggerTemplate template\n    InterceptorList interceptors\n    ServiceAccount serviceAccountName\n  }\n  Resource {\n    kubernetesResource o\n    customResource o\n    kubernetesResource o\n  }\n```\n\n- 대체가능\n  - TriggerBinding \u003c-\u003e ClusterTriggerBinding\n  - TriggerTemplate \u003c-\u003e ClusterTriggerTemplate\n  - TriggerTemplate 은 PipelineRun 외에 다른 오브젝트 참조가 가능\n    - PipelineRun\n    - Pipeline\n    - TaskRun\n    - Task\n    - CustumTask\n- [ ] TriggerBinding \u003c-\u003e TriggerTemplate\n  - [ ] n..1 관계로 Trigger 에서 만나는데 TriggerBinding 수 많은 TriggerTemplate 을 호출되는지 확인이 필요\n\n### 흐름도 단순화 버전\n\u003e 2023-01-29 에 타 프로젝트에서 비슷한 걸 그린 단순화 버전이 있어서 이쪽으로 이동\n\n+ https://github.com/deptno/wiki/blob/723c94917898fc9bf99e4475196dc2a67fa60de4/project.md#tekton\n#### tekton\n```mermaid\nflowchart TD\n  subgraph external\n    a{{httpEvent}}\n  end\n  subgraph cluster\n  subgraph sa\n    ServiceAccount\n    ClusterRole --\u003e ClusterRoleBinding --\u003e ServiceAccount\n    Role --\u003e RoleBinding --\u003e ServiceAccount\n    Role --\u003e ClusterRoleBinding\n    Secret --\u003e ServiceAccount\n  end\n  \n  subgraph tekton\n    a{{httpEvent}} --\u003e EventListener --\u003e Trigger --\u003e TriggerBinding\n                                    Trigger --\u003e TriggerTemplate --\u003e PipelineRun --\u003e Pipeline --\u003e Task\n                                    Trigger --\u003e _(Interceptor) -..-\u003e TriggerBinding -...-\u003e TriggerTemplate\n                                    \n    ServiceAccount -..-\u003e EventListener\n    ServiceAccount -..-\u003e PipelineRun\n    ServiceAccount -..-\u003e Trigger\n  end\n  end\n```\n- 생성 오브젝트\n  - external\n  - clsuter\n    - EventListeer\n    - EventListeer\n    - EventListeer\n    - EventListeer\n---\n\n### CRD\nEventListener \u003e TriggerBinding \u003e TriggerTemplate \u003e PipelineRun \u003e Pipeline \u003e Task\n\n- EventListener\n- TriggerBinding \n- TriggerTemplate \n- PipelineRun \n- Pipeline \n- Task\n\n### Trigger\n+ https://tekton.dev/docs/getting-started/triggers/\n- EventListener\n  - PipelineBinding \n  - PipelineTemplate \n    - Pipeline \n- RoleBinding\n  - ServiceAccount\n  - ClusterRole\n- ClusterRoleBinding\n  - ServiceAccount\n  - ClusterRole\n\n| CRD              | 설명                     |\n|------------------|--------------------------|\n| Event            | 트리거                   |\n| PipelineBinding  | 파이프라인에 변수 바인딩 |\n| PipelineTemplate |                          |\n| PipelineRun      | 파이프라인의 실행        |\n| Pipeline         | Task 콜렉션              |\n| Task             |                          |\n\n\n## install\n- [X] pipelines\n- [X] triggers\n- [ ] results 실행 결과?\n\n---\n- [[diary:2023-01-19]] \n- tutorial\n  + https://tekton.dev/docs/how-to-guides/clone-repository/\n    - `tkn hub install task git-clone` 에러가 나므로 `kubectl apply -f` 를 통한 직접 설치가 필요 2023-01-20 \n    \n## pipeline\n+ https://tekton.dev/docs/pipelines/install/#installing-tekton-pipelines-on-kubernetes\n```sh\nkubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml\n```\n`tecton-pipelines` namepsace 로 설치됨\n\n- pvc 설정\n```sh\napiVersion: v1\nkind: ConfigMap\nmetadata:\n  labels:\n    app.kubernetes.io/instance: default\n    app.kubernetes.io/part-of: tekton-pipelines\n  name: config-artifact-pvc\n  namespace: tekton-pipelines\ndata:\n  storageClassName: \"openebs-hostpath\"\n  size: \"10GiB\"\n```\n\n- private repo 설정\n+ https://tekton.dev/docs/installation/pipelines/#configuring-cloudevents-notifications\n\n- pipeline 설정 `cm/feature-flags` 에 있다\n  - [ ] require-git-ssh-secret-known-hosts\n  - disable-creds-init credential initialization 을 스킵하고 secret 로드로 대체\n\n## dashboard\n```sh \nkubectl apply --filename \\\nhttps://storage.googleapis.com/tekton-releases/dashboard/latest/tekton-dashboard-release.yaml\n```\n\n## cli\n+ https://github.com/tektoncd/cli\n```sh\nbrew install tektoncd-cli\n```\n\n## github \n[[ssh-keygen]] 후 github 에 [[ssh]] 등록\n\n1. `Secret` 생성\n```sh \nssh-keygen -t ed25519 -C \"[deptno@service.domain]\"\n# save current directory\nkubectl create secret generic [secret_name] --from-file=ssh-privatekey=./id_ed25519.tekton.dev --type=kubernetes.io/ssh-auth\nkubectl annotate secret [secret_name] tekton.dev/git-0=github.com\n```\n2. `ServiceAccount` 생성\n```sh \napiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: tekton-deptno\nsecrets:\n  - name: [secret_name]\n```\n3. `PipelineRun` 에 주입하여 사용\n\ntekton hub 에 있는 `git-clone` task 로 확인 DONE: 2023-01-24\n\n## 구현\n### trigger 를 통한 github private 레포지터리 클론 파이프라인 실행\n`ssh-github` 아래와 같은 형태\n```sh\nName:         ssh-github-deptno\nNamespace:    project-things\nLabels:       \u003cnone\u003e\nAnnotations:  tekton.dev/git-0: github.com\n\nType:  kubernetes.io/ssh-auth\n\nData\n====\nssh-privatekey:  411 bytes\n```\n\n`git-clone` task 는 hub에서 설치했다\n  + https://hub.tekton.dev/tekton/task/git-clone\n\n```sh \napiVersion: v1 \nkind: ServiceAccount\nmetadata:\n  name: tt-sa\nsecrets:\n  - name: ssh-github # `sh-privatekey` 를 데이터로 갖는다\n---\napiVersion: rbac.authorization.k8s.io/v1 \nkind: RoleBinding\nmetadata:\n  name: tt-rb\n  namespace: project-things\nsubjects:\n- kind: ServiceAccount\n  name: tt-sa\nroleRef:\n  apiGroup: rbac.authorization.k8s.io\n  kind: ClusterRole\n  name: tekton-triggers-eventlistener-roles\n---\napiVersion: rbac.authorization.k8s.io/v1\nkind: ClusterRoleBinding\nmetadata:\n  name: tt-crb\nsubjects:\n- kind: ServiceAccount\n  name: tt-sa\n  namespace: project-things\nroleRef:\n  apiGroup: rbac.authorization.k8s.io\n  kind: ClusterRole\n  name: tekton-triggers-eventlistener-clusterroles\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: EventListener\nmetadata:\n  name: tt-ev\nspec:\n  serviceAccountName: tt-sa\n  triggers:\n  - triggerRef: tt-tr\n  resources:\n    kubernetesResource:\n      serviceType: ClusterIP\n      servicePort: 80\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: Trigger\nmetadata:\n  name: tt-tr\nspec:\n  bindings:\n  - ref: tt-tb\n  template:\n    ref: tt-tt\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: TriggerBinding\nmetadata:\n  name: tt-tb\nspec:\n  params:\n  - name: url\n    value: $(body.url)\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: TriggerTemplate\nmetadata:\n  name: tt-tt\nspec:\n  params:\n  - name: url\n  resourceTemplates:\n  - apiVersion: tekton.dev/v1beta1\n    kind: PipelineRun\n    metadata:\n      generateName: tt-tt-pr\n    spec:\n      serviceAccountName: tt-sa\n      pipelineRef:\n        name: tt-pl\n      params:\n      - name: repo-url\n        value: $(tt.params.url)\n      workspaces:\n      - name: shared-data\n        emptyDir: {}\n---\napiVersion: tekton.dev/v1beta1\nkind: Pipeline\nmetadata:\n  name: tt-pl\n  namespace: project-things\nspec:\n  description: clone git repository\n  params:\n  - name: repo-url\n    type: string\n    description: https://github.com/[username]/[reponame].git\n  workspaces:\n  - name: shared-data\n    description: working directory\n  tasks:\n  - name: fetch-source\n    taskRef:\n      name: git-clone\n    params:\n    - name: url\n      value: $(params.repo-url)\n    workspaces:\n    - name: output\n      workspace: shared-data\n```\n\n- 실행\n```sh \n$ curl -X POST \\                                                                                                                                               ok  4s  16.15.0 node  1.59.0 rust  01:12:56\n  http://localhost:8080 \\\n  -H 'Content-Type: application/json' \\\n  -d '{ \"url\": \"git@github.com:deptno/private-repo.git\" }'\n{\"eventListener\":\"tt-ev\",\"namespace\":\"project-things\",\"eventListenerUID\":\"54001b1f-1859-48a3-802b-d220a954f23c\",\"eventID\":\"19375452-32d1-4650-aa03-beb73f7f7538\"}\n$ tkn pr logs                                                                                                                                                      ok  16.15.0 node  1.59.0 rust  01:13:07\n? Select pipelinerun: tt-tt-prkbpb2 started 1 second ago\nPipeline still running ...\ntask fetch-source has failed: \"step-clone\" exited with code 1 (image: \"gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init@sha256:28ff94e63e4058afc3f15b4c11c08cf3b54fa91faa646a4bbac90380cd7158df\"); for logs run: kubectl -n project-things logs tt-tt-prkbpb2-fetch-source-pod -c step-clone\n\n[... logs]\n```\n\n## error\n- pipelinerun 을 통해서 pod 생성 후 계속 pending 상태라 보니 pvc 가 바운드되지 않는 문제\n```sh\nEvents:\n  Type     Reason            Age   From               Message\n  ----     ------            ----  ----               -------\n  Warning  FailedScheduling  2m8s  default-scheduler  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1\n nodes are available: 1 No preemption victims found for incoming pod..\n```\n  1. pvc 를 가보니 storageClassName 이 비어있다, 현 세팅은 `openebs-hostpath` 를 지정해야 사용이 가능한 상태\n  2. manifest 에서 pvc 설정에 storageClassName 을 설정했음에도 동작하지 않았다.\n  3. pvc 에서 `spec.storageClassName: openebs-hostpath` 를 주입하니 정상 실행된다.\n  4. `PipelineRun` 에서 `storageClassName` 을 주입하면 동작한다\n```yaml\n  workspaces:\n  - name: shared-data\n    volumeClaimTemplate:\n      spec:\n        accessModes:\n        - ReadWriteOnce\n        resources:\n          requests:\n            storage: 1Gi\n        storageClassName: openebs-hostpath\n```\n+ https://tekton.dev/docs/pipelines/workspaces/#using-persistent-volumes-within-a-pipelinerun\n\n---\n\n```sh \n{\n    \"severity\": \"fatal\",\n    \"timestamp\": \"2023-01-28T08:55:54.927Z\",\n    \"logger\": \"eventlistener\",\n    \"caller\": \"v2/main.go:205\",\n    \"message\": \"Start returned an error\",\n    \"error\": \"Timed out waiting on CaBundle to available for clusterInterceptor: Timed out waiting on CaBundle to available for Interceptor: clusterinterceptors. triggers.tekton.dev is forbidden: User \\\"system:serviceaccount:project-things:default\\\" cannot list resource \\\"clusterinterceptors\\\" in API group \\\"triggers.tekton.dev\\\" at the cluster scope\"\n}\n```\n- account 에 tekton에서 제공하는 ClusterRole, Role 이 제대로 되어 있는지 확인한다\n  + https://github.com/tektoncd/triggers/blob/main/examples/rbac.yaml\n\n## releated\n- [[kubernetes]]\n- [[metrics-server]]\n- [[ci]]\n"])</script><script>self.__next_f.push([1,"16:T2dea,"])</script><script>self.__next_f.push([1,"\n[[kubernetes]] 베이스의 ci/cd\n- [ ] TODO: 모듈화가 잘 되어 있지만 해당 파이브라인 관리 코드를 프로젝트에 놓아야할지 인프라쪽에 놓아야할지 고민 필요\n\n---\n## 구조\n### 흐름도\n```mermaid\nerDiagram\n  EXTERNAL-EVENT ||--|| Service : receive-from-external-event\n  Service ||--|| EventListener : \"\"\n  EventListener ||--|{ TriggerGroups : \"\"\n  TriggerGroups ||--|{ Trigger: \"by selector\"\n  Trigger ||--|| TriggerTemplate : ref-or-embed\n  Trigger ||--o{ TriggerBinding : \"\"\n  Trigger ||--o{ Interceptor : \"\"\n  Interceptor ||--o{ TriggerBinding : \"modify, filter, validate\"\n  Trigger ||--o| ServiceAccount : ref\n  EventListener ||--o{ TriggerBinding : \"implicit ref event as body\"\n  EventListener ||--o{ Interceptor : \"implicit ref event as body\"\n  TriggerTemplate ||--|{ PipelineRun : embed\n  EventListener ||--|| ServiceAccount : ref\n  PipelineRun ||--o| ServiceAccount : ref\n  PipelineRun }|--|| Pipeline : pipelinerun-ref-or-embed-pipeline\n  PipelineRun ||--|{ Resource : ref\n  PipelineRun ||--|{ Workspace : ref\n  Pipeline ||--|{ Task: ref\n  ServiceAccount }|--|| RoleBinding : ref\n  ServiceAccount }|--|| ClusterRoleBinding : ref\n  RoleBinding ||--o| Role : ref\n  RoleBinding ||--o| ClusterRole : ref\n  ClusterRoleBinding ||--o| ClusterRole : ref\n  ServiceAccount ||--|{ Secret : ref\n  \n  EventListener {\n    TriggerList triggers\n    Resource resources\n  }\n  Trigger {\n    TriggerBindingList bindings\n    TriggerTemplate template\n    InterceptorList interceptors\n    ServiceAccount serviceAccountName\n  }\n  Resource {\n    kubernetesResource o\n    customResource o\n    kubernetesResource o\n  }\n```\n\n- 대체가능\n  - TriggerBinding \u003c-\u003e ClusterTriggerBinding\n  - TriggerTemplate \u003c-\u003e ClusterTriggerTemplate\n  - TriggerTemplate 은 PipelineRun 외에 다른 오브젝트 참조가 가능\n    - PipelineRun\n    - Pipeline\n    - TaskRun\n    - Task\n    - CustumTask\n- [ ] TriggerBinding \u003c-\u003e TriggerTemplate\n  - [ ] n..1 관계로 Trigger 에서 만나는데 TriggerBinding 수 많은 TriggerTemplate 을 호출되는지 확인이 필요\n\n### 흐름도 단순화 버전\n\u003e 2023-01-29 에 타 프로젝트에서 비슷한 걸 그린 단순화 버전이 있어서 이쪽으로 이동\n\n+ https://github.com/deptno/wiki/blob/723c94917898fc9bf99e4475196dc2a67fa60de4/project.md#tekton\n#### tekton\n```mermaid\nflowchart TD\n  subgraph external\n    a{{httpEvent}}\n  end\n  subgraph cluster\n  subgraph sa\n    ServiceAccount\n    ClusterRole --\u003e ClusterRoleBinding --\u003e ServiceAccount\n    Role --\u003e RoleBinding --\u003e ServiceAccount\n    Role --\u003e ClusterRoleBinding\n    Secret --\u003e ServiceAccount\n  end\n  \n  subgraph tekton\n    a{{httpEvent}} --\u003e EventListener --\u003e Trigger --\u003e TriggerBinding\n                                    Trigger --\u003e TriggerTemplate --\u003e PipelineRun --\u003e Pipeline --\u003e Task\n                                    Trigger --\u003e _(Interceptor) -..-\u003e TriggerBinding -...-\u003e TriggerTemplate\n                                    \n    ServiceAccount -..-\u003e EventListener\n    ServiceAccount -..-\u003e PipelineRun\n    ServiceAccount -..-\u003e Trigger\n  end\n  end\n```\n- 생성 오브젝트\n  - external\n  - clsuter\n    - EventListeer\n    - EventListeer\n    - EventListeer\n    - EventListeer\n---\n\n### CRD\nEventListener \u003e TriggerBinding \u003e TriggerTemplate \u003e PipelineRun \u003e Pipeline \u003e Task\n\n- EventListener\n- TriggerBinding \n- TriggerTemplate \n- PipelineRun \n- Pipeline \n- Task\n\n### Trigger\n+ https://tekton.dev/docs/getting-started/triggers/\n- EventListener\n  - PipelineBinding \n  - PipelineTemplate \n    - Pipeline \n- RoleBinding\n  - ServiceAccount\n  - ClusterRole\n- ClusterRoleBinding\n  - ServiceAccount\n  - ClusterRole\n\n| CRD              | 설명                     |\n|------------------|--------------------------|\n| Event            | 트리거                   |\n| PipelineBinding  | 파이프라인에 변수 바인딩 |\n| PipelineTemplate |                          |\n| PipelineRun      | 파이프라인의 실행        |\n| Pipeline         | Task 콜렉션              |\n| Task             |                          |\n\n\n## install\n- [X] pipelines\n- [X] triggers\n- [ ] results 실행 결과?\n\n---\n- [[diary:2023-01-19]] \n- tutorial\n  + https://tekton.dev/docs/how-to-guides/clone-repository/\n    - `tkn hub install task git-clone` 에러가 나므로 `kubectl apply -f` 를 통한 직접 설치가 필요 2023-01-20 \n    \n## pipeline\n+ https://tekton.dev/docs/pipelines/install/#installing-tekton-pipelines-on-kubernetes\n```sh\nkubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml\n```\n`tecton-pipelines` namepsace 로 설치됨\n\n- pvc 설정\n```sh\napiVersion: v1\nkind: ConfigMap\nmetadata:\n  labels:\n    app.kubernetes.io/instance: default\n    app.kubernetes.io/part-of: tekton-pipelines\n  name: config-artifact-pvc\n  namespace: tekton-pipelines\ndata:\n  storageClassName: \"openebs-hostpath\"\n  size: \"10GiB\"\n```\n\n- private repo 설정\n+ https://tekton.dev/docs/installation/pipelines/#configuring-cloudevents-notifications\n\n- pipeline 설정 `cm/feature-flags` 에 있다\n  - [ ] require-git-ssh-secret-known-hosts\n  - disable-creds-init credential initialization 을 스킵하고 secret 로드로 대체\n\n## dashboard\n```sh \nkubectl apply --filename \\\nhttps://storage.googleapis.com/tekton-releases/dashboard/latest/tekton-dashboard-release.yaml\n```\n\n## cli\n+ https://github.com/tektoncd/cli\n```sh\nbrew install tektoncd-cli\n```\n\n## github \n[[ssh-keygen]] 후 github 에 [[ssh]] 등록\n\n1. `Secret` 생성\n```sh \nssh-keygen -t ed25519 -C \"[deptno@service.domain]\"\n# save current directory\nkubectl create secret generic [secret_name] --from-file=ssh-privatekey=./id_ed25519.tekton.dev --type=kubernetes.io/ssh-auth\nkubectl annotate secret [secret_name] tekton.dev/git-0=github.com\n```\n2. `ServiceAccount` 생성\n```sh \napiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: tekton-deptno\nsecrets:\n  - name: [secret_name]\n```\n3. `PipelineRun` 에 주입하여 사용\n\ntekton hub 에 있는 `git-clone` task 로 확인 DONE: 2023-01-24\n\n## 구현\n### trigger 를 통한 github private 레포지터리 클론 파이프라인 실행\n`ssh-github` 아래와 같은 형태\n```sh\nName:         ssh-github-deptno\nNamespace:    project-things\nLabels:       \u003cnone\u003e\nAnnotations:  tekton.dev/git-0: github.com\n\nType:  kubernetes.io/ssh-auth\n\nData\n====\nssh-privatekey:  411 bytes\n```\n\n`git-clone` task 는 hub에서 설치했다\n  + https://hub.tekton.dev/tekton/task/git-clone\n\n```sh \napiVersion: v1 \nkind: ServiceAccount\nmetadata:\n  name: tt-sa\nsecrets:\n  - name: ssh-github # `sh-privatekey` 를 데이터로 갖는다\n---\napiVersion: rbac.authorization.k8s.io/v1 \nkind: RoleBinding\nmetadata:\n  name: tt-rb\n  namespace: project-things\nsubjects:\n- kind: ServiceAccount\n  name: tt-sa\nroleRef:\n  apiGroup: rbac.authorization.k8s.io\n  kind: ClusterRole\n  name: tekton-triggers-eventlistener-roles\n---\napiVersion: rbac.authorization.k8s.io/v1\nkind: ClusterRoleBinding\nmetadata:\n  name: tt-crb\nsubjects:\n- kind: ServiceAccount\n  name: tt-sa\n  namespace: project-things\nroleRef:\n  apiGroup: rbac.authorization.k8s.io\n  kind: ClusterRole\n  name: tekton-triggers-eventlistener-clusterroles\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: EventListener\nmetadata:\n  name: tt-ev\nspec:\n  serviceAccountName: tt-sa\n  triggers:\n  - triggerRef: tt-tr\n  resources:\n    kubernetesResource:\n      serviceType: ClusterIP\n      servicePort: 80\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: Trigger\nmetadata:\n  name: tt-tr\nspec:\n  bindings:\n  - ref: tt-tb\n  template:\n    ref: tt-tt\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: TriggerBinding\nmetadata:\n  name: tt-tb\nspec:\n  params:\n  - name: url\n    value: $(body.url)\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: TriggerTemplate\nmetadata:\n  name: tt-tt\nspec:\n  params:\n  - name: url\n  resourceTemplates:\n  - apiVersion: tekton.dev/v1beta1\n    kind: PipelineRun\n    metadata:\n      generateName: tt-tt-pr\n    spec:\n      serviceAccountName: tt-sa\n      pipelineRef:\n        name: tt-pl\n      params:\n      - name: repo-url\n        value: $(tt.params.url)\n      workspaces:\n      - name: shared-data\n        emptyDir: {}\n---\napiVersion: tekton.dev/v1beta1\nkind: Pipeline\nmetadata:\n  name: tt-pl\n  namespace: project-things\nspec:\n  description: clone git repository\n  params:\n  - name: repo-url\n    type: string\n    description: https://github.com/[username]/[reponame].git\n  workspaces:\n  - name: shared-data\n    description: working directory\n  tasks:\n  - name: fetch-source\n    taskRef:\n      name: git-clone\n    params:\n    - name: url\n      value: $(params.repo-url)\n    workspaces:\n    - name: output\n      workspace: shared-data\n```\n\n- 실행\n```sh \n$ curl -X POST \\                                                                                                                                               ok  4s  16.15.0 node  1.59.0 rust  01:12:56\n  http://localhost:8080 \\\n  -H 'Content-Type: application/json' \\\n  -d '{ \"url\": \"git@github.com:deptno/private-repo.git\" }'\n{\"eventListener\":\"tt-ev\",\"namespace\":\"project-things\",\"eventListenerUID\":\"54001b1f-1859-48a3-802b-d220a954f23c\",\"eventID\":\"19375452-32d1-4650-aa03-beb73f7f7538\"}\n$ tkn pr logs                                                                                                                                                      ok  16.15.0 node  1.59.0 rust  01:13:07\n? Select pipelinerun: tt-tt-prkbpb2 started 1 second ago\nPipeline still running ...\ntask fetch-source has failed: \"step-clone\" exited with code 1 (image: \"gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init@sha256:28ff94e63e4058afc3f15b4c11c08cf3b54fa91faa646a4bbac90380cd7158df\"); for logs run: kubectl -n project-things logs tt-tt-prkbpb2-fetch-source-pod -c step-clone\n\n[... logs]\n```\n\n## error\n- pipelinerun 을 통해서 pod 생성 후 계속 pending 상태라 보니 pvc 가 바운드되지 않는 문제\n```sh\nEvents:\n  Type     Reason            Age   From               Message\n  ----     ------            ----  ----               -------\n  Warning  FailedScheduling  2m8s  default-scheduler  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1\n nodes are available: 1 No preemption victims found for incoming pod..\n```\n  1. pvc 를 가보니 storageClassName 이 비어있다, 현 세팅은 `openebs-hostpath` 를 지정해야 사용이 가능한 상태\n  2. manifest 에서 pvc 설정에 storageClassName 을 설정했음에도 동작하지 않았다.\n  3. pvc 에서 `spec.storageClassName: openebs-hostpath` 를 주입하니 정상 실행된다.\n  4. `PipelineRun` 에서 `storageClassName` 을 주입하면 동작한다\n```yaml\n  workspaces:\n  - name: shared-data\n    volumeClaimTemplate:\n      spec:\n        accessModes:\n        - ReadWriteOnce\n        resources:\n          requests:\n            storage: 1Gi\n        storageClassName: openebs-hostpath\n```\n+ https://tekton.dev/docs/pipelines/workspaces/#using-persistent-volumes-within-a-pipelinerun\n\n---\n\n```sh \n{\n    \"severity\": \"fatal\",\n    \"timestamp\": \"2023-01-28T08:55:54.927Z\",\n    \"logger\": \"eventlistener\",\n    \"caller\": \"v2/main.go:205\",\n    \"message\": \"Start returned an error\",\n    \"error\": \"Timed out waiting on CaBundle to available for clusterInterceptor: Timed out waiting on CaBundle to available for Interceptor: clusterinterceptors. triggers.tekton.dev is forbidden: User \\\"system:serviceaccount:project-things:default\\\" cannot list resource \\\"clusterinterceptors\\\" in API group \\\"triggers.tekton.dev\\\" at the cluster scope\"\n}\n```\n- account 에 tekton에서 제공하는 ClusterRole, Role 이 제대로 되어 있는지 확인한다\n  + https://github.com/tektoncd/triggers/blob/main/examples/rbac.yaml\n\n## releated\n- [[kubernetes]]\n- [[metrics-server]]\n- [[ci]]\n"])</script><script>self.__next_f.push([1,"17:T2dea,"])</script><script>self.__next_f.push([1,"\n[[kubernetes]] 베이스의 ci/cd\n- [ ] TODO: 모듈화가 잘 되어 있지만 해당 파이브라인 관리 코드를 프로젝트에 놓아야할지 인프라쪽에 놓아야할지 고민 필요\n\n---\n## 구조\n### 흐름도\n```mermaid\nerDiagram\n  EXTERNAL-EVENT ||--|| Service : receive-from-external-event\n  Service ||--|| EventListener : \"\"\n  EventListener ||--|{ TriggerGroups : \"\"\n  TriggerGroups ||--|{ Trigger: \"by selector\"\n  Trigger ||--|| TriggerTemplate : ref-or-embed\n  Trigger ||--o{ TriggerBinding : \"\"\n  Trigger ||--o{ Interceptor : \"\"\n  Interceptor ||--o{ TriggerBinding : \"modify, filter, validate\"\n  Trigger ||--o| ServiceAccount : ref\n  EventListener ||--o{ TriggerBinding : \"implicit ref event as body\"\n  EventListener ||--o{ Interceptor : \"implicit ref event as body\"\n  TriggerTemplate ||--|{ PipelineRun : embed\n  EventListener ||--|| ServiceAccount : ref\n  PipelineRun ||--o| ServiceAccount : ref\n  PipelineRun }|--|| Pipeline : pipelinerun-ref-or-embed-pipeline\n  PipelineRun ||--|{ Resource : ref\n  PipelineRun ||--|{ Workspace : ref\n  Pipeline ||--|{ Task: ref\n  ServiceAccount }|--|| RoleBinding : ref\n  ServiceAccount }|--|| ClusterRoleBinding : ref\n  RoleBinding ||--o| Role : ref\n  RoleBinding ||--o| ClusterRole : ref\n  ClusterRoleBinding ||--o| ClusterRole : ref\n  ServiceAccount ||--|{ Secret : ref\n  \n  EventListener {\n    TriggerList triggers\n    Resource resources\n  }\n  Trigger {\n    TriggerBindingList bindings\n    TriggerTemplate template\n    InterceptorList interceptors\n    ServiceAccount serviceAccountName\n  }\n  Resource {\n    kubernetesResource o\n    customResource o\n    kubernetesResource o\n  }\n```\n\n- 대체가능\n  - TriggerBinding \u003c-\u003e ClusterTriggerBinding\n  - TriggerTemplate \u003c-\u003e ClusterTriggerTemplate\n  - TriggerTemplate 은 PipelineRun 외에 다른 오브젝트 참조가 가능\n    - PipelineRun\n    - Pipeline\n    - TaskRun\n    - Task\n    - CustumTask\n- [ ] TriggerBinding \u003c-\u003e TriggerTemplate\n  - [ ] n..1 관계로 Trigger 에서 만나는데 TriggerBinding 수 많은 TriggerTemplate 을 호출되는지 확인이 필요\n\n### 흐름도 단순화 버전\n\u003e 2023-01-29 에 타 프로젝트에서 비슷한 걸 그린 단순화 버전이 있어서 이쪽으로 이동\n\n+ https://github.com/deptno/wiki/blob/723c94917898fc9bf99e4475196dc2a67fa60de4/project.md#tekton\n#### tekton\n```mermaid\nflowchart TD\n  subgraph external\n    a{{httpEvent}}\n  end\n  subgraph cluster\n  subgraph sa\n    ServiceAccount\n    ClusterRole --\u003e ClusterRoleBinding --\u003e ServiceAccount\n    Role --\u003e RoleBinding --\u003e ServiceAccount\n    Role --\u003e ClusterRoleBinding\n    Secret --\u003e ServiceAccount\n  end\n  \n  subgraph tekton\n    a{{httpEvent}} --\u003e EventListener --\u003e Trigger --\u003e TriggerBinding\n                                    Trigger --\u003e TriggerTemplate --\u003e PipelineRun --\u003e Pipeline --\u003e Task\n                                    Trigger --\u003e _(Interceptor) -..-\u003e TriggerBinding -...-\u003e TriggerTemplate\n                                    \n    ServiceAccount -..-\u003e EventListener\n    ServiceAccount -..-\u003e PipelineRun\n    ServiceAccount -..-\u003e Trigger\n  end\n  end\n```\n- 생성 오브젝트\n  - external\n  - clsuter\n    - EventListeer\n    - EventListeer\n    - EventListeer\n    - EventListeer\n---\n\n### CRD\nEventListener \u003e TriggerBinding \u003e TriggerTemplate \u003e PipelineRun \u003e Pipeline \u003e Task\n\n- EventListener\n- TriggerBinding \n- TriggerTemplate \n- PipelineRun \n- Pipeline \n- Task\n\n### Trigger\n+ https://tekton.dev/docs/getting-started/triggers/\n- EventListener\n  - PipelineBinding \n  - PipelineTemplate \n    - Pipeline \n- RoleBinding\n  - ServiceAccount\n  - ClusterRole\n- ClusterRoleBinding\n  - ServiceAccount\n  - ClusterRole\n\n| CRD              | 설명                     |\n|------------------|--------------------------|\n| Event            | 트리거                   |\n| PipelineBinding  | 파이프라인에 변수 바인딩 |\n| PipelineTemplate |                          |\n| PipelineRun      | 파이프라인의 실행        |\n| Pipeline         | Task 콜렉션              |\n| Task             |                          |\n\n\n## install\n- [X] pipelines\n- [X] triggers\n- [ ] results 실행 결과?\n\n---\n- [[diary:2023-01-19]] \n- tutorial\n  + https://tekton.dev/docs/how-to-guides/clone-repository/\n    - `tkn hub install task git-clone` 에러가 나므로 `kubectl apply -f` 를 통한 직접 설치가 필요 2023-01-20 \n    \n## pipeline\n+ https://tekton.dev/docs/pipelines/install/#installing-tekton-pipelines-on-kubernetes\n```sh\nkubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml\n```\n`tecton-pipelines` namepsace 로 설치됨\n\n- pvc 설정\n```sh\napiVersion: v1\nkind: ConfigMap\nmetadata:\n  labels:\n    app.kubernetes.io/instance: default\n    app.kubernetes.io/part-of: tekton-pipelines\n  name: config-artifact-pvc\n  namespace: tekton-pipelines\ndata:\n  storageClassName: \"openebs-hostpath\"\n  size: \"10GiB\"\n```\n\n- private repo 설정\n+ https://tekton.dev/docs/installation/pipelines/#configuring-cloudevents-notifications\n\n- pipeline 설정 `cm/feature-flags` 에 있다\n  - [ ] require-git-ssh-secret-known-hosts\n  - disable-creds-init credential initialization 을 스킵하고 secret 로드로 대체\n\n## dashboard\n```sh \nkubectl apply --filename \\\nhttps://storage.googleapis.com/tekton-releases/dashboard/latest/tekton-dashboard-release.yaml\n```\n\n## cli\n+ https://github.com/tektoncd/cli\n```sh\nbrew install tektoncd-cli\n```\n\n## github \n[[ssh-keygen]] 후 github 에 [[ssh]] 등록\n\n1. `Secret` 생성\n```sh \nssh-keygen -t ed25519 -C \"[deptno@service.domain]\"\n# save current directory\nkubectl create secret generic [secret_name] --from-file=ssh-privatekey=./id_ed25519.tekton.dev --type=kubernetes.io/ssh-auth\nkubectl annotate secret [secret_name] tekton.dev/git-0=github.com\n```\n2. `ServiceAccount` 생성\n```sh \napiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: tekton-deptno\nsecrets:\n  - name: [secret_name]\n```\n3. `PipelineRun` 에 주입하여 사용\n\ntekton hub 에 있는 `git-clone` task 로 확인 DONE: 2023-01-24\n\n## 구현\n### trigger 를 통한 github private 레포지터리 클론 파이프라인 실행\n`ssh-github` 아래와 같은 형태\n```sh\nName:         ssh-github-deptno\nNamespace:    project-things\nLabels:       \u003cnone\u003e\nAnnotations:  tekton.dev/git-0: github.com\n\nType:  kubernetes.io/ssh-auth\n\nData\n====\nssh-privatekey:  411 bytes\n```\n\n`git-clone` task 는 hub에서 설치했다\n  + https://hub.tekton.dev/tekton/task/git-clone\n\n```sh \napiVersion: v1 \nkind: ServiceAccount\nmetadata:\n  name: tt-sa\nsecrets:\n  - name: ssh-github # `sh-privatekey` 를 데이터로 갖는다\n---\napiVersion: rbac.authorization.k8s.io/v1 \nkind: RoleBinding\nmetadata:\n  name: tt-rb\n  namespace: project-things\nsubjects:\n- kind: ServiceAccount\n  name: tt-sa\nroleRef:\n  apiGroup: rbac.authorization.k8s.io\n  kind: ClusterRole\n  name: tekton-triggers-eventlistener-roles\n---\napiVersion: rbac.authorization.k8s.io/v1\nkind: ClusterRoleBinding\nmetadata:\n  name: tt-crb\nsubjects:\n- kind: ServiceAccount\n  name: tt-sa\n  namespace: project-things\nroleRef:\n  apiGroup: rbac.authorization.k8s.io\n  kind: ClusterRole\n  name: tekton-triggers-eventlistener-clusterroles\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: EventListener\nmetadata:\n  name: tt-ev\nspec:\n  serviceAccountName: tt-sa\n  triggers:\n  - triggerRef: tt-tr\n  resources:\n    kubernetesResource:\n      serviceType: ClusterIP\n      servicePort: 80\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: Trigger\nmetadata:\n  name: tt-tr\nspec:\n  bindings:\n  - ref: tt-tb\n  template:\n    ref: tt-tt\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: TriggerBinding\nmetadata:\n  name: tt-tb\nspec:\n  params:\n  - name: url\n    value: $(body.url)\n---\napiVersion: triggers.tekton.dev/v1beta1\nkind: TriggerTemplate\nmetadata:\n  name: tt-tt\nspec:\n  params:\n  - name: url\n  resourceTemplates:\n  - apiVersion: tekton.dev/v1beta1\n    kind: PipelineRun\n    metadata:\n      generateName: tt-tt-pr\n    spec:\n      serviceAccountName: tt-sa\n      pipelineRef:\n        name: tt-pl\n      params:\n      - name: repo-url\n        value: $(tt.params.url)\n      workspaces:\n      - name: shared-data\n        emptyDir: {}\n---\napiVersion: tekton.dev/v1beta1\nkind: Pipeline\nmetadata:\n  name: tt-pl\n  namespace: project-things\nspec:\n  description: clone git repository\n  params:\n  - name: repo-url\n    type: string\n    description: https://github.com/[username]/[reponame].git\n  workspaces:\n  - name: shared-data\n    description: working directory\n  tasks:\n  - name: fetch-source\n    taskRef:\n      name: git-clone\n    params:\n    - name: url\n      value: $(params.repo-url)\n    workspaces:\n    - name: output\n      workspace: shared-data\n```\n\n- 실행\n```sh \n$ curl -X POST \\                                                                                                                                               ok  4s  16.15.0 node  1.59.0 rust  01:12:56\n  http://localhost:8080 \\\n  -H 'Content-Type: application/json' \\\n  -d '{ \"url\": \"git@github.com:deptno/private-repo.git\" }'\n{\"eventListener\":\"tt-ev\",\"namespace\":\"project-things\",\"eventListenerUID\":\"54001b1f-1859-48a3-802b-d220a954f23c\",\"eventID\":\"19375452-32d1-4650-aa03-beb73f7f7538\"}\n$ tkn pr logs                                                                                                                                                      ok  16.15.0 node  1.59.0 rust  01:13:07\n? Select pipelinerun: tt-tt-prkbpb2 started 1 second ago\nPipeline still running ...\ntask fetch-source has failed: \"step-clone\" exited with code 1 (image: \"gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init@sha256:28ff94e63e4058afc3f15b4c11c08cf3b54fa91faa646a4bbac90380cd7158df\"); for logs run: kubectl -n project-things logs tt-tt-prkbpb2-fetch-source-pod -c step-clone\n\n[... logs]\n```\n\n## error\n- pipelinerun 을 통해서 pod 생성 후 계속 pending 상태라 보니 pvc 가 바운드되지 않는 문제\n```sh\nEvents:\n  Type     Reason            Age   From               Message\n  ----     ------            ----  ----               -------\n  Warning  FailedScheduling  2m8s  default-scheduler  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1\n nodes are available: 1 No preemption victims found for incoming pod..\n```\n  1. pvc 를 가보니 storageClassName 이 비어있다, 현 세팅은 `openebs-hostpath` 를 지정해야 사용이 가능한 상태\n  2. manifest 에서 pvc 설정에 storageClassName 을 설정했음에도 동작하지 않았다.\n  3. pvc 에서 `spec.storageClassName: openebs-hostpath` 를 주입하니 정상 실행된다.\n  4. `PipelineRun` 에서 `storageClassName` 을 주입하면 동작한다\n```yaml\n  workspaces:\n  - name: shared-data\n    volumeClaimTemplate:\n      spec:\n        accessModes:\n        - ReadWriteOnce\n        resources:\n          requests:\n            storage: 1Gi\n        storageClassName: openebs-hostpath\n```\n+ https://tekton.dev/docs/pipelines/workspaces/#using-persistent-volumes-within-a-pipelinerun\n\n---\n\n```sh \n{\n    \"severity\": \"fatal\",\n    \"timestamp\": \"2023-01-28T08:55:54.927Z\",\n    \"logger\": \"eventlistener\",\n    \"caller\": \"v2/main.go:205\",\n    \"message\": \"Start returned an error\",\n    \"error\": \"Timed out waiting on CaBundle to available for clusterInterceptor: Timed out waiting on CaBundle to available for Interceptor: clusterinterceptors. triggers.tekton.dev is forbidden: User \\\"system:serviceaccount:project-things:default\\\" cannot list resource \\\"clusterinterceptors\\\" in API group \\\"triggers.tekton.dev\\\" at the cluster scope\"\n}\n```\n- account 에 tekton에서 제공하는 ClusterRole, Role 이 제대로 되어 있는지 확인한다\n  + https://github.com/tektoncd/triggers/blob/main/examples/rbac.yaml\n\n## releated\n- [[kubernetes]]\n- [[metrics-server]]\n- [[ci]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# tekton\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# tekton\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/tekton\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# tekton\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

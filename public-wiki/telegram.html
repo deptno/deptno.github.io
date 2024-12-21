@@ -1,0 +1,214 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-0d2541f49ad9d59a.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-bc971df7080b641f.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># telegram | 텔레그램</title><meta name="description" content="
+messager
+
+## bot 만들기
++ https://somjang.tistory.com/entry/텔레그램-BotFather를-활용하여-텔레그램-봇-생성하고-chatid를-얻는-방법
+1. BotFather 와 대화 시작
+  - https://t.me/BotFather 접속해서 접근
+  - telegram 에서 `BotFather` 검색해서 `start`
+  - `api token` 획득
+2. authorizing
+  + https://core.telegram.org/api#bot-api
+  + https://core.telegram.org/bots/api
+  - curl &quot;https://api.telegram.org/bot[token]/getMe&quot;
+3. 명령어 설정
+  - 사용할 만한 method 를 찾는다
+    - https://core.telegram.org/bots/api#setchattitle
+    - https://core.telegram.org/bots/api#setchatdescription
+    - https://core.telegram.org/bots/api#setmycommands
+```sh 
+curl -X POST \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{&quot;commands&quot;:[{&quot;command&quot;: &quot;commanda&quot;, &quot;description&quot;: &quot;command a&quot;}]&#x27; \
+  https://api.telegram.org/bot[token]/setMyCommands
+curl https://api.telegram.org/bot[token]/getMyCommands
+```
+    - https://core.telegram.org/bots/api#setchatmenubutton
+4. 채팅
+  - polling
+     - telegram 에서 bot 을 찾아서 메시지 혹은 명령어를 입력한 후 아래 명령어로 확인한다
+```sh 
+curl https://api.telegram.org/bot[token]/getUpdates
+```
+  - webhook
+    실제 서버는 반응성과 효율성을 위해서 webhook 으로 서비스 되어야한다
+      - webhook 을 받을 수 있는 public domain 이 존재해야하며 https 가 지원되어야한다.
+        - 사설 인증서를 사용한다면 해당 인증서를 등록해야한다
+      - 주소로 해당이벤트가 오면 해당 post 메시지를 핸들링 하면된다.
+5. 응답하기
+```sh
+curl -X POST \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{&quot;chat_id&quot;: 1830393354, &quot;text&quot;: &quot;hello&quot;&#x27; \
+  &quot;https://api.telegram.org/bot[token]/sendMessage&quot;
+```
+
+### error
+`entries` 에 url 이 **localhost** 로 되어있는 링크를 걸면 동작하지 않는다.
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# telegram | 텔레그램"/><meta property="og:description" content="
+messager
+
+## bot 만들기
++ https://somjang.tistory.com/entry/텔레그램-BotFather를-활용하여-텔레그램-봇-생성하고-chatid를-얻는-방법
+1. BotFather 와 대화 시작
+  - https://t.me/BotFather 접속해서 접근
+  - telegram 에서 `BotFather` 검색해서 `start`
+  - `api token` 획득
+2. authorizing
+  + https://core.telegram.org/api#bot-api
+  + https://core.telegram.org/bots/api
+  - curl &quot;https://api.telegram.org/bot[token]/getMe&quot;
+3. 명령어 설정
+  - 사용할 만한 method 를 찾는다
+    - https://core.telegram.org/bots/api#setchattitle
+    - https://core.telegram.org/bots/api#setchatdescription
+    - https://core.telegram.org/bots/api#setmycommands
+```sh 
+curl -X POST \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{&quot;commands&quot;:[{&quot;command&quot;: &quot;commanda&quot;, &quot;description&quot;: &quot;command a&quot;}]&#x27; \
+  https://api.telegram.org/bot[token]/setMyCommands
+curl https://api.telegram.org/bot[token]/getMyCommands
+```
+    - https://core.telegram.org/bots/api#setchatmenubutton
+4. 채팅
+  - polling
+     - telegram 에서 bot 을 찾아서 메시지 혹은 명령어를 입력한 후 아래 명령어로 확인한다
+```sh 
+curl https://api.telegram.org/bot[token]/getUpdates
+```
+  - webhook
+    실제 서버는 반응성과 효율성을 위해서 webhook 으로 서비스 되어야한다
+      - webhook 을 받을 수 있는 public domain 이 존재해야하며 https 가 지원되어야한다.
+        - 사설 인증서를 사용한다면 해당 인증서를 등록해야한다
+      - 주소로 해당이벤트가 오면 해당 post 메시지를 핸들링 하면된다.
+5. 응답하기
+```sh
+curl -X POST \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{&quot;chat_id&quot;: 1830393354, &quot;text&quot;: &quot;hello&quot;&#x27; \
+  &quot;https://api.telegram.org/bot[token]/sendMessage&quot;
+```
+
+### error
+`entries` 에 url 이 **localhost** 로 되어있는 링크를 걸면 동작하지 않는다.
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/telegram"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# telegram | 텔레그램"/><meta name="twitter:description" content="
+messager
+
+## bot 만들기
++ https://somjang.tistory.com/entry/텔레그램-BotFather를-활용하여-텔레그램-봇-생성하고-chatid를-얻는-방법
+1. BotFather 와 대화 시작
+  - https://t.me/BotFather 접속해서 접근
+  - telegram 에서 `BotFather` 검색해서 `start`
+  - `api token` 획득
+2. authorizing
+  + https://core.telegram.org/api#bot-api
+  + https://core.telegram.org/bots/api
+  - curl &quot;https://api.telegram.org/bot[token]/getMe&quot;
+3. 명령어 설정
+  - 사용할 만한 method 를 찾는다
+    - https://core.telegram.org/bots/api#setchattitle
+    - https://core.telegram.org/bots/api#setchatdescription
+    - https://core.telegram.org/bots/api#setmycommands
+```sh 
+curl -X POST \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{&quot;commands&quot;:[{&quot;command&quot;: &quot;commanda&quot;, &quot;description&quot;: &quot;command a&quot;}]&#x27; \
+  https://api.telegram.org/bot[token]/setMyCommands
+curl https://api.telegram.org/bot[token]/getMyCommands
+```
+    - https://core.telegram.org/bots/api#setchatmenubutton
+4. 채팅
+  - polling
+     - telegram 에서 bot 을 찾아서 메시지 혹은 명령어를 입력한 후 아래 명령어로 확인한다
+```sh 
+curl https://api.telegram.org/bot[token]/getUpdates
+```
+  - webhook
+    실제 서버는 반응성과 효율성을 위해서 webhook 으로 서비스 되어야한다
+      - webhook 을 받을 수 있는 public domain 이 존재해야하며 https 가 지원되어야한다.
+        - 사설 인증서를 사용한다면 해당 인증서를 등록해야한다
+      - 주소로 해당이벤트가 오면 해당 post 메시지를 핸들링 하면된다.
+5. 응답하기
+```sh
+curl -X POST \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{&quot;chat_id&quot;: 1830393354, &quot;text&quot;: &quot;hello&quot;&#x27; \
+  &quot;https://api.telegram.org/bot[token]/sendMessage&quot;
+```
+
+### error
+`entries` 에 url 이 **localhost** 로 되어있는 링크를 걸면 동작하지 않는다.
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/cb50144
+" class="bg-white text-black">cb50144</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/telegram.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/telegram.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/telegram.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/telegram"><span class="underline">telegram</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/index"><span class="underline">index</span><sup>106</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#telegram--텔레그램">telegram | 텔레그램</a></div><div class="pl-2"><a href="#bot-만들기">bot 만들기</a></div><div class="pl-4"><a href="#error">error</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="telegram--텔레그램">telegram | 텔레그램</h1>
+<p>messager</p>
+<h2 id="bot-만들기">bot 만들기</h2>
+<ul>
+<li><a href="https://somjang.tistory.com/entry/텔레그램-BotFather를-활용하여-텔레그램-봇-생성하고-chatid를-얻는-방법" target="_blank">[URL] https://somjang.tistory.com/entry/텔레그램-BotFather를-활용하여-텔레그램-봇-생성하고-chatid를-얻는-방법</a></li>
+</ul>
+<ol>
+<li>BotFather 와 대화 시작</li>
+</ol>
+<ul>
+<li><a href="https://t.me/BotFather" target="_blank">[URL] https://t.me/BotFather</a> 접속해서 접근</li>
+<li>telegram 에서 <code class="span">BotFather</code> 검색해서 <code class="span">start</code></li>
+<li><code class="span">api token</code> 획득</li>
+</ul>
+<ol start="2">
+<li>authorizing</li>
+</ol>
+<ul>
+<li><a href="https://core.telegram.org/api#bot-api" target="_blank">[URL] https://core.telegram.org/api#bot-api</a></li>
+<li><a href="https://core.telegram.org/bots/api" target="_blank">[URL] https://core.telegram.org/bots/api</a></li>
+</ul>
+<ul>
+<li>curl &quot;<a href="https://api.telegram.org/bot[token]/getMe" target="_blank">[URL] https://api.telegram.org/bot[token]/getMe</a>&quot;</li>
+</ul>
+<ol start="3">
+<li>명령어 설정</li>
+</ol>
+<ul>
+<li>사용할 만한 method 를 찾는다<ul>
+<li><a href="https://core.telegram.org/bots/api#setchattitle" target="_blank">[URL] https://core.telegram.org/bots/api#setchattitle</a></li>
+<li><a href="https://core.telegram.org/bots/api#setchatdescription" target="_blank">[URL] https://core.telegram.org/bots/api#setchatdescription</a></li>
+<li><a href="https://core.telegram.org/bots/api#setmycommands" target="_blank">[URL] https://core.telegram.org/bots/api#setmycommands</a></li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs language-sh">curl -X POST \
+  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+  -d <span class="hljs-string">&#x27;{&quot;commands&quot;:[{&quot;command&quot;: &quot;commanda&quot;, &quot;description&quot;: &quot;command a&quot;}]&#x27;</span> \
+  https://api.telegram.org/bot[token]/setMyCommands
+curl https://api.telegram.org/bot[token]/getMyCommands
+</code></pre><pre><code>- https://core.telegram.org/bots/api#setchatmenubutton
+</code></pre><ol start="4">
+<li>채팅</li>
+</ol>
+<ul>
+<li>polling<ul>
+<li>telegram 에서 bot 을 찾아서 메시지 혹은 명령어를 입력한 후 아래 명령어로 확인한다</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs language-sh">curl https://api.telegram.org/bot[token]/getUpdates
+</code></pre><ul>
+<li>webhook
+실제 서버는 반응성과 효율성을 위해서 webhook 으로 서비스 되어야한다<ul>
+<li>webhook 을 받을 수 있는 public domain 이 존재해야하며 https 가 지원되어야한다.<ul>
+<li>사설 인증서를 사용한다면 해당 인증서를 등록해야한다</li>
+</ul>
+</li>
+<li>주소로 해당이벤트가 오면 해당 post 메시지를 핸들링 하면된다.</li>
+</ul>
+</li>
+</ul>
+<ol start="5">
+<li>응답하기</li>
+</ol>
+<pre><code class="hljs language-sh">curl -X POST \
+  -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+  -d <span class="hljs-string">&#x27;{&quot;chat_id&quot;: 1830393354, &quot;text&quot;: &quot;hello&quot;&#x27;</span> \
+  <span class="hljs-string">&quot;https://api.telegram.org/bot[token]/sendMessage&quot;</span>
+</code></pre><h3 id="error">error</h3>
+<p><code class="span">entries</code> 에 url 이 <strong>localhost</strong> 로 되어있는 링크를 걸면 동작하지 않는다.</p>
+</pre></div></main><script src="/_next/static/chunks/webpack-0d2541f49ad9d59a.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-bc971df7080b641f.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"telegram\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"RNVjrwq2dSJDzlbiALfEr\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/telegram\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"telegram\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"telegram\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"telegram\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:Tde4,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"telegram--텔레그램\"\u003etelegram | 텔레그램\u003c/h1\u003e\n\u003cp\u003emessager\u003c/p\u003e\n\u003ch2 id=\"bot-만들기\"\u003ebot 만들기\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://somjang.tistory.com/entry/텔레그램-BotFather를-활용하여-텔레그램-봇-생성하고-chatid를-얻는-방법\" target=\"_blank\"\u003e[URL] https://somjang.tistory.com/entry/텔레그램-BotFather를-활용하여-텔레그램-봇-생성하고-chatid를-얻는-방법\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003col\u003e\n\u003cli\u003eBotFather 와 대화 시작\u003c/li\u003e\n\u003c/ol\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://t.me/BotFather\" target=\"_blank\"\u003e[URL] https://t.me/BotFather\u003c/a\u003e 접속해서 접근\u003c/li\u003e\n\u003cli\u003etelegram 에서 \u003ccode class=\"span\"\u003eBotFather\u003c/code\u003e 검색해서 \u003ccode class=\"span\"\u003estart\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eapi token\u003c/code\u003e 획득\u003c/li\u003e\n\u003c/ul\u003e\n\u003col start=\"2\"\u003e\n\u003cli\u003eauthorizing\u003c/li\u003e\n\u003c/ol\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://core.telegram.org/api#bot-api\" target=\"_blank\"\u003e[URL] https://core.telegram.org/api#bot-api\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"https://core.telegram.org/bots/api\" target=\"_blank\"\u003e[URL] https://core.telegram.org/bots/api\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003ecurl \u0026quot;\u003ca href=\"https://api.telegram.org/bot[token]/getMe\" target=\"_blank\"\u003e[URL] https://api.telegram.org/bot[token]/getMe\u003c/a\u003e\u0026quot;\u003c/li\u003e\n\u003c/ul\u003e\n\u003col start=\"3\"\u003e\n\u003cli\u003e명령어 설정\u003c/li\u003e\n\u003c/ol\u003e\n\u003cul\u003e\n\u003cli\u003e사용할 만한 method 를 찾는다\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://core.telegram.org/bots/api#setchattitle\" target=\"_blank\"\u003e[URL] https://core.telegram.org/bots/api#setchattitle\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"https://core.telegram.org/bots/api#setchatdescription\" target=\"_blank\"\u003e[URL] https://core.telegram.org/bots/api#setchatdescription\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"https://core.telegram.org/bots/api#setmycommands\" target=\"_blank\"\u003e[URL] https://core.telegram.org/bots/api#setmycommands\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ecurl -X POST \\\n  -H \u003cspan class=\"hljs-string\"\u003e\u0026quot;Content-Type: application/json\u0026quot;\u003c/span\u003e \\\n  -d \u003cspan class=\"hljs-string\"\u003e\u0026#x27;{\u0026quot;commands\u0026quot;:[{\u0026quot;command\u0026quot;: \u0026quot;commanda\u0026quot;, \u0026quot;description\u0026quot;: \u0026quot;command a\u0026quot;}]\u0026#x27;\u003c/span\u003e \\\n  https://api.telegram.org/bot[token]/setMyCommands\ncurl https://api.telegram.org/bot[token]/getMyCommands\n\u003c/code\u003e\u003c/pre\u003e\u003cpre\u003e\u003ccode\u003e- https://core.telegram.org/bots/api#setchatmenubutton\n\u003c/code\u003e\u003c/pre\u003e\u003col start=\"4\"\u003e\n\u003cli\u003e채팅\u003c/li\u003e\n\u003c/ol\u003e\n\u003cul\u003e\n\u003cli\u003epolling\u003cul\u003e\n\u003cli\u003etelegram 에서 bot 을 찾아서 메시지 혹은 명령어를 입력한 후 아래 명령어로 확인한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ecurl https://api.telegram.org/bot[token]/getUpdates\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003ewebhook\n실제 서버는 반응성과 효율성을 위해서 webhook 으로 서비스 되어야한다\u003cul\u003e\n\u003cli\u003ewebhook 을 받을 수 있는 public domain 이 존재해야하며 https 가 지원되어야한다.\u003cul\u003e\n\u003cli\u003e사설 인증서를 사용한다면 해당 인증서를 등록해야한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e주소로 해당이벤트가 오면 해당 post 메시지를 핸들링 하면된다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003col start=\"5\"\u003e\n\u003cli\u003e응답하기\u003c/li\u003e\n\u003c/ol\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ecurl -X POST \\\n  -H \u003cspan class=\"hljs-string\"\u003e\u0026quot;Content-Type: application/json\u0026quot;\u003c/span\u003e \\\n  -d \u003cspan class=\"hljs-string\"\u003e\u0026#x27;{\u0026quot;chat_id\u0026quot;: 1830393354, \u0026quot;text\u0026quot;: \u0026quot;hello\u0026quot;\u0026#x27;\u003c/span\u003e \\\n  \u003cspan class=\"hljs-string\"\u003e\u0026quot;https://api.telegram.org/bot[token]/sendMessage\u0026quot;\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"error\"\u003eerror\u003c/h3\u003e\n\u003cp\u003e\u003ccode class=\"span\"\u003eentries\u003c/code\u003e 에 url 이 \u003cstrong\u003elocalhost\u003c/strong\u003e 로 되어있는 링크를 걸면 동작하지 않는다.\u003c/p\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/cb50144\\n\",\"className\":\"bg-white text-black\",\"children\":\"cb50144\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/telegram.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/telegram.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/telegram.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"telegram\",\"name\":\"telegram\",\"val\":\"$undefined\"},{\"id\":\"index\",\"name\":\"index\",\"val\":106}],\"links\":[{\"source\":\"index\",\"target\":\"telegram\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"telegram\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/telegram\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"telegram\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"index\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/index\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"index\"}],[\"$\",\"sup\",null,{\"children\":106}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"telegram--텔레그램\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#telegram--텔레그램\",\"children\":\"telegram | 텔레그램\"}]}],[\"$\",\"div\",\"bot-만들기\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#bot-만들기\",\"children\":\"bot 만들기\"}]}],[\"$\",\"div\",\"error\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error\",\"children\":\"error\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T75c,"])</script><script>self.__next_f.push([1,"\nmessager\n\n## bot 만들기\n+ https://somjang.tistory.com/entry/텔레그램-BotFather를-활용하여-텔레그램-봇-생성하고-chatid를-얻는-방법\n1. BotFather 와 대화 시작\n  - https://t.me/BotFather 접속해서 접근\n  - telegram 에서 `BotFather` 검색해서 `start`\n  - `api token` 획득\n2. authorizing\n  + https://core.telegram.org/api#bot-api\n  + https://core.telegram.org/bots/api\n  - curl \"https://api.telegram.org/bot[token]/getMe\"\n3. 명령어 설정\n  - 사용할 만한 method 를 찾는다\n    - https://core.telegram.org/bots/api#setchattitle\n    - https://core.telegram.org/bots/api#setchatdescription\n    - https://core.telegram.org/bots/api#setmycommands\n```sh \ncurl -X POST \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"commands\":[{\"command\": \"commanda\", \"description\": \"command a\"}]' \\\n  https://api.telegram.org/bot[token]/setMyCommands\ncurl https://api.telegram.org/bot[token]/getMyCommands\n```\n    - https://core.telegram.org/bots/api#setchatmenubutton\n4. 채팅\n  - polling\n     - telegram 에서 bot 을 찾아서 메시지 혹은 명령어를 입력한 후 아래 명령어로 확인한다\n```sh \ncurl https://api.telegram.org/bot[token]/getUpdates\n```\n  - webhook\n    실제 서버는 반응성과 효율성을 위해서 webhook 으로 서비스 되어야한다\n      - webhook 을 받을 수 있는 public domain 이 존재해야하며 https 가 지원되어야한다.\n        - 사설 인증서를 사용한다면 해당 인증서를 등록해야한다\n      - 주소로 해당이벤트가 오면 해당 post 메시지를 핸들링 하면된다.\n5. 응답하기\n```sh\ncurl -X POST \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"chat_id\": 1830393354, \"text\": \"hello\"' \\\n  \"https://api.telegram.org/bot[token]/sendMessage\"\n```\n\n### error\n`entries` 에 url 이 **localhost** 로 되어있는 링크를 걸면 동작하지 않는다.\n"])</script><script>self.__next_f.push([1,"16:T75c,"])</script><script>self.__next_f.push([1,"\nmessager\n\n## bot 만들기\n+ https://somjang.tistory.com/entry/텔레그램-BotFather를-활용하여-텔레그램-봇-생성하고-chatid를-얻는-방법\n1. BotFather 와 대화 시작\n  - https://t.me/BotFather 접속해서 접근\n  - telegram 에서 `BotFather` 검색해서 `start`\n  - `api token` 획득\n2. authorizing\n  + https://core.telegram.org/api#bot-api\n  + https://core.telegram.org/bots/api\n  - curl \"https://api.telegram.org/bot[token]/getMe\"\n3. 명령어 설정\n  - 사용할 만한 method 를 찾는다\n    - https://core.telegram.org/bots/api#setchattitle\n    - https://core.telegram.org/bots/api#setchatdescription\n    - https://core.telegram.org/bots/api#setmycommands\n```sh \ncurl -X POST \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"commands\":[{\"command\": \"commanda\", \"description\": \"command a\"}]' \\\n  https://api.telegram.org/bot[token]/setMyCommands\ncurl https://api.telegram.org/bot[token]/getMyCommands\n```\n    - https://core.telegram.org/bots/api#setchatmenubutton\n4. 채팅\n  - polling\n     - telegram 에서 bot 을 찾아서 메시지 혹은 명령어를 입력한 후 아래 명령어로 확인한다\n```sh \ncurl https://api.telegram.org/bot[token]/getUpdates\n```\n  - webhook\n    실제 서버는 반응성과 효율성을 위해서 webhook 으로 서비스 되어야한다\n      - webhook 을 받을 수 있는 public domain 이 존재해야하며 https 가 지원되어야한다.\n        - 사설 인증서를 사용한다면 해당 인증서를 등록해야한다\n      - 주소로 해당이벤트가 오면 해당 post 메시지를 핸들링 하면된다.\n5. 응답하기\n```sh\ncurl -X POST \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"chat_id\": 1830393354, \"text\": \"hello\"' \\\n  \"https://api.telegram.org/bot[token]/sendMessage\"\n```\n\n### error\n`entries` 에 url 이 **localhost** 로 되어있는 링크를 걸면 동작하지 않는다.\n"])</script><script>self.__next_f.push([1,"17:T75c,"])</script><script>self.__next_f.push([1,"\nmessager\n\n## bot 만들기\n+ https://somjang.tistory.com/entry/텔레그램-BotFather를-활용하여-텔레그램-봇-생성하고-chatid를-얻는-방법\n1. BotFather 와 대화 시작\n  - https://t.me/BotFather 접속해서 접근\n  - telegram 에서 `BotFather` 검색해서 `start`\n  - `api token` 획득\n2. authorizing\n  + https://core.telegram.org/api#bot-api\n  + https://core.telegram.org/bots/api\n  - curl \"https://api.telegram.org/bot[token]/getMe\"\n3. 명령어 설정\n  - 사용할 만한 method 를 찾는다\n    - https://core.telegram.org/bots/api#setchattitle\n    - https://core.telegram.org/bots/api#setchatdescription\n    - https://core.telegram.org/bots/api#setmycommands\n```sh \ncurl -X POST \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"commands\":[{\"command\": \"commanda\", \"description\": \"command a\"}]' \\\n  https://api.telegram.org/bot[token]/setMyCommands\ncurl https://api.telegram.org/bot[token]/getMyCommands\n```\n    - https://core.telegram.org/bots/api#setchatmenubutton\n4. 채팅\n  - polling\n     - telegram 에서 bot 을 찾아서 메시지 혹은 명령어를 입력한 후 아래 명령어로 확인한다\n```sh \ncurl https://api.telegram.org/bot[token]/getUpdates\n```\n  - webhook\n    실제 서버는 반응성과 효율성을 위해서 webhook 으로 서비스 되어야한다\n      - webhook 을 받을 수 있는 public domain 이 존재해야하며 https 가 지원되어야한다.\n        - 사설 인증서를 사용한다면 해당 인증서를 등록해야한다\n      - 주소로 해당이벤트가 오면 해당 post 메시지를 핸들링 하면된다.\n5. 응답하기\n```sh\ncurl -X POST \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"chat_id\": 1830393354, \"text\": \"hello\"' \\\n  \"https://api.telegram.org/bot[token]/sendMessage\"\n```\n\n### error\n`entries` 에 url 이 **localhost** 로 되어있는 링크를 걸면 동작하지 않는다.\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# telegram | 텔레그램\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# telegram | 텔레그램\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/telegram\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# telegram | 텔레그램\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
