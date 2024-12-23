@@ -1,0 +1,859 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-5f0f3d25c7817892.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-e6f48f16817ae44e.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># upstage-ai-lab-day-98</title><meta name="description" content="### LM to LLM
+- 공부하는 느낌보다는 그냥 전반적인 것을 훑는 느낌으로 학습
+
+## 학습
+### LM
+- count 기반
+  - 단어가 얼마나 많이 등장하는지, 얼마나 많이 참조되는지 등을 통해 처리
+  - 동일 단어를 기반으로하므로 동음이의어등이 처리가 안됨
+  - TF-IDF, BM25 등이 존재
+- 단점을 커버하기 위해 의미론적인 임베딩을 할 수 있도록 발전
+  - 주변 단어를 보기시작
+  - Word2Vec, FastText, Glove 등
+- 의미기반을 넘어 문맥정보를 통한 이해 필요성
+  - ELMo, GPT, BERT 등
+  - 너무 고비용이라 실제 현업에 적용이 어렵다
+### LM 에서 LLM 으로 진화하게 된 과정
+- scale up/down 에 대한 방향성이 존재
+  - scale up
+    - 스케일링 법칙이 나오면서 대규모 투자가 할 수 있는 근거 만들어지고 이에 다라 현재의 [[ChatGPT]] 와 같은 서비스가 탄생할 수 있는 계기가 됨
+  - scale down
+### LLM
+- 기존 model 1:1 task 관계가 깨짐
+- ICL In-Context Learning 이 특징, few-shot 등의 예제를 통해 여러 타스크 처리
+  - prompt engineering 으로 이어짐
+- 이에 대한 서빙 관점에서 LLMOps(FMOps) 등이 발생
+  - MLOps -&gt; LLMOps(FMOps)
+- 근간 이론
+  - SFT -&gt; Reward Model -&gt; RLHF
+    - [[ChatGPT]] 방법
+- 비즈니스 동향
+  - 1T 토큰 클럽
+    - 데이터 기여도만큼 사용할 수 있는 토큰을 제공하는 방법
+    - 수익 쉐어 범위 안에서 데이터 기여도에 따른 수익 분배
+### LLM 기반 Data-Centric NLP 연구
+- 사전 학습, Pre Training
+  - 비지도 학습(혹은 셀프 지도, Masked Language Modeling)
+  - 대량의 말뭉치
+- 미세조정
+  - SFT, Supervised Fine Tuning 지도학습
+  - Instruction Fine-Tuning
+    - 사람의 지시에 따른 타스크 수행 능력을 생성
+  - Alignment Tuning
+    - 선호도 반영
+    - RLHF 대신 RLAIF 방식도 있음
+      - 피드백 주체가 사람 -&gt; AI 로
+    - DPO
+      - 선호 데이터만을 활용, 리워드 함수 처럼 복잡한 로직 대신 그냥 적용하는 개념인듯
+      - 이게 RLHF 를 거진 대체
+- 데이터
+  - 다양성, 품질이 중요
+    - 중복 제거, 유사 필터링등을 통해서 데이터를 필터링
+      - 성능 상승 뿐 아니라 학습 비용도 감소
+  - 데이터 증강
+    - 기존 LLM 등의 성능이 올라오면서 이를 증강할 데이터 셋 생성에 사용
+### LLM 기반 Model-Centric NLP 연구
+- PEFT Parameter Efficient Fine Tuning
+  - 일부 파라메터만 튜닝
+    - catastrarophic forgetting 완화
+      - 파인 튜닝후 기존에 잘 하던것도 못하는 현상
+- LoRA
+  - 특정레이어의 가중치를 로우랭크로 낮춰서 학습, 메모리 사용량을 줄임
+  - 기존 가중치를 업데이트하지 않고 곱할 변경할 가중치를 만드는 형태
+- Quantization
+  - 부동 소수점 정밀도를 희생시켜 메모리 사용량을 줄이는 것
+- QLora
+  - LoRA + 4bit Quantization
+- Prompt
+  - Discreate Prompt
+  - Continuous Prompt
+  - Prefix Tuning
+  - Prompt Tuning
+  - P-Tuning
+### LLM 기반 Evaluation-Centric NLP
+- LLM 은 f1, acc 등으로 평가할 수 없다 -&gt; 평가지표 발전
+- Interpretability
+  - 설명 가능한 관점
+- 윤리
+- 정치적 편향
+- MBTI
+  - ChatGPT 는 ENFJ??
+- 사용자의 견해에 아첨하는 경향이 있다.
+- Leaderboard
+### LLM 기반 Application 연구
+- LLMOps(FMOps)
+  - 생성 데이터에 대한 후처리를 포함
+    - 할루시네이션, 윤리적 요소 처리할 것으로 생각
+  - 프롬프트 체이닝
+  - Augmented LLM 운영 주체
+- Augmented LLM
+  - LLM + 외부 서비스로 문제 해결
+  - RAG, Agent 등
+### LLM 기반 Prompt Engineering
+- Prompt Engineering
+  - COT Chain Of Thought
+    - 사람과 같이 단계별로 실행, 검증하여 성능을 향상
+    - 대수(수학)연산에서 특히 더 향상
+  - In-Context Learning
+    - 예제를 통한 동적 학습
+      - 예제 순서가 성능에 영향을 미친다는 논문이 있음
+  - Plan and Solve
+    - 계획 실행으로 성능 향상
+  - 동일 질문에 대해서 여러 답변을 생성 -&gt; 샘플링 -&gt; 일치도가 높은 답변을 사용하여 안정성 확보
+  - 단계별 검증
+  - promptbreeder
+- LLM Tools
+  - LangChain
+  - AutoGPT
+  - Scikit-LLM
+- Multilingual LLM
+  - 모델들
+    - mBERT
+    - XLM
+      - 여러 언어를 학습시키면 성능이 향상
+        - perplexity 가 낮다는 말(low is better)
+    - MASS
+    - mBART
+    - mT5
+  - 다국어 코퍼스로 학습된 LLMs
+    - PaLM
+    - LLaMA
+    - Alpaca
+    - Falcon
+    - RedPajama
+  - Multilingual LLM Benchmark
+    - LASER2
+    - NLLB
+    - MEGA
+    - Open Multilingual LLM Evaluation Leaderboard
+### Multimodel LLM
+- 배경지식
+  - Coarse-grained classification
+    - 대분류
+  - fine-grained classification
+    - 소분류
+- Image-Text
+  - CLIP
+  - FILIP
+  - BLIP
+- Audio/Video
+- LLMs
+  - Flamingo
+    - CLIP + ChinChilla
+  - BLIP-2
+    - Q-Former 를 통해 이미 학습된 두 모델을 연결
+      - Q-Former, FC 레이어만 학습
+  - LLaVA
+  - Gemini
+    - 시각, 비디오, 오디오
+### Cross Lingual LLM
+- 언어모델에서 다른언어로 전이
+- 전이학습
+  - instruction tuning
+    - 목표언어로 instruction tuning 만 진행
+    - source 언어와 나름 유사해야한다, 타겟 언어에대한 vocab을 다소 가지고있어야한다
+    - 성능이 낮을 수 있다.
+    - futher pre-training or instruciton tuning 이 필요
+  - vocabulary extension
+    - vocab 추가를 위한 트레이닝 필요
+  - futher pre-training
+    - pre-training 부터 시작
+    - 대용량 코퍼스 필요
+  - AMM Adappting Monolingual Model
+    - token embedding 만 학습
+  - XPT Cross-Lingual Post-Training
+    - 추가레이어에서 타겟 언어만 학습
+  - GPT-recycle
+    - 잘 학습된 다른 언어모델의 임베딩을 사용
+- 임베딩 정렬 기반 학습 전략
+  - WECHSEL
+    - 기존언어와 타겟언어를 유사도기반으로 정렬후 임베딩
+- Adapter 기반 학습방법
+
+## link
+- [[upstage-ai-lab]]
+- [[upstage-ai-lab-day-92]]
+- [[upstage-ai-lab-day-102]]
+- [[wn.private:upstage-ai-lab-lm-to-llm]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# upstage-ai-lab-day-98"/><meta property="og:description" content="### LM to LLM
+- 공부하는 느낌보다는 그냥 전반적인 것을 훑는 느낌으로 학습
+
+## 학습
+### LM
+- count 기반
+  - 단어가 얼마나 많이 등장하는지, 얼마나 많이 참조되는지 등을 통해 처리
+  - 동일 단어를 기반으로하므로 동음이의어등이 처리가 안됨
+  - TF-IDF, BM25 등이 존재
+- 단점을 커버하기 위해 의미론적인 임베딩을 할 수 있도록 발전
+  - 주변 단어를 보기시작
+  - Word2Vec, FastText, Glove 등
+- 의미기반을 넘어 문맥정보를 통한 이해 필요성
+  - ELMo, GPT, BERT 등
+  - 너무 고비용이라 실제 현업에 적용이 어렵다
+### LM 에서 LLM 으로 진화하게 된 과정
+- scale up/down 에 대한 방향성이 존재
+  - scale up
+    - 스케일링 법칙이 나오면서 대규모 투자가 할 수 있는 근거 만들어지고 이에 다라 현재의 [[ChatGPT]] 와 같은 서비스가 탄생할 수 있는 계기가 됨
+  - scale down
+### LLM
+- 기존 model 1:1 task 관계가 깨짐
+- ICL In-Context Learning 이 특징, few-shot 등의 예제를 통해 여러 타스크 처리
+  - prompt engineering 으로 이어짐
+- 이에 대한 서빙 관점에서 LLMOps(FMOps) 등이 발생
+  - MLOps -&gt; LLMOps(FMOps)
+- 근간 이론
+  - SFT -&gt; Reward Model -&gt; RLHF
+    - [[ChatGPT]] 방법
+- 비즈니스 동향
+  - 1T 토큰 클럽
+    - 데이터 기여도만큼 사용할 수 있는 토큰을 제공하는 방법
+    - 수익 쉐어 범위 안에서 데이터 기여도에 따른 수익 분배
+### LLM 기반 Data-Centric NLP 연구
+- 사전 학습, Pre Training
+  - 비지도 학습(혹은 셀프 지도, Masked Language Modeling)
+  - 대량의 말뭉치
+- 미세조정
+  - SFT, Supervised Fine Tuning 지도학습
+  - Instruction Fine-Tuning
+    - 사람의 지시에 따른 타스크 수행 능력을 생성
+  - Alignment Tuning
+    - 선호도 반영
+    - RLHF 대신 RLAIF 방식도 있음
+      - 피드백 주체가 사람 -&gt; AI 로
+    - DPO
+      - 선호 데이터만을 활용, 리워드 함수 처럼 복잡한 로직 대신 그냥 적용하는 개념인듯
+      - 이게 RLHF 를 거진 대체
+- 데이터
+  - 다양성, 품질이 중요
+    - 중복 제거, 유사 필터링등을 통해서 데이터를 필터링
+      - 성능 상승 뿐 아니라 학습 비용도 감소
+  - 데이터 증강
+    - 기존 LLM 등의 성능이 올라오면서 이를 증강할 데이터 셋 생성에 사용
+### LLM 기반 Model-Centric NLP 연구
+- PEFT Parameter Efficient Fine Tuning
+  - 일부 파라메터만 튜닝
+    - catastrarophic forgetting 완화
+      - 파인 튜닝후 기존에 잘 하던것도 못하는 현상
+- LoRA
+  - 특정레이어의 가중치를 로우랭크로 낮춰서 학습, 메모리 사용량을 줄임
+  - 기존 가중치를 업데이트하지 않고 곱할 변경할 가중치를 만드는 형태
+- Quantization
+  - 부동 소수점 정밀도를 희생시켜 메모리 사용량을 줄이는 것
+- QLora
+  - LoRA + 4bit Quantization
+- Prompt
+  - Discreate Prompt
+  - Continuous Prompt
+  - Prefix Tuning
+  - Prompt Tuning
+  - P-Tuning
+### LLM 기반 Evaluation-Centric NLP
+- LLM 은 f1, acc 등으로 평가할 수 없다 -&gt; 평가지표 발전
+- Interpretability
+  - 설명 가능한 관점
+- 윤리
+- 정치적 편향
+- MBTI
+  - ChatGPT 는 ENFJ??
+- 사용자의 견해에 아첨하는 경향이 있다.
+- Leaderboard
+### LLM 기반 Application 연구
+- LLMOps(FMOps)
+  - 생성 데이터에 대한 후처리를 포함
+    - 할루시네이션, 윤리적 요소 처리할 것으로 생각
+  - 프롬프트 체이닝
+  - Augmented LLM 운영 주체
+- Augmented LLM
+  - LLM + 외부 서비스로 문제 해결
+  - RAG, Agent 등
+### LLM 기반 Prompt Engineering
+- Prompt Engineering
+  - COT Chain Of Thought
+    - 사람과 같이 단계별로 실행, 검증하여 성능을 향상
+    - 대수(수학)연산에서 특히 더 향상
+  - In-Context Learning
+    - 예제를 통한 동적 학습
+      - 예제 순서가 성능에 영향을 미친다는 논문이 있음
+  - Plan and Solve
+    - 계획 실행으로 성능 향상
+  - 동일 질문에 대해서 여러 답변을 생성 -&gt; 샘플링 -&gt; 일치도가 높은 답변을 사용하여 안정성 확보
+  - 단계별 검증
+  - promptbreeder
+- LLM Tools
+  - LangChain
+  - AutoGPT
+  - Scikit-LLM
+- Multilingual LLM
+  - 모델들
+    - mBERT
+    - XLM
+      - 여러 언어를 학습시키면 성능이 향상
+        - perplexity 가 낮다는 말(low is better)
+    - MASS
+    - mBART
+    - mT5
+  - 다국어 코퍼스로 학습된 LLMs
+    - PaLM
+    - LLaMA
+    - Alpaca
+    - Falcon
+    - RedPajama
+  - Multilingual LLM Benchmark
+    - LASER2
+    - NLLB
+    - MEGA
+    - Open Multilingual LLM Evaluation Leaderboard
+### Multimodel LLM
+- 배경지식
+  - Coarse-grained classification
+    - 대분류
+  - fine-grained classification
+    - 소분류
+- Image-Text
+  - CLIP
+  - FILIP
+  - BLIP
+- Audio/Video
+- LLMs
+  - Flamingo
+    - CLIP + ChinChilla
+  - BLIP-2
+    - Q-Former 를 통해 이미 학습된 두 모델을 연결
+      - Q-Former, FC 레이어만 학습
+  - LLaVA
+  - Gemini
+    - 시각, 비디오, 오디오
+### Cross Lingual LLM
+- 언어모델에서 다른언어로 전이
+- 전이학습
+  - instruction tuning
+    - 목표언어로 instruction tuning 만 진행
+    - source 언어와 나름 유사해야한다, 타겟 언어에대한 vocab을 다소 가지고있어야한다
+    - 성능이 낮을 수 있다.
+    - futher pre-training or instruciton tuning 이 필요
+  - vocabulary extension
+    - vocab 추가를 위한 트레이닝 필요
+  - futher pre-training
+    - pre-training 부터 시작
+    - 대용량 코퍼스 필요
+  - AMM Adappting Monolingual Model
+    - token embedding 만 학습
+  - XPT Cross-Lingual Post-Training
+    - 추가레이어에서 타겟 언어만 학습
+  - GPT-recycle
+    - 잘 학습된 다른 언어모델의 임베딩을 사용
+- 임베딩 정렬 기반 학습 전략
+  - WECHSEL
+    - 기존언어와 타겟언어를 유사도기반으로 정렬후 임베딩
+- Adapter 기반 학습방법
+
+## link
+- [[upstage-ai-lab]]
+- [[upstage-ai-lab-day-92]]
+- [[upstage-ai-lab-day-102]]
+- [[wn.private:upstage-ai-lab-lm-to-llm]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/upstage-ai-lab-day-98"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# upstage-ai-lab-day-98"/><meta name="twitter:description" content="### LM to LLM
+- 공부하는 느낌보다는 그냥 전반적인 것을 훑는 느낌으로 학습
+
+## 학습
+### LM
+- count 기반
+  - 단어가 얼마나 많이 등장하는지, 얼마나 많이 참조되는지 등을 통해 처리
+  - 동일 단어를 기반으로하므로 동음이의어등이 처리가 안됨
+  - TF-IDF, BM25 등이 존재
+- 단점을 커버하기 위해 의미론적인 임베딩을 할 수 있도록 발전
+  - 주변 단어를 보기시작
+  - Word2Vec, FastText, Glove 등
+- 의미기반을 넘어 문맥정보를 통한 이해 필요성
+  - ELMo, GPT, BERT 등
+  - 너무 고비용이라 실제 현업에 적용이 어렵다
+### LM 에서 LLM 으로 진화하게 된 과정
+- scale up/down 에 대한 방향성이 존재
+  - scale up
+    - 스케일링 법칙이 나오면서 대규모 투자가 할 수 있는 근거 만들어지고 이에 다라 현재의 [[ChatGPT]] 와 같은 서비스가 탄생할 수 있는 계기가 됨
+  - scale down
+### LLM
+- 기존 model 1:1 task 관계가 깨짐
+- ICL In-Context Learning 이 특징, few-shot 등의 예제를 통해 여러 타스크 처리
+  - prompt engineering 으로 이어짐
+- 이에 대한 서빙 관점에서 LLMOps(FMOps) 등이 발생
+  - MLOps -&gt; LLMOps(FMOps)
+- 근간 이론
+  - SFT -&gt; Reward Model -&gt; RLHF
+    - [[ChatGPT]] 방법
+- 비즈니스 동향
+  - 1T 토큰 클럽
+    - 데이터 기여도만큼 사용할 수 있는 토큰을 제공하는 방법
+    - 수익 쉐어 범위 안에서 데이터 기여도에 따른 수익 분배
+### LLM 기반 Data-Centric NLP 연구
+- 사전 학습, Pre Training
+  - 비지도 학습(혹은 셀프 지도, Masked Language Modeling)
+  - 대량의 말뭉치
+- 미세조정
+  - SFT, Supervised Fine Tuning 지도학습
+  - Instruction Fine-Tuning
+    - 사람의 지시에 따른 타스크 수행 능력을 생성
+  - Alignment Tuning
+    - 선호도 반영
+    - RLHF 대신 RLAIF 방식도 있음
+      - 피드백 주체가 사람 -&gt; AI 로
+    - DPO
+      - 선호 데이터만을 활용, 리워드 함수 처럼 복잡한 로직 대신 그냥 적용하는 개념인듯
+      - 이게 RLHF 를 거진 대체
+- 데이터
+  - 다양성, 품질이 중요
+    - 중복 제거, 유사 필터링등을 통해서 데이터를 필터링
+      - 성능 상승 뿐 아니라 학습 비용도 감소
+  - 데이터 증강
+    - 기존 LLM 등의 성능이 올라오면서 이를 증강할 데이터 셋 생성에 사용
+### LLM 기반 Model-Centric NLP 연구
+- PEFT Parameter Efficient Fine Tuning
+  - 일부 파라메터만 튜닝
+    - catastrarophic forgetting 완화
+      - 파인 튜닝후 기존에 잘 하던것도 못하는 현상
+- LoRA
+  - 특정레이어의 가중치를 로우랭크로 낮춰서 학습, 메모리 사용량을 줄임
+  - 기존 가중치를 업데이트하지 않고 곱할 변경할 가중치를 만드는 형태
+- Quantization
+  - 부동 소수점 정밀도를 희생시켜 메모리 사용량을 줄이는 것
+- QLora
+  - LoRA + 4bit Quantization
+- Prompt
+  - Discreate Prompt
+  - Continuous Prompt
+  - Prefix Tuning
+  - Prompt Tuning
+  - P-Tuning
+### LLM 기반 Evaluation-Centric NLP
+- LLM 은 f1, acc 등으로 평가할 수 없다 -&gt; 평가지표 발전
+- Interpretability
+  - 설명 가능한 관점
+- 윤리
+- 정치적 편향
+- MBTI
+  - ChatGPT 는 ENFJ??
+- 사용자의 견해에 아첨하는 경향이 있다.
+- Leaderboard
+### LLM 기반 Application 연구
+- LLMOps(FMOps)
+  - 생성 데이터에 대한 후처리를 포함
+    - 할루시네이션, 윤리적 요소 처리할 것으로 생각
+  - 프롬프트 체이닝
+  - Augmented LLM 운영 주체
+- Augmented LLM
+  - LLM + 외부 서비스로 문제 해결
+  - RAG, Agent 등
+### LLM 기반 Prompt Engineering
+- Prompt Engineering
+  - COT Chain Of Thought
+    - 사람과 같이 단계별로 실행, 검증하여 성능을 향상
+    - 대수(수학)연산에서 특히 더 향상
+  - In-Context Learning
+    - 예제를 통한 동적 학습
+      - 예제 순서가 성능에 영향을 미친다는 논문이 있음
+  - Plan and Solve
+    - 계획 실행으로 성능 향상
+  - 동일 질문에 대해서 여러 답변을 생성 -&gt; 샘플링 -&gt; 일치도가 높은 답변을 사용하여 안정성 확보
+  - 단계별 검증
+  - promptbreeder
+- LLM Tools
+  - LangChain
+  - AutoGPT
+  - Scikit-LLM
+- Multilingual LLM
+  - 모델들
+    - mBERT
+    - XLM
+      - 여러 언어를 학습시키면 성능이 향상
+        - perplexity 가 낮다는 말(low is better)
+    - MASS
+    - mBART
+    - mT5
+  - 다국어 코퍼스로 학습된 LLMs
+    - PaLM
+    - LLaMA
+    - Alpaca
+    - Falcon
+    - RedPajama
+  - Multilingual LLM Benchmark
+    - LASER2
+    - NLLB
+    - MEGA
+    - Open Multilingual LLM Evaluation Leaderboard
+### Multimodel LLM
+- 배경지식
+  - Coarse-grained classification
+    - 대분류
+  - fine-grained classification
+    - 소분류
+- Image-Text
+  - CLIP
+  - FILIP
+  - BLIP
+- Audio/Video
+- LLMs
+  - Flamingo
+    - CLIP + ChinChilla
+  - BLIP-2
+    - Q-Former 를 통해 이미 학습된 두 모델을 연결
+      - Q-Former, FC 레이어만 학습
+  - LLaVA
+  - Gemini
+    - 시각, 비디오, 오디오
+### Cross Lingual LLM
+- 언어모델에서 다른언어로 전이
+- 전이학습
+  - instruction tuning
+    - 목표언어로 instruction tuning 만 진행
+    - source 언어와 나름 유사해야한다, 타겟 언어에대한 vocab을 다소 가지고있어야한다
+    - 성능이 낮을 수 있다.
+    - futher pre-training or instruciton tuning 이 필요
+  - vocabulary extension
+    - vocab 추가를 위한 트레이닝 필요
+  - futher pre-training
+    - pre-training 부터 시작
+    - 대용량 코퍼스 필요
+  - AMM Adappting Monolingual Model
+    - token embedding 만 학습
+  - XPT Cross-Lingual Post-Training
+    - 추가레이어에서 타겟 언어만 학습
+  - GPT-recycle
+    - 잘 학습된 다른 언어모델의 임베딩을 사용
+- 임베딩 정렬 기반 학습 전략
+  - WECHSEL
+    - 기존언어와 타겟언어를 유사도기반으로 정렬후 임베딩
+- Adapter 기반 학습방법
+
+## link
+- [[upstage-ai-lab]]
+- [[upstage-ai-lab-day-92]]
+- [[upstage-ai-lab-day-102]]
+- [[wn.private:upstage-ai-lab-lm-to-llm]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/a14ec6a
+" class="bg-white text-black">a14ec6a</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/upstage-ai-lab-day-98.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/upstage-ai-lab-day-98.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/upstage-ai-lab-day-98.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-98"><span class="underline">upstage-ai-lab-day-98</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ChatGPT"><span class="underline">ChatGPT</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab"><span class="underline">upstage-ai-lab</span><sup>20</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-92"><span class="underline">upstage-ai-lab-day-92</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-102"><span class="underline">upstage-ai-lab-day-102</span><sup>2</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#upstage-ai-lab-day-98">upstage-ai-lab-day-98</a></div><div class="pl-4"><a href="#lm-to-llm">LM to LLM</a></div><div class="pl-2"><a href="#학습">학습</a></div><div class="pl-4"><a href="#lm">LM</a></div><div class="pl-4"><a href="#lm-에서-llm-으로-진화하게-된-과정">LM 에서 LLM 으로 진화하게 된 과정</a></div><div class="pl-4"><a href="#llm">LLM</a></div><div class="pl-4"><a href="#llm-기반-data-centric-nlp-연구">LLM 기반 Data-Centric NLP 연구</a></div><div class="pl-4"><a href="#llm-기반-model-centric-nlp-연구">LLM 기반 Model-Centric NLP 연구</a></div><div class="pl-4"><a href="#llm-기반-evaluation-centric-nlp">LLM 기반 Evaluation-Centric NLP</a></div><div class="pl-4"><a href="#llm-기반-application-연구">LLM 기반 Application 연구</a></div><div class="pl-4"><a href="#llm-기반-prompt-engineering">LLM 기반 Prompt Engineering</a></div><div class="pl-4"><a href="#multimodel-llm">Multimodel LLM</a></div><div class="pl-4"><a href="#cross-lingual-llm">Cross Lingual LLM</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="upstage-ai-lab-day-98">upstage-ai-lab-day-98</h1>
+<h3 id="lm-to-llm">LM to LLM</h3>
+<ul>
+<li>공부하는 느낌보다는 그냥 전반적인 것을 훑는 느낌으로 학습</li>
+</ul>
+<h2 id="학습">학습</h2>
+<h3 id="lm">LM</h3>
+<ul>
+<li>count 기반<ul>
+<li>단어가 얼마나 많이 등장하는지, 얼마나 많이 참조되는지 등을 통해 처리</li>
+<li>동일 단어를 기반으로하므로 동음이의어등이 처리가 안됨</li>
+<li>TF-IDF, BM25 등이 존재</li>
+</ul>
+</li>
+<li>단점을 커버하기 위해 의미론적인 임베딩을 할 수 있도록 발전<ul>
+<li>주변 단어를 보기시작</li>
+<li>Word2Vec, FastText, Glove 등</li>
+</ul>
+</li>
+<li>의미기반을 넘어 문맥정보를 통한 이해 필요성<ul>
+<li>ELMo, GPT, BERT 등</li>
+<li>너무 고비용이라 실제 현업에 적용이 어렵다</li>
+</ul>
+</li>
+</ul>
+<h3 id="lm-에서-llm-으로-진화하게-된-과정">LM 에서 LLM 으로 진화하게 된 과정</h3>
+<ul>
+<li>scale up/down 에 대한 방향성이 존재<ul>
+<li>scale up<ul>
+<li>스케일링 법칙이 나오면서 대규모 투자가 할 수 있는 근거 만들어지고 이에 다라 현재의 <a href="ChatGPT">ChatGPT</a> 와 같은 서비스가 탄생할 수 있는 계기가 됨</li>
+</ul>
+</li>
+<li>scale down</li>
+</ul>
+</li>
+</ul>
+<h3 id="llm">LLM</h3>
+<ul>
+<li>기존 model 1:1 task 관계가 깨짐</li>
+<li>ICL In-Context Learning 이 특징, few-shot 등의 예제를 통해 여러 타스크 처리<ul>
+<li>prompt engineering 으로 이어짐</li>
+</ul>
+</li>
+<li>이에 대한 서빙 관점에서 LLMOps(FMOps) 등이 발생<ul>
+<li>MLOps -&gt; LLMOps(FMOps)</li>
+</ul>
+</li>
+<li>근간 이론<ul>
+<li>SFT -&gt; Reward Model -&gt; RLHF<ul>
+<li><a href="ChatGPT">ChatGPT</a> 방법</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>비즈니스 동향<ul>
+<li>1T 토큰 클럽<ul>
+<li>데이터 기여도만큼 사용할 수 있는 토큰을 제공하는 방법</li>
+<li>수익 쉐어 범위 안에서 데이터 기여도에 따른 수익 분배</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="llm-기반-data-centric-nlp-연구">LLM 기반 Data-Centric NLP 연구</h3>
+<ul>
+<li>사전 학습, Pre Training<ul>
+<li>비지도 학습(혹은 셀프 지도, Masked Language Modeling)</li>
+<li>대량의 말뭉치</li>
+</ul>
+</li>
+<li>미세조정<ul>
+<li>SFT, Supervised Fine Tuning 지도학습</li>
+<li>Instruction Fine-Tuning<ul>
+<li>사람의 지시에 따른 타스크 수행 능력을 생성</li>
+</ul>
+</li>
+<li>Alignment Tuning<ul>
+<li>선호도 반영</li>
+<li>RLHF 대신 RLAIF 방식도 있음<ul>
+<li>피드백 주체가 사람 -&gt; AI 로</li>
+</ul>
+</li>
+<li>DPO<ul>
+<li>선호 데이터만을 활용, 리워드 함수 처럼 복잡한 로직 대신 그냥 적용하는 개념인듯</li>
+<li>이게 RLHF 를 거진 대체</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>데이터<ul>
+<li>다양성, 품질이 중요<ul>
+<li>중복 제거, 유사 필터링등을 통해서 데이터를 필터링<ul>
+<li>성능 상승 뿐 아니라 학습 비용도 감소</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>데이터 증강<ul>
+<li>기존 LLM 등의 성능이 올라오면서 이를 증강할 데이터 셋 생성에 사용</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="llm-기반-model-centric-nlp-연구">LLM 기반 Model-Centric NLP 연구</h3>
+<ul>
+<li>PEFT Parameter Efficient Fine Tuning<ul>
+<li>일부 파라메터만 튜닝<ul>
+<li>catastrarophic forgetting 완화<ul>
+<li>파인 튜닝후 기존에 잘 하던것도 못하는 현상</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>LoRA<ul>
+<li>특정레이어의 가중치를 로우랭크로 낮춰서 학습, 메모리 사용량을 줄임</li>
+<li>기존 가중치를 업데이트하지 않고 곱할 변경할 가중치를 만드는 형태</li>
+</ul>
+</li>
+<li>Quantization<ul>
+<li>부동 소수점 정밀도를 희생시켜 메모리 사용량을 줄이는 것</li>
+</ul>
+</li>
+<li>QLora<ul>
+<li>LoRA + 4bit Quantization</li>
+</ul>
+</li>
+<li>Prompt<ul>
+<li>Discreate Prompt</li>
+<li>Continuous Prompt</li>
+<li>Prefix Tuning</li>
+<li>Prompt Tuning</li>
+<li>P-Tuning</li>
+</ul>
+</li>
+</ul>
+<h3 id="llm-기반-evaluation-centric-nlp">LLM 기반 Evaluation-Centric NLP</h3>
+<ul>
+<li>LLM 은 f1, acc 등으로 평가할 수 없다 -&gt; 평가지표 발전</li>
+<li>Interpretability<ul>
+<li>설명 가능한 관점</li>
+</ul>
+</li>
+<li>윤리</li>
+<li>정치적 편향</li>
+<li>MBTI<ul>
+<li>ChatGPT 는 ENFJ??</li>
+</ul>
+</li>
+<li>사용자의 견해에 아첨하는 경향이 있다.</li>
+<li>Leaderboard</li>
+</ul>
+<h3 id="llm-기반-application-연구">LLM 기반 Application 연구</h3>
+<ul>
+<li>LLMOps(FMOps)<ul>
+<li>생성 데이터에 대한 후처리를 포함<ul>
+<li>할루시네이션, 윤리적 요소 처리할 것으로 생각</li>
+</ul>
+</li>
+<li>프롬프트 체이닝</li>
+<li>Augmented LLM 운영 주체</li>
+</ul>
+</li>
+<li>Augmented LLM<ul>
+<li>LLM + 외부 서비스로 문제 해결</li>
+<li>RAG, Agent 등</li>
+</ul>
+</li>
+</ul>
+<h3 id="llm-기반-prompt-engineering">LLM 기반 Prompt Engineering</h3>
+<ul>
+<li>Prompt Engineering<ul>
+<li>COT Chain Of Thought<ul>
+<li>사람과 같이 단계별로 실행, 검증하여 성능을 향상</li>
+<li>대수(수학)연산에서 특히 더 향상</li>
+</ul>
+</li>
+<li>In-Context Learning<ul>
+<li>예제를 통한 동적 학습<ul>
+<li>예제 순서가 성능에 영향을 미친다는 논문이 있음</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Plan and Solve<ul>
+<li>계획 실행으로 성능 향상</li>
+</ul>
+</li>
+<li>동일 질문에 대해서 여러 답변을 생성 -&gt; 샘플링 -&gt; 일치도가 높은 답변을 사용하여 안정성 확보</li>
+<li>단계별 검증</li>
+<li>promptbreeder</li>
+</ul>
+</li>
+<li>LLM Tools<ul>
+<li>LangChain</li>
+<li>AutoGPT</li>
+<li>Scikit-LLM</li>
+</ul>
+</li>
+<li>Multilingual LLM<ul>
+<li>모델들<ul>
+<li>mBERT</li>
+<li>XLM<ul>
+<li>여러 언어를 학습시키면 성능이 향상<ul>
+<li>perplexity 가 낮다는 말(low is better)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>MASS</li>
+<li>mBART</li>
+<li>mT5</li>
+</ul>
+</li>
+<li>다국어 코퍼스로 학습된 LLMs<ul>
+<li>PaLM</li>
+<li>LLaMA</li>
+<li>Alpaca</li>
+<li>Falcon</li>
+<li>RedPajama</li>
+</ul>
+</li>
+<li>Multilingual LLM Benchmark<ul>
+<li>LASER2</li>
+<li>NLLB</li>
+<li>MEGA</li>
+<li>Open Multilingual LLM Evaluation Leaderboard</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="multimodel-llm">Multimodel LLM</h3>
+<ul>
+<li>배경지식<ul>
+<li>Coarse-grained classification<ul>
+<li>대분류</li>
+</ul>
+</li>
+<li>fine-grained classification<ul>
+<li>소분류</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Image-Text<ul>
+<li>CLIP</li>
+<li>FILIP</li>
+<li>BLIP</li>
+</ul>
+</li>
+<li>Audio/Video</li>
+<li>LLMs<ul>
+<li>Flamingo<ul>
+<li>CLIP + ChinChilla</li>
+</ul>
+</li>
+<li>BLIP-2<ul>
+<li>Q-Former 를 통해 이미 학습된 두 모델을 연결<ul>
+<li>Q-Former, FC 레이어만 학습</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>LLaVA</li>
+<li>Gemini<ul>
+<li>시각, 비디오, 오디오</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="cross-lingual-llm">Cross Lingual LLM</h3>
+<ul>
+<li>언어모델에서 다른언어로 전이</li>
+<li>전이학습<ul>
+<li>instruction tuning<ul>
+<li>목표언어로 instruction tuning 만 진행</li>
+<li>source 언어와 나름 유사해야한다, 타겟 언어에대한 vocab을 다소 가지고있어야한다</li>
+<li>성능이 낮을 수 있다.</li>
+<li>futher pre-training or instruciton tuning 이 필요</li>
+</ul>
+</li>
+<li>vocabulary extension<ul>
+<li>vocab 추가를 위한 트레이닝 필요</li>
+</ul>
+</li>
+<li>futher pre-training<ul>
+<li>pre-training 부터 시작</li>
+<li>대용량 코퍼스 필요</li>
+</ul>
+</li>
+<li>AMM Adappting Monolingual Model<ul>
+<li>token embedding 만 학습</li>
+</ul>
+</li>
+<li>XPT Cross-Lingual Post-Training<ul>
+<li>추가레이어에서 타겟 언어만 학습</li>
+</ul>
+</li>
+<li>GPT-recycle<ul>
+<li>잘 학습된 다른 언어모델의 임베딩을 사용</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>임베딩 정렬 기반 학습 전략<ul>
+<li>WECHSEL<ul>
+<li>기존언어와 타겟언어를 유사도기반으로 정렬후 임베딩</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Adapter 기반 학습방법</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="upstage-ai-lab">upstage-ai-lab</a></li>
+<li><a href="upstage-ai-lab-day-92">upstage-ai-lab-day-92</a></li>
+<li><a href="upstage-ai-lab-day-102">upstage-ai-lab-day-102</a></li>
+<li><strike>[wn.private] wn.private:upstage-ai-lab-lm-to-llm</strike></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-5f0f3d25c7817892.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-e6f48f16817ae44e.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"upstage-ai-lab-day-98\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"3fNbiVBK732MED2CjBpQj\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/upstage-ai-lab-day-98\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"upstage-ai-lab-day-98\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"upstage-ai-lab-day-98\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"upstage-ai-lab-day-98\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T20ea,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"upstage-ai-lab-day-98\"\u003eupstage-ai-lab-day-98\u003c/h1\u003e\n\u003ch3 id=\"lm-to-llm\"\u003eLM to LLM\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e공부하는 느낌보다는 그냥 전반적인 것을 훑는 느낌으로 학습\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"학습\"\u003e학습\u003c/h2\u003e\n\u003ch3 id=\"lm\"\u003eLM\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003ecount 기반\u003cul\u003e\n\u003cli\u003e단어가 얼마나 많이 등장하는지, 얼마나 많이 참조되는지 등을 통해 처리\u003c/li\u003e\n\u003cli\u003e동일 단어를 기반으로하므로 동음이의어등이 처리가 안됨\u003c/li\u003e\n\u003cli\u003eTF-IDF, BM25 등이 존재\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e단점을 커버하기 위해 의미론적인 임베딩을 할 수 있도록 발전\u003cul\u003e\n\u003cli\u003e주변 단어를 보기시작\u003c/li\u003e\n\u003cli\u003eWord2Vec, FastText, Glove 등\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e의미기반을 넘어 문맥정보를 통한 이해 필요성\u003cul\u003e\n\u003cli\u003eELMo, GPT, BERT 등\u003c/li\u003e\n\u003cli\u003e너무 고비용이라 실제 현업에 적용이 어렵다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"lm-에서-llm-으로-진화하게-된-과정\"\u003eLM 에서 LLM 으로 진화하게 된 과정\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003escale up/down 에 대한 방향성이 존재\u003cul\u003e\n\u003cli\u003escale up\u003cul\u003e\n\u003cli\u003e스케일링 법칙이 나오면서 대규모 투자가 할 수 있는 근거 만들어지고 이에 다라 현재의 \u003ca href=\"ChatGPT\"\u003eChatGPT\u003c/a\u003e 와 같은 서비스가 탄생할 수 있는 계기가 됨\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003escale down\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"llm\"\u003eLLM\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e기존 model 1:1 task 관계가 깨짐\u003c/li\u003e\n\u003cli\u003eICL In-Context Learning 이 특징, few-shot 등의 예제를 통해 여러 타스크 처리\u003cul\u003e\n\u003cli\u003eprompt engineering 으로 이어짐\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e이에 대한 서빙 관점에서 LLMOps(FMOps) 등이 발생\u003cul\u003e\n\u003cli\u003eMLOps -\u0026gt; LLMOps(FMOps)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e근간 이론\u003cul\u003e\n\u003cli\u003eSFT -\u0026gt; Reward Model -\u0026gt; RLHF\u003cul\u003e\n\u003cli\u003e\u003ca href=\"ChatGPT\"\u003eChatGPT\u003c/a\u003e 방법\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e비즈니스 동향\u003cul\u003e\n\u003cli\u003e1T 토큰 클럽\u003cul\u003e\n\u003cli\u003e데이터 기여도만큼 사용할 수 있는 토큰을 제공하는 방법\u003c/li\u003e\n\u003cli\u003e수익 쉐어 범위 안에서 데이터 기여도에 따른 수익 분배\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"llm-기반-data-centric-nlp-연구\"\u003eLLM 기반 Data-Centric NLP 연구\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e사전 학습, Pre Training\u003cul\u003e\n\u003cli\u003e비지도 학습(혹은 셀프 지도, Masked Language Modeling)\u003c/li\u003e\n\u003cli\u003e대량의 말뭉치\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e미세조정\u003cul\u003e\n\u003cli\u003eSFT, Supervised Fine Tuning 지도학습\u003c/li\u003e\n\u003cli\u003eInstruction Fine-Tuning\u003cul\u003e\n\u003cli\u003e사람의 지시에 따른 타스크 수행 능력을 생성\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eAlignment Tuning\u003cul\u003e\n\u003cli\u003e선호도 반영\u003c/li\u003e\n\u003cli\u003eRLHF 대신 RLAIF 방식도 있음\u003cul\u003e\n\u003cli\u003e피드백 주체가 사람 -\u0026gt; AI 로\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eDPO\u003cul\u003e\n\u003cli\u003e선호 데이터만을 활용, 리워드 함수 처럼 복잡한 로직 대신 그냥 적용하는 개념인듯\u003c/li\u003e\n\u003cli\u003e이게 RLHF 를 거진 대체\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터\u003cul\u003e\n\u003cli\u003e다양성, 품질이 중요\u003cul\u003e\n\u003cli\u003e중복 제거, 유사 필터링등을 통해서 데이터를 필터링\u003cul\u003e\n\u003cli\u003e성능 상승 뿐 아니라 학습 비용도 감소\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터 증강\u003cul\u003e\n\u003cli\u003e기존 LLM 등의 성능이 올라오면서 이를 증강할 데이터 셋 생성에 사용\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"llm-기반-model-centric-nlp-연구\"\u003eLLM 기반 Model-Centric NLP 연구\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003ePEFT Parameter Efficient Fine Tuning\u003cul\u003e\n\u003cli\u003e일부 파라메터만 튜닝\u003cul\u003e\n\u003cli\u003ecatastrarophic forgetting 완화\u003cul\u003e\n\u003cli\u003e파인 튜닝후 기존에 잘 하던것도 못하는 현상\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eLoRA\u003cul\u003e\n\u003cli\u003e특정레이어의 가중치를 로우랭크로 낮춰서 학습, 메모리 사용량을 줄임\u003c/li\u003e\n\u003cli\u003e기존 가중치를 업데이트하지 않고 곱할 변경할 가중치를 만드는 형태\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eQuantization\u003cul\u003e\n\u003cli\u003e부동 소수점 정밀도를 희생시켜 메모리 사용량을 줄이는 것\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eQLora\u003cul\u003e\n\u003cli\u003eLoRA + 4bit Quantization\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003ePrompt\u003cul\u003e\n\u003cli\u003eDiscreate Prompt\u003c/li\u003e\n\u003cli\u003eContinuous Prompt\u003c/li\u003e\n\u003cli\u003ePrefix Tuning\u003c/li\u003e\n\u003cli\u003ePrompt Tuning\u003c/li\u003e\n\u003cli\u003eP-Tuning\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"llm-기반-evaluation-centric-nlp\"\u003eLLM 기반 Evaluation-Centric NLP\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eLLM 은 f1, acc 등으로 평가할 수 없다 -\u0026gt; 평가지표 발전\u003c/li\u003e\n\u003cli\u003eInterpretability\u003cul\u003e\n\u003cli\u003e설명 가능한 관점\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e윤리\u003c/li\u003e\n\u003cli\u003e정치적 편향\u003c/li\u003e\n\u003cli\u003eMBTI\u003cul\u003e\n\u003cli\u003eChatGPT 는 ENFJ??\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e사용자의 견해에 아첨하는 경향이 있다.\u003c/li\u003e\n\u003cli\u003eLeaderboard\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"llm-기반-application-연구\"\u003eLLM 기반 Application 연구\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eLLMOps(FMOps)\u003cul\u003e\n\u003cli\u003e생성 데이터에 대한 후처리를 포함\u003cul\u003e\n\u003cli\u003e할루시네이션, 윤리적 요소 처리할 것으로 생각\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e프롬프트 체이닝\u003c/li\u003e\n\u003cli\u003eAugmented LLM 운영 주체\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eAugmented LLM\u003cul\u003e\n\u003cli\u003eLLM + 외부 서비스로 문제 해결\u003c/li\u003e\n\u003cli\u003eRAG, Agent 등\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"llm-기반-prompt-engineering\"\u003eLLM 기반 Prompt Engineering\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003ePrompt Engineering\u003cul\u003e\n\u003cli\u003eCOT Chain Of Thought\u003cul\u003e\n\u003cli\u003e사람과 같이 단계별로 실행, 검증하여 성능을 향상\u003c/li\u003e\n\u003cli\u003e대수(수학)연산에서 특히 더 향상\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eIn-Context Learning\u003cul\u003e\n\u003cli\u003e예제를 통한 동적 학습\u003cul\u003e\n\u003cli\u003e예제 순서가 성능에 영향을 미친다는 논문이 있음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003ePlan and Solve\u003cul\u003e\n\u003cli\u003e계획 실행으로 성능 향상\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e동일 질문에 대해서 여러 답변을 생성 -\u0026gt; 샘플링 -\u0026gt; 일치도가 높은 답변을 사용하여 안정성 확보\u003c/li\u003e\n\u003cli\u003e단계별 검증\u003c/li\u003e\n\u003cli\u003epromptbreeder\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eLLM Tools\u003cul\u003e\n\u003cli\u003eLangChain\u003c/li\u003e\n\u003cli\u003eAutoGPT\u003c/li\u003e\n\u003cli\u003eScikit-LLM\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eMultilingual LLM\u003cul\u003e\n\u003cli\u003e모델들\u003cul\u003e\n\u003cli\u003emBERT\u003c/li\u003e\n\u003cli\u003eXLM\u003cul\u003e\n\u003cli\u003e여러 언어를 학습시키면 성능이 향상\u003cul\u003e\n\u003cli\u003eperplexity 가 낮다는 말(low is better)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eMASS\u003c/li\u003e\n\u003cli\u003emBART\u003c/li\u003e\n\u003cli\u003emT5\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e다국어 코퍼스로 학습된 LLMs\u003cul\u003e\n\u003cli\u003ePaLM\u003c/li\u003e\n\u003cli\u003eLLaMA\u003c/li\u003e\n\u003cli\u003eAlpaca\u003c/li\u003e\n\u003cli\u003eFalcon\u003c/li\u003e\n\u003cli\u003eRedPajama\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eMultilingual LLM Benchmark\u003cul\u003e\n\u003cli\u003eLASER2\u003c/li\u003e\n\u003cli\u003eNLLB\u003c/li\u003e\n\u003cli\u003eMEGA\u003c/li\u003e\n\u003cli\u003eOpen Multilingual LLM Evaluation Leaderboard\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"multimodel-llm\"\u003eMultimodel LLM\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e배경지식\u003cul\u003e\n\u003cli\u003eCoarse-grained classification\u003cul\u003e\n\u003cli\u003e대분류\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003efine-grained classification\u003cul\u003e\n\u003cli\u003e소분류\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eImage-Text\u003cul\u003e\n\u003cli\u003eCLIP\u003c/li\u003e\n\u003cli\u003eFILIP\u003c/li\u003e\n\u003cli\u003eBLIP\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eAudio/Video\u003c/li\u003e\n\u003cli\u003eLLMs\u003cul\u003e\n\u003cli\u003eFlamingo\u003cul\u003e\n\u003cli\u003eCLIP + ChinChilla\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eBLIP-2\u003cul\u003e\n\u003cli\u003eQ-Former 를 통해 이미 학습된 두 모델을 연결\u003cul\u003e\n\u003cli\u003eQ-Former, FC 레이어만 학습\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eLLaVA\u003c/li\u003e\n\u003cli\u003eGemini\u003cul\u003e\n\u003cli\u003e시각, 비디오, 오디오\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"cross-lingual-llm\"\u003eCross Lingual LLM\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e언어모델에서 다른언어로 전이\u003c/li\u003e\n\u003cli\u003e전이학습\u003cul\u003e\n\u003cli\u003einstruction tuning\u003cul\u003e\n\u003cli\u003e목표언어로 instruction tuning 만 진행\u003c/li\u003e\n\u003cli\u003esource 언어와 나름 유사해야한다, 타겟 언어에대한 vocab을 다소 가지고있어야한다\u003c/li\u003e\n\u003cli\u003e성능이 낮을 수 있다.\u003c/li\u003e\n\u003cli\u003efuther pre-training or instruciton tuning 이 필요\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003evocabulary extension\u003cul\u003e\n\u003cli\u003evocab 추가를 위한 트레이닝 필요\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003efuther pre-training\u003cul\u003e\n\u003cli\u003epre-training 부터 시작\u003c/li\u003e\n\u003cli\u003e대용량 코퍼스 필요\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eAMM Adappting Monolingual Model\u003cul\u003e\n\u003cli\u003etoken embedding 만 학습\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eXPT Cross-Lingual Post-Training\u003cul\u003e\n\u003cli\u003e추가레이어에서 타겟 언어만 학습\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eGPT-recycle\u003cul\u003e\n\u003cli\u003e잘 학습된 다른 언어모델의 임베딩을 사용\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e임베딩 정렬 기반 학습 전략\u003cul\u003e\n\u003cli\u003eWECHSEL\u003cul\u003e\n\u003cli\u003e기존언어와 타겟언어를 유사도기반으로 정렬후 임베딩\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eAdapter 기반 학습방법\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"upstage-ai-lab\"\u003eupstage-ai-lab\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"upstage-ai-lab-day-92\"\u003eupstage-ai-lab-day-92\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"upstage-ai-lab-day-102\"\u003eupstage-ai-lab-day-102\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cstrike\u003e[wn.private] wn.private:upstage-ai-lab-lm-to-llm\u003c/strike\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/a14ec6a\\n\",\"className\":\"bg-white text-black\",\"children\":\"a14ec6a\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/upstage-ai-lab-day-98.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/upstage-ai-lab-day-98.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/upstage-ai-lab-day-98.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"upstage-ai-lab-day-98\",\"name\":\"upstage-ai-lab-day-98\",\"val\":5},{\"id\":\"ChatGPT\",\"name\":\"ChatGPT\",\"val\":\"$undefined\"},{\"id\":\"upstage-ai-lab\",\"name\":\"upstage-ai-lab\",\"val\":20},{\"id\":\"upstage-ai-lab-day-92\",\"name\":\"upstage-ai-lab-day-92\",\"val\":9},{\"id\":\"upstage-ai-lab-day-102\",\"name\":\"upstage-ai-lab-day-102\",\"val\":2}],\"links\":[{\"source\":\"upstage-ai-lab-day-98\",\"target\":\"ChatGPT\"},{\"source\":\"upstage-ai-lab-day-98\",\"target\":\"ChatGPT\"},{\"source\":\"upstage-ai-lab-day-98\",\"target\":\"upstage-ai-lab\"},{\"source\":\"upstage-ai-lab-day-98\",\"target\":\"upstage-ai-lab-day-92\"},{\"source\":\"upstage-ai-lab-day-98\",\"target\":\"upstage-ai-lab-day-102\"},{\"source\":\"upstage-ai-lab-day-102\",\"target\":\"upstage-ai-lab-day-98\"},{\"source\":\"upstage-ai-lab-day-92\",\"target\":\"upstage-ai-lab-day-98\"},{\"source\":\"upstage-ai-lab\",\"target\":\"upstage-ai-lab-day-98\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"upstage-ai-lab-day-98\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-98\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-98\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"ChatGPT\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ChatGPT\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ChatGPT\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"upstage-ai-lab\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab\"}],[\"$\",\"sup\",null,{\"children\":20}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-day-92\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-92\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-92\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-day-102\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-102\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-102\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"upstage-ai-lab-day-98\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#upstage-ai-lab-day-98\",\"children\":\"upstage-ai-lab-day-98\"}]}],[\"$\",\"div\",\"lm-to-llm\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#lm-to-llm\",\"children\":\"LM to LLM\"}]}],[\"$\",\"div\",\"학습\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#학습\",\"children\":\"학습\"}]}],[\"$\",\"div\",\"lm\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#lm\",\"children\":\"LM\"}]}],[\"$\",\"div\",\"lm-에서-llm-으로-진화하게-된-과정\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#lm-에서-llm-으로-진화하게-된-과정\",\"children\":\"LM 에서 LLM 으로 진화하게 된 과정\"}]}],[\"$\",\"div\",\"llm\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#llm\",\"children\":\"LLM\"}]}],[\"$\",\"div\",\"llm-기반-data-centric-nlp-연구\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#llm-기반-data-centric-nlp-연구\",\"children\":\"LLM 기반 Data-Centric NLP 연구\"}]}],[\"$\",\"div\",\"llm-기반-model-centric-nlp-연구\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#llm-기반-model-centric-nlp-연구\",\"children\":\"LLM 기반 Model-Centric NLP 연구\"}]}],[\"$\",\"div\",\"llm-기반-evaluation-centric-nlp\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#llm-기반-evaluation-centric-nlp\",\"children\":\"LLM 기반 Evaluation-Centric NLP\"}]}],[\"$\",\"div\",\"llm-기반-application-연구\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#llm-기반-application-연구\",\"children\":\"LLM 기반 Application 연구\"}]}],[\"$\",\"div\",\"llm-기반-prompt-engineering\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#llm-기반-prompt-engineering\",\"children\":\"LLM 기반 Prompt Engineering\"}]}],[\"$\",\"div\",\"multimodel-llm\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#multimodel-llm\",\"children\":\"Multimodel LLM\"}]}],[\"$\",\"div\",\"cross-lingual-llm\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#cross-lingual-llm\",\"children\":\"Cross Lingual LLM\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T183c,"])</script><script>self.__next_f.push([1,"### LM to LLM\n- 공부하는 느낌보다는 그냥 전반적인 것을 훑는 느낌으로 학습\n\n## 학습\n### LM\n- count 기반\n  - 단어가 얼마나 많이 등장하는지, 얼마나 많이 참조되는지 등을 통해 처리\n  - 동일 단어를 기반으로하므로 동음이의어등이 처리가 안됨\n  - TF-IDF, BM25 등이 존재\n- 단점을 커버하기 위해 의미론적인 임베딩을 할 수 있도록 발전\n  - 주변 단어를 보기시작\n  - Word2Vec, FastText, Glove 등\n- 의미기반을 넘어 문맥정보를 통한 이해 필요성\n  - ELMo, GPT, BERT 등\n  - 너무 고비용이라 실제 현업에 적용이 어렵다\n### LM 에서 LLM 으로 진화하게 된 과정\n- scale up/down 에 대한 방향성이 존재\n  - scale up\n    - 스케일링 법칙이 나오면서 대규모 투자가 할 수 있는 근거 만들어지고 이에 다라 현재의 [[ChatGPT]] 와 같은 서비스가 탄생할 수 있는 계기가 됨\n  - scale down\n### LLM\n- 기존 model 1:1 task 관계가 깨짐\n- ICL In-Context Learning 이 특징, few-shot 등의 예제를 통해 여러 타스크 처리\n  - prompt engineering 으로 이어짐\n- 이에 대한 서빙 관점에서 LLMOps(FMOps) 등이 발생\n  - MLOps -\u003e LLMOps(FMOps)\n- 근간 이론\n  - SFT -\u003e Reward Model -\u003e RLHF\n    - [[ChatGPT]] 방법\n- 비즈니스 동향\n  - 1T 토큰 클럽\n    - 데이터 기여도만큼 사용할 수 있는 토큰을 제공하는 방법\n    - 수익 쉐어 범위 안에서 데이터 기여도에 따른 수익 분배\n### LLM 기반 Data-Centric NLP 연구\n- 사전 학습, Pre Training\n  - 비지도 학습(혹은 셀프 지도, Masked Language Modeling)\n  - 대량의 말뭉치\n- 미세조정\n  - SFT, Supervised Fine Tuning 지도학습\n  - Instruction Fine-Tuning\n    - 사람의 지시에 따른 타스크 수행 능력을 생성\n  - Alignment Tuning\n    - 선호도 반영\n    - RLHF 대신 RLAIF 방식도 있음\n      - 피드백 주체가 사람 -\u003e AI 로\n    - DPO\n      - 선호 데이터만을 활용, 리워드 함수 처럼 복잡한 로직 대신 그냥 적용하는 개념인듯\n      - 이게 RLHF 를 거진 대체\n- 데이터\n  - 다양성, 품질이 중요\n    - 중복 제거, 유사 필터링등을 통해서 데이터를 필터링\n      - 성능 상승 뿐 아니라 학습 비용도 감소\n  - 데이터 증강\n    - 기존 LLM 등의 성능이 올라오면서 이를 증강할 데이터 셋 생성에 사용\n### LLM 기반 Model-Centric NLP 연구\n- PEFT Parameter Efficient Fine Tuning\n  - 일부 파라메터만 튜닝\n    - catastrarophic forgetting 완화\n      - 파인 튜닝후 기존에 잘 하던것도 못하는 현상\n- LoRA\n  - 특정레이어의 가중치를 로우랭크로 낮춰서 학습, 메모리 사용량을 줄임\n  - 기존 가중치를 업데이트하지 않고 곱할 변경할 가중치를 만드는 형태\n- Quantization\n  - 부동 소수점 정밀도를 희생시켜 메모리 사용량을 줄이는 것\n- QLora\n  - LoRA + 4bit Quantization\n- Prompt\n  - Discreate Prompt\n  - Continuous Prompt\n  - Prefix Tuning\n  - Prompt Tuning\n  - P-Tuning\n### LLM 기반 Evaluation-Centric NLP\n- LLM 은 f1, acc 등으로 평가할 수 없다 -\u003e 평가지표 발전\n- Interpretability\n  - 설명 가능한 관점\n- 윤리\n- 정치적 편향\n- MBTI\n  - ChatGPT 는 ENFJ??\n- 사용자의 견해에 아첨하는 경향이 있다.\n- Leaderboard\n### LLM 기반 Application 연구\n- LLMOps(FMOps)\n  - 생성 데이터에 대한 후처리를 포함\n    - 할루시네이션, 윤리적 요소 처리할 것으로 생각\n  - 프롬프트 체이닝\n  - Augmented LLM 운영 주체\n- Augmented LLM\n  - LLM + 외부 서비스로 문제 해결\n  - RAG, Agent 등\n### LLM 기반 Prompt Engineering\n- Prompt Engineering\n  - COT Chain Of Thought\n    - 사람과 같이 단계별로 실행, 검증하여 성능을 향상\n    - 대수(수학)연산에서 특히 더 향상\n  - In-Context Learning\n    - 예제를 통한 동적 학습\n      - 예제 순서가 성능에 영향을 미친다는 논문이 있음\n  - Plan and Solve\n    - 계획 실행으로 성능 향상\n  - 동일 질문에 대해서 여러 답변을 생성 -\u003e 샘플링 -\u003e 일치도가 높은 답변을 사용하여 안정성 확보\n  - 단계별 검증\n  - promptbreeder\n- LLM Tools\n  - LangChain\n  - AutoGPT\n  - Scikit-LLM\n- Multilingual LLM\n  - 모델들\n    - mBERT\n    - XLM\n      - 여러 언어를 학습시키면 성능이 향상\n        - perplexity 가 낮다는 말(low is better)\n    - MASS\n    - mBART\n    - mT5\n  - 다국어 코퍼스로 학습된 LLMs\n    - PaLM\n    - LLaMA\n    - Alpaca\n    - Falcon\n    - RedPajama\n  - Multilingual LLM Benchmark\n    - LASER2\n    - NLLB\n    - MEGA\n    - Open Multilingual LLM Evaluation Leaderboard\n### Multimodel LLM\n- 배경지식\n  - Coarse-grained classification\n    - 대분류\n  - fine-grained classification\n    - 소분류\n- Image-Text\n  - CLIP\n  - FILIP\n  - BLIP\n- Audio/Video\n- LLMs\n  - Flamingo\n    - CLIP + ChinChilla\n  - BLIP-2\n    - Q-Former 를 통해 이미 학습된 두 모델을 연결\n      - Q-Former, FC 레이어만 학습\n  - LLaVA\n  - Gemini\n    - 시각, 비디오, 오디오\n### Cross Lingual LLM\n- 언어모델에서 다른언어로 전이\n- 전이학습\n  - instruction tuning\n    - 목표언어로 instruction tuning 만 진행\n    - source 언어와 나름 유사해야한다, 타겟 언어에대한 vocab을 다소 가지고있어야한다\n    - 성능이 낮을 수 있다.\n    - futher pre-training or instruciton tuning 이 필요\n  - vocabulary extension\n    - vocab 추가를 위한 트레이닝 필요\n  - futher pre-training\n    - pre-training 부터 시작\n    - 대용량 코퍼스 필요\n  - AMM Adappting Monolingual Model\n    - token embedding 만 학습\n  - XPT Cross-Lingual Post-Training\n    - 추가레이어에서 타겟 언어만 학습\n  - GPT-recycle\n    - 잘 학습된 다른 언어모델의 임베딩을 사용\n- 임베딩 정렬 기반 학습 전략\n  - WECHSEL\n    - 기존언어와 타겟언어를 유사도기반으로 정렬후 임베딩\n- Adapter 기반 학습방법\n\n## link\n- [[upstage-ai-lab]]\n- [[upstage-ai-lab-day-92]]\n- [[upstage-ai-lab-day-102]]\n- [[wn.private:upstage-ai-lab-lm-to-llm]]\n"])</script><script>self.__next_f.push([1,"16:T183c,"])</script><script>self.__next_f.push([1,"### LM to LLM\n- 공부하는 느낌보다는 그냥 전반적인 것을 훑는 느낌으로 학습\n\n## 학습\n### LM\n- count 기반\n  - 단어가 얼마나 많이 등장하는지, 얼마나 많이 참조되는지 등을 통해 처리\n  - 동일 단어를 기반으로하므로 동음이의어등이 처리가 안됨\n  - TF-IDF, BM25 등이 존재\n- 단점을 커버하기 위해 의미론적인 임베딩을 할 수 있도록 발전\n  - 주변 단어를 보기시작\n  - Word2Vec, FastText, Glove 등\n- 의미기반을 넘어 문맥정보를 통한 이해 필요성\n  - ELMo, GPT, BERT 등\n  - 너무 고비용이라 실제 현업에 적용이 어렵다\n### LM 에서 LLM 으로 진화하게 된 과정\n- scale up/down 에 대한 방향성이 존재\n  - scale up\n    - 스케일링 법칙이 나오면서 대규모 투자가 할 수 있는 근거 만들어지고 이에 다라 현재의 [[ChatGPT]] 와 같은 서비스가 탄생할 수 있는 계기가 됨\n  - scale down\n### LLM\n- 기존 model 1:1 task 관계가 깨짐\n- ICL In-Context Learning 이 특징, few-shot 등의 예제를 통해 여러 타스크 처리\n  - prompt engineering 으로 이어짐\n- 이에 대한 서빙 관점에서 LLMOps(FMOps) 등이 발생\n  - MLOps -\u003e LLMOps(FMOps)\n- 근간 이론\n  - SFT -\u003e Reward Model -\u003e RLHF\n    - [[ChatGPT]] 방법\n- 비즈니스 동향\n  - 1T 토큰 클럽\n    - 데이터 기여도만큼 사용할 수 있는 토큰을 제공하는 방법\n    - 수익 쉐어 범위 안에서 데이터 기여도에 따른 수익 분배\n### LLM 기반 Data-Centric NLP 연구\n- 사전 학습, Pre Training\n  - 비지도 학습(혹은 셀프 지도, Masked Language Modeling)\n  - 대량의 말뭉치\n- 미세조정\n  - SFT, Supervised Fine Tuning 지도학습\n  - Instruction Fine-Tuning\n    - 사람의 지시에 따른 타스크 수행 능력을 생성\n  - Alignment Tuning\n    - 선호도 반영\n    - RLHF 대신 RLAIF 방식도 있음\n      - 피드백 주체가 사람 -\u003e AI 로\n    - DPO\n      - 선호 데이터만을 활용, 리워드 함수 처럼 복잡한 로직 대신 그냥 적용하는 개념인듯\n      - 이게 RLHF 를 거진 대체\n- 데이터\n  - 다양성, 품질이 중요\n    - 중복 제거, 유사 필터링등을 통해서 데이터를 필터링\n      - 성능 상승 뿐 아니라 학습 비용도 감소\n  - 데이터 증강\n    - 기존 LLM 등의 성능이 올라오면서 이를 증강할 데이터 셋 생성에 사용\n### LLM 기반 Model-Centric NLP 연구\n- PEFT Parameter Efficient Fine Tuning\n  - 일부 파라메터만 튜닝\n    - catastrarophic forgetting 완화\n      - 파인 튜닝후 기존에 잘 하던것도 못하는 현상\n- LoRA\n  - 특정레이어의 가중치를 로우랭크로 낮춰서 학습, 메모리 사용량을 줄임\n  - 기존 가중치를 업데이트하지 않고 곱할 변경할 가중치를 만드는 형태\n- Quantization\n  - 부동 소수점 정밀도를 희생시켜 메모리 사용량을 줄이는 것\n- QLora\n  - LoRA + 4bit Quantization\n- Prompt\n  - Discreate Prompt\n  - Continuous Prompt\n  - Prefix Tuning\n  - Prompt Tuning\n  - P-Tuning\n### LLM 기반 Evaluation-Centric NLP\n- LLM 은 f1, acc 등으로 평가할 수 없다 -\u003e 평가지표 발전\n- Interpretability\n  - 설명 가능한 관점\n- 윤리\n- 정치적 편향\n- MBTI\n  - ChatGPT 는 ENFJ??\n- 사용자의 견해에 아첨하는 경향이 있다.\n- Leaderboard\n### LLM 기반 Application 연구\n- LLMOps(FMOps)\n  - 생성 데이터에 대한 후처리를 포함\n    - 할루시네이션, 윤리적 요소 처리할 것으로 생각\n  - 프롬프트 체이닝\n  - Augmented LLM 운영 주체\n- Augmented LLM\n  - LLM + 외부 서비스로 문제 해결\n  - RAG, Agent 등\n### LLM 기반 Prompt Engineering\n- Prompt Engineering\n  - COT Chain Of Thought\n    - 사람과 같이 단계별로 실행, 검증하여 성능을 향상\n    - 대수(수학)연산에서 특히 더 향상\n  - In-Context Learning\n    - 예제를 통한 동적 학습\n      - 예제 순서가 성능에 영향을 미친다는 논문이 있음\n  - Plan and Solve\n    - 계획 실행으로 성능 향상\n  - 동일 질문에 대해서 여러 답변을 생성 -\u003e 샘플링 -\u003e 일치도가 높은 답변을 사용하여 안정성 확보\n  - 단계별 검증\n  - promptbreeder\n- LLM Tools\n  - LangChain\n  - AutoGPT\n  - Scikit-LLM\n- Multilingual LLM\n  - 모델들\n    - mBERT\n    - XLM\n      - 여러 언어를 학습시키면 성능이 향상\n        - perplexity 가 낮다는 말(low is better)\n    - MASS\n    - mBART\n    - mT5\n  - 다국어 코퍼스로 학습된 LLMs\n    - PaLM\n    - LLaMA\n    - Alpaca\n    - Falcon\n    - RedPajama\n  - Multilingual LLM Benchmark\n    - LASER2\n    - NLLB\n    - MEGA\n    - Open Multilingual LLM Evaluation Leaderboard\n### Multimodel LLM\n- 배경지식\n  - Coarse-grained classification\n    - 대분류\n  - fine-grained classification\n    - 소분류\n- Image-Text\n  - CLIP\n  - FILIP\n  - BLIP\n- Audio/Video\n- LLMs\n  - Flamingo\n    - CLIP + ChinChilla\n  - BLIP-2\n    - Q-Former 를 통해 이미 학습된 두 모델을 연결\n      - Q-Former, FC 레이어만 학습\n  - LLaVA\n  - Gemini\n    - 시각, 비디오, 오디오\n### Cross Lingual LLM\n- 언어모델에서 다른언어로 전이\n- 전이학습\n  - instruction tuning\n    - 목표언어로 instruction tuning 만 진행\n    - source 언어와 나름 유사해야한다, 타겟 언어에대한 vocab을 다소 가지고있어야한다\n    - 성능이 낮을 수 있다.\n    - futher pre-training or instruciton tuning 이 필요\n  - vocabulary extension\n    - vocab 추가를 위한 트레이닝 필요\n  - futher pre-training\n    - pre-training 부터 시작\n    - 대용량 코퍼스 필요\n  - AMM Adappting Monolingual Model\n    - token embedding 만 학습\n  - XPT Cross-Lingual Post-Training\n    - 추가레이어에서 타겟 언어만 학습\n  - GPT-recycle\n    - 잘 학습된 다른 언어모델의 임베딩을 사용\n- 임베딩 정렬 기반 학습 전략\n  - WECHSEL\n    - 기존언어와 타겟언어를 유사도기반으로 정렬후 임베딩\n- Adapter 기반 학습방법\n\n## link\n- [[upstage-ai-lab]]\n- [[upstage-ai-lab-day-92]]\n- [[upstage-ai-lab-day-102]]\n- [[wn.private:upstage-ai-lab-lm-to-llm]]\n"])</script><script>self.__next_f.push([1,"17:T183c,"])</script><script>self.__next_f.push([1,"### LM to LLM\n- 공부하는 느낌보다는 그냥 전반적인 것을 훑는 느낌으로 학습\n\n## 학습\n### LM\n- count 기반\n  - 단어가 얼마나 많이 등장하는지, 얼마나 많이 참조되는지 등을 통해 처리\n  - 동일 단어를 기반으로하므로 동음이의어등이 처리가 안됨\n  - TF-IDF, BM25 등이 존재\n- 단점을 커버하기 위해 의미론적인 임베딩을 할 수 있도록 발전\n  - 주변 단어를 보기시작\n  - Word2Vec, FastText, Glove 등\n- 의미기반을 넘어 문맥정보를 통한 이해 필요성\n  - ELMo, GPT, BERT 등\n  - 너무 고비용이라 실제 현업에 적용이 어렵다\n### LM 에서 LLM 으로 진화하게 된 과정\n- scale up/down 에 대한 방향성이 존재\n  - scale up\n    - 스케일링 법칙이 나오면서 대규모 투자가 할 수 있는 근거 만들어지고 이에 다라 현재의 [[ChatGPT]] 와 같은 서비스가 탄생할 수 있는 계기가 됨\n  - scale down\n### LLM\n- 기존 model 1:1 task 관계가 깨짐\n- ICL In-Context Learning 이 특징, few-shot 등의 예제를 통해 여러 타스크 처리\n  - prompt engineering 으로 이어짐\n- 이에 대한 서빙 관점에서 LLMOps(FMOps) 등이 발생\n  - MLOps -\u003e LLMOps(FMOps)\n- 근간 이론\n  - SFT -\u003e Reward Model -\u003e RLHF\n    - [[ChatGPT]] 방법\n- 비즈니스 동향\n  - 1T 토큰 클럽\n    - 데이터 기여도만큼 사용할 수 있는 토큰을 제공하는 방법\n    - 수익 쉐어 범위 안에서 데이터 기여도에 따른 수익 분배\n### LLM 기반 Data-Centric NLP 연구\n- 사전 학습, Pre Training\n  - 비지도 학습(혹은 셀프 지도, Masked Language Modeling)\n  - 대량의 말뭉치\n- 미세조정\n  - SFT, Supervised Fine Tuning 지도학습\n  - Instruction Fine-Tuning\n    - 사람의 지시에 따른 타스크 수행 능력을 생성\n  - Alignment Tuning\n    - 선호도 반영\n    - RLHF 대신 RLAIF 방식도 있음\n      - 피드백 주체가 사람 -\u003e AI 로\n    - DPO\n      - 선호 데이터만을 활용, 리워드 함수 처럼 복잡한 로직 대신 그냥 적용하는 개념인듯\n      - 이게 RLHF 를 거진 대체\n- 데이터\n  - 다양성, 품질이 중요\n    - 중복 제거, 유사 필터링등을 통해서 데이터를 필터링\n      - 성능 상승 뿐 아니라 학습 비용도 감소\n  - 데이터 증강\n    - 기존 LLM 등의 성능이 올라오면서 이를 증강할 데이터 셋 생성에 사용\n### LLM 기반 Model-Centric NLP 연구\n- PEFT Parameter Efficient Fine Tuning\n  - 일부 파라메터만 튜닝\n    - catastrarophic forgetting 완화\n      - 파인 튜닝후 기존에 잘 하던것도 못하는 현상\n- LoRA\n  - 특정레이어의 가중치를 로우랭크로 낮춰서 학습, 메모리 사용량을 줄임\n  - 기존 가중치를 업데이트하지 않고 곱할 변경할 가중치를 만드는 형태\n- Quantization\n  - 부동 소수점 정밀도를 희생시켜 메모리 사용량을 줄이는 것\n- QLora\n  - LoRA + 4bit Quantization\n- Prompt\n  - Discreate Prompt\n  - Continuous Prompt\n  - Prefix Tuning\n  - Prompt Tuning\n  - P-Tuning\n### LLM 기반 Evaluation-Centric NLP\n- LLM 은 f1, acc 등으로 평가할 수 없다 -\u003e 평가지표 발전\n- Interpretability\n  - 설명 가능한 관점\n- 윤리\n- 정치적 편향\n- MBTI\n  - ChatGPT 는 ENFJ??\n- 사용자의 견해에 아첨하는 경향이 있다.\n- Leaderboard\n### LLM 기반 Application 연구\n- LLMOps(FMOps)\n  - 생성 데이터에 대한 후처리를 포함\n    - 할루시네이션, 윤리적 요소 처리할 것으로 생각\n  - 프롬프트 체이닝\n  - Augmented LLM 운영 주체\n- Augmented LLM\n  - LLM + 외부 서비스로 문제 해결\n  - RAG, Agent 등\n### LLM 기반 Prompt Engineering\n- Prompt Engineering\n  - COT Chain Of Thought\n    - 사람과 같이 단계별로 실행, 검증하여 성능을 향상\n    - 대수(수학)연산에서 특히 더 향상\n  - In-Context Learning\n    - 예제를 통한 동적 학습\n      - 예제 순서가 성능에 영향을 미친다는 논문이 있음\n  - Plan and Solve\n    - 계획 실행으로 성능 향상\n  - 동일 질문에 대해서 여러 답변을 생성 -\u003e 샘플링 -\u003e 일치도가 높은 답변을 사용하여 안정성 확보\n  - 단계별 검증\n  - promptbreeder\n- LLM Tools\n  - LangChain\n  - AutoGPT\n  - Scikit-LLM\n- Multilingual LLM\n  - 모델들\n    - mBERT\n    - XLM\n      - 여러 언어를 학습시키면 성능이 향상\n        - perplexity 가 낮다는 말(low is better)\n    - MASS\n    - mBART\n    - mT5\n  - 다국어 코퍼스로 학습된 LLMs\n    - PaLM\n    - LLaMA\n    - Alpaca\n    - Falcon\n    - RedPajama\n  - Multilingual LLM Benchmark\n    - LASER2\n    - NLLB\n    - MEGA\n    - Open Multilingual LLM Evaluation Leaderboard\n### Multimodel LLM\n- 배경지식\n  - Coarse-grained classification\n    - 대분류\n  - fine-grained classification\n    - 소분류\n- Image-Text\n  - CLIP\n  - FILIP\n  - BLIP\n- Audio/Video\n- LLMs\n  - Flamingo\n    - CLIP + ChinChilla\n  - BLIP-2\n    - Q-Former 를 통해 이미 학습된 두 모델을 연결\n      - Q-Former, FC 레이어만 학습\n  - LLaVA\n  - Gemini\n    - 시각, 비디오, 오디오\n### Cross Lingual LLM\n- 언어모델에서 다른언어로 전이\n- 전이학습\n  - instruction tuning\n    - 목표언어로 instruction tuning 만 진행\n    - source 언어와 나름 유사해야한다, 타겟 언어에대한 vocab을 다소 가지고있어야한다\n    - 성능이 낮을 수 있다.\n    - futher pre-training or instruciton tuning 이 필요\n  - vocabulary extension\n    - vocab 추가를 위한 트레이닝 필요\n  - futher pre-training\n    - pre-training 부터 시작\n    - 대용량 코퍼스 필요\n  - AMM Adappting Monolingual Model\n    - token embedding 만 학습\n  - XPT Cross-Lingual Post-Training\n    - 추가레이어에서 타겟 언어만 학습\n  - GPT-recycle\n    - 잘 학습된 다른 언어모델의 임베딩을 사용\n- 임베딩 정렬 기반 학습 전략\n  - WECHSEL\n    - 기존언어와 타겟언어를 유사도기반으로 정렬후 임베딩\n- Adapter 기반 학습방법\n\n## link\n- [[upstage-ai-lab]]\n- [[upstage-ai-lab-day-92]]\n- [[upstage-ai-lab-day-102]]\n- [[wn.private:upstage-ai-lab-lm-to-llm]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# upstage-ai-lab-day-98\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# upstage-ai-lab-day-98\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/upstage-ai-lab-day-98\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# upstage-ai-lab-day-98\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
