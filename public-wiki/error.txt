@@ -1,0 +1,318 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-e6f48f16817ae44e.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","error","c"]
+0:["v6jR9pC4a4KDqQaOd49wL",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","error","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"error\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","error","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:T19c8,<h1 id="error">error</h1>
+<h2 id="vimwiki-gk-로-발생">vimwiki gk 로 발생</h2>
+<ul>
+<li><a href="neovim">neovim</a></li>
+<li><a href="gitsigns">gitsigns</a></li>
+</ul>
+<pre><code class="hljs language-sh">Error executing vim.schedule lua callback: ...k/packer/start/gitsigns.nvim/lua/gitsigns/subprocess.lua:71: Failed to spawn process: {
+  _state = {
+    pid = <span class="hljs-string">&quot;EMFILE: too many open files&quot;</span>,
+    stderr = &lt;userdata 1&gt;,
+    stderr_data = {},
+    stdout = &lt;userdata 2&gt;,
+    stdout_data = {}
+  },
+  args = { <span class="hljs-string">&quot;--no-pager&quot;</span>, <span class="hljs-string">&quot;--git-dir=/path/to/wiki/.git&quot;</span>, <span class="hljs-string">&quot;ls-files&quot;</span>, <span class="hljs-string">&quot;--stage&quot;</span>, <span class="hljs-string">&quot;--others&quot;</span>, <span class="hljs-string">&quot;--exclude-standard&quot;</span>, <span class="hljs-string">&quot;--eol&quot;</span>, <span class="hljs-string">&quot;/Users/dept
+no/workspace/src/github.com/deptno/wiki/file.md&quot;</span> },
+  <span class="hljs-built_in">command</span> = <span class="hljs-string">&quot;git&quot;</span>,
+  cwd = <span class="hljs-string">&quot;/path/to/wiki&quot;</span>,
+  supress_stderr = <span class="hljs-literal">true</span>
+}
+stack traceback:
+        ...k/packer/start/gitsigns.nvim/lua/gitsigns/subprocess.lua:71: <span class="hljs-keyword">in</span> <span class="hljs-keyword">function</span> <span class="hljs-string">&#x27;run_job&#x27;</span>
+        ...ite/pack/packer/start/gitsigns.nvim/lua/gitsigns/git.lua:160: <span class="hljs-keyword">in</span> <span class="hljs-keyword">function</span> <span class="hljs-string">&#x27;returned_function&#x27;</span>
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:26: <span class="hljs-keyword">in</span> <span class="hljs-keyword">function</span> <span class="hljs-string">&#x27;callback_or_next&#x27;</span>
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:40: <span class="hljs-keyword">in</span> <span class="hljs-keyword">function</span> &lt;...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:39&gt;
+        [C]: <span class="hljs-keyword">in</span> <span class="hljs-keyword">function</span> <span class="hljs-string">&#x27;wait&#x27;</span>
+        ...w/Cellar/neovim/0.6.1/share/nvim/runtime/lua/vim/lsp.lua:1371: <span class="hljs-keyword">in</span> <span class="hljs-keyword">function</span> <span class="hljs-string">&#x27;_vim_exit_handler&#x27;</span>
+        [string <span class="hljs-string">&quot;:lua&quot;</span>]:1: <span class="hljs-keyword">in</span> main chunk
+stack traceback:
+        [C]: <span class="hljs-keyword">in</span> <span class="hljs-keyword">function</span> <span class="hljs-string">&#x27;error&#x27;</span>
+        ...k/packer/start/gitsigns.nvim/lua/gitsigns/subprocess.lua:71: <span class="hljs-keyword">in</span> <span class="hljs-keyword">function</span> <span class="hljs-string">&#x27;run_job&#x27;</span>
+        ...ite/pack/packer/start/gitsigns.nvim/lua/gitsigns/git.lua:160: <span class="hljs-keyword">in</span> <span class="hljs-keyword">function</span> <span class="hljs-string">&#x27;returned_function&#x27;</span>
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:26: <span class="hljs-keyword">in</span> <span class="hljs-keyword">function</span> <span class="hljs-string">&#x27;callback_or_next&#x27;</span>
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:40: <span class="hljs-keyword">in</span> <span class="hljs-keyword">function</span> &lt;...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:39&gt;
+        [C]: <span class="hljs-keyword">in</span> <span class="hljs-keyword">function</span> <span class="hljs-string">&#x27;wait&#x27;</span>
+        ...w/Cellar/neovim/0.6.1/share/nvim/runtime/lua/vim/lsp.lua:1371: <span class="hljs-keyword">in</span> <span class="hljs-keyword">function</span> <span class="hljs-string">&#x27;_vim_exit_handler&#x27;</span>
+        [string <span class="hljs-string">&quot;:lua&quot;</span>]:1: <span class="hljs-keyword">in</span> main chunk
+</code></pre><h2 id="too-many-open-files">too many open files</h2>
+<ul>
+<li><a href="https://github.com/grafana/loki/issues/1153" target="_blank">[URL] https://github.com/grafana/loki/issues/1153</a></li>
+</ul>
+<ul>
+<li><a href="kubernetes">kubernetes</a></li>
+<li><a href="promtail">promtail</a></li>
+</ul>
+<pre><code class="hljs language-sh">level=error ts=2023-01-23T18:00:42.109504938Z <span class="hljs-built_in">caller</span>=main.go:167 msg=<span class="hljs-string">&quot;error creating promtail&quot;</span> error=<span class="hljs-string">&quot;failed to make file target manager: too many open files&quot;</span>
+</code></pre><ul>
+<li><input disabled="" type="checkbox"> host<ul>
+<li>process 수정
+process에 ulimit 설정으로 해결되지 않는 것으로 보임</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs language-sh">$ ps -ef | grep promtail
+deptno   4048974 4046594  0 17:47 pts/2    00:00:00 grep --color=auto promtail
+$ prlimit --nofile --output RESOURCE,SOFT,HARD --pid 4046594
+RESOURCE SOFT    HARD
+NOFILE   1024 1048576
+$ prlimit --nofile=4096 --pid 4046594
+$ prlimit --nofile --output RESOURCE,SOFT,HARD --pid 4046594
+RESOURCE SOFT HARD
+NOFILE   4096 4096
+</code></pre><pre><code>- runtime 수정(docker, containerd 설정 /etc/docker/datmon.json, containerd 는 없는 것으로 보임)
+- /etc/security/limits.conf 수정 -&gt; 리붓, 적용을 안해봐서 파일 수정만으로는 일단 안되는 것 확인
+</code></pre><ul>
+<li><input checked="" disabled="" type="checkbox"> container
+initContainer 로 fs.inotify.max_user_instances 값을 128-&gt;512 변경으로 성공</li>
+</ul>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">initContainer:</span>
+ <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">init</span>
+   <span class="hljs-attr">image:</span> <span class="hljs-string">docker.io/busybox:1.33</span>
+   <span class="hljs-attr">command:</span>
+     <span class="hljs-bullet">-</span> <span class="hljs-string">sh</span>
+     <span class="hljs-bullet">-</span> <span class="hljs-string">-c</span>
+     <span class="hljs-bullet">-</span> <span class="hljs-string">sysctl</span> <span class="hljs-string">-w</span> <span class="hljs-string">fs.inotify.max_user_instances=512</span>
+   <span class="hljs-attr">securityContext:</span>
+     <span class="hljs-attr">privileged:</span> <span class="hljs-literal">true</span>
+</code></pre>2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/5cd9ba5\n","className":"bg-white text-black","children":"5cd9ba5"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/error.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/error.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/error.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"error","name":"error","val":4},{"id":"neovim","name":"neovim","val":22},{"id":"gitsigns","name":"gitsigns","val":2},{"id":"kubernetes","name":"kubernetes","val":40},{"id":"promtail","name":"promtail","val":4},{"id":"android","name":"android","val":23},{"id":"awscli","name":"awscli","val":5},{"id":"bun","name":"bun","val":10},{"id":"cloudfront","name":"cloudfront","val":8},{"id":"comfyui","name":"comfyui","val":7},{"id":"defx","name":"defx","val":4},{"id":"devide-app-by-development-env","name":"devide-app-by-development-env","val":30},{"id":"fastlane","name":"fastlane","val":26},{"id":"firebase-app-check","name":"firebase-app-check","val":11},{"id":"firebase","name":"firebase","val":14},{"id":"flipper","name":"flipper","val":4},{"id":"frum","name":"frum","val":5},{"id":"google-adsense","name":"google-adsense","val":3},{"id":"home-assistant","name":"home-assistant","val":11},{"id":"iina","name":"iina","val":7},{"id":"index","name":"index","val":107},{"id":"k9s","name":"k9s","val":15},{"id":"loki","name":"loki","val":6},{"id":"macos-monterey","name":"macos-monterey","val":4},{"id":"macos","name":"macos","val":13},{"id":"milvus","name":"milvus","val":9},{"id":"mlflow","name":"mlflow","val":20},{"id":"neotest","name":"neotest","val":8},{"id":"node","name":"node","val":14},{"id":"nvim-treesitter","name":"nvim-treesitter","val":18},{"id":"onyx","name":"onyx","val":2},{"id":"openebs","name":"openebs","val":3},{"id":"optuna","name":"optuna","val":3},{"id":"practical-deep-learning","name":"practical-deep-learning","val":4},{"id":"proxyman","name":"proxyman","val":13},{"id":"react-native","name":"react-native","val":90},{"id":"ruby-install","name":"ruby-install","val":6},{"id":"ruby","name":"ruby","val":28},{"id":"stable-diffusion-webui","name":"stable-diffusion-webui","val":11},{"id":"synology-photos","name":"synology-photos","val":5},{"id":"tmux","name":"tmux","val":7},{"id":"unity","name":"unity","val":13},{"id":"vim","name":"vim","val":20},{"id":"webstorm","name":"webstorm","val":9},{"id":"xcode","name":"xcode","val":16},{"id":"diary/2024-08-03","name":"diary/2024-08-03","val":2}],"links":[{"source":"error","target":"neovim"},{"source":"error","target":"gitsigns"},{"source":"error","target":"kubernetes"},{"source":"error","target":"promtail"},{"source":"android","target":"error"},{"source":"awscli","target":"error"},{"source":"bun","target":"error"},{"source":"cloudfront","target":"error"},{"source":"comfyui","target":"error"},{"source":"defx","target":"error"},{"source":"devide-app-by-development-env","target":"error"},{"source":"fastlane","target":"error"},{"source":"firebase-app-check","target":"error"},{"source":"firebase","target":"error"},{"source":"flipper","target":"error"},{"source":"frum","target":"error"},{"source":"google-adsense","target":"error"},{"source":"home-assistant","target":"error"},{"source":"iina","target":"error"},{"source":"index","target":"error"},{"source":"k9s","target":"error"},{"source":"loki","target":"error"},{"source":"macos-monterey","target":"error"},{"source":"macos","target":"error"},{"source":"milvus","target":"error"},{"source":"mlflow","target":"error"},{"source":"neotest","target":"error"},{"source":"neovim","target":"error"},{"source":"node","target":"error"},{"source":"nvim-treesitter","target":"error"},{"source":"onyx","target":"error"},{"source":"openebs","target":"error"},{"source":"optuna","target":"error"},{"source":"practical-deep-learning","target":"error"},{"source":"proxyman","target":"error"},{"source":"react-native","target":"error"},{"source":"ruby-install","target":"error"},{"source":"ruby","target":"error"},{"source":"stable-diffusion-webui","target":"error"},{"source":"synology-photos","target":"error"},{"source":"tmux","target":"error"},{"source":"unity","target":"error"},{"source":"vim","target":"error"},{"source":"webstorm","target":"error"},{"source":"xcode","target":"error"},{"source":"diary/2024-08-03","target":"error"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","error",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/error","children":[["$","span",null,{"className":"underline","children":"error"}],["$","sup",null,{"children":4}]]}]}],["$","span","neovim",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim","children":[["$","span",null,{"className":"underline","children":"neovim"}],["$","sup",null,{"children":22}]]}]}],["$","span","gitsigns",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/gitsigns","children":[["$","span",null,{"className":"underline","children":"gitsigns"}],["$","sup",null,{"children":2}]]}]}],["$","span","kubernetes",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/kubernetes","children":[["$","span",null,{"className":"underline","children":"kubernetes"}],["$","sup",null,{"children":40}]]}]}],["$","span","promtail",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/promtail","children":[["$","span",null,{"className":"underline","children":"promtail"}],["$","sup",null,{"children":4}]]}]}],["$","span","android",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/android","children":[["$","span",null,{"className":"underline","children":"android"}],["$","sup",null,{"children":23}]]}]}],["$","span","awscli",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/awscli","children":[["$","span",null,{"className":"underline","children":"awscli"}],["$","sup",null,{"children":5}]]}]}],["$","span","bun",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/bun","children":[["$","span",null,{"className":"underline","children":"bun"}],["$","sup",null,{"children":10}]]}]}],["$","span","cloudfront",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/cloudfront","children":[["$","span",null,{"className":"underline","children":"cloudfront"}],["$","sup",null,{"children":8}]]}]}],["$","span","comfyui",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/comfyui","children":[["$","span",null,{"className":"underline","children":"comfyui"}],["$","sup",null,{"children":7}]]}]}],["$","span","defx",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/defx","children":[["$","span",null,{"className":"underline","children":"defx"}],["$","sup",null,{"children":4}]]}]}],["$","span","devide-app-by-development-env",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/devide-app-by-development-env","children":[["$","span",null,{"className":"underline","children":"devide-app-by-development-env"}],["$","sup",null,{"children":30}]]}]}],["$","span","fastlane",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/fastlane","children":[["$","span",null,{"className":"underline","children":"fastlane"}],["$","sup",null,{"children":26}]]}]}],["$","span","firebase-app-check",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/firebase-app-check","children":[["$","span",null,{"className":"underline","children":"firebase-app-check"}],["$","sup",null,{"children":11}]]}]}],["$","span","firebase",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/firebase","children":[["$","span",null,{"className":"underline","children":"firebase"}],["$","sup",null,{"children":14}]]}]}],["$","span","flipper",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/flipper","children":[["$","span",null,{"className":"underline","children":"flipper"}],["$","sup",null,{"children":4}]]}]}],["$","span","frum",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/frum","children":[["$","span",null,{"className":"underline","children":"frum"}],["$","sup",null,{"children":5}]]}]}],["$","span","google-adsense",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/google-adsense","children":[["$","span",null,{"className":"underline","children":"google-adsense"}],["$","sup",null,{"children":3}]]}]}],["$","span","home-assistant",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/home-assistant","children":[["$","span",null,{"className":"underline","children":"home-assistant"}],["$","sup",null,{"children":11}]]}]}],["$","span","iina",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/iina","children":[["$","span",null,{"className":"underline","children":"iina"}],["$","sup",null,{"children":7}]]}]}],["$","span","index",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/index","children":[["$","span",null,{"className":"underline","children":"index"}],["$","sup",null,{"children":107}]]}]}],["$","span","k9s",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/k9s","children":[["$","span",null,{"className":"underline","children":"k9s"}],["$","sup",null,{"children":15}]]}]}],["$","span","loki",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/loki","children":[["$","span",null,{"className":"underline","children":"loki"}],["$","sup",null,{"children":6}]]}]}],["$","span","macos-monterey",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/macos-monterey","children":[["$","span",null,{"className":"underline","children":"macos-monterey"}],["$","sup",null,{"children":4}]]}]}],["$","span","macos",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/macos","children":[["$","span",null,{"className":"underline","children":"macos"}],["$","sup",null,{"children":13}]]}]}],["$","span","milvus",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/milvus","children":[["$","span",null,{"className":"underline","children":"milvus"}],["$","sup",null,{"children":9}]]}]}],["$","span","mlflow",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/mlflow","children":[["$","span",null,{"className":"underline","children":"mlflow"}],["$","sup",null,{"children":20}]]}]}],["$","span","neotest",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neotest","children":[["$","span",null,{"className":"underline","children":"neotest"}],["$","sup",null,{"children":8}]]}]}],["$","span","node",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/node","children":[["$","span",null,{"className":"underline","children":"node"}],["$","sup",null,{"children":14}]]}]}],["$","span","nvim-treesitter",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/nvim-treesitter","children":[["$","span",null,{"className":"underline","children":"nvim-treesitter"}],["$","sup",null,{"children":18}]]}]}],["$","span","onyx",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/onyx","children":[["$","span",null,{"className":"underline","children":"onyx"}],["$","sup",null,{"children":2}]]}]}],["$","span","openebs",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/openebs","children":[["$","span",null,{"className":"underline","children":"openebs"}],["$","sup",null,{"children":3}]]}]}],["$","span","optuna",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/optuna","children":[["$","span",null,{"className":"underline","children":"optuna"}],["$","sup",null,{"children":3}]]}]}],["$","span","practical-deep-learning",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/practical-deep-learning","children":[["$","span",null,{"className":"underline","children":"practical-deep-learning"}],["$","sup",null,{"children":4}]]}]}],["$","span","proxyman",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/proxyman","children":[["$","span",null,{"className":"underline","children":"proxyman"}],["$","sup",null,{"children":13}]]}]}],["$","span","react-native",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/react-native","children":[["$","span",null,{"className":"underline","children":"react-native"}],["$","sup",null,{"children":90}]]}]}],["$","span","ruby-install",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ruby-install","children":[["$","span",null,{"className":"underline","children":"ruby-install"}],["$","sup",null,{"children":6}]]}]}],["$","span","ruby",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ruby","children":[["$","span",null,{"className":"underline","children":"ruby"}],["$","sup",null,{"children":28}]]}]}],["$","span","stable-diffusion-webui",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/stable-diffusion-webui","children":[["$","span",null,{"className":"underline","children":"stable-diffusion-webui"}],["$","sup",null,{"children":11}]]}]}],["$","span","synology-photos",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/synology-photos","children":[["$","span",null,{"className":"underline","children":"synology-photos"}],["$","sup",null,{"children":5}]]}]}],["$","span","tmux",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/tmux","children":[["$","span",null,{"className":"underline","children":"tmux"}],["$","sup",null,{"children":7}]]}]}],["$","span","unity",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/unity","children":[["$","span",null,{"className":"underline","children":"unity"}],["$","sup",null,{"children":13}]]}]}],["$","span","vim",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/vim","children":[["$","span",null,{"className":"underline","children":"vim"}],["$","sup",null,{"children":20}]]}]}],["$","span","webstorm",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/webstorm","children":[["$","span",null,{"className":"underline","children":"webstorm"}],["$","sup",null,{"children":9}]]}]}],["$","span","xcode",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/xcode","children":[["$","span",null,{"className":"underline","children":"xcode"}],["$","sup",null,{"children":16}]]}]}],["$","span","diary/2024-08-03",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-08-03","children":[["$","span",null,{"className":"underline","children":"diary/2024-08-03"}],["$","sup",null,{"children":2}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","error",{"className":"pl-0","children":["$","a",null,{"href":"#error","children":"error"}]}],["$","div","vimwiki-gk-로-발생",{"className":"pl-2","children":["$","a",null,{"href":"#vimwiki-gk-로-발생","children":"vimwiki gk 로 발생"}]}],["$","div","too-many-open-files",{"className":"pl-2","children":["$","a",null,{"href":"#too-many-open-files","children":"too many open files"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:Tc94,
+## vimwiki gk 로 발생
+- [[neovim]]
+- [[gitsigns]]
+```sh
+Error executing vim.schedule lua callback: ...k/packer/start/gitsigns.nvim/lua/gitsigns/subprocess.lua:71: Failed to spawn process: {
+  _state = {
+    pid = "EMFILE: too many open files",
+    stderr = <userdata 1>,
+    stderr_data = {},
+    stdout = <userdata 2>,
+    stdout_data = {}
+  },
+  args = { "--no-pager", "--git-dir=/path/to/wiki/.git", "ls-files", "--stage", "--others", "--exclude-standard", "--eol", "/Users/dept
+no/workspace/src/github.com/deptno/wiki/file.md" },
+  command = "git",
+  cwd = "/path/to/wiki",
+  supress_stderr = true
+}
+stack traceback:
+        ...k/packer/start/gitsigns.nvim/lua/gitsigns/subprocess.lua:71: in function 'run_job'
+        ...ite/pack/packer/start/gitsigns.nvim/lua/gitsigns/git.lua:160: in function 'returned_function'
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:26: in function 'callback_or_next'
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:40: in function <...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:39>
+        [C]: in function 'wait'
+        ...w/Cellar/neovim/0.6.1/share/nvim/runtime/lua/vim/lsp.lua:1371: in function '_vim_exit_handler'
+        [string ":lua"]:1: in main chunk
+stack traceback:
+        [C]: in function 'error'
+        ...k/packer/start/gitsigns.nvim/lua/gitsigns/subprocess.lua:71: in function 'run_job'
+        ...ite/pack/packer/start/gitsigns.nvim/lua/gitsigns/git.lua:160: in function 'returned_function'
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:26: in function 'callback_or_next'
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:40: in function <...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:39>
+        [C]: in function 'wait'
+        ...w/Cellar/neovim/0.6.1/share/nvim/runtime/lua/vim/lsp.lua:1371: in function '_vim_exit_handler'
+        [string ":lua"]:1: in main chunk
+
+```
+
+## too many open files
++ https://github.com/grafana/loki/issues/1153
+- [[kubernetes]]
+- [[promtail]]
+```sh
+level=error ts=2023-01-23T18:00:42.109504938Z caller=main.go:167 msg="error creating promtail" error="failed to make file target manager: too many open files"
+```
+  - [ ] host
+    - process 수정
+      process에 ulimit 설정으로 해결되지 않는 것으로 보임
+```sh 
+$ ps -ef | grep promtail
+deptno   4048974 4046594  0 17:47 pts/2    00:00:00 grep --color=auto promtail
+$ prlimit --nofile --output RESOURCE,SOFT,HARD --pid 4046594
+RESOURCE SOFT    HARD
+NOFILE   1024 1048576
+$ prlimit --nofile=4096 --pid 4046594
+$ prlimit --nofile --output RESOURCE,SOFT,HARD --pid 4046594
+RESOURCE SOFT HARD
+NOFILE   4096 4096
+```
+    - runtime 수정(docker, containerd 설정 /etc/docker/datmon.json, containerd 는 없는 것으로 보임)
+    - /etc/security/limits.conf 수정 -> 리붓, 적용을 안해봐서 파일 수정만으로는 일단 안되는 것 확인
+  - [X] container
+    initContainer 로 fs.inotify.max_user_instances 값을 128->512 변경으로 성공
+```yaml
+initContainer:
+ - name: init
+   image: docker.io/busybox:1.33
+   command:
+     - sh
+     - -c
+     - sysctl -w fs.inotify.max_user_instances=512
+   securityContext:
+     privileged: true
+```
+12:Tc94,
+## vimwiki gk 로 발생
+- [[neovim]]
+- [[gitsigns]]
+```sh
+Error executing vim.schedule lua callback: ...k/packer/start/gitsigns.nvim/lua/gitsigns/subprocess.lua:71: Failed to spawn process: {
+  _state = {
+    pid = "EMFILE: too many open files",
+    stderr = <userdata 1>,
+    stderr_data = {},
+    stdout = <userdata 2>,
+    stdout_data = {}
+  },
+  args = { "--no-pager", "--git-dir=/path/to/wiki/.git", "ls-files", "--stage", "--others", "--exclude-standard", "--eol", "/Users/dept
+no/workspace/src/github.com/deptno/wiki/file.md" },
+  command = "git",
+  cwd = "/path/to/wiki",
+  supress_stderr = true
+}
+stack traceback:
+        ...k/packer/start/gitsigns.nvim/lua/gitsigns/subprocess.lua:71: in function 'run_job'
+        ...ite/pack/packer/start/gitsigns.nvim/lua/gitsigns/git.lua:160: in function 'returned_function'
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:26: in function 'callback_or_next'
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:40: in function <...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:39>
+        [C]: in function 'wait'
+        ...w/Cellar/neovim/0.6.1/share/nvim/runtime/lua/vim/lsp.lua:1371: in function '_vim_exit_handler'
+        [string ":lua"]:1: in main chunk
+stack traceback:
+        [C]: in function 'error'
+        ...k/packer/start/gitsigns.nvim/lua/gitsigns/subprocess.lua:71: in function 'run_job'
+        ...ite/pack/packer/start/gitsigns.nvim/lua/gitsigns/git.lua:160: in function 'returned_function'
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:26: in function 'callback_or_next'
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:40: in function <...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:39>
+        [C]: in function 'wait'
+        ...w/Cellar/neovim/0.6.1/share/nvim/runtime/lua/vim/lsp.lua:1371: in function '_vim_exit_handler'
+        [string ":lua"]:1: in main chunk
+
+```
+
+## too many open files
++ https://github.com/grafana/loki/issues/1153
+- [[kubernetes]]
+- [[promtail]]
+```sh
+level=error ts=2023-01-23T18:00:42.109504938Z caller=main.go:167 msg="error creating promtail" error="failed to make file target manager: too many open files"
+```
+  - [ ] host
+    - process 수정
+      process에 ulimit 설정으로 해결되지 않는 것으로 보임
+```sh 
+$ ps -ef | grep promtail
+deptno   4048974 4046594  0 17:47 pts/2    00:00:00 grep --color=auto promtail
+$ prlimit --nofile --output RESOURCE,SOFT,HARD --pid 4046594
+RESOURCE SOFT    HARD
+NOFILE   1024 1048576
+$ prlimit --nofile=4096 --pid 4046594
+$ prlimit --nofile --output RESOURCE,SOFT,HARD --pid 4046594
+RESOURCE SOFT HARD
+NOFILE   4096 4096
+```
+    - runtime 수정(docker, containerd 설정 /etc/docker/datmon.json, containerd 는 없는 것으로 보임)
+    - /etc/security/limits.conf 수정 -> 리붓, 적용을 안해봐서 파일 수정만으로는 일단 안되는 것 확인
+  - [X] container
+    initContainer 로 fs.inotify.max_user_instances 값을 128->512 변경으로 성공
+```yaml
+initContainer:
+ - name: init
+   image: docker.io/busybox:1.33
+   command:
+     - sh
+     - -c
+     - sysctl -w fs.inotify.max_user_instances=512
+   securityContext:
+     privileged: true
+```
+13:Tc94,
+## vimwiki gk 로 발생
+- [[neovim]]
+- [[gitsigns]]
+```sh
+Error executing vim.schedule lua callback: ...k/packer/start/gitsigns.nvim/lua/gitsigns/subprocess.lua:71: Failed to spawn process: {
+  _state = {
+    pid = "EMFILE: too many open files",
+    stderr = <userdata 1>,
+    stderr_data = {},
+    stdout = <userdata 2>,
+    stdout_data = {}
+  },
+  args = { "--no-pager", "--git-dir=/path/to/wiki/.git", "ls-files", "--stage", "--others", "--exclude-standard", "--eol", "/Users/dept
+no/workspace/src/github.com/deptno/wiki/file.md" },
+  command = "git",
+  cwd = "/path/to/wiki",
+  supress_stderr = true
+}
+stack traceback:
+        ...k/packer/start/gitsigns.nvim/lua/gitsigns/subprocess.lua:71: in function 'run_job'
+        ...ite/pack/packer/start/gitsigns.nvim/lua/gitsigns/git.lua:160: in function 'returned_function'
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:26: in function 'callback_or_next'
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:40: in function <...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:39>
+        [C]: in function 'wait'
+        ...w/Cellar/neovim/0.6.1/share/nvim/runtime/lua/vim/lsp.lua:1371: in function '_vim_exit_handler'
+        [string ":lua"]:1: in main chunk
+stack traceback:
+        [C]: in function 'error'
+        ...k/packer/start/gitsigns.nvim/lua/gitsigns/subprocess.lua:71: in function 'run_job'
+        ...ite/pack/packer/start/gitsigns.nvim/lua/gitsigns/git.lua:160: in function 'returned_function'
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:26: in function 'callback_or_next'
+        ...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:40: in function <...ck/packer/start/plenary.nvim/lua/plenary/async/async.lua:39>
+        [C]: in function 'wait'
+        ...w/Cellar/neovim/0.6.1/share/nvim/runtime/lua/vim/lsp.lua:1371: in function '_vim_exit_handler'
+        [string ":lua"]:1: in main chunk
+
+```
+
+## too many open files
++ https://github.com/grafana/loki/issues/1153
+- [[kubernetes]]
+- [[promtail]]
+```sh
+level=error ts=2023-01-23T18:00:42.109504938Z caller=main.go:167 msg="error creating promtail" error="failed to make file target manager: too many open files"
+```
+  - [ ] host
+    - process 수정
+      process에 ulimit 설정으로 해결되지 않는 것으로 보임
+```sh 
+$ ps -ef | grep promtail
+deptno   4048974 4046594  0 17:47 pts/2    00:00:00 grep --color=auto promtail
+$ prlimit --nofile --output RESOURCE,SOFT,HARD --pid 4046594
+RESOURCE SOFT    HARD
+NOFILE   1024 1048576
+$ prlimit --nofile=4096 --pid 4046594
+$ prlimit --nofile --output RESOURCE,SOFT,HARD --pid 4046594
+RESOURCE SOFT HARD
+NOFILE   4096 4096
+```
+    - runtime 수정(docker, containerd 설정 /etc/docker/datmon.json, containerd 는 없는 것으로 보임)
+    - /etc/security/limits.conf 수정 -> 리붓, 적용을 안해봐서 파일 수정만으로는 일단 안되는 것 확인
+  - [X] container
+    initContainer 로 fs.inotify.max_user_instances 값을 128->512 변경으로 성공
+```yaml
+initContainer:
+ - name: init
+   image: docker.io/busybox:1.33
+   command:
+     - sh
+     - -c
+     - sysctl -w fs.inotify.max_user_instances=512
+   securityContext:
+     privileged: true
+```
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# error"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# error"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/error"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# error"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null
