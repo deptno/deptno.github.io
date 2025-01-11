@@ -1,0 +1,319 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-12f772d3c5c658cf.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-50964ab9a5cac455.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># infinity-scroll</title><meta name="description" content="매번 구현해야해서 정리
+
+## 개념
+```mermaid
+sequenceDiagram
+  participant l as 리스트
+  participant d as 상세
+  l -&gt;&gt; d: 이동전 sessionStorage에 저장
+  d -&gt;&gt; l: 이동 후 복구
+```
+- 전제 조건
+  - 이전의 위치로 갈 수 있을만큼, 그리기 위한 데이터가 존재해야한다
+    - 캐시
+      - `react-query` or `swr` 등을 사용
+    - 페이지 페이지 이동에 영향을 받지 않는 글로벌 스테이트에 기반한 리스트 아이템
+      - zustand 등을 사용해서 직접 구현
+- 최적화
+  - 스크롤이 길게된 상태면 너무 그려진 아이템이 많아서 퍼포먼서 저하가 일어나게된다
+    - 보일때만 그린다
+      - 이 또한 IntersectionObserver 등을 사용해서 각각의 엘리먼트 이벤트를 모니터링해야하므로 퍼모먼스 측정이 필요하다
+      - 혹은 다른 방법
+      - 이런 것 까지 구현할 시대는 아닌듯
+  - 클릭하면 새창에서 열어버리는게 사실 깔금, 모바일에서도 이런 경우 심리스한 뒤로가기를 지원
+
+## 구현
+&gt; 포지션 저장 복구는 네비게이션 이동에 따른 상황을 처리하기 위함인데, 백키로 할 경우는 브라우저에서 처리하는 것으로 보이고 이게 더 명확하게 느껴진다  
+&gt; 이때 전제조건은 캐시가 존재하여 이를 복구할 수 있는 경우에 한정된다
+### 스크롤 포지션 저장
+```javascript
+sessionStorage.setItem(location.href, window.scrollY.toString())
+```
+
+### 스크롤 포지션 복구
+```javascript
+useffect(() =&gt; {
+  const y = sessionStorage.getItem(location.href)
+
+  if (y) {
+    const y = sessionStorage.removeItem(location.href)
+    const top = Number(y)
+    if (top) {
+      window.scrollTo({ top })
+    }
+  }
+}, [])
+```
+
+### react-query
+- 작성 시점, ssr 에서 처리를 처리가 어려운 것으로 보여 드랍 [[diary:2024-03-02]]
+
+### swr
+- `useSWRImmutable` 훅을 통해 parameter 에 따라서 불편하는 쿼리를 쉽게 캐싱
+
+### 구현 순서
+- [[wip]]
+- ssr 타이밍에 list 를 그린다, 초기 리스트라서 커서가 없을 수 있다.
+- 리스트의 마지막 아이템은 클라이언트 컴포넌트로 작성한다, &lt;ServerItem /&gt;, &lt;ClientWatchItem /&gt;
+  - `IntersectionObserver` 를 통해 &lt;ClientWatchItem /&gt; 이 노출되는 경우 &lt;ClientList /&gt; 를 **함께** 그린다
+- 마지막아이템이 노출되는 경우 패치를 시작하고 패치에 따라 데이터를 그린다
+  ```javascriptreact
+  if (isShow) {
+    return (
+      &lt;&gt;
+        &lt;ServerItem&gt;
+        &lt;ClientList/&gt;
+      &lt;/&gt;
+    )
+  }
+
+  return (
+    &lt;ClientWatchItem ref={refForWatch}&gt;
+  )
+  ```
+
+
+## link
+- [[frontend]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# infinity-scroll"/><meta property="og:description" content="매번 구현해야해서 정리
+
+## 개념
+```mermaid
+sequenceDiagram
+  participant l as 리스트
+  participant d as 상세
+  l -&gt;&gt; d: 이동전 sessionStorage에 저장
+  d -&gt;&gt; l: 이동 후 복구
+```
+- 전제 조건
+  - 이전의 위치로 갈 수 있을만큼, 그리기 위한 데이터가 존재해야한다
+    - 캐시
+      - `react-query` or `swr` 등을 사용
+    - 페이지 페이지 이동에 영향을 받지 않는 글로벌 스테이트에 기반한 리스트 아이템
+      - zustand 등을 사용해서 직접 구현
+- 최적화
+  - 스크롤이 길게된 상태면 너무 그려진 아이템이 많아서 퍼포먼서 저하가 일어나게된다
+    - 보일때만 그린다
+      - 이 또한 IntersectionObserver 등을 사용해서 각각의 엘리먼트 이벤트를 모니터링해야하므로 퍼모먼스 측정이 필요하다
+      - 혹은 다른 방법
+      - 이런 것 까지 구현할 시대는 아닌듯
+  - 클릭하면 새창에서 열어버리는게 사실 깔금, 모바일에서도 이런 경우 심리스한 뒤로가기를 지원
+
+## 구현
+&gt; 포지션 저장 복구는 네비게이션 이동에 따른 상황을 처리하기 위함인데, 백키로 할 경우는 브라우저에서 처리하는 것으로 보이고 이게 더 명확하게 느껴진다  
+&gt; 이때 전제조건은 캐시가 존재하여 이를 복구할 수 있는 경우에 한정된다
+### 스크롤 포지션 저장
+```javascript
+sessionStorage.setItem(location.href, window.scrollY.toString())
+```
+
+### 스크롤 포지션 복구
+```javascript
+useffect(() =&gt; {
+  const y = sessionStorage.getItem(location.href)
+
+  if (y) {
+    const y = sessionStorage.removeItem(location.href)
+    const top = Number(y)
+    if (top) {
+      window.scrollTo({ top })
+    }
+  }
+}, [])
+```
+
+### react-query
+- 작성 시점, ssr 에서 처리를 처리가 어려운 것으로 보여 드랍 [[diary:2024-03-02]]
+
+### swr
+- `useSWRImmutable` 훅을 통해 parameter 에 따라서 불편하는 쿼리를 쉽게 캐싱
+
+### 구현 순서
+- [[wip]]
+- ssr 타이밍에 list 를 그린다, 초기 리스트라서 커서가 없을 수 있다.
+- 리스트의 마지막 아이템은 클라이언트 컴포넌트로 작성한다, &lt;ServerItem /&gt;, &lt;ClientWatchItem /&gt;
+  - `IntersectionObserver` 를 통해 &lt;ClientWatchItem /&gt; 이 노출되는 경우 &lt;ClientList /&gt; 를 **함께** 그린다
+- 마지막아이템이 노출되는 경우 패치를 시작하고 패치에 따라 데이터를 그린다
+  ```javascriptreact
+  if (isShow) {
+    return (
+      &lt;&gt;
+        &lt;ServerItem&gt;
+        &lt;ClientList/&gt;
+      &lt;/&gt;
+    )
+  }
+
+  return (
+    &lt;ClientWatchItem ref={refForWatch}&gt;
+  )
+  ```
+
+
+## link
+- [[frontend]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/infinity-scroll"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# infinity-scroll"/><meta name="twitter:description" content="매번 구현해야해서 정리
+
+## 개념
+```mermaid
+sequenceDiagram
+  participant l as 리스트
+  participant d as 상세
+  l -&gt;&gt; d: 이동전 sessionStorage에 저장
+  d -&gt;&gt; l: 이동 후 복구
+```
+- 전제 조건
+  - 이전의 위치로 갈 수 있을만큼, 그리기 위한 데이터가 존재해야한다
+    - 캐시
+      - `react-query` or `swr` 등을 사용
+    - 페이지 페이지 이동에 영향을 받지 않는 글로벌 스테이트에 기반한 리스트 아이템
+      - zustand 등을 사용해서 직접 구현
+- 최적화
+  - 스크롤이 길게된 상태면 너무 그려진 아이템이 많아서 퍼포먼서 저하가 일어나게된다
+    - 보일때만 그린다
+      - 이 또한 IntersectionObserver 등을 사용해서 각각의 엘리먼트 이벤트를 모니터링해야하므로 퍼모먼스 측정이 필요하다
+      - 혹은 다른 방법
+      - 이런 것 까지 구현할 시대는 아닌듯
+  - 클릭하면 새창에서 열어버리는게 사실 깔금, 모바일에서도 이런 경우 심리스한 뒤로가기를 지원
+
+## 구현
+&gt; 포지션 저장 복구는 네비게이션 이동에 따른 상황을 처리하기 위함인데, 백키로 할 경우는 브라우저에서 처리하는 것으로 보이고 이게 더 명확하게 느껴진다  
+&gt; 이때 전제조건은 캐시가 존재하여 이를 복구할 수 있는 경우에 한정된다
+### 스크롤 포지션 저장
+```javascript
+sessionStorage.setItem(location.href, window.scrollY.toString())
+```
+
+### 스크롤 포지션 복구
+```javascript
+useffect(() =&gt; {
+  const y = sessionStorage.getItem(location.href)
+
+  if (y) {
+    const y = sessionStorage.removeItem(location.href)
+    const top = Number(y)
+    if (top) {
+      window.scrollTo({ top })
+    }
+  }
+}, [])
+```
+
+### react-query
+- 작성 시점, ssr 에서 처리를 처리가 어려운 것으로 보여 드랍 [[diary:2024-03-02]]
+
+### swr
+- `useSWRImmutable` 훅을 통해 parameter 에 따라서 불편하는 쿼리를 쉽게 캐싱
+
+### 구현 순서
+- [[wip]]
+- ssr 타이밍에 list 를 그린다, 초기 리스트라서 커서가 없을 수 있다.
+- 리스트의 마지막 아이템은 클라이언트 컴포넌트로 작성한다, &lt;ServerItem /&gt;, &lt;ClientWatchItem /&gt;
+  - `IntersectionObserver` 를 통해 &lt;ClientWatchItem /&gt; 이 노출되는 경우 &lt;ClientList /&gt; 를 **함께** 그린다
+- 마지막아이템이 노출되는 경우 패치를 시작하고 패치에 따라 데이터를 그린다
+  ```javascriptreact
+  if (isShow) {
+    return (
+      &lt;&gt;
+        &lt;ServerItem&gt;
+        &lt;ClientList/&gt;
+      &lt;/&gt;
+    )
+  }
+
+  return (
+    &lt;ClientWatchItem ref={refForWatch}&gt;
+  )
+  ```
+
+
+## link
+- [[frontend]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/454e834
+" class="bg-white text-black">454e834</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/infinity-scroll.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/infinity-scroll.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/infinity-scroll.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/infinity-scroll"><span class="underline">infinity-scroll</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-03-02"><span class="underline">diary/2024-03-02</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/wip"><span class="underline">wip</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/frontend"><span class="underline">frontend</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-03-03"><span class="underline">diary/2024-03-03</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-12-31"><span class="underline">diary/2024-12-31</span><sup>441</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#infinity-scroll">infinity-scroll</a></div><div class="pl-2"><a href="#개념">개념</a></div><div class="pl-2"><a href="#구현">구현</a></div><div class="pl-4"><a href="#스크롤-포지션-저장">스크롤 포지션 저장</a></div><div class="pl-4"><a href="#스크롤-포지션-복구">스크롤 포지션 복구</a></div><div class="pl-4"><a href="#react-query">react-query</a></div><div class="pl-4"><a href="#swr">swr</a></div><div class="pl-4"><a href="#구현-순서">구현 순서</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="infinity-scroll">infinity-scroll</h1>
+<p>매번 구현해야해서 정리</p>
+<h2 id="개념">개념</h2>
+<pre><code class="hljs language-mermaid">sequenceDiagram
+  participant l as 리스트
+  participant d as 상세
+  l -&gt;&gt; d: 이동전 sessionStorage에 저장
+  d -&gt;&gt; l: 이동 후 복구
+</code></pre><ul>
+<li>전제 조건<ul>
+<li>이전의 위치로 갈 수 있을만큼, 그리기 위한 데이터가 존재해야한다<ul>
+<li>캐시<ul>
+<li><code class="span">react-query</code> or <code class="span">swr</code> 등을 사용</li>
+</ul>
+</li>
+<li>페이지 페이지 이동에 영향을 받지 않는 글로벌 스테이트에 기반한 리스트 아이템<ul>
+<li>zustand 등을 사용해서 직접 구현</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>최적화<ul>
+<li>스크롤이 길게된 상태면 너무 그려진 아이템이 많아서 퍼포먼서 저하가 일어나게된다<ul>
+<li>보일때만 그린다<ul>
+<li>이 또한 IntersectionObserver 등을 사용해서 각각의 엘리먼트 이벤트를 모니터링해야하므로 퍼모먼스 측정이 필요하다</li>
+<li>혹은 다른 방법</li>
+<li>이런 것 까지 구현할 시대는 아닌듯</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>클릭하면 새창에서 열어버리는게 사실 깔금, 모바일에서도 이런 경우 심리스한 뒤로가기를 지원</li>
+</ul>
+</li>
+</ul>
+<h2 id="구현">구현</h2>
+<blockquote><p>포지션 저장 복구는 네비게이션 이동에 따른 상황을 처리하기 위함인데, 백키로 할 경우는 브라우저에서 처리하는 것으로 보이고 이게 더 명확하게 느껴진다<br>이때 전제조건은 캐시가 존재하여 이를 복구할 수 있는 경우에 한정된다</p></blockquote><h3 id="스크롤-포지션-저장">스크롤 포지션 저장</h3>
+<pre><code class="hljs language-javascript"><span class="hljs-variable language_">sessionStorage</span>.<span class="hljs-title function_">setItem</span>(location.<span class="hljs-property">href</span>, <span class="hljs-variable language_">window</span>.<span class="hljs-property">scrollY</span>.<span class="hljs-title function_">toString</span>())
+</code></pre><h3 id="스크롤-포지션-복구">스크롤 포지션 복구</h3>
+<pre><code class="hljs language-javascript"><span class="hljs-title function_">useffect</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> y = <span class="hljs-variable language_">sessionStorage</span>.<span class="hljs-title function_">getItem</span>(location.<span class="hljs-property">href</span>)
+
+  <span class="hljs-keyword">if</span> (y) {
+    <span class="hljs-keyword">const</span> y = <span class="hljs-variable language_">sessionStorage</span>.<span class="hljs-title function_">removeItem</span>(location.<span class="hljs-property">href</span>)
+    <span class="hljs-keyword">const</span> top = <span class="hljs-title class_">Number</span>(y)
+    <span class="hljs-keyword">if</span> (top) {
+      <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">scrollTo</span>({ top })
+    }
+  }
+}, [])
+</code></pre><h3 id="react-query">react-query</h3>
+<ul>
+<li>작성 시점, ssr 에서 처리를 처리가 어려운 것으로 보여 드랍 <a href="/public-wiki/diary/2024-03-02">[diary] diary:2024-03-02</a></li>
+</ul>
+<h3 id="swr">swr</h3>
+<ul>
+<li><code class="span">useSWRImmutable</code> 훅을 통해 parameter 에 따라서 불편하는 쿼리를 쉽게 캐싱</li>
+</ul>
+<h3 id="구현-순서">구현 순서</h3>
+<ul>
+<li><a href="wip">wip</a></li>
+<li>ssr 타이밍에 list 를 그린다, 초기 리스트라서 커서가 없을 수 있다.</li>
+<li>리스트의 마지막 아이템은 클라이언트 컴포넌트로 작성한다, <ServerItem />, <ClientWatchItem /><ul>
+<li><code class="span">IntersectionObserver</code> 를 통해 <ClientWatchItem /> 이 노출되는 경우 <ClientList /> 를 <strong>함께</strong> 그린다</li>
+</ul>
+</li>
+<li>마지막아이템이 노출되는 경우 패치를 시작하고 패치에 따라 데이터를 그린다<pre><code class="hljs language-javascriptreact">if (isShow) {
+  return (
+    &lt;&gt;
+      &lt;ServerItem&gt;
+      &lt;ClientList/&gt;
+    &lt;/&gt;
+  )
+}
+
+return (
+  &lt;ClientWatchItem ref={refForWatch}&gt;
+)
+</code></pre></li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="frontend">frontend</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-12f772d3c5c658cf.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-50964ab9a5cac455.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"infinity-scroll\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"OlyJDNjeCYQYxDPs-zJB_\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/infinity-scroll\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"infinity-scroll\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"infinity-scroll\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"infinity-scroll\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T1140,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"infinity-scroll\"\u003einfinity-scroll\u003c/h1\u003e\n\u003cp\u003e매번 구현해야해서 정리\u003c/p\u003e\n\u003ch2 id=\"개념\"\u003e개념\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-mermaid\"\u003esequenceDiagram\n  participant l as 리스트\n  participant d as 상세\n  l -\u0026gt;\u0026gt; d: 이동전 sessionStorage에 저장\n  d -\u0026gt;\u0026gt; l: 이동 후 복구\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e전제 조건\u003cul\u003e\n\u003cli\u003e이전의 위치로 갈 수 있을만큼, 그리기 위한 데이터가 존재해야한다\u003cul\u003e\n\u003cli\u003e캐시\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ereact-query\u003c/code\u003e or \u003ccode class=\"span\"\u003eswr\u003c/code\u003e 등을 사용\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e페이지 페이지 이동에 영향을 받지 않는 글로벌 스테이트에 기반한 리스트 아이템\u003cul\u003e\n\u003cli\u003ezustand 등을 사용해서 직접 구현\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e최적화\u003cul\u003e\n\u003cli\u003e스크롤이 길게된 상태면 너무 그려진 아이템이 많아서 퍼포먼서 저하가 일어나게된다\u003cul\u003e\n\u003cli\u003e보일때만 그린다\u003cul\u003e\n\u003cli\u003e이 또한 IntersectionObserver 등을 사용해서 각각의 엘리먼트 이벤트를 모니터링해야하므로 퍼모먼스 측정이 필요하다\u003c/li\u003e\n\u003cli\u003e혹은 다른 방법\u003c/li\u003e\n\u003cli\u003e이런 것 까지 구현할 시대는 아닌듯\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e클릭하면 새창에서 열어버리는게 사실 깔금, 모바일에서도 이런 경우 심리스한 뒤로가기를 지원\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"구현\"\u003e구현\u003c/h2\u003e\n\u003cblockquote\u003e\u003cp\u003e포지션 저장 복구는 네비게이션 이동에 따른 상황을 처리하기 위함인데, 백키로 할 경우는 브라우저에서 처리하는 것으로 보이고 이게 더 명확하게 느껴진다\u003cbr\u003e이때 전제조건은 캐시가 존재하여 이를 복구할 수 있는 경우에 한정된다\u003c/p\u003e\u003c/blockquote\u003e\u003ch3 id=\"스크롤-포지션-저장\"\u003e스크롤 포지션 저장\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-javascript\"\u003e\u003cspan class=\"hljs-variable language_\"\u003esessionStorage\u003c/span\u003e.\u003cspan class=\"hljs-title function_\"\u003esetItem\u003c/span\u003e(location.\u003cspan class=\"hljs-property\"\u003ehref\u003c/span\u003e, \u003cspan class=\"hljs-variable language_\"\u003ewindow\u003c/span\u003e.\u003cspan class=\"hljs-property\"\u003escrollY\u003c/span\u003e.\u003cspan class=\"hljs-title function_\"\u003etoString\u003c/span\u003e())\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"스크롤-포지션-복구\"\u003e스크롤 포지션 복구\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-javascript\"\u003e\u003cspan class=\"hljs-title function_\"\u003euseffect\u003c/span\u003e(\u003cspan class=\"hljs-function\"\u003e() =\u0026gt;\u003c/span\u003e {\n  \u003cspan class=\"hljs-keyword\"\u003econst\u003c/span\u003e y = \u003cspan class=\"hljs-variable language_\"\u003esessionStorage\u003c/span\u003e.\u003cspan class=\"hljs-title function_\"\u003egetItem\u003c/span\u003e(location.\u003cspan class=\"hljs-property\"\u003ehref\u003c/span\u003e)\n\n  \u003cspan class=\"hljs-keyword\"\u003eif\u003c/span\u003e (y) {\n    \u003cspan class=\"hljs-keyword\"\u003econst\u003c/span\u003e y = \u003cspan class=\"hljs-variable language_\"\u003esessionStorage\u003c/span\u003e.\u003cspan class=\"hljs-title function_\"\u003eremoveItem\u003c/span\u003e(location.\u003cspan class=\"hljs-property\"\u003ehref\u003c/span\u003e)\n    \u003cspan class=\"hljs-keyword\"\u003econst\u003c/span\u003e top = \u003cspan class=\"hljs-title class_\"\u003eNumber\u003c/span\u003e(y)\n    \u003cspan class=\"hljs-keyword\"\u003eif\u003c/span\u003e (top) {\n      \u003cspan class=\"hljs-variable language_\"\u003ewindow\u003c/span\u003e.\u003cspan class=\"hljs-title function_\"\u003escrollTo\u003c/span\u003e({ top })\n    }\n  }\n}, [])\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"react-query\"\u003ereact-query\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e작성 시점, ssr 에서 처리를 처리가 어려운 것으로 보여 드랍 \u003ca href=\"/public-wiki/diary/2024-03-02\"\u003e[diary] diary:2024-03-02\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"swr\"\u003eswr\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003euseSWRImmutable\u003c/code\u003e 훅을 통해 parameter 에 따라서 불편하는 쿼리를 쉽게 캐싱\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"구현-순서\"\u003e구현 순서\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"wip\"\u003ewip\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003essr 타이밍에 list 를 그린다, 초기 리스트라서 커서가 없을 수 있다.\u003c/li\u003e\n\u003cli\u003e리스트의 마지막 아이템은 클라이언트 컴포넌트로 작성한다, \u003cServerItem /\u003e, \u003cClientWatchItem /\u003e\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eIntersectionObserver\u003c/code\u003e 를 통해 \u003cClientWatchItem /\u003e 이 노출되는 경우 \u003cClientList /\u003e 를 \u003cstrong\u003e함께\u003c/strong\u003e 그린다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e마지막아이템이 노출되는 경우 패치를 시작하고 패치에 따라 데이터를 그린다\u003cpre\u003e\u003ccode class=\"hljs language-javascriptreact\"\u003eif (isShow) {\n  return (\n    \u0026lt;\u0026gt;\n      \u0026lt;ServerItem\u0026gt;\n      \u0026lt;ClientList/\u0026gt;\n    \u0026lt;/\u0026gt;\n  )\n}\n\nreturn (\n  \u0026lt;ClientWatchItem ref={refForWatch}\u0026gt;\n)\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"frontend\"\u003efrontend\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/454e834\\n\",\"className\":\"bg-white text-black\",\"children\":\"454e834\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/infinity-scroll.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/infinity-scroll.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/infinity-scroll.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"infinity-scroll\",\"name\":\"infinity-scroll\",\"val\":3},{\"id\":\"diary/2024-03-02\",\"name\":\"diary/2024-03-02\",\"val\":6},{\"id\":\"wip\",\"name\":\"wip\",\"val\":2},{\"id\":\"frontend\",\"name\":\"frontend\",\"val\":2},{\"id\":\"diary/2024-03-03\",\"name\":\"diary/2024-03-03\",\"val\":2},{\"id\":\"diary/2024-12-31\",\"name\":\"diary/2024-12-31\",\"val\":441}],\"links\":[{\"source\":\"infinity-scroll\",\"target\":\"diary/2024-03-02\"},{\"source\":\"infinity-scroll\",\"target\":\"wip\"},{\"source\":\"infinity-scroll\",\"target\":\"frontend\"},{\"source\":\"frontend\",\"target\":\"infinity-scroll\"},{\"source\":\"diary/2024-03-02\",\"target\":\"infinity-scroll\"},{\"source\":\"diary/2024-03-03\",\"target\":\"infinity-scroll\"},{\"source\":\"diary/2024-12-31\",\"target\":\"infinity-scroll\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"infinity-scroll\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/infinity-scroll\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"infinity-scroll\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2024-03-02\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-03-02\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-03-02\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"wip\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/wip\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"wip\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"frontend\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/frontend\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"frontend\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2024-03-03\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-03-03\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-03-03\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2024-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-12-31\"}],[\"$\",\"sup\",null,{\"children\":441}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"infinity-scroll\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#infinity-scroll\",\"children\":\"infinity-scroll\"}]}],[\"$\",\"div\",\"개념\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#개념\",\"children\":\"개념\"}]}],[\"$\",\"div\",\"구현\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#구현\",\"children\":\"구현\"}]}],[\"$\",\"div\",\"스크롤-포지션-저장\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#스크롤-포지션-저장\",\"children\":\"스크롤 포지션 저장\"}]}],[\"$\",\"div\",\"스크롤-포지션-복구\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#스크롤-포지션-복구\",\"children\":\"스크롤 포지션 복구\"}]}],[\"$\",\"div\",\"react-query\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#react-query\",\"children\":\"react-query\"}]}],[\"$\",\"div\",\"swr\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#swr\",\"children\":\"swr\"}]}],[\"$\",\"div\",\"구현-순서\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#구현-순서\",\"children\":\"구현 순서\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:Ta83,"])</script><script>self.__next_f.push([1,"매번 구현해야해서 정리\n\n## 개념\n```mermaid\nsequenceDiagram\n  participant l as 리스트\n  participant d as 상세\n  l -\u003e\u003e d: 이동전 sessionStorage에 저장\n  d -\u003e\u003e l: 이동 후 복구\n```\n- 전제 조건\n  - 이전의 위치로 갈 수 있을만큼, 그리기 위한 데이터가 존재해야한다\n    - 캐시\n      - `react-query` or `swr` 등을 사용\n    - 페이지 페이지 이동에 영향을 받지 않는 글로벌 스테이트에 기반한 리스트 아이템\n      - zustand 등을 사용해서 직접 구현\n- 최적화\n  - 스크롤이 길게된 상태면 너무 그려진 아이템이 많아서 퍼포먼서 저하가 일어나게된다\n    - 보일때만 그린다\n      - 이 또한 IntersectionObserver 등을 사용해서 각각의 엘리먼트 이벤트를 모니터링해야하므로 퍼모먼스 측정이 필요하다\n      - 혹은 다른 방법\n      - 이런 것 까지 구현할 시대는 아닌듯\n  - 클릭하면 새창에서 열어버리는게 사실 깔금, 모바일에서도 이런 경우 심리스한 뒤로가기를 지원\n\n## 구현\n\u003e 포지션 저장 복구는 네비게이션 이동에 따른 상황을 처리하기 위함인데, 백키로 할 경우는 브라우저에서 처리하는 것으로 보이고 이게 더 명확하게 느껴진다  \n\u003e 이때 전제조건은 캐시가 존재하여 이를 복구할 수 있는 경우에 한정된다\n### 스크롤 포지션 저장\n```javascript\nsessionStorage.setItem(location.href, window.scrollY.toString())\n```\n\n### 스크롤 포지션 복구\n```javascript\nuseffect(() =\u003e {\n  const y = sessionStorage.getItem(location.href)\n\n  if (y) {\n    const y = sessionStorage.removeItem(location.href)\n    const top = Number(y)\n    if (top) {\n      window.scrollTo({ top })\n    }\n  }\n}, [])\n```\n\n### react-query\n- 작성 시점, ssr 에서 처리를 처리가 어려운 것으로 보여 드랍 [[diary:2024-03-02]]\n\n### swr\n- `useSWRImmutable` 훅을 통해 parameter 에 따라서 불편하는 쿼리를 쉽게 캐싱\n\n### 구현 순서\n- [[wip]]\n- ssr 타이밍에 list 를 그린다, 초기 리스트라서 커서가 없을 수 있다.\n- 리스트의 마지막 아이템은 클라이언트 컴포넌트로 작성한다, \u003cServerItem /\u003e, \u003cClientWatchItem /\u003e\n  - `IntersectionObserver` 를 통해 \u003cClientWatchItem /\u003e 이 노출되는 경우 \u003cClientList /\u003e 를 **함께** 그린다\n- 마지막아이템이 노출되는 경우 패치를 시작하고 패치에 따라 데이터를 그린다\n  ```javascriptreact\n  if (isShow) {\n    return (\n      \u003c\u003e\n        \u003cServerItem\u003e\n        \u003cClientList/\u003e\n      \u003c/\u003e\n    )\n  }\n\n  return (\n    \u003cClientWatchItem ref={refForWatch}\u003e\n  )\n  ```\n\n\n## link\n- [[frontend]]\n"])</script><script>self.__next_f.push([1,"16:Ta83,"])</script><script>self.__next_f.push([1,"매번 구현해야해서 정리\n\n## 개념\n```mermaid\nsequenceDiagram\n  participant l as 리스트\n  participant d as 상세\n  l -\u003e\u003e d: 이동전 sessionStorage에 저장\n  d -\u003e\u003e l: 이동 후 복구\n```\n- 전제 조건\n  - 이전의 위치로 갈 수 있을만큼, 그리기 위한 데이터가 존재해야한다\n    - 캐시\n      - `react-query` or `swr` 등을 사용\n    - 페이지 페이지 이동에 영향을 받지 않는 글로벌 스테이트에 기반한 리스트 아이템\n      - zustand 등을 사용해서 직접 구현\n- 최적화\n  - 스크롤이 길게된 상태면 너무 그려진 아이템이 많아서 퍼포먼서 저하가 일어나게된다\n    - 보일때만 그린다\n      - 이 또한 IntersectionObserver 등을 사용해서 각각의 엘리먼트 이벤트를 모니터링해야하므로 퍼모먼스 측정이 필요하다\n      - 혹은 다른 방법\n      - 이런 것 까지 구현할 시대는 아닌듯\n  - 클릭하면 새창에서 열어버리는게 사실 깔금, 모바일에서도 이런 경우 심리스한 뒤로가기를 지원\n\n## 구현\n\u003e 포지션 저장 복구는 네비게이션 이동에 따른 상황을 처리하기 위함인데, 백키로 할 경우는 브라우저에서 처리하는 것으로 보이고 이게 더 명확하게 느껴진다  \n\u003e 이때 전제조건은 캐시가 존재하여 이를 복구할 수 있는 경우에 한정된다\n### 스크롤 포지션 저장\n```javascript\nsessionStorage.setItem(location.href, window.scrollY.toString())\n```\n\n### 스크롤 포지션 복구\n```javascript\nuseffect(() =\u003e {\n  const y = sessionStorage.getItem(location.href)\n\n  if (y) {\n    const y = sessionStorage.removeItem(location.href)\n    const top = Number(y)\n    if (top) {\n      window.scrollTo({ top })\n    }\n  }\n}, [])\n```\n\n### react-query\n- 작성 시점, ssr 에서 처리를 처리가 어려운 것으로 보여 드랍 [[diary:2024-03-02]]\n\n### swr\n- `useSWRImmutable` 훅을 통해 parameter 에 따라서 불편하는 쿼리를 쉽게 캐싱\n\n### 구현 순서\n- [[wip]]\n- ssr 타이밍에 list 를 그린다, 초기 리스트라서 커서가 없을 수 있다.\n- 리스트의 마지막 아이템은 클라이언트 컴포넌트로 작성한다, \u003cServerItem /\u003e, \u003cClientWatchItem /\u003e\n  - `IntersectionObserver` 를 통해 \u003cClientWatchItem /\u003e 이 노출되는 경우 \u003cClientList /\u003e 를 **함께** 그린다\n- 마지막아이템이 노출되는 경우 패치를 시작하고 패치에 따라 데이터를 그린다\n  ```javascriptreact\n  if (isShow) {\n    return (\n      \u003c\u003e\n        \u003cServerItem\u003e\n        \u003cClientList/\u003e\n      \u003c/\u003e\n    )\n  }\n\n  return (\n    \u003cClientWatchItem ref={refForWatch}\u003e\n  )\n  ```\n\n\n## link\n- [[frontend]]\n"])</script><script>self.__next_f.push([1,"17:Ta83,"])</script><script>self.__next_f.push([1,"매번 구현해야해서 정리\n\n## 개념\n```mermaid\nsequenceDiagram\n  participant l as 리스트\n  participant d as 상세\n  l -\u003e\u003e d: 이동전 sessionStorage에 저장\n  d -\u003e\u003e l: 이동 후 복구\n```\n- 전제 조건\n  - 이전의 위치로 갈 수 있을만큼, 그리기 위한 데이터가 존재해야한다\n    - 캐시\n      - `react-query` or `swr` 등을 사용\n    - 페이지 페이지 이동에 영향을 받지 않는 글로벌 스테이트에 기반한 리스트 아이템\n      - zustand 등을 사용해서 직접 구현\n- 최적화\n  - 스크롤이 길게된 상태면 너무 그려진 아이템이 많아서 퍼포먼서 저하가 일어나게된다\n    - 보일때만 그린다\n      - 이 또한 IntersectionObserver 등을 사용해서 각각의 엘리먼트 이벤트를 모니터링해야하므로 퍼모먼스 측정이 필요하다\n      - 혹은 다른 방법\n      - 이런 것 까지 구현할 시대는 아닌듯\n  - 클릭하면 새창에서 열어버리는게 사실 깔금, 모바일에서도 이런 경우 심리스한 뒤로가기를 지원\n\n## 구현\n\u003e 포지션 저장 복구는 네비게이션 이동에 따른 상황을 처리하기 위함인데, 백키로 할 경우는 브라우저에서 처리하는 것으로 보이고 이게 더 명확하게 느껴진다  \n\u003e 이때 전제조건은 캐시가 존재하여 이를 복구할 수 있는 경우에 한정된다\n### 스크롤 포지션 저장\n```javascript\nsessionStorage.setItem(location.href, window.scrollY.toString())\n```\n\n### 스크롤 포지션 복구\n```javascript\nuseffect(() =\u003e {\n  const y = sessionStorage.getItem(location.href)\n\n  if (y) {\n    const y = sessionStorage.removeItem(location.href)\n    const top = Number(y)\n    if (top) {\n      window.scrollTo({ top })\n    }\n  }\n}, [])\n```\n\n### react-query\n- 작성 시점, ssr 에서 처리를 처리가 어려운 것으로 보여 드랍 [[diary:2024-03-02]]\n\n### swr\n- `useSWRImmutable` 훅을 통해 parameter 에 따라서 불편하는 쿼리를 쉽게 캐싱\n\n### 구현 순서\n- [[wip]]\n- ssr 타이밍에 list 를 그린다, 초기 리스트라서 커서가 없을 수 있다.\n- 리스트의 마지막 아이템은 클라이언트 컴포넌트로 작성한다, \u003cServerItem /\u003e, \u003cClientWatchItem /\u003e\n  - `IntersectionObserver` 를 통해 \u003cClientWatchItem /\u003e 이 노출되는 경우 \u003cClientList /\u003e 를 **함께** 그린다\n- 마지막아이템이 노출되는 경우 패치를 시작하고 패치에 따라 데이터를 그린다\n  ```javascriptreact\n  if (isShow) {\n    return (\n      \u003c\u003e\n        \u003cServerItem\u003e\n        \u003cClientList/\u003e\n      \u003c/\u003e\n    )\n  }\n\n  return (\n    \u003cClientWatchItem ref={refForWatch}\u003e\n  )\n  ```\n\n\n## link\n- [[frontend]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# infinity-scroll\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# infinity-scroll\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/infinity-scroll\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# infinity-scroll\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

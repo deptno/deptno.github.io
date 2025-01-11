@@ -1,0 +1,232 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-12f772d3c5c658cf.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-50964ab9a5cac455.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># natural-language-processing-with-transformer|트랜스포머를 활용한 자연어 처리</title><meta name="description" content="
+## 생각해볼 문제
+- 날짜에 대한 임베딩을 하게되는경우 토큰화가 어떻게 이루어지는에 맞춰서 서식을 정해야한다
+
+## 개념
+### one hot vector
+|   | Bumblebee | Megatron | optimus Prime |
+|---|-----------|----------|---------------|
+| 0 | 1         | 0        | 0             |
+| 0 | 0         | 0        | 0             |
+| 0 | 0         | 0        | 1             |
+- 종류만큼(여기선 3)의 길이를 가지며 하나만 1로 세팅
+
+## dataset
+- 훈련/테스트 분할 전에 *샘플링* 하지말 것
+- 
+### code snippet
+```python
+# set format to pandas
+emotions.set_format(type=&quot;pandas&quot;)
+df = emotions[&#x27;train&#x27;][:]
+df.head()
+
+# reset format
+emotions.reset_format()
+
+# convert classlabel to string
+df[&#x27;label-name&#x27;] = emotions[&#x27;train&#x27;].features[&#x27;label&#x27;].int2str(row)
+
+# draw bar h
+df[&#x27;label-name&#x27;].value_counts(ascending=True).plot.barh() 
+plt.title(&#x27;Frequency of Classes&#x27;)
+plt.show()
+
+# create dataframe from scratch
+categorical df = pd.DataFrame(
+  {&quot;Name&quot;: [&#x27;&#x27;Bumblebee&quot;, &quot;Optimus Prime&quot;, &quot;Megatron&#x27;&#x27;], &quot;Label ID&quot;: [0,1,2]}
+)
+
+# p62, 문자 단위 토큰화 one hot encoding 예제
+input_ids = [5,14,12,8,13,11,19,11,13,10,0,17,8,18, 17, 0, 11, 16, 0, 6, 0, 7, 14, 15, 8, 0, 17, 6, 16, 12, 0, 14, 9, 0, 3, 2, 4, 1] =
+input_ids = torch.tensor(input_ids)
+one_hot_encodings = F.one_hot(input_ids, num_classes=len(tokenZidx))
+## `num_classes` 를 입력하지 않으면 `input_ids` 의 정수중 가장 큰수 + 1 로 설정되기 때문에 필수적으로 세팅이 필요하다
+
+one_hot_encodings.shape # torch.Size([38, Z0])
+
+
+```
+## link
+- [[index]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# natural-language-processing-with-transformer|트랜스포머를 활용한 자연어 처리"/><meta property="og:description" content="
+## 생각해볼 문제
+- 날짜에 대한 임베딩을 하게되는경우 토큰화가 어떻게 이루어지는에 맞춰서 서식을 정해야한다
+
+## 개념
+### one hot vector
+|   | Bumblebee | Megatron | optimus Prime |
+|---|-----------|----------|---------------|
+| 0 | 1         | 0        | 0             |
+| 0 | 0         | 0        | 0             |
+| 0 | 0         | 0        | 1             |
+- 종류만큼(여기선 3)의 길이를 가지며 하나만 1로 세팅
+
+## dataset
+- 훈련/테스트 분할 전에 *샘플링* 하지말 것
+- 
+### code snippet
+```python
+# set format to pandas
+emotions.set_format(type=&quot;pandas&quot;)
+df = emotions[&#x27;train&#x27;][:]
+df.head()
+
+# reset format
+emotions.reset_format()
+
+# convert classlabel to string
+df[&#x27;label-name&#x27;] = emotions[&#x27;train&#x27;].features[&#x27;label&#x27;].int2str(row)
+
+# draw bar h
+df[&#x27;label-name&#x27;].value_counts(ascending=True).plot.barh() 
+plt.title(&#x27;Frequency of Classes&#x27;)
+plt.show()
+
+# create dataframe from scratch
+categorical df = pd.DataFrame(
+  {&quot;Name&quot;: [&#x27;&#x27;Bumblebee&quot;, &quot;Optimus Prime&quot;, &quot;Megatron&#x27;&#x27;], &quot;Label ID&quot;: [0,1,2]}
+)
+
+# p62, 문자 단위 토큰화 one hot encoding 예제
+input_ids = [5,14,12,8,13,11,19,11,13,10,0,17,8,18, 17, 0, 11, 16, 0, 6, 0, 7, 14, 15, 8, 0, 17, 6, 16, 12, 0, 14, 9, 0, 3, 2, 4, 1] =
+input_ids = torch.tensor(input_ids)
+one_hot_encodings = F.one_hot(input_ids, num_classes=len(tokenZidx))
+## `num_classes` 를 입력하지 않으면 `input_ids` 의 정수중 가장 큰수 + 1 로 설정되기 때문에 필수적으로 세팅이 필요하다
+
+one_hot_encodings.shape # torch.Size([38, Z0])
+
+
+```
+## link
+- [[index]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/book/natural-language-processing-with-transformer"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# natural-language-processing-with-transformer|트랜스포머를 활용한 자연어 처리"/><meta name="twitter:description" content="
+## 생각해볼 문제
+- 날짜에 대한 임베딩을 하게되는경우 토큰화가 어떻게 이루어지는에 맞춰서 서식을 정해야한다
+
+## 개념
+### one hot vector
+|   | Bumblebee | Megatron | optimus Prime |
+|---|-----------|----------|---------------|
+| 0 | 1         | 0        | 0             |
+| 0 | 0         | 0        | 0             |
+| 0 | 0         | 0        | 1             |
+- 종류만큼(여기선 3)의 길이를 가지며 하나만 1로 세팅
+
+## dataset
+- 훈련/테스트 분할 전에 *샘플링* 하지말 것
+- 
+### code snippet
+```python
+# set format to pandas
+emotions.set_format(type=&quot;pandas&quot;)
+df = emotions[&#x27;train&#x27;][:]
+df.head()
+
+# reset format
+emotions.reset_format()
+
+# convert classlabel to string
+df[&#x27;label-name&#x27;] = emotions[&#x27;train&#x27;].features[&#x27;label&#x27;].int2str(row)
+
+# draw bar h
+df[&#x27;label-name&#x27;].value_counts(ascending=True).plot.barh() 
+plt.title(&#x27;Frequency of Classes&#x27;)
+plt.show()
+
+# create dataframe from scratch
+categorical df = pd.DataFrame(
+  {&quot;Name&quot;: [&#x27;&#x27;Bumblebee&quot;, &quot;Optimus Prime&quot;, &quot;Megatron&#x27;&#x27;], &quot;Label ID&quot;: [0,1,2]}
+)
+
+# p62, 문자 단위 토큰화 one hot encoding 예제
+input_ids = [5,14,12,8,13,11,19,11,13,10,0,17,8,18, 17, 0, 11, 16, 0, 6, 0, 7, 14, 15, 8, 0, 17, 6, 16, 12, 0, 14, 9, 0, 3, 2, 4, 1] =
+input_ids = torch.tensor(input_ids)
+one_hot_encodings = F.one_hot(input_ids, num_classes=len(tokenZidx))
+## `num_classes` 를 입력하지 않으면 `input_ids` 의 정수중 가장 큰수 + 1 로 설정되기 때문에 필수적으로 세팅이 필요하다
+
+one_hot_encodings.shape # torch.Size([38, Z0])
+
+
+```
+## link
+- [[index]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/454e834
+" class="bg-white text-black">454e834</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki/book">book<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/book/natural-language-processing-with-transformer.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/book/natural-language-processing-with-transformer.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/book/natural-language-processing-with-transformer.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/book/natural-language-processing-with-transformer"><span class="underline">book/natural-language-processing-with-transformer</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/book/index"><span class="underline">book/index</span><sup>13</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-12-31"><span class="underline">diary/2024-12-31</span><sup>441</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#natural-language-processing-with-transformer트랜스포머를-활용한-자연어-처리">natural-language-processing-with-transformer|트랜스포머를 활용한 자연어 처리</a></div><div class="pl-2"><a href="#생각해볼-문제">생각해볼 문제</a></div><div class="pl-2"><a href="#개념">개념</a></div><div class="pl-4"><a href="#one-hot-vector">one hot vector</a></div><div class="pl-2"><a href="#dataset">dataset</a></div><div class="pl-4"><a href="#code-snippet">code snippet</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="natural-language-processing-with-transformer트랜스포머를-활용한-자연어-처리">natural-language-processing-with-transformer|트랜스포머를 활용한 자연어 처리</h1>
+<h2 id="생각해볼-문제">생각해볼 문제</h2>
+<ul>
+<li>날짜에 대한 임베딩을 하게되는경우 토큰화가 어떻게 이루어지는에 맞춰서 서식을 정해야한다</li>
+</ul>
+<h2 id="개념">개념</h2>
+<h3 id="one-hot-vector">one hot vector</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Bumblebee</th>
+<th>Megatron</th>
+<th>optimus Prime</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<ul>
+<li>종류만큼(여기선 3)의 길이를 가지며 하나만 1로 세팅</li>
+</ul>
+<h2 id="dataset">dataset</h2>
+<ul>
+<li>훈련/테스트 분할 전에 <em>샘플링</em> 하지말 것</li>
+<li></li>
+</ul>
+<h3 id="code-snippet">code snippet</h3>
+<pre><code class="hljs language-python"><span class="hljs-comment"># set format to pandas</span>
+emotions.set_format(<span class="hljs-built_in">type</span>=<span class="hljs-string">&quot;pandas&quot;</span>)
+df = emotions[<span class="hljs-string">&#x27;train&#x27;</span>][:]
+df.head()
+
+<span class="hljs-comment"># reset format</span>
+emotions.reset_format()
+
+<span class="hljs-comment"># convert classlabel to string</span>
+df[<span class="hljs-string">&#x27;label-name&#x27;</span>] = emotions[<span class="hljs-string">&#x27;train&#x27;</span>].features[<span class="hljs-string">&#x27;label&#x27;</span>].int2str(row)
+
+<span class="hljs-comment"># draw bar h</span>
+df[<span class="hljs-string">&#x27;label-name&#x27;</span>].value_counts(ascending=<span class="hljs-literal">True</span>).plot.barh() 
+plt.title(<span class="hljs-string">&#x27;Frequency of Classes&#x27;</span>)
+plt.show()
+
+<span class="hljs-comment"># create dataframe from scratch</span>
+categorical df = pd.DataFrame(
+  {<span class="hljs-string">&quot;Name&quot;</span>: [<span class="hljs-string">&#x27;&#x27;</span>Bumblebee<span class="hljs-string">&quot;, &quot;</span>Optimus Prime<span class="hljs-string">&quot;, &quot;</span>Megatron<span class="hljs-string">&#x27;&#x27;</span>], <span class="hljs-string">&quot;Label ID&quot;</span>: [<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>]}
+)
+
+<span class="hljs-comment"># p62, 문자 단위 토큰화 one hot encoding 예제</span>
+input_ids = [<span class="hljs-number">5</span>,<span class="hljs-number">14</span>,<span class="hljs-number">12</span>,<span class="hljs-number">8</span>,<span class="hljs-number">13</span>,<span class="hljs-number">11</span>,<span class="hljs-number">19</span>,<span class="hljs-number">11</span>,<span class="hljs-number">13</span>,<span class="hljs-number">10</span>,<span class="hljs-number">0</span>,<span class="hljs-number">17</span>,<span class="hljs-number">8</span>,<span class="hljs-number">18</span>, <span class="hljs-number">17</span>, <span class="hljs-number">0</span>, <span class="hljs-number">11</span>, <span class="hljs-number">16</span>, <span class="hljs-number">0</span>, <span class="hljs-number">6</span>, <span class="hljs-number">0</span>, <span class="hljs-number">7</span>, <span class="hljs-number">14</span>, <span class="hljs-number">15</span>, <span class="hljs-number">8</span>, <span class="hljs-number">0</span>, <span class="hljs-number">17</span>, <span class="hljs-number">6</span>, <span class="hljs-number">16</span>, <span class="hljs-number">12</span>, <span class="hljs-number">0</span>, <span class="hljs-number">14</span>, <span class="hljs-number">9</span>, <span class="hljs-number">0</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>] =
+input_ids = torch.tensor(input_ids)
+one_hot_encodings = F.one_hot(input_ids, num_classes=<span class="hljs-built_in">len</span>(tokenZidx))
+<span class="hljs-comment">## `num_classes` 를 입력하지 않으면 `input_ids` 의 정수중 가장 큰수 + 1 로 설정되기 때문에 필수적으로 세팅이 필요하다</span>
+
+one_hot_encodings.shape <span class="hljs-comment"># torch.Size([38, Z0])</span>
+
+</code></pre><h2 id="link">link</h2>
+<ul>
+<li><a href="index">index</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-12f772d3c5c658cf.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-50964ab9a5cac455.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"book/natural-language-processing-with-transformer\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"OlyJDNjeCYQYxDPs-zJB_\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/book/natural-language-processing-with-transformer\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"book/natural-language-processing-with-transformer\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"book\\\",\\\"natural-language-processing-with-transformer\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"book/natural-language-processing-with-transformer\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T1148,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"natural-language-processing-with-transformer트랜스포머를-활용한-자연어-처리\"\u003enatural-language-processing-with-transformer|트랜스포머를 활용한 자연어 처리\u003c/h1\u003e\n\u003ch2 id=\"생각해볼-문제\"\u003e생각해볼 문제\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e날짜에 대한 임베딩을 하게되는경우 토큰화가 어떻게 이루어지는에 맞춰서 서식을 정해야한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"개념\"\u003e개념\u003c/h2\u003e\n\u003ch3 id=\"one-hot-vector\"\u003eone hot vector\u003c/h3\u003e\n\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003e\u003c/th\u003e\n\u003cth\u003eBumblebee\u003c/th\u003e\n\u003cth\u003eMegatron\u003c/th\u003e\n\u003cth\u003eoptimus Prime\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\u003ctr\u003e\n\u003ctd\u003e0\u003c/td\u003e\n\u003ctd\u003e1\u003c/td\u003e\n\u003ctd\u003e0\u003c/td\u003e\n\u003ctd\u003e0\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e0\u003c/td\u003e\n\u003ctd\u003e0\u003c/td\u003e\n\u003ctd\u003e0\u003c/td\u003e\n\u003ctd\u003e0\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e0\u003c/td\u003e\n\u003ctd\u003e0\u003c/td\u003e\n\u003ctd\u003e0\u003c/td\u003e\n\u003ctd\u003e1\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\u003c/table\u003e\n\u003cul\u003e\n\u003cli\u003e종류만큼(여기선 3)의 길이를 가지며 하나만 1로 세팅\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"dataset\"\u003edataset\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e훈련/테스트 분할 전에 \u003cem\u003e샘플링\u003c/em\u003e 하지말 것\u003c/li\u003e\n\u003cli\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"code-snippet\"\u003ecode snippet\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-python\"\u003e\u003cspan class=\"hljs-comment\"\u003e# set format to pandas\u003c/span\u003e\nemotions.set_format(\u003cspan class=\"hljs-built_in\"\u003etype\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e\u0026quot;pandas\u0026quot;\u003c/span\u003e)\ndf = emotions[\u003cspan class=\"hljs-string\"\u003e\u0026#x27;train\u0026#x27;\u003c/span\u003e][:]\ndf.head()\n\n\u003cspan class=\"hljs-comment\"\u003e# reset format\u003c/span\u003e\nemotions.reset_format()\n\n\u003cspan class=\"hljs-comment\"\u003e# convert classlabel to string\u003c/span\u003e\ndf[\u003cspan class=\"hljs-string\"\u003e\u0026#x27;label-name\u0026#x27;\u003c/span\u003e] = emotions[\u003cspan class=\"hljs-string\"\u003e\u0026#x27;train\u0026#x27;\u003c/span\u003e].features[\u003cspan class=\"hljs-string\"\u003e\u0026#x27;label\u0026#x27;\u003c/span\u003e].int2str(row)\n\n\u003cspan class=\"hljs-comment\"\u003e# draw bar h\u003c/span\u003e\ndf[\u003cspan class=\"hljs-string\"\u003e\u0026#x27;label-name\u0026#x27;\u003c/span\u003e].value_counts(ascending=\u003cspan class=\"hljs-literal\"\u003eTrue\u003c/span\u003e).plot.barh() \nplt.title(\u003cspan class=\"hljs-string\"\u003e\u0026#x27;Frequency of Classes\u0026#x27;\u003c/span\u003e)\nplt.show()\n\n\u003cspan class=\"hljs-comment\"\u003e# create dataframe from scratch\u003c/span\u003e\ncategorical df = pd.DataFrame(\n  {\u003cspan class=\"hljs-string\"\u003e\u0026quot;Name\u0026quot;\u003c/span\u003e: [\u003cspan class=\"hljs-string\"\u003e\u0026#x27;\u0026#x27;\u003c/span\u003eBumblebee\u003cspan class=\"hljs-string\"\u003e\u0026quot;, \u0026quot;\u003c/span\u003eOptimus Prime\u003cspan class=\"hljs-string\"\u003e\u0026quot;, \u0026quot;\u003c/span\u003eMegatron\u003cspan class=\"hljs-string\"\u003e\u0026#x27;\u0026#x27;\u003c/span\u003e], \u003cspan class=\"hljs-string\"\u003e\u0026quot;Label ID\u0026quot;\u003c/span\u003e: [\u003cspan class=\"hljs-number\"\u003e0\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e1\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e2\u003c/span\u003e]}\n)\n\n\u003cspan class=\"hljs-comment\"\u003e# p62, 문자 단위 토큰화 one hot encoding 예제\u003c/span\u003e\ninput_ids = [\u003cspan class=\"hljs-number\"\u003e5\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e14\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e12\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e8\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e13\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e11\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e19\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e11\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e13\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e10\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e0\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e17\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e8\u003c/span\u003e,\u003cspan class=\"hljs-number\"\u003e18\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e17\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e0\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e11\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e16\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e0\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e6\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e0\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e7\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e14\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e15\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e8\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e0\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e17\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e6\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e16\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e12\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e0\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e14\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e9\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e0\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e3\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e2\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e4\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e1\u003c/span\u003e] =\ninput_ids = torch.tensor(input_ids)\none_hot_encodings = F.one_hot(input_ids, num_classes=\u003cspan class=\"hljs-built_in\"\u003elen\u003c/span\u003e(tokenZidx))\n\u003cspan class=\"hljs-comment\"\u003e## `num_classes` 를 입력하지 않으면 `input_ids` 의 정수중 가장 큰수 + 1 로 설정되기 때문에 필수적으로 세팅이 필요하다\u003c/span\u003e\n\none_hot_encodings.shape \u003cspan class=\"hljs-comment\"\u003e# torch.Size([38, Z0])\u003c/span\u003e\n\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"index\"\u003eindex\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/454e834\\n\",\"className\":\"bg-white text-black\",\"children\":\"454e834\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/book/natural-language-processing-with-transformer.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/book/natural-language-processing-with-transformer.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/book/natural-language-processing-with-transformer.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"book/natural-language-processing-with-transformer\",\"name\":\"book/natural-language-processing-with-transformer\",\"val\":1},{\"id\":\"book/index\",\"name\":\"book/index\",\"val\":13},{\"id\":\"diary/2024-12-31\",\"name\":\"diary/2024-12-31\",\"val\":441}],\"links\":[{\"source\":\"book/natural-language-processing-with-transformer\",\"target\":\"book/index\"},{\"source\":\"book/index\",\"target\":\"book/natural-language-processing-with-transformer\"},{\"source\":\"diary/2024-12-31\",\"target\":\"book/natural-language-processing-with-transformer\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"book/natural-language-processing-with-transformer\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/book/natural-language-processing-with-transformer\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"book/natural-language-processing-with-transformer\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"book/index\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/book/index\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"book/index\"}],[\"$\",\"sup\",null,{\"children\":13}]]}]}],[\"$\",\"span\",\"diary/2024-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-12-31\"}],[\"$\",\"sup\",null,{\"children\":441}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"natural-language-processing-with-transformer트랜스포머를-활용한-자연어-처리\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#natural-language-processing-with-transformer트랜스포머를-활용한-자연어-처리\",\"children\":\"natural-language-processing-with-transformer|트랜스포머를 활용한 자연어 처리\"}]}],[\"$\",\"div\",\"생각해볼-문제\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#생각해볼-문제\",\"children\":\"생각해볼 문제\"}]}],[\"$\",\"div\",\"개념\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#개념\",\"children\":\"개념\"}]}],[\"$\",\"div\",\"one-hot-vector\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#one-hot-vector\",\"children\":\"one hot vector\"}]}],[\"$\",\"div\",\"dataset\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#dataset\",\"children\":\"dataset\"}]}],[\"$\",\"div\",\"code-snippet\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#code-snippet\",\"children\":\"code snippet\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T642,"])</script><script>self.__next_f.push([1,"\n## 생각해볼 문제\n- 날짜에 대한 임베딩을 하게되는경우 토큰화가 어떻게 이루어지는에 맞춰서 서식을 정해야한다\n\n## 개념\n### one hot vector\n|   | Bumblebee | Megatron | optimus Prime |\n|---|-----------|----------|---------------|\n| 0 | 1         | 0        | 0             |\n| 0 | 0         | 0        | 0             |\n| 0 | 0         | 0        | 1             |\n- 종류만큼(여기선 3)의 길이를 가지며 하나만 1로 세팅\n\n## dataset\n- 훈련/테스트 분할 전에 *샘플링* 하지말 것\n- \n### code snippet\n```python\n# set format to pandas\nemotions.set_format(type=\"pandas\")\ndf = emotions['train'][:]\ndf.head()\n\n# reset format\nemotions.reset_format()\n\n# convert classlabel to string\ndf['label-name'] = emotions['train'].features['label'].int2str(row)\n\n# draw bar h\ndf['label-name'].value_counts(ascending=True).plot.barh() \nplt.title('Frequency of Classes')\nplt.show()\n\n# create dataframe from scratch\ncategorical df = pd.DataFrame(\n  {\"Name\": [''Bumblebee\", \"Optimus Prime\", \"Megatron''], \"Label ID\": [0,1,2]}\n)\n\n# p62, 문자 단위 토큰화 one hot encoding 예제\ninput_ids = [5,14,12,8,13,11,19,11,13,10,0,17,8,18, 17, 0, 11, 16, 0, 6, 0, 7, 14, 15, 8, 0, 17, 6, 16, 12, 0, 14, 9, 0, 3, 2, 4, 1] =\ninput_ids = torch.tensor(input_ids)\none_hot_encodings = F.one_hot(input_ids, num_classes=len(tokenZidx))\n## `num_classes` 를 입력하지 않으면 `input_ids` 의 정수중 가장 큰수 + 1 로 설정되기 때문에 필수적으로 세팅이 필요하다\n\none_hot_encodings.shape # torch.Size([38, Z0])\n\n\n```\n## link\n- [[index]]\n"])</script><script>self.__next_f.push([1,"16:T642,"])</script><script>self.__next_f.push([1,"\n## 생각해볼 문제\n- 날짜에 대한 임베딩을 하게되는경우 토큰화가 어떻게 이루어지는에 맞춰서 서식을 정해야한다\n\n## 개념\n### one hot vector\n|   | Bumblebee | Megatron | optimus Prime |\n|---|-----------|----------|---------------|\n| 0 | 1         | 0        | 0             |\n| 0 | 0         | 0        | 0             |\n| 0 | 0         | 0        | 1             |\n- 종류만큼(여기선 3)의 길이를 가지며 하나만 1로 세팅\n\n## dataset\n- 훈련/테스트 분할 전에 *샘플링* 하지말 것\n- \n### code snippet\n```python\n# set format to pandas\nemotions.set_format(type=\"pandas\")\ndf = emotions['train'][:]\ndf.head()\n\n# reset format\nemotions.reset_format()\n\n# convert classlabel to string\ndf['label-name'] = emotions['train'].features['label'].int2str(row)\n\n# draw bar h\ndf['label-name'].value_counts(ascending=True).plot.barh() \nplt.title('Frequency of Classes')\nplt.show()\n\n# create dataframe from scratch\ncategorical df = pd.DataFrame(\n  {\"Name\": [''Bumblebee\", \"Optimus Prime\", \"Megatron''], \"Label ID\": [0,1,2]}\n)\n\n# p62, 문자 단위 토큰화 one hot encoding 예제\ninput_ids = [5,14,12,8,13,11,19,11,13,10,0,17,8,18, 17, 0, 11, 16, 0, 6, 0, 7, 14, 15, 8, 0, 17, 6, 16, 12, 0, 14, 9, 0, 3, 2, 4, 1] =\ninput_ids = torch.tensor(input_ids)\none_hot_encodings = F.one_hot(input_ids, num_classes=len(tokenZidx))\n## `num_classes` 를 입력하지 않으면 `input_ids` 의 정수중 가장 큰수 + 1 로 설정되기 때문에 필수적으로 세팅이 필요하다\n\none_hot_encodings.shape # torch.Size([38, Z0])\n\n\n```\n## link\n- [[index]]\n"])</script><script>self.__next_f.push([1,"17:T642,"])</script><script>self.__next_f.push([1,"\n## 생각해볼 문제\n- 날짜에 대한 임베딩을 하게되는경우 토큰화가 어떻게 이루어지는에 맞춰서 서식을 정해야한다\n\n## 개념\n### one hot vector\n|   | Bumblebee | Megatron | optimus Prime |\n|---|-----------|----------|---------------|\n| 0 | 1         | 0        | 0             |\n| 0 | 0         | 0        | 0             |\n| 0 | 0         | 0        | 1             |\n- 종류만큼(여기선 3)의 길이를 가지며 하나만 1로 세팅\n\n## dataset\n- 훈련/테스트 분할 전에 *샘플링* 하지말 것\n- \n### code snippet\n```python\n# set format to pandas\nemotions.set_format(type=\"pandas\")\ndf = emotions['train'][:]\ndf.head()\n\n# reset format\nemotions.reset_format()\n\n# convert classlabel to string\ndf['label-name'] = emotions['train'].features['label'].int2str(row)\n\n# draw bar h\ndf['label-name'].value_counts(ascending=True).plot.barh() \nplt.title('Frequency of Classes')\nplt.show()\n\n# create dataframe from scratch\ncategorical df = pd.DataFrame(\n  {\"Name\": [''Bumblebee\", \"Optimus Prime\", \"Megatron''], \"Label ID\": [0,1,2]}\n)\n\n# p62, 문자 단위 토큰화 one hot encoding 예제\ninput_ids = [5,14,12,8,13,11,19,11,13,10,0,17,8,18, 17, 0, 11, 16, 0, 6, 0, 7, 14, 15, 8, 0, 17, 6, 16, 12, 0, 14, 9, 0, 3, 2, 4, 1] =\ninput_ids = torch.tensor(input_ids)\none_hot_encodings = F.one_hot(input_ids, num_classes=len(tokenZidx))\n## `num_classes` 를 입력하지 않으면 `input_ids` 의 정수중 가장 큰수 + 1 로 설정되기 때문에 필수적으로 세팅이 필요하다\n\none_hot_encodings.shape # torch.Size([38, Z0])\n\n\n```\n## link\n- [[index]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# natural-language-processing-with-transformer|트랜스포머를 활용한 자연어 처리\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# natural-language-processing-with-transformer|트랜스포머를 활용한 자연어 처리\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/book/natural-language-processing-with-transformer\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# natural-language-processing-with-transformer|트랜스포머를 활용한 자연어 처리\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
