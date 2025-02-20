@@ -1,0 +1,233 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-ff0fdc150151b97a.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-22298481ca782a54.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># terraform</title><meta name="description" content="
+## terraform@0.13
+사용버전: terraform@1.1.7
+요약:
+- terraform 0.13에서 upgrade를 요함
+- 바이너리 제공안하니 소스 빌드할 것
+- 소스빌드하려면 go@1.14 필요
+- go@1.14 설치하려면 x86_64 아키텍쳐로 시도할것
+
+```sh
+$ terraform init
+
+Initializing the backend...
+╷
+│ Error: Invalid legacy provider address
+│
+│ This configuration or its associated state refers to the unqualified provider &quot;aws&quot;.
+│
+│ You must complete the Terraform 0.13 upgrade process before upgrading to later versions.
+╵
+
+$ brew install terraform@0.13
+Running `brew update --preinstall`...
+==&gt; Auto-updated Homebrew!
+Updated 2 taps (homebrew/core and homebrew/cask).
+==&gt; Updated Formulae
+Updated 12 formulae.
+==&gt; Updated Casks
+Updated 7 casks.
+
+Warning: terraform@0.13 has been deprecated because it is not supported upstream!
+Error: terraform@0.13: no bottle available!
+You can try to install from source with:
+  brew install --build-from-source terraform@0.13
+Please note building from source is unsupported. You will encounter build
+failures with some formulae. If you experience any issues please create pull
+requests instead of asking for help on Homebrew&#x27;s GitHub, Twitter or any other
+official channels.
+$ brew install --build-from-source terraform@0.13
+Warning: terraform@0.13 has been deprecated because it is not supported upstream!
+Warning: go@1.14 has been deprecated because it is not supported upstream!
+Error: go@1.14: no bottle available!
+You can try to install from source with:
+  brew install --build-from-source go@1.14
+Please note building from source is unsupported. You will encounter build
+failures with some formulae. If you experience any issues please create pull
+requests instead of asking for help on Homebrew&#x27;s GitHub, Twitter or any other
+official channels.
+$ brew install --build-from-source go@1.14
+
+Warning: go@1.14 has been deprecated because it is not supported upstream!
+go@1.14: The x86_64 architecture is required for this software.
+Error: go@1.14: An unsatisfied requirement failed this build.
+```
+
+
+## link
+- [[isc]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# terraform"/><meta property="og:description" content="
+## terraform@0.13
+사용버전: terraform@1.1.7
+요약:
+- terraform 0.13에서 upgrade를 요함
+- 바이너리 제공안하니 소스 빌드할 것
+- 소스빌드하려면 go@1.14 필요
+- go@1.14 설치하려면 x86_64 아키텍쳐로 시도할것
+
+```sh
+$ terraform init
+
+Initializing the backend...
+╷
+│ Error: Invalid legacy provider address
+│
+│ This configuration or its associated state refers to the unqualified provider &quot;aws&quot;.
+│
+│ You must complete the Terraform 0.13 upgrade process before upgrading to later versions.
+╵
+
+$ brew install terraform@0.13
+Running `brew update --preinstall`...
+==&gt; Auto-updated Homebrew!
+Updated 2 taps (homebrew/core and homebrew/cask).
+==&gt; Updated Formulae
+Updated 12 formulae.
+==&gt; Updated Casks
+Updated 7 casks.
+
+Warning: terraform@0.13 has been deprecated because it is not supported upstream!
+Error: terraform@0.13: no bottle available!
+You can try to install from source with:
+  brew install --build-from-source terraform@0.13
+Please note building from source is unsupported. You will encounter build
+failures with some formulae. If you experience any issues please create pull
+requests instead of asking for help on Homebrew&#x27;s GitHub, Twitter or any other
+official channels.
+$ brew install --build-from-source terraform@0.13
+Warning: terraform@0.13 has been deprecated because it is not supported upstream!
+Warning: go@1.14 has been deprecated because it is not supported upstream!
+Error: go@1.14: no bottle available!
+You can try to install from source with:
+  brew install --build-from-source go@1.14
+Please note building from source is unsupported. You will encounter build
+failures with some formulae. If you experience any issues please create pull
+requests instead of asking for help on Homebrew&#x27;s GitHub, Twitter or any other
+official channels.
+$ brew install --build-from-source go@1.14
+
+Warning: go@1.14 has been deprecated because it is not supported upstream!
+go@1.14: The x86_64 architecture is required for this software.
+Error: go@1.14: An unsatisfied requirement failed this build.
+```
+
+
+## link
+- [[isc]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/terraform"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# terraform"/><meta name="twitter:description" content="
+## terraform@0.13
+사용버전: terraform@1.1.7
+요약:
+- terraform 0.13에서 upgrade를 요함
+- 바이너리 제공안하니 소스 빌드할 것
+- 소스빌드하려면 go@1.14 필요
+- go@1.14 설치하려면 x86_64 아키텍쳐로 시도할것
+
+```sh
+$ terraform init
+
+Initializing the backend...
+╷
+│ Error: Invalid legacy provider address
+│
+│ This configuration or its associated state refers to the unqualified provider &quot;aws&quot;.
+│
+│ You must complete the Terraform 0.13 upgrade process before upgrading to later versions.
+╵
+
+$ brew install terraform@0.13
+Running `brew update --preinstall`...
+==&gt; Auto-updated Homebrew!
+Updated 2 taps (homebrew/core and homebrew/cask).
+==&gt; Updated Formulae
+Updated 12 formulae.
+==&gt; Updated Casks
+Updated 7 casks.
+
+Warning: terraform@0.13 has been deprecated because it is not supported upstream!
+Error: terraform@0.13: no bottle available!
+You can try to install from source with:
+  brew install --build-from-source terraform@0.13
+Please note building from source is unsupported. You will encounter build
+failures with some formulae. If you experience any issues please create pull
+requests instead of asking for help on Homebrew&#x27;s GitHub, Twitter or any other
+official channels.
+$ brew install --build-from-source terraform@0.13
+Warning: terraform@0.13 has been deprecated because it is not supported upstream!
+Warning: go@1.14 has been deprecated because it is not supported upstream!
+Error: go@1.14: no bottle available!
+You can try to install from source with:
+  brew install --build-from-source go@1.14
+Please note building from source is unsupported. You will encounter build
+failures with some formulae. If you experience any issues please create pull
+requests instead of asking for help on Homebrew&#x27;s GitHub, Twitter or any other
+official channels.
+$ brew install --build-from-source go@1.14
+
+Warning: go@1.14 has been deprecated because it is not supported upstream!
+go@1.14: The x86_64 architecture is required for this software.
+Error: go@1.14: An unsatisfied requirement failed this build.
+```
+
+
+## link
+- [[isc]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/a33db5f
+" class="bg-white text-black">a33db5f</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/terraform.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/terraform.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/terraform.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/terraform"><span class="underline">terraform</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/isc"><span class="underline">isc</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/index"><span class="underline">index</span><sup>107</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#terraform">terraform</a></div><div class="pl-2"><a href="#terraform013-지메일로-보내기">terraform@0.13 [지메일로 보내기]</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="terraform">terraform</h1>
+<h2 id="terraform013"><a href="mailto:terraform@0.13" target="_blank">terraform@0.13</a> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=terraform@0.13&body=from deptno.dev" target="_blank">[지메일로 보내기]</a></h2>
+<p>사용버전: <a href="mailto:terraform@1.1.7" target="_blank">terraform@1.1.7</a> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=terraform@1.1.7&body=from deptno.dev" target="_blank">[지메일로 보내기]</a>
+요약:</p>
+<ul>
+<li>terraform 0.13에서 upgrade를 요함</li>
+<li>바이너리 제공안하니 소스 빌드할 것</li>
+<li>소스빌드하려면 <a href="mailto:go@1.14" target="_blank">go@1.14</a> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=go@1.14&body=from deptno.dev" target="_blank">[지메일로 보내기]</a> 필요</li>
+<li><a href="mailto:go@1.14" target="_blank">go@1.14</a> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=go@1.14&body=from deptno.dev" target="_blank">[지메일로 보내기]</a> 설치하려면 x86_64 아키텍쳐로 시도할것</li>
+</ul>
+<pre><code class="hljs language-sh">$ terraform init
+
+Initializing the backend...
+╷
+│ Error: Invalid legacy provider address
+│
+│ This configuration or its associated state refers to the unqualified provider <span class="hljs-string">&quot;aws&quot;</span>.
+│
+│ You must complete the Terraform 0.13 upgrade process before upgrading to later versions.
+╵
+
+$ brew install terraform@0.13
+Running `brew update --preinstall`...
+==&gt; Auto-updated Homebrew!
+Updated 2 taps (homebrew/core and homebrew/cask).
+==&gt; Updated Formulae
+Updated 12 formulae.
+==&gt; Updated Casks
+Updated 7 casks.
+
+Warning: terraform@0.13 has been deprecated because it is not supported upstream!
+Error: terraform@0.13: no bottle available!
+You can try to install from <span class="hljs-built_in">source</span> with:
+  brew install --build-from-source terraform@0.13
+Please note building from <span class="hljs-built_in">source</span> is unsupported. You will encounter build
+failures with some formulae. If you experience any issues please create pull
+requests instead of asking <span class="hljs-keyword">for</span> <span class="hljs-built_in">help</span> on Homebrew<span class="hljs-string">&#x27;s GitHub, Twitter or any other
+official channels.
+$ brew install --build-from-source terraform@0.13
+Warning: terraform@0.13 has been deprecated because it is not supported upstream!
+Warning: go@1.14 has been deprecated because it is not supported upstream!
+Error: go@1.14: no bottle available!
+You can try to install from source with:
+  brew install --build-from-source go@1.14
+Please note building from source is unsupported. You will encounter build
+failures with some formulae. If you experience any issues please create pull
+requests instead of asking for help on Homebrew&#x27;</span>s GitHub, Twitter or any other
+official channels.
+$ brew install --build-from-source go@1.14
+
+Warning: go@1.14 has been deprecated because it is not supported upstream!
+go@1.14: The x86_64 architecture is required <span class="hljs-keyword">for</span> this software.
+Error: go@1.14: An unsatisfied requirement failed this build.
+</code></pre><h2 id="link">link</h2>
+<ul>
+<li><a href="isc">isc</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-ff0fdc150151b97a.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-22298481ca782a54.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"terraform\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"2RoBITMm8njpA4YDsBdso\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/terraform\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"terraform\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"terraform\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"terraform\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:Tcc2,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"terraform\"\u003eterraform\u003c/h1\u003e\n\u003ch2 id=\"terraform013\"\u003e\u003ca href=\"mailto:terraform@0.13\" target=\"_blank\"\u003eterraform@0.13\u003c/a\u003e \u003ca href=\"https://mail.google.com/mail/?view=cm\u0026fs=1\u0026to=terraform@0.13\u0026body=from deptno.dev\" target=\"_blank\"\u003e[지메일로 보내기]\u003c/a\u003e\u003c/h2\u003e\n\u003cp\u003e사용버전: \u003ca href=\"mailto:terraform@1.1.7\" target=\"_blank\"\u003eterraform@1.1.7\u003c/a\u003e \u003ca href=\"https://mail.google.com/mail/?view=cm\u0026fs=1\u0026to=terraform@1.1.7\u0026body=from deptno.dev\" target=\"_blank\"\u003e[지메일로 보내기]\u003c/a\u003e\n요약:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eterraform 0.13에서 upgrade를 요함\u003c/li\u003e\n\u003cli\u003e바이너리 제공안하니 소스 빌드할 것\u003c/li\u003e\n\u003cli\u003e소스빌드하려면 \u003ca href=\"mailto:go@1.14\" target=\"_blank\"\u003ego@1.14\u003c/a\u003e \u003ca href=\"https://mail.google.com/mail/?view=cm\u0026fs=1\u0026to=go@1.14\u0026body=from deptno.dev\" target=\"_blank\"\u003e[지메일로 보내기]\u003c/a\u003e 필요\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"mailto:go@1.14\" target=\"_blank\"\u003ego@1.14\u003c/a\u003e \u003ca href=\"https://mail.google.com/mail/?view=cm\u0026fs=1\u0026to=go@1.14\u0026body=from deptno.dev\" target=\"_blank\"\u003e[지메일로 보내기]\u003c/a\u003e 설치하려면 x86_64 아키텍쳐로 시도할것\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ terraform init\n\nInitializing the backend...\n╷\n│ Error: Invalid legacy provider address\n│\n│ This configuration or its associated state refers to the unqualified provider \u003cspan class=\"hljs-string\"\u003e\u0026quot;aws\u0026quot;\u003c/span\u003e.\n│\n│ You must complete the Terraform 0.13 upgrade process before upgrading to later versions.\n╵\n\n$ brew install terraform@0.13\nRunning `brew update --preinstall`...\n==\u0026gt; Auto-updated Homebrew!\nUpdated 2 taps (homebrew/core and homebrew/cask).\n==\u0026gt; Updated Formulae\nUpdated 12 formulae.\n==\u0026gt; Updated Casks\nUpdated 7 casks.\n\nWarning: terraform@0.13 has been deprecated because it is not supported upstream!\nError: terraform@0.13: no bottle available!\nYou can try to install from \u003cspan class=\"hljs-built_in\"\u003esource\u003c/span\u003e with:\n  brew install --build-from-source terraform@0.13\nPlease note building from \u003cspan class=\"hljs-built_in\"\u003esource\u003c/span\u003e is unsupported. You will encounter build\nfailures with some formulae. If you experience any issues please create pull\nrequests instead of asking \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e \u003cspan class=\"hljs-built_in\"\u003ehelp\u003c/span\u003e on Homebrew\u003cspan class=\"hljs-string\"\u003e\u0026#x27;s GitHub, Twitter or any other\nofficial channels.\n$ brew install --build-from-source terraform@0.13\nWarning: terraform@0.13 has been deprecated because it is not supported upstream!\nWarning: go@1.14 has been deprecated because it is not supported upstream!\nError: go@1.14: no bottle available!\nYou can try to install from source with:\n  brew install --build-from-source go@1.14\nPlease note building from source is unsupported. You will encounter build\nfailures with some formulae. If you experience any issues please create pull\nrequests instead of asking for help on Homebrew\u0026#x27;\u003c/span\u003es GitHub, Twitter or any other\nofficial channels.\n$ brew install --build-from-source go@1.14\n\nWarning: go@1.14 has been deprecated because it is not supported upstream!\ngo@1.14: The x86_64 architecture is required \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e this software.\nError: go@1.14: An unsatisfied requirement failed this build.\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"isc\"\u003eisc\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/a33db5f\\n\",\"className\":\"bg-white text-black\",\"children\":\"a33db5f\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/terraform.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/terraform.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/terraform.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"terraform\",\"name\":\"terraform\",\"val\":1},{\"id\":\"isc\",\"name\":\"isc\",\"val\":\"$undefined\"},{\"id\":\"index\",\"name\":\"index\",\"val\":107}],\"links\":[{\"source\":\"terraform\",\"target\":\"isc\"},{\"source\":\"index\",\"target\":\"terraform\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"terraform\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/terraform\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"terraform\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"isc\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/isc\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"isc\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"index\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/index\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"index\"}],[\"$\",\"sup\",null,{\"children\":107}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"terraform\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#terraform\",\"children\":\"terraform\"}]}],[\"$\",\"div\",\"terraform013-지메일로-보내기\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#terraform013-지메일로-보내기\",\"children\":\"terraform@0.13 [지메일로 보내기]\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T821,"])</script><script>self.__next_f.push([1,"\n## terraform@0.13\n사용버전: terraform@1.1.7\n요약:\n- terraform 0.13에서 upgrade를 요함\n- 바이너리 제공안하니 소스 빌드할 것\n- 소스빌드하려면 go@1.14 필요\n- go@1.14 설치하려면 x86_64 아키텍쳐로 시도할것\n\n```sh\n$ terraform init\n\nInitializing the backend...\n╷\n│ Error: Invalid legacy provider address\n│\n│ This configuration or its associated state refers to the unqualified provider \"aws\".\n│\n│ You must complete the Terraform 0.13 upgrade process before upgrading to later versions.\n╵\n\n$ brew install terraform@0.13\nRunning `brew update --preinstall`...\n==\u003e Auto-updated Homebrew!\nUpdated 2 taps (homebrew/core and homebrew/cask).\n==\u003e Updated Formulae\nUpdated 12 formulae.\n==\u003e Updated Casks\nUpdated 7 casks.\n\nWarning: terraform@0.13 has been deprecated because it is not supported upstream!\nError: terraform@0.13: no bottle available!\nYou can try to install from source with:\n  brew install --build-from-source terraform@0.13\nPlease note building from source is unsupported. You will encounter build\nfailures with some formulae. If you experience any issues please create pull\nrequests instead of asking for help on Homebrew's GitHub, Twitter or any other\nofficial channels.\n$ brew install --build-from-source terraform@0.13\nWarning: terraform@0.13 has been deprecated because it is not supported upstream!\nWarning: go@1.14 has been deprecated because it is not supported upstream!\nError: go@1.14: no bottle available!\nYou can try to install from source with:\n  brew install --build-from-source go@1.14\nPlease note building from source is unsupported. You will encounter build\nfailures with some formulae. If you experience any issues please create pull\nrequests instead of asking for help on Homebrew's GitHub, Twitter or any other\nofficial channels.\n$ brew install --build-from-source go@1.14\n\nWarning: go@1.14 has been deprecated because it is not supported upstream!\ngo@1.14: The x86_64 architecture is required for this software.\nError: go@1.14: An unsatisfied requirement failed this build.\n```\n\n\n## link\n- [[isc]]\n"])</script><script>self.__next_f.push([1,"16:T821,"])</script><script>self.__next_f.push([1,"\n## terraform@0.13\n사용버전: terraform@1.1.7\n요약:\n- terraform 0.13에서 upgrade를 요함\n- 바이너리 제공안하니 소스 빌드할 것\n- 소스빌드하려면 go@1.14 필요\n- go@1.14 설치하려면 x86_64 아키텍쳐로 시도할것\n\n```sh\n$ terraform init\n\nInitializing the backend...\n╷\n│ Error: Invalid legacy provider address\n│\n│ This configuration or its associated state refers to the unqualified provider \"aws\".\n│\n│ You must complete the Terraform 0.13 upgrade process before upgrading to later versions.\n╵\n\n$ brew install terraform@0.13\nRunning `brew update --preinstall`...\n==\u003e Auto-updated Homebrew!\nUpdated 2 taps (homebrew/core and homebrew/cask).\n==\u003e Updated Formulae\nUpdated 12 formulae.\n==\u003e Updated Casks\nUpdated 7 casks.\n\nWarning: terraform@0.13 has been deprecated because it is not supported upstream!\nError: terraform@0.13: no bottle available!\nYou can try to install from source with:\n  brew install --build-from-source terraform@0.13\nPlease note building from source is unsupported. You will encounter build\nfailures with some formulae. If you experience any issues please create pull\nrequests instead of asking for help on Homebrew's GitHub, Twitter or any other\nofficial channels.\n$ brew install --build-from-source terraform@0.13\nWarning: terraform@0.13 has been deprecated because it is not supported upstream!\nWarning: go@1.14 has been deprecated because it is not supported upstream!\nError: go@1.14: no bottle available!\nYou can try to install from source with:\n  brew install --build-from-source go@1.14\nPlease note building from source is unsupported. You will encounter build\nfailures with some formulae. If you experience any issues please create pull\nrequests instead of asking for help on Homebrew's GitHub, Twitter or any other\nofficial channels.\n$ brew install --build-from-source go@1.14\n\nWarning: go@1.14 has been deprecated because it is not supported upstream!\ngo@1.14: The x86_64 architecture is required for this software.\nError: go@1.14: An unsatisfied requirement failed this build.\n```\n\n\n## link\n- [[isc]]\n"])</script><script>self.__next_f.push([1,"17:T821,"])</script><script>self.__next_f.push([1,"\n## terraform@0.13\n사용버전: terraform@1.1.7\n요약:\n- terraform 0.13에서 upgrade를 요함\n- 바이너리 제공안하니 소스 빌드할 것\n- 소스빌드하려면 go@1.14 필요\n- go@1.14 설치하려면 x86_64 아키텍쳐로 시도할것\n\n```sh\n$ terraform init\n\nInitializing the backend...\n╷\n│ Error: Invalid legacy provider address\n│\n│ This configuration or its associated state refers to the unqualified provider \"aws\".\n│\n│ You must complete the Terraform 0.13 upgrade process before upgrading to later versions.\n╵\n\n$ brew install terraform@0.13\nRunning `brew update --preinstall`...\n==\u003e Auto-updated Homebrew!\nUpdated 2 taps (homebrew/core and homebrew/cask).\n==\u003e Updated Formulae\nUpdated 12 formulae.\n==\u003e Updated Casks\nUpdated 7 casks.\n\nWarning: terraform@0.13 has been deprecated because it is not supported upstream!\nError: terraform@0.13: no bottle available!\nYou can try to install from source with:\n  brew install --build-from-source terraform@0.13\nPlease note building from source is unsupported. You will encounter build\nfailures with some formulae. If you experience any issues please create pull\nrequests instead of asking for help on Homebrew's GitHub, Twitter or any other\nofficial channels.\n$ brew install --build-from-source terraform@0.13\nWarning: terraform@0.13 has been deprecated because it is not supported upstream!\nWarning: go@1.14 has been deprecated because it is not supported upstream!\nError: go@1.14: no bottle available!\nYou can try to install from source with:\n  brew install --build-from-source go@1.14\nPlease note building from source is unsupported. You will encounter build\nfailures with some formulae. If you experience any issues please create pull\nrequests instead of asking for help on Homebrew's GitHub, Twitter or any other\nofficial channels.\n$ brew install --build-from-source go@1.14\n\nWarning: go@1.14 has been deprecated because it is not supported upstream!\ngo@1.14: The x86_64 architecture is required for this software.\nError: go@1.14: An unsatisfied requirement failed this build.\n```\n\n\n## link\n- [[isc]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# terraform\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# terraform\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/terraform\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# terraform\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
