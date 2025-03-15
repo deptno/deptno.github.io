@@ -1,0 +1,852 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-a049f68e7ea32292.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","upstage-ai-lab-day-43","c"]
+0:["NWGjrf6yfehwcT4MYnrJK",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","upstage-ai-lab-day-43","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"upstage-ai-lab-day-43\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","upstage-ai-lab-day-43","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/51cae7d269711d54.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:T347d,<h1 id="upstage-ai-lab-day-43">upstage-ai-lab-day-43</h1>
+<ul>
+<li>machine learning basic</li>
+<li>machine learning advanced</li>
+<li>캐글, 대회 관련 특강</li>
+<li><strong>House Price Prediction</strong> 경진대회</li>
+</ul>
+<h2 id="2주간의-수업">2주간의 수업</h2>
+<ul>
+<li>기본이 없는 경우 수업을 들으면서 무엇에 쓰이는지를 상상하기 어렵기 때문에 효율이 떨어진다</li>
+<li>때문에 졸리게 되는데 진도를 뺀다는 생각으로 들어봤자 졸면서 해봤자 기억에 남지 않는다.</li>
+<li><em>learn by doing</em> 이라고 오히려 실습, 혹은 실제 프로젝트를 들어가서야 <em>아! 그거</em> 하는 순간이 찾아오고 찾게된다.</li>
+</ul>
+<h2 id="대회-house-price-prediction">대회: House Price Prediction</h2>
+<blockquote><p>대회의 EDA 시도나 결과는 모두 유사할 수 밖에 없어, 개인적인 경험을 위주로 기록한다</p></blockquote><h3 id="대회">대회</h3>
+<ul>
+<li>대회기간은 2주다</li>
+<li>2주는 한주는 수업을 들어야해서 입문자를 기준으로는 기간이 1주다</li>
+<li>upstage 에서 주관하므로 <a href="https://stages.ai" target="_blank">[URL] https://stages.ai/</a> 를 통해 진행된다<ul>
+<li>한번은 제출 결과가 영원히 <code class="span">pending</code> 에 빠지는 문제가있었으나 재업로드로 해결할 수 있었으므로 크리티컬한 문제는 아니었다.</li>
+</ul>
+</li>
+<li>대회는 일별로 제출 한도가 있다. 때문에 뒤늦게 하려고한들 팀원들이 몰릴테고 나에게 돌아오는 기회는 작아지게된다<ul>
+<li>때문에 피쳐 엔지니어링에 들어가기전에 한사이클을 돌릴 수 있도록 모델까지의 파이프라인을 생성해야한다</li>
+<li>그럼 서버는 파이프라인으로 매번 돌아가고 난 그사이에 피쳐 엔지니어링을 통해 다음 타스크를 머신에 부여할 수 있다.</li>
+</ul>
+</li>
+<li>주최측에서 제공하는 서버는 <strong>nvidia RTX3090</strong> 을 포함하고있었다.<ul>
+<li><code class="span">nvidia-smi</code> 는 설치되어 있었으나 <code class="span">nvcc</code> 명령어가 없어 추가 설정을 해야 gpu 를 활용할 수 있었다.<ul>
+<li>이런 설정도 주최측의 의도인건가?</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="협업">협업</h3>
+<ul>
+<li>팀바팀이지만 우리 팀에 능력자는 없었다. 학부때 경험자는 있었다.</li>
+<li>특별한 리더쉽이 없는 상태에서 스크럼은 유야무야되어 5일동안 2,3번 정도 초기에 진행되었다.<ul>
+<li>소통이 별로 없다보니 서로 공유하거나 이런 것이 제한되었다.</li>
+</ul>
+</li>
+<li><a href="git">git</a> 이 활용되기 어려워서 파일들은 주로 <a href="slack">slack</a> 을 통해 전달되었다<ul>
+<li>팀원들의 경험</li>
+<li><a href="jupyter-notebook">jupyter-notebook</a> 이 실행 결과를 포함하는 포맷이어서 생기는 문제</li>
+</ul>
+</li>
+<li>개발 환경<ul>
+<li>os 부터 시작해서 모두 각자 다른환경을 가지고 있고 이걸 통합하지 못함으로 인해서 로컬 실행이 안되는 분도 있었다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="코드">코드</h3>
+<ul>
+<li>jupyter-notebook 을 통해 모든 것을 진행하게 되면 스파게티 코드와 같은 경험을 하게된다<ul>
+<li>이 것이 이분야의 일반적인 경험인지 모르겟으나 나로썬 집중하기 어렵고 비효율이 집중을 흐리게했다.<ul>
+<li>너무 길다, 마킹을 위해서는 중간 중간을 <code class="span">markdown</code> 으로 헤더를 남겨서 IDE 기능을 통해서 이동해야한다</li>
+<li>수정을 어디했는지를 잘 모르니 어디서 부터 다시 시작해야할지 헷갈린다</li>
+<li><code class="span">stateful</code> 한 방식의 코드가 셀별로 사용되다가 어디까지 실행되었는지 잃은경우 다시 시작한다</li>
+</ul>
+</li>
+<li>이러한 것들은 이런 프로젝트의 프로세스가 체화되면 나아질 수 있을 것 같다</li>
+<li>개발자가 가지는 모듈화라는 관점에서는 좀 어려운 면이 있었다</li>
+<li><code class="span">vscode</code> 는 좀 나은 것 같긴한데 <code class="span">pycharm</code> + <code class="span">vim</code> 의 조합은 최악이었다. 버그투성이고 커서가 튀어서 집중하기가 어려웠다.</li>
+</ul>
+</li>
+</ul>
+<h3 id="경험">경험</h3>
+<ul>
+<li>각개 격파를 하는 중에 <a href="chatgpt">chatgpt</a> 와의 심도깊은 대화를 통해 많은 것을 깨달았으나 이미 늦었다.</li>
+<li>데이터 분석도 실습없이 눈으로 보고 온 것들이 지금와서 발목을 잡는다<ul>
+<li>실습하고왔어도 어차피 같은 상황이었을 것 같긴한다</li>
+<li>어차피 익숙해지는데는 시간이 걸린다</li>
+<li>프로젝트가 시작되기 전에 눈으로 보는 수준으론 어렵고 손으로 정리하면서 이해의 수준을 끌어 올려두면 도움이 될 것</li>
+</ul>
+</li>
+<li>프로젝트를 진행하면서 필요한 task는 순서가 분명히 존재하니 이를 체화해야한다.<ul>
+<li>효율성 때문, 결측치를 먼저 보정한뒤에 그래프를 본다 등</li>
+</ul>
+</li>
+<li>jupyter-notebook <ul>
+<li><input disabled="" type="checkbox"> jupyter-notebook 의 결과에 대한 커밋을 strip 하는 방식으로 진행해야할지 확인이 필요하다<ul>
+<li><input disabled="" type="checkbox"> diff 툴도 찾아본다</li>
+</ul>
+</li>
+<li>한 파일이 너무 길어지면 파일 관리가 어려워지는 것은 매 한가지인 것 같다<ul>
+<li>그러나 캐글등 모들 플랫폼에서 원파일로 정리가 되어있다.<ul>
+<li><input disabled="" type="checkbox"> 정리만 한 파일로 한걸가?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>하이퍼파라메터 튜닝등 time-consuming 한 작업을 하기위해 <code class="span">py</code> 파일이 편리할 것 <ul>
+<li><a href="tmux">tmux</a> 와 같은 가상 세션으로 집전기세는 보존</li>
+</ul>
+</li>
+<li>아무래도 eda 나 피쳐 셀렉션등의 결과를 스탭단위로 저장하고 다음 파이프라인(파일)로 가는 형태로 설계하는게 좋을것이라 생각된다</li>
+</ul>
+</li>
+</ul>
+<h3 id="정리">정리</h3>
+<h4 id="작업-순서를-지켜야한다">작업 순서를 지켜야한다</h4>
+<ul>
+<li>특히 처음에는 어떤 것을 할지 떠오르지 않고 여러 검색결과나 다른 사람들의 작업을 물을 보다보면 점점 더 헷갈릴 수 있으니 순서를 체화해서 진행한다</li>
+</ul>
+<h5 id="데이터-전처리">데이터 전처리</h5>
+<blockquote><p>데이터 확인후, 이상 데이터부터 처리후에 엔코딩 -&gt; 변수생성, 선택으로 간다</p></blockquote><ul>
+<li><input disabled="" type="checkbox"> <a href="@todo">@todo</a> 엔코딩이 왜 먼저인지는 추후 찾아보자</li>
+</ul>
+<ol>
+<li>EDA</li>
+<li>결측치 제거</li>
+<li>이상치 제거</li>
+<li>카테고리 변수 엔코딩</li>
+<li>연속형 변수 엔코딩</li>
+<li>파생 변수 생성</li>
+<li>변수 선택</li>
+</ol>
+<h5 id="모델-선택">모델 선택</h5>
+<blockquote><p>이 부분 부터는 컴퓨터와 페어가 가능하다, 동시에 일을 처리하는 것이 중요</p></blockquote><ul>
+<li>적합한 모델을 생성</li>
+<li>하이퍼 파라메터 생성</li>
+</ul>
+<h5 id="학습-평가">학습 평가</h5>
+<ul>
+<li>데이터 셋 분할</li>
+<li>모델 성능 측정</li>
+</ul>
+<h4 id="발표-피드백">발표 피드백</h4>
+<ul>
+<li>김현우 강사</li>
+<li>test set 조건 부터 확인<ul>
+<li>기간등<ul>
+<li>타겟 기간이 명확하기 때문에, 타임시리즈 스플릿 사용이 명확하고 점수가 낮다면 다른 부분을 찾아봐야한다</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>scale 은 트리모델에서는 관련이 없음</li>
+<li>catboost 가 카테고리 관련성이 큰 경우 힘을 발휘할 수 있다.</li>
+<li>결측치는 트리계열에서는 드랍하지않아도 알아서 우선순위가 낮아진다는듯?</li>
+<li>구별 -&gt; 평균값을 기준으로 라벨링 한 팀들이 좀 있음</li>
+<li>feature importance, lightgbm 기준<ul>
+<li><input disabled="" type="checkbox"> option 확인할 것<ul>
+<li>개인</li>
+<li>split</li>
+</ul>
+</li>
+<li>변수 중요도는 어떤 로직(옵션, 알고리즘) 사용에 따라 달라지니 함께 분석해야한다</li>
+</ul>
+</li>
+<li>개발환경<ul>
+<li>로컬 실험 환경을 맞춰줘야한다<ul>
+<li>valid set 결정을 함께해서 파일로 공유하며 좋다</li>
+</ul>
+</li>
+<li>가상환경 맞추기</li>
+</ul>
+</li>
+<li>하이퍼파라메터 튜닝<ul>
+<li><code class="span">n_estimator</code> 는 10만등 크게 고정하고 early stopping 으로 조절하는게 일반적</li>
+</ul>
+</li>
+<li>앙상블<ul>
+<li>동일한 부스팅계열이라던가하는경우 성능이 떨어지긴한다</li>
+</ul>
+</li>
+<li>시계열데이터인지 아니면 좌표게임인지 판단이 다르다, 지형영향을 더 많이 받는다고도 볼 수 있기 때문</li>
+</ul>
+<h5 id="리뷰">리뷰</h5>
+<ul>
+<li>목표<ul>
+<li>tabluar 데이터를 기반으로 머신러닝 프로세스에 대한 경험<ul>
+<li>결측, 이상데이터 처리</li>
+<li>모델 선택</li>
+<li>데이터셋 분할, 이게 1번<ul>
+<li>이게 아마도 제일 중요하다</li>
+<li>valid, test 셋 점수 차이가 많이 나는 경우 상위랭커는 해당 대회 참여를 잘 안함</li>
+</ul>
+</li>
+<li>하이퍼파라메터 튜닝<ul>
+<li>모델별로 중요변수는 정해져있다</li>
+<li>lightgbm 인 경우<ul>
+<li>learning rate</li>
+<li>max_depth, num_leaves, total_leaves<ul>
+<li>over, under fitting 방지를 위한</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>이상거래<ul>
+<li>분양가와 실거래가가 혼재되어있는 경우</li>
+<li>실거래가 찍혔으나 실제 거래는 되지 않은 경우</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>대회의 어려운점<ul>
+<li>부동산은 불편, 하지만 외부가치가 변한다<ul>
+<li>지하철역이 어느시점에 생김</li>
+</ul>
+</li>
+<li>표현되지 않는 데이터<ul>
+<li>오션뷰</li>
+<li>팬트하우스</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>강사의 직접 후기<ul>
+<li>결측치, 카테고리 빈값 채우기</li>
+<li>stage1 timeseries 검증, 크기랑 <em>월수(3달)을 맞춰준다</em><ul>
+<li>stage2 풀데이터로 다시 훈련 <ul>
+<li>최근 3개월이 가장중요한데 해당 데이터가 valid 셋으로 빠진것을 다시 충전하기위해</li>
+<li>stage1 의 하이퍼파라메터를 그대로 사용</li>
+</ul>
+</li>
+<li>결측치 부터 다시 채우기 사이클</li>
+</ul>
+</li>
+<li>문제의식<ul>
+<li>validation, leader board rmse 차이가 크다</li>
+<li>예측 실패 이유<ul>
+<li>학습에서 못 본 데이터</li>
+<li>학습에 있으나 거래된지 오래된 경우<ul>
+<li>최근 거래를 기반으로 평균값 조치?</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>결측치<ul>
+<li>좌표가 결측치인 경우 오차가 심한지 비교</li>
+</ul>
+</li>
+<li>public / private<ul>
+<li>15000 / 11000</li>
+</ul>
+</li>
+<li>시간없어서 실패한 시도<ul>
+<li>네이버 부동산, 강변, 층 정보등 크롤링, 시간 문제로 실패</li>
+<li>서로다른 모델들, vision, text + nn<ul>
+<li>image -&gt; image encoder -&gt; extract image features -&gt; feature imbedding -&gt; feature<ul>
+<li>너무 크면 PCA 진행</li>
+</ul>
+</li>
+<li>자연어 -&gt; 텍스트 임베딩 -&gt; 피쳐화</li>
+<li>nn, lightgbm 은 차이가 있으나 참고</li>
+</ul>
+</li>
+<li>고가, 저가, 지역별 분할 후 앙상블</li>
+</ul>
+</li>
+<li>Q&amp;A<ul>
+<li>없어진 아파트 같은 경우면 제거한다</li>
+<li>근처 직전거래가 가격을 많이 변영하기 때문에 잘 활용하며 좋을 것 같다 -&gt; 오버피팅이 심해서 주의해야했다</li>
+<li>슈로 레이블링이 왜 금지인가?<ul>
+<li>미래 데이터를 활용한 예측의 경우 데이터 리키지 문제로 인해서 금지되는 경우되는 경우가 있다</li>
+</ul>
+</li>
+<li>직전변화율을 추적하는게 의미있겠나?<ul>
+<li>가격자체보다 더 의미가 있을 것 같다</li>
+</ul>
+</li>
+<li>리더보드 점수가 안 오를 것 같을 때<ul>
+<li>금메달은 둘다해야한다는 듯, 팀이면 나눠서 진행해도 좋다, 멘탈 관리해라<ul>
+<li><input disabled="" type="checkbox"> 디테일 조정하냐</li>
+<li><input disabled="" type="checkbox"> 파괴적인 방법을 시도하냐</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="결론">결론</h4>
+<ul>
+<li>데이터 전처리부터 학습평가까지 진행하면서 좋고 나쁨을 테스트할 수 있도록 파이프라인을 구성해서 서버를 쉬지 않고 돌리도록 한다</li>
+<li>데이터 분석을 위해서 jupyter 를 쓰되 중간중간 결과를 출력해서 여러 파일로 나눠서하는 것이 유연성이 높을 것 같다<ul>
+<li><a href="pycharm">pycharm</a> 기준으로 에러가 너무 심해서 중간중간에 의도치 않은 영역이 수정될 수 있고 변경 추적이 어렵기 때문</li>
+</ul>
+</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="upstage-ai-lab">upstage-ai-lab</a></li>
+<li><a href="upstage-ai-lab-day-28">upstage-ai-lab-day-28</a></li>
+<li><a href="upstage-ai-lab-day-48">upstage-ai-lab-day-48</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/d372d5b\n","className":"bg-white text-black","children":"d372d5b"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/upstage-ai-lab-day-43.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/upstage-ai-lab-day-43.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/upstage-ai-lab-day-43.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"upstage-ai-lab-day-43","name":"upstage-ai-lab-day-43","val":10},{"id":"git","name":"git","val":44},{"id":"slack","name":"slack","val":4},{"id":"jupyter-notebook","name":"jupyter-notebook","val":4},{"id":"chatgpt","name":"chatgpt","val":5},{"id":"tmux","name":"tmux","val":7},{"id":"@todo","name":"@todo","val":24},{"id":"pycharm","name":"pycharm","val":13},{"id":"upstage-ai-lab","name":"upstage-ai-lab","val":20},{"id":"upstage-ai-lab-day-28","name":"upstage-ai-lab-day-28","val":3},{"id":"upstage-ai-lab-day-48","name":"upstage-ai-lab-day-48","val":12},{"id":"diary/2024-12-31","name":"diary/2024-12-31","val":441}],"links":[{"source":"upstage-ai-lab-day-43","target":"git"},{"source":"upstage-ai-lab-day-43","target":"slack"},{"source":"upstage-ai-lab-day-43","target":"jupyter-notebook"},{"source":"upstage-ai-lab-day-43","target":"chatgpt"},{"source":"upstage-ai-lab-day-43","target":"tmux"},{"source":"upstage-ai-lab-day-43","target":"@todo"},{"source":"upstage-ai-lab-day-43","target":"pycharm"},{"source":"upstage-ai-lab-day-43","target":"upstage-ai-lab"},{"source":"upstage-ai-lab-day-43","target":"upstage-ai-lab-day-28"},{"source":"upstage-ai-lab-day-43","target":"upstage-ai-lab-day-48"},{"source":"upstage-ai-lab-day-28","target":"upstage-ai-lab-day-43"},{"source":"upstage-ai-lab-day-48","target":"upstage-ai-lab-day-43"},{"source":"upstage-ai-lab","target":"upstage-ai-lab-day-43"},{"source":"diary/2024-12-31","target":"upstage-ai-lab-day-43"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","upstage-ai-lab-day-43",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/upstage-ai-lab-day-43","children":[["$","span",null,{"className":"underline","children":"upstage-ai-lab-day-43"}],["$","sup",null,{"children":10}]]}]}],["$","span","git",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/git","children":[["$","span",null,{"className":"underline","children":"git"}],["$","sup",null,{"children":44}]]}]}],["$","span","slack",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/slack","children":[["$","span",null,{"className":"underline","children":"slack"}],["$","sup",null,{"children":4}]]}]}],["$","span","jupyter-notebook",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/jupyter-notebook","children":[["$","span",null,{"className":"underline","children":"jupyter-notebook"}],["$","sup",null,{"children":4}]]}]}],["$","span","chatgpt",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/chatgpt","children":[["$","span",null,{"className":"underline","children":"chatgpt"}],["$","sup",null,{"children":5}]]}]}],["$","span","tmux",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/tmux","children":[["$","span",null,{"className":"underline","children":"tmux"}],["$","sup",null,{"children":7}]]}]}],["$","span","@todo",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/@todo","children":[["$","span",null,{"className":"underline","children":"@todo"}],["$","sup",null,{"children":24}]]}]}],["$","span","pycharm",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/pycharm","children":[["$","span",null,{"className":"underline","children":"pycharm"}],["$","sup",null,{"children":13}]]}]}],["$","span","upstage-ai-lab",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/upstage-ai-lab","children":[["$","span",null,{"className":"underline","children":"upstage-ai-lab"}],["$","sup",null,{"children":20}]]}]}],["$","span","upstage-ai-lab-day-28",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/upstage-ai-lab-day-28","children":[["$","span",null,{"className":"underline","children":"upstage-ai-lab-day-28"}],["$","sup",null,{"children":3}]]}]}],["$","span","upstage-ai-lab-day-48",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/upstage-ai-lab-day-48","children":[["$","span",null,{"className":"underline","children":"upstage-ai-lab-day-48"}],["$","sup",null,{"children":12}]]}]}],["$","span","diary/2024-12-31",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-12-31","children":[["$","span",null,{"className":"underline","children":"diary/2024-12-31"}],["$","sup",null,{"children":441}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","upstage-ai-lab-day-43",{"className":"pl-0","children":["$","a",null,{"href":"#upstage-ai-lab-day-43","children":"upstage-ai-lab-day-43"}]}],["$","div","2주간의-수업",{"className":"pl-2","children":["$","a",null,{"href":"#2주간의-수업","children":"2주간의 수업"}]}],["$","div","대회-house-price-prediction",{"className":"pl-2","children":["$","a",null,{"href":"#대회-house-price-prediction","children":"대회: House Price Prediction"}]}],["$","div","대회",{"className":"pl-4","children":["$","a",null,{"href":"#대회","children":"대회"}]}],["$","div","협업",{"className":"pl-4","children":["$","a",null,{"href":"#협업","children":"협업"}]}],["$","div","코드",{"className":"pl-4","children":["$","a",null,{"href":"#코드","children":"코드"}]}],["$","div","경험",{"className":"pl-4","children":["$","a",null,{"href":"#경험","children":"경험"}]}],["$","div","정리",{"className":"pl-4","children":["$","a",null,{"href":"#정리","children":"정리"}]}],["$","div","작업-순서를-지켜야한다",{"className":"pl-6","children":["$","a",null,{"href":"#작업-순서를-지켜야한다","children":"작업 순서를 지켜야한다"}]}],["$","div","데이터-전처리",{"className":"pl-8","children":["$","a",null,{"href":"#데이터-전처리","children":"데이터 전처리"}]}],["$","div","모델-선택",{"className":"pl-8","children":["$","a",null,{"href":"#모델-선택","children":"모델 선택"}]}],["$","div","학습-평가",{"className":"pl-8","children":["$","a",null,{"href":"#학습-평가","children":"학습 평가"}]}],["$","div","발표-피드백",{"className":"pl-6","children":["$","a",null,{"href":"#발표-피드백","children":"발표 피드백"}]}],["$","div","리뷰",{"className":"pl-8","children":["$","a",null,{"href":"#리뷰","children":"리뷰"}]}],["$","div","결론",{"className":"pl-6","children":["$","a",null,{"href":"#결론","children":"결론"}]}],["$","div","link",{"className":"pl-2","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:T2a0b,- machine learning basic
+- machine learning advanced
+- 캐글, 대회 관련 특강
+- **House Price Prediction** 경진대회
+
+## 2주간의 수업
+- 기본이 없는 경우 수업을 들으면서 무엇에 쓰이는지를 상상하기 어렵기 때문에 효율이 떨어진다
+- 때문에 졸리게 되는데 진도를 뺀다는 생각으로 들어봤자 졸면서 해봤자 기억에 남지 않는다.
+- *learn by doing* 이라고 오히려 실습, 혹은 실제 프로젝트를 들어가서야 *아! 그거* 하는 순간이 찾아오고 찾게된다.
+
+## 대회: House Price Prediction
+> 대회의 EDA 시도나 결과는 모두 유사할 수 밖에 없어, 개인적인 경험을 위주로 기록한다
+
+### 대회
+- 대회기간은 2주다
+- 2주는 한주는 수업을 들어야해서 입문자를 기준으로는 기간이 1주다
+- upstage 에서 주관하므로 https://stages.ai 를 통해 진행된다
+  - 한번은 제출 결과가 영원히 `pending` 에 빠지는 문제가있었으나 재업로드로 해결할 수 있었으므로 크리티컬한 문제는 아니었다.
+- 대회는 일별로 제출 한도가 있다. 때문에 뒤늦게 하려고한들 팀원들이 몰릴테고 나에게 돌아오는 기회는 작아지게된다
+  - 때문에 피쳐 엔지니어링에 들어가기전에 한사이클을 돌릴 수 있도록 모델까지의 파이프라인을 생성해야한다
+  - 그럼 서버는 파이프라인으로 매번 돌아가고 난 그사이에 피쳐 엔지니어링을 통해 다음 타스크를 머신에 부여할 수 있다.
+- 주최측에서 제공하는 서버는 **nvidia RTX3090** 을 포함하고있었다.
+  - `nvidia-smi` 는 설치되어 있었으나 `nvcc` 명령어가 없어 추가 설정을 해야 gpu 를 활용할 수 있었다.
+    - 이런 설정도 주최측의 의도인건가?
+
+### 협업
+- 팀바팀이지만 우리 팀에 능력자는 없었다. 학부때 경험자는 있었다.
+- 특별한 리더쉽이 없는 상태에서 스크럼은 유야무야되어 5일동안 2,3번 정도 초기에 진행되었다.
+  - 소통이 별로 없다보니 서로 공유하거나 이런 것이 제한되었다.
+- [[git]] 이 활용되기 어려워서 파일들은 주로 [[slack]] 을 통해 전달되었다
+  - 팀원들의 경험
+  - [[jupyter-notebook]] 이 실행 결과를 포함하는 포맷이어서 생기는 문제
+- 개발 환경
+  - os 부터 시작해서 모두 각자 다른환경을 가지고 있고 이걸 통합하지 못함으로 인해서 로컬 실행이 안되는 분도 있었다.
+
+### 코드
+- jupyter-notebook 을 통해 모든 것을 진행하게 되면 스파게티 코드와 같은 경험을 하게된다
+  - 이 것이 이분야의 일반적인 경험인지 모르겟으나 나로썬 집중하기 어렵고 비효율이 집중을 흐리게했다.
+    - 너무 길다, 마킹을 위해서는 중간 중간을 `markdown` 으로 헤더를 남겨서 IDE 기능을 통해서 이동해야한다
+    - 수정을 어디했는지를 잘 모르니 어디서 부터 다시 시작해야할지 헷갈린다
+    - `stateful` 한 방식의 코드가 셀별로 사용되다가 어디까지 실행되었는지 잃은경우 다시 시작한다
+  - 이러한 것들은 이런 프로젝트의 프로세스가 체화되면 나아질 수 있을 것 같다
+  - 개발자가 가지는 모듈화라는 관점에서는 좀 어려운 면이 있었다
+  - `vscode` 는 좀 나은 것 같긴한데 `pycharm` + `vim` 의 조합은 최악이었다. 버그투성이고 커서가 튀어서 집중하기가 어려웠다.
+
+### 경험
+- 각개 격파를 하는 중에 [[chatgpt]] 와의 심도깊은 대화를 통해 많은 것을 깨달았으나 이미 늦었다.
+- 데이터 분석도 실습없이 눈으로 보고 온 것들이 지금와서 발목을 잡는다
+  - 실습하고왔어도 어차피 같은 상황이었을 것 같긴한다
+  - 어차피 익숙해지는데는 시간이 걸린다
+  - 프로젝트가 시작되기 전에 눈으로 보는 수준으론 어렵고 손으로 정리하면서 이해의 수준을 끌어 올려두면 도움이 될 것
+- 프로젝트를 진행하면서 필요한 task는 순서가 분명히 존재하니 이를 체화해야한다.
+  - 효율성 때문, 결측치를 먼저 보정한뒤에 그래프를 본다 등
+- jupyter-notebook 
+  - [ ] jupyter-notebook 의 결과에 대한 커밋을 strip 하는 방식으로 진행해야할지 확인이 필요하다
+    - [ ] diff 툴도 찾아본다
+  - 한 파일이 너무 길어지면 파일 관리가 어려워지는 것은 매 한가지인 것 같다
+    - 그러나 캐글등 모들 플랫폼에서 원파일로 정리가 되어있다.
+      - [ ] 정리만 한 파일로 한걸가?
+  - 하이퍼파라메터 튜닝등 time-consuming 한 작업을 하기위해 `py` 파일이 편리할 것 
+    - [[tmux]] 와 같은 가상 세션으로 집전기세는 보존
+  - 아무래도 eda 나 피쳐 셀렉션등의 결과를 스탭단위로 저장하고 다음 파이프라인(파일)로 가는 형태로 설계하는게 좋을것이라 생각된다
+
+### 정리
+#### 작업 순서를 지켜야한다
+- 특히 처음에는 어떤 것을 할지 떠오르지 않고 여러 검색결과나 다른 사람들의 작업을 물을 보다보면 점점 더 헷갈릴 수 있으니 순서를 체화해서 진행한다
+
+##### 데이터 전처리
+> 데이터 확인후, 이상 데이터부터 처리후에 엔코딩 -> 변수생성, 선택으로 간다
+- [ ] [[@todo]] 엔코딩이 왜 먼저인지는 추후 찾아보자
+1. EDA
+2. 결측치 제거
+3. 이상치 제거
+4. 카테고리 변수 엔코딩
+5. 연속형 변수 엔코딩
+6. 파생 변수 생성
+7. 변수 선택
+
+##### 모델 선택
+> 이 부분 부터는 컴퓨터와 페어가 가능하다, 동시에 일을 처리하는 것이 중요
+- 적합한 모델을 생성
+- 하이퍼 파라메터 생성
+
+##### 학습 평가
+- 데이터 셋 분할
+- 모델 성능 측정
+
+#### 발표 피드백
+- 김현우 강사
+- test set 조건 부터 확인
+  - 기간등
+    - 타겟 기간이 명확하기 때문에, 타임시리즈 스플릿 사용이 명확하고 점수가 낮다면 다른 부분을 찾아봐야한다
+- scale 은 트리모델에서는 관련이 없음
+- catboost 가 카테고리 관련성이 큰 경우 힘을 발휘할 수 있다.
+- 결측치는 트리계열에서는 드랍하지않아도 알아서 우선순위가 낮아진다는듯?
+- 구별 -> 평균값을 기준으로 라벨링 한 팀들이 좀 있음
+- feature importance, lightgbm 기준
+  - [ ] option 확인할 것
+    - 개인
+    - split
+  - 변수 중요도는 어떤 로직(옵션, 알고리즘) 사용에 따라 달라지니 함께 분석해야한다
+- 개발환경
+  - 로컬 실험 환경을 맞춰줘야한다
+    - valid set 결정을 함께해서 파일로 공유하며 좋다
+  - 가상환경 맞추기
+- 하이퍼파라메터 튜닝
+  - `n_estimator` 는 10만등 크게 고정하고 early stopping 으로 조절하는게 일반적
+- 앙상블
+  - 동일한 부스팅계열이라던가하는경우 성능이 떨어지긴한다
+- 시계열데이터인지 아니면 좌표게임인지 판단이 다르다, 지형영향을 더 많이 받는다고도 볼 수 있기 때문
+
+##### 리뷰
+- 목표
+  - tabluar 데이터를 기반으로 머신러닝 프로세스에 대한 경험
+    - 결측, 이상데이터 처리
+    - 모델 선택
+    - 데이터셋 분할, 이게 1번
+      - 이게 아마도 제일 중요하다
+      - valid, test 셋 점수 차이가 많이 나는 경우 상위랭커는 해당 대회 참여를 잘 안함
+    - 하이퍼파라메터 튜닝
+      - 모델별로 중요변수는 정해져있다
+      - lightgbm 인 경우
+        - learning rate
+        - max_depth, num_leaves, total_leaves
+          - over, under fitting 방지를 위한
+  - 이상거래
+    - 분양가와 실거래가가 혼재되어있는 경우
+    - 실거래가 찍혔으나 실제 거래는 되지 않은 경우
+- 대회의 어려운점
+  - 부동산은 불편, 하지만 외부가치가 변한다
+    - 지하철역이 어느시점에 생김
+  - 표현되지 않는 데이터
+    - 오션뷰
+    - 팬트하우스
+- 강사의 직접 후기
+  - 결측치, 카테고리 빈값 채우기
+  - stage1 timeseries 검증, 크기랑 *월수(3달)을 맞춰준다*
+    - stage2 풀데이터로 다시 훈련 
+      - 최근 3개월이 가장중요한데 해당 데이터가 valid 셋으로 빠진것을 다시 충전하기위해
+      - stage1 의 하이퍼파라메터를 그대로 사용
+    - 결측치 부터 다시 채우기 사이클
+  - 문제의식
+    - validation, leader board rmse 차이가 크다
+    - 예측 실패 이유
+      - 학습에서 못 본 데이터
+      - 학습에 있으나 거래된지 오래된 경우
+          - 최근 거래를 기반으로 평균값 조치?
+  - 결측치
+    - 좌표가 결측치인 경우 오차가 심한지 비교
+  - public / private
+    - 15000 / 11000
+  - 시간없어서 실패한 시도
+    - 네이버 부동산, 강변, 층 정보등 크롤링, 시간 문제로 실패
+    - 서로다른 모델들, vision, text + nn
+      - image -> image encoder -> extract image features -> feature imbedding -> feature
+        - 너무 크면 PCA 진행
+      - 자연어 -> 텍스트 임베딩 -> 피쳐화
+      - nn, lightgbm 은 차이가 있으나 참고
+    - 고가, 저가, 지역별 분할 후 앙상블
+  - Q&A
+    - 없어진 아파트 같은 경우면 제거한다
+    - 근처 직전거래가 가격을 많이 변영하기 때문에 잘 활용하며 좋을 것 같다 -> 오버피팅이 심해서 주의해야했다
+    - 슈로 레이블링이 왜 금지인가?
+      - 미래 데이터를 활용한 예측의 경우 데이터 리키지 문제로 인해서 금지되는 경우되는 경우가 있다
+    - 직전변화율을 추적하는게 의미있겠나?
+      - 가격자체보다 더 의미가 있을 것 같다
+    - 리더보드 점수가 안 오를 것 같을 때
+      - 금메달은 둘다해야한다는 듯, 팀이면 나눠서 진행해도 좋다, 멘탈 관리해라
+        - [ ] 디테일 조정하냐
+        - [ ] 파괴적인 방법을 시도하냐
+
+#### 결론
+- 데이터 전처리부터 학습평가까지 진행하면서 좋고 나쁨을 테스트할 수 있도록 파이프라인을 구성해서 서버를 쉬지 않고 돌리도록 한다
+- 데이터 분석을 위해서 jupyter 를 쓰되 중간중간 결과를 출력해서 여러 파일로 나눠서하는 것이 유연성이 높을 것 같다
+  - [[pycharm]] 기준으로 에러가 너무 심해서 중간중간에 의도치 않은 영역이 수정될 수 있고 변경 추적이 어렵기 때문
+
+## link
+- [[upstage-ai-lab]]
+- [[upstage-ai-lab-day-28]]
+- [[upstage-ai-lab-day-48]]
+12:T2a0b,- machine learning basic
+- machine learning advanced
+- 캐글, 대회 관련 특강
+- **House Price Prediction** 경진대회
+
+## 2주간의 수업
+- 기본이 없는 경우 수업을 들으면서 무엇에 쓰이는지를 상상하기 어렵기 때문에 효율이 떨어진다
+- 때문에 졸리게 되는데 진도를 뺀다는 생각으로 들어봤자 졸면서 해봤자 기억에 남지 않는다.
+- *learn by doing* 이라고 오히려 실습, 혹은 실제 프로젝트를 들어가서야 *아! 그거* 하는 순간이 찾아오고 찾게된다.
+
+## 대회: House Price Prediction
+> 대회의 EDA 시도나 결과는 모두 유사할 수 밖에 없어, 개인적인 경험을 위주로 기록한다
+
+### 대회
+- 대회기간은 2주다
+- 2주는 한주는 수업을 들어야해서 입문자를 기준으로는 기간이 1주다
+- upstage 에서 주관하므로 https://stages.ai 를 통해 진행된다
+  - 한번은 제출 결과가 영원히 `pending` 에 빠지는 문제가있었으나 재업로드로 해결할 수 있었으므로 크리티컬한 문제는 아니었다.
+- 대회는 일별로 제출 한도가 있다. 때문에 뒤늦게 하려고한들 팀원들이 몰릴테고 나에게 돌아오는 기회는 작아지게된다
+  - 때문에 피쳐 엔지니어링에 들어가기전에 한사이클을 돌릴 수 있도록 모델까지의 파이프라인을 생성해야한다
+  - 그럼 서버는 파이프라인으로 매번 돌아가고 난 그사이에 피쳐 엔지니어링을 통해 다음 타스크를 머신에 부여할 수 있다.
+- 주최측에서 제공하는 서버는 **nvidia RTX3090** 을 포함하고있었다.
+  - `nvidia-smi` 는 설치되어 있었으나 `nvcc` 명령어가 없어 추가 설정을 해야 gpu 를 활용할 수 있었다.
+    - 이런 설정도 주최측의 의도인건가?
+
+### 협업
+- 팀바팀이지만 우리 팀에 능력자는 없었다. 학부때 경험자는 있었다.
+- 특별한 리더쉽이 없는 상태에서 스크럼은 유야무야되어 5일동안 2,3번 정도 초기에 진행되었다.
+  - 소통이 별로 없다보니 서로 공유하거나 이런 것이 제한되었다.
+- [[git]] 이 활용되기 어려워서 파일들은 주로 [[slack]] 을 통해 전달되었다
+  - 팀원들의 경험
+  - [[jupyter-notebook]] 이 실행 결과를 포함하는 포맷이어서 생기는 문제
+- 개발 환경
+  - os 부터 시작해서 모두 각자 다른환경을 가지고 있고 이걸 통합하지 못함으로 인해서 로컬 실행이 안되는 분도 있었다.
+
+### 코드
+- jupyter-notebook 을 통해 모든 것을 진행하게 되면 스파게티 코드와 같은 경험을 하게된다
+  - 이 것이 이분야의 일반적인 경험인지 모르겟으나 나로썬 집중하기 어렵고 비효율이 집중을 흐리게했다.
+    - 너무 길다, 마킹을 위해서는 중간 중간을 `markdown` 으로 헤더를 남겨서 IDE 기능을 통해서 이동해야한다
+    - 수정을 어디했는지를 잘 모르니 어디서 부터 다시 시작해야할지 헷갈린다
+    - `stateful` 한 방식의 코드가 셀별로 사용되다가 어디까지 실행되었는지 잃은경우 다시 시작한다
+  - 이러한 것들은 이런 프로젝트의 프로세스가 체화되면 나아질 수 있을 것 같다
+  - 개발자가 가지는 모듈화라는 관점에서는 좀 어려운 면이 있었다
+  - `vscode` 는 좀 나은 것 같긴한데 `pycharm` + `vim` 의 조합은 최악이었다. 버그투성이고 커서가 튀어서 집중하기가 어려웠다.
+
+### 경험
+- 각개 격파를 하는 중에 [[chatgpt]] 와의 심도깊은 대화를 통해 많은 것을 깨달았으나 이미 늦었다.
+- 데이터 분석도 실습없이 눈으로 보고 온 것들이 지금와서 발목을 잡는다
+  - 실습하고왔어도 어차피 같은 상황이었을 것 같긴한다
+  - 어차피 익숙해지는데는 시간이 걸린다
+  - 프로젝트가 시작되기 전에 눈으로 보는 수준으론 어렵고 손으로 정리하면서 이해의 수준을 끌어 올려두면 도움이 될 것
+- 프로젝트를 진행하면서 필요한 task는 순서가 분명히 존재하니 이를 체화해야한다.
+  - 효율성 때문, 결측치를 먼저 보정한뒤에 그래프를 본다 등
+- jupyter-notebook 
+  - [ ] jupyter-notebook 의 결과에 대한 커밋을 strip 하는 방식으로 진행해야할지 확인이 필요하다
+    - [ ] diff 툴도 찾아본다
+  - 한 파일이 너무 길어지면 파일 관리가 어려워지는 것은 매 한가지인 것 같다
+    - 그러나 캐글등 모들 플랫폼에서 원파일로 정리가 되어있다.
+      - [ ] 정리만 한 파일로 한걸가?
+  - 하이퍼파라메터 튜닝등 time-consuming 한 작업을 하기위해 `py` 파일이 편리할 것 
+    - [[tmux]] 와 같은 가상 세션으로 집전기세는 보존
+  - 아무래도 eda 나 피쳐 셀렉션등의 결과를 스탭단위로 저장하고 다음 파이프라인(파일)로 가는 형태로 설계하는게 좋을것이라 생각된다
+
+### 정리
+#### 작업 순서를 지켜야한다
+- 특히 처음에는 어떤 것을 할지 떠오르지 않고 여러 검색결과나 다른 사람들의 작업을 물을 보다보면 점점 더 헷갈릴 수 있으니 순서를 체화해서 진행한다
+
+##### 데이터 전처리
+> 데이터 확인후, 이상 데이터부터 처리후에 엔코딩 -> 변수생성, 선택으로 간다
+- [ ] [[@todo]] 엔코딩이 왜 먼저인지는 추후 찾아보자
+1. EDA
+2. 결측치 제거
+3. 이상치 제거
+4. 카테고리 변수 엔코딩
+5. 연속형 변수 엔코딩
+6. 파생 변수 생성
+7. 변수 선택
+
+##### 모델 선택
+> 이 부분 부터는 컴퓨터와 페어가 가능하다, 동시에 일을 처리하는 것이 중요
+- 적합한 모델을 생성
+- 하이퍼 파라메터 생성
+
+##### 학습 평가
+- 데이터 셋 분할
+- 모델 성능 측정
+
+#### 발표 피드백
+- 김현우 강사
+- test set 조건 부터 확인
+  - 기간등
+    - 타겟 기간이 명확하기 때문에, 타임시리즈 스플릿 사용이 명확하고 점수가 낮다면 다른 부분을 찾아봐야한다
+- scale 은 트리모델에서는 관련이 없음
+- catboost 가 카테고리 관련성이 큰 경우 힘을 발휘할 수 있다.
+- 결측치는 트리계열에서는 드랍하지않아도 알아서 우선순위가 낮아진다는듯?
+- 구별 -> 평균값을 기준으로 라벨링 한 팀들이 좀 있음
+- feature importance, lightgbm 기준
+  - [ ] option 확인할 것
+    - 개인
+    - split
+  - 변수 중요도는 어떤 로직(옵션, 알고리즘) 사용에 따라 달라지니 함께 분석해야한다
+- 개발환경
+  - 로컬 실험 환경을 맞춰줘야한다
+    - valid set 결정을 함께해서 파일로 공유하며 좋다
+  - 가상환경 맞추기
+- 하이퍼파라메터 튜닝
+  - `n_estimator` 는 10만등 크게 고정하고 early stopping 으로 조절하는게 일반적
+- 앙상블
+  - 동일한 부스팅계열이라던가하는경우 성능이 떨어지긴한다
+- 시계열데이터인지 아니면 좌표게임인지 판단이 다르다, 지형영향을 더 많이 받는다고도 볼 수 있기 때문
+
+##### 리뷰
+- 목표
+  - tabluar 데이터를 기반으로 머신러닝 프로세스에 대한 경험
+    - 결측, 이상데이터 처리
+    - 모델 선택
+    - 데이터셋 분할, 이게 1번
+      - 이게 아마도 제일 중요하다
+      - valid, test 셋 점수 차이가 많이 나는 경우 상위랭커는 해당 대회 참여를 잘 안함
+    - 하이퍼파라메터 튜닝
+      - 모델별로 중요변수는 정해져있다
+      - lightgbm 인 경우
+        - learning rate
+        - max_depth, num_leaves, total_leaves
+          - over, under fitting 방지를 위한
+  - 이상거래
+    - 분양가와 실거래가가 혼재되어있는 경우
+    - 실거래가 찍혔으나 실제 거래는 되지 않은 경우
+- 대회의 어려운점
+  - 부동산은 불편, 하지만 외부가치가 변한다
+    - 지하철역이 어느시점에 생김
+  - 표현되지 않는 데이터
+    - 오션뷰
+    - 팬트하우스
+- 강사의 직접 후기
+  - 결측치, 카테고리 빈값 채우기
+  - stage1 timeseries 검증, 크기랑 *월수(3달)을 맞춰준다*
+    - stage2 풀데이터로 다시 훈련 
+      - 최근 3개월이 가장중요한데 해당 데이터가 valid 셋으로 빠진것을 다시 충전하기위해
+      - stage1 의 하이퍼파라메터를 그대로 사용
+    - 결측치 부터 다시 채우기 사이클
+  - 문제의식
+    - validation, leader board rmse 차이가 크다
+    - 예측 실패 이유
+      - 학습에서 못 본 데이터
+      - 학습에 있으나 거래된지 오래된 경우
+          - 최근 거래를 기반으로 평균값 조치?
+  - 결측치
+    - 좌표가 결측치인 경우 오차가 심한지 비교
+  - public / private
+    - 15000 / 11000
+  - 시간없어서 실패한 시도
+    - 네이버 부동산, 강변, 층 정보등 크롤링, 시간 문제로 실패
+    - 서로다른 모델들, vision, text + nn
+      - image -> image encoder -> extract image features -> feature imbedding -> feature
+        - 너무 크면 PCA 진행
+      - 자연어 -> 텍스트 임베딩 -> 피쳐화
+      - nn, lightgbm 은 차이가 있으나 참고
+    - 고가, 저가, 지역별 분할 후 앙상블
+  - Q&A
+    - 없어진 아파트 같은 경우면 제거한다
+    - 근처 직전거래가 가격을 많이 변영하기 때문에 잘 활용하며 좋을 것 같다 -> 오버피팅이 심해서 주의해야했다
+    - 슈로 레이블링이 왜 금지인가?
+      - 미래 데이터를 활용한 예측의 경우 데이터 리키지 문제로 인해서 금지되는 경우되는 경우가 있다
+    - 직전변화율을 추적하는게 의미있겠나?
+      - 가격자체보다 더 의미가 있을 것 같다
+    - 리더보드 점수가 안 오를 것 같을 때
+      - 금메달은 둘다해야한다는 듯, 팀이면 나눠서 진행해도 좋다, 멘탈 관리해라
+        - [ ] 디테일 조정하냐
+        - [ ] 파괴적인 방법을 시도하냐
+
+#### 결론
+- 데이터 전처리부터 학습평가까지 진행하면서 좋고 나쁨을 테스트할 수 있도록 파이프라인을 구성해서 서버를 쉬지 않고 돌리도록 한다
+- 데이터 분석을 위해서 jupyter 를 쓰되 중간중간 결과를 출력해서 여러 파일로 나눠서하는 것이 유연성이 높을 것 같다
+  - [[pycharm]] 기준으로 에러가 너무 심해서 중간중간에 의도치 않은 영역이 수정될 수 있고 변경 추적이 어렵기 때문
+
+## link
+- [[upstage-ai-lab]]
+- [[upstage-ai-lab-day-28]]
+- [[upstage-ai-lab-day-48]]
+13:T2a0b,- machine learning basic
+- machine learning advanced
+- 캐글, 대회 관련 특강
+- **House Price Prediction** 경진대회
+
+## 2주간의 수업
+- 기본이 없는 경우 수업을 들으면서 무엇에 쓰이는지를 상상하기 어렵기 때문에 효율이 떨어진다
+- 때문에 졸리게 되는데 진도를 뺀다는 생각으로 들어봤자 졸면서 해봤자 기억에 남지 않는다.
+- *learn by doing* 이라고 오히려 실습, 혹은 실제 프로젝트를 들어가서야 *아! 그거* 하는 순간이 찾아오고 찾게된다.
+
+## 대회: House Price Prediction
+> 대회의 EDA 시도나 결과는 모두 유사할 수 밖에 없어, 개인적인 경험을 위주로 기록한다
+
+### 대회
+- 대회기간은 2주다
+- 2주는 한주는 수업을 들어야해서 입문자를 기준으로는 기간이 1주다
+- upstage 에서 주관하므로 https://stages.ai 를 통해 진행된다
+  - 한번은 제출 결과가 영원히 `pending` 에 빠지는 문제가있었으나 재업로드로 해결할 수 있었으므로 크리티컬한 문제는 아니었다.
+- 대회는 일별로 제출 한도가 있다. 때문에 뒤늦게 하려고한들 팀원들이 몰릴테고 나에게 돌아오는 기회는 작아지게된다
+  - 때문에 피쳐 엔지니어링에 들어가기전에 한사이클을 돌릴 수 있도록 모델까지의 파이프라인을 생성해야한다
+  - 그럼 서버는 파이프라인으로 매번 돌아가고 난 그사이에 피쳐 엔지니어링을 통해 다음 타스크를 머신에 부여할 수 있다.
+- 주최측에서 제공하는 서버는 **nvidia RTX3090** 을 포함하고있었다.
+  - `nvidia-smi` 는 설치되어 있었으나 `nvcc` 명령어가 없어 추가 설정을 해야 gpu 를 활용할 수 있었다.
+    - 이런 설정도 주최측의 의도인건가?
+
+### 협업
+- 팀바팀이지만 우리 팀에 능력자는 없었다. 학부때 경험자는 있었다.
+- 특별한 리더쉽이 없는 상태에서 스크럼은 유야무야되어 5일동안 2,3번 정도 초기에 진행되었다.
+  - 소통이 별로 없다보니 서로 공유하거나 이런 것이 제한되었다.
+- [[git]] 이 활용되기 어려워서 파일들은 주로 [[slack]] 을 통해 전달되었다
+  - 팀원들의 경험
+  - [[jupyter-notebook]] 이 실행 결과를 포함하는 포맷이어서 생기는 문제
+- 개발 환경
+  - os 부터 시작해서 모두 각자 다른환경을 가지고 있고 이걸 통합하지 못함으로 인해서 로컬 실행이 안되는 분도 있었다.
+
+### 코드
+- jupyter-notebook 을 통해 모든 것을 진행하게 되면 스파게티 코드와 같은 경험을 하게된다
+  - 이 것이 이분야의 일반적인 경험인지 모르겟으나 나로썬 집중하기 어렵고 비효율이 집중을 흐리게했다.
+    - 너무 길다, 마킹을 위해서는 중간 중간을 `markdown` 으로 헤더를 남겨서 IDE 기능을 통해서 이동해야한다
+    - 수정을 어디했는지를 잘 모르니 어디서 부터 다시 시작해야할지 헷갈린다
+    - `stateful` 한 방식의 코드가 셀별로 사용되다가 어디까지 실행되었는지 잃은경우 다시 시작한다
+  - 이러한 것들은 이런 프로젝트의 프로세스가 체화되면 나아질 수 있을 것 같다
+  - 개발자가 가지는 모듈화라는 관점에서는 좀 어려운 면이 있었다
+  - `vscode` 는 좀 나은 것 같긴한데 `pycharm` + `vim` 의 조합은 최악이었다. 버그투성이고 커서가 튀어서 집중하기가 어려웠다.
+
+### 경험
+- 각개 격파를 하는 중에 [[chatgpt]] 와의 심도깊은 대화를 통해 많은 것을 깨달았으나 이미 늦었다.
+- 데이터 분석도 실습없이 눈으로 보고 온 것들이 지금와서 발목을 잡는다
+  - 실습하고왔어도 어차피 같은 상황이었을 것 같긴한다
+  - 어차피 익숙해지는데는 시간이 걸린다
+  - 프로젝트가 시작되기 전에 눈으로 보는 수준으론 어렵고 손으로 정리하면서 이해의 수준을 끌어 올려두면 도움이 될 것
+- 프로젝트를 진행하면서 필요한 task는 순서가 분명히 존재하니 이를 체화해야한다.
+  - 효율성 때문, 결측치를 먼저 보정한뒤에 그래프를 본다 등
+- jupyter-notebook 
+  - [ ] jupyter-notebook 의 결과에 대한 커밋을 strip 하는 방식으로 진행해야할지 확인이 필요하다
+    - [ ] diff 툴도 찾아본다
+  - 한 파일이 너무 길어지면 파일 관리가 어려워지는 것은 매 한가지인 것 같다
+    - 그러나 캐글등 모들 플랫폼에서 원파일로 정리가 되어있다.
+      - [ ] 정리만 한 파일로 한걸가?
+  - 하이퍼파라메터 튜닝등 time-consuming 한 작업을 하기위해 `py` 파일이 편리할 것 
+    - [[tmux]] 와 같은 가상 세션으로 집전기세는 보존
+  - 아무래도 eda 나 피쳐 셀렉션등의 결과를 스탭단위로 저장하고 다음 파이프라인(파일)로 가는 형태로 설계하는게 좋을것이라 생각된다
+
+### 정리
+#### 작업 순서를 지켜야한다
+- 특히 처음에는 어떤 것을 할지 떠오르지 않고 여러 검색결과나 다른 사람들의 작업을 물을 보다보면 점점 더 헷갈릴 수 있으니 순서를 체화해서 진행한다
+
+##### 데이터 전처리
+> 데이터 확인후, 이상 데이터부터 처리후에 엔코딩 -> 변수생성, 선택으로 간다
+- [ ] [[@todo]] 엔코딩이 왜 먼저인지는 추후 찾아보자
+1. EDA
+2. 결측치 제거
+3. 이상치 제거
+4. 카테고리 변수 엔코딩
+5. 연속형 변수 엔코딩
+6. 파생 변수 생성
+7. 변수 선택
+
+##### 모델 선택
+> 이 부분 부터는 컴퓨터와 페어가 가능하다, 동시에 일을 처리하는 것이 중요
+- 적합한 모델을 생성
+- 하이퍼 파라메터 생성
+
+##### 학습 평가
+- 데이터 셋 분할
+- 모델 성능 측정
+
+#### 발표 피드백
+- 김현우 강사
+- test set 조건 부터 확인
+  - 기간등
+    - 타겟 기간이 명확하기 때문에, 타임시리즈 스플릿 사용이 명확하고 점수가 낮다면 다른 부분을 찾아봐야한다
+- scale 은 트리모델에서는 관련이 없음
+- catboost 가 카테고리 관련성이 큰 경우 힘을 발휘할 수 있다.
+- 결측치는 트리계열에서는 드랍하지않아도 알아서 우선순위가 낮아진다는듯?
+- 구별 -> 평균값을 기준으로 라벨링 한 팀들이 좀 있음
+- feature importance, lightgbm 기준
+  - [ ] option 확인할 것
+    - 개인
+    - split
+  - 변수 중요도는 어떤 로직(옵션, 알고리즘) 사용에 따라 달라지니 함께 분석해야한다
+- 개발환경
+  - 로컬 실험 환경을 맞춰줘야한다
+    - valid set 결정을 함께해서 파일로 공유하며 좋다
+  - 가상환경 맞추기
+- 하이퍼파라메터 튜닝
+  - `n_estimator` 는 10만등 크게 고정하고 early stopping 으로 조절하는게 일반적
+- 앙상블
+  - 동일한 부스팅계열이라던가하는경우 성능이 떨어지긴한다
+- 시계열데이터인지 아니면 좌표게임인지 판단이 다르다, 지형영향을 더 많이 받는다고도 볼 수 있기 때문
+
+##### 리뷰
+- 목표
+  - tabluar 데이터를 기반으로 머신러닝 프로세스에 대한 경험
+    - 결측, 이상데이터 처리
+    - 모델 선택
+    - 데이터셋 분할, 이게 1번
+      - 이게 아마도 제일 중요하다
+      - valid, test 셋 점수 차이가 많이 나는 경우 상위랭커는 해당 대회 참여를 잘 안함
+    - 하이퍼파라메터 튜닝
+      - 모델별로 중요변수는 정해져있다
+      - lightgbm 인 경우
+        - learning rate
+        - max_depth, num_leaves, total_leaves
+          - over, under fitting 방지를 위한
+  - 이상거래
+    - 분양가와 실거래가가 혼재되어있는 경우
+    - 실거래가 찍혔으나 실제 거래는 되지 않은 경우
+- 대회의 어려운점
+  - 부동산은 불편, 하지만 외부가치가 변한다
+    - 지하철역이 어느시점에 생김
+  - 표현되지 않는 데이터
+    - 오션뷰
+    - 팬트하우스
+- 강사의 직접 후기
+  - 결측치, 카테고리 빈값 채우기
+  - stage1 timeseries 검증, 크기랑 *월수(3달)을 맞춰준다*
+    - stage2 풀데이터로 다시 훈련 
+      - 최근 3개월이 가장중요한데 해당 데이터가 valid 셋으로 빠진것을 다시 충전하기위해
+      - stage1 의 하이퍼파라메터를 그대로 사용
+    - 결측치 부터 다시 채우기 사이클
+  - 문제의식
+    - validation, leader board rmse 차이가 크다
+    - 예측 실패 이유
+      - 학습에서 못 본 데이터
+      - 학습에 있으나 거래된지 오래된 경우
+          - 최근 거래를 기반으로 평균값 조치?
+  - 결측치
+    - 좌표가 결측치인 경우 오차가 심한지 비교
+  - public / private
+    - 15000 / 11000
+  - 시간없어서 실패한 시도
+    - 네이버 부동산, 강변, 층 정보등 크롤링, 시간 문제로 실패
+    - 서로다른 모델들, vision, text + nn
+      - image -> image encoder -> extract image features -> feature imbedding -> feature
+        - 너무 크면 PCA 진행
+      - 자연어 -> 텍스트 임베딩 -> 피쳐화
+      - nn, lightgbm 은 차이가 있으나 참고
+    - 고가, 저가, 지역별 분할 후 앙상블
+  - Q&A
+    - 없어진 아파트 같은 경우면 제거한다
+    - 근처 직전거래가 가격을 많이 변영하기 때문에 잘 활용하며 좋을 것 같다 -> 오버피팅이 심해서 주의해야했다
+    - 슈로 레이블링이 왜 금지인가?
+      - 미래 데이터를 활용한 예측의 경우 데이터 리키지 문제로 인해서 금지되는 경우되는 경우가 있다
+    - 직전변화율을 추적하는게 의미있겠나?
+      - 가격자체보다 더 의미가 있을 것 같다
+    - 리더보드 점수가 안 오를 것 같을 때
+      - 금메달은 둘다해야한다는 듯, 팀이면 나눠서 진행해도 좋다, 멘탈 관리해라
+        - [ ] 디테일 조정하냐
+        - [ ] 파괴적인 방법을 시도하냐
+
+#### 결론
+- 데이터 전처리부터 학습평가까지 진행하면서 좋고 나쁨을 테스트할 수 있도록 파이프라인을 구성해서 서버를 쉬지 않고 돌리도록 한다
+- 데이터 분석을 위해서 jupyter 를 쓰되 중간중간 결과를 출력해서 여러 파일로 나눠서하는 것이 유연성이 높을 것 같다
+  - [[pycharm]] 기준으로 에러가 너무 심해서 중간중간에 의도치 않은 영역이 수정될 수 있고 변경 추적이 어렵기 때문
+
+## link
+- [[upstage-ai-lab]]
+- [[upstage-ai-lab-day-28]]
+- [[upstage-ai-lab-day-48]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# upstage-ai-lab-day-43"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# upstage-ai-lab-day-43"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/upstage-ai-lab-day-43"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# upstage-ai-lab-day-43"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null

@@ -1,0 +1,183 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-a049f68e7ea32292.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","lazygit","c"]
+0:["NWGjrf6yfehwcT4MYnrJK",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","lazygit","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"lazygit\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","lazygit","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/51cae7d269711d54.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:Td24,<h1 id="lazygit">lazygit</h1>
+<blockquote><p>tui git client</p></blockquote><ul>
+<li><a href="https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md" target="_blank">[URL] https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md</a></li>
+</ul>
+<ul>
+<li>내 설정 <a href="/public-wiki/diary/2023-10-26">[diary] diary:2023-10-26</a><ul>
+<li><a href="https://github.com/deptno/.config/blob/5789b6fef0075ee1104f45952906afe73ce99521/.config/lazygit/config.yml" target="_blank">[URL] https://github.com/deptno/.config/blob/5789b6fef0075ee1104f45952906afe73ce99521/.config/lazygit/config.yml</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="todo"><a href="@todo">@todo</a></h2>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> custom command<ul>
+<li><input checked="" disabled="" type="checkbox"> commits<ul>
+<li><input checked="" disabled="" type="checkbox"> filter by author + <a href="https://github.com/deptno/.config/commit/24db073d9781906b271b31e10a15f833472ed048" target="_blank">[URL] https://github.com/deptno/.config/commit/24db073d9781906b271b31e10a15f833472ed048</a></li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> <a href="gh">gh</a> 와 연동해서 브랜치 PR 열기<ul>
+<li><a href="https://github.com/deptno/.config/commit/a7216f3dc82dc50d7e42721568986a84ee6b3daa" target="_blank">[URL] https://github.com/deptno/.config/commit/a7216f3dc82dc50d7e42721568986a84ee6b3daa</a></li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> custom command 를 사용해서 깃헙 pr 열기 {base,head}<ul>
+<li><a href="https://github.com/deptno/.config/commit/9fc069dddbe1c1e23ab894ad7d680c5b5d219f09" target="_blank">[URL] https://github.com/deptno/.config/commit/9fc069dddbe1c1e23ab894ad7d680c5b5d219f09</a></li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> commit git show</li>
+</ul>
+</li>
+</ul>
+<h2 id="color-구분">color 구분</h2>
+<blockquote><p>green yellow red 등 색상은 테마에 따라 달라지니 참고</p></blockquote><ul>
+<li>commit 들이 green 으로 표현</li>
+<li><input checked="" disabled="" type="checkbox"> <del>main</del> 현재 브랜치(git.mainBranches 옵션에 의해 지정된)에 포함되지 않은 커밋은 yellow 로 표현되는 것으로 <em>추정</em>된다</li>
+<li>red 로 표시되는 커밋들은 아직 remote 에 push 되지 않은 커밋</li>
+</ul>
+<h2 id="custom-command">custom command</h2>
+<p><code class="span">:</code> 로 트리거 가능
+<code class="span">config.yml</code> 파일에서 생성하여 사용가능</p>
+<h3 id="해당-커밋이-있는-브랜치-리스트---checkout">해당 커밋이 있는 브랜치 리스트 -&gt; checkout</h3>
+<pre><code class="hljs language-sh">pbpaste | xargs -0 git branch --contains | fzf --<span class="hljs-built_in">bind</span> <span class="hljs-string">&#x27;enter:become(git switch $(echo {} | tr -d &quot;* &quot;))&#x27;</span> --header <span class="hljs-string">&quot;contains <span class="hljs-subst">$(pbpaste)</span>&quot;</span>
+</code></pre><ul>
+<li>commit 뷰에서 <code class="span">y</code>, <code class="span">&lt;c-y&gt;</code> 를 통해 해시 복사가 후 해당 커밋이 있는 브랜치 확인이 가능</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="golang">golang</a></li>
+<li><a href="git">git</a></li>
+<li><a href="tig">tig</a></li>
+<li><a href="fzf">fzf</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/d372d5b\n","className":"bg-white text-black","children":"d372d5b"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/lazygit.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/lazygit.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/lazygit.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"lazygit","name":"lazygit","val":7},{"id":"diary/2023-10-26","name":"diary/2023-10-26","val":2},{"id":"@todo","name":"@todo","val":24},{"id":"gh","name":"gh","val":11},{"id":"golang","name":"golang","val":1},{"id":"git","name":"git","val":44},{"id":"tig","name":"tig","val":1},{"id":"fzf","name":"fzf","val":4},{"id":"about-me","name":"about-me","val":60},{"id":"go","name":"go","val":2},{"id":"neovim-setup","name":"neovim-setup","val":37},{"id":"upstage-ai-lab-project-04","name":"upstage-ai-lab-project-04","val":31},{"id":"diary/2023-10-24","name":"diary/2023-10-24","val":3},{"id":"diary/2023-12-31","name":"diary/2023-12-31","val":93}],"links":[{"source":"lazygit","target":"diary/2023-10-26"},{"source":"lazygit","target":"@todo"},{"source":"lazygit","target":"gh"},{"source":"lazygit","target":"golang"},{"source":"lazygit","target":"git"},{"source":"lazygit","target":"tig"},{"source":"lazygit","target":"fzf"},{"source":"about-me","target":"lazygit"},{"source":"fzf","target":"lazygit"},{"source":"go","target":"lazygit"},{"source":"neovim-setup","target":"lazygit"},{"source":"neovim-setup","target":"lazygit"},{"source":"upstage-ai-lab-project-04","target":"lazygit"},{"source":"diary/2023-10-24","target":"lazygit"},{"source":"diary/2023-12-31","target":"lazygit"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","lazygit",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/lazygit","children":[["$","span",null,{"className":"underline","children":"lazygit"}],["$","sup",null,{"children":7}]]}]}],["$","span","diary/2023-10-26",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-10-26","children":[["$","span",null,{"className":"underline","children":"diary/2023-10-26"}],["$","sup",null,{"children":2}]]}]}],["$","span","@todo",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/@todo","children":[["$","span",null,{"className":"underline","children":"@todo"}],["$","sup",null,{"children":24}]]}]}],["$","span","gh",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/gh","children":[["$","span",null,{"className":"underline","children":"gh"}],["$","sup",null,{"children":11}]]}]}],["$","span","golang",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/golang","children":[["$","span",null,{"className":"underline","children":"golang"}],["$","sup",null,{"children":1}]]}]}],["$","span","git",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/git","children":[["$","span",null,{"className":"underline","children":"git"}],["$","sup",null,{"children":44}]]}]}],["$","span","tig",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/tig","children":[["$","span",null,{"className":"underline","children":"tig"}],["$","sup",null,{"children":1}]]}]}],["$","span","fzf",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/fzf","children":[["$","span",null,{"className":"underline","children":"fzf"}],["$","sup",null,{"children":4}]]}]}],["$","span","about-me",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/about-me","children":[["$","span",null,{"className":"underline","children":"about-me"}],["$","sup",null,{"children":60}]]}]}],["$","span","go",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/go","children":[["$","span",null,{"className":"underline","children":"go"}],["$","sup",null,{"children":2}]]}]}],["$","span","neovim-setup",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim-setup","children":[["$","span",null,{"className":"underline","children":"neovim-setup"}],["$","sup",null,{"children":37}]]}]}],["$","span","upstage-ai-lab-project-04",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/upstage-ai-lab-project-04","children":[["$","span",null,{"className":"underline","children":"upstage-ai-lab-project-04"}],["$","sup",null,{"children":31}]]}]}],["$","span","diary/2023-10-24",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-10-24","children":[["$","span",null,{"className":"underline","children":"diary/2023-10-24"}],["$","sup",null,{"children":3}]]}]}],["$","span","diary/2023-12-31",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-12-31","children":[["$","span",null,{"className":"underline","children":"diary/2023-12-31"}],["$","sup",null,{"children":93}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","lazygit",{"className":"pl-0","children":["$","a",null,{"href":"#lazygit","children":"lazygit"}]}],["$","div","todo",{"className":"pl-2","children":["$","a",null,{"href":"#todo","children":"@todo"}]}],["$","div","color-구분",{"className":"pl-2","children":["$","a",null,{"href":"#color-구분","children":"color 구분"}]}],["$","div","custom-command",{"className":"pl-2","children":["$","a",null,{"href":"#custom-command","children":"custom command"}]}],["$","div","해당-커밋이-있는-브랜치-리스트---checkout",{"className":"pl-4","children":["$","a",null,{"href":"#해당-커밋이-있는-브랜치-리스트---checkout","children":"해당 커밋이 있는 브랜치 리스트 -> checkout"}]}],["$","div","link",{"className":"pl-2","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:T60f,
+> tui git client
+
++ https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
+- 내 설정 [[diary:2023-10-26]]
+  + https://github.com/deptno/.config/blob/5789b6fef0075ee1104f45952906afe73ce99521/.config/lazygit/config.yml
+
+## [[@todo]]
+- [X] custom command
+  - [X] commits
+    - [X] filter by author + https://github.com/deptno/.config/commit/24db073d9781906b271b31e10a15f833472ed048
+  - [X] [[gh]] 와 연동해서 브랜치 PR 열기
+    + https://github.com/deptno/.config/commit/a7216f3dc82dc50d7e42721568986a84ee6b3daa
+  - [X] custom command 를 사용해서 깃헙 pr 열기 {base,head}
+    + https://github.com/deptno/.config/commit/9fc069dddbe1c1e23ab894ad7d680c5b5d219f09
+  - [ ] commit git show
+
+## color 구분
+> green yellow red 등 색상은 테마에 따라 달라지니 참고
+
+- commit 들이 green 으로 표현
+- [X] ~~main~~ 현재 브랜치(git.mainBranches 옵션에 의해 지정된)에 포함되지 않은 커밋은 yellow 로 표현되는 것으로 *추정*된다
+- red 로 표시되는 커밋들은 아직 remote 에 push 되지 않은 커밋
+
+## custom command
+`:` 로 트리거 가능
+`config.yml` 파일에서 생성하여 사용가능
+
+### 해당 커밋이 있는 브랜치 리스트 -> checkout
+```sh 
+pbpaste | xargs -0 git branch --contains | fzf --bind 'enter:become(git switch $(echo {} | tr -d "* "))' --header "contains $(pbpaste)"
+```
+- commit 뷰에서 `y`, `<c-y>` 를 통해 해시 복사가 후 해당 커밋이 있는 브랜치 확인이 가능
+
+## link
+- [[golang]]
+- [[git]]
+- [[tig]]
+- [[fzf]]
+12:T60f,
+> tui git client
+
++ https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
+- 내 설정 [[diary:2023-10-26]]
+  + https://github.com/deptno/.config/blob/5789b6fef0075ee1104f45952906afe73ce99521/.config/lazygit/config.yml
+
+## [[@todo]]
+- [X] custom command
+  - [X] commits
+    - [X] filter by author + https://github.com/deptno/.config/commit/24db073d9781906b271b31e10a15f833472ed048
+  - [X] [[gh]] 와 연동해서 브랜치 PR 열기
+    + https://github.com/deptno/.config/commit/a7216f3dc82dc50d7e42721568986a84ee6b3daa
+  - [X] custom command 를 사용해서 깃헙 pr 열기 {base,head}
+    + https://github.com/deptno/.config/commit/9fc069dddbe1c1e23ab894ad7d680c5b5d219f09
+  - [ ] commit git show
+
+## color 구분
+> green yellow red 등 색상은 테마에 따라 달라지니 참고
+
+- commit 들이 green 으로 표현
+- [X] ~~main~~ 현재 브랜치(git.mainBranches 옵션에 의해 지정된)에 포함되지 않은 커밋은 yellow 로 표현되는 것으로 *추정*된다
+- red 로 표시되는 커밋들은 아직 remote 에 push 되지 않은 커밋
+
+## custom command
+`:` 로 트리거 가능
+`config.yml` 파일에서 생성하여 사용가능
+
+### 해당 커밋이 있는 브랜치 리스트 -> checkout
+```sh 
+pbpaste | xargs -0 git branch --contains | fzf --bind 'enter:become(git switch $(echo {} | tr -d "* "))' --header "contains $(pbpaste)"
+```
+- commit 뷰에서 `y`, `<c-y>` 를 통해 해시 복사가 후 해당 커밋이 있는 브랜치 확인이 가능
+
+## link
+- [[golang]]
+- [[git]]
+- [[tig]]
+- [[fzf]]
+13:T60f,
+> tui git client
+
++ https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
+- 내 설정 [[diary:2023-10-26]]
+  + https://github.com/deptno/.config/blob/5789b6fef0075ee1104f45952906afe73ce99521/.config/lazygit/config.yml
+
+## [[@todo]]
+- [X] custom command
+  - [X] commits
+    - [X] filter by author + https://github.com/deptno/.config/commit/24db073d9781906b271b31e10a15f833472ed048
+  - [X] [[gh]] 와 연동해서 브랜치 PR 열기
+    + https://github.com/deptno/.config/commit/a7216f3dc82dc50d7e42721568986a84ee6b3daa
+  - [X] custom command 를 사용해서 깃헙 pr 열기 {base,head}
+    + https://github.com/deptno/.config/commit/9fc069dddbe1c1e23ab894ad7d680c5b5d219f09
+  - [ ] commit git show
+
+## color 구분
+> green yellow red 등 색상은 테마에 따라 달라지니 참고
+
+- commit 들이 green 으로 표현
+- [X] ~~main~~ 현재 브랜치(git.mainBranches 옵션에 의해 지정된)에 포함되지 않은 커밋은 yellow 로 표현되는 것으로 *추정*된다
+- red 로 표시되는 커밋들은 아직 remote 에 push 되지 않은 커밋
+
+## custom command
+`:` 로 트리거 가능
+`config.yml` 파일에서 생성하여 사용가능
+
+### 해당 커밋이 있는 브랜치 리스트 -> checkout
+```sh 
+pbpaste | xargs -0 git branch --contains | fzf --bind 'enter:become(git switch $(echo {} | tr -d "* "))' --header "contains $(pbpaste)"
+```
+- commit 뷰에서 `y`, `<c-y>` 를 통해 해시 복사가 후 해당 커밋이 있는 브랜치 확인이 가능
+
+## link
+- [[golang]]
+- [[git]]
+- [[tig]]
+- [[fzf]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# lazygit"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# lazygit"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/lazygit"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# lazygit"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null
