@@ -1,0 +1,927 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-b27d974807b67466.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-f971f15f0b870f4f.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># huggingface nlp</title><meta name="description" content="
+## nlp
+### [[wip]]
+- encoder -&gt; 분석
+  - BERT(Bidirectional *Encoder* Representations from Transformers)
+- decoder -&gt; 생성
+- encoder, decoder 모델 -&gt; 요약
+- 
+
+### transformers
+- 흐름
+  - input -&gt; tokenizer -&gt; {input_ids, attension_mark}
+  - {input_ids, attension_mark} -&gt; model -&gt; {hidden_state}
+  - {hidden_state} -&gt; head -&gt; logits(tensor, 정규화되지 않은 점수)
+  - logits -&gt; *softmax* or 기타 활성함수 -&gt; 확률
+
+#### model
+##### AutoTokenizer
+&gt; `input_ids` 를 생성한다
+- `return_tensors` 를 지정하지 않으면 리스트로 모두 리턴된다
+
+##### AutoModel
+- feature == hidden state
+  - 768 ~ 3072 혹은 그 이상의 고차원
+- input -&gt; feature -&gt; head(모델의 다른 부분)
+- { input_ids } 만이 model 의 **필수** input
+- `AutoModel` 을 사용하면 `BertModel` 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다
+- method
+  - `from_pretrained`
+  - `save_pretrained`
+
+#### tokenizer
+- 알고리즘
+  - word base
+    - 단어 또는 구분자로 잘라서 토큰화
+    - 단어사전수가 커짐
+  - character base
+    - word baes 토크나이저에서 `UNK`nown 토큰을 줄이는 것이 목표
+    - 문자의 구성요소인만큼 `UNK` 토큰을 줄일 수 있다
+    - 단어 사전이 작다 -&gt; 토큰은 많아짐
+    - 그러나 토큰당 가지는 의미가 적다. -&gt; 중국어같은 문자는 조금 다름
+  - subword base
+    - 위 두 알고리즘의 장점 조합
+    - 뭉치이지만 자주쓰이고 독립적인 것들은 토큰으로 유지
+      - `tokenization` -&gt; `token` + `ization`
+- `AutoTokenizer` 를 사용하면 `BertTokenizer` 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다
+- method
+  - `from_pretrained`
+  - `save_pretrained`
+
+#### fine-tunning a pre-trained model
+##### Processing the data
+- `token_type_ids` 한 로우의 데이터 셋에 여러 문장이 포함된 경우를 구분한다
+  - `bert-base-uncased` checkpoint 에서의 토크나이저는 제공되나 다른 checkpoint 에서는 해당 checkpoint 의 니즈에 따른다 
+  - 모델과 토크나이저는 동일 체크포인트를 사용하므로 해당 속성의 존재여부에 관심가질 필요는 없다
+- tokenizer 는 rust로 작성되어 `[dataset].map(tokenizer_function, batched=True)` 를 주면 병렬로 빠르게 처리가 가능하다, `num_proc` - 프로세서 수 조절도 가능한 것 같다
+- dataset 은 **apach arrow** 를 사용하여 기본적으로 디스크를 사용하고 토크나이저를 사용하여 올릴대만 메모리가 사용된다
+- dataset 에서 사용되는 `.map` 함수는 단순 맵이 아니라 기존 데이터를 두고 리턴되는 데이터가 추가되는 형태(reduce)인것으로 보인다. (테스트 결과)
+- 데이터를 동시에(`.map`) 토큰화를 하면 속도가 향상된다
+  - 하지만 이 경우에 각 로우에 해당하는 시퀀스(문자열, 데이터 whatever) 가 다르므로 패딩이 필요하다
+  - 패딩을 max_length(전체 시퀀스중의 최대길이) 혹은 model 이 받아들일 수 있는 최대 길이로 커팅된다
+  - 여기서 불필요한 패딩이 최악의 케이스로 표준화되면서 퍼포먼스 손실이 일어난다
+  - 이를 해결하기 위해서 dynamic padding 이 사용된다
+  - dynamic padding(동적 패딩) 은 배치로 토크나이징을 할때 배치사이즈의 맥스로 통일시킨다
+  - 전체 데이터셋의 부분집합인 배치별로 패딩길이가 최적화되어 큰폭의 성능 개선이 가능하다
+    ```python
+    from transformers import datacollatorwithpadding
+    
+    data_collator = datacollatorwithpadding(tokenizer=tokenizer)
+    ```
+  - cpu 와 gpu 에서 성능향상이 있으므로 거의 필수적으로 적용되지만 google tpu 에서는 고정 텐서 shape를 요구하므로 구글 코렙등의 환경에서는 사용이 불가능하다
+- 요약
+  - &quot;glue&quot; dataset 의 8/10 다중 문자열을 가지고 학습되었으며 그 간의 관계를 갖는 데이터셋이다
+  - 이를 학습한 모델의 경우 토크나이저는 `token_type_ids` 를 함께 리턴하여 문자열이 여러개임을 구분한다
+  - 토큰화는 배치를 사용해서 가속화 할 수 있다.
+  - 토큰화는 동적 패딩을 사용해서 가속화 할 수 있다.
+
+#### Fine-tuning a model with the Trainer API or Keras
+
+#### a full training
+- accelerator
+  - gpu 분산환경에서 작업하기 위해 필요
+  - accelerator 를 통해 래핑된 오프젝트로 작업
+  - `python` 명령어대신 `accelerator` 를 통해 작업한다
+
+#### Fine-tuning, Check!
+- 파트 정리
+- Auto{Tokenizer,Model}.from_pretrained([checkpoint]) 를 통해 시작
+  - Auto* 를 사용하는 경우 huggingface hub 로 부터 해당 model card 를 읽어들여서 설정을 처리한다
+- 그리고 데이터 셋을 불러와서(`from datasets`) 이를 기반으로 `Trainer` 를 생성하고 학습시킨다
+  - `TrainerArguments` 는 `Trainer` 를 위해 trainer, evaluation 을 위한  hyperparameters 를 제공한다
+- `dataset` 은 *apache arrow* 로 작성되었으며 작업시에만 메모리를 사용한다
+  - `map` 메소드
+    - 동시 배치 처리가 가능하다
+    - 작업은 캐싱된다
+- 학습 속도 향상을 위해서 동적 패딩이 사용되며, 이는 batch 안에서의 `max_length` 를 활용하는 방식이다
+  - tpu 는 동적 패딩을지원하지 않는다.
+- 학습시키면서 평가나 프로그래스를 볼 수있도록 설정이 가능하다 (`evaluator`)
+- `accelerator` 를 사용하면 multiple gpu 를 활용한 학습이 가능하다
+- `AutoModelForSequenceClassification` 와 같은 모델을 생성하면서 `bert-base-uncased` 와 같은 checkpoint 를 `from_pretrained` 로 불러들이면
+  - 워닝이 발생한다
+  - pre-trained 모델에서 sequence classification 을 위한 헤드는 버려진다
+  - 새로운 헤드가 장착되므로 여기에 학습을 시키면 된다
+
+### 4. SHARING MODELS AND TOKENIZERS
+
+#### The Hugging Face hub  
+
+#### Using pretrained models
+- `pipeline` 함수를 사용할때는 task, checkpoint 짝이 맞아야한다
+  - 아닌경우 head가 task에 맞지않음으로 정상동작하지 않는다
+- `pipeline` 함수가 아니어도 model을 바로 생성할수 있다.
+  - `from transformers import ATokenizer, AForMaskedLM` 의 형식
+  - 하지만 이건 모델 종속적이므로 추천하지 않고 대신 `Auto*` 형태의 사용을 추천한다
+    - `from transformers import AutoTokenizer, AutoModelForMaskedLM`
+- 모델 사용할대는 model card(huggingface 모델 페이지의 정보)를 확인해라
+
+#### Sharing pretrained models
+- `huggingface-cli` 에 대한 내용
+- [[tbd]]
+
+#### Buliding a model card
+&gt; 읽어보면 도움이 될만한 내용들
+- 모델에 대한 정보
+- 한계
+- 라이센스
+- 학습방법
+
+#### Part 1 completed!
+- 여기까지 왔으면 text classification 에서 single, paris 문장에 대한 파인튜닝이 가능해야한다
+
+### 5. THE 🤗 DATASETS LIBRARY
+#### Introduction
+- 파인튜닝시 데이터셋 사용
+  - 로드 from hugging face hub
+  - `Dataset.map()` 통한 전처리
+  - metric 계산
+
+#### What if my dataset isn’t on the Hub?
+- `csv`(`tsv` 포함), `text`, `json`, `jsonl`, `pandas`(`pkl`) 지원
+- local / remote file 지원
+- from datasets import load_dataset
+- 다양한 방법으로 train/test 데이터 분할을 지원한다
+- 압축파일도 지원한다
+- 경로를 path 대신 url 을 주면 리포트 파일을 로딩한다
+
+#### Time to slice and dice
+- 데이터 클린업
+
+##### 샘플링
+- `Dataset`, `DatasetDict` 의 메소드
+- `Datset.shufffle().select(range(1000))` 을 통해 테스트해볼수있다.
+
+##### 정규화
+- 수상한 컬럼이지만 id 처럼 보이는 컬럼이 발견되면 `.unique` 메소드를 통해 id 인지 확인한다
+  - id 가 확인되면 `DatasetDict.rename_column` 을 통해서 적합한 이름으로 변경
+- `.map` 을 통해 대소문자 통일
+- `.filter` 를 통해 `None` 제거
+  - [ ] [[@todo]] 걍 제거해버리면 되는건가;
+- `html` 코드가 포함된 데이터의 경우 `html` 패키지의 `unescape` 로 변경가능
+  - `I&amp;#039;m` -&gt; `I&#x27;m`
+
+##### 새 컬럼 생성
+- `Dataset.map` or `Dataset.add_column`
+- `Dataset.sort` 로 특정 컬럼의 값을 통해 정렬가능
+- `.num_rows` 를 통해 카운팅
+
+##### `.map`
+- `batched=True`
+  - batch 의 기본값은 1000
+  - `batched=True` 가 설정되면 map 함수로 들어오는 딕셔너리 인자의 값들은 리스트가 된다
+  - 때문에 리스트 컴프리헨션등을 사용해서 한방에 처리해야한다
+  - batch 도 가속화되지만 `.map` 함수내에서 사용되는 함수내 리스트 컴프리헨션도 for loop 보다 속도면에서 우월하다
+  - 토크나이저를 fast 버전을 사용할 수 없는경우(rust backend 사용 x) `num_proc` 을 조정해서 속도를 높일 수 있다.
+  - 내용이 많아서 배치 최적화는 그때가서 읽어봐야할 듯 [[tbd]]
+  - 파이썬 멀티프로세싱(`num_proc`) 을 fast tokenizer + batched=True 와 사용하지 말것을 권고
+
+#### 6. tokenizer
+- `pipeline` 함수 없이 토크나이징하는 것에 대한 설명 있음
+
+##### Building a tokenizer, block by block
+- BIRT
+  - pre_tokenizers 들은 compose 가능
+  - pre_tokenizers.Whitespace - 공백 및 구두점
+    - pre_tokenizers.WhitespaceSplit - 공백에서만 split
+    - pre_tokenizers.Punctuation - 구두점에서만 split
+  - trainer 사용시에는 스페셜 토큰들을 모두 제공해야한다
+  - 이를 가지고 저장([[json]]) 후 불러와서 사용하려는 경우
+    - `PreTrainedTokenizerFast` 로 래핑해야하며 이때 스페셜 토큰들은 명시해야한다
+      - wrapping 후에는 허브에 올리든 `save_pretrained` 를 통해서 사용가능하다
+- BPE(GPT-2 토크나이저)
+  - `unk_token` 을 사용하지 않는다
+  - GPT-2 는 `normalizer` 를 사용하지 않아 스킵
+  - 토크나이저 생성시 `models.BPE()` 로 인자가 들어간다
+  - 토크나이저 생성시 `pre_tokenizers.ByteLevel` 프리토크나이저가 사용된다
+  - 스페이스는 토큰에 포함
+  - 역시 huggingface transformers 에서 사용하려면 wrapping 필요
+
+#### 7. MAIN NLP TASKS
+##### Token classification
+- `AutoTokenizer` 로 model checkpoint -&gt; tokenizer
+- 학습시길 dataset 불러옴
+- 학습시킬 데이터를 토큰화 해보면 데이터가 가지고있는 레이블링 데이터(? NER 정보등)의 수와 맞지 않게됨(토큰수가 달라지며)
+- 이를 맞추는 작업이 proprocessing 
+  - 토큰을 맞추기 위해 스페셜 토큰을 -100 값으로 채우고
+  - 배치시에 길이를 맞추기 위해 패딩 채우는 작업
+- -100 은 loss 함수에서 무시하게되어 부하를 줄이는 역할도 있음
+
+## link
+- [[huggingface]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# huggingface nlp"/><meta property="og:description" content="
+## nlp
+### [[wip]]
+- encoder -&gt; 분석
+  - BERT(Bidirectional *Encoder* Representations from Transformers)
+- decoder -&gt; 생성
+- encoder, decoder 모델 -&gt; 요약
+- 
+
+### transformers
+- 흐름
+  - input -&gt; tokenizer -&gt; {input_ids, attension_mark}
+  - {input_ids, attension_mark} -&gt; model -&gt; {hidden_state}
+  - {hidden_state} -&gt; head -&gt; logits(tensor, 정규화되지 않은 점수)
+  - logits -&gt; *softmax* or 기타 활성함수 -&gt; 확률
+
+#### model
+##### AutoTokenizer
+&gt; `input_ids` 를 생성한다
+- `return_tensors` 를 지정하지 않으면 리스트로 모두 리턴된다
+
+##### AutoModel
+- feature == hidden state
+  - 768 ~ 3072 혹은 그 이상의 고차원
+- input -&gt; feature -&gt; head(모델의 다른 부분)
+- { input_ids } 만이 model 의 **필수** input
+- `AutoModel` 을 사용하면 `BertModel` 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다
+- method
+  - `from_pretrained`
+  - `save_pretrained`
+
+#### tokenizer
+- 알고리즘
+  - word base
+    - 단어 또는 구분자로 잘라서 토큰화
+    - 단어사전수가 커짐
+  - character base
+    - word baes 토크나이저에서 `UNK`nown 토큰을 줄이는 것이 목표
+    - 문자의 구성요소인만큼 `UNK` 토큰을 줄일 수 있다
+    - 단어 사전이 작다 -&gt; 토큰은 많아짐
+    - 그러나 토큰당 가지는 의미가 적다. -&gt; 중국어같은 문자는 조금 다름
+  - subword base
+    - 위 두 알고리즘의 장점 조합
+    - 뭉치이지만 자주쓰이고 독립적인 것들은 토큰으로 유지
+      - `tokenization` -&gt; `token` + `ization`
+- `AutoTokenizer` 를 사용하면 `BertTokenizer` 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다
+- method
+  - `from_pretrained`
+  - `save_pretrained`
+
+#### fine-tunning a pre-trained model
+##### Processing the data
+- `token_type_ids` 한 로우의 데이터 셋에 여러 문장이 포함된 경우를 구분한다
+  - `bert-base-uncased` checkpoint 에서의 토크나이저는 제공되나 다른 checkpoint 에서는 해당 checkpoint 의 니즈에 따른다 
+  - 모델과 토크나이저는 동일 체크포인트를 사용하므로 해당 속성의 존재여부에 관심가질 필요는 없다
+- tokenizer 는 rust로 작성되어 `[dataset].map(tokenizer_function, batched=True)` 를 주면 병렬로 빠르게 처리가 가능하다, `num_proc` - 프로세서 수 조절도 가능한 것 같다
+- dataset 은 **apach arrow** 를 사용하여 기본적으로 디스크를 사용하고 토크나이저를 사용하여 올릴대만 메모리가 사용된다
+- dataset 에서 사용되는 `.map` 함수는 단순 맵이 아니라 기존 데이터를 두고 리턴되는 데이터가 추가되는 형태(reduce)인것으로 보인다. (테스트 결과)
+- 데이터를 동시에(`.map`) 토큰화를 하면 속도가 향상된다
+  - 하지만 이 경우에 각 로우에 해당하는 시퀀스(문자열, 데이터 whatever) 가 다르므로 패딩이 필요하다
+  - 패딩을 max_length(전체 시퀀스중의 최대길이) 혹은 model 이 받아들일 수 있는 최대 길이로 커팅된다
+  - 여기서 불필요한 패딩이 최악의 케이스로 표준화되면서 퍼포먼스 손실이 일어난다
+  - 이를 해결하기 위해서 dynamic padding 이 사용된다
+  - dynamic padding(동적 패딩) 은 배치로 토크나이징을 할때 배치사이즈의 맥스로 통일시킨다
+  - 전체 데이터셋의 부분집합인 배치별로 패딩길이가 최적화되어 큰폭의 성능 개선이 가능하다
+    ```python
+    from transformers import datacollatorwithpadding
+    
+    data_collator = datacollatorwithpadding(tokenizer=tokenizer)
+    ```
+  - cpu 와 gpu 에서 성능향상이 있으므로 거의 필수적으로 적용되지만 google tpu 에서는 고정 텐서 shape를 요구하므로 구글 코렙등의 환경에서는 사용이 불가능하다
+- 요약
+  - &quot;glue&quot; dataset 의 8/10 다중 문자열을 가지고 학습되었으며 그 간의 관계를 갖는 데이터셋이다
+  - 이를 학습한 모델의 경우 토크나이저는 `token_type_ids` 를 함께 리턴하여 문자열이 여러개임을 구분한다
+  - 토큰화는 배치를 사용해서 가속화 할 수 있다.
+  - 토큰화는 동적 패딩을 사용해서 가속화 할 수 있다.
+
+#### Fine-tuning a model with the Trainer API or Keras
+
+#### a full training
+- accelerator
+  - gpu 분산환경에서 작업하기 위해 필요
+  - accelerator 를 통해 래핑된 오프젝트로 작업
+  - `python` 명령어대신 `accelerator` 를 통해 작업한다
+
+#### Fine-tuning, Check!
+- 파트 정리
+- Auto{Tokenizer,Model}.from_pretrained([checkpoint]) 를 통해 시작
+  - Auto* 를 사용하는 경우 huggingface hub 로 부터 해당 model card 를 읽어들여서 설정을 처리한다
+- 그리고 데이터 셋을 불러와서(`from datasets`) 이를 기반으로 `Trainer` 를 생성하고 학습시킨다
+  - `TrainerArguments` 는 `Trainer` 를 위해 trainer, evaluation 을 위한  hyperparameters 를 제공한다
+- `dataset` 은 *apache arrow* 로 작성되었으며 작업시에만 메모리를 사용한다
+  - `map` 메소드
+    - 동시 배치 처리가 가능하다
+    - 작업은 캐싱된다
+- 학습 속도 향상을 위해서 동적 패딩이 사용되며, 이는 batch 안에서의 `max_length` 를 활용하는 방식이다
+  - tpu 는 동적 패딩을지원하지 않는다.
+- 학습시키면서 평가나 프로그래스를 볼 수있도록 설정이 가능하다 (`evaluator`)
+- `accelerator` 를 사용하면 multiple gpu 를 활용한 학습이 가능하다
+- `AutoModelForSequenceClassification` 와 같은 모델을 생성하면서 `bert-base-uncased` 와 같은 checkpoint 를 `from_pretrained` 로 불러들이면
+  - 워닝이 발생한다
+  - pre-trained 모델에서 sequence classification 을 위한 헤드는 버려진다
+  - 새로운 헤드가 장착되므로 여기에 학습을 시키면 된다
+
+### 4. SHARING MODELS AND TOKENIZERS
+
+#### The Hugging Face hub  
+
+#### Using pretrained models
+- `pipeline` 함수를 사용할때는 task, checkpoint 짝이 맞아야한다
+  - 아닌경우 head가 task에 맞지않음으로 정상동작하지 않는다
+- `pipeline` 함수가 아니어도 model을 바로 생성할수 있다.
+  - `from transformers import ATokenizer, AForMaskedLM` 의 형식
+  - 하지만 이건 모델 종속적이므로 추천하지 않고 대신 `Auto*` 형태의 사용을 추천한다
+    - `from transformers import AutoTokenizer, AutoModelForMaskedLM`
+- 모델 사용할대는 model card(huggingface 모델 페이지의 정보)를 확인해라
+
+#### Sharing pretrained models
+- `huggingface-cli` 에 대한 내용
+- [[tbd]]
+
+#### Buliding a model card
+&gt; 읽어보면 도움이 될만한 내용들
+- 모델에 대한 정보
+- 한계
+- 라이센스
+- 학습방법
+
+#### Part 1 completed!
+- 여기까지 왔으면 text classification 에서 single, paris 문장에 대한 파인튜닝이 가능해야한다
+
+### 5. THE 🤗 DATASETS LIBRARY
+#### Introduction
+- 파인튜닝시 데이터셋 사용
+  - 로드 from hugging face hub
+  - `Dataset.map()` 통한 전처리
+  - metric 계산
+
+#### What if my dataset isn’t on the Hub?
+- `csv`(`tsv` 포함), `text`, `json`, `jsonl`, `pandas`(`pkl`) 지원
+- local / remote file 지원
+- from datasets import load_dataset
+- 다양한 방법으로 train/test 데이터 분할을 지원한다
+- 압축파일도 지원한다
+- 경로를 path 대신 url 을 주면 리포트 파일을 로딩한다
+
+#### Time to slice and dice
+- 데이터 클린업
+
+##### 샘플링
+- `Dataset`, `DatasetDict` 의 메소드
+- `Datset.shufffle().select(range(1000))` 을 통해 테스트해볼수있다.
+
+##### 정규화
+- 수상한 컬럼이지만 id 처럼 보이는 컬럼이 발견되면 `.unique` 메소드를 통해 id 인지 확인한다
+  - id 가 확인되면 `DatasetDict.rename_column` 을 통해서 적합한 이름으로 변경
+- `.map` 을 통해 대소문자 통일
+- `.filter` 를 통해 `None` 제거
+  - [ ] [[@todo]] 걍 제거해버리면 되는건가;
+- `html` 코드가 포함된 데이터의 경우 `html` 패키지의 `unescape` 로 변경가능
+  - `I&amp;#039;m` -&gt; `I&#x27;m`
+
+##### 새 컬럼 생성
+- `Dataset.map` or `Dataset.add_column`
+- `Dataset.sort` 로 특정 컬럼의 값을 통해 정렬가능
+- `.num_rows` 를 통해 카운팅
+
+##### `.map`
+- `batched=True`
+  - batch 의 기본값은 1000
+  - `batched=True` 가 설정되면 map 함수로 들어오는 딕셔너리 인자의 값들은 리스트가 된다
+  - 때문에 리스트 컴프리헨션등을 사용해서 한방에 처리해야한다
+  - batch 도 가속화되지만 `.map` 함수내에서 사용되는 함수내 리스트 컴프리헨션도 for loop 보다 속도면에서 우월하다
+  - 토크나이저를 fast 버전을 사용할 수 없는경우(rust backend 사용 x) `num_proc` 을 조정해서 속도를 높일 수 있다.
+  - 내용이 많아서 배치 최적화는 그때가서 읽어봐야할 듯 [[tbd]]
+  - 파이썬 멀티프로세싱(`num_proc`) 을 fast tokenizer + batched=True 와 사용하지 말것을 권고
+
+#### 6. tokenizer
+- `pipeline` 함수 없이 토크나이징하는 것에 대한 설명 있음
+
+##### Building a tokenizer, block by block
+- BIRT
+  - pre_tokenizers 들은 compose 가능
+  - pre_tokenizers.Whitespace - 공백 및 구두점
+    - pre_tokenizers.WhitespaceSplit - 공백에서만 split
+    - pre_tokenizers.Punctuation - 구두점에서만 split
+  - trainer 사용시에는 스페셜 토큰들을 모두 제공해야한다
+  - 이를 가지고 저장([[json]]) 후 불러와서 사용하려는 경우
+    - `PreTrainedTokenizerFast` 로 래핑해야하며 이때 스페셜 토큰들은 명시해야한다
+      - wrapping 후에는 허브에 올리든 `save_pretrained` 를 통해서 사용가능하다
+- BPE(GPT-2 토크나이저)
+  - `unk_token` 을 사용하지 않는다
+  - GPT-2 는 `normalizer` 를 사용하지 않아 스킵
+  - 토크나이저 생성시 `models.BPE()` 로 인자가 들어간다
+  - 토크나이저 생성시 `pre_tokenizers.ByteLevel` 프리토크나이저가 사용된다
+  - 스페이스는 토큰에 포함
+  - 역시 huggingface transformers 에서 사용하려면 wrapping 필요
+
+#### 7. MAIN NLP TASKS
+##### Token classification
+- `AutoTokenizer` 로 model checkpoint -&gt; tokenizer
+- 학습시길 dataset 불러옴
+- 학습시킬 데이터를 토큰화 해보면 데이터가 가지고있는 레이블링 데이터(? NER 정보등)의 수와 맞지 않게됨(토큰수가 달라지며)
+- 이를 맞추는 작업이 proprocessing 
+  - 토큰을 맞추기 위해 스페셜 토큰을 -100 값으로 채우고
+  - 배치시에 길이를 맞추기 위해 패딩 채우는 작업
+- -100 은 loss 함수에서 무시하게되어 부하를 줄이는 역할도 있음
+
+## link
+- [[huggingface]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/huggingface-nlp"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# huggingface nlp"/><meta name="twitter:description" content="
+## nlp
+### [[wip]]
+- encoder -&gt; 분석
+  - BERT(Bidirectional *Encoder* Representations from Transformers)
+- decoder -&gt; 생성
+- encoder, decoder 모델 -&gt; 요약
+- 
+
+### transformers
+- 흐름
+  - input -&gt; tokenizer -&gt; {input_ids, attension_mark}
+  - {input_ids, attension_mark} -&gt; model -&gt; {hidden_state}
+  - {hidden_state} -&gt; head -&gt; logits(tensor, 정규화되지 않은 점수)
+  - logits -&gt; *softmax* or 기타 활성함수 -&gt; 확률
+
+#### model
+##### AutoTokenizer
+&gt; `input_ids` 를 생성한다
+- `return_tensors` 를 지정하지 않으면 리스트로 모두 리턴된다
+
+##### AutoModel
+- feature == hidden state
+  - 768 ~ 3072 혹은 그 이상의 고차원
+- input -&gt; feature -&gt; head(모델의 다른 부분)
+- { input_ids } 만이 model 의 **필수** input
+- `AutoModel` 을 사용하면 `BertModel` 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다
+- method
+  - `from_pretrained`
+  - `save_pretrained`
+
+#### tokenizer
+- 알고리즘
+  - word base
+    - 단어 또는 구분자로 잘라서 토큰화
+    - 단어사전수가 커짐
+  - character base
+    - word baes 토크나이저에서 `UNK`nown 토큰을 줄이는 것이 목표
+    - 문자의 구성요소인만큼 `UNK` 토큰을 줄일 수 있다
+    - 단어 사전이 작다 -&gt; 토큰은 많아짐
+    - 그러나 토큰당 가지는 의미가 적다. -&gt; 중국어같은 문자는 조금 다름
+  - subword base
+    - 위 두 알고리즘의 장점 조합
+    - 뭉치이지만 자주쓰이고 독립적인 것들은 토큰으로 유지
+      - `tokenization` -&gt; `token` + `ization`
+- `AutoTokenizer` 를 사용하면 `BertTokenizer` 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다
+- method
+  - `from_pretrained`
+  - `save_pretrained`
+
+#### fine-tunning a pre-trained model
+##### Processing the data
+- `token_type_ids` 한 로우의 데이터 셋에 여러 문장이 포함된 경우를 구분한다
+  - `bert-base-uncased` checkpoint 에서의 토크나이저는 제공되나 다른 checkpoint 에서는 해당 checkpoint 의 니즈에 따른다 
+  - 모델과 토크나이저는 동일 체크포인트를 사용하므로 해당 속성의 존재여부에 관심가질 필요는 없다
+- tokenizer 는 rust로 작성되어 `[dataset].map(tokenizer_function, batched=True)` 를 주면 병렬로 빠르게 처리가 가능하다, `num_proc` - 프로세서 수 조절도 가능한 것 같다
+- dataset 은 **apach arrow** 를 사용하여 기본적으로 디스크를 사용하고 토크나이저를 사용하여 올릴대만 메모리가 사용된다
+- dataset 에서 사용되는 `.map` 함수는 단순 맵이 아니라 기존 데이터를 두고 리턴되는 데이터가 추가되는 형태(reduce)인것으로 보인다. (테스트 결과)
+- 데이터를 동시에(`.map`) 토큰화를 하면 속도가 향상된다
+  - 하지만 이 경우에 각 로우에 해당하는 시퀀스(문자열, 데이터 whatever) 가 다르므로 패딩이 필요하다
+  - 패딩을 max_length(전체 시퀀스중의 최대길이) 혹은 model 이 받아들일 수 있는 최대 길이로 커팅된다
+  - 여기서 불필요한 패딩이 최악의 케이스로 표준화되면서 퍼포먼스 손실이 일어난다
+  - 이를 해결하기 위해서 dynamic padding 이 사용된다
+  - dynamic padding(동적 패딩) 은 배치로 토크나이징을 할때 배치사이즈의 맥스로 통일시킨다
+  - 전체 데이터셋의 부분집합인 배치별로 패딩길이가 최적화되어 큰폭의 성능 개선이 가능하다
+    ```python
+    from transformers import datacollatorwithpadding
+    
+    data_collator = datacollatorwithpadding(tokenizer=tokenizer)
+    ```
+  - cpu 와 gpu 에서 성능향상이 있으므로 거의 필수적으로 적용되지만 google tpu 에서는 고정 텐서 shape를 요구하므로 구글 코렙등의 환경에서는 사용이 불가능하다
+- 요약
+  - &quot;glue&quot; dataset 의 8/10 다중 문자열을 가지고 학습되었으며 그 간의 관계를 갖는 데이터셋이다
+  - 이를 학습한 모델의 경우 토크나이저는 `token_type_ids` 를 함께 리턴하여 문자열이 여러개임을 구분한다
+  - 토큰화는 배치를 사용해서 가속화 할 수 있다.
+  - 토큰화는 동적 패딩을 사용해서 가속화 할 수 있다.
+
+#### Fine-tuning a model with the Trainer API or Keras
+
+#### a full training
+- accelerator
+  - gpu 분산환경에서 작업하기 위해 필요
+  - accelerator 를 통해 래핑된 오프젝트로 작업
+  - `python` 명령어대신 `accelerator` 를 통해 작업한다
+
+#### Fine-tuning, Check!
+- 파트 정리
+- Auto{Tokenizer,Model}.from_pretrained([checkpoint]) 를 통해 시작
+  - Auto* 를 사용하는 경우 huggingface hub 로 부터 해당 model card 를 읽어들여서 설정을 처리한다
+- 그리고 데이터 셋을 불러와서(`from datasets`) 이를 기반으로 `Trainer` 를 생성하고 학습시킨다
+  - `TrainerArguments` 는 `Trainer` 를 위해 trainer, evaluation 을 위한  hyperparameters 를 제공한다
+- `dataset` 은 *apache arrow* 로 작성되었으며 작업시에만 메모리를 사용한다
+  - `map` 메소드
+    - 동시 배치 처리가 가능하다
+    - 작업은 캐싱된다
+- 학습 속도 향상을 위해서 동적 패딩이 사용되며, 이는 batch 안에서의 `max_length` 를 활용하는 방식이다
+  - tpu 는 동적 패딩을지원하지 않는다.
+- 학습시키면서 평가나 프로그래스를 볼 수있도록 설정이 가능하다 (`evaluator`)
+- `accelerator` 를 사용하면 multiple gpu 를 활용한 학습이 가능하다
+- `AutoModelForSequenceClassification` 와 같은 모델을 생성하면서 `bert-base-uncased` 와 같은 checkpoint 를 `from_pretrained` 로 불러들이면
+  - 워닝이 발생한다
+  - pre-trained 모델에서 sequence classification 을 위한 헤드는 버려진다
+  - 새로운 헤드가 장착되므로 여기에 학습을 시키면 된다
+
+### 4. SHARING MODELS AND TOKENIZERS
+
+#### The Hugging Face hub  
+
+#### Using pretrained models
+- `pipeline` 함수를 사용할때는 task, checkpoint 짝이 맞아야한다
+  - 아닌경우 head가 task에 맞지않음으로 정상동작하지 않는다
+- `pipeline` 함수가 아니어도 model을 바로 생성할수 있다.
+  - `from transformers import ATokenizer, AForMaskedLM` 의 형식
+  - 하지만 이건 모델 종속적이므로 추천하지 않고 대신 `Auto*` 형태의 사용을 추천한다
+    - `from transformers import AutoTokenizer, AutoModelForMaskedLM`
+- 모델 사용할대는 model card(huggingface 모델 페이지의 정보)를 확인해라
+
+#### Sharing pretrained models
+- `huggingface-cli` 에 대한 내용
+- [[tbd]]
+
+#### Buliding a model card
+&gt; 읽어보면 도움이 될만한 내용들
+- 모델에 대한 정보
+- 한계
+- 라이센스
+- 학습방법
+
+#### Part 1 completed!
+- 여기까지 왔으면 text classification 에서 single, paris 문장에 대한 파인튜닝이 가능해야한다
+
+### 5. THE 🤗 DATASETS LIBRARY
+#### Introduction
+- 파인튜닝시 데이터셋 사용
+  - 로드 from hugging face hub
+  - `Dataset.map()` 통한 전처리
+  - metric 계산
+
+#### What if my dataset isn’t on the Hub?
+- `csv`(`tsv` 포함), `text`, `json`, `jsonl`, `pandas`(`pkl`) 지원
+- local / remote file 지원
+- from datasets import load_dataset
+- 다양한 방법으로 train/test 데이터 분할을 지원한다
+- 압축파일도 지원한다
+- 경로를 path 대신 url 을 주면 리포트 파일을 로딩한다
+
+#### Time to slice and dice
+- 데이터 클린업
+
+##### 샘플링
+- `Dataset`, `DatasetDict` 의 메소드
+- `Datset.shufffle().select(range(1000))` 을 통해 테스트해볼수있다.
+
+##### 정규화
+- 수상한 컬럼이지만 id 처럼 보이는 컬럼이 발견되면 `.unique` 메소드를 통해 id 인지 확인한다
+  - id 가 확인되면 `DatasetDict.rename_column` 을 통해서 적합한 이름으로 변경
+- `.map` 을 통해 대소문자 통일
+- `.filter` 를 통해 `None` 제거
+  - [ ] [[@todo]] 걍 제거해버리면 되는건가;
+- `html` 코드가 포함된 데이터의 경우 `html` 패키지의 `unescape` 로 변경가능
+  - `I&amp;#039;m` -&gt; `I&#x27;m`
+
+##### 새 컬럼 생성
+- `Dataset.map` or `Dataset.add_column`
+- `Dataset.sort` 로 특정 컬럼의 값을 통해 정렬가능
+- `.num_rows` 를 통해 카운팅
+
+##### `.map`
+- `batched=True`
+  - batch 의 기본값은 1000
+  - `batched=True` 가 설정되면 map 함수로 들어오는 딕셔너리 인자의 값들은 리스트가 된다
+  - 때문에 리스트 컴프리헨션등을 사용해서 한방에 처리해야한다
+  - batch 도 가속화되지만 `.map` 함수내에서 사용되는 함수내 리스트 컴프리헨션도 for loop 보다 속도면에서 우월하다
+  - 토크나이저를 fast 버전을 사용할 수 없는경우(rust backend 사용 x) `num_proc` 을 조정해서 속도를 높일 수 있다.
+  - 내용이 많아서 배치 최적화는 그때가서 읽어봐야할 듯 [[tbd]]
+  - 파이썬 멀티프로세싱(`num_proc`) 을 fast tokenizer + batched=True 와 사용하지 말것을 권고
+
+#### 6. tokenizer
+- `pipeline` 함수 없이 토크나이징하는 것에 대한 설명 있음
+
+##### Building a tokenizer, block by block
+- BIRT
+  - pre_tokenizers 들은 compose 가능
+  - pre_tokenizers.Whitespace - 공백 및 구두점
+    - pre_tokenizers.WhitespaceSplit - 공백에서만 split
+    - pre_tokenizers.Punctuation - 구두점에서만 split
+  - trainer 사용시에는 스페셜 토큰들을 모두 제공해야한다
+  - 이를 가지고 저장([[json]]) 후 불러와서 사용하려는 경우
+    - `PreTrainedTokenizerFast` 로 래핑해야하며 이때 스페셜 토큰들은 명시해야한다
+      - wrapping 후에는 허브에 올리든 `save_pretrained` 를 통해서 사용가능하다
+- BPE(GPT-2 토크나이저)
+  - `unk_token` 을 사용하지 않는다
+  - GPT-2 는 `normalizer` 를 사용하지 않아 스킵
+  - 토크나이저 생성시 `models.BPE()` 로 인자가 들어간다
+  - 토크나이저 생성시 `pre_tokenizers.ByteLevel` 프리토크나이저가 사용된다
+  - 스페이스는 토큰에 포함
+  - 역시 huggingface transformers 에서 사용하려면 wrapping 필요
+
+#### 7. MAIN NLP TASKS
+##### Token classification
+- `AutoTokenizer` 로 model checkpoint -&gt; tokenizer
+- 학습시길 dataset 불러옴
+- 학습시킬 데이터를 토큰화 해보면 데이터가 가지고있는 레이블링 데이터(? NER 정보등)의 수와 맞지 않게됨(토큰수가 달라지며)
+- 이를 맞추는 작업이 proprocessing 
+  - 토큰을 맞추기 위해 스페셜 토큰을 -100 값으로 채우고
+  - 배치시에 길이를 맞추기 위해 패딩 채우는 작업
+- -100 은 loss 함수에서 무시하게되어 부하를 줄이는 역할도 있음
+
+## link
+- [[huggingface]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/bc70f7b
+" class="bg-white text-black">bc70f7b</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/huggingface-nlp.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/huggingface-nlp.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/huggingface-nlp.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/huggingface-nlp"><span class="underline">huggingface-nlp</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/wip"><span class="underline">wip</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/tbd"><span class="underline">tbd</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/@todo"><span class="underline">@todo</span><sup>24</sup></a></span><span><a class="text-blue-600" href="/public-wiki/json"><span class="underline">json</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/huggingface"><span class="underline">huggingface</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-12-31"><span class="underline">diary/2024-12-31</span><sup>441</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#huggingface-nlp">huggingface nlp</a></div><div class="pl-2"><a href="#nlp">nlp</a></div><div class="pl-4"><a href="#wip">wip</a></div><div class="pl-4"><a href="#transformers">transformers</a></div><div class="pl-6"><a href="#model">model</a></div><div class="pl-8"><a href="#autotokenizer">AutoTokenizer</a></div><div class="pl-8"><a href="#automodel">AutoModel</a></div><div class="pl-6"><a href="#tokenizer">tokenizer</a></div><div class="pl-6"><a href="#fine-tunning-a-pre-trained-model">fine-tunning a pre-trained model</a></div><div class="pl-8"><a href="#processing-the-data">Processing the data</a></div><div class="pl-6"><a href="#fine-tuning-a-model-with-the-trainer-api-or-keras">Fine-tuning a model with the Trainer API or Keras</a></div><div class="pl-6"><a href="#a-full-training">a full training</a></div><div class="pl-6"><a href="#fine-tuning-check">Fine-tuning, Check!</a></div><div class="pl-4"><a href="#4-sharing-models-and-tokenizers">4. SHARING MODELS AND TOKENIZERS</a></div><div class="pl-6"><a href="#the-hugging-face-hub">The Hugging Face hub</a></div><div class="pl-6"><a href="#using-pretrained-models">Using pretrained models</a></div><div class="pl-6"><a href="#sharing-pretrained-models">Sharing pretrained models</a></div><div class="pl-6"><a href="#buliding-a-model-card">Buliding a model card</a></div><div class="pl-6"><a href="#part-1-completed">Part 1 completed!</a></div><div class="pl-4"><a href="#5-the-🤗-datasets-library">5. THE 🤗 DATASETS LIBRARY</a></div><div class="pl-6"><a href="#introduction">Introduction</a></div><div class="pl-6"><a href="#what-if-my-dataset-isnt-on-the-hub">What if my dataset isn’t on the Hub?</a></div><div class="pl-6"><a href="#time-to-slice-and-dice">Time to slice and dice</a></div><div class="pl-8"><a href="#샘플링">샘플링</a></div><div class="pl-8"><a href="#정규화">정규화</a></div><div class="pl-8"><a href="#새-컬럼-생성">새 컬럼 생성</a></div><div class="pl-8"><a href="#map">.map</a></div><div class="pl-6"><a href="#6-tokenizer">6. tokenizer</a></div><div class="pl-8"><a href="#building-a-tokenizer-block-by-block">Building a tokenizer, block by block</a></div><div class="pl-6"><a href="#7-main-nlp-tasks">7. MAIN NLP TASKS</a></div><div class="pl-8"><a href="#token-classification">Token classification</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="huggingface-nlp">huggingface nlp</h1>
+<h2 id="nlp">nlp</h2>
+<h3 id="wip"><a href="wip">wip</a></h3>
+<ul>
+<li>encoder -&gt; 분석<ul>
+<li>BERT(Bidirectional <em>Encoder</em> Representations from Transformers)</li>
+</ul>
+</li>
+<li>decoder -&gt; 생성</li>
+<li>encoder, decoder 모델 -&gt; 요약</li>
+<li></li>
+</ul>
+<h3 id="transformers">transformers</h3>
+<ul>
+<li>흐름<ul>
+<li>input -&gt; tokenizer -&gt; {input_ids, attension_mark}</li>
+<li>{input_ids, attension_mark} -&gt; model -&gt; {hidden_state}</li>
+<li>{hidden_state} -&gt; head -&gt; logits(tensor, 정규화되지 않은 점수)</li>
+<li>logits -&gt; <em>softmax</em> or 기타 활성함수 -&gt; 확률</li>
+</ul>
+</li>
+</ul>
+<h4 id="model">model</h4>
+<h5 id="autotokenizer">AutoTokenizer</h5>
+<blockquote><p><code class="span">input_ids</code> 를 생성한다</p></blockquote><ul>
+<li><code class="span">return_tensors</code> 를 지정하지 않으면 리스트로 모두 리턴된다</li>
+</ul>
+<h5 id="automodel">AutoModel</h5>
+<ul>
+<li>feature == hidden state<ul>
+<li>768 ~ 3072 혹은 그 이상의 고차원</li>
+</ul>
+</li>
+<li>input -&gt; feature -&gt; head(모델의 다른 부분)</li>
+<li>{ input_ids } 만이 model 의 <strong>필수</strong> input</li>
+<li><code class="span">AutoModel</code> 을 사용하면 <code class="span">BertModel</code> 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다</li>
+<li>method<ul>
+<li><code class="span">from_pretrained</code></li>
+<li><code class="span">save_pretrained</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="tokenizer">tokenizer</h4>
+<ul>
+<li>알고리즘<ul>
+<li>word base<ul>
+<li>단어 또는 구분자로 잘라서 토큰화</li>
+<li>단어사전수가 커짐</li>
+</ul>
+</li>
+<li>character base<ul>
+<li>word baes 토크나이저에서 <code class="span">UNK</code>nown 토큰을 줄이는 것이 목표</li>
+<li>문자의 구성요소인만큼 <code class="span">UNK</code> 토큰을 줄일 수 있다</li>
+<li>단어 사전이 작다 -&gt; 토큰은 많아짐</li>
+<li>그러나 토큰당 가지는 의미가 적다. -&gt; 중국어같은 문자는 조금 다름</li>
+</ul>
+</li>
+<li>subword base<ul>
+<li>위 두 알고리즘의 장점 조합</li>
+<li>뭉치이지만 자주쓰이고 독립적인 것들은 토큰으로 유지<ul>
+<li><code class="span">tokenization</code> -&gt; <code class="span">token</code> + <code class="span">ization</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code class="span">AutoTokenizer</code> 를 사용하면 <code class="span">BertTokenizer</code> 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다</li>
+<li>method<ul>
+<li><code class="span">from_pretrained</code></li>
+<li><code class="span">save_pretrained</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="fine-tunning-a-pre-trained-model">fine-tunning a pre-trained model</h4>
+<h5 id="processing-the-data">Processing the data</h5>
+<ul>
+<li><code class="span">token_type_ids</code> 한 로우의 데이터 셋에 여러 문장이 포함된 경우를 구분한다<ul>
+<li><code class="span">bert-base-uncased</code> checkpoint 에서의 토크나이저는 제공되나 다른 checkpoint 에서는 해당 checkpoint 의 니즈에 따른다 </li>
+<li>모델과 토크나이저는 동일 체크포인트를 사용하므로 해당 속성의 존재여부에 관심가질 필요는 없다</li>
+</ul>
+</li>
+<li>tokenizer 는 rust로 작성되어 <code class="span">[dataset].map(tokenizer_function, batched=True)</code> 를 주면 병렬로 빠르게 처리가 가능하다, <code class="span">num_proc</code> - 프로세서 수 조절도 가능한 것 같다</li>
+<li>dataset 은 <strong>apach arrow</strong> 를 사용하여 기본적으로 디스크를 사용하고 토크나이저를 사용하여 올릴대만 메모리가 사용된다</li>
+<li>dataset 에서 사용되는 <code class="span">.map</code> 함수는 단순 맵이 아니라 기존 데이터를 두고 리턴되는 데이터가 추가되는 형태(reduce)인것으로 보인다. (테스트 결과)</li>
+<li>데이터를 동시에(<code class="span">.map</code>) 토큰화를 하면 속도가 향상된다<ul>
+<li>하지만 이 경우에 각 로우에 해당하는 시퀀스(문자열, 데이터 whatever) 가 다르므로 패딩이 필요하다</li>
+<li>패딩을 max_length(전체 시퀀스중의 최대길이) 혹은 model 이 받아들일 수 있는 최대 길이로 커팅된다</li>
+<li>여기서 불필요한 패딩이 최악의 케이스로 표준화되면서 퍼포먼스 손실이 일어난다</li>
+<li>이를 해결하기 위해서 dynamic padding 이 사용된다</li>
+<li>dynamic padding(동적 패딩) 은 배치로 토크나이징을 할때 배치사이즈의 맥스로 통일시킨다</li>
+<li>전체 데이터셋의 부분집합인 배치별로 패딩길이가 최적화되어 큰폭의 성능 개선이 가능하다<pre><code class="hljs language-python"><span class="hljs-keyword">from</span> transformers <span class="hljs-keyword">import</span> datacollatorwithpadding
+
+data_collator = datacollatorwithpadding(tokenizer=tokenizer)
+</code></pre></li>
+<li>cpu 와 gpu 에서 성능향상이 있으므로 거의 필수적으로 적용되지만 google tpu 에서는 고정 텐서 shape를 요구하므로 구글 코렙등의 환경에서는 사용이 불가능하다</li>
+</ul>
+</li>
+<li>요약<ul>
+<li>&quot;glue&quot; dataset 의 8/10 다중 문자열을 가지고 학습되었으며 그 간의 관계를 갖는 데이터셋이다</li>
+<li>이를 학습한 모델의 경우 토크나이저는 <code class="span">token_type_ids</code> 를 함께 리턴하여 문자열이 여러개임을 구분한다</li>
+<li>토큰화는 배치를 사용해서 가속화 할 수 있다.</li>
+<li>토큰화는 동적 패딩을 사용해서 가속화 할 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h4 id="fine-tuning-a-model-with-the-trainer-api-or-keras">Fine-tuning a model with the Trainer API or Keras</h4>
+<h4 id="a-full-training">a full training</h4>
+<ul>
+<li>accelerator<ul>
+<li>gpu 분산환경에서 작업하기 위해 필요</li>
+<li>accelerator 를 통해 래핑된 오프젝트로 작업</li>
+<li><code class="span">python</code> 명령어대신 <code class="span">accelerator</code> 를 통해 작업한다</li>
+</ul>
+</li>
+</ul>
+<h4 id="fine-tuning-check">Fine-tuning, Check!</h4>
+<ul>
+<li>파트 정리</li>
+<li>Auto{Tokenizer,Model}.from_pretrained([checkpoint]) 를 통해 시작<ul>
+<li>Auto* 를 사용하는 경우 huggingface hub 로 부터 해당 model card 를 읽어들여서 설정을 처리한다</li>
+</ul>
+</li>
+<li>그리고 데이터 셋을 불러와서(<code class="span">from datasets</code>) 이를 기반으로 <code class="span">Trainer</code> 를 생성하고 학습시킨다<ul>
+<li><code class="span">TrainerArguments</code> 는 <code class="span">Trainer</code> 를 위해 trainer, evaluation 을 위한  hyperparameters 를 제공한다</li>
+</ul>
+</li>
+<li><code class="span">dataset</code> 은 <em>apache arrow</em> 로 작성되었으며 작업시에만 메모리를 사용한다<ul>
+<li><code class="span">map</code> 메소드<ul>
+<li>동시 배치 처리가 가능하다</li>
+<li>작업은 캐싱된다</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>학습 속도 향상을 위해서 동적 패딩이 사용되며, 이는 batch 안에서의 <code class="span">max_length</code> 를 활용하는 방식이다<ul>
+<li>tpu 는 동적 패딩을지원하지 않는다.</li>
+</ul>
+</li>
+<li>학습시키면서 평가나 프로그래스를 볼 수있도록 설정이 가능하다 (<code class="span">evaluator</code>)</li>
+<li><code class="span">accelerator</code> 를 사용하면 multiple gpu 를 활용한 학습이 가능하다</li>
+<li><code class="span">AutoModelForSequenceClassification</code> 와 같은 모델을 생성하면서 <code class="span">bert-base-uncased</code> 와 같은 checkpoint 를 <code class="span">from_pretrained</code> 로 불러들이면<ul>
+<li>워닝이 발생한다</li>
+<li>pre-trained 모델에서 sequence classification 을 위한 헤드는 버려진다</li>
+<li>새로운 헤드가 장착되므로 여기에 학습을 시키면 된다</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-sharing-models-and-tokenizers">4. SHARING MODELS AND TOKENIZERS</h3>
+<h4 id="the-hugging-face-hub">The Hugging Face hub</h4>
+<h4 id="using-pretrained-models">Using pretrained models</h4>
+<ul>
+<li><code class="span">pipeline</code> 함수를 사용할때는 task, checkpoint 짝이 맞아야한다<ul>
+<li>아닌경우 head가 task에 맞지않음으로 정상동작하지 않는다</li>
+</ul>
+</li>
+<li><code class="span">pipeline</code> 함수가 아니어도 model을 바로 생성할수 있다.<ul>
+<li><code class="span">from transformers import ATokenizer, AForMaskedLM</code> 의 형식</li>
+<li>하지만 이건 모델 종속적이므로 추천하지 않고 대신 <code class="span">Auto*</code> 형태의 사용을 추천한다<ul>
+<li><code class="span">from transformers import AutoTokenizer, AutoModelForMaskedLM</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>모델 사용할대는 model card(huggingface 모델 페이지의 정보)를 확인해라</li>
+</ul>
+<h4 id="sharing-pretrained-models">Sharing pretrained models</h4>
+<ul>
+<li><code class="span">huggingface-cli</code> 에 대한 내용</li>
+<li><a href="tbd">tbd</a></li>
+</ul>
+<h4 id="buliding-a-model-card">Buliding a model card</h4>
+<blockquote><p>읽어보면 도움이 될만한 내용들</p></blockquote><ul>
+<li>모델에 대한 정보</li>
+<li>한계</li>
+<li>라이센스</li>
+<li>학습방법</li>
+</ul>
+<h4 id="part-1-completed">Part 1 completed!</h4>
+<ul>
+<li>여기까지 왔으면 text classification 에서 single, paris 문장에 대한 파인튜닝이 가능해야한다</li>
+</ul>
+<h3 id="5-the--datasets-library">5. THE 🤗 DATASETS LIBRARY</h3>
+<h4 id="introduction">Introduction</h4>
+<ul>
+<li>파인튜닝시 데이터셋 사용<ul>
+<li>로드 from hugging face hub</li>
+<li><code class="span">Dataset.map()</code> 통한 전처리</li>
+<li>metric 계산</li>
+</ul>
+</li>
+</ul>
+<h4 id="what-if-my-dataset-isnt-on-the-hub">What if my dataset isn’t on the Hub?</h4>
+<ul>
+<li><code class="span">csv</code>(<code class="span">tsv</code> 포함), <code class="span">text</code>, <code class="span">json</code>, <code class="span">jsonl</code>, <code class="span">pandas</code>(<code class="span">pkl</code>) 지원</li>
+<li>local / remote file 지원</li>
+<li>from datasets import load_dataset</li>
+<li>다양한 방법으로 train/test 데이터 분할을 지원한다</li>
+<li>압축파일도 지원한다</li>
+<li>경로를 path 대신 url 을 주면 리포트 파일을 로딩한다</li>
+</ul>
+<h4 id="time-to-slice-and-dice">Time to slice and dice</h4>
+<ul>
+<li>데이터 클린업</li>
+</ul>
+<h5 id="샘플링">샘플링</h5>
+<ul>
+<li><code class="span">Dataset</code>, <code class="span">DatasetDict</code> 의 메소드</li>
+<li><code class="span">Datset.shufffle().select(range(1000))</code> 을 통해 테스트해볼수있다.</li>
+</ul>
+<h5 id="정규화">정규화</h5>
+<ul>
+<li>수상한 컬럼이지만 id 처럼 보이는 컬럼이 발견되면 <code class="span">.unique</code> 메소드를 통해 id 인지 확인한다<ul>
+<li>id 가 확인되면 <code class="span">DatasetDict.rename_column</code> 을 통해서 적합한 이름으로 변경</li>
+</ul>
+</li>
+<li><code class="span">.map</code> 을 통해 대소문자 통일</li>
+<li><code class="span">.filter</code> 를 통해 <code class="span">None</code> 제거<ul>
+<li><input disabled="" type="checkbox"> <a href="@todo">@todo</a> 걍 제거해버리면 되는건가;</li>
+</ul>
+</li>
+<li><code class="span">html</code> 코드가 포함된 데이터의 경우 <code class="span">html</code> 패키지의 <code class="span">unescape</code> 로 변경가능<ul>
+<li><code class="span">I&amp;#039;m</code> -&gt; <code class="span">I&#39;m</code></li>
+</ul>
+</li>
+</ul>
+<h5 id="새-컬럼-생성">새 컬럼 생성</h5>
+<ul>
+<li><code class="span">Dataset.map</code> or <code class="span">Dataset.add_column</code></li>
+<li><code class="span">Dataset.sort</code> 로 특정 컬럼의 값을 통해 정렬가능</li>
+<li><code class="span">.num_rows</code> 를 통해 카운팅</li>
+</ul>
+<h5 id="map"><code class="span">.map</code></h5>
+<ul>
+<li><code class="span">batched=True</code><ul>
+<li>batch 의 기본값은 1000</li>
+<li><code class="span">batched=True</code> 가 설정되면 map 함수로 들어오는 딕셔너리 인자의 값들은 리스트가 된다</li>
+<li>때문에 리스트 컴프리헨션등을 사용해서 한방에 처리해야한다</li>
+<li>batch 도 가속화되지만 <code class="span">.map</code> 함수내에서 사용되는 함수내 리스트 컴프리헨션도 for loop 보다 속도면에서 우월하다</li>
+<li>토크나이저를 fast 버전을 사용할 수 없는경우(rust backend 사용 x) <code class="span">num_proc</code> 을 조정해서 속도를 높일 수 있다.</li>
+<li>내용이 많아서 배치 최적화는 그때가서 읽어봐야할 듯 <a href="tbd">tbd</a></li>
+<li>파이썬 멀티프로세싱(<code class="span">num_proc</code>) 을 fast tokenizer + batched=True 와 사용하지 말것을 권고</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-tokenizer">6. tokenizer</h4>
+<ul>
+<li><code class="span">pipeline</code> 함수 없이 토크나이징하는 것에 대한 설명 있음</li>
+</ul>
+<h5 id="building-a-tokenizer-block-by-block">Building a tokenizer, block by block</h5>
+<ul>
+<li>BIRT<ul>
+<li>pre_tokenizers 들은 compose 가능</li>
+<li>pre_tokenizers.Whitespace - 공백 및 구두점<ul>
+<li>pre_tokenizers.WhitespaceSplit - 공백에서만 split</li>
+<li>pre_tokenizers.Punctuation - 구두점에서만 split</li>
+</ul>
+</li>
+<li>trainer 사용시에는 스페셜 토큰들을 모두 제공해야한다</li>
+<li>이를 가지고 저장(<a href="json">json</a>) 후 불러와서 사용하려는 경우<ul>
+<li><code class="span">PreTrainedTokenizerFast</code> 로 래핑해야하며 이때 스페셜 토큰들은 명시해야한다<ul>
+<li>wrapping 후에는 허브에 올리든 <code class="span">save_pretrained</code> 를 통해서 사용가능하다</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>BPE(GPT-2 토크나이저)<ul>
+<li><code class="span">unk_token</code> 을 사용하지 않는다</li>
+<li>GPT-2 는 <code class="span">normalizer</code> 를 사용하지 않아 스킵</li>
+<li>토크나이저 생성시 <code class="span">models.BPE()</code> 로 인자가 들어간다</li>
+<li>토크나이저 생성시 <code class="span">pre_tokenizers.ByteLevel</code> 프리토크나이저가 사용된다</li>
+<li>스페이스는 토큰에 포함</li>
+<li>역시 huggingface transformers 에서 사용하려면 wrapping 필요</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-main-nlp-tasks">7. MAIN NLP TASKS</h4>
+<h5 id="token-classification">Token classification</h5>
+<ul>
+<li><code class="span">AutoTokenizer</code> 로 model checkpoint -&gt; tokenizer</li>
+<li>학습시길 dataset 불러옴</li>
+<li>학습시킬 데이터를 토큰화 해보면 데이터가 가지고있는 레이블링 데이터(? NER 정보등)의 수와 맞지 않게됨(토큰수가 달라지며)</li>
+<li>이를 맞추는 작업이 proprocessing <ul>
+<li>토큰을 맞추기 위해 스페셜 토큰을 -100 값으로 채우고</li>
+<li>배치시에 길이를 맞추기 위해 패딩 채우는 작업</li>
+</ul>
+</li>
+<li>-100 은 loss 함수에서 무시하게되어 부하를 줄이는 역할도 있음</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="huggingface">huggingface</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-b27d974807b67466.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-f971f15f0b870f4f.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"huggingface-nlp\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"6Ljv2cGu_yYA50LdF4Vuv\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/huggingface-nlp\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"huggingface-nlp\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"huggingface-nlp\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"huggingface-nlp\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T3cba,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"huggingface-nlp\"\u003ehuggingface nlp\u003c/h1\u003e\n\u003ch2 id=\"nlp\"\u003enlp\u003c/h2\u003e\n\u003ch3 id=\"wip\"\u003e\u003ca href=\"wip\"\u003ewip\u003c/a\u003e\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eencoder -\u0026gt; 분석\u003cul\u003e\n\u003cli\u003eBERT(Bidirectional \u003cem\u003eEncoder\u003c/em\u003e Representations from Transformers)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003edecoder -\u0026gt; 생성\u003c/li\u003e\n\u003cli\u003eencoder, decoder 모델 -\u0026gt; 요약\u003c/li\u003e\n\u003cli\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"transformers\"\u003etransformers\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e흐름\u003cul\u003e\n\u003cli\u003einput -\u0026gt; tokenizer -\u0026gt; {input_ids, attension_mark}\u003c/li\u003e\n\u003cli\u003e{input_ids, attension_mark} -\u0026gt; model -\u0026gt; {hidden_state}\u003c/li\u003e\n\u003cli\u003e{hidden_state} -\u0026gt; head -\u0026gt; logits(tensor, 정규화되지 않은 점수)\u003c/li\u003e\n\u003cli\u003elogits -\u0026gt; \u003cem\u003esoftmax\u003c/em\u003e or 기타 활성함수 -\u0026gt; 확률\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"model\"\u003emodel\u003c/h4\u003e\n\u003ch5 id=\"autotokenizer\"\u003eAutoTokenizer\u003c/h5\u003e\n\u003cblockquote\u003e\u003cp\u003e\u003ccode class=\"span\"\u003einput_ids\u003c/code\u003e 를 생성한다\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ereturn_tensors\u003c/code\u003e 를 지정하지 않으면 리스트로 모두 리턴된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch5 id=\"automodel\"\u003eAutoModel\u003c/h5\u003e\n\u003cul\u003e\n\u003cli\u003efeature == hidden state\u003cul\u003e\n\u003cli\u003e768 ~ 3072 혹은 그 이상의 고차원\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003einput -\u0026gt; feature -\u0026gt; head(모델의 다른 부분)\u003c/li\u003e\n\u003cli\u003e{ input_ids } 만이 model 의 \u003cstrong\u003e필수\u003c/strong\u003e input\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eAutoModel\u003c/code\u003e 을 사용하면 \u003ccode class=\"span\"\u003eBertModel\u003c/code\u003e 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다\u003c/li\u003e\n\u003cli\u003emethod\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efrom_pretrained\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003esave_pretrained\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"tokenizer\"\u003etokenizer\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e알고리즘\u003cul\u003e\n\u003cli\u003eword base\u003cul\u003e\n\u003cli\u003e단어 또는 구분자로 잘라서 토큰화\u003c/li\u003e\n\u003cli\u003e단어사전수가 커짐\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003echaracter base\u003cul\u003e\n\u003cli\u003eword baes 토크나이저에서 \u003ccode class=\"span\"\u003eUNK\u003c/code\u003enown 토큰을 줄이는 것이 목표\u003c/li\u003e\n\u003cli\u003e문자의 구성요소인만큼 \u003ccode class=\"span\"\u003eUNK\u003c/code\u003e 토큰을 줄일 수 있다\u003c/li\u003e\n\u003cli\u003e단어 사전이 작다 -\u0026gt; 토큰은 많아짐\u003c/li\u003e\n\u003cli\u003e그러나 토큰당 가지는 의미가 적다. -\u0026gt; 중국어같은 문자는 조금 다름\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003esubword base\u003cul\u003e\n\u003cli\u003e위 두 알고리즘의 장점 조합\u003c/li\u003e\n\u003cli\u003e뭉치이지만 자주쓰이고 독립적인 것들은 토큰으로 유지\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003etokenization\u003c/code\u003e -\u0026gt; \u003ccode class=\"span\"\u003etoken\u003c/code\u003e + \u003ccode class=\"span\"\u003eization\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eAutoTokenizer\u003c/code\u003e 를 사용하면 \u003ccode class=\"span\"\u003eBertTokenizer\u003c/code\u003e 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다\u003c/li\u003e\n\u003cli\u003emethod\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efrom_pretrained\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003esave_pretrained\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"fine-tunning-a-pre-trained-model\"\u003efine-tunning a pre-trained model\u003c/h4\u003e\n\u003ch5 id=\"processing-the-data\"\u003eProcessing the data\u003c/h5\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003etoken_type_ids\u003c/code\u003e 한 로우의 데이터 셋에 여러 문장이 포함된 경우를 구분한다\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ebert-base-uncased\u003c/code\u003e checkpoint 에서의 토크나이저는 제공되나 다른 checkpoint 에서는 해당 checkpoint 의 니즈에 따른다 \u003c/li\u003e\n\u003cli\u003e모델과 토크나이저는 동일 체크포인트를 사용하므로 해당 속성의 존재여부에 관심가질 필요는 없다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003etokenizer 는 rust로 작성되어 \u003ccode class=\"span\"\u003e[dataset].map(tokenizer_function, batched=True)\u003c/code\u003e 를 주면 병렬로 빠르게 처리가 가능하다, \u003ccode class=\"span\"\u003enum_proc\u003c/code\u003e - 프로세서 수 조절도 가능한 것 같다\u003c/li\u003e\n\u003cli\u003edataset 은 \u003cstrong\u003eapach arrow\u003c/strong\u003e 를 사용하여 기본적으로 디스크를 사용하고 토크나이저를 사용하여 올릴대만 메모리가 사용된다\u003c/li\u003e\n\u003cli\u003edataset 에서 사용되는 \u003ccode class=\"span\"\u003e.map\u003c/code\u003e 함수는 단순 맵이 아니라 기존 데이터를 두고 리턴되는 데이터가 추가되는 형태(reduce)인것으로 보인다. (테스트 결과)\u003c/li\u003e\n\u003cli\u003e데이터를 동시에(\u003ccode class=\"span\"\u003e.map\u003c/code\u003e) 토큰화를 하면 속도가 향상된다\u003cul\u003e\n\u003cli\u003e하지만 이 경우에 각 로우에 해당하는 시퀀스(문자열, 데이터 whatever) 가 다르므로 패딩이 필요하다\u003c/li\u003e\n\u003cli\u003e패딩을 max_length(전체 시퀀스중의 최대길이) 혹은 model 이 받아들일 수 있는 최대 길이로 커팅된다\u003c/li\u003e\n\u003cli\u003e여기서 불필요한 패딩이 최악의 케이스로 표준화되면서 퍼포먼스 손실이 일어난다\u003c/li\u003e\n\u003cli\u003e이를 해결하기 위해서 dynamic padding 이 사용된다\u003c/li\u003e\n\u003cli\u003edynamic padding(동적 패딩) 은 배치로 토크나이징을 할때 배치사이즈의 맥스로 통일시킨다\u003c/li\u003e\n\u003cli\u003e전체 데이터셋의 부분집합인 배치별로 패딩길이가 최적화되어 큰폭의 성능 개선이 가능하다\u003cpre\u003e\u003ccode class=\"hljs language-python\"\u003e\u003cspan class=\"hljs-keyword\"\u003efrom\u003c/span\u003e transformers \u003cspan class=\"hljs-keyword\"\u003eimport\u003c/span\u003e datacollatorwithpadding\n\ndata_collator = datacollatorwithpadding(tokenizer=tokenizer)\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003ecpu 와 gpu 에서 성능향상이 있으므로 거의 필수적으로 적용되지만 google tpu 에서는 고정 텐서 shape를 요구하므로 구글 코렙등의 환경에서는 사용이 불가능하다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e요약\u003cul\u003e\n\u003cli\u003e\u0026quot;glue\u0026quot; dataset 의 8/10 다중 문자열을 가지고 학습되었으며 그 간의 관계를 갖는 데이터셋이다\u003c/li\u003e\n\u003cli\u003e이를 학습한 모델의 경우 토크나이저는 \u003ccode class=\"span\"\u003etoken_type_ids\u003c/code\u003e 를 함께 리턴하여 문자열이 여러개임을 구분한다\u003c/li\u003e\n\u003cli\u003e토큰화는 배치를 사용해서 가속화 할 수 있다.\u003c/li\u003e\n\u003cli\u003e토큰화는 동적 패딩을 사용해서 가속화 할 수 있다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"fine-tuning-a-model-with-the-trainer-api-or-keras\"\u003eFine-tuning a model with the Trainer API or Keras\u003c/h4\u003e\n\u003ch4 id=\"a-full-training\"\u003ea full training\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003eaccelerator\u003cul\u003e\n\u003cli\u003egpu 분산환경에서 작업하기 위해 필요\u003c/li\u003e\n\u003cli\u003eaccelerator 를 통해 래핑된 오프젝트로 작업\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003epython\u003c/code\u003e 명령어대신 \u003ccode class=\"span\"\u003eaccelerator\u003c/code\u003e 를 통해 작업한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"fine-tuning-check\"\u003eFine-tuning, Check!\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e파트 정리\u003c/li\u003e\n\u003cli\u003eAuto{Tokenizer,Model}.from_pretrained([checkpoint]) 를 통해 시작\u003cul\u003e\n\u003cli\u003eAuto* 를 사용하는 경우 huggingface hub 로 부터 해당 model card 를 읽어들여서 설정을 처리한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e그리고 데이터 셋을 불러와서(\u003ccode class=\"span\"\u003efrom datasets\u003c/code\u003e) 이를 기반으로 \u003ccode class=\"span\"\u003eTrainer\u003c/code\u003e 를 생성하고 학습시킨다\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eTrainerArguments\u003c/code\u003e 는 \u003ccode class=\"span\"\u003eTrainer\u003c/code\u003e 를 위해 trainer, evaluation 을 위한  hyperparameters 를 제공한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003edataset\u003c/code\u003e 은 \u003cem\u003eapache arrow\u003c/em\u003e 로 작성되었으며 작업시에만 메모리를 사용한다\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003emap\u003c/code\u003e 메소드\u003cul\u003e\n\u003cli\u003e동시 배치 처리가 가능하다\u003c/li\u003e\n\u003cli\u003e작업은 캐싱된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e학습 속도 향상을 위해서 동적 패딩이 사용되며, 이는 batch 안에서의 \u003ccode class=\"span\"\u003emax_length\u003c/code\u003e 를 활용하는 방식이다\u003cul\u003e\n\u003cli\u003etpu 는 동적 패딩을지원하지 않는다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e학습시키면서 평가나 프로그래스를 볼 수있도록 설정이 가능하다 (\u003ccode class=\"span\"\u003eevaluator\u003c/code\u003e)\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eaccelerator\u003c/code\u003e 를 사용하면 multiple gpu 를 활용한 학습이 가능하다\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eAutoModelForSequenceClassification\u003c/code\u003e 와 같은 모델을 생성하면서 \u003ccode class=\"span\"\u003ebert-base-uncased\u003c/code\u003e 와 같은 checkpoint 를 \u003ccode class=\"span\"\u003efrom_pretrained\u003c/code\u003e 로 불러들이면\u003cul\u003e\n\u003cli\u003e워닝이 발생한다\u003c/li\u003e\n\u003cli\u003epre-trained 모델에서 sequence classification 을 위한 헤드는 버려진다\u003c/li\u003e\n\u003cli\u003e새로운 헤드가 장착되므로 여기에 학습을 시키면 된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"4-sharing-models-and-tokenizers\"\u003e4. SHARING MODELS AND TOKENIZERS\u003c/h3\u003e\n\u003ch4 id=\"the-hugging-face-hub\"\u003eThe Hugging Face hub\u003c/h4\u003e\n\u003ch4 id=\"using-pretrained-models\"\u003eUsing pretrained models\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003epipeline\u003c/code\u003e 함수를 사용할때는 task, checkpoint 짝이 맞아야한다\u003cul\u003e\n\u003cli\u003e아닌경우 head가 task에 맞지않음으로 정상동작하지 않는다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003epipeline\u003c/code\u003e 함수가 아니어도 model을 바로 생성할수 있다.\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efrom transformers import ATokenizer, AForMaskedLM\u003c/code\u003e 의 형식\u003c/li\u003e\n\u003cli\u003e하지만 이건 모델 종속적이므로 추천하지 않고 대신 \u003ccode class=\"span\"\u003eAuto*\u003c/code\u003e 형태의 사용을 추천한다\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003efrom transformers import AutoTokenizer, AutoModelForMaskedLM\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e모델 사용할대는 model card(huggingface 모델 페이지의 정보)를 확인해라\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"sharing-pretrained-models\"\u003eSharing pretrained models\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ehuggingface-cli\u003c/code\u003e 에 대한 내용\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"tbd\"\u003etbd\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"buliding-a-model-card\"\u003eBuliding a model card\u003c/h4\u003e\n\u003cblockquote\u003e\u003cp\u003e읽어보면 도움이 될만한 내용들\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003e모델에 대한 정보\u003c/li\u003e\n\u003cli\u003e한계\u003c/li\u003e\n\u003cli\u003e라이센스\u003c/li\u003e\n\u003cli\u003e학습방법\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"part-1-completed\"\u003ePart 1 completed!\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e여기까지 왔으면 text classification 에서 single, paris 문장에 대한 파인튜닝이 가능해야한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"5-the--datasets-library\"\u003e5. THE 🤗 DATASETS LIBRARY\u003c/h3\u003e\n\u003ch4 id=\"introduction\"\u003eIntroduction\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e파인튜닝시 데이터셋 사용\u003cul\u003e\n\u003cli\u003e로드 from hugging face hub\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eDataset.map()\u003c/code\u003e 통한 전처리\u003c/li\u003e\n\u003cli\u003emetric 계산\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"what-if-my-dataset-isnt-on-the-hub\"\u003eWhat if my dataset isn’t on the Hub?\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ecsv\u003c/code\u003e(\u003ccode class=\"span\"\u003etsv\u003c/code\u003e 포함), \u003ccode class=\"span\"\u003etext\u003c/code\u003e, \u003ccode class=\"span\"\u003ejson\u003c/code\u003e, \u003ccode class=\"span\"\u003ejsonl\u003c/code\u003e, \u003ccode class=\"span\"\u003epandas\u003c/code\u003e(\u003ccode class=\"span\"\u003epkl\u003c/code\u003e) 지원\u003c/li\u003e\n\u003cli\u003elocal / remote file 지원\u003c/li\u003e\n\u003cli\u003efrom datasets import load_dataset\u003c/li\u003e\n\u003cli\u003e다양한 방법으로 train/test 데이터 분할을 지원한다\u003c/li\u003e\n\u003cli\u003e압축파일도 지원한다\u003c/li\u003e\n\u003cli\u003e경로를 path 대신 url 을 주면 리포트 파일을 로딩한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"time-to-slice-and-dice\"\u003eTime to slice and dice\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e데이터 클린업\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch5 id=\"샘플링\"\u003e샘플링\u003c/h5\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eDataset\u003c/code\u003e, \u003ccode class=\"span\"\u003eDatasetDict\u003c/code\u003e 의 메소드\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eDatset.shufffle().select(range(1000))\u003c/code\u003e 을 통해 테스트해볼수있다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch5 id=\"정규화\"\u003e정규화\u003c/h5\u003e\n\u003cul\u003e\n\u003cli\u003e수상한 컬럼이지만 id 처럼 보이는 컬럼이 발견되면 \u003ccode class=\"span\"\u003e.unique\u003c/code\u003e 메소드를 통해 id 인지 확인한다\u003cul\u003e\n\u003cli\u003eid 가 확인되면 \u003ccode class=\"span\"\u003eDatasetDict.rename_column\u003c/code\u003e 을 통해서 적합한 이름으로 변경\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e.map\u003c/code\u003e 을 통해 대소문자 통일\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e.filter\u003c/code\u003e 를 통해 \u003ccode class=\"span\"\u003eNone\u003c/code\u003e 제거\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"@todo\"\u003e@todo\u003c/a\u003e 걍 제거해버리면 되는건가;\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ehtml\u003c/code\u003e 코드가 포함된 데이터의 경우 \u003ccode class=\"span\"\u003ehtml\u003c/code\u003e 패키지의 \u003ccode class=\"span\"\u003eunescape\u003c/code\u003e 로 변경가능\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eI\u0026amp;#039;m\u003c/code\u003e -\u0026gt; \u003ccode class=\"span\"\u003eI\u0026#39;m\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch5 id=\"새-컬럼-생성\"\u003e새 컬럼 생성\u003c/h5\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eDataset.map\u003c/code\u003e or \u003ccode class=\"span\"\u003eDataset.add_column\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eDataset.sort\u003c/code\u003e 로 특정 컬럼의 값을 통해 정렬가능\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e.num_rows\u003c/code\u003e 를 통해 카운팅\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch5 id=\"map\"\u003e\u003ccode class=\"span\"\u003e.map\u003c/code\u003e\u003c/h5\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ebatched=True\u003c/code\u003e\u003cul\u003e\n\u003cli\u003ebatch 의 기본값은 1000\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ebatched=True\u003c/code\u003e 가 설정되면 map 함수로 들어오는 딕셔너리 인자의 값들은 리스트가 된다\u003c/li\u003e\n\u003cli\u003e때문에 리스트 컴프리헨션등을 사용해서 한방에 처리해야한다\u003c/li\u003e\n\u003cli\u003ebatch 도 가속화되지만 \u003ccode class=\"span\"\u003e.map\u003c/code\u003e 함수내에서 사용되는 함수내 리스트 컴프리헨션도 for loop 보다 속도면에서 우월하다\u003c/li\u003e\n\u003cli\u003e토크나이저를 fast 버전을 사용할 수 없는경우(rust backend 사용 x) \u003ccode class=\"span\"\u003enum_proc\u003c/code\u003e 을 조정해서 속도를 높일 수 있다.\u003c/li\u003e\n\u003cli\u003e내용이 많아서 배치 최적화는 그때가서 읽어봐야할 듯 \u003ca href=\"tbd\"\u003etbd\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e파이썬 멀티프로세싱(\u003ccode class=\"span\"\u003enum_proc\u003c/code\u003e) 을 fast tokenizer + batched=True 와 사용하지 말것을 권고\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"6-tokenizer\"\u003e6. tokenizer\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003epipeline\u003c/code\u003e 함수 없이 토크나이징하는 것에 대한 설명 있음\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch5 id=\"building-a-tokenizer-block-by-block\"\u003eBuilding a tokenizer, block by block\u003c/h5\u003e\n\u003cul\u003e\n\u003cli\u003eBIRT\u003cul\u003e\n\u003cli\u003epre_tokenizers 들은 compose 가능\u003c/li\u003e\n\u003cli\u003epre_tokenizers.Whitespace - 공백 및 구두점\u003cul\u003e\n\u003cli\u003epre_tokenizers.WhitespaceSplit - 공백에서만 split\u003c/li\u003e\n\u003cli\u003epre_tokenizers.Punctuation - 구두점에서만 split\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003etrainer 사용시에는 스페셜 토큰들을 모두 제공해야한다\u003c/li\u003e\n\u003cli\u003e이를 가지고 저장(\u003ca href=\"json\"\u003ejson\u003c/a\u003e) 후 불러와서 사용하려는 경우\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ePreTrainedTokenizerFast\u003c/code\u003e 로 래핑해야하며 이때 스페셜 토큰들은 명시해야한다\u003cul\u003e\n\u003cli\u003ewrapping 후에는 허브에 올리든 \u003ccode class=\"span\"\u003esave_pretrained\u003c/code\u003e 를 통해서 사용가능하다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eBPE(GPT-2 토크나이저)\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eunk_token\u003c/code\u003e 을 사용하지 않는다\u003c/li\u003e\n\u003cli\u003eGPT-2 는 \u003ccode class=\"span\"\u003enormalizer\u003c/code\u003e 를 사용하지 않아 스킵\u003c/li\u003e\n\u003cli\u003e토크나이저 생성시 \u003ccode class=\"span\"\u003emodels.BPE()\u003c/code\u003e 로 인자가 들어간다\u003c/li\u003e\n\u003cli\u003e토크나이저 생성시 \u003ccode class=\"span\"\u003epre_tokenizers.ByteLevel\u003c/code\u003e 프리토크나이저가 사용된다\u003c/li\u003e\n\u003cli\u003e스페이스는 토큰에 포함\u003c/li\u003e\n\u003cli\u003e역시 huggingface transformers 에서 사용하려면 wrapping 필요\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"7-main-nlp-tasks\"\u003e7. MAIN NLP TASKS\u003c/h4\u003e\n\u003ch5 id=\"token-classification\"\u003eToken classification\u003c/h5\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eAutoTokenizer\u003c/code\u003e 로 model checkpoint -\u0026gt; tokenizer\u003c/li\u003e\n\u003cli\u003e학습시길 dataset 불러옴\u003c/li\u003e\n\u003cli\u003e학습시킬 데이터를 토큰화 해보면 데이터가 가지고있는 레이블링 데이터(? NER 정보등)의 수와 맞지 않게됨(토큰수가 달라지며)\u003c/li\u003e\n\u003cli\u003e이를 맞추는 작업이 proprocessing \u003cul\u003e\n\u003cli\u003e토큰을 맞추기 위해 스페셜 토큰을 -100 값으로 채우고\u003c/li\u003e\n\u003cli\u003e배치시에 길이를 맞추기 위해 패딩 채우는 작업\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e-100 은 loss 함수에서 무시하게되어 부하를 줄이는 역할도 있음\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"huggingface\"\u003ehuggingface\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/bc70f7b\\n\",\"className\":\"bg-white text-black\",\"children\":\"bc70f7b\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/huggingface-nlp.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/huggingface-nlp.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/huggingface-nlp.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"huggingface-nlp\",\"name\":\"huggingface-nlp\",\"val\":6},{\"id\":\"wip\",\"name\":\"wip\",\"val\":2},{\"id\":\"tbd\",\"name\":\"tbd\",\"val\":1},{\"id\":\"@todo\",\"name\":\"@todo\",\"val\":24},{\"id\":\"json\",\"name\":\"json\",\"val\":1},{\"id\":\"huggingface\",\"name\":\"huggingface\",\"val\":7},{\"id\":\"diary/2024-12-31\",\"name\":\"diary/2024-12-31\",\"val\":441}],\"links\":[{\"source\":\"huggingface-nlp\",\"target\":\"wip\"},{\"source\":\"huggingface-nlp\",\"target\":\"tbd\"},{\"source\":\"huggingface-nlp\",\"target\":\"@todo\"},{\"source\":\"huggingface-nlp\",\"target\":\"tbd\"},{\"source\":\"huggingface-nlp\",\"target\":\"json\"},{\"source\":\"huggingface-nlp\",\"target\":\"huggingface\"},{\"source\":\"huggingface\",\"target\":\"huggingface-nlp\"},{\"source\":\"diary/2024-12-31\",\"target\":\"huggingface-nlp\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"huggingface-nlp\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/huggingface-nlp\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"huggingface-nlp\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"wip\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/wip\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"wip\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"tbd\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/tbd\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"tbd\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"@todo\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/@todo\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"@todo\"}],[\"$\",\"sup\",null,{\"children\":24}]]}]}],[\"$\",\"span\",\"json\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/json\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"json\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"huggingface\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/huggingface\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"huggingface\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"diary/2024-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-12-31\"}],[\"$\",\"sup\",null,{\"children\":441}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"huggingface-nlp\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#huggingface-nlp\",\"children\":\"huggingface nlp\"}]}],[\"$\",\"div\",\"nlp\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#nlp\",\"children\":\"nlp\"}]}],[\"$\",\"div\",\"wip\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#wip\",\"children\":\"wip\"}]}],[\"$\",\"div\",\"transformers\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#transformers\",\"children\":\"transformers\"}]}],[\"$\",\"div\",\"model\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#model\",\"children\":\"model\"}]}],[\"$\",\"div\",\"autotokenizer\",{\"className\":\"pl-8\",\"children\":[\"$\",\"a\",null,{\"href\":\"#autotokenizer\",\"children\":\"AutoTokenizer\"}]}],[\"$\",\"div\",\"automodel\",{\"className\":\"pl-8\",\"children\":[\"$\",\"a\",null,{\"href\":\"#automodel\",\"children\":\"AutoModel\"}]}],[\"$\",\"div\",\"tokenizer\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#tokenizer\",\"children\":\"tokenizer\"}]}],[\"$\",\"div\",\"fine-tunning-a-pre-trained-model\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#fine-tunning-a-pre-trained-model\",\"children\":\"fine-tunning a pre-trained model\"}]}],[\"$\",\"div\",\"processing-the-data\",{\"className\":\"pl-8\",\"children\":[\"$\",\"a\",null,{\"href\":\"#processing-the-data\",\"children\":\"Processing the data\"}]}],[\"$\",\"div\",\"fine-tuning-a-model-with-the-trainer-api-or-keras\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#fine-tuning-a-model-with-the-trainer-api-or-keras\",\"children\":\"Fine-tuning a model with the Trainer API or Keras\"}]}],[\"$\",\"div\",\"a-full-training\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#a-full-training\",\"children\":\"a full training\"}]}],[\"$\",\"div\",\"fine-tuning-check\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#fine-tuning-check\",\"children\":\"Fine-tuning, Check!\"}]}],[\"$\",\"div\",\"4-sharing-models-and-tokenizers\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#4-sharing-models-and-tokenizers\",\"children\":\"4. SHARING MODELS AND TOKENIZERS\"}]}],[\"$\",\"div\",\"the-hugging-face-hub\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#the-hugging-face-hub\",\"children\":\"The Hugging Face hub\"}]}],[\"$\",\"div\",\"using-pretrained-models\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#using-pretrained-models\",\"children\":\"Using pretrained models\"}]}],[\"$\",\"div\",\"sharing-pretrained-models\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#sharing-pretrained-models\",\"children\":\"Sharing pretrained models\"}]}],[\"$\",\"div\",\"buliding-a-model-card\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#buliding-a-model-card\",\"children\":\"Buliding a model card\"}]}],[\"$\",\"div\",\"part-1-completed\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#part-1-completed\",\"children\":\"Part 1 completed!\"}]}],[\"$\",\"div\",\"5-the-🤗-datasets-library\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#5-the-🤗-datasets-library\",\"children\":\"5. THE 🤗 DATASETS LIBRARY\"}]}],[\"$\",\"div\",\"introduction\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#introduction\",\"children\":\"Introduction\"}]}],[\"$\",\"div\",\"what-if-my-dataset-isnt-on-the-hub\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#what-if-my-dataset-isnt-on-the-hub\",\"children\":\"What if my dataset isn’t on the Hub?\"}]}],[\"$\",\"div\",\"time-to-slice-and-dice\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#time-to-slice-and-dice\",\"children\":\"Time to slice and dice\"}]}],[\"$\",\"div\",\"샘플링\",{\"className\":\"pl-8\",\"children\":[\"$\",\"a\",null,{\"href\":\"#샘플링\",\"children\":\"샘플링\"}]}],[\"$\",\"div\",\"정규화\",{\"className\":\"pl-8\",\"children\":[\"$\",\"a\",null,{\"href\":\"#정규화\",\"children\":\"정규화\"}]}],[\"$\",\"div\",\"새-컬럼-생성\",{\"className\":\"pl-8\",\"children\":[\"$\",\"a\",null,{\"href\":\"#새-컬럼-생성\",\"children\":\"새 컬럼 생성\"}]}],[\"$\",\"div\",\"map\",{\"className\":\"pl-8\",\"children\":[\"$\",\"a\",null,{\"href\":\"#map\",\"children\":\".map\"}]}],[\"$\",\"div\",\"6-tokenizer\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#6-tokenizer\",\"children\":\"6. tokenizer\"}]}],[\"$\",\"div\",\"building-a-tokenizer-block-by-block\",{\"className\":\"pl-8\",\"children\":[\"$\",\"a\",null,{\"href\":\"#building-a-tokenizer-block-by-block\",\"children\":\"Building a tokenizer, block by block\"}]}],[\"$\",\"div\",\"7-main-nlp-tasks\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#7-main-nlp-tasks\",\"children\":\"7. MAIN NLP TASKS\"}]}],[\"$\",\"div\",\"token-classification\",{\"className\":\"pl-8\",\"children\":[\"$\",\"a\",null,{\"href\":\"#token-classification\",\"children\":\"Token classification\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T2a8e,"])</script><script>self.__next_f.push([1,"\n## nlp\n### [[wip]]\n- encoder -\u003e 분석\n  - BERT(Bidirectional *Encoder* Representations from Transformers)\n- decoder -\u003e 생성\n- encoder, decoder 모델 -\u003e 요약\n- \n\n### transformers\n- 흐름\n  - input -\u003e tokenizer -\u003e {input_ids, attension_mark}\n  - {input_ids, attension_mark} -\u003e model -\u003e {hidden_state}\n  - {hidden_state} -\u003e head -\u003e logits(tensor, 정규화되지 않은 점수)\n  - logits -\u003e *softmax* or 기타 활성함수 -\u003e 확률\n\n#### model\n##### AutoTokenizer\n\u003e `input_ids` 를 생성한다\n- `return_tensors` 를 지정하지 않으면 리스트로 모두 리턴된다\n\n##### AutoModel\n- feature == hidden state\n  - 768 ~ 3072 혹은 그 이상의 고차원\n- input -\u003e feature -\u003e head(모델의 다른 부분)\n- { input_ids } 만이 model 의 **필수** input\n- `AutoModel` 을 사용하면 `BertModel` 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다\n- method\n  - `from_pretrained`\n  - `save_pretrained`\n\n#### tokenizer\n- 알고리즘\n  - word base\n    - 단어 또는 구분자로 잘라서 토큰화\n    - 단어사전수가 커짐\n  - character base\n    - word baes 토크나이저에서 `UNK`nown 토큰을 줄이는 것이 목표\n    - 문자의 구성요소인만큼 `UNK` 토큰을 줄일 수 있다\n    - 단어 사전이 작다 -\u003e 토큰은 많아짐\n    - 그러나 토큰당 가지는 의미가 적다. -\u003e 중국어같은 문자는 조금 다름\n  - subword base\n    - 위 두 알고리즘의 장점 조합\n    - 뭉치이지만 자주쓰이고 독립적인 것들은 토큰으로 유지\n      - `tokenization` -\u003e `token` + `ization`\n- `AutoTokenizer` 를 사용하면 `BertTokenizer` 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다\n- method\n  - `from_pretrained`\n  - `save_pretrained`\n\n#### fine-tunning a pre-trained model\n##### Processing the data\n- `token_type_ids` 한 로우의 데이터 셋에 여러 문장이 포함된 경우를 구분한다\n  - `bert-base-uncased` checkpoint 에서의 토크나이저는 제공되나 다른 checkpoint 에서는 해당 checkpoint 의 니즈에 따른다 \n  - 모델과 토크나이저는 동일 체크포인트를 사용하므로 해당 속성의 존재여부에 관심가질 필요는 없다\n- tokenizer 는 rust로 작성되어 `[dataset].map(tokenizer_function, batched=True)` 를 주면 병렬로 빠르게 처리가 가능하다, `num_proc` - 프로세서 수 조절도 가능한 것 같다\n- dataset 은 **apach arrow** 를 사용하여 기본적으로 디스크를 사용하고 토크나이저를 사용하여 올릴대만 메모리가 사용된다\n- dataset 에서 사용되는 `.map` 함수는 단순 맵이 아니라 기존 데이터를 두고 리턴되는 데이터가 추가되는 형태(reduce)인것으로 보인다. (테스트 결과)\n- 데이터를 동시에(`.map`) 토큰화를 하면 속도가 향상된다\n  - 하지만 이 경우에 각 로우에 해당하는 시퀀스(문자열, 데이터 whatever) 가 다르므로 패딩이 필요하다\n  - 패딩을 max_length(전체 시퀀스중의 최대길이) 혹은 model 이 받아들일 수 있는 최대 길이로 커팅된다\n  - 여기서 불필요한 패딩이 최악의 케이스로 표준화되면서 퍼포먼스 손실이 일어난다\n  - 이를 해결하기 위해서 dynamic padding 이 사용된다\n  - dynamic padding(동적 패딩) 은 배치로 토크나이징을 할때 배치사이즈의 맥스로 통일시킨다\n  - 전체 데이터셋의 부분집합인 배치별로 패딩길이가 최적화되어 큰폭의 성능 개선이 가능하다\n    ```python\n    from transformers import datacollatorwithpadding\n    \n    data_collator = datacollatorwithpadding(tokenizer=tokenizer)\n    ```\n  - cpu 와 gpu 에서 성능향상이 있으므로 거의 필수적으로 적용되지만 google tpu 에서는 고정 텐서 shape를 요구하므로 구글 코렙등의 환경에서는 사용이 불가능하다\n- 요약\n  - \"glue\" dataset 의 8/10 다중 문자열을 가지고 학습되었으며 그 간의 관계를 갖는 데이터셋이다\n  - 이를 학습한 모델의 경우 토크나이저는 `token_type_ids` 를 함께 리턴하여 문자열이 여러개임을 구분한다\n  - 토큰화는 배치를 사용해서 가속화 할 수 있다.\n  - 토큰화는 동적 패딩을 사용해서 가속화 할 수 있다.\n\n#### Fine-tuning a model with the Trainer API or Keras\n\n#### a full training\n- accelerator\n  - gpu 분산환경에서 작업하기 위해 필요\n  - accelerator 를 통해 래핑된 오프젝트로 작업\n  - `python` 명령어대신 `accelerator` 를 통해 작업한다\n\n#### Fine-tuning, Check!\n- 파트 정리\n- Auto{Tokenizer,Model}.from_pretrained([checkpoint]) 를 통해 시작\n  - Auto* 를 사용하는 경우 huggingface hub 로 부터 해당 model card 를 읽어들여서 설정을 처리한다\n- 그리고 데이터 셋을 불러와서(`from datasets`) 이를 기반으로 `Trainer` 를 생성하고 학습시킨다\n  - `TrainerArguments` 는 `Trainer` 를 위해 trainer, evaluation 을 위한  hyperparameters 를 제공한다\n- `dataset` 은 *apache arrow* 로 작성되었으며 작업시에만 메모리를 사용한다\n  - `map` 메소드\n    - 동시 배치 처리가 가능하다\n    - 작업은 캐싱된다\n- 학습 속도 향상을 위해서 동적 패딩이 사용되며, 이는 batch 안에서의 `max_length` 를 활용하는 방식이다\n  - tpu 는 동적 패딩을지원하지 않는다.\n- 학습시키면서 평가나 프로그래스를 볼 수있도록 설정이 가능하다 (`evaluator`)\n- `accelerator` 를 사용하면 multiple gpu 를 활용한 학습이 가능하다\n- `AutoModelForSequenceClassification` 와 같은 모델을 생성하면서 `bert-base-uncased` 와 같은 checkpoint 를 `from_pretrained` 로 불러들이면\n  - 워닝이 발생한다\n  - pre-trained 모델에서 sequence classification 을 위한 헤드는 버려진다\n  - 새로운 헤드가 장착되므로 여기에 학습을 시키면 된다\n\n### 4. SHARING MODELS AND TOKENIZERS\n\n#### The Hugging Face hub  \n\n#### Using pretrained models\n- `pipeline` 함수를 사용할때는 task, checkpoint 짝이 맞아야한다\n  - 아닌경우 head가 task에 맞지않음으로 정상동작하지 않는다\n- `pipeline` 함수가 아니어도 model을 바로 생성할수 있다.\n  - `from transformers import ATokenizer, AForMaskedLM` 의 형식\n  - 하지만 이건 모델 종속적이므로 추천하지 않고 대신 `Auto*` 형태의 사용을 추천한다\n    - `from transformers import AutoTokenizer, AutoModelForMaskedLM`\n- 모델 사용할대는 model card(huggingface 모델 페이지의 정보)를 확인해라\n\n#### Sharing pretrained models\n- `huggingface-cli` 에 대한 내용\n- [[tbd]]\n\n#### Buliding a model card\n\u003e 읽어보면 도움이 될만한 내용들\n- 모델에 대한 정보\n- 한계\n- 라이센스\n- 학습방법\n\n#### Part 1 completed!\n- 여기까지 왔으면 text classification 에서 single, paris 문장에 대한 파인튜닝이 가능해야한다\n\n### 5. THE 🤗 DATASETS LIBRARY\n#### Introduction\n- 파인튜닝시 데이터셋 사용\n  - 로드 from hugging face hub\n  - `Dataset.map()` 통한 전처리\n  - metric 계산\n\n#### What if my dataset isn’t on the Hub?\n- `csv`(`tsv` 포함), `text`, `json`, `jsonl`, `pandas`(`pkl`) 지원\n- local / remote file 지원\n- from datasets import load_dataset\n- 다양한 방법으로 train/test 데이터 분할을 지원한다\n- 압축파일도 지원한다\n- 경로를 path 대신 url 을 주면 리포트 파일을 로딩한다\n\n#### Time to slice and dice\n- 데이터 클린업\n\n##### 샘플링\n- `Dataset`, `DatasetDict` 의 메소드\n- `Datset.shufffle().select(range(1000))` 을 통해 테스트해볼수있다.\n\n##### 정규화\n- 수상한 컬럼이지만 id 처럼 보이는 컬럼이 발견되면 `.unique` 메소드를 통해 id 인지 확인한다\n  - id 가 확인되면 `DatasetDict.rename_column` 을 통해서 적합한 이름으로 변경\n- `.map` 을 통해 대소문자 통일\n- `.filter` 를 통해 `None` 제거\n  - [ ] [[@todo]] 걍 제거해버리면 되는건가;\n- `html` 코드가 포함된 데이터의 경우 `html` 패키지의 `unescape` 로 변경가능\n  - `I\u0026#039;m` -\u003e `I'm`\n\n##### 새 컬럼 생성\n- `Dataset.map` or `Dataset.add_column`\n- `Dataset.sort` 로 특정 컬럼의 값을 통해 정렬가능\n- `.num_rows` 를 통해 카운팅\n\n##### `.map`\n- `batched=True`\n  - batch 의 기본값은 1000\n  - `batched=True` 가 설정되면 map 함수로 들어오는 딕셔너리 인자의 값들은 리스트가 된다\n  - 때문에 리스트 컴프리헨션등을 사용해서 한방에 처리해야한다\n  - batch 도 가속화되지만 `.map` 함수내에서 사용되는 함수내 리스트 컴프리헨션도 for loop 보다 속도면에서 우월하다\n  - 토크나이저를 fast 버전을 사용할 수 없는경우(rust backend 사용 x) `num_proc` 을 조정해서 속도를 높일 수 있다.\n  - 내용이 많아서 배치 최적화는 그때가서 읽어봐야할 듯 [[tbd]]\n  - 파이썬 멀티프로세싱(`num_proc`) 을 fast tokenizer + batched=True 와 사용하지 말것을 권고\n\n#### 6. tokenizer\n- `pipeline` 함수 없이 토크나이징하는 것에 대한 설명 있음\n\n##### Building a tokenizer, block by block\n- BIRT\n  - pre_tokenizers 들은 compose 가능\n  - pre_tokenizers.Whitespace - 공백 및 구두점\n    - pre_tokenizers.WhitespaceSplit - 공백에서만 split\n    - pre_tokenizers.Punctuation - 구두점에서만 split\n  - trainer 사용시에는 스페셜 토큰들을 모두 제공해야한다\n  - 이를 가지고 저장([[json]]) 후 불러와서 사용하려는 경우\n    - `PreTrainedTokenizerFast` 로 래핑해야하며 이때 스페셜 토큰들은 명시해야한다\n      - wrapping 후에는 허브에 올리든 `save_pretrained` 를 통해서 사용가능하다\n- BPE(GPT-2 토크나이저)\n  - `unk_token` 을 사용하지 않는다\n  - GPT-2 는 `normalizer` 를 사용하지 않아 스킵\n  - 토크나이저 생성시 `models.BPE()` 로 인자가 들어간다\n  - 토크나이저 생성시 `pre_tokenizers.ByteLevel` 프리토크나이저가 사용된다\n  - 스페이스는 토큰에 포함\n  - 역시 huggingface transformers 에서 사용하려면 wrapping 필요\n\n#### 7. MAIN NLP TASKS\n##### Token classification\n- `AutoTokenizer` 로 model checkpoint -\u003e tokenizer\n- 학습시길 dataset 불러옴\n- 학습시킬 데이터를 토큰화 해보면 데이터가 가지고있는 레이블링 데이터(? NER 정보등)의 수와 맞지 않게됨(토큰수가 달라지며)\n- 이를 맞추는 작업이 proprocessing \n  - 토큰을 맞추기 위해 스페셜 토큰을 -100 값으로 채우고\n  - 배치시에 길이를 맞추기 위해 패딩 채우는 작업\n- -100 은 loss 함수에서 무시하게되어 부하를 줄이는 역할도 있음\n\n## link\n- [[huggingface]]\n"])</script><script>self.__next_f.push([1,"16:T2a8e,"])</script><script>self.__next_f.push([1,"\n## nlp\n### [[wip]]\n- encoder -\u003e 분석\n  - BERT(Bidirectional *Encoder* Representations from Transformers)\n- decoder -\u003e 생성\n- encoder, decoder 모델 -\u003e 요약\n- \n\n### transformers\n- 흐름\n  - input -\u003e tokenizer -\u003e {input_ids, attension_mark}\n  - {input_ids, attension_mark} -\u003e model -\u003e {hidden_state}\n  - {hidden_state} -\u003e head -\u003e logits(tensor, 정규화되지 않은 점수)\n  - logits -\u003e *softmax* or 기타 활성함수 -\u003e 확률\n\n#### model\n##### AutoTokenizer\n\u003e `input_ids` 를 생성한다\n- `return_tensors` 를 지정하지 않으면 리스트로 모두 리턴된다\n\n##### AutoModel\n- feature == hidden state\n  - 768 ~ 3072 혹은 그 이상의 고차원\n- input -\u003e feature -\u003e head(모델의 다른 부분)\n- { input_ids } 만이 model 의 **필수** input\n- `AutoModel` 을 사용하면 `BertModel` 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다\n- method\n  - `from_pretrained`\n  - `save_pretrained`\n\n#### tokenizer\n- 알고리즘\n  - word base\n    - 단어 또는 구분자로 잘라서 토큰화\n    - 단어사전수가 커짐\n  - character base\n    - word baes 토크나이저에서 `UNK`nown 토큰을 줄이는 것이 목표\n    - 문자의 구성요소인만큼 `UNK` 토큰을 줄일 수 있다\n    - 단어 사전이 작다 -\u003e 토큰은 많아짐\n    - 그러나 토큰당 가지는 의미가 적다. -\u003e 중국어같은 문자는 조금 다름\n  - subword base\n    - 위 두 알고리즘의 장점 조합\n    - 뭉치이지만 자주쓰이고 독립적인 것들은 토큰으로 유지\n      - `tokenization` -\u003e `token` + `ization`\n- `AutoTokenizer` 를 사용하면 `BertTokenizer` 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다\n- method\n  - `from_pretrained`\n  - `save_pretrained`\n\n#### fine-tunning a pre-trained model\n##### Processing the data\n- `token_type_ids` 한 로우의 데이터 셋에 여러 문장이 포함된 경우를 구분한다\n  - `bert-base-uncased` checkpoint 에서의 토크나이저는 제공되나 다른 checkpoint 에서는 해당 checkpoint 의 니즈에 따른다 \n  - 모델과 토크나이저는 동일 체크포인트를 사용하므로 해당 속성의 존재여부에 관심가질 필요는 없다\n- tokenizer 는 rust로 작성되어 `[dataset].map(tokenizer_function, batched=True)` 를 주면 병렬로 빠르게 처리가 가능하다, `num_proc` - 프로세서 수 조절도 가능한 것 같다\n- dataset 은 **apach arrow** 를 사용하여 기본적으로 디스크를 사용하고 토크나이저를 사용하여 올릴대만 메모리가 사용된다\n- dataset 에서 사용되는 `.map` 함수는 단순 맵이 아니라 기존 데이터를 두고 리턴되는 데이터가 추가되는 형태(reduce)인것으로 보인다. (테스트 결과)\n- 데이터를 동시에(`.map`) 토큰화를 하면 속도가 향상된다\n  - 하지만 이 경우에 각 로우에 해당하는 시퀀스(문자열, 데이터 whatever) 가 다르므로 패딩이 필요하다\n  - 패딩을 max_length(전체 시퀀스중의 최대길이) 혹은 model 이 받아들일 수 있는 최대 길이로 커팅된다\n  - 여기서 불필요한 패딩이 최악의 케이스로 표준화되면서 퍼포먼스 손실이 일어난다\n  - 이를 해결하기 위해서 dynamic padding 이 사용된다\n  - dynamic padding(동적 패딩) 은 배치로 토크나이징을 할때 배치사이즈의 맥스로 통일시킨다\n  - 전체 데이터셋의 부분집합인 배치별로 패딩길이가 최적화되어 큰폭의 성능 개선이 가능하다\n    ```python\n    from transformers import datacollatorwithpadding\n    \n    data_collator = datacollatorwithpadding(tokenizer=tokenizer)\n    ```\n  - cpu 와 gpu 에서 성능향상이 있으므로 거의 필수적으로 적용되지만 google tpu 에서는 고정 텐서 shape를 요구하므로 구글 코렙등의 환경에서는 사용이 불가능하다\n- 요약\n  - \"glue\" dataset 의 8/10 다중 문자열을 가지고 학습되었으며 그 간의 관계를 갖는 데이터셋이다\n  - 이를 학습한 모델의 경우 토크나이저는 `token_type_ids` 를 함께 리턴하여 문자열이 여러개임을 구분한다\n  - 토큰화는 배치를 사용해서 가속화 할 수 있다.\n  - 토큰화는 동적 패딩을 사용해서 가속화 할 수 있다.\n\n#### Fine-tuning a model with the Trainer API or Keras\n\n#### a full training\n- accelerator\n  - gpu 분산환경에서 작업하기 위해 필요\n  - accelerator 를 통해 래핑된 오프젝트로 작업\n  - `python` 명령어대신 `accelerator` 를 통해 작업한다\n\n#### Fine-tuning, Check!\n- 파트 정리\n- Auto{Tokenizer,Model}.from_pretrained([checkpoint]) 를 통해 시작\n  - Auto* 를 사용하는 경우 huggingface hub 로 부터 해당 model card 를 읽어들여서 설정을 처리한다\n- 그리고 데이터 셋을 불러와서(`from datasets`) 이를 기반으로 `Trainer` 를 생성하고 학습시킨다\n  - `TrainerArguments` 는 `Trainer` 를 위해 trainer, evaluation 을 위한  hyperparameters 를 제공한다\n- `dataset` 은 *apache arrow* 로 작성되었으며 작업시에만 메모리를 사용한다\n  - `map` 메소드\n    - 동시 배치 처리가 가능하다\n    - 작업은 캐싱된다\n- 학습 속도 향상을 위해서 동적 패딩이 사용되며, 이는 batch 안에서의 `max_length` 를 활용하는 방식이다\n  - tpu 는 동적 패딩을지원하지 않는다.\n- 학습시키면서 평가나 프로그래스를 볼 수있도록 설정이 가능하다 (`evaluator`)\n- `accelerator` 를 사용하면 multiple gpu 를 활용한 학습이 가능하다\n- `AutoModelForSequenceClassification` 와 같은 모델을 생성하면서 `bert-base-uncased` 와 같은 checkpoint 를 `from_pretrained` 로 불러들이면\n  - 워닝이 발생한다\n  - pre-trained 모델에서 sequence classification 을 위한 헤드는 버려진다\n  - 새로운 헤드가 장착되므로 여기에 학습을 시키면 된다\n\n### 4. SHARING MODELS AND TOKENIZERS\n\n#### The Hugging Face hub  \n\n#### Using pretrained models\n- `pipeline` 함수를 사용할때는 task, checkpoint 짝이 맞아야한다\n  - 아닌경우 head가 task에 맞지않음으로 정상동작하지 않는다\n- `pipeline` 함수가 아니어도 model을 바로 생성할수 있다.\n  - `from transformers import ATokenizer, AForMaskedLM` 의 형식\n  - 하지만 이건 모델 종속적이므로 추천하지 않고 대신 `Auto*` 형태의 사용을 추천한다\n    - `from transformers import AutoTokenizer, AutoModelForMaskedLM`\n- 모델 사용할대는 model card(huggingface 모델 페이지의 정보)를 확인해라\n\n#### Sharing pretrained models\n- `huggingface-cli` 에 대한 내용\n- [[tbd]]\n\n#### Buliding a model card\n\u003e 읽어보면 도움이 될만한 내용들\n- 모델에 대한 정보\n- 한계\n- 라이센스\n- 학습방법\n\n#### Part 1 completed!\n- 여기까지 왔으면 text classification 에서 single, paris 문장에 대한 파인튜닝이 가능해야한다\n\n### 5. THE 🤗 DATASETS LIBRARY\n#### Introduction\n- 파인튜닝시 데이터셋 사용\n  - 로드 from hugging face hub\n  - `Dataset.map()` 통한 전처리\n  - metric 계산\n\n#### What if my dataset isn’t on the Hub?\n- `csv`(`tsv` 포함), `text`, `json`, `jsonl`, `pandas`(`pkl`) 지원\n- local / remote file 지원\n- from datasets import load_dataset\n- 다양한 방법으로 train/test 데이터 분할을 지원한다\n- 압축파일도 지원한다\n- 경로를 path 대신 url 을 주면 리포트 파일을 로딩한다\n\n#### Time to slice and dice\n- 데이터 클린업\n\n##### 샘플링\n- `Dataset`, `DatasetDict` 의 메소드\n- `Datset.shufffle().select(range(1000))` 을 통해 테스트해볼수있다.\n\n##### 정규화\n- 수상한 컬럼이지만 id 처럼 보이는 컬럼이 발견되면 `.unique` 메소드를 통해 id 인지 확인한다\n  - id 가 확인되면 `DatasetDict.rename_column` 을 통해서 적합한 이름으로 변경\n- `.map` 을 통해 대소문자 통일\n- `.filter` 를 통해 `None` 제거\n  - [ ] [[@todo]] 걍 제거해버리면 되는건가;\n- `html` 코드가 포함된 데이터의 경우 `html` 패키지의 `unescape` 로 변경가능\n  - `I\u0026#039;m` -\u003e `I'm`\n\n##### 새 컬럼 생성\n- `Dataset.map` or `Dataset.add_column`\n- `Dataset.sort` 로 특정 컬럼의 값을 통해 정렬가능\n- `.num_rows` 를 통해 카운팅\n\n##### `.map`\n- `batched=True`\n  - batch 의 기본값은 1000\n  - `batched=True` 가 설정되면 map 함수로 들어오는 딕셔너리 인자의 값들은 리스트가 된다\n  - 때문에 리스트 컴프리헨션등을 사용해서 한방에 처리해야한다\n  - batch 도 가속화되지만 `.map` 함수내에서 사용되는 함수내 리스트 컴프리헨션도 for loop 보다 속도면에서 우월하다\n  - 토크나이저를 fast 버전을 사용할 수 없는경우(rust backend 사용 x) `num_proc` 을 조정해서 속도를 높일 수 있다.\n  - 내용이 많아서 배치 최적화는 그때가서 읽어봐야할 듯 [[tbd]]\n  - 파이썬 멀티프로세싱(`num_proc`) 을 fast tokenizer + batched=True 와 사용하지 말것을 권고\n\n#### 6. tokenizer\n- `pipeline` 함수 없이 토크나이징하는 것에 대한 설명 있음\n\n##### Building a tokenizer, block by block\n- BIRT\n  - pre_tokenizers 들은 compose 가능\n  - pre_tokenizers.Whitespace - 공백 및 구두점\n    - pre_tokenizers.WhitespaceSplit - 공백에서만 split\n    - pre_tokenizers.Punctuation - 구두점에서만 split\n  - trainer 사용시에는 스페셜 토큰들을 모두 제공해야한다\n  - 이를 가지고 저장([[json]]) 후 불러와서 사용하려는 경우\n    - `PreTrainedTokenizerFast` 로 래핑해야하며 이때 스페셜 토큰들은 명시해야한다\n      - wrapping 후에는 허브에 올리든 `save_pretrained` 를 통해서 사용가능하다\n- BPE(GPT-2 토크나이저)\n  - `unk_token` 을 사용하지 않는다\n  - GPT-2 는 `normalizer` 를 사용하지 않아 스킵\n  - 토크나이저 생성시 `models.BPE()` 로 인자가 들어간다\n  - 토크나이저 생성시 `pre_tokenizers.ByteLevel` 프리토크나이저가 사용된다\n  - 스페이스는 토큰에 포함\n  - 역시 huggingface transformers 에서 사용하려면 wrapping 필요\n\n#### 7. MAIN NLP TASKS\n##### Token classification\n- `AutoTokenizer` 로 model checkpoint -\u003e tokenizer\n- 학습시길 dataset 불러옴\n- 학습시킬 데이터를 토큰화 해보면 데이터가 가지고있는 레이블링 데이터(? NER 정보등)의 수와 맞지 않게됨(토큰수가 달라지며)\n- 이를 맞추는 작업이 proprocessing \n  - 토큰을 맞추기 위해 스페셜 토큰을 -100 값으로 채우고\n  - 배치시에 길이를 맞추기 위해 패딩 채우는 작업\n- -100 은 loss 함수에서 무시하게되어 부하를 줄이는 역할도 있음\n\n## link\n- [[huggingface]]\n"])</script><script>self.__next_f.push([1,"17:T2a8e,"])</script><script>self.__next_f.push([1,"\n## nlp\n### [[wip]]\n- encoder -\u003e 분석\n  - BERT(Bidirectional *Encoder* Representations from Transformers)\n- decoder -\u003e 생성\n- encoder, decoder 모델 -\u003e 요약\n- \n\n### transformers\n- 흐름\n  - input -\u003e tokenizer -\u003e {input_ids, attension_mark}\n  - {input_ids, attension_mark} -\u003e model -\u003e {hidden_state}\n  - {hidden_state} -\u003e head -\u003e logits(tensor, 정규화되지 않은 점수)\n  - logits -\u003e *softmax* or 기타 활성함수 -\u003e 확률\n\n#### model\n##### AutoTokenizer\n\u003e `input_ids` 를 생성한다\n- `return_tensors` 를 지정하지 않으면 리스트로 모두 리턴된다\n\n##### AutoModel\n- feature == hidden state\n  - 768 ~ 3072 혹은 그 이상의 고차원\n- input -\u003e feature -\u003e head(모델의 다른 부분)\n- { input_ids } 만이 model 의 **필수** input\n- `AutoModel` 을 사용하면 `BertModel` 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다\n- method\n  - `from_pretrained`\n  - `save_pretrained`\n\n#### tokenizer\n- 알고리즘\n  - word base\n    - 단어 또는 구분자로 잘라서 토큰화\n    - 단어사전수가 커짐\n  - character base\n    - word baes 토크나이저에서 `UNK`nown 토큰을 줄이는 것이 목표\n    - 문자의 구성요소인만큼 `UNK` 토큰을 줄일 수 있다\n    - 단어 사전이 작다 -\u003e 토큰은 많아짐\n    - 그러나 토큰당 가지는 의미가 적다. -\u003e 중국어같은 문자는 조금 다름\n  - subword base\n    - 위 두 알고리즘의 장점 조합\n    - 뭉치이지만 자주쓰이고 독립적인 것들은 토큰으로 유지\n      - `tokenization` -\u003e `token` + `ization`\n- `AutoTokenizer` 를 사용하면 `BertTokenizer` 등의 상위 버전으로 checkpoint 로 부터 모델을 알아서 불러온다\n- method\n  - `from_pretrained`\n  - `save_pretrained`\n\n#### fine-tunning a pre-trained model\n##### Processing the data\n- `token_type_ids` 한 로우의 데이터 셋에 여러 문장이 포함된 경우를 구분한다\n  - `bert-base-uncased` checkpoint 에서의 토크나이저는 제공되나 다른 checkpoint 에서는 해당 checkpoint 의 니즈에 따른다 \n  - 모델과 토크나이저는 동일 체크포인트를 사용하므로 해당 속성의 존재여부에 관심가질 필요는 없다\n- tokenizer 는 rust로 작성되어 `[dataset].map(tokenizer_function, batched=True)` 를 주면 병렬로 빠르게 처리가 가능하다, `num_proc` - 프로세서 수 조절도 가능한 것 같다\n- dataset 은 **apach arrow** 를 사용하여 기본적으로 디스크를 사용하고 토크나이저를 사용하여 올릴대만 메모리가 사용된다\n- dataset 에서 사용되는 `.map` 함수는 단순 맵이 아니라 기존 데이터를 두고 리턴되는 데이터가 추가되는 형태(reduce)인것으로 보인다. (테스트 결과)\n- 데이터를 동시에(`.map`) 토큰화를 하면 속도가 향상된다\n  - 하지만 이 경우에 각 로우에 해당하는 시퀀스(문자열, 데이터 whatever) 가 다르므로 패딩이 필요하다\n  - 패딩을 max_length(전체 시퀀스중의 최대길이) 혹은 model 이 받아들일 수 있는 최대 길이로 커팅된다\n  - 여기서 불필요한 패딩이 최악의 케이스로 표준화되면서 퍼포먼스 손실이 일어난다\n  - 이를 해결하기 위해서 dynamic padding 이 사용된다\n  - dynamic padding(동적 패딩) 은 배치로 토크나이징을 할때 배치사이즈의 맥스로 통일시킨다\n  - 전체 데이터셋의 부분집합인 배치별로 패딩길이가 최적화되어 큰폭의 성능 개선이 가능하다\n    ```python\n    from transformers import datacollatorwithpadding\n    \n    data_collator = datacollatorwithpadding(tokenizer=tokenizer)\n    ```\n  - cpu 와 gpu 에서 성능향상이 있으므로 거의 필수적으로 적용되지만 google tpu 에서는 고정 텐서 shape를 요구하므로 구글 코렙등의 환경에서는 사용이 불가능하다\n- 요약\n  - \"glue\" dataset 의 8/10 다중 문자열을 가지고 학습되었으며 그 간의 관계를 갖는 데이터셋이다\n  - 이를 학습한 모델의 경우 토크나이저는 `token_type_ids` 를 함께 리턴하여 문자열이 여러개임을 구분한다\n  - 토큰화는 배치를 사용해서 가속화 할 수 있다.\n  - 토큰화는 동적 패딩을 사용해서 가속화 할 수 있다.\n\n#### Fine-tuning a model with the Trainer API or Keras\n\n#### a full training\n- accelerator\n  - gpu 분산환경에서 작업하기 위해 필요\n  - accelerator 를 통해 래핑된 오프젝트로 작업\n  - `python` 명령어대신 `accelerator` 를 통해 작업한다\n\n#### Fine-tuning, Check!\n- 파트 정리\n- Auto{Tokenizer,Model}.from_pretrained([checkpoint]) 를 통해 시작\n  - Auto* 를 사용하는 경우 huggingface hub 로 부터 해당 model card 를 읽어들여서 설정을 처리한다\n- 그리고 데이터 셋을 불러와서(`from datasets`) 이를 기반으로 `Trainer` 를 생성하고 학습시킨다\n  - `TrainerArguments` 는 `Trainer` 를 위해 trainer, evaluation 을 위한  hyperparameters 를 제공한다\n- `dataset` 은 *apache arrow* 로 작성되었으며 작업시에만 메모리를 사용한다\n  - `map` 메소드\n    - 동시 배치 처리가 가능하다\n    - 작업은 캐싱된다\n- 학습 속도 향상을 위해서 동적 패딩이 사용되며, 이는 batch 안에서의 `max_length` 를 활용하는 방식이다\n  - tpu 는 동적 패딩을지원하지 않는다.\n- 학습시키면서 평가나 프로그래스를 볼 수있도록 설정이 가능하다 (`evaluator`)\n- `accelerator` 를 사용하면 multiple gpu 를 활용한 학습이 가능하다\n- `AutoModelForSequenceClassification` 와 같은 모델을 생성하면서 `bert-base-uncased` 와 같은 checkpoint 를 `from_pretrained` 로 불러들이면\n  - 워닝이 발생한다\n  - pre-trained 모델에서 sequence classification 을 위한 헤드는 버려진다\n  - 새로운 헤드가 장착되므로 여기에 학습을 시키면 된다\n\n### 4. SHARING MODELS AND TOKENIZERS\n\n#### The Hugging Face hub  \n\n#### Using pretrained models\n- `pipeline` 함수를 사용할때는 task, checkpoint 짝이 맞아야한다\n  - 아닌경우 head가 task에 맞지않음으로 정상동작하지 않는다\n- `pipeline` 함수가 아니어도 model을 바로 생성할수 있다.\n  - `from transformers import ATokenizer, AForMaskedLM` 의 형식\n  - 하지만 이건 모델 종속적이므로 추천하지 않고 대신 `Auto*` 형태의 사용을 추천한다\n    - `from transformers import AutoTokenizer, AutoModelForMaskedLM`\n- 모델 사용할대는 model card(huggingface 모델 페이지의 정보)를 확인해라\n\n#### Sharing pretrained models\n- `huggingface-cli` 에 대한 내용\n- [[tbd]]\n\n#### Buliding a model card\n\u003e 읽어보면 도움이 될만한 내용들\n- 모델에 대한 정보\n- 한계\n- 라이센스\n- 학습방법\n\n#### Part 1 completed!\n- 여기까지 왔으면 text classification 에서 single, paris 문장에 대한 파인튜닝이 가능해야한다\n\n### 5. THE 🤗 DATASETS LIBRARY\n#### Introduction\n- 파인튜닝시 데이터셋 사용\n  - 로드 from hugging face hub\n  - `Dataset.map()` 통한 전처리\n  - metric 계산\n\n#### What if my dataset isn’t on the Hub?\n- `csv`(`tsv` 포함), `text`, `json`, `jsonl`, `pandas`(`pkl`) 지원\n- local / remote file 지원\n- from datasets import load_dataset\n- 다양한 방법으로 train/test 데이터 분할을 지원한다\n- 압축파일도 지원한다\n- 경로를 path 대신 url 을 주면 리포트 파일을 로딩한다\n\n#### Time to slice and dice\n- 데이터 클린업\n\n##### 샘플링\n- `Dataset`, `DatasetDict` 의 메소드\n- `Datset.shufffle().select(range(1000))` 을 통해 테스트해볼수있다.\n\n##### 정규화\n- 수상한 컬럼이지만 id 처럼 보이는 컬럼이 발견되면 `.unique` 메소드를 통해 id 인지 확인한다\n  - id 가 확인되면 `DatasetDict.rename_column` 을 통해서 적합한 이름으로 변경\n- `.map` 을 통해 대소문자 통일\n- `.filter` 를 통해 `None` 제거\n  - [ ] [[@todo]] 걍 제거해버리면 되는건가;\n- `html` 코드가 포함된 데이터의 경우 `html` 패키지의 `unescape` 로 변경가능\n  - `I\u0026#039;m` -\u003e `I'm`\n\n##### 새 컬럼 생성\n- `Dataset.map` or `Dataset.add_column`\n- `Dataset.sort` 로 특정 컬럼의 값을 통해 정렬가능\n- `.num_rows` 를 통해 카운팅\n\n##### `.map`\n- `batched=True`\n  - batch 의 기본값은 1000\n  - `batched=True` 가 설정되면 map 함수로 들어오는 딕셔너리 인자의 값들은 리스트가 된다\n  - 때문에 리스트 컴프리헨션등을 사용해서 한방에 처리해야한다\n  - batch 도 가속화되지만 `.map` 함수내에서 사용되는 함수내 리스트 컴프리헨션도 for loop 보다 속도면에서 우월하다\n  - 토크나이저를 fast 버전을 사용할 수 없는경우(rust backend 사용 x) `num_proc` 을 조정해서 속도를 높일 수 있다.\n  - 내용이 많아서 배치 최적화는 그때가서 읽어봐야할 듯 [[tbd]]\n  - 파이썬 멀티프로세싱(`num_proc`) 을 fast tokenizer + batched=True 와 사용하지 말것을 권고\n\n#### 6. tokenizer\n- `pipeline` 함수 없이 토크나이징하는 것에 대한 설명 있음\n\n##### Building a tokenizer, block by block\n- BIRT\n  - pre_tokenizers 들은 compose 가능\n  - pre_tokenizers.Whitespace - 공백 및 구두점\n    - pre_tokenizers.WhitespaceSplit - 공백에서만 split\n    - pre_tokenizers.Punctuation - 구두점에서만 split\n  - trainer 사용시에는 스페셜 토큰들을 모두 제공해야한다\n  - 이를 가지고 저장([[json]]) 후 불러와서 사용하려는 경우\n    - `PreTrainedTokenizerFast` 로 래핑해야하며 이때 스페셜 토큰들은 명시해야한다\n      - wrapping 후에는 허브에 올리든 `save_pretrained` 를 통해서 사용가능하다\n- BPE(GPT-2 토크나이저)\n  - `unk_token` 을 사용하지 않는다\n  - GPT-2 는 `normalizer` 를 사용하지 않아 스킵\n  - 토크나이저 생성시 `models.BPE()` 로 인자가 들어간다\n  - 토크나이저 생성시 `pre_tokenizers.ByteLevel` 프리토크나이저가 사용된다\n  - 스페이스는 토큰에 포함\n  - 역시 huggingface transformers 에서 사용하려면 wrapping 필요\n\n#### 7. MAIN NLP TASKS\n##### Token classification\n- `AutoTokenizer` 로 model checkpoint -\u003e tokenizer\n- 학습시길 dataset 불러옴\n- 학습시킬 데이터를 토큰화 해보면 데이터가 가지고있는 레이블링 데이터(? NER 정보등)의 수와 맞지 않게됨(토큰수가 달라지며)\n- 이를 맞추는 작업이 proprocessing \n  - 토큰을 맞추기 위해 스페셜 토큰을 -100 값으로 채우고\n  - 배치시에 길이를 맞추기 위해 패딩 채우는 작업\n- -100 은 loss 함수에서 무시하게되어 부하를 줄이는 역할도 있음\n\n## link\n- [[huggingface]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# huggingface nlp\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# huggingface nlp\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/huggingface-nlp\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# huggingface nlp\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

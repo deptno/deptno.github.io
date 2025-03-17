@@ -1,0 +1,648 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-f971f15f0b870f4f.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","docker","c"]
+0:["6Ljv2cGu_yYA50LdF4Vuv",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","docker","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"docker\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","docker","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:T3699,<h1 id="docker">docker</h1>
+<p>컨테이너</p>
+<pre><code class="hljs language-sh">brew install --cask docker 
+</code></pre><h2 id="exmaple-usage">exmaple usage</h2>
+<pre><code class="hljs language-sh">docker built -t [TAG_NAME] . <span class="hljs-comment"># . 은 Dockerfile 위치</span>
+docker images <span class="hljs-comment"># image 확인</span>
+docker run --name [CONTAINER_NAME] -d -p 8080:8080 [IMAGE_NAME]
+docker ps <span class="hljs-comment"># 실행 확인</span>
+docker logs [CONTAINER_NAME] -f <span class="hljs-comment"># -f 는 following</span>
+docker <span class="hljs-built_in">exec</span> -it [CONTAINER_NAME] /bin/bash <span class="hljs-comment"># bash shell 로 접속</span>
+<span class="hljs-comment"># docker rm </span>
+<span class="hljs-comment"># docker rmi</span>
+</code></pre><h2 id="arg-vs-env">arg vs env</h2>
+<pre><code class="hljs language-Dockerfile"><span class="hljs-keyword">ARG</span> JS
+
+<span class="hljs-keyword">COPY</span><span class="language-bash"> ./<span class="hljs-variable">$JS</span> ./packages/<span class="hljs-variable">$JS</span></span>
+<span class="hljs-keyword">CMD</span><span class="language-bash"> node <span class="hljs-variable">$JS</span></span>
+</code></pre><p>둘다 $JS 로 표현되고 있지만 사용되는 구문에 따라 ARG 가 참조될지 ENV 가 참조될지 결정된다</p>
+<ul>
+<li><p>arg</p>
+<ul>
+<li>build time 에 사용되므로 COPY 등 이미지가 만들어지는 타이밍에 사용된다</li>
+</ul>
+</li>
+<li><p>env</p>
+<ul>
+<li>runtime 에 사용된된다. <code class="span">CMD</code> 가 실행되는 타이밍은 runtime 이므로 env가 참조된다</li>
+</ul>
+</li>
+<li><p><strong>주의</strong> 해야할 점은 사용을 해보니 <code class="span">FROM</code> 절 전/후의 <code class="span">ARG</code> 사용 용도가 다르다</p>
+<ul>
+<li><code class="span">FROM</code> <strong>전</strong>의 <code class="span">ARG</code> 는 <code class="span">FROM</code> 절에서 사용 가능하다</li>
+<li><code class="span">FROM</code> <strong>전</strong>의 <code class="span">ARG</code> 는 <code class="span">FROM</code> 후의 절에서 <strong>사용 가능하지 않다</strong></li>
+<li><code class="span">FROM</code> <strong>후</strong>의 <code class="span">ARG</code> 는 <code class="span">FROM</code> 이 후 절에서 사용 가능하다</li>
+<li><code class="span">FROM</code> <strong>후</strong>의 <code class="span">ARG</code> 는 <code class="span">FROM</code> 절에서 <strong>사용 가능하지 않다</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="build">build</h2>
+<pre><code class="hljs language-sh">docker build . -f [Dockerfile.custom]
+docker build . --no-cache <span class="hljs-comment"># 결과 캐싱하지 않음, stdout 출력 필요시에도 사용</span>
+docker build . --pull <span class="hljs-comment"># pull 옵션을 통해서 항상 리모트 이미지를 사용할지 결정이 가능</span>
+docker build . --progress=plain <span class="hljs-comment"># 기본적으로 프로그레스 텍스트(변하는 텍스트)를 보여주는데 이를 plain text 를 출력하는게 좋음</span>
+</code></pre><h2 id="error">error</h2>
+<p>container 가 실행중에 아래와 같은 형태의 에러를 낸다면 architecture 문제
+즉 arm64 로 빌드된 이미지가 amd64 에서 실행된 경우</p>
+<pre><code class="hljs language-sh"><span class="hljs-built_in">exec</span> /whoami: <span class="hljs-built_in">exec</span> format error                                                                                                              │
+</code></pre><h2 id="아래와-같은-형태로-플랫폼을-지정해서-pull-이-가능하다sh-docker-pull---platform-linuxamd64-image-name">아래와 같은 형태로 플랫폼을 지정해서 pull 이 가능하다
+<code class="span">sh docker pull --platform [linux/amd64] [image-name] </code></h2>
+<pre><code class="hljs language-sh">STEP 9/9: RUN yarn --immutable
+➤ YN0000: ┌ Resolution step
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Fetch step
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Link step
+➤ YN0008: │ puppeteer@npm:19.6.2 must be rebuilt because its dependency tree changed
+➤ YN0009: │ puppeteer@npm:19.6.2 couldn<span class="hljs-string">&#x27;t be built successfully (exit code 1, logs can be found here: /tmp/xfs-2807b8a5/build.log)
+➤ YN0000: └ Completed in 0s 487ms
+➤ YN0000: Failed with errors in 0s 792ms
+Error: building at STEP &quot;RUN yarn --immutable&quot;: while running runtime: exit status 1</span>
+</code></pre><pre><code class="hljs language-sh">[Warning] one or more build args were not consumed: [TARGETARCH TARGETOS TARGETPLATFORM]
+</code></pre><h3 id="copy-packages-packages-컨텐츠-변경에도-캐시가-유지되는-문제"><code class="span">COPY packages ./packages</code> 컨텐츠 변경에도 캐시가 유지되는 문제</h3>
+<pre><code class="hljs language-Dockerfile"><span class="hljs-keyword">COPY</span><span class="language-bash"> packages ./packages</span>
+</code></pre><p>폴더안의 새로운 폴더가 생성되었음에도 불구하고 레이어가 캐시되는 문제가 있다.</p>
+<h3 id="failed-to-solve-with-frontend-dockerfilev0-failed-to-create-llb-definition-failed-to-parse-stage-name-registryimagetag-invalid-reference-format"><code class="span">failed to solve with frontend dockerfile.v0: failed to create LLB definition: failed to parse stage name &quot;registry/image/tag:&quot;: invalid reference format</code></h3>
+<ul>
+<li><a href="dockerfile">dockerfile</a> 에서 <code class="span">FROM image:$TAG</code> 와 같은 형태로 사용하면서 $TAG 를 ARG 로 받지 않아서 생긴문제</li>
+</ul>
+<pre><code class="hljs language-dockerfile"><span class="hljs-keyword">ARG</span> TAG=latest
+
+<span class="hljs-keyword">FROM</span> registry/repo/name:$TAG
+</code></pre><h3 id="failed-to-solve-with-frontend-dockerfilev0-failed-to-create-llb-definition-no-build-stage-in-current-context"><code class="span">failed to solve with frontend dockerfile.v0: failed to create LLB definition: no build stage in current context</code></h3>
+<p>둘 중 하나 확인못함</p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> ENV 는 FROM 전에 갈수 없다<ul>
+<li><a href="https://qiita.com/kaizen_nagoya/items/1e8311a0ccda1413ef10" target="_blank">[URL] https://qiita.com/kaizen_nagoya/items/1e8311a0ccda1413ef10</a></li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> ARG 를 잘못 쓴 것으로 보인다</li>
+<li><input disabled="" type="checkbox"> build 중 ctrl+c 로 취소하면서 문제가 생긴 것으로 보인데 빌드되다만 이미지를 삭제한다<ul>
+<li>Docker desktop -&gt; 우상단의 debug 아이콘 -&gt; Clean / Purge data</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="error-internal-load-metadata-for-imagetag"><code class="span">ERROR [internal] load metadata for [image]:[tag]</code></h3>
+<p>항상 빌드되던 다커빌드시에 발생했는데 apt-get update 를 진행하는중에 발생했다. 좀 관련이 없어보이지만 결국 <code class="span">docker system prune</code> 으로 해결되었다</p>
+<pre><code class="hljs language-sh">ERROR [internal] load metadata <span class="hljs-keyword">for</span> [image]:[tag]
+</code></pre><p> 다른 빌드를 할때는 용량 부족에 대한 에러가 발생했다</p>
+<pre><code class="hljs language-sh">failed to register layer: Error processing tar file(<span class="hljs-built_in">exit</span> status 1): write /home/pptruser/.cache/puppeteer/chrome/linux-113.0.5672.63/chrome-linux64/ClearKeyCdm/_platform_specific/linux_x64/libclearkeycdm.so: no space left on device
+</code></pre><p>no space 에러는 <code class="span">docker system prune [-a]</code> 로 해결된다.
+<code class="span">FROM</code> 절에서 참조할 수 없는 이미지를 참조한 경우</p>
+<h3 id="at-least-one-invalid-signature-was-encountered">At least one invalid signature was encountered.</h3>
+<pre><code class="hljs language-sh">docker system prune
+</code></pre><h3 id="gpg-error">GPG error</h3>
+<pre><code class="hljs language-sh"> [+] Building 3.4s (5/5) FINISHED
+ =&gt; [internal] load build definition from Dockerfile.chrome                                                                                                                                                                        0.0s
+ =&gt; =&gt; transferring dockerfile: 750B                                                                                                                                                                                               0.0s
+ =&gt; [internal] load .dockerignore                                                                                                                                                                                                  0.0s
+ =&gt; =&gt; transferring context: 71B                                                                                                                                                                                                   0.0s
+ =&gt; [internal] load metadata <span class="hljs-keyword">for</span> docker.io/library/node:20-bullseye                                                                                                                                                                0.9s
+ =&gt; CACHED [1/2] FROM docker.io/library/node:20-bullseye@sha256:c1b3e61fa0fde701bdb45032796bc4bb020a8c53f06cba5765584b620087fa03                                                                                                   0.0s
+ =&gt; ERROR [2/2] RUN apt-get update &amp;&amp; apt-get install gnupg wget -y &amp;&amp;   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor &gt; /etc/apt/trusted.gpg.d/google-archive.gpg &amp;&amp;     2.4s
+------
+ &gt; [2/2] RUN apt-get update &amp;&amp; apt-get install gnupg wget -y &amp;&amp;   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor &gt; /etc/apt/trusted.gpg.d/google-archive.gpg &amp;&amp;   sh -c <span class="hljs-string">&#x27;echo &quot;deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main&quot; &gt;&gt; /etc/apt/sources.list.d/google.list&#x27;</span> &amp;&amp;   apt-get update &amp;&amp;   apt-get install google-chrome-stable -y --no-install-recommends &amp;&amp;   <span class="hljs-built_in">rm</span> -rf /var/lib/apt/lists/*:
+<span class="hljs-comment">#5 0.484 Get:1 http://deb.debian.org/debian bullseye InRelease [116 kB]</span>
+<span class="hljs-comment">#5 0.589 Get:2 http://deb.debian.org/debian-security bullseye-security InRelease [48.4 kB]</span>
+<span class="hljs-comment">#5 0.631 Get:3 http://deb.debian.org/debian bullseye-updates InRelease [44.1 kB]</span>
+<span class="hljs-comment">#5 1.156 Err:1 http://deb.debian.org/debian bullseye InRelease</span>
+<span class="hljs-comment">#5 1.156   At least one invalid signature was encountered.</span>
+<span class="hljs-comment">#5 1.719 Err:2 http://deb.debian.org/debian-security bullseye-security InRelease</span>
+<span class="hljs-comment">#5 1.719   At least one invalid signature was encountered.</span>
+<span class="hljs-comment">#5 2.268 Err:3 http://deb.debian.org/debian bullseye-updates InRelease</span>
+<span class="hljs-comment">#5 2.268   At least one invalid signature was encountered.</span>
+<span class="hljs-comment">#5 2.306 Reading package lists...</span>
+<span class="hljs-comment">#5 2.404 W: GPG error: http://deb.debian.org/debian bullseye InRelease: At least one invalid signature was encountered.</span>
+<span class="hljs-comment">#5 2.404 E: The repository &#x27;http://deb.debian.org/debian bullseye InRelease&#x27; is not signed.</span>
+<span class="hljs-comment">#5 2.405 W: GPG error: http://deb.debian.org/debian-security bullseye-security InRelease: At least one invalid signature was encountered.</span>
+<span class="hljs-comment">#5 2.405 E: The repository &#x27;http://deb.debian.org/debian-security bullseye-security InRelease&#x27; is not signed.</span>
+<span class="hljs-comment">#5 2.405 W: GPG error: http://deb.debian.org/debian bullseye-updates InRelease: At least one invalid signature was encountered.</span>
+<span class="hljs-comment">#5 2.405 E: The repository &#x27;http://deb.debian.org/debian bullseye-updates InRelease&#x27; is not signed.</span>
+------
+executor failed running [/bin/sh -c apt-get update &amp;&amp; apt-get install gnupg wget -y &amp;&amp;   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor &gt; /etc/apt/trusted.gpg.d/google-archive.gpg &amp;&amp;   sh -c <span class="hljs-string">&#x27;echo &quot;deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main&quot; &gt;&gt; /etc/apt/sources.list.d/google.list&#x27;</span> &amp;&amp;   apt-get update &amp;&amp;   apt-get install google-chrome-stable -y --no-install-recommends &amp;&amp;   <span class="hljs-built_in">rm</span> -rf /var/lib/apt/lists/*]: <span class="hljs-built_in">exit</span> code: 100
+</code></pre><ul>
+<li>GPG 에러 였지만 결국엔 disk space 랑 연결, 아래 명령어를 통해서 해결</li>
+</ul>
+<pre><code class="hljs language-sh">docker system prune -a
+</code></pre><h3 id="cannot-replace-to-directory">cannot replace to directory</h3>
+<pre><code class="hljs language-sh">cannot replace to directory /var/lib/docker/overlay2/pg75y9wcqxxgmqzex5k30owur/merged/app/.yarn/cache/next-npm-14.0.3-45132b65cd-73aa3d5dd7.zip with file
+</code></pre><ul>
+<li><a href="dockerfile">dockerfile</a> 에서 <code class="span">COPY</code> 구문의 타겟에 복사할 대상과 같은 이름의 디렉토리가 존재할 떄 발생</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="kubernetes">kubernetes</a></li>
+<li><a href="podman">podman</a></li>
+<li><a href="harbor">harbor</a></li>
+<li><a href="container">container</a></li>
+<li><a href="docker-compose">docker-compose</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/bc70f7b\n","className":"bg-white text-black","children":"bc70f7b"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/docker.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/docker.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/docker.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"docker","name":"docker","val":7},{"id":"dockerfile","name":"dockerfile","val":4},{"id":"kubernetes","name":"kubernetes","val":43},{"id":"podman","name":"podman","val":4},{"id":"harbor","name":"harbor","val":11},{"id":"container","name":"container","val":2},{"id":"docker-compose","name":"docker-compose","val":3},{"id":"apache-airflow","name":"apache-airflow","val":6},{"id":"awscli","name":"awscli","val":5},{"id":"ci","name":"ci","val":6},{"id":"devcontainer","name":"devcontainer","val":3},{"id":"k9s","name":"k9s","val":15},{"id":"minikube","name":"minikube","val":9},{"id":"mlflow","name":"mlflow","val":21},{"id":"nextjs","name":"nextjs","val":12},{"id":"upstage-ai-lab-day-57","name":"upstage-ai-lab-day-57","val":8},{"id":"upstage-ai-lab-day-62","name":"upstage-ai-lab-day-62","val":8},{"id":"upstage-ai-lab-day-77","name":"upstage-ai-lab-day-77","val":9},{"id":"upstage-ai-lab-day-92","name":"upstage-ai-lab-day-92","val":9},{"id":"upstage-ai-lab-project-03","name":"upstage-ai-lab-project-03","val":36},{"id":"upstage-ai-lab-project-04","name":"upstage-ai-lab-project-04","val":31},{"id":"upstage-ai-lab-project-05","name":"upstage-ai-lab-project-05","val":27},{"id":"yarn","name":"yarn","val":11},{"id":"diary/2023-02-03","name":"diary/2023-02-03","val":2},{"id":"diary/2023-12-31","name":"diary/2023-12-31","val":93},{"id":"diary/2024-01-25","name":"diary/2024-01-25","val":59},{"id":"diary/2024-02-22","name":"diary/2024-02-22","val":6},{"id":"diary/2024-12-31","name":"diary/2024-12-31","val":441}],"links":[{"source":"docker","target":"dockerfile"},{"source":"docker","target":"dockerfile"},{"source":"docker","target":"kubernetes"},{"source":"docker","target":"podman"},{"source":"docker","target":"harbor"},{"source":"docker","target":"container"},{"source":"docker","target":"docker-compose"},{"source":"apache-airflow","target":"docker"},{"source":"awscli","target":"docker"},{"source":"ci","target":"docker"},{"source":"container","target":"docker"},{"source":"devcontainer","target":"docker"},{"source":"docker-compose","target":"docker"},{"source":"dockerfile","target":"docker"},{"source":"harbor","target":"docker"},{"source":"k9s","target":"docker"},{"source":"k9s","target":"docker"},{"source":"minikube","target":"docker"},{"source":"mlflow","target":"docker"},{"source":"nextjs","target":"docker"},{"source":"podman","target":"docker"},{"source":"podman","target":"docker"},{"source":"upstage-ai-lab-day-57","target":"docker"},{"source":"upstage-ai-lab-day-62","target":"docker"},{"source":"upstage-ai-lab-day-77","target":"docker"},{"source":"upstage-ai-lab-day-92","target":"docker"},{"source":"upstage-ai-lab-project-03","target":"docker"},{"source":"upstage-ai-lab-project-04","target":"docker"},{"source":"upstage-ai-lab-project-05","target":"docker"},{"source":"yarn","target":"docker"},{"source":"diary/2023-02-03","target":"docker"},{"source":"diary/2023-12-31","target":"docker"},{"source":"diary/2023-12-31","target":"docker"},{"source":"diary/2024-01-25","target":"docker"},{"source":"diary/2024-02-22","target":"docker"},{"source":"diary/2024-12-31","target":"docker"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","docker",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/docker","children":[["$","span",null,{"className":"underline","children":"docker"}],["$","sup",null,{"children":7}]]}]}],["$","span","dockerfile",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/dockerfile","children":[["$","span",null,{"className":"underline","children":"dockerfile"}],["$","sup",null,{"children":4}]]}]}],["$","span","kubernetes",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/kubernetes","children":[["$","span",null,{"className":"underline","children":"kubernetes"}],["$","sup",null,{"children":43}]]}]}],["$","span","podman",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/podman","children":[["$","span",null,{"className":"underline","children":"podman"}],["$","sup",null,{"children":4}]]}]}],["$","span","harbor",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/harbor","children":[["$","span",null,{"className":"underline","children":"harbor"}],["$","sup",null,{"children":11}]]}]}],["$","span","container",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/container","children":[["$","span",null,{"className":"underline","children":"container"}],["$","sup",null,{"children":2}]]}]}],["$","span","docker-compose",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/docker-compose","children":[["$","span",null,{"className":"underline","children":"docker-compose"}],["$","sup",null,{"children":3}]]}]}],["$","span","apache-airflow",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/apache-airflow","children":[["$","span",null,{"className":"underline","children":"apache-airflow"}],["$","sup",null,{"children":6}]]}]}],["$","span","awscli",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/awscli","children":[["$","span",null,{"className":"underline","children":"awscli"}],["$","sup",null,{"children":5}]]}]}],["$","span","ci",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ci","children":[["$","span",null,{"className":"underline","children":"ci"}],["$","sup",null,{"children":6}]]}]}],["$","span","devcontainer",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/devcontainer","children":[["$","span",null,{"className":"underline","children":"devcontainer"}],["$","sup",null,{"children":3}]]}]}],["$","span","k9s",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/k9s","children":[["$","span",null,{"className":"underline","children":"k9s"}],["$","sup",null,{"children":15}]]}]}],["$","span","minikube",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/minikube","children":[["$","span",null,{"className":"underline","children":"minikube"}],["$","sup",null,{"children":9}]]}]}],["$","span","mlflow",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/mlflow","children":[["$","span",null,{"className":"underline","children":"mlflow"}],["$","sup",null,{"children":21}]]}]}],["$","span","nextjs",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/nextjs","children":[["$","span",null,{"className":"underline","children":"nextjs"}],["$","sup",null,{"children":12}]]}]}],["$","span","upstage-ai-lab-day-57",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/upstage-ai-lab-day-57","children":[["$","span",null,{"className":"underline","children":"upstage-ai-lab-day-57"}],["$","sup",null,{"children":8}]]}]}],["$","span","upstage-ai-lab-day-62",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/upstage-ai-lab-day-62","children":[["$","span",null,{"className":"underline","children":"upstage-ai-lab-day-62"}],["$","sup",null,{"children":8}]]}]}],["$","span","upstage-ai-lab-day-77",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/upstage-ai-lab-day-77","children":[["$","span",null,{"className":"underline","children":"upstage-ai-lab-day-77"}],["$","sup",null,{"children":9}]]}]}],["$","span","upstage-ai-lab-day-92",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/upstage-ai-lab-day-92","children":[["$","span",null,{"className":"underline","children":"upstage-ai-lab-day-92"}],["$","sup",null,{"children":9}]]}]}],["$","span","upstage-ai-lab-project-03",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/upstage-ai-lab-project-03","children":[["$","span",null,{"className":"underline","children":"upstage-ai-lab-project-03"}],["$","sup",null,{"children":36}]]}]}],["$","span","upstage-ai-lab-project-04",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/upstage-ai-lab-project-04","children":[["$","span",null,{"className":"underline","children":"upstage-ai-lab-project-04"}],["$","sup",null,{"children":31}]]}]}],["$","span","upstage-ai-lab-project-05",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/upstage-ai-lab-project-05","children":[["$","span",null,{"className":"underline","children":"upstage-ai-lab-project-05"}],["$","sup",null,{"children":27}]]}]}],["$","span","yarn",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/yarn","children":[["$","span",null,{"className":"underline","children":"yarn"}],["$","sup",null,{"children":11}]]}]}],["$","span","diary/2023-02-03",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-02-03","children":[["$","span",null,{"className":"underline","children":"diary/2023-02-03"}],["$","sup",null,{"children":2}]]}]}],["$","span","diary/2023-12-31",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-12-31","children":[["$","span",null,{"className":"underline","children":"diary/2023-12-31"}],["$","sup",null,{"children":93}]]}]}],["$","span","diary/2024-01-25",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-01-25","children":[["$","span",null,{"className":"underline","children":"diary/2024-01-25"}],["$","sup",null,{"children":59}]]}]}],["$","span","diary/2024-02-22",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-02-22","children":[["$","span",null,{"className":"underline","children":"diary/2024-02-22"}],["$","sup",null,{"children":6}]]}]}],["$","span","diary/2024-12-31",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-12-31","children":[["$","span",null,{"className":"underline","children":"diary/2024-12-31"}],["$","sup",null,{"children":441}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","docker",{"className":"pl-0","children":["$","a",null,{"href":"#docker","children":"docker"}]}],["$","div","exmaple-usage",{"className":"pl-2","children":["$","a",null,{"href":"#exmaple-usage","children":"exmaple usage"}]}],["$","div","arg-vs-env",{"className":"pl-2","children":["$","a",null,{"href":"#arg-vs-env","children":"arg vs env"}]}],["$","div","build",{"className":"pl-2","children":["$","a",null,{"href":"#build","children":"build"}]}],["$","div","error",{"className":"pl-2","children":["$","a",null,{"href":"#error","children":"error"}]}],["$","div","아래와-같은-형태로-플랫폼을-지정해서-pull-이-가능하다-sh-docker-pull---platform-linuxamd64-image-name",{"className":"pl-2","children":["$","a",null,{"href":"#아래와-같은-형태로-플랫폼을-지정해서-pull-이-가능하다-sh-docker-pull---platform-linuxamd64-image-name","children":"아래와 같은 형태로 플랫폼을 지정해서 pull 이 가능하다\nsh docker pull --platform [linux/amd64] [image-name] "}]}],["$","div","copy-packages-packages-컨텐츠-변경에도-캐시가-유지되는-문제",{"className":"pl-4","children":["$","a",null,{"href":"#copy-packages-packages-컨텐츠-변경에도-캐시가-유지되는-문제","children":"COPY packages ./packages 컨텐츠 변경에도 캐시가 유지되는 문제"}]}],["$","div","failed-to-solve-with-frontend-dockerfilev0-failed-to-create-llb-definition-failed-to-parse-stage-name-registryimagetag-invalid-reference-format",{"className":"pl-4","children":["$","a",null,{"href":"#failed-to-solve-with-frontend-dockerfilev0-failed-to-create-llb-definition-failed-to-parse-stage-name-registryimagetag-invalid-reference-format","children":"failed to solve with frontend dockerfile.v0: failed to create LLB definition: failed to parse stage name \"registry/image/tag:\": invalid reference format"}]}],["$","div","failed-to-solve-with-frontend-dockerfilev0-failed-to-create-llb-definition-no-build-stage-in-current-context",{"className":"pl-4","children":["$","a",null,{"href":"#failed-to-solve-with-frontend-dockerfilev0-failed-to-create-llb-definition-no-build-stage-in-current-context","children":"failed to solve with frontend dockerfile.v0: failed to create LLB definition: no build stage in current context"}]}],["$","div","error-internal-load-metadata-for-imagetag",{"className":"pl-4","children":["$","a",null,{"href":"#error-internal-load-metadata-for-imagetag","children":"ERROR [internal] load metadata for [image]:[tag]"}]}],["$","div","at-least-one-invalid-signature-was-encountered",{"className":"pl-4","children":["$","a",null,{"href":"#at-least-one-invalid-signature-was-encountered","children":"At least one invalid signature was encountered."}]}],["$","div","gpg-error",{"className":"pl-4","children":["$","a",null,{"href":"#gpg-error","children":"GPG error"}]}],["$","div","cannot-replace-to-directory",{"className":"pl-4","children":["$","a",null,{"href":"#cannot-replace-to-directory","children":"cannot replace to directory"}]}],["$","div","link",{"className":"pl-2","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:T2444,컨테이너
+```sh
+brew install --cask docker 
+```
+
+## exmaple usage
+```sh 
+docker built -t [TAG_NAME] . # . 은 Dockerfile 위치
+docker images # image 확인
+docker run --name [CONTAINER_NAME] -d -p 8080:8080 [IMAGE_NAME]
+docker ps # 실행 확인
+docker logs [CONTAINER_NAME] -f # -f 는 following
+docker exec -it [CONTAINER_NAME] /bin/bash # bash shell 로 접속
+# docker rm 
+# docker rmi
+```
+
+## arg vs env
+```Dockerfile
+ARG JS
+
+COPY ./$JS ./packages/$JS
+CMD node $JS
+```
+둘다 $JS 로 표현되고 있지만 사용되는 구문에 따라 ARG 가 참조될지 ENV 가 참조될지 결정된다
+
+- arg
+  - build time 에 사용되므로 COPY 등 이미지가 만들어지는 타이밍에 사용된다
+- env
+  - runtime 에 사용된된다. `CMD` 가 실행되는 타이밍은 runtime 이므로 env가 참조된다
+  
+- **주의** 해야할 점은 사용을 해보니 `FROM` 절 전/후의 `ARG` 사용 용도가 다르다
+  - `FROM` **전**의 `ARG` 는 `FROM` 절에서 사용 가능하다
+  - `FROM` **전**의 `ARG` 는 `FROM` 후의 절에서 **사용 가능하지 않다**
+  - `FROM` **후**의 `ARG` 는 `FROM` 이 후 절에서 사용 가능하다
+  - `FROM` **후**의 `ARG` 는 `FROM` 절에서 **사용 가능하지 않다**
+
+## build
+```sh
+docker build . -f [Dockerfile.custom]
+docker build . --no-cache # 결과 캐싱하지 않음, stdout 출력 필요시에도 사용
+docker build . --pull # pull 옵션을 통해서 항상 리모트 이미지를 사용할지 결정이 가능
+docker build . --progress=plain # 기본적으로 프로그레스 텍스트(변하는 텍스트)를 보여주는데 이를 plain text 를 출력하는게 좋음
+```
+
+## error
+container 가 실행중에 아래와 같은 형태의 에러를 낸다면 architecture 문제
+즉 arm64 로 빌드된 이미지가 amd64 에서 실행된 경우
+```sh
+exec /whoami: exec format error                                                                                                              │
+```
+
+아래와 같은 형태로 플랫폼을 지정해서 pull 이 가능하다
+```sh
+docker pull --platform [linux/amd64] [image-name]
+```
+---
+```sh
+STEP 9/9: RUN yarn --immutable
+➤ YN0000: ┌ Resolution step
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Fetch step
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Link step
+➤ YN0008: │ puppeteer@npm:19.6.2 must be rebuilt because its dependency tree changed
+➤ YN0009: │ puppeteer@npm:19.6.2 couldn't be built successfully (exit code 1, logs can be found here: /tmp/xfs-2807b8a5/build.log)
+➤ YN0000: └ Completed in 0s 487ms
+➤ YN0000: Failed with errors in 0s 792ms
+Error: building at STEP "RUN yarn --immutable": while running runtime: exit status 1
+```
+```sh 
+[Warning] one or more build args were not consumed: [TARGETARCH TARGETOS TARGETPLATFORM]
+```
+
+### `COPY packages ./packages` 컨텐츠 변경에도 캐시가 유지되는 문제
+```Dockerfile
+COPY packages ./packages
+```
+폴더안의 새로운 폴더가 생성되었음에도 불구하고 레이어가 캐시되는 문제가 있다.
+
+### `failed to solve with frontend dockerfile.v0: failed to create LLB definition: failed to parse stage name "registry/image/tag:": invalid reference format`
+- [[dockerfile]] 에서 `FROM image:$TAG` 와 같은 형태로 사용하면서 $TAG 를 ARG 로 받지 않아서 생긴문제
+```dockerfile
+ARG TAG=latest
+
+FROM registry/repo/name:$TAG
+```
+
+### `failed to solve with frontend dockerfile.v0: failed to create LLB definition: no build stage in current context`
+둘 중 하나 확인못함
+- [X] ENV 는 FROM 전에 갈수 없다
+  + https://qiita.com/kaizen_nagoya/items/1e8311a0ccda1413ef10
+- [ ] ARG 를 잘못 쓴 것으로 보인다
+- [ ] build 중 ctrl+c 로 취소하면서 문제가 생긴 것으로 보인데 빌드되다만 이미지를 삭제한다
+  - Docker desktop -> 우상단의 debug 아이콘 -> Clean / Purge data
+
+---
+
+### `ERROR [internal] load metadata for [image]:[tag]`
+항상 빌드되던 다커빌드시에 발생했는데 apt-get update 를 진행하는중에 발생했다. 좀 관련이 없어보이지만 결국 `docker system prune` 으로 해결되었다
+```sh 
+ERROR [internal] load metadata for [image]:[tag]
+```
+ 다른 빌드를 할때는 용량 부족에 대한 에러가 발생했다
+```sh 
+failed to register layer: Error processing tar file(exit status 1): write /home/pptruser/.cache/puppeteer/chrome/linux-113.0.5672.63/chrome-linux64/ClearKeyCdm/_platform_specific/linux_x64/libclearkeycdm.so: no space left on device
+```
+no space 에러는 `docker system prune [-a]` 로 해결된다.
+`FROM` 절에서 참조할 수 없는 이미지를 참조한 경우
+
+### At least one invalid signature was encountered.
+```sh 
+docker system prune
+```
+
+### GPG error  
+```sh
+ [+] Building 3.4s (5/5) FINISHED
+ => [internal] load build definition from Dockerfile.chrome                                                                                                                                                                        0.0s
+ => => transferring dockerfile: 750B                                                                                                                                                                                               0.0s
+ => [internal] load .dockerignore                                                                                                                                                                                                  0.0s
+ => => transferring context: 71B                                                                                                                                                                                                   0.0s
+ => [internal] load metadata for docker.io/library/node:20-bullseye                                                                                                                                                                0.9s
+ => CACHED [1/2] FROM docker.io/library/node:20-bullseye@sha256:c1b3e61fa0fde701bdb45032796bc4bb020a8c53f06cba5765584b620087fa03                                                                                                   0.0s
+ => ERROR [2/2] RUN apt-get update && apt-get install gnupg wget -y &&   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg &&     2.4s
+------
+ > [2/2] RUN apt-get update && apt-get install gnupg wget -y &&   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg &&   sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' &&   apt-get update &&   apt-get install google-chrome-stable -y --no-install-recommends &&   rm -rf /var/lib/apt/lists/*:
+#5 0.484 Get:1 http://deb.debian.org/debian bullseye InRelease [116 kB]
+#5 0.589 Get:2 http://deb.debian.org/debian-security bullseye-security InRelease [48.4 kB]
+#5 0.631 Get:3 http://deb.debian.org/debian bullseye-updates InRelease [44.1 kB]
+#5 1.156 Err:1 http://deb.debian.org/debian bullseye InRelease
+#5 1.156   At least one invalid signature was encountered.
+#5 1.719 Err:2 http://deb.debian.org/debian-security bullseye-security InRelease
+#5 1.719   At least one invalid signature was encountered.
+#5 2.268 Err:3 http://deb.debian.org/debian bullseye-updates InRelease
+#5 2.268   At least one invalid signature was encountered.
+#5 2.306 Reading package lists...
+#5 2.404 W: GPG error: http://deb.debian.org/debian bullseye InRelease: At least one invalid signature was encountered.
+#5 2.404 E: The repository 'http://deb.debian.org/debian bullseye InRelease' is not signed.
+#5 2.405 W: GPG error: http://deb.debian.org/debian-security bullseye-security InRelease: At least one invalid signature was encountered.
+#5 2.405 E: The repository 'http://deb.debian.org/debian-security bullseye-security InRelease' is not signed.
+#5 2.405 W: GPG error: http://deb.debian.org/debian bullseye-updates InRelease: At least one invalid signature was encountered.
+#5 2.405 E: The repository 'http://deb.debian.org/debian bullseye-updates InRelease' is not signed.
+------
+executor failed running [/bin/sh -c apt-get update && apt-get install gnupg wget -y &&   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg &&   sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' &&   apt-get update &&   apt-get install google-chrome-stable -y --no-install-recommends &&   rm -rf /var/lib/apt/lists/*]: exit code: 100
+
+```
+- GPG 에러 였지만 결국엔 disk space 랑 연결, 아래 명령어를 통해서 해결
+```sh 
+docker system prune -a
+```
+
+### cannot replace to directory
+```sh 
+cannot replace to directory /var/lib/docker/overlay2/pg75y9wcqxxgmqzex5k30owur/merged/app/.yarn/cache/next-npm-14.0.3-45132b65cd-73aa3d5dd7.zip with file
+```
+- [[dockerfile]] 에서 `COPY` 구문의 타겟에 복사할 대상과 같은 이름의 디렉토리가 존재할 떄 발생
+
+## link
+- [[kubernetes]]
+- [[podman]]
+- [[harbor]]
+- [[container]]
+- [[docker-compose]]
+12:T2444,컨테이너
+```sh
+brew install --cask docker 
+```
+
+## exmaple usage
+```sh 
+docker built -t [TAG_NAME] . # . 은 Dockerfile 위치
+docker images # image 확인
+docker run --name [CONTAINER_NAME] -d -p 8080:8080 [IMAGE_NAME]
+docker ps # 실행 확인
+docker logs [CONTAINER_NAME] -f # -f 는 following
+docker exec -it [CONTAINER_NAME] /bin/bash # bash shell 로 접속
+# docker rm 
+# docker rmi
+```
+
+## arg vs env
+```Dockerfile
+ARG JS
+
+COPY ./$JS ./packages/$JS
+CMD node $JS
+```
+둘다 $JS 로 표현되고 있지만 사용되는 구문에 따라 ARG 가 참조될지 ENV 가 참조될지 결정된다
+
+- arg
+  - build time 에 사용되므로 COPY 등 이미지가 만들어지는 타이밍에 사용된다
+- env
+  - runtime 에 사용된된다. `CMD` 가 실행되는 타이밍은 runtime 이므로 env가 참조된다
+  
+- **주의** 해야할 점은 사용을 해보니 `FROM` 절 전/후의 `ARG` 사용 용도가 다르다
+  - `FROM` **전**의 `ARG` 는 `FROM` 절에서 사용 가능하다
+  - `FROM` **전**의 `ARG` 는 `FROM` 후의 절에서 **사용 가능하지 않다**
+  - `FROM` **후**의 `ARG` 는 `FROM` 이 후 절에서 사용 가능하다
+  - `FROM` **후**의 `ARG` 는 `FROM` 절에서 **사용 가능하지 않다**
+
+## build
+```sh
+docker build . -f [Dockerfile.custom]
+docker build . --no-cache # 결과 캐싱하지 않음, stdout 출력 필요시에도 사용
+docker build . --pull # pull 옵션을 통해서 항상 리모트 이미지를 사용할지 결정이 가능
+docker build . --progress=plain # 기본적으로 프로그레스 텍스트(변하는 텍스트)를 보여주는데 이를 plain text 를 출력하는게 좋음
+```
+
+## error
+container 가 실행중에 아래와 같은 형태의 에러를 낸다면 architecture 문제
+즉 arm64 로 빌드된 이미지가 amd64 에서 실행된 경우
+```sh
+exec /whoami: exec format error                                                                                                              │
+```
+
+아래와 같은 형태로 플랫폼을 지정해서 pull 이 가능하다
+```sh
+docker pull --platform [linux/amd64] [image-name]
+```
+---
+```sh
+STEP 9/9: RUN yarn --immutable
+➤ YN0000: ┌ Resolution step
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Fetch step
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Link step
+➤ YN0008: │ puppeteer@npm:19.6.2 must be rebuilt because its dependency tree changed
+➤ YN0009: │ puppeteer@npm:19.6.2 couldn't be built successfully (exit code 1, logs can be found here: /tmp/xfs-2807b8a5/build.log)
+➤ YN0000: └ Completed in 0s 487ms
+➤ YN0000: Failed with errors in 0s 792ms
+Error: building at STEP "RUN yarn --immutable": while running runtime: exit status 1
+```
+```sh 
+[Warning] one or more build args were not consumed: [TARGETARCH TARGETOS TARGETPLATFORM]
+```
+
+### `COPY packages ./packages` 컨텐츠 변경에도 캐시가 유지되는 문제
+```Dockerfile
+COPY packages ./packages
+```
+폴더안의 새로운 폴더가 생성되었음에도 불구하고 레이어가 캐시되는 문제가 있다.
+
+### `failed to solve with frontend dockerfile.v0: failed to create LLB definition: failed to parse stage name "registry/image/tag:": invalid reference format`
+- [[dockerfile]] 에서 `FROM image:$TAG` 와 같은 형태로 사용하면서 $TAG 를 ARG 로 받지 않아서 생긴문제
+```dockerfile
+ARG TAG=latest
+
+FROM registry/repo/name:$TAG
+```
+
+### `failed to solve with frontend dockerfile.v0: failed to create LLB definition: no build stage in current context`
+둘 중 하나 확인못함
+- [X] ENV 는 FROM 전에 갈수 없다
+  + https://qiita.com/kaizen_nagoya/items/1e8311a0ccda1413ef10
+- [ ] ARG 를 잘못 쓴 것으로 보인다
+- [ ] build 중 ctrl+c 로 취소하면서 문제가 생긴 것으로 보인데 빌드되다만 이미지를 삭제한다
+  - Docker desktop -> 우상단의 debug 아이콘 -> Clean / Purge data
+
+---
+
+### `ERROR [internal] load metadata for [image]:[tag]`
+항상 빌드되던 다커빌드시에 발생했는데 apt-get update 를 진행하는중에 발생했다. 좀 관련이 없어보이지만 결국 `docker system prune` 으로 해결되었다
+```sh 
+ERROR [internal] load metadata for [image]:[tag]
+```
+ 다른 빌드를 할때는 용량 부족에 대한 에러가 발생했다
+```sh 
+failed to register layer: Error processing tar file(exit status 1): write /home/pptruser/.cache/puppeteer/chrome/linux-113.0.5672.63/chrome-linux64/ClearKeyCdm/_platform_specific/linux_x64/libclearkeycdm.so: no space left on device
+```
+no space 에러는 `docker system prune [-a]` 로 해결된다.
+`FROM` 절에서 참조할 수 없는 이미지를 참조한 경우
+
+### At least one invalid signature was encountered.
+```sh 
+docker system prune
+```
+
+### GPG error  
+```sh
+ [+] Building 3.4s (5/5) FINISHED
+ => [internal] load build definition from Dockerfile.chrome                                                                                                                                                                        0.0s
+ => => transferring dockerfile: 750B                                                                                                                                                                                               0.0s
+ => [internal] load .dockerignore                                                                                                                                                                                                  0.0s
+ => => transferring context: 71B                                                                                                                                                                                                   0.0s
+ => [internal] load metadata for docker.io/library/node:20-bullseye                                                                                                                                                                0.9s
+ => CACHED [1/2] FROM docker.io/library/node:20-bullseye@sha256:c1b3e61fa0fde701bdb45032796bc4bb020a8c53f06cba5765584b620087fa03                                                                                                   0.0s
+ => ERROR [2/2] RUN apt-get update && apt-get install gnupg wget -y &&   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg &&     2.4s
+------
+ > [2/2] RUN apt-get update && apt-get install gnupg wget -y &&   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg &&   sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' &&   apt-get update &&   apt-get install google-chrome-stable -y --no-install-recommends &&   rm -rf /var/lib/apt/lists/*:
+#5 0.484 Get:1 http://deb.debian.org/debian bullseye InRelease [116 kB]
+#5 0.589 Get:2 http://deb.debian.org/debian-security bullseye-security InRelease [48.4 kB]
+#5 0.631 Get:3 http://deb.debian.org/debian bullseye-updates InRelease [44.1 kB]
+#5 1.156 Err:1 http://deb.debian.org/debian bullseye InRelease
+#5 1.156   At least one invalid signature was encountered.
+#5 1.719 Err:2 http://deb.debian.org/debian-security bullseye-security InRelease
+#5 1.719   At least one invalid signature was encountered.
+#5 2.268 Err:3 http://deb.debian.org/debian bullseye-updates InRelease
+#5 2.268   At least one invalid signature was encountered.
+#5 2.306 Reading package lists...
+#5 2.404 W: GPG error: http://deb.debian.org/debian bullseye InRelease: At least one invalid signature was encountered.
+#5 2.404 E: The repository 'http://deb.debian.org/debian bullseye InRelease' is not signed.
+#5 2.405 W: GPG error: http://deb.debian.org/debian-security bullseye-security InRelease: At least one invalid signature was encountered.
+#5 2.405 E: The repository 'http://deb.debian.org/debian-security bullseye-security InRelease' is not signed.
+#5 2.405 W: GPG error: http://deb.debian.org/debian bullseye-updates InRelease: At least one invalid signature was encountered.
+#5 2.405 E: The repository 'http://deb.debian.org/debian bullseye-updates InRelease' is not signed.
+------
+executor failed running [/bin/sh -c apt-get update && apt-get install gnupg wget -y &&   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg &&   sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' &&   apt-get update &&   apt-get install google-chrome-stable -y --no-install-recommends &&   rm -rf /var/lib/apt/lists/*]: exit code: 100
+
+```
+- GPG 에러 였지만 결국엔 disk space 랑 연결, 아래 명령어를 통해서 해결
+```sh 
+docker system prune -a
+```
+
+### cannot replace to directory
+```sh 
+cannot replace to directory /var/lib/docker/overlay2/pg75y9wcqxxgmqzex5k30owur/merged/app/.yarn/cache/next-npm-14.0.3-45132b65cd-73aa3d5dd7.zip with file
+```
+- [[dockerfile]] 에서 `COPY` 구문의 타겟에 복사할 대상과 같은 이름의 디렉토리가 존재할 떄 발생
+
+## link
+- [[kubernetes]]
+- [[podman]]
+- [[harbor]]
+- [[container]]
+- [[docker-compose]]
+13:T2444,컨테이너
+```sh
+brew install --cask docker 
+```
+
+## exmaple usage
+```sh 
+docker built -t [TAG_NAME] . # . 은 Dockerfile 위치
+docker images # image 확인
+docker run --name [CONTAINER_NAME] -d -p 8080:8080 [IMAGE_NAME]
+docker ps # 실행 확인
+docker logs [CONTAINER_NAME] -f # -f 는 following
+docker exec -it [CONTAINER_NAME] /bin/bash # bash shell 로 접속
+# docker rm 
+# docker rmi
+```
+
+## arg vs env
+```Dockerfile
+ARG JS
+
+COPY ./$JS ./packages/$JS
+CMD node $JS
+```
+둘다 $JS 로 표현되고 있지만 사용되는 구문에 따라 ARG 가 참조될지 ENV 가 참조될지 결정된다
+
+- arg
+  - build time 에 사용되므로 COPY 등 이미지가 만들어지는 타이밍에 사용된다
+- env
+  - runtime 에 사용된된다. `CMD` 가 실행되는 타이밍은 runtime 이므로 env가 참조된다
+  
+- **주의** 해야할 점은 사용을 해보니 `FROM` 절 전/후의 `ARG` 사용 용도가 다르다
+  - `FROM` **전**의 `ARG` 는 `FROM` 절에서 사용 가능하다
+  - `FROM` **전**의 `ARG` 는 `FROM` 후의 절에서 **사용 가능하지 않다**
+  - `FROM` **후**의 `ARG` 는 `FROM` 이 후 절에서 사용 가능하다
+  - `FROM` **후**의 `ARG` 는 `FROM` 절에서 **사용 가능하지 않다**
+
+## build
+```sh
+docker build . -f [Dockerfile.custom]
+docker build . --no-cache # 결과 캐싱하지 않음, stdout 출력 필요시에도 사용
+docker build . --pull # pull 옵션을 통해서 항상 리모트 이미지를 사용할지 결정이 가능
+docker build . --progress=plain # 기본적으로 프로그레스 텍스트(변하는 텍스트)를 보여주는데 이를 plain text 를 출력하는게 좋음
+```
+
+## error
+container 가 실행중에 아래와 같은 형태의 에러를 낸다면 architecture 문제
+즉 arm64 로 빌드된 이미지가 amd64 에서 실행된 경우
+```sh
+exec /whoami: exec format error                                                                                                              │
+```
+
+아래와 같은 형태로 플랫폼을 지정해서 pull 이 가능하다
+```sh
+docker pull --platform [linux/amd64] [image-name]
+```
+---
+```sh
+STEP 9/9: RUN yarn --immutable
+➤ YN0000: ┌ Resolution step
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Fetch step
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Link step
+➤ YN0008: │ puppeteer@npm:19.6.2 must be rebuilt because its dependency tree changed
+➤ YN0009: │ puppeteer@npm:19.6.2 couldn't be built successfully (exit code 1, logs can be found here: /tmp/xfs-2807b8a5/build.log)
+➤ YN0000: └ Completed in 0s 487ms
+➤ YN0000: Failed with errors in 0s 792ms
+Error: building at STEP "RUN yarn --immutable": while running runtime: exit status 1
+```
+```sh 
+[Warning] one or more build args were not consumed: [TARGETARCH TARGETOS TARGETPLATFORM]
+```
+
+### `COPY packages ./packages` 컨텐츠 변경에도 캐시가 유지되는 문제
+```Dockerfile
+COPY packages ./packages
+```
+폴더안의 새로운 폴더가 생성되었음에도 불구하고 레이어가 캐시되는 문제가 있다.
+
+### `failed to solve with frontend dockerfile.v0: failed to create LLB definition: failed to parse stage name "registry/image/tag:": invalid reference format`
+- [[dockerfile]] 에서 `FROM image:$TAG` 와 같은 형태로 사용하면서 $TAG 를 ARG 로 받지 않아서 생긴문제
+```dockerfile
+ARG TAG=latest
+
+FROM registry/repo/name:$TAG
+```
+
+### `failed to solve with frontend dockerfile.v0: failed to create LLB definition: no build stage in current context`
+둘 중 하나 확인못함
+- [X] ENV 는 FROM 전에 갈수 없다
+  + https://qiita.com/kaizen_nagoya/items/1e8311a0ccda1413ef10
+- [ ] ARG 를 잘못 쓴 것으로 보인다
+- [ ] build 중 ctrl+c 로 취소하면서 문제가 생긴 것으로 보인데 빌드되다만 이미지를 삭제한다
+  - Docker desktop -> 우상단의 debug 아이콘 -> Clean / Purge data
+
+---
+
+### `ERROR [internal] load metadata for [image]:[tag]`
+항상 빌드되던 다커빌드시에 발생했는데 apt-get update 를 진행하는중에 발생했다. 좀 관련이 없어보이지만 결국 `docker system prune` 으로 해결되었다
+```sh 
+ERROR [internal] load metadata for [image]:[tag]
+```
+ 다른 빌드를 할때는 용량 부족에 대한 에러가 발생했다
+```sh 
+failed to register layer: Error processing tar file(exit status 1): write /home/pptruser/.cache/puppeteer/chrome/linux-113.0.5672.63/chrome-linux64/ClearKeyCdm/_platform_specific/linux_x64/libclearkeycdm.so: no space left on device
+```
+no space 에러는 `docker system prune [-a]` 로 해결된다.
+`FROM` 절에서 참조할 수 없는 이미지를 참조한 경우
+
+### At least one invalid signature was encountered.
+```sh 
+docker system prune
+```
+
+### GPG error  
+```sh
+ [+] Building 3.4s (5/5) FINISHED
+ => [internal] load build definition from Dockerfile.chrome                                                                                                                                                                        0.0s
+ => => transferring dockerfile: 750B                                                                                                                                                                                               0.0s
+ => [internal] load .dockerignore                                                                                                                                                                                                  0.0s
+ => => transferring context: 71B                                                                                                                                                                                                   0.0s
+ => [internal] load metadata for docker.io/library/node:20-bullseye                                                                                                                                                                0.9s
+ => CACHED [1/2] FROM docker.io/library/node:20-bullseye@sha256:c1b3e61fa0fde701bdb45032796bc4bb020a8c53f06cba5765584b620087fa03                                                                                                   0.0s
+ => ERROR [2/2] RUN apt-get update && apt-get install gnupg wget -y &&   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg &&     2.4s
+------
+ > [2/2] RUN apt-get update && apt-get install gnupg wget -y &&   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg &&   sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' &&   apt-get update &&   apt-get install google-chrome-stable -y --no-install-recommends &&   rm -rf /var/lib/apt/lists/*:
+#5 0.484 Get:1 http://deb.debian.org/debian bullseye InRelease [116 kB]
+#5 0.589 Get:2 http://deb.debian.org/debian-security bullseye-security InRelease [48.4 kB]
+#5 0.631 Get:3 http://deb.debian.org/debian bullseye-updates InRelease [44.1 kB]
+#5 1.156 Err:1 http://deb.debian.org/debian bullseye InRelease
+#5 1.156   At least one invalid signature was encountered.
+#5 1.719 Err:2 http://deb.debian.org/debian-security bullseye-security InRelease
+#5 1.719   At least one invalid signature was encountered.
+#5 2.268 Err:3 http://deb.debian.org/debian bullseye-updates InRelease
+#5 2.268   At least one invalid signature was encountered.
+#5 2.306 Reading package lists...
+#5 2.404 W: GPG error: http://deb.debian.org/debian bullseye InRelease: At least one invalid signature was encountered.
+#5 2.404 E: The repository 'http://deb.debian.org/debian bullseye InRelease' is not signed.
+#5 2.405 W: GPG error: http://deb.debian.org/debian-security bullseye-security InRelease: At least one invalid signature was encountered.
+#5 2.405 E: The repository 'http://deb.debian.org/debian-security bullseye-security InRelease' is not signed.
+#5 2.405 W: GPG error: http://deb.debian.org/debian bullseye-updates InRelease: At least one invalid signature was encountered.
+#5 2.405 E: The repository 'http://deb.debian.org/debian bullseye-updates InRelease' is not signed.
+------
+executor failed running [/bin/sh -c apt-get update && apt-get install gnupg wget -y &&   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg &&   sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' &&   apt-get update &&   apt-get install google-chrome-stable -y --no-install-recommends &&   rm -rf /var/lib/apt/lists/*]: exit code: 100
+
+```
+- GPG 에러 였지만 결국엔 disk space 랑 연결, 아래 명령어를 통해서 해결
+```sh 
+docker system prune -a
+```
+
+### cannot replace to directory
+```sh 
+cannot replace to directory /var/lib/docker/overlay2/pg75y9wcqxxgmqzex5k30owur/merged/app/.yarn/cache/next-npm-14.0.3-45132b65cd-73aa3d5dd7.zip with file
+```
+- [[dockerfile]] 에서 `COPY` 구문의 타겟에 복사할 대상과 같은 이름의 디렉토리가 존재할 떄 발생
+
+## link
+- [[kubernetes]]
+- [[podman]]
+- [[harbor]]
+- [[container]]
+- [[docker-compose]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# docker"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# docker"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/docker"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# docker"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null
