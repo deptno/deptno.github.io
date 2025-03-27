@@ -1,0 +1,1971 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-4cf5e0b6c08b989f.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-bfc5f34ea7491706.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title>### Data Centric</title><meta name="description" content="
+## 학습
+- 학습 순서
+  - 데이터 기획
+  - 데이터 수집
+  - 데이터 라벨링
+  - 데이터 클렌징
+  - 데이터 마무리
+  - 데이터 제작 실습
+
+### Data-Centric AI란 무엇인가?
+- AI System = Code + Data
+- 데이터 품질 -&gt; 성능 향상
+  - 데이터 어노테이션 일관성이 꺠지면 노이즈로 인식됨
+- AI 프로젝트는 66~80%가 데이터 관련 작업
+  - 그외에 알고리즘, 모델 학습, 모델 조정, 서비스 배포등
+- Model-Centric AI
+  - 데이터가 많아지면 노이즈는 묻힌다는 개념
+- Data-Centric
+  - 데이터 품질에 집중
+- AI 서비스 개발 과정
+  - 프로젝트 셋업
+  - 데이터 준비
+  - 모델 훈련
+  - 배포
+- 서비스 출시 이전 중요도
+  - 모델 1:1 데이터
+- 서비스 출시 이후 중요도
+  - 모델 2:8 데이터
+- MLOps
+  - 데이터 구축을 위한 인프라
+  - google, nvidia 참조
+- 요즘은 파인튜닝
+  - 요즘 LoRA
+  - 적은 데이터로도 최적화가 가능
+- 연구분야
+  - 윤리
+  - 품질
+    - 이상 탐지및 제거
+    - 에러 탐지 및 수정
+      + https://labelerrors.com
+    - 데이터 증강
+      - back translation
+    - 피처 엔지니어링
+    - 컨센서스 라벨링
+      - 다수의 라벨러로 부터 얻은 라벨들의 일관성을 높이는 방법
+    - 액티브 러닝
+      - 모든 데이터가 아니라 중요한 데이터를 식별하고 학습하는 방식
+    - 커리큘럼 학습
+      - 쉬운 데이터부터 차근차근 학습할 수 있도록 학습 순서 조절하는 방식
+  - 평가
+    - 테스트데이터 추가로 평가
+    - 부분집합으로 평가
+    - 손상된 학습데이터 식별
+
+### Data-Centric AI의 미래
+- foundation model 시대
+  - multilingual
+    - 과거는 unilingual
+    - transformer 이전(LSTM)에는 모델도 키우기 어려움
+    - transforemr 이후로는 모델이 커지면서 multilingual이 대세
+    - 성능도 unilingual 을 뛰어 넘음
+  - multimodal
+    - LMM Large Multimodal Model
+    - LLM 이후로 멀티모달의 성능이 향상됨
+    - VQA Visual Question Answering
+      - 이미지 -&gt; 텍스트 디스크립션 표현
+    - Multimodal Data VidLN
+      - 동영상 -&gt; 텍스트 디스크립션 표현
+    - VDialogUE
+      - 이미지+텍스트
+    - 로봇 센서등 여러 입력을 기반으로한 데이터들이 많음
+  - synthetic data
+    - 합성 데이터
+    - 모델이 생성한 데이터 -&gt; 다른 모델 훈련
+      - chatgpt 4로 생성된 데이터가 이미 사람의 것을 넘어섬
+    - 싸고 빠르다
+    - 어려운 조건의 데이터도 생성가능
+    - 데이터 편향 회피
+    - 사례
+      - 자율주행
+      - VQA
+      - 오디오도 생성
+
+### 데이터 구축 프로세스 소개
+- 데이터 구축 프로세스
+  - 수집
+    - 방법
+      - 원시(raw) 데이터
+      - 수집
+      - 크롤링
+      - 오픈소스
+      - 크라우드 소싱
+    - 데이터 타당성 검토
+      - 다양성
+      - 편향 방지
+      - 윤리 준수
+      - 수집 방법
+      - 법, 제도 준수
+  - 전처리
+    - 원천(source) 데이터
+    - 품질 확보
+      - 품질 기준 마련
+      - 개인정보 비식별화
+      - 중복성 방지
+        - 유사 데이터 및 특성이 없는 데이터 제거
+    - 품질 검사 지표
+      - 적합성, 신뢰성, 정합성 등등
+    - 스키마 설계
+      - 어떻게 저장할지 구조 설계
+      - 의미 분할, 요약시 압축 정도, 추출할 것인지 추상화할 것인지
+      - 감성 분석, 전체 텍스트에 하나만 혹은 요소별로 라벨링할 것인지
+      - 예시
+        - 문서 요약
+          - 압축할 양
+          - 추출 추출 단어 수
+          - 추상화 생성, 타겟 글자 수
+  - 라벨링
+    - 라벨링을 할 기준을 마련
+    - 가이드라인 작성 -&gt; 작업자 교육 -&gt; 라벨링 진행
+      - 데이터 구축 목적 정의
+      - 사용 용어 정의
+      - 예시를 통한 체계 설명
+      - 버전 관리
+    - 단계
+      - 파일럿 테스트를 통한 소규모 데이터셋 구축
+        - 문제, 엣지케이스발견
+      - 잘 설계된 데이터 라벨링 툴을 사용해서 라벨링하는 것이 핵심
+        - 잘 설계된 툴
+          - Quality Control
+            - 일관성 있고 정확한 데이터 생성가능여부
+          - Efficientcy
+          - Scalability
+  - 클렌징
+    - 라벨링 된 데이터의 품질 검수
+    - 기준이하 폐기
+    - 종류
+      - 내재적 요소 검수
+        - 가이드 라인이 준수 되었는지
+        - 작업자들간 라벨링이 일치하는지
+        - IAA Inter Annotator Agreement 평가 지표를 통해 확인
+      - 외재적 요소 검수
+        - 다양성, 신뢰성, 충분성, 윤리 적합성을 살펴보는 과정
+        - 외부 자문위원들도 있다
+  - 스플릿
+    - 학습, 검증, 테스트셋으로 분할
+  - 릴리즈
+    - 배포내용, 있으면 좋다
+      - 라벨링 데이터
+      - 버전 및 로그
+      - 샘플데이터 형태
+      - 데이터 분석서
+      - 품질 평가서
+- 데이터 구축 프로세스의 진행
+  - 사이클이 존재
+    - 폭포수(Waterfall) 모델
+      - 순차적
+      - 이터레이션이 별로 필요없는 경우
+    - 나선형(Spiral) 모델
+      - 빠르게 이터레이션
+      - 장기간
+  - 과정의 이동간에 유연성이있다
+
+### 데이터 구축 기획서 작성
+- 데이터 구축 기획서의 작성
+  - 기획
+    - 어던 방식으로 수집되는가
+    - 무슨 문제를 해결하는가
+    - 수집 필요 양
+    - 수집 방법
+    - AI Hub 데이터 구축 기획서 참고
+- 데이터 구축 기획서의 구성
+  - 수업 생략
+
+### 데이터 수집 1_직접 수집
+- 수집 방법
+  - 직접
+    - 전문성 떨어져서 사이드 프로젝트 등에서 수행
+  - 크롤링
+  - 오픈소스
+  - 크라우드 소싱
+- 증강
+  - 혼합 Belding
+    - 유사 데이터를 합친다, 데이터 머징, 조인
+  - 증강 Augmentation
+    - back translation
+    - image retation
+  - 합성 Synthetic
+    - 모델을 통해 생성
+
+### 데이터 수집 2_크롤링 (이론)
+- api 제공 여부 확인
+- python library
+  - requests
+  - beautiful-Soup
+  - scrapy
+  - seleinum
+  - pyquery
+
+### 데이터 수집 2_크롤링 (실습)
+- seleinum 을 이용한 이미지 크롤링
+  - 구글이미지의 옵션을 설정하여 크롤링하는 예제
+  - 크리에이티브 커먼즈 라이센스
+- 실습은 생략
+
+### 데이터 수집 3_오픈 소스
+- 데이터 자체를 참고
+- 데이터 수집 방법 참고
+- 오픈 소스 데이터 플랫폼
+  - 국내 
+    - 공공데이터 포털
+    - 서울 열린데이터광장
+    - AI 허브
+  - 해외
+    - Kaggle
+    - Huggingface
+    - PapersWithCode
+    - UCI ML Repo
+    - 국가별 공공데이터 포털이 존재
+      - data.gov.fr
+      - data.gov.sg
+
+### 데이터 수집 4_크라우드 소싱
+- 업체선정해서 외주맡기는 형태
+
+### 데이터 수집시 주의 사항 1_라이선스
+- 코드
+  - OSL
+    - BSD
+    - Apache License
+    - MIT
+- 데이터
+  - CCL Creative Commons License
+    - 저작권
+    - 이용허락조건
+      - 저작권자 표시
+      - 비영리
+      - 변경금지
+      - 동일조건변경허락
+
+### 데이터 수집시 주의 사항 2_개인정보보호
+- 개인정보가 아닌경우
+  - 사망한 정보
+  - 집단의 통계값
+- 개인정보인 경우
+  - 개인에 대한 특정이 가능한경우
+
+### 데이터 수집시 주의 사항 3_윤리
+
+### 데이터 전처리
+- 중복데이터는
+  - 제거
+  - 표시
+- 결측데이터
+  - 평균,중앙,최빈값을 사용하여 대체
+  - 모델을 사용해서 예측
+  - 제거
+- 이상치 처리
+  - 관측치에서 멀리 덜어진 값
+  - 제거, 대체, 표시
+- 도메인별 전처리
+  - 이미지
+    - 포맷 통일
+    - 중복, 잘못찰영된 것 제거
+  - 텍스트
+    - &quot;ㅋㅋㅋ&quot;, &quot;ㅎㅎㅎ&quot;, 이모지등
+      - 제거 또는 규측으로 처리
+    - `utf-8` 인코딩으로 변호나
+    - 어휘나 종류의 수가 미달인경우 제거등의 처리
+- 데이터 스키마 설계
+  - 원본데이터, 타스크 수행 결과, 메타데이터 등을 저장
+
+### 라벨링 가이드라인 작성 방법
+- 라벨링은 툴을 사용하기도 한다
+  - 문서 같은 경우 Label Studio 등
+
+### 데이터 라벨링 규칙 설정 1_CV
+- 방식
+  - 바운딩 박스
+    - 직사각형, 타이트하게, 노이즈없이
+  - 큐보인드
+    - 3d 박스
+  - 폴리곤
+    - 다각형 형태의 바운딩 박스, 폐곡선
+  - 폴리라인
+    - 선형 객체의 경계나 위치등을 연속선으로 지정, 폐곡선이 아닌경우
+  - 의미 분할
+    - 픽셀 라벨링
+  - 키 포인트
+    - 객체의 주요 지점을 라벨링, 관절
+- 모호성 제거
+  - 띄어쓰기는 분리하여, 기호 분리등
+  - `é` 와 같은 기호들을 라벨러가 통일성있게 기록할 수 있도록
+  - 통일성이 가장 중요
+
+### 데이터 라벨링 규칙 설정 2_NLP
+- 기법
+  - 분류 및 태깅
+    - 다큐먼트(문단 등)의 분류
+    - 텍스트의 부분을 태깅, NER
+  - 전사
+    - 음성 to 텍스트
+    - 종류
+      - 일반전사
+        - 발음 전사
+      - 이중 전사
+        - 발음 전사와 철자(표준어) 전사 병기
+      - 화자 전사
+        - 화자 구분
+- 사례
+  - 방송 컨텐츠 전사(tool: zeroth)
+- 번역 및 요약의 특징
+  - 의미를 보존한체 텍스트를 변환하는 작업
+  - 특별한 툴 없이 작업 가능
+- 분류 또는 태깅시 고려할 사항
+  - 태깅 대상 구분
+    - 동일 군이 연속으로 등장하는 경우 태그를 합침
+      - `Lorem` `Ipsum`
+- 전사 규칙
+  - 맞춤법 교육을 먼저받는다
+  - 축약형, 방언은 이중 전사로 표기한다
+  - 비식별화, 둘 이상인 경우 그 둘을 구분할 수 있어야한다
+  - 주소는 동까지 표현
+  - 이런것들은 규칙이 중요
+- 요약
+  - 몇 문장으로 요약해야하는지
+  - 수정 불가능한 단어와, 수정 가능한 범주
+  - 필수로 포함되어야하는 내용
+    - 육하 원칙
+  - 핵심 키워드가 2개이상 포함되어야한다
+
+### 라벨링 툴 소개
+- pass
+
+### 데이터 클렌징 방법
+- 라벨링 에러
+  - 휴먼 에러
+  - 라벨링 규칙 에러
+    - 사람마다 다르게 해석 가능
+    - 라벨링 중간에 규칙을 바꾸는 경우
+- 데이터 클렌징
+  - 규칙으로 정상화 할 수 있으면 좋지마 그렇지 않은 경우가 대다수
+- 에러 확인
+  - 샘플 직접 검수
+    - 에러발견 -&gt; 전체에서 해당 에러 필터링
+  - 모델 결과 분석
+  - IAA Inter Annotator Agreement
+  - Confident Learning
+    - 컨피던트가 낮은 데이터는 제외하고 사용
+      - 제외한 데이터는 추가 검수
+- 데이터 클렌징
+  - 직접 클렌징
+    - 라벨링 에러가 규칙적인지 않은 경우, 직접 클렌징
+    - 비용, 휴먼에러 이슈
+  - 규칙 기반 코드로 클렌징
+- 라벨링 규칙 수정
+  - 규칙 업데이트
+
+### 데이터 평가 방법 - IAA
+- 정의
+  - IAA Inter Annotator Agreement
+    - 작업자들간의 일치 정도
+- 평가 방법들이 존재
+  - 작업자들의 일치도록 평가하기 때문에 다수가 잘못된 선택을 하는 경우 보완
+
+### IAA를 활용한 데이터 클렌징 방법
+- pass
+
+### 데이터 스플릿
+- 과적합 방지
+- 데이터 샘플링
+  - 이점
+    - 정확성, 편향 제거, 위험 감소
+  - 방식
+    - 확률적 샘프링
+    - 비확률적 샘플링
+  - 한계
+    - 편향이 생길 수도 있다.
+
+### 합성 데이터 - CV (이론)
+- GANs
+- VAE
+- Diffusion
+
+### 합성 데이터 - CV (실습)
+
+### 합성 데이터 - NLP (이론)
+- RNN
+- BART
+- LLM
+
+### 합성 데이터 - NLP (실습)
+
+### 액티브 러닝 (이론)
+- 모델로 라벨링 -&gt; 사람이 다시 라벨링 -&gt; 라벨링 경계 업데이트
+
+### 액티브 러닝 (실습)
+- 생략
+
+### 데이터 릴리즈
+- 고려사항
+  - 품질
+  - 라이센스 권리표시
+  - 개인정보 보호 문제
+  - 윤리적 고려사항
+- 릴리즈 플랫폼
+  - https://paperswithcode.com/datasets
+  - https://huggingface.co/datasets
+  - https://kaggle.com/datasets
+
+### CV 데이터 제작 실습
+- 세그멘테이션 관련
+
+### NLP 데이터 제작 실습
+- 데이터 NER관련해서 해당 수동 태깅(툴 사용)하고 돌려보라는 뜻
+- 생략
+
+## link
+- [[wn.private:upstage-ai-lab-day-102]]
+- [[upstage-ai-lab]]
+- [[upstage-ai-lab-day-98]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="### Data Centric"/><meta property="og:description" content="
+## 학습
+- 학습 순서
+  - 데이터 기획
+  - 데이터 수집
+  - 데이터 라벨링
+  - 데이터 클렌징
+  - 데이터 마무리
+  - 데이터 제작 실습
+
+### Data-Centric AI란 무엇인가?
+- AI System = Code + Data
+- 데이터 품질 -&gt; 성능 향상
+  - 데이터 어노테이션 일관성이 꺠지면 노이즈로 인식됨
+- AI 프로젝트는 66~80%가 데이터 관련 작업
+  - 그외에 알고리즘, 모델 학습, 모델 조정, 서비스 배포등
+- Model-Centric AI
+  - 데이터가 많아지면 노이즈는 묻힌다는 개념
+- Data-Centric
+  - 데이터 품질에 집중
+- AI 서비스 개발 과정
+  - 프로젝트 셋업
+  - 데이터 준비
+  - 모델 훈련
+  - 배포
+- 서비스 출시 이전 중요도
+  - 모델 1:1 데이터
+- 서비스 출시 이후 중요도
+  - 모델 2:8 데이터
+- MLOps
+  - 데이터 구축을 위한 인프라
+  - google, nvidia 참조
+- 요즘은 파인튜닝
+  - 요즘 LoRA
+  - 적은 데이터로도 최적화가 가능
+- 연구분야
+  - 윤리
+  - 품질
+    - 이상 탐지및 제거
+    - 에러 탐지 및 수정
+      + https://labelerrors.com
+    - 데이터 증강
+      - back translation
+    - 피처 엔지니어링
+    - 컨센서스 라벨링
+      - 다수의 라벨러로 부터 얻은 라벨들의 일관성을 높이는 방법
+    - 액티브 러닝
+      - 모든 데이터가 아니라 중요한 데이터를 식별하고 학습하는 방식
+    - 커리큘럼 학습
+      - 쉬운 데이터부터 차근차근 학습할 수 있도록 학습 순서 조절하는 방식
+  - 평가
+    - 테스트데이터 추가로 평가
+    - 부분집합으로 평가
+    - 손상된 학습데이터 식별
+
+### Data-Centric AI의 미래
+- foundation model 시대
+  - multilingual
+    - 과거는 unilingual
+    - transformer 이전(LSTM)에는 모델도 키우기 어려움
+    - transforemr 이후로는 모델이 커지면서 multilingual이 대세
+    - 성능도 unilingual 을 뛰어 넘음
+  - multimodal
+    - LMM Large Multimodal Model
+    - LLM 이후로 멀티모달의 성능이 향상됨
+    - VQA Visual Question Answering
+      - 이미지 -&gt; 텍스트 디스크립션 표현
+    - Multimodal Data VidLN
+      - 동영상 -&gt; 텍스트 디스크립션 표현
+    - VDialogUE
+      - 이미지+텍스트
+    - 로봇 센서등 여러 입력을 기반으로한 데이터들이 많음
+  - synthetic data
+    - 합성 데이터
+    - 모델이 생성한 데이터 -&gt; 다른 모델 훈련
+      - chatgpt 4로 생성된 데이터가 이미 사람의 것을 넘어섬
+    - 싸고 빠르다
+    - 어려운 조건의 데이터도 생성가능
+    - 데이터 편향 회피
+    - 사례
+      - 자율주행
+      - VQA
+      - 오디오도 생성
+
+### 데이터 구축 프로세스 소개
+- 데이터 구축 프로세스
+  - 수집
+    - 방법
+      - 원시(raw) 데이터
+      - 수집
+      - 크롤링
+      - 오픈소스
+      - 크라우드 소싱
+    - 데이터 타당성 검토
+      - 다양성
+      - 편향 방지
+      - 윤리 준수
+      - 수집 방법
+      - 법, 제도 준수
+  - 전처리
+    - 원천(source) 데이터
+    - 품질 확보
+      - 품질 기준 마련
+      - 개인정보 비식별화
+      - 중복성 방지
+        - 유사 데이터 및 특성이 없는 데이터 제거
+    - 품질 검사 지표
+      - 적합성, 신뢰성, 정합성 등등
+    - 스키마 설계
+      - 어떻게 저장할지 구조 설계
+      - 의미 분할, 요약시 압축 정도, 추출할 것인지 추상화할 것인지
+      - 감성 분석, 전체 텍스트에 하나만 혹은 요소별로 라벨링할 것인지
+      - 예시
+        - 문서 요약
+          - 압축할 양
+          - 추출 추출 단어 수
+          - 추상화 생성, 타겟 글자 수
+  - 라벨링
+    - 라벨링을 할 기준을 마련
+    - 가이드라인 작성 -&gt; 작업자 교육 -&gt; 라벨링 진행
+      - 데이터 구축 목적 정의
+      - 사용 용어 정의
+      - 예시를 통한 체계 설명
+      - 버전 관리
+    - 단계
+      - 파일럿 테스트를 통한 소규모 데이터셋 구축
+        - 문제, 엣지케이스발견
+      - 잘 설계된 데이터 라벨링 툴을 사용해서 라벨링하는 것이 핵심
+        - 잘 설계된 툴
+          - Quality Control
+            - 일관성 있고 정확한 데이터 생성가능여부
+          - Efficientcy
+          - Scalability
+  - 클렌징
+    - 라벨링 된 데이터의 품질 검수
+    - 기준이하 폐기
+    - 종류
+      - 내재적 요소 검수
+        - 가이드 라인이 준수 되었는지
+        - 작업자들간 라벨링이 일치하는지
+        - IAA Inter Annotator Agreement 평가 지표를 통해 확인
+      - 외재적 요소 검수
+        - 다양성, 신뢰성, 충분성, 윤리 적합성을 살펴보는 과정
+        - 외부 자문위원들도 있다
+  - 스플릿
+    - 학습, 검증, 테스트셋으로 분할
+  - 릴리즈
+    - 배포내용, 있으면 좋다
+      - 라벨링 데이터
+      - 버전 및 로그
+      - 샘플데이터 형태
+      - 데이터 분석서
+      - 품질 평가서
+- 데이터 구축 프로세스의 진행
+  - 사이클이 존재
+    - 폭포수(Waterfall) 모델
+      - 순차적
+      - 이터레이션이 별로 필요없는 경우
+    - 나선형(Spiral) 모델
+      - 빠르게 이터레이션
+      - 장기간
+  - 과정의 이동간에 유연성이있다
+
+### 데이터 구축 기획서 작성
+- 데이터 구축 기획서의 작성
+  - 기획
+    - 어던 방식으로 수집되는가
+    - 무슨 문제를 해결하는가
+    - 수집 필요 양
+    - 수집 방법
+    - AI Hub 데이터 구축 기획서 참고
+- 데이터 구축 기획서의 구성
+  - 수업 생략
+
+### 데이터 수집 1_직접 수집
+- 수집 방법
+  - 직접
+    - 전문성 떨어져서 사이드 프로젝트 등에서 수행
+  - 크롤링
+  - 오픈소스
+  - 크라우드 소싱
+- 증강
+  - 혼합 Belding
+    - 유사 데이터를 합친다, 데이터 머징, 조인
+  - 증강 Augmentation
+    - back translation
+    - image retation
+  - 합성 Synthetic
+    - 모델을 통해 생성
+
+### 데이터 수집 2_크롤링 (이론)
+- api 제공 여부 확인
+- python library
+  - requests
+  - beautiful-Soup
+  - scrapy
+  - seleinum
+  - pyquery
+
+### 데이터 수집 2_크롤링 (실습)
+- seleinum 을 이용한 이미지 크롤링
+  - 구글이미지의 옵션을 설정하여 크롤링하는 예제
+  - 크리에이티브 커먼즈 라이센스
+- 실습은 생략
+
+### 데이터 수집 3_오픈 소스
+- 데이터 자체를 참고
+- 데이터 수집 방법 참고
+- 오픈 소스 데이터 플랫폼
+  - 국내 
+    - 공공데이터 포털
+    - 서울 열린데이터광장
+    - AI 허브
+  - 해외
+    - Kaggle
+    - Huggingface
+    - PapersWithCode
+    - UCI ML Repo
+    - 국가별 공공데이터 포털이 존재
+      - data.gov.fr
+      - data.gov.sg
+
+### 데이터 수집 4_크라우드 소싱
+- 업체선정해서 외주맡기는 형태
+
+### 데이터 수집시 주의 사항 1_라이선스
+- 코드
+  - OSL
+    - BSD
+    - Apache License
+    - MIT
+- 데이터
+  - CCL Creative Commons License
+    - 저작권
+    - 이용허락조건
+      - 저작권자 표시
+      - 비영리
+      - 변경금지
+      - 동일조건변경허락
+
+### 데이터 수집시 주의 사항 2_개인정보보호
+- 개인정보가 아닌경우
+  - 사망한 정보
+  - 집단의 통계값
+- 개인정보인 경우
+  - 개인에 대한 특정이 가능한경우
+
+### 데이터 수집시 주의 사항 3_윤리
+
+### 데이터 전처리
+- 중복데이터는
+  - 제거
+  - 표시
+- 결측데이터
+  - 평균,중앙,최빈값을 사용하여 대체
+  - 모델을 사용해서 예측
+  - 제거
+- 이상치 처리
+  - 관측치에서 멀리 덜어진 값
+  - 제거, 대체, 표시
+- 도메인별 전처리
+  - 이미지
+    - 포맷 통일
+    - 중복, 잘못찰영된 것 제거
+  - 텍스트
+    - &quot;ㅋㅋㅋ&quot;, &quot;ㅎㅎㅎ&quot;, 이모지등
+      - 제거 또는 규측으로 처리
+    - `utf-8` 인코딩으로 변호나
+    - 어휘나 종류의 수가 미달인경우 제거등의 처리
+- 데이터 스키마 설계
+  - 원본데이터, 타스크 수행 결과, 메타데이터 등을 저장
+
+### 라벨링 가이드라인 작성 방법
+- 라벨링은 툴을 사용하기도 한다
+  - 문서 같은 경우 Label Studio 등
+
+### 데이터 라벨링 규칙 설정 1_CV
+- 방식
+  - 바운딩 박스
+    - 직사각형, 타이트하게, 노이즈없이
+  - 큐보인드
+    - 3d 박스
+  - 폴리곤
+    - 다각형 형태의 바운딩 박스, 폐곡선
+  - 폴리라인
+    - 선형 객체의 경계나 위치등을 연속선으로 지정, 폐곡선이 아닌경우
+  - 의미 분할
+    - 픽셀 라벨링
+  - 키 포인트
+    - 객체의 주요 지점을 라벨링, 관절
+- 모호성 제거
+  - 띄어쓰기는 분리하여, 기호 분리등
+  - `é` 와 같은 기호들을 라벨러가 통일성있게 기록할 수 있도록
+  - 통일성이 가장 중요
+
+### 데이터 라벨링 규칙 설정 2_NLP
+- 기법
+  - 분류 및 태깅
+    - 다큐먼트(문단 등)의 분류
+    - 텍스트의 부분을 태깅, NER
+  - 전사
+    - 음성 to 텍스트
+    - 종류
+      - 일반전사
+        - 발음 전사
+      - 이중 전사
+        - 발음 전사와 철자(표준어) 전사 병기
+      - 화자 전사
+        - 화자 구분
+- 사례
+  - 방송 컨텐츠 전사(tool: zeroth)
+- 번역 및 요약의 특징
+  - 의미를 보존한체 텍스트를 변환하는 작업
+  - 특별한 툴 없이 작업 가능
+- 분류 또는 태깅시 고려할 사항
+  - 태깅 대상 구분
+    - 동일 군이 연속으로 등장하는 경우 태그를 합침
+      - `Lorem` `Ipsum`
+- 전사 규칙
+  - 맞춤법 교육을 먼저받는다
+  - 축약형, 방언은 이중 전사로 표기한다
+  - 비식별화, 둘 이상인 경우 그 둘을 구분할 수 있어야한다
+  - 주소는 동까지 표현
+  - 이런것들은 규칙이 중요
+- 요약
+  - 몇 문장으로 요약해야하는지
+  - 수정 불가능한 단어와, 수정 가능한 범주
+  - 필수로 포함되어야하는 내용
+    - 육하 원칙
+  - 핵심 키워드가 2개이상 포함되어야한다
+
+### 라벨링 툴 소개
+- pass
+
+### 데이터 클렌징 방법
+- 라벨링 에러
+  - 휴먼 에러
+  - 라벨링 규칙 에러
+    - 사람마다 다르게 해석 가능
+    - 라벨링 중간에 규칙을 바꾸는 경우
+- 데이터 클렌징
+  - 규칙으로 정상화 할 수 있으면 좋지마 그렇지 않은 경우가 대다수
+- 에러 확인
+  - 샘플 직접 검수
+    - 에러발견 -&gt; 전체에서 해당 에러 필터링
+  - 모델 결과 분석
+  - IAA Inter Annotator Agreement
+  - Confident Learning
+    - 컨피던트가 낮은 데이터는 제외하고 사용
+      - 제외한 데이터는 추가 검수
+- 데이터 클렌징
+  - 직접 클렌징
+    - 라벨링 에러가 규칙적인지 않은 경우, 직접 클렌징
+    - 비용, 휴먼에러 이슈
+  - 규칙 기반 코드로 클렌징
+- 라벨링 규칙 수정
+  - 규칙 업데이트
+
+### 데이터 평가 방법 - IAA
+- 정의
+  - IAA Inter Annotator Agreement
+    - 작업자들간의 일치 정도
+- 평가 방법들이 존재
+  - 작업자들의 일치도록 평가하기 때문에 다수가 잘못된 선택을 하는 경우 보완
+
+### IAA를 활용한 데이터 클렌징 방법
+- pass
+
+### 데이터 스플릿
+- 과적합 방지
+- 데이터 샘플링
+  - 이점
+    - 정확성, 편향 제거, 위험 감소
+  - 방식
+    - 확률적 샘프링
+    - 비확률적 샘플링
+  - 한계
+    - 편향이 생길 수도 있다.
+
+### 합성 데이터 - CV (이론)
+- GANs
+- VAE
+- Diffusion
+
+### 합성 데이터 - CV (실습)
+
+### 합성 데이터 - NLP (이론)
+- RNN
+- BART
+- LLM
+
+### 합성 데이터 - NLP (실습)
+
+### 액티브 러닝 (이론)
+- 모델로 라벨링 -&gt; 사람이 다시 라벨링 -&gt; 라벨링 경계 업데이트
+
+### 액티브 러닝 (실습)
+- 생략
+
+### 데이터 릴리즈
+- 고려사항
+  - 품질
+  - 라이센스 권리표시
+  - 개인정보 보호 문제
+  - 윤리적 고려사항
+- 릴리즈 플랫폼
+  - https://paperswithcode.com/datasets
+  - https://huggingface.co/datasets
+  - https://kaggle.com/datasets
+
+### CV 데이터 제작 실습
+- 세그멘테이션 관련
+
+### NLP 데이터 제작 실습
+- 데이터 NER관련해서 해당 수동 태깅(툴 사용)하고 돌려보라는 뜻
+- 생략
+
+## link
+- [[wn.private:upstage-ai-lab-day-102]]
+- [[upstage-ai-lab]]
+- [[upstage-ai-lab-day-98]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/upstage-ai-lab-day-102"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="### Data Centric"/><meta name="twitter:description" content="
+## 학습
+- 학습 순서
+  - 데이터 기획
+  - 데이터 수집
+  - 데이터 라벨링
+  - 데이터 클렌징
+  - 데이터 마무리
+  - 데이터 제작 실습
+
+### Data-Centric AI란 무엇인가?
+- AI System = Code + Data
+- 데이터 품질 -&gt; 성능 향상
+  - 데이터 어노테이션 일관성이 꺠지면 노이즈로 인식됨
+- AI 프로젝트는 66~80%가 데이터 관련 작업
+  - 그외에 알고리즘, 모델 학습, 모델 조정, 서비스 배포등
+- Model-Centric AI
+  - 데이터가 많아지면 노이즈는 묻힌다는 개념
+- Data-Centric
+  - 데이터 품질에 집중
+- AI 서비스 개발 과정
+  - 프로젝트 셋업
+  - 데이터 준비
+  - 모델 훈련
+  - 배포
+- 서비스 출시 이전 중요도
+  - 모델 1:1 데이터
+- 서비스 출시 이후 중요도
+  - 모델 2:8 데이터
+- MLOps
+  - 데이터 구축을 위한 인프라
+  - google, nvidia 참조
+- 요즘은 파인튜닝
+  - 요즘 LoRA
+  - 적은 데이터로도 최적화가 가능
+- 연구분야
+  - 윤리
+  - 품질
+    - 이상 탐지및 제거
+    - 에러 탐지 및 수정
+      + https://labelerrors.com
+    - 데이터 증강
+      - back translation
+    - 피처 엔지니어링
+    - 컨센서스 라벨링
+      - 다수의 라벨러로 부터 얻은 라벨들의 일관성을 높이는 방법
+    - 액티브 러닝
+      - 모든 데이터가 아니라 중요한 데이터를 식별하고 학습하는 방식
+    - 커리큘럼 학습
+      - 쉬운 데이터부터 차근차근 학습할 수 있도록 학습 순서 조절하는 방식
+  - 평가
+    - 테스트데이터 추가로 평가
+    - 부분집합으로 평가
+    - 손상된 학습데이터 식별
+
+### Data-Centric AI의 미래
+- foundation model 시대
+  - multilingual
+    - 과거는 unilingual
+    - transformer 이전(LSTM)에는 모델도 키우기 어려움
+    - transforemr 이후로는 모델이 커지면서 multilingual이 대세
+    - 성능도 unilingual 을 뛰어 넘음
+  - multimodal
+    - LMM Large Multimodal Model
+    - LLM 이후로 멀티모달의 성능이 향상됨
+    - VQA Visual Question Answering
+      - 이미지 -&gt; 텍스트 디스크립션 표현
+    - Multimodal Data VidLN
+      - 동영상 -&gt; 텍스트 디스크립션 표현
+    - VDialogUE
+      - 이미지+텍스트
+    - 로봇 센서등 여러 입력을 기반으로한 데이터들이 많음
+  - synthetic data
+    - 합성 데이터
+    - 모델이 생성한 데이터 -&gt; 다른 모델 훈련
+      - chatgpt 4로 생성된 데이터가 이미 사람의 것을 넘어섬
+    - 싸고 빠르다
+    - 어려운 조건의 데이터도 생성가능
+    - 데이터 편향 회피
+    - 사례
+      - 자율주행
+      - VQA
+      - 오디오도 생성
+
+### 데이터 구축 프로세스 소개
+- 데이터 구축 프로세스
+  - 수집
+    - 방법
+      - 원시(raw) 데이터
+      - 수집
+      - 크롤링
+      - 오픈소스
+      - 크라우드 소싱
+    - 데이터 타당성 검토
+      - 다양성
+      - 편향 방지
+      - 윤리 준수
+      - 수집 방법
+      - 법, 제도 준수
+  - 전처리
+    - 원천(source) 데이터
+    - 품질 확보
+      - 품질 기준 마련
+      - 개인정보 비식별화
+      - 중복성 방지
+        - 유사 데이터 및 특성이 없는 데이터 제거
+    - 품질 검사 지표
+      - 적합성, 신뢰성, 정합성 등등
+    - 스키마 설계
+      - 어떻게 저장할지 구조 설계
+      - 의미 분할, 요약시 압축 정도, 추출할 것인지 추상화할 것인지
+      - 감성 분석, 전체 텍스트에 하나만 혹은 요소별로 라벨링할 것인지
+      - 예시
+        - 문서 요약
+          - 압축할 양
+          - 추출 추출 단어 수
+          - 추상화 생성, 타겟 글자 수
+  - 라벨링
+    - 라벨링을 할 기준을 마련
+    - 가이드라인 작성 -&gt; 작업자 교육 -&gt; 라벨링 진행
+      - 데이터 구축 목적 정의
+      - 사용 용어 정의
+      - 예시를 통한 체계 설명
+      - 버전 관리
+    - 단계
+      - 파일럿 테스트를 통한 소규모 데이터셋 구축
+        - 문제, 엣지케이스발견
+      - 잘 설계된 데이터 라벨링 툴을 사용해서 라벨링하는 것이 핵심
+        - 잘 설계된 툴
+          - Quality Control
+            - 일관성 있고 정확한 데이터 생성가능여부
+          - Efficientcy
+          - Scalability
+  - 클렌징
+    - 라벨링 된 데이터의 품질 검수
+    - 기준이하 폐기
+    - 종류
+      - 내재적 요소 검수
+        - 가이드 라인이 준수 되었는지
+        - 작업자들간 라벨링이 일치하는지
+        - IAA Inter Annotator Agreement 평가 지표를 통해 확인
+      - 외재적 요소 검수
+        - 다양성, 신뢰성, 충분성, 윤리 적합성을 살펴보는 과정
+        - 외부 자문위원들도 있다
+  - 스플릿
+    - 학습, 검증, 테스트셋으로 분할
+  - 릴리즈
+    - 배포내용, 있으면 좋다
+      - 라벨링 데이터
+      - 버전 및 로그
+      - 샘플데이터 형태
+      - 데이터 분석서
+      - 품질 평가서
+- 데이터 구축 프로세스의 진행
+  - 사이클이 존재
+    - 폭포수(Waterfall) 모델
+      - 순차적
+      - 이터레이션이 별로 필요없는 경우
+    - 나선형(Spiral) 모델
+      - 빠르게 이터레이션
+      - 장기간
+  - 과정의 이동간에 유연성이있다
+
+### 데이터 구축 기획서 작성
+- 데이터 구축 기획서의 작성
+  - 기획
+    - 어던 방식으로 수집되는가
+    - 무슨 문제를 해결하는가
+    - 수집 필요 양
+    - 수집 방법
+    - AI Hub 데이터 구축 기획서 참고
+- 데이터 구축 기획서의 구성
+  - 수업 생략
+
+### 데이터 수집 1_직접 수집
+- 수집 방법
+  - 직접
+    - 전문성 떨어져서 사이드 프로젝트 등에서 수행
+  - 크롤링
+  - 오픈소스
+  - 크라우드 소싱
+- 증강
+  - 혼합 Belding
+    - 유사 데이터를 합친다, 데이터 머징, 조인
+  - 증강 Augmentation
+    - back translation
+    - image retation
+  - 합성 Synthetic
+    - 모델을 통해 생성
+
+### 데이터 수집 2_크롤링 (이론)
+- api 제공 여부 확인
+- python library
+  - requests
+  - beautiful-Soup
+  - scrapy
+  - seleinum
+  - pyquery
+
+### 데이터 수집 2_크롤링 (실습)
+- seleinum 을 이용한 이미지 크롤링
+  - 구글이미지의 옵션을 설정하여 크롤링하는 예제
+  - 크리에이티브 커먼즈 라이센스
+- 실습은 생략
+
+### 데이터 수집 3_오픈 소스
+- 데이터 자체를 참고
+- 데이터 수집 방법 참고
+- 오픈 소스 데이터 플랫폼
+  - 국내 
+    - 공공데이터 포털
+    - 서울 열린데이터광장
+    - AI 허브
+  - 해외
+    - Kaggle
+    - Huggingface
+    - PapersWithCode
+    - UCI ML Repo
+    - 국가별 공공데이터 포털이 존재
+      - data.gov.fr
+      - data.gov.sg
+
+### 데이터 수집 4_크라우드 소싱
+- 업체선정해서 외주맡기는 형태
+
+### 데이터 수집시 주의 사항 1_라이선스
+- 코드
+  - OSL
+    - BSD
+    - Apache License
+    - MIT
+- 데이터
+  - CCL Creative Commons License
+    - 저작권
+    - 이용허락조건
+      - 저작권자 표시
+      - 비영리
+      - 변경금지
+      - 동일조건변경허락
+
+### 데이터 수집시 주의 사항 2_개인정보보호
+- 개인정보가 아닌경우
+  - 사망한 정보
+  - 집단의 통계값
+- 개인정보인 경우
+  - 개인에 대한 특정이 가능한경우
+
+### 데이터 수집시 주의 사항 3_윤리
+
+### 데이터 전처리
+- 중복데이터는
+  - 제거
+  - 표시
+- 결측데이터
+  - 평균,중앙,최빈값을 사용하여 대체
+  - 모델을 사용해서 예측
+  - 제거
+- 이상치 처리
+  - 관측치에서 멀리 덜어진 값
+  - 제거, 대체, 표시
+- 도메인별 전처리
+  - 이미지
+    - 포맷 통일
+    - 중복, 잘못찰영된 것 제거
+  - 텍스트
+    - &quot;ㅋㅋㅋ&quot;, &quot;ㅎㅎㅎ&quot;, 이모지등
+      - 제거 또는 규측으로 처리
+    - `utf-8` 인코딩으로 변호나
+    - 어휘나 종류의 수가 미달인경우 제거등의 처리
+- 데이터 스키마 설계
+  - 원본데이터, 타스크 수행 결과, 메타데이터 등을 저장
+
+### 라벨링 가이드라인 작성 방법
+- 라벨링은 툴을 사용하기도 한다
+  - 문서 같은 경우 Label Studio 등
+
+### 데이터 라벨링 규칙 설정 1_CV
+- 방식
+  - 바운딩 박스
+    - 직사각형, 타이트하게, 노이즈없이
+  - 큐보인드
+    - 3d 박스
+  - 폴리곤
+    - 다각형 형태의 바운딩 박스, 폐곡선
+  - 폴리라인
+    - 선형 객체의 경계나 위치등을 연속선으로 지정, 폐곡선이 아닌경우
+  - 의미 분할
+    - 픽셀 라벨링
+  - 키 포인트
+    - 객체의 주요 지점을 라벨링, 관절
+- 모호성 제거
+  - 띄어쓰기는 분리하여, 기호 분리등
+  - `é` 와 같은 기호들을 라벨러가 통일성있게 기록할 수 있도록
+  - 통일성이 가장 중요
+
+### 데이터 라벨링 규칙 설정 2_NLP
+- 기법
+  - 분류 및 태깅
+    - 다큐먼트(문단 등)의 분류
+    - 텍스트의 부분을 태깅, NER
+  - 전사
+    - 음성 to 텍스트
+    - 종류
+      - 일반전사
+        - 발음 전사
+      - 이중 전사
+        - 발음 전사와 철자(표준어) 전사 병기
+      - 화자 전사
+        - 화자 구분
+- 사례
+  - 방송 컨텐츠 전사(tool: zeroth)
+- 번역 및 요약의 특징
+  - 의미를 보존한체 텍스트를 변환하는 작업
+  - 특별한 툴 없이 작업 가능
+- 분류 또는 태깅시 고려할 사항
+  - 태깅 대상 구분
+    - 동일 군이 연속으로 등장하는 경우 태그를 합침
+      - `Lorem` `Ipsum`
+- 전사 규칙
+  - 맞춤법 교육을 먼저받는다
+  - 축약형, 방언은 이중 전사로 표기한다
+  - 비식별화, 둘 이상인 경우 그 둘을 구분할 수 있어야한다
+  - 주소는 동까지 표현
+  - 이런것들은 규칙이 중요
+- 요약
+  - 몇 문장으로 요약해야하는지
+  - 수정 불가능한 단어와, 수정 가능한 범주
+  - 필수로 포함되어야하는 내용
+    - 육하 원칙
+  - 핵심 키워드가 2개이상 포함되어야한다
+
+### 라벨링 툴 소개
+- pass
+
+### 데이터 클렌징 방법
+- 라벨링 에러
+  - 휴먼 에러
+  - 라벨링 규칙 에러
+    - 사람마다 다르게 해석 가능
+    - 라벨링 중간에 규칙을 바꾸는 경우
+- 데이터 클렌징
+  - 규칙으로 정상화 할 수 있으면 좋지마 그렇지 않은 경우가 대다수
+- 에러 확인
+  - 샘플 직접 검수
+    - 에러발견 -&gt; 전체에서 해당 에러 필터링
+  - 모델 결과 분석
+  - IAA Inter Annotator Agreement
+  - Confident Learning
+    - 컨피던트가 낮은 데이터는 제외하고 사용
+      - 제외한 데이터는 추가 검수
+- 데이터 클렌징
+  - 직접 클렌징
+    - 라벨링 에러가 규칙적인지 않은 경우, 직접 클렌징
+    - 비용, 휴먼에러 이슈
+  - 규칙 기반 코드로 클렌징
+- 라벨링 규칙 수정
+  - 규칙 업데이트
+
+### 데이터 평가 방법 - IAA
+- 정의
+  - IAA Inter Annotator Agreement
+    - 작업자들간의 일치 정도
+- 평가 방법들이 존재
+  - 작업자들의 일치도록 평가하기 때문에 다수가 잘못된 선택을 하는 경우 보완
+
+### IAA를 활용한 데이터 클렌징 방법
+- pass
+
+### 데이터 스플릿
+- 과적합 방지
+- 데이터 샘플링
+  - 이점
+    - 정확성, 편향 제거, 위험 감소
+  - 방식
+    - 확률적 샘프링
+    - 비확률적 샘플링
+  - 한계
+    - 편향이 생길 수도 있다.
+
+### 합성 데이터 - CV (이론)
+- GANs
+- VAE
+- Diffusion
+
+### 합성 데이터 - CV (실습)
+
+### 합성 데이터 - NLP (이론)
+- RNN
+- BART
+- LLM
+
+### 합성 데이터 - NLP (실습)
+
+### 액티브 러닝 (이론)
+- 모델로 라벨링 -&gt; 사람이 다시 라벨링 -&gt; 라벨링 경계 업데이트
+
+### 액티브 러닝 (실습)
+- 생략
+
+### 데이터 릴리즈
+- 고려사항
+  - 품질
+  - 라이센스 권리표시
+  - 개인정보 보호 문제
+  - 윤리적 고려사항
+- 릴리즈 플랫폼
+  - https://paperswithcode.com/datasets
+  - https://huggingface.co/datasets
+  - https://kaggle.com/datasets
+
+### CV 데이터 제작 실습
+- 세그멘테이션 관련
+
+### NLP 데이터 제작 실습
+- 데이터 NER관련해서 해당 수동 태깅(툴 사용)하고 돌려보라는 뜻
+- 생략
+
+## link
+- [[wn.private:upstage-ai-lab-day-102]]
+- [[upstage-ai-lab]]
+- [[upstage-ai-lab-day-98]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/a51c46d
+" class="bg-white text-black">a51c46d</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/upstage-ai-lab-day-102.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/upstage-ai-lab-day-102.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/upstage-ai-lab-day-102.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-102"><span class="underline">upstage-ai-lab-day-102</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab"><span class="underline">upstage-ai-lab</span><sup>20</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-98"><span class="underline">upstage-ai-lab-day-98</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-12-31"><span class="underline">diary/2024-12-31</span><sup>441</sup></a></span></div><hr/><div class="toc"><div class="pl-4"><a href="#data-centric">Data Centric</a></div><div class="pl-2"><a href="#학습">학습</a></div><div class="pl-4"><a href="#data-centric-ai란-무엇인가">Data-Centric AI란 무엇인가?</a></div><div class="pl-4"><a href="#data-centric-ai의-미래">Data-Centric AI의 미래</a></div><div class="pl-4"><a href="#데이터-구축-프로세스-소개">데이터 구축 프로세스 소개</a></div><div class="pl-4"><a href="#데이터-구축-기획서-작성">데이터 구축 기획서 작성</a></div><div class="pl-4"><a href="#데이터-수집-1_직접-수집">데이터 수집 1_직접 수집</a></div><div class="pl-4"><a href="#데이터-수집-2_크롤링-이론">데이터 수집 2_크롤링 (이론)</a></div><div class="pl-4"><a href="#데이터-수집-2_크롤링-실습">데이터 수집 2_크롤링 (실습)</a></div><div class="pl-4"><a href="#데이터-수집-3_오픈-소스">데이터 수집 3_오픈 소스</a></div><div class="pl-4"><a href="#데이터-수집-4_크라우드-소싱">데이터 수집 4_크라우드 소싱</a></div><div class="pl-4"><a href="#데이터-수집시-주의-사항-1_라이선스">데이터 수집시 주의 사항 1_라이선스</a></div><div class="pl-4"><a href="#데이터-수집시-주의-사항-2_개인정보보호">데이터 수집시 주의 사항 2_개인정보보호</a></div><div class="pl-4"><a href="#데이터-수집시-주의-사항-3_윤리">데이터 수집시 주의 사항 3_윤리</a></div><div class="pl-4"><a href="#데이터-전처리">데이터 전처리</a></div><div class="pl-4"><a href="#라벨링-가이드라인-작성-방법">라벨링 가이드라인 작성 방법</a></div><div class="pl-4"><a href="#데이터-라벨링-규칙-설정-1_cv">데이터 라벨링 규칙 설정 1_CV</a></div><div class="pl-4"><a href="#데이터-라벨링-규칙-설정-2_nlp">데이터 라벨링 규칙 설정 2_NLP</a></div><div class="pl-4"><a href="#라벨링-툴-소개">라벨링 툴 소개</a></div><div class="pl-4"><a href="#데이터-클렌징-방법">데이터 클렌징 방법</a></div><div class="pl-4"><a href="#데이터-평가-방법---iaa">데이터 평가 방법 - IAA</a></div><div class="pl-4"><a href="#iaa를-활용한-데이터-클렌징-방법">IAA를 활용한 데이터 클렌징 방법</a></div><div class="pl-4"><a href="#데이터-스플릿">데이터 스플릿</a></div><div class="pl-4"><a href="#합성-데이터---cv-이론">합성 데이터 - CV (이론)</a></div><div class="pl-4"><a href="#합성-데이터---cv-실습">합성 데이터 - CV (실습)</a></div><div class="pl-4"><a href="#합성-데이터---nlp-이론">합성 데이터 - NLP (이론)</a></div><div class="pl-4"><a href="#합성-데이터---nlp-실습">합성 데이터 - NLP (실습)</a></div><div class="pl-4"><a href="#액티브-러닝-이론">액티브 러닝 (이론)</a></div><div class="pl-4"><a href="#액티브-러닝-실습">액티브 러닝 (실습)</a></div><div class="pl-4"><a href="#데이터-릴리즈">데이터 릴리즈</a></div><div class="pl-4"><a href="#cv-데이터-제작-실습">CV 데이터 제작 실습</a></div><div class="pl-4"><a href="#nlp-데이터-제작-실습">NLP 데이터 제작 실습</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h3 id="data-centric">Data Centric</h3>
+<h2 id="학습">학습</h2>
+<ul>
+<li>학습 순서<ul>
+<li>데이터 기획</li>
+<li>데이터 수집</li>
+<li>데이터 라벨링</li>
+<li>데이터 클렌징</li>
+<li>데이터 마무리</li>
+<li>데이터 제작 실습</li>
+</ul>
+</li>
+</ul>
+<h3 id="data-centric-ai란-무엇인가">Data-Centric AI란 무엇인가?</h3>
+<ul>
+<li>AI System = Code + Data</li>
+<li>데이터 품질 -&gt; 성능 향상<ul>
+<li>데이터 어노테이션 일관성이 꺠지면 노이즈로 인식됨</li>
+</ul>
+</li>
+<li>AI 프로젝트는 66~80%가 데이터 관련 작업<ul>
+<li>그외에 알고리즘, 모델 학습, 모델 조정, 서비스 배포등</li>
+</ul>
+</li>
+<li>Model-Centric AI<ul>
+<li>데이터가 많아지면 노이즈는 묻힌다는 개념</li>
+</ul>
+</li>
+<li>Data-Centric<ul>
+<li>데이터 품질에 집중</li>
+</ul>
+</li>
+<li>AI 서비스 개발 과정<ul>
+<li>프로젝트 셋업</li>
+<li>데이터 준비</li>
+<li>모델 훈련</li>
+<li>배포</li>
+</ul>
+</li>
+<li>서비스 출시 이전 중요도<ul>
+<li>모델 1:1 데이터</li>
+</ul>
+</li>
+<li>서비스 출시 이후 중요도<ul>
+<li>모델 2:8 데이터</li>
+</ul>
+</li>
+<li>MLOps<ul>
+<li>데이터 구축을 위한 인프라</li>
+<li>google, nvidia 참조</li>
+</ul>
+</li>
+<li>요즘은 파인튜닝<ul>
+<li>요즘 LoRA</li>
+<li>적은 데이터로도 최적화가 가능</li>
+</ul>
+</li>
+<li>연구분야<ul>
+<li>윤리</li>
+<li>품질<ul>
+<li>이상 탐지및 제거</li>
+<li>에러 탐지 및 수정<ul>
+<li><a href="https://labelerrors.com" target="_blank">[URL] https://labelerrors.com/</a></li>
+</ul>
+</li>
+<li>데이터 증강<ul>
+<li>back translation</li>
+</ul>
+</li>
+<li>피처 엔지니어링</li>
+<li>컨센서스 라벨링<ul>
+<li>다수의 라벨러로 부터 얻은 라벨들의 일관성을 높이는 방법</li>
+</ul>
+</li>
+<li>액티브 러닝<ul>
+<li>모든 데이터가 아니라 중요한 데이터를 식별하고 학습하는 방식</li>
+</ul>
+</li>
+<li>커리큘럼 학습<ul>
+<li>쉬운 데이터부터 차근차근 학습할 수 있도록 학습 순서 조절하는 방식</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>평가<ul>
+<li>테스트데이터 추가로 평가</li>
+<li>부분집합으로 평가</li>
+<li>손상된 학습데이터 식별</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="data-centric-ai의-미래">Data-Centric AI의 미래</h3>
+<ul>
+<li>foundation model 시대<ul>
+<li>multilingual<ul>
+<li>과거는 unilingual</li>
+<li>transformer 이전(LSTM)에는 모델도 키우기 어려움</li>
+<li>transforemr 이후로는 모델이 커지면서 multilingual이 대세</li>
+<li>성능도 unilingual 을 뛰어 넘음</li>
+</ul>
+</li>
+<li>multimodal<ul>
+<li>LMM Large Multimodal Model</li>
+<li>LLM 이후로 멀티모달의 성능이 향상됨</li>
+<li>VQA Visual Question Answering<ul>
+<li>이미지 -&gt; 텍스트 디스크립션 표현</li>
+</ul>
+</li>
+<li>Multimodal Data VidLN<ul>
+<li>동영상 -&gt; 텍스트 디스크립션 표현</li>
+</ul>
+</li>
+<li>VDialogUE<ul>
+<li>이미지+텍스트</li>
+</ul>
+</li>
+<li>로봇 센서등 여러 입력을 기반으로한 데이터들이 많음</li>
+</ul>
+</li>
+<li>synthetic data<ul>
+<li>합성 데이터</li>
+<li>모델이 생성한 데이터 -&gt; 다른 모델 훈련<ul>
+<li>chatgpt 4로 생성된 데이터가 이미 사람의 것을 넘어섬</li>
+</ul>
+</li>
+<li>싸고 빠르다</li>
+<li>어려운 조건의 데이터도 생성가능</li>
+<li>데이터 편향 회피</li>
+<li>사례<ul>
+<li>자율주행</li>
+<li>VQA</li>
+<li>오디오도 생성</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="데이터-구축-프로세스-소개">데이터 구축 프로세스 소개</h3>
+<ul>
+<li>데이터 구축 프로세스<ul>
+<li>수집<ul>
+<li>방법<ul>
+<li>원시(raw) 데이터</li>
+<li>수집</li>
+<li>크롤링</li>
+<li>오픈소스</li>
+<li>크라우드 소싱</li>
+</ul>
+</li>
+<li>데이터 타당성 검토<ul>
+<li>다양성</li>
+<li>편향 방지</li>
+<li>윤리 준수</li>
+<li>수집 방법</li>
+<li>법, 제도 준수</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>전처리<ul>
+<li>원천(source) 데이터</li>
+<li>품질 확보<ul>
+<li>품질 기준 마련</li>
+<li>개인정보 비식별화</li>
+<li>중복성 방지<ul>
+<li>유사 데이터 및 특성이 없는 데이터 제거</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>품질 검사 지표<ul>
+<li>적합성, 신뢰성, 정합성 등등</li>
+</ul>
+</li>
+<li>스키마 설계<ul>
+<li>어떻게 저장할지 구조 설계</li>
+<li>의미 분할, 요약시 압축 정도, 추출할 것인지 추상화할 것인지</li>
+<li>감성 분석, 전체 텍스트에 하나만 혹은 요소별로 라벨링할 것인지</li>
+<li>예시<ul>
+<li>문서 요약<ul>
+<li>압축할 양</li>
+<li>추출 추출 단어 수</li>
+<li>추상화 생성, 타겟 글자 수</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>라벨링<ul>
+<li>라벨링을 할 기준을 마련</li>
+<li>가이드라인 작성 -&gt; 작업자 교육 -&gt; 라벨링 진행<ul>
+<li>데이터 구축 목적 정의</li>
+<li>사용 용어 정의</li>
+<li>예시를 통한 체계 설명</li>
+<li>버전 관리</li>
+</ul>
+</li>
+<li>단계<ul>
+<li>파일럿 테스트를 통한 소규모 데이터셋 구축<ul>
+<li>문제, 엣지케이스발견</li>
+</ul>
+</li>
+<li>잘 설계된 데이터 라벨링 툴을 사용해서 라벨링하는 것이 핵심<ul>
+<li>잘 설계된 툴<ul>
+<li>Quality Control<ul>
+<li>일관성 있고 정확한 데이터 생성가능여부</li>
+</ul>
+</li>
+<li>Efficientcy</li>
+<li>Scalability</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>클렌징<ul>
+<li>라벨링 된 데이터의 품질 검수</li>
+<li>기준이하 폐기</li>
+<li>종류<ul>
+<li>내재적 요소 검수<ul>
+<li>가이드 라인이 준수 되었는지</li>
+<li>작업자들간 라벨링이 일치하는지</li>
+<li>IAA Inter Annotator Agreement 평가 지표를 통해 확인</li>
+</ul>
+</li>
+<li>외재적 요소 검수<ul>
+<li>다양성, 신뢰성, 충분성, 윤리 적합성을 살펴보는 과정</li>
+<li>외부 자문위원들도 있다</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>스플릿<ul>
+<li>학습, 검증, 테스트셋으로 분할</li>
+</ul>
+</li>
+<li>릴리즈<ul>
+<li>배포내용, 있으면 좋다<ul>
+<li>라벨링 데이터</li>
+<li>버전 및 로그</li>
+<li>샘플데이터 형태</li>
+<li>데이터 분석서</li>
+<li>품질 평가서</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>데이터 구축 프로세스의 진행<ul>
+<li>사이클이 존재<ul>
+<li>폭포수(Waterfall) 모델<ul>
+<li>순차적</li>
+<li>이터레이션이 별로 필요없는 경우</li>
+</ul>
+</li>
+<li>나선형(Spiral) 모델<ul>
+<li>빠르게 이터레이션</li>
+<li>장기간</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>과정의 이동간에 유연성이있다</li>
+</ul>
+</li>
+</ul>
+<h3 id="데이터-구축-기획서-작성">데이터 구축 기획서 작성</h3>
+<ul>
+<li>데이터 구축 기획서의 작성<ul>
+<li>기획<ul>
+<li>어던 방식으로 수집되는가</li>
+<li>무슨 문제를 해결하는가</li>
+<li>수집 필요 양</li>
+<li>수집 방법</li>
+<li>AI Hub 데이터 구축 기획서 참고</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>데이터 구축 기획서의 구성<ul>
+<li>수업 생략</li>
+</ul>
+</li>
+</ul>
+<h3 id="데이터-수집-1_직접-수집">데이터 수집 1_직접 수집</h3>
+<ul>
+<li>수집 방법<ul>
+<li>직접<ul>
+<li>전문성 떨어져서 사이드 프로젝트 등에서 수행</li>
+</ul>
+</li>
+<li>크롤링</li>
+<li>오픈소스</li>
+<li>크라우드 소싱</li>
+</ul>
+</li>
+<li>증강<ul>
+<li>혼합 Belding<ul>
+<li>유사 데이터를 합친다, 데이터 머징, 조인</li>
+</ul>
+</li>
+<li>증강 Augmentation<ul>
+<li>back translation</li>
+<li>image retation</li>
+</ul>
+</li>
+<li>합성 Synthetic<ul>
+<li>모델을 통해 생성</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="데이터-수집-2_크롤링-이론">데이터 수집 2_크롤링 (이론)</h3>
+<ul>
+<li>api 제공 여부 확인</li>
+<li>python library<ul>
+<li>requests</li>
+<li>beautiful-Soup</li>
+<li>scrapy</li>
+<li>seleinum</li>
+<li>pyquery</li>
+</ul>
+</li>
+</ul>
+<h3 id="데이터-수집-2_크롤링-실습">데이터 수집 2_크롤링 (실습)</h3>
+<ul>
+<li>seleinum 을 이용한 이미지 크롤링<ul>
+<li>구글이미지의 옵션을 설정하여 크롤링하는 예제</li>
+<li>크리에이티브 커먼즈 라이센스</li>
+</ul>
+</li>
+<li>실습은 생략</li>
+</ul>
+<h3 id="데이터-수집-3_오픈-소스">데이터 수집 3_오픈 소스</h3>
+<ul>
+<li>데이터 자체를 참고</li>
+<li>데이터 수집 방법 참고</li>
+<li>오픈 소스 데이터 플랫폼<ul>
+<li>국내 <ul>
+<li>공공데이터 포털</li>
+<li>서울 열린데이터광장</li>
+<li>AI 허브</li>
+</ul>
+</li>
+<li>해외<ul>
+<li>Kaggle</li>
+<li>Huggingface</li>
+<li>PapersWithCode</li>
+<li>UCI ML Repo</li>
+<li>국가별 공공데이터 포털이 존재<ul>
+<li>data.gov.fr</li>
+<li>data.gov.sg</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="데이터-수집-4_크라우드-소싱">데이터 수집 4_크라우드 소싱</h3>
+<ul>
+<li>업체선정해서 외주맡기는 형태</li>
+</ul>
+<h3 id="데이터-수집시-주의-사항-1_라이선스">데이터 수집시 주의 사항 1_라이선스</h3>
+<ul>
+<li>코드<ul>
+<li>OSL<ul>
+<li>BSD</li>
+<li>Apache License</li>
+<li>MIT</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>데이터<ul>
+<li>CCL Creative Commons License<ul>
+<li>저작권</li>
+<li>이용허락조건<ul>
+<li>저작권자 표시</li>
+<li>비영리</li>
+<li>변경금지</li>
+<li>동일조건변경허락</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="데이터-수집시-주의-사항-2_개인정보보호">데이터 수집시 주의 사항 2_개인정보보호</h3>
+<ul>
+<li>개인정보가 아닌경우<ul>
+<li>사망한 정보</li>
+<li>집단의 통계값</li>
+</ul>
+</li>
+<li>개인정보인 경우<ul>
+<li>개인에 대한 특정이 가능한경우</li>
+</ul>
+</li>
+</ul>
+<h3 id="데이터-수집시-주의-사항-3_윤리">데이터 수집시 주의 사항 3_윤리</h3>
+<h3 id="데이터-전처리">데이터 전처리</h3>
+<ul>
+<li>중복데이터는<ul>
+<li>제거</li>
+<li>표시</li>
+</ul>
+</li>
+<li>결측데이터<ul>
+<li>평균,중앙,최빈값을 사용하여 대체</li>
+<li>모델을 사용해서 예측</li>
+<li>제거</li>
+</ul>
+</li>
+<li>이상치 처리<ul>
+<li>관측치에서 멀리 덜어진 값</li>
+<li>제거, 대체, 표시</li>
+</ul>
+</li>
+<li>도메인별 전처리<ul>
+<li>이미지<ul>
+<li>포맷 통일</li>
+<li>중복, 잘못찰영된 것 제거</li>
+</ul>
+</li>
+<li>텍스트<ul>
+<li>&quot;ㅋㅋㅋ&quot;, &quot;ㅎㅎㅎ&quot;, 이모지등<ul>
+<li>제거 또는 규측으로 처리</li>
+</ul>
+</li>
+<li><code class="span">utf-8</code> 인코딩으로 변호나</li>
+<li>어휘나 종류의 수가 미달인경우 제거등의 처리</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>데이터 스키마 설계<ul>
+<li>원본데이터, 타스크 수행 결과, 메타데이터 등을 저장</li>
+</ul>
+</li>
+</ul>
+<h3 id="라벨링-가이드라인-작성-방법">라벨링 가이드라인 작성 방법</h3>
+<ul>
+<li>라벨링은 툴을 사용하기도 한다<ul>
+<li>문서 같은 경우 Label Studio 등</li>
+</ul>
+</li>
+</ul>
+<h3 id="데이터-라벨링-규칙-설정-1_cv">데이터 라벨링 규칙 설정 1_CV</h3>
+<ul>
+<li>방식<ul>
+<li>바운딩 박스<ul>
+<li>직사각형, 타이트하게, 노이즈없이</li>
+</ul>
+</li>
+<li>큐보인드<ul>
+<li>3d 박스</li>
+</ul>
+</li>
+<li>폴리곤<ul>
+<li>다각형 형태의 바운딩 박스, 폐곡선</li>
+</ul>
+</li>
+<li>폴리라인<ul>
+<li>선형 객체의 경계나 위치등을 연속선으로 지정, 폐곡선이 아닌경우</li>
+</ul>
+</li>
+<li>의미 분할<ul>
+<li>픽셀 라벨링</li>
+</ul>
+</li>
+<li>키 포인트<ul>
+<li>객체의 주요 지점을 라벨링, 관절</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>모호성 제거<ul>
+<li>띄어쓰기는 분리하여, 기호 분리등</li>
+<li><code class="span">é</code> 와 같은 기호들을 라벨러가 통일성있게 기록할 수 있도록</li>
+<li>통일성이 가장 중요</li>
+</ul>
+</li>
+</ul>
+<h3 id="데이터-라벨링-규칙-설정-2_nlp">데이터 라벨링 규칙 설정 2_NLP</h3>
+<ul>
+<li>기법<ul>
+<li>분류 및 태깅<ul>
+<li>다큐먼트(문단 등)의 분류</li>
+<li>텍스트의 부분을 태깅, NER</li>
+</ul>
+</li>
+<li>전사<ul>
+<li>음성 to 텍스트</li>
+<li>종류<ul>
+<li>일반전사<ul>
+<li>발음 전사</li>
+</ul>
+</li>
+<li>이중 전사<ul>
+<li>발음 전사와 철자(표준어) 전사 병기</li>
+</ul>
+</li>
+<li>화자 전사<ul>
+<li>화자 구분</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>사례<ul>
+<li>방송 컨텐츠 전사(tool: zeroth)</li>
+</ul>
+</li>
+<li>번역 및 요약의 특징<ul>
+<li>의미를 보존한체 텍스트를 변환하는 작업</li>
+<li>특별한 툴 없이 작업 가능</li>
+</ul>
+</li>
+<li>분류 또는 태깅시 고려할 사항<ul>
+<li>태깅 대상 구분<ul>
+<li>동일 군이 연속으로 등장하는 경우 태그를 합침<ul>
+<li><code class="span">Lorem</code> <code class="span">Ipsum</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>전사 규칙<ul>
+<li>맞춤법 교육을 먼저받는다</li>
+<li>축약형, 방언은 이중 전사로 표기한다</li>
+<li>비식별화, 둘 이상인 경우 그 둘을 구분할 수 있어야한다</li>
+<li>주소는 동까지 표현</li>
+<li>이런것들은 규칙이 중요</li>
+</ul>
+</li>
+<li>요약<ul>
+<li>몇 문장으로 요약해야하는지</li>
+<li>수정 불가능한 단어와, 수정 가능한 범주</li>
+<li>필수로 포함되어야하는 내용<ul>
+<li>육하 원칙</li>
+</ul>
+</li>
+<li>핵심 키워드가 2개이상 포함되어야한다</li>
+</ul>
+</li>
+</ul>
+<h3 id="라벨링-툴-소개">라벨링 툴 소개</h3>
+<ul>
+<li>pass</li>
+</ul>
+<h3 id="데이터-클렌징-방법">데이터 클렌징 방법</h3>
+<ul>
+<li>라벨링 에러<ul>
+<li>휴먼 에러</li>
+<li>라벨링 규칙 에러<ul>
+<li>사람마다 다르게 해석 가능</li>
+<li>라벨링 중간에 규칙을 바꾸는 경우</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>데이터 클렌징<ul>
+<li>규칙으로 정상화 할 수 있으면 좋지마 그렇지 않은 경우가 대다수</li>
+</ul>
+</li>
+<li>에러 확인<ul>
+<li>샘플 직접 검수<ul>
+<li>에러발견 -&gt; 전체에서 해당 에러 필터링</li>
+</ul>
+</li>
+<li>모델 결과 분석</li>
+<li>IAA Inter Annotator Agreement</li>
+<li>Confident Learning<ul>
+<li>컨피던트가 낮은 데이터는 제외하고 사용<ul>
+<li>제외한 데이터는 추가 검수</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>데이터 클렌징<ul>
+<li>직접 클렌징<ul>
+<li>라벨링 에러가 규칙적인지 않은 경우, 직접 클렌징</li>
+<li>비용, 휴먼에러 이슈</li>
+</ul>
+</li>
+<li>규칙 기반 코드로 클렌징</li>
+</ul>
+</li>
+<li>라벨링 규칙 수정<ul>
+<li>규칙 업데이트</li>
+</ul>
+</li>
+</ul>
+<h3 id="데이터-평가-방법---iaa">데이터 평가 방법 - IAA</h3>
+<ul>
+<li>정의<ul>
+<li>IAA Inter Annotator Agreement<ul>
+<li>작업자들간의 일치 정도</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>평가 방법들이 존재<ul>
+<li>작업자들의 일치도록 평가하기 때문에 다수가 잘못된 선택을 하는 경우 보완</li>
+</ul>
+</li>
+</ul>
+<h3 id="iaa를-활용한-데이터-클렌징-방법">IAA를 활용한 데이터 클렌징 방법</h3>
+<ul>
+<li>pass</li>
+</ul>
+<h3 id="데이터-스플릿">데이터 스플릿</h3>
+<ul>
+<li>과적합 방지</li>
+<li>데이터 샘플링<ul>
+<li>이점<ul>
+<li>정확성, 편향 제거, 위험 감소</li>
+</ul>
+</li>
+<li>방식<ul>
+<li>확률적 샘프링</li>
+<li>비확률적 샘플링</li>
+</ul>
+</li>
+<li>한계<ul>
+<li>편향이 생길 수도 있다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="합성-데이터---cv-이론">합성 데이터 - CV (이론)</h3>
+<ul>
+<li>GANs</li>
+<li>VAE</li>
+<li>Diffusion</li>
+</ul>
+<h3 id="합성-데이터---cv-실습">합성 데이터 - CV (실습)</h3>
+<h3 id="합성-데이터---nlp-이론">합성 데이터 - NLP (이론)</h3>
+<ul>
+<li>RNN</li>
+<li>BART</li>
+<li>LLM</li>
+</ul>
+<h3 id="합성-데이터---nlp-실습">합성 데이터 - NLP (실습)</h3>
+<h3 id="액티브-러닝-이론">액티브 러닝 (이론)</h3>
+<ul>
+<li>모델로 라벨링 -&gt; 사람이 다시 라벨링 -&gt; 라벨링 경계 업데이트</li>
+</ul>
+<h3 id="액티브-러닝-실습">액티브 러닝 (실습)</h3>
+<ul>
+<li>생략</li>
+</ul>
+<h3 id="데이터-릴리즈">데이터 릴리즈</h3>
+<ul>
+<li>고려사항<ul>
+<li>품질</li>
+<li>라이센스 권리표시</li>
+<li>개인정보 보호 문제</li>
+<li>윤리적 고려사항</li>
+</ul>
+</li>
+<li>릴리즈 플랫폼<ul>
+<li><a href="https://paperswithcode.com/datasets" target="_blank">[URL] https://paperswithcode.com/datasets</a></li>
+<li><a href="https://huggingface.co/datasets" target="_blank">[URL] https://huggingface.co/datasets</a></li>
+<li><a href="https://kaggle.com/datasets" target="_blank">[URL] https://kaggle.com/datasets</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="cv-데이터-제작-실습">CV 데이터 제작 실습</h3>
+<ul>
+<li>세그멘테이션 관련</li>
+</ul>
+<h3 id="nlp-데이터-제작-실습">NLP 데이터 제작 실습</h3>
+<ul>
+<li>데이터 NER관련해서 해당 수동 태깅(툴 사용)하고 돌려보라는 뜻</li>
+<li>생략</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><strike>[wn.private] wn.private:upstage-ai-lab-day-102</strike></li>
+<li><a href="upstage-ai-lab">upstage-ai-lab</a></li>
+<li><a href="upstage-ai-lab-day-98">upstage-ai-lab-day-98</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-4cf5e0b6c08b989f.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-bfc5f34ea7491706.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"upstage-ai-lab-day-102\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"PlS6BXOsYAhJS3h0y3XpQ\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/upstage-ai-lab-day-102\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"upstage-ai-lab-day-102\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"upstage-ai-lab-day-102\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"upstage-ai-lab-day-102\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T444a,"])</script><script>self.__next_f.push([1,"\u003ch3 id=\"data-centric\"\u003eData Centric\u003c/h3\u003e\n\u003ch2 id=\"학습\"\u003e학습\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e학습 순서\u003cul\u003e\n\u003cli\u003e데이터 기획\u003c/li\u003e\n\u003cli\u003e데이터 수집\u003c/li\u003e\n\u003cli\u003e데이터 라벨링\u003c/li\u003e\n\u003cli\u003e데이터 클렌징\u003c/li\u003e\n\u003cli\u003e데이터 마무리\u003c/li\u003e\n\u003cli\u003e데이터 제작 실습\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"data-centric-ai란-무엇인가\"\u003eData-Centric AI란 무엇인가?\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eAI System = Code + Data\u003c/li\u003e\n\u003cli\u003e데이터 품질 -\u0026gt; 성능 향상\u003cul\u003e\n\u003cli\u003e데이터 어노테이션 일관성이 꺠지면 노이즈로 인식됨\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eAI 프로젝트는 66~80%가 데이터 관련 작업\u003cul\u003e\n\u003cli\u003e그외에 알고리즘, 모델 학습, 모델 조정, 서비스 배포등\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eModel-Centric AI\u003cul\u003e\n\u003cli\u003e데이터가 많아지면 노이즈는 묻힌다는 개념\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eData-Centric\u003cul\u003e\n\u003cli\u003e데이터 품질에 집중\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eAI 서비스 개발 과정\u003cul\u003e\n\u003cli\u003e프로젝트 셋업\u003c/li\u003e\n\u003cli\u003e데이터 준비\u003c/li\u003e\n\u003cli\u003e모델 훈련\u003c/li\u003e\n\u003cli\u003e배포\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e서비스 출시 이전 중요도\u003cul\u003e\n\u003cli\u003e모델 1:1 데이터\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e서비스 출시 이후 중요도\u003cul\u003e\n\u003cli\u003e모델 2:8 데이터\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eMLOps\u003cul\u003e\n\u003cli\u003e데이터 구축을 위한 인프라\u003c/li\u003e\n\u003cli\u003egoogle, nvidia 참조\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e요즘은 파인튜닝\u003cul\u003e\n\u003cli\u003e요즘 LoRA\u003c/li\u003e\n\u003cli\u003e적은 데이터로도 최적화가 가능\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e연구분야\u003cul\u003e\n\u003cli\u003e윤리\u003c/li\u003e\n\u003cli\u003e품질\u003cul\u003e\n\u003cli\u003e이상 탐지및 제거\u003c/li\u003e\n\u003cli\u003e에러 탐지 및 수정\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://labelerrors.com\" target=\"_blank\"\u003e[URL] https://labelerrors.com/\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터 증강\u003cul\u003e\n\u003cli\u003eback translation\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e피처 엔지니어링\u003c/li\u003e\n\u003cli\u003e컨센서스 라벨링\u003cul\u003e\n\u003cli\u003e다수의 라벨러로 부터 얻은 라벨들의 일관성을 높이는 방법\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e액티브 러닝\u003cul\u003e\n\u003cli\u003e모든 데이터가 아니라 중요한 데이터를 식별하고 학습하는 방식\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e커리큘럼 학습\u003cul\u003e\n\u003cli\u003e쉬운 데이터부터 차근차근 학습할 수 있도록 학습 순서 조절하는 방식\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e평가\u003cul\u003e\n\u003cli\u003e테스트데이터 추가로 평가\u003c/li\u003e\n\u003cli\u003e부분집합으로 평가\u003c/li\u003e\n\u003cli\u003e손상된 학습데이터 식별\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"data-centric-ai의-미래\"\u003eData-Centric AI의 미래\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003efoundation model 시대\u003cul\u003e\n\u003cli\u003emultilingual\u003cul\u003e\n\u003cli\u003e과거는 unilingual\u003c/li\u003e\n\u003cli\u003etransformer 이전(LSTM)에는 모델도 키우기 어려움\u003c/li\u003e\n\u003cli\u003etransforemr 이후로는 모델이 커지면서 multilingual이 대세\u003c/li\u003e\n\u003cli\u003e성능도 unilingual 을 뛰어 넘음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003emultimodal\u003cul\u003e\n\u003cli\u003eLMM Large Multimodal Model\u003c/li\u003e\n\u003cli\u003eLLM 이후로 멀티모달의 성능이 향상됨\u003c/li\u003e\n\u003cli\u003eVQA Visual Question Answering\u003cul\u003e\n\u003cli\u003e이미지 -\u0026gt; 텍스트 디스크립션 표현\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eMultimodal Data VidLN\u003cul\u003e\n\u003cli\u003e동영상 -\u0026gt; 텍스트 디스크립션 표현\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eVDialogUE\u003cul\u003e\n\u003cli\u003e이미지+텍스트\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e로봇 센서등 여러 입력을 기반으로한 데이터들이 많음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003esynthetic data\u003cul\u003e\n\u003cli\u003e합성 데이터\u003c/li\u003e\n\u003cli\u003e모델이 생성한 데이터 -\u0026gt; 다른 모델 훈련\u003cul\u003e\n\u003cli\u003echatgpt 4로 생성된 데이터가 이미 사람의 것을 넘어섬\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e싸고 빠르다\u003c/li\u003e\n\u003cli\u003e어려운 조건의 데이터도 생성가능\u003c/li\u003e\n\u003cli\u003e데이터 편향 회피\u003c/li\u003e\n\u003cli\u003e사례\u003cul\u003e\n\u003cli\u003e자율주행\u003c/li\u003e\n\u003cli\u003eVQA\u003c/li\u003e\n\u003cli\u003e오디오도 생성\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-구축-프로세스-소개\"\u003e데이터 구축 프로세스 소개\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e데이터 구축 프로세스\u003cul\u003e\n\u003cli\u003e수집\u003cul\u003e\n\u003cli\u003e방법\u003cul\u003e\n\u003cli\u003e원시(raw) 데이터\u003c/li\u003e\n\u003cli\u003e수집\u003c/li\u003e\n\u003cli\u003e크롤링\u003c/li\u003e\n\u003cli\u003e오픈소스\u003c/li\u003e\n\u003cli\u003e크라우드 소싱\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터 타당성 검토\u003cul\u003e\n\u003cli\u003e다양성\u003c/li\u003e\n\u003cli\u003e편향 방지\u003c/li\u003e\n\u003cli\u003e윤리 준수\u003c/li\u003e\n\u003cli\u003e수집 방법\u003c/li\u003e\n\u003cli\u003e법, 제도 준수\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e전처리\u003cul\u003e\n\u003cli\u003e원천(source) 데이터\u003c/li\u003e\n\u003cli\u003e품질 확보\u003cul\u003e\n\u003cli\u003e품질 기준 마련\u003c/li\u003e\n\u003cli\u003e개인정보 비식별화\u003c/li\u003e\n\u003cli\u003e중복성 방지\u003cul\u003e\n\u003cli\u003e유사 데이터 및 특성이 없는 데이터 제거\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e품질 검사 지표\u003cul\u003e\n\u003cli\u003e적합성, 신뢰성, 정합성 등등\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e스키마 설계\u003cul\u003e\n\u003cli\u003e어떻게 저장할지 구조 설계\u003c/li\u003e\n\u003cli\u003e의미 분할, 요약시 압축 정도, 추출할 것인지 추상화할 것인지\u003c/li\u003e\n\u003cli\u003e감성 분석, 전체 텍스트에 하나만 혹은 요소별로 라벨링할 것인지\u003c/li\u003e\n\u003cli\u003e예시\u003cul\u003e\n\u003cli\u003e문서 요약\u003cul\u003e\n\u003cli\u003e압축할 양\u003c/li\u003e\n\u003cli\u003e추출 추출 단어 수\u003c/li\u003e\n\u003cli\u003e추상화 생성, 타겟 글자 수\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e라벨링\u003cul\u003e\n\u003cli\u003e라벨링을 할 기준을 마련\u003c/li\u003e\n\u003cli\u003e가이드라인 작성 -\u0026gt; 작업자 교육 -\u0026gt; 라벨링 진행\u003cul\u003e\n\u003cli\u003e데이터 구축 목적 정의\u003c/li\u003e\n\u003cli\u003e사용 용어 정의\u003c/li\u003e\n\u003cli\u003e예시를 통한 체계 설명\u003c/li\u003e\n\u003cli\u003e버전 관리\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e단계\u003cul\u003e\n\u003cli\u003e파일럿 테스트를 통한 소규모 데이터셋 구축\u003cul\u003e\n\u003cli\u003e문제, 엣지케이스발견\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e잘 설계된 데이터 라벨링 툴을 사용해서 라벨링하는 것이 핵심\u003cul\u003e\n\u003cli\u003e잘 설계된 툴\u003cul\u003e\n\u003cli\u003eQuality Control\u003cul\u003e\n\u003cli\u003e일관성 있고 정확한 데이터 생성가능여부\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eEfficientcy\u003c/li\u003e\n\u003cli\u003eScalability\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e클렌징\u003cul\u003e\n\u003cli\u003e라벨링 된 데이터의 품질 검수\u003c/li\u003e\n\u003cli\u003e기준이하 폐기\u003c/li\u003e\n\u003cli\u003e종류\u003cul\u003e\n\u003cli\u003e내재적 요소 검수\u003cul\u003e\n\u003cli\u003e가이드 라인이 준수 되었는지\u003c/li\u003e\n\u003cli\u003e작업자들간 라벨링이 일치하는지\u003c/li\u003e\n\u003cli\u003eIAA Inter Annotator Agreement 평가 지표를 통해 확인\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e외재적 요소 검수\u003cul\u003e\n\u003cli\u003e다양성, 신뢰성, 충분성, 윤리 적합성을 살펴보는 과정\u003c/li\u003e\n\u003cli\u003e외부 자문위원들도 있다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e스플릿\u003cul\u003e\n\u003cli\u003e학습, 검증, 테스트셋으로 분할\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e릴리즈\u003cul\u003e\n\u003cli\u003e배포내용, 있으면 좋다\u003cul\u003e\n\u003cli\u003e라벨링 데이터\u003c/li\u003e\n\u003cli\u003e버전 및 로그\u003c/li\u003e\n\u003cli\u003e샘플데이터 형태\u003c/li\u003e\n\u003cli\u003e데이터 분석서\u003c/li\u003e\n\u003cli\u003e품질 평가서\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터 구축 프로세스의 진행\u003cul\u003e\n\u003cli\u003e사이클이 존재\u003cul\u003e\n\u003cli\u003e폭포수(Waterfall) 모델\u003cul\u003e\n\u003cli\u003e순차적\u003c/li\u003e\n\u003cli\u003e이터레이션이 별로 필요없는 경우\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e나선형(Spiral) 모델\u003cul\u003e\n\u003cli\u003e빠르게 이터레이션\u003c/li\u003e\n\u003cli\u003e장기간\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e과정의 이동간에 유연성이있다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-구축-기획서-작성\"\u003e데이터 구축 기획서 작성\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e데이터 구축 기획서의 작성\u003cul\u003e\n\u003cli\u003e기획\u003cul\u003e\n\u003cli\u003e어던 방식으로 수집되는가\u003c/li\u003e\n\u003cli\u003e무슨 문제를 해결하는가\u003c/li\u003e\n\u003cli\u003e수집 필요 양\u003c/li\u003e\n\u003cli\u003e수집 방법\u003c/li\u003e\n\u003cli\u003eAI Hub 데이터 구축 기획서 참고\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터 구축 기획서의 구성\u003cul\u003e\n\u003cli\u003e수업 생략\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-수집-1_직접-수집\"\u003e데이터 수집 1_직접 수집\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e수집 방법\u003cul\u003e\n\u003cli\u003e직접\u003cul\u003e\n\u003cli\u003e전문성 떨어져서 사이드 프로젝트 등에서 수행\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e크롤링\u003c/li\u003e\n\u003cli\u003e오픈소스\u003c/li\u003e\n\u003cli\u003e크라우드 소싱\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e증강\u003cul\u003e\n\u003cli\u003e혼합 Belding\u003cul\u003e\n\u003cli\u003e유사 데이터를 합친다, 데이터 머징, 조인\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e증강 Augmentation\u003cul\u003e\n\u003cli\u003eback translation\u003c/li\u003e\n\u003cli\u003eimage retation\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e합성 Synthetic\u003cul\u003e\n\u003cli\u003e모델을 통해 생성\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-수집-2_크롤링-이론\"\u003e데이터 수집 2_크롤링 (이론)\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eapi 제공 여부 확인\u003c/li\u003e\n\u003cli\u003epython library\u003cul\u003e\n\u003cli\u003erequests\u003c/li\u003e\n\u003cli\u003ebeautiful-Soup\u003c/li\u003e\n\u003cli\u003escrapy\u003c/li\u003e\n\u003cli\u003eseleinum\u003c/li\u003e\n\u003cli\u003epyquery\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-수집-2_크롤링-실습\"\u003e데이터 수집 2_크롤링 (실습)\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eseleinum 을 이용한 이미지 크롤링\u003cul\u003e\n\u003cli\u003e구글이미지의 옵션을 설정하여 크롤링하는 예제\u003c/li\u003e\n\u003cli\u003e크리에이티브 커먼즈 라이센스\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e실습은 생략\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-수집-3_오픈-소스\"\u003e데이터 수집 3_오픈 소스\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e데이터 자체를 참고\u003c/li\u003e\n\u003cli\u003e데이터 수집 방법 참고\u003c/li\u003e\n\u003cli\u003e오픈 소스 데이터 플랫폼\u003cul\u003e\n\u003cli\u003e국내 \u003cul\u003e\n\u003cli\u003e공공데이터 포털\u003c/li\u003e\n\u003cli\u003e서울 열린데이터광장\u003c/li\u003e\n\u003cli\u003eAI 허브\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e해외\u003cul\u003e\n\u003cli\u003eKaggle\u003c/li\u003e\n\u003cli\u003eHuggingface\u003c/li\u003e\n\u003cli\u003ePapersWithCode\u003c/li\u003e\n\u003cli\u003eUCI ML Repo\u003c/li\u003e\n\u003cli\u003e국가별 공공데이터 포털이 존재\u003cul\u003e\n\u003cli\u003edata.gov.fr\u003c/li\u003e\n\u003cli\u003edata.gov.sg\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-수집-4_크라우드-소싱\"\u003e데이터 수집 4_크라우드 소싱\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e업체선정해서 외주맡기는 형태\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-수집시-주의-사항-1_라이선스\"\u003e데이터 수집시 주의 사항 1_라이선스\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e코드\u003cul\u003e\n\u003cli\u003eOSL\u003cul\u003e\n\u003cli\u003eBSD\u003c/li\u003e\n\u003cli\u003eApache License\u003c/li\u003e\n\u003cli\u003eMIT\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터\u003cul\u003e\n\u003cli\u003eCCL Creative Commons License\u003cul\u003e\n\u003cli\u003e저작권\u003c/li\u003e\n\u003cli\u003e이용허락조건\u003cul\u003e\n\u003cli\u003e저작권자 표시\u003c/li\u003e\n\u003cli\u003e비영리\u003c/li\u003e\n\u003cli\u003e변경금지\u003c/li\u003e\n\u003cli\u003e동일조건변경허락\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-수집시-주의-사항-2_개인정보보호\"\u003e데이터 수집시 주의 사항 2_개인정보보호\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e개인정보가 아닌경우\u003cul\u003e\n\u003cli\u003e사망한 정보\u003c/li\u003e\n\u003cli\u003e집단의 통계값\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e개인정보인 경우\u003cul\u003e\n\u003cli\u003e개인에 대한 특정이 가능한경우\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-수집시-주의-사항-3_윤리\"\u003e데이터 수집시 주의 사항 3_윤리\u003c/h3\u003e\n\u003ch3 id=\"데이터-전처리\"\u003e데이터 전처리\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e중복데이터는\u003cul\u003e\n\u003cli\u003e제거\u003c/li\u003e\n\u003cli\u003e표시\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e결측데이터\u003cul\u003e\n\u003cli\u003e평균,중앙,최빈값을 사용하여 대체\u003c/li\u003e\n\u003cli\u003e모델을 사용해서 예측\u003c/li\u003e\n\u003cli\u003e제거\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e이상치 처리\u003cul\u003e\n\u003cli\u003e관측치에서 멀리 덜어진 값\u003c/li\u003e\n\u003cli\u003e제거, 대체, 표시\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e도메인별 전처리\u003cul\u003e\n\u003cli\u003e이미지\u003cul\u003e\n\u003cli\u003e포맷 통일\u003c/li\u003e\n\u003cli\u003e중복, 잘못찰영된 것 제거\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e텍스트\u003cul\u003e\n\u003cli\u003e\u0026quot;ㅋㅋㅋ\u0026quot;, \u0026quot;ㅎㅎㅎ\u0026quot;, 이모지등\u003cul\u003e\n\u003cli\u003e제거 또는 규측으로 처리\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eutf-8\u003c/code\u003e 인코딩으로 변호나\u003c/li\u003e\n\u003cli\u003e어휘나 종류의 수가 미달인경우 제거등의 처리\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터 스키마 설계\u003cul\u003e\n\u003cli\u003e원본데이터, 타스크 수행 결과, 메타데이터 등을 저장\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"라벨링-가이드라인-작성-방법\"\u003e라벨링 가이드라인 작성 방법\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e라벨링은 툴을 사용하기도 한다\u003cul\u003e\n\u003cli\u003e문서 같은 경우 Label Studio 등\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-라벨링-규칙-설정-1_cv\"\u003e데이터 라벨링 규칙 설정 1_CV\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e방식\u003cul\u003e\n\u003cli\u003e바운딩 박스\u003cul\u003e\n\u003cli\u003e직사각형, 타이트하게, 노이즈없이\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e큐보인드\u003cul\u003e\n\u003cli\u003e3d 박스\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e폴리곤\u003cul\u003e\n\u003cli\u003e다각형 형태의 바운딩 박스, 폐곡선\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e폴리라인\u003cul\u003e\n\u003cli\u003e선형 객체의 경계나 위치등을 연속선으로 지정, 폐곡선이 아닌경우\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e의미 분할\u003cul\u003e\n\u003cli\u003e픽셀 라벨링\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e키 포인트\u003cul\u003e\n\u003cli\u003e객체의 주요 지점을 라벨링, 관절\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e모호성 제거\u003cul\u003e\n\u003cli\u003e띄어쓰기는 분리하여, 기호 분리등\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eé\u003c/code\u003e 와 같은 기호들을 라벨러가 통일성있게 기록할 수 있도록\u003c/li\u003e\n\u003cli\u003e통일성이 가장 중요\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-라벨링-규칙-설정-2_nlp\"\u003e데이터 라벨링 규칙 설정 2_NLP\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e기법\u003cul\u003e\n\u003cli\u003e분류 및 태깅\u003cul\u003e\n\u003cli\u003e다큐먼트(문단 등)의 분류\u003c/li\u003e\n\u003cli\u003e텍스트의 부분을 태깅, NER\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e전사\u003cul\u003e\n\u003cli\u003e음성 to 텍스트\u003c/li\u003e\n\u003cli\u003e종류\u003cul\u003e\n\u003cli\u003e일반전사\u003cul\u003e\n\u003cli\u003e발음 전사\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e이중 전사\u003cul\u003e\n\u003cli\u003e발음 전사와 철자(표준어) 전사 병기\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e화자 전사\u003cul\u003e\n\u003cli\u003e화자 구분\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e사례\u003cul\u003e\n\u003cli\u003e방송 컨텐츠 전사(tool: zeroth)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e번역 및 요약의 특징\u003cul\u003e\n\u003cli\u003e의미를 보존한체 텍스트를 변환하는 작업\u003c/li\u003e\n\u003cli\u003e특별한 툴 없이 작업 가능\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e분류 또는 태깅시 고려할 사항\u003cul\u003e\n\u003cli\u003e태깅 대상 구분\u003cul\u003e\n\u003cli\u003e동일 군이 연속으로 등장하는 경우 태그를 합침\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eLorem\u003c/code\u003e \u003ccode class=\"span\"\u003eIpsum\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e전사 규칙\u003cul\u003e\n\u003cli\u003e맞춤법 교육을 먼저받는다\u003c/li\u003e\n\u003cli\u003e축약형, 방언은 이중 전사로 표기한다\u003c/li\u003e\n\u003cli\u003e비식별화, 둘 이상인 경우 그 둘을 구분할 수 있어야한다\u003c/li\u003e\n\u003cli\u003e주소는 동까지 표현\u003c/li\u003e\n\u003cli\u003e이런것들은 규칙이 중요\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e요약\u003cul\u003e\n\u003cli\u003e몇 문장으로 요약해야하는지\u003c/li\u003e\n\u003cli\u003e수정 불가능한 단어와, 수정 가능한 범주\u003c/li\u003e\n\u003cli\u003e필수로 포함되어야하는 내용\u003cul\u003e\n\u003cli\u003e육하 원칙\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e핵심 키워드가 2개이상 포함되어야한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"라벨링-툴-소개\"\u003e라벨링 툴 소개\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003epass\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-클렌징-방법\"\u003e데이터 클렌징 방법\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e라벨링 에러\u003cul\u003e\n\u003cli\u003e휴먼 에러\u003c/li\u003e\n\u003cli\u003e라벨링 규칙 에러\u003cul\u003e\n\u003cli\u003e사람마다 다르게 해석 가능\u003c/li\u003e\n\u003cli\u003e라벨링 중간에 규칙을 바꾸는 경우\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터 클렌징\u003cul\u003e\n\u003cli\u003e규칙으로 정상화 할 수 있으면 좋지마 그렇지 않은 경우가 대다수\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e에러 확인\u003cul\u003e\n\u003cli\u003e샘플 직접 검수\u003cul\u003e\n\u003cli\u003e에러발견 -\u0026gt; 전체에서 해당 에러 필터링\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e모델 결과 분석\u003c/li\u003e\n\u003cli\u003eIAA Inter Annotator Agreement\u003c/li\u003e\n\u003cli\u003eConfident Learning\u003cul\u003e\n\u003cli\u003e컨피던트가 낮은 데이터는 제외하고 사용\u003cul\u003e\n\u003cli\u003e제외한 데이터는 추가 검수\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터 클렌징\u003cul\u003e\n\u003cli\u003e직접 클렌징\u003cul\u003e\n\u003cli\u003e라벨링 에러가 규칙적인지 않은 경우, 직접 클렌징\u003c/li\u003e\n\u003cli\u003e비용, 휴먼에러 이슈\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e규칙 기반 코드로 클렌징\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e라벨링 규칙 수정\u003cul\u003e\n\u003cli\u003e규칙 업데이트\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-평가-방법---iaa\"\u003e데이터 평가 방법 - IAA\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e정의\u003cul\u003e\n\u003cli\u003eIAA Inter Annotator Agreement\u003cul\u003e\n\u003cli\u003e작업자들간의 일치 정도\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e평가 방법들이 존재\u003cul\u003e\n\u003cli\u003e작업자들의 일치도록 평가하기 때문에 다수가 잘못된 선택을 하는 경우 보완\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"iaa를-활용한-데이터-클렌징-방법\"\u003eIAA를 활용한 데이터 클렌징 방법\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003epass\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-스플릿\"\u003e데이터 스플릿\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e과적합 방지\u003c/li\u003e\n\u003cli\u003e데이터 샘플링\u003cul\u003e\n\u003cli\u003e이점\u003cul\u003e\n\u003cli\u003e정확성, 편향 제거, 위험 감소\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e방식\u003cul\u003e\n\u003cli\u003e확률적 샘프링\u003c/li\u003e\n\u003cli\u003e비확률적 샘플링\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e한계\u003cul\u003e\n\u003cli\u003e편향이 생길 수도 있다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"합성-데이터---cv-이론\"\u003e합성 데이터 - CV (이론)\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eGANs\u003c/li\u003e\n\u003cli\u003eVAE\u003c/li\u003e\n\u003cli\u003eDiffusion\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"합성-데이터---cv-실습\"\u003e합성 데이터 - CV (실습)\u003c/h3\u003e\n\u003ch3 id=\"합성-데이터---nlp-이론\"\u003e합성 데이터 - NLP (이론)\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eRNN\u003c/li\u003e\n\u003cli\u003eBART\u003c/li\u003e\n\u003cli\u003eLLM\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"합성-데이터---nlp-실습\"\u003e합성 데이터 - NLP (실습)\u003c/h3\u003e\n\u003ch3 id=\"액티브-러닝-이론\"\u003e액티브 러닝 (이론)\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e모델로 라벨링 -\u0026gt; 사람이 다시 라벨링 -\u0026gt; 라벨링 경계 업데이트\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"액티브-러닝-실습\"\u003e액티브 러닝 (실습)\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e생략\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"데이터-릴리즈\"\u003e데이터 릴리즈\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e고려사항\u003cul\u003e\n\u003cli\u003e품질\u003c/li\u003e\n\u003cli\u003e라이센스 권리표시\u003c/li\u003e\n\u003cli\u003e개인정보 보호 문제\u003c/li\u003e\n\u003cli\u003e윤리적 고려사항\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e릴리즈 플랫폼\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://paperswithcode.com/datasets\" target=\"_blank\"\u003e[URL] https://paperswithcode.com/datasets\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"https://huggingface.co/datasets\" target=\"_blank\"\u003e[URL] https://huggingface.co/datasets\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"https://kaggle.com/datasets\" target=\"_blank\"\u003e[URL] https://kaggle.com/datasets\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"cv-데이터-제작-실습\"\u003eCV 데이터 제작 실습\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e세그멘테이션 관련\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"nlp-데이터-제작-실습\"\u003eNLP 데이터 제작 실습\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e데이터 NER관련해서 해당 수동 태깅(툴 사용)하고 돌려보라는 뜻\u003c/li\u003e\n\u003cli\u003e생략\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cstrike\u003e[wn.private] wn.private:upstage-ai-lab-day-102\u003c/strike\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"upstage-ai-lab\"\u003eupstage-ai-lab\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"upstage-ai-lab-day-98\"\u003eupstage-ai-lab-day-98\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/a51c46d\\n\",\"className\":\"bg-white text-black\",\"children\":\"a51c46d\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/upstage-ai-lab-day-102.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/upstage-ai-lab-day-102.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/upstage-ai-lab-day-102.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"upstage-ai-lab-day-102\",\"name\":\"upstage-ai-lab-day-102\",\"val\":2},{\"id\":\"upstage-ai-lab\",\"name\":\"upstage-ai-lab\",\"val\":20},{\"id\":\"upstage-ai-lab-day-98\",\"name\":\"upstage-ai-lab-day-98\",\"val\":5},{\"id\":\"diary/2024-12-31\",\"name\":\"diary/2024-12-31\",\"val\":441}],\"links\":[{\"source\":\"upstage-ai-lab-day-102\",\"target\":\"upstage-ai-lab\"},{\"source\":\"upstage-ai-lab-day-102\",\"target\":\"upstage-ai-lab-day-98\"},{\"source\":\"upstage-ai-lab-day-98\",\"target\":\"upstage-ai-lab-day-102\"},{\"source\":\"upstage-ai-lab\",\"target\":\"upstage-ai-lab-day-102\"},{\"source\":\"diary/2024-12-31\",\"target\":\"upstage-ai-lab-day-102\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"upstage-ai-lab-day-102\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-102\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-102\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"upstage-ai-lab\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab\"}],[\"$\",\"sup\",null,{\"children\":20}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-day-98\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-98\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-98\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"diary/2024-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-12-31\"}],[\"$\",\"sup\",null,{\"children\":441}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"data-centric\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#data-centric\",\"children\":\"Data Centric\"}]}],[\"$\",\"div\",\"학습\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#학습\",\"children\":\"학습\"}]}],[\"$\",\"div\",\"data-centric-ai란-무엇인가\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#data-centric-ai란-무엇인가\",\"children\":\"Data-Centric AI란 무엇인가?\"}]}],[\"$\",\"div\",\"data-centric-ai의-미래\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#data-centric-ai의-미래\",\"children\":\"Data-Centric AI의 미래\"}]}],[\"$\",\"div\",\"데이터-구축-프로세스-소개\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-구축-프로세스-소개\",\"children\":\"데이터 구축 프로세스 소개\"}]}],[\"$\",\"div\",\"데이터-구축-기획서-작성\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-구축-기획서-작성\",\"children\":\"데이터 구축 기획서 작성\"}]}],[\"$\",\"div\",\"데이터-수집-1_직접-수집\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-수집-1_직접-수집\",\"children\":\"데이터 수집 1_직접 수집\"}]}],[\"$\",\"div\",\"데이터-수집-2_크롤링-이론\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-수집-2_크롤링-이론\",\"children\":\"데이터 수집 2_크롤링 (이론)\"}]}],[\"$\",\"div\",\"데이터-수집-2_크롤링-실습\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-수집-2_크롤링-실습\",\"children\":\"데이터 수집 2_크롤링 (실습)\"}]}],[\"$\",\"div\",\"데이터-수집-3_오픈-소스\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-수집-3_오픈-소스\",\"children\":\"데이터 수집 3_오픈 소스\"}]}],[\"$\",\"div\",\"데이터-수집-4_크라우드-소싱\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-수집-4_크라우드-소싱\",\"children\":\"데이터 수집 4_크라우드 소싱\"}]}],[\"$\",\"div\",\"데이터-수집시-주의-사항-1_라이선스\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-수집시-주의-사항-1_라이선스\",\"children\":\"데이터 수집시 주의 사항 1_라이선스\"}]}],[\"$\",\"div\",\"데이터-수집시-주의-사항-2_개인정보보호\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-수집시-주의-사항-2_개인정보보호\",\"children\":\"데이터 수집시 주의 사항 2_개인정보보호\"}]}],[\"$\",\"div\",\"데이터-수집시-주의-사항-3_윤리\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-수집시-주의-사항-3_윤리\",\"children\":\"데이터 수집시 주의 사항 3_윤리\"}]}],[\"$\",\"div\",\"데이터-전처리\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-전처리\",\"children\":\"데이터 전처리\"}]}],[\"$\",\"div\",\"라벨링-가이드라인-작성-방법\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#라벨링-가이드라인-작성-방법\",\"children\":\"라벨링 가이드라인 작성 방법\"}]}],[\"$\",\"div\",\"데이터-라벨링-규칙-설정-1_cv\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-라벨링-규칙-설정-1_cv\",\"children\":\"데이터 라벨링 규칙 설정 1_CV\"}]}],[\"$\",\"div\",\"데이터-라벨링-규칙-설정-2_nlp\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-라벨링-규칙-설정-2_nlp\",\"children\":\"데이터 라벨링 규칙 설정 2_NLP\"}]}],[\"$\",\"div\",\"라벨링-툴-소개\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#라벨링-툴-소개\",\"children\":\"라벨링 툴 소개\"}]}],[\"$\",\"div\",\"데이터-클렌징-방법\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-클렌징-방법\",\"children\":\"데이터 클렌징 방법\"}]}],[\"$\",\"div\",\"데이터-평가-방법---iaa\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-평가-방법---iaa\",\"children\":\"데이터 평가 방법 - IAA\"}]}],[\"$\",\"div\",\"iaa를-활용한-데이터-클렌징-방법\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#iaa를-활용한-데이터-클렌징-방법\",\"children\":\"IAA를 활용한 데이터 클렌징 방법\"}]}],[\"$\",\"div\",\"데이터-스플릿\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-스플릿\",\"children\":\"데이터 스플릿\"}]}],[\"$\",\"div\",\"합성-데이터---cv-이론\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#합성-데이터---cv-이론\",\"children\":\"합성 데이터 - CV (이론)\"}]}],[\"$\",\"div\",\"합성-데이터---cv-실습\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#합성-데이터---cv-실습\",\"children\":\"합성 데이터 - CV (실습)\"}]}],[\"$\",\"div\",\"합성-데이터---nlp-이론\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#합성-데이터---nlp-이론\",\"children\":\"합성 데이터 - NLP (이론)\"}]}],[\"$\",\"div\",\"합성-데이터---nlp-실습\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#합성-데이터---nlp-실습\",\"children\":\"합성 데이터 - NLP (실습)\"}]}],[\"$\",\"div\",\"액티브-러닝-이론\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#액티브-러닝-이론\",\"children\":\"액티브 러닝 (이론)\"}]}],[\"$\",\"div\",\"액티브-러닝-실습\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#액티브-러닝-실습\",\"children\":\"액티브 러닝 (실습)\"}]}],[\"$\",\"div\",\"데이터-릴리즈\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#데이터-릴리즈\",\"children\":\"데이터 릴리즈\"}]}],[\"$\",\"div\",\"cv-데이터-제작-실습\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#cv-데이터-제작-실습\",\"children\":\"CV 데이터 제작 실습\"}]}],[\"$\",\"div\",\"nlp-데이터-제작-실습\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#nlp-데이터-제작-실습\",\"children\":\"NLP 데이터 제작 실습\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T310f,"])</script><script>self.__next_f.push([1,"\n## 학습\n- 학습 순서\n  - 데이터 기획\n  - 데이터 수집\n  - 데이터 라벨링\n  - 데이터 클렌징\n  - 데이터 마무리\n  - 데이터 제작 실습\n\n### Data-Centric AI란 무엇인가?\n- AI System = Code + Data\n- 데이터 품질 -\u003e 성능 향상\n  - 데이터 어노테이션 일관성이 꺠지면 노이즈로 인식됨\n- AI 프로젝트는 66~80%가 데이터 관련 작업\n  - 그외에 알고리즘, 모델 학습, 모델 조정, 서비스 배포등\n- Model-Centric AI\n  - 데이터가 많아지면 노이즈는 묻힌다는 개념\n- Data-Centric\n  - 데이터 품질에 집중\n- AI 서비스 개발 과정\n  - 프로젝트 셋업\n  - 데이터 준비\n  - 모델 훈련\n  - 배포\n- 서비스 출시 이전 중요도\n  - 모델 1:1 데이터\n- 서비스 출시 이후 중요도\n  - 모델 2:8 데이터\n- MLOps\n  - 데이터 구축을 위한 인프라\n  - google, nvidia 참조\n- 요즘은 파인튜닝\n  - 요즘 LoRA\n  - 적은 데이터로도 최적화가 가능\n- 연구분야\n  - 윤리\n  - 품질\n    - 이상 탐지및 제거\n    - 에러 탐지 및 수정\n      + https://labelerrors.com\n    - 데이터 증강\n      - back translation\n    - 피처 엔지니어링\n    - 컨센서스 라벨링\n      - 다수의 라벨러로 부터 얻은 라벨들의 일관성을 높이는 방법\n    - 액티브 러닝\n      - 모든 데이터가 아니라 중요한 데이터를 식별하고 학습하는 방식\n    - 커리큘럼 학습\n      - 쉬운 데이터부터 차근차근 학습할 수 있도록 학습 순서 조절하는 방식\n  - 평가\n    - 테스트데이터 추가로 평가\n    - 부분집합으로 평가\n    - 손상된 학습데이터 식별\n\n### Data-Centric AI의 미래\n- foundation model 시대\n  - multilingual\n    - 과거는 unilingual\n    - transformer 이전(LSTM)에는 모델도 키우기 어려움\n    - transforemr 이후로는 모델이 커지면서 multilingual이 대세\n    - 성능도 unilingual 을 뛰어 넘음\n  - multimodal\n    - LMM Large Multimodal Model\n    - LLM 이후로 멀티모달의 성능이 향상됨\n    - VQA Visual Question Answering\n      - 이미지 -\u003e 텍스트 디스크립션 표현\n    - Multimodal Data VidLN\n      - 동영상 -\u003e 텍스트 디스크립션 표현\n    - VDialogUE\n      - 이미지+텍스트\n    - 로봇 센서등 여러 입력을 기반으로한 데이터들이 많음\n  - synthetic data\n    - 합성 데이터\n    - 모델이 생성한 데이터 -\u003e 다른 모델 훈련\n      - chatgpt 4로 생성된 데이터가 이미 사람의 것을 넘어섬\n    - 싸고 빠르다\n    - 어려운 조건의 데이터도 생성가능\n    - 데이터 편향 회피\n    - 사례\n      - 자율주행\n      - VQA\n      - 오디오도 생성\n\n### 데이터 구축 프로세스 소개\n- 데이터 구축 프로세스\n  - 수집\n    - 방법\n      - 원시(raw) 데이터\n      - 수집\n      - 크롤링\n      - 오픈소스\n      - 크라우드 소싱\n    - 데이터 타당성 검토\n      - 다양성\n      - 편향 방지\n      - 윤리 준수\n      - 수집 방법\n      - 법, 제도 준수\n  - 전처리\n    - 원천(source) 데이터\n    - 품질 확보\n      - 품질 기준 마련\n      - 개인정보 비식별화\n      - 중복성 방지\n        - 유사 데이터 및 특성이 없는 데이터 제거\n    - 품질 검사 지표\n      - 적합성, 신뢰성, 정합성 등등\n    - 스키마 설계\n      - 어떻게 저장할지 구조 설계\n      - 의미 분할, 요약시 압축 정도, 추출할 것인지 추상화할 것인지\n      - 감성 분석, 전체 텍스트에 하나만 혹은 요소별로 라벨링할 것인지\n      - 예시\n        - 문서 요약\n          - 압축할 양\n          - 추출 추출 단어 수\n          - 추상화 생성, 타겟 글자 수\n  - 라벨링\n    - 라벨링을 할 기준을 마련\n    - 가이드라인 작성 -\u003e 작업자 교육 -\u003e 라벨링 진행\n      - 데이터 구축 목적 정의\n      - 사용 용어 정의\n      - 예시를 통한 체계 설명\n      - 버전 관리\n    - 단계\n      - 파일럿 테스트를 통한 소규모 데이터셋 구축\n        - 문제, 엣지케이스발견\n      - 잘 설계된 데이터 라벨링 툴을 사용해서 라벨링하는 것이 핵심\n        - 잘 설계된 툴\n          - Quality Control\n            - 일관성 있고 정확한 데이터 생성가능여부\n          - Efficientcy\n          - Scalability\n  - 클렌징\n    - 라벨링 된 데이터의 품질 검수\n    - 기준이하 폐기\n    - 종류\n      - 내재적 요소 검수\n        - 가이드 라인이 준수 되었는지\n        - 작업자들간 라벨링이 일치하는지\n        - IAA Inter Annotator Agreement 평가 지표를 통해 확인\n      - 외재적 요소 검수\n        - 다양성, 신뢰성, 충분성, 윤리 적합성을 살펴보는 과정\n        - 외부 자문위원들도 있다\n  - 스플릿\n    - 학습, 검증, 테스트셋으로 분할\n  - 릴리즈\n    - 배포내용, 있으면 좋다\n      - 라벨링 데이터\n      - 버전 및 로그\n      - 샘플데이터 형태\n      - 데이터 분석서\n      - 품질 평가서\n- 데이터 구축 프로세스의 진행\n  - 사이클이 존재\n    - 폭포수(Waterfall) 모델\n      - 순차적\n      - 이터레이션이 별로 필요없는 경우\n    - 나선형(Spiral) 모델\n      - 빠르게 이터레이션\n      - 장기간\n  - 과정의 이동간에 유연성이있다\n\n### 데이터 구축 기획서 작성\n- 데이터 구축 기획서의 작성\n  - 기획\n    - 어던 방식으로 수집되는가\n    - 무슨 문제를 해결하는가\n    - 수집 필요 양\n    - 수집 방법\n    - AI Hub 데이터 구축 기획서 참고\n- 데이터 구축 기획서의 구성\n  - 수업 생략\n\n### 데이터 수집 1_직접 수집\n- 수집 방법\n  - 직접\n    - 전문성 떨어져서 사이드 프로젝트 등에서 수행\n  - 크롤링\n  - 오픈소스\n  - 크라우드 소싱\n- 증강\n  - 혼합 Belding\n    - 유사 데이터를 합친다, 데이터 머징, 조인\n  - 증강 Augmentation\n    - back translation\n    - image retation\n  - 합성 Synthetic\n    - 모델을 통해 생성\n\n### 데이터 수집 2_크롤링 (이론)\n- api 제공 여부 확인\n- python library\n  - requests\n  - beautiful-Soup\n  - scrapy\n  - seleinum\n  - pyquery\n\n### 데이터 수집 2_크롤링 (실습)\n- seleinum 을 이용한 이미지 크롤링\n  - 구글이미지의 옵션을 설정하여 크롤링하는 예제\n  - 크리에이티브 커먼즈 라이센스\n- 실습은 생략\n\n### 데이터 수집 3_오픈 소스\n- 데이터 자체를 참고\n- 데이터 수집 방법 참고\n- 오픈 소스 데이터 플랫폼\n  - 국내 \n    - 공공데이터 포털\n    - 서울 열린데이터광장\n    - AI 허브\n  - 해외\n    - Kaggle\n    - Huggingface\n    - PapersWithCode\n    - UCI ML Repo\n    - 국가별 공공데이터 포털이 존재\n      - data.gov.fr\n      - data.gov.sg\n\n### 데이터 수집 4_크라우드 소싱\n- 업체선정해서 외주맡기는 형태\n\n### 데이터 수집시 주의 사항 1_라이선스\n- 코드\n  - OSL\n    - BSD\n    - Apache License\n    - MIT\n- 데이터\n  - CCL Creative Commons License\n    - 저작권\n    - 이용허락조건\n      - 저작권자 표시\n      - 비영리\n      - 변경금지\n      - 동일조건변경허락\n\n### 데이터 수집시 주의 사항 2_개인정보보호\n- 개인정보가 아닌경우\n  - 사망한 정보\n  - 집단의 통계값\n- 개인정보인 경우\n  - 개인에 대한 특정이 가능한경우\n\n### 데이터 수집시 주의 사항 3_윤리\n\n### 데이터 전처리\n- 중복데이터는\n  - 제거\n  - 표시\n- 결측데이터\n  - 평균,중앙,최빈값을 사용하여 대체\n  - 모델을 사용해서 예측\n  - 제거\n- 이상치 처리\n  - 관측치에서 멀리 덜어진 값\n  - 제거, 대체, 표시\n- 도메인별 전처리\n  - 이미지\n    - 포맷 통일\n    - 중복, 잘못찰영된 것 제거\n  - 텍스트\n    - \"ㅋㅋㅋ\", \"ㅎㅎㅎ\", 이모지등\n      - 제거 또는 규측으로 처리\n    - `utf-8` 인코딩으로 변호나\n    - 어휘나 종류의 수가 미달인경우 제거등의 처리\n- 데이터 스키마 설계\n  - 원본데이터, 타스크 수행 결과, 메타데이터 등을 저장\n\n### 라벨링 가이드라인 작성 방법\n- 라벨링은 툴을 사용하기도 한다\n  - 문서 같은 경우 Label Studio 등\n\n### 데이터 라벨링 규칙 설정 1_CV\n- 방식\n  - 바운딩 박스\n    - 직사각형, 타이트하게, 노이즈없이\n  - 큐보인드\n    - 3d 박스\n  - 폴리곤\n    - 다각형 형태의 바운딩 박스, 폐곡선\n  - 폴리라인\n    - 선형 객체의 경계나 위치등을 연속선으로 지정, 폐곡선이 아닌경우\n  - 의미 분할\n    - 픽셀 라벨링\n  - 키 포인트\n    - 객체의 주요 지점을 라벨링, 관절\n- 모호성 제거\n  - 띄어쓰기는 분리하여, 기호 분리등\n  - `é` 와 같은 기호들을 라벨러가 통일성있게 기록할 수 있도록\n  - 통일성이 가장 중요\n\n### 데이터 라벨링 규칙 설정 2_NLP\n- 기법\n  - 분류 및 태깅\n    - 다큐먼트(문단 등)의 분류\n    - 텍스트의 부분을 태깅, NER\n  - 전사\n    - 음성 to 텍스트\n    - 종류\n      - 일반전사\n        - 발음 전사\n      - 이중 전사\n        - 발음 전사와 철자(표준어) 전사 병기\n      - 화자 전사\n        - 화자 구분\n- 사례\n  - 방송 컨텐츠 전사(tool: zeroth)\n- 번역 및 요약의 특징\n  - 의미를 보존한체 텍스트를 변환하는 작업\n  - 특별한 툴 없이 작업 가능\n- 분류 또는 태깅시 고려할 사항\n  - 태깅 대상 구분\n    - 동일 군이 연속으로 등장하는 경우 태그를 합침\n      - `Lorem` `Ipsum`\n- 전사 규칙\n  - 맞춤법 교육을 먼저받는다\n  - 축약형, 방언은 이중 전사로 표기한다\n  - 비식별화, 둘 이상인 경우 그 둘을 구분할 수 있어야한다\n  - 주소는 동까지 표현\n  - 이런것들은 규칙이 중요\n- 요약\n  - 몇 문장으로 요약해야하는지\n  - 수정 불가능한 단어와, 수정 가능한 범주\n  - 필수로 포함되어야하는 내용\n    - 육하 원칙\n  - 핵심 키워드가 2개이상 포함되어야한다\n\n### 라벨링 툴 소개\n- pass\n\n### 데이터 클렌징 방법\n- 라벨링 에러\n  - 휴먼 에러\n  - 라벨링 규칙 에러\n    - 사람마다 다르게 해석 가능\n    - 라벨링 중간에 규칙을 바꾸는 경우\n- 데이터 클렌징\n  - 규칙으로 정상화 할 수 있으면 좋지마 그렇지 않은 경우가 대다수\n- 에러 확인\n  - 샘플 직접 검수\n    - 에러발견 -\u003e 전체에서 해당 에러 필터링\n  - 모델 결과 분석\n  - IAA Inter Annotator Agreement\n  - Confident Learning\n    - 컨피던트가 낮은 데이터는 제외하고 사용\n      - 제외한 데이터는 추가 검수\n- 데이터 클렌징\n  - 직접 클렌징\n    - 라벨링 에러가 규칙적인지 않은 경우, 직접 클렌징\n    - 비용, 휴먼에러 이슈\n  - 규칙 기반 코드로 클렌징\n- 라벨링 규칙 수정\n  - 규칙 업데이트\n\n### 데이터 평가 방법 - IAA\n- 정의\n  - IAA Inter Annotator Agreement\n    - 작업자들간의 일치 정도\n- 평가 방법들이 존재\n  - 작업자들의 일치도록 평가하기 때문에 다수가 잘못된 선택을 하는 경우 보완\n\n### IAA를 활용한 데이터 클렌징 방법\n- pass\n\n### 데이터 스플릿\n- 과적합 방지\n- 데이터 샘플링\n  - 이점\n    - 정확성, 편향 제거, 위험 감소\n  - 방식\n    - 확률적 샘프링\n    - 비확률적 샘플링\n  - 한계\n    - 편향이 생길 수도 있다.\n\n### 합성 데이터 - CV (이론)\n- GANs\n- VAE\n- Diffusion\n\n### 합성 데이터 - CV (실습)\n\n### 합성 데이터 - NLP (이론)\n- RNN\n- BART\n- LLM\n\n### 합성 데이터 - NLP (실습)\n\n### 액티브 러닝 (이론)\n- 모델로 라벨링 -\u003e 사람이 다시 라벨링 -\u003e 라벨링 경계 업데이트\n\n### 액티브 러닝 (실습)\n- 생략\n\n### 데이터 릴리즈\n- 고려사항\n  - 품질\n  - 라이센스 권리표시\n  - 개인정보 보호 문제\n  - 윤리적 고려사항\n- 릴리즈 플랫폼\n  - https://paperswithcode.com/datasets\n  - https://huggingface.co/datasets\n  - https://kaggle.com/datasets\n\n### CV 데이터 제작 실습\n- 세그멘테이션 관련\n\n### NLP 데이터 제작 실습\n- 데이터 NER관련해서 해당 수동 태깅(툴 사용)하고 돌려보라는 뜻\n- 생략\n\n## link\n- [[wn.private:upstage-ai-lab-day-102]]\n- [[upstage-ai-lab]]\n- [[upstage-ai-lab-day-98]]\n"])</script><script>self.__next_f.push([1,"16:T310f,"])</script><script>self.__next_f.push([1,"\n## 학습\n- 학습 순서\n  - 데이터 기획\n  - 데이터 수집\n  - 데이터 라벨링\n  - 데이터 클렌징\n  - 데이터 마무리\n  - 데이터 제작 실습\n\n### Data-Centric AI란 무엇인가?\n- AI System = Code + Data\n- 데이터 품질 -\u003e 성능 향상\n  - 데이터 어노테이션 일관성이 꺠지면 노이즈로 인식됨\n- AI 프로젝트는 66~80%가 데이터 관련 작업\n  - 그외에 알고리즘, 모델 학습, 모델 조정, 서비스 배포등\n- Model-Centric AI\n  - 데이터가 많아지면 노이즈는 묻힌다는 개념\n- Data-Centric\n  - 데이터 품질에 집중\n- AI 서비스 개발 과정\n  - 프로젝트 셋업\n  - 데이터 준비\n  - 모델 훈련\n  - 배포\n- 서비스 출시 이전 중요도\n  - 모델 1:1 데이터\n- 서비스 출시 이후 중요도\n  - 모델 2:8 데이터\n- MLOps\n  - 데이터 구축을 위한 인프라\n  - google, nvidia 참조\n- 요즘은 파인튜닝\n  - 요즘 LoRA\n  - 적은 데이터로도 최적화가 가능\n- 연구분야\n  - 윤리\n  - 품질\n    - 이상 탐지및 제거\n    - 에러 탐지 및 수정\n      + https://labelerrors.com\n    - 데이터 증강\n      - back translation\n    - 피처 엔지니어링\n    - 컨센서스 라벨링\n      - 다수의 라벨러로 부터 얻은 라벨들의 일관성을 높이는 방법\n    - 액티브 러닝\n      - 모든 데이터가 아니라 중요한 데이터를 식별하고 학습하는 방식\n    - 커리큘럼 학습\n      - 쉬운 데이터부터 차근차근 학습할 수 있도록 학습 순서 조절하는 방식\n  - 평가\n    - 테스트데이터 추가로 평가\n    - 부분집합으로 평가\n    - 손상된 학습데이터 식별\n\n### Data-Centric AI의 미래\n- foundation model 시대\n  - multilingual\n    - 과거는 unilingual\n    - transformer 이전(LSTM)에는 모델도 키우기 어려움\n    - transforemr 이후로는 모델이 커지면서 multilingual이 대세\n    - 성능도 unilingual 을 뛰어 넘음\n  - multimodal\n    - LMM Large Multimodal Model\n    - LLM 이후로 멀티모달의 성능이 향상됨\n    - VQA Visual Question Answering\n      - 이미지 -\u003e 텍스트 디스크립션 표현\n    - Multimodal Data VidLN\n      - 동영상 -\u003e 텍스트 디스크립션 표현\n    - VDialogUE\n      - 이미지+텍스트\n    - 로봇 센서등 여러 입력을 기반으로한 데이터들이 많음\n  - synthetic data\n    - 합성 데이터\n    - 모델이 생성한 데이터 -\u003e 다른 모델 훈련\n      - chatgpt 4로 생성된 데이터가 이미 사람의 것을 넘어섬\n    - 싸고 빠르다\n    - 어려운 조건의 데이터도 생성가능\n    - 데이터 편향 회피\n    - 사례\n      - 자율주행\n      - VQA\n      - 오디오도 생성\n\n### 데이터 구축 프로세스 소개\n- 데이터 구축 프로세스\n  - 수집\n    - 방법\n      - 원시(raw) 데이터\n      - 수집\n      - 크롤링\n      - 오픈소스\n      - 크라우드 소싱\n    - 데이터 타당성 검토\n      - 다양성\n      - 편향 방지\n      - 윤리 준수\n      - 수집 방법\n      - 법, 제도 준수\n  - 전처리\n    - 원천(source) 데이터\n    - 품질 확보\n      - 품질 기준 마련\n      - 개인정보 비식별화\n      - 중복성 방지\n        - 유사 데이터 및 특성이 없는 데이터 제거\n    - 품질 검사 지표\n      - 적합성, 신뢰성, 정합성 등등\n    - 스키마 설계\n      - 어떻게 저장할지 구조 설계\n      - 의미 분할, 요약시 압축 정도, 추출할 것인지 추상화할 것인지\n      - 감성 분석, 전체 텍스트에 하나만 혹은 요소별로 라벨링할 것인지\n      - 예시\n        - 문서 요약\n          - 압축할 양\n          - 추출 추출 단어 수\n          - 추상화 생성, 타겟 글자 수\n  - 라벨링\n    - 라벨링을 할 기준을 마련\n    - 가이드라인 작성 -\u003e 작업자 교육 -\u003e 라벨링 진행\n      - 데이터 구축 목적 정의\n      - 사용 용어 정의\n      - 예시를 통한 체계 설명\n      - 버전 관리\n    - 단계\n      - 파일럿 테스트를 통한 소규모 데이터셋 구축\n        - 문제, 엣지케이스발견\n      - 잘 설계된 데이터 라벨링 툴을 사용해서 라벨링하는 것이 핵심\n        - 잘 설계된 툴\n          - Quality Control\n            - 일관성 있고 정확한 데이터 생성가능여부\n          - Efficientcy\n          - Scalability\n  - 클렌징\n    - 라벨링 된 데이터의 품질 검수\n    - 기준이하 폐기\n    - 종류\n      - 내재적 요소 검수\n        - 가이드 라인이 준수 되었는지\n        - 작업자들간 라벨링이 일치하는지\n        - IAA Inter Annotator Agreement 평가 지표를 통해 확인\n      - 외재적 요소 검수\n        - 다양성, 신뢰성, 충분성, 윤리 적합성을 살펴보는 과정\n        - 외부 자문위원들도 있다\n  - 스플릿\n    - 학습, 검증, 테스트셋으로 분할\n  - 릴리즈\n    - 배포내용, 있으면 좋다\n      - 라벨링 데이터\n      - 버전 및 로그\n      - 샘플데이터 형태\n      - 데이터 분석서\n      - 품질 평가서\n- 데이터 구축 프로세스의 진행\n  - 사이클이 존재\n    - 폭포수(Waterfall) 모델\n      - 순차적\n      - 이터레이션이 별로 필요없는 경우\n    - 나선형(Spiral) 모델\n      - 빠르게 이터레이션\n      - 장기간\n  - 과정의 이동간에 유연성이있다\n\n### 데이터 구축 기획서 작성\n- 데이터 구축 기획서의 작성\n  - 기획\n    - 어던 방식으로 수집되는가\n    - 무슨 문제를 해결하는가\n    - 수집 필요 양\n    - 수집 방법\n    - AI Hub 데이터 구축 기획서 참고\n- 데이터 구축 기획서의 구성\n  - 수업 생략\n\n### 데이터 수집 1_직접 수집\n- 수집 방법\n  - 직접\n    - 전문성 떨어져서 사이드 프로젝트 등에서 수행\n  - 크롤링\n  - 오픈소스\n  - 크라우드 소싱\n- 증강\n  - 혼합 Belding\n    - 유사 데이터를 합친다, 데이터 머징, 조인\n  - 증강 Augmentation\n    - back translation\n    - image retation\n  - 합성 Synthetic\n    - 모델을 통해 생성\n\n### 데이터 수집 2_크롤링 (이론)\n- api 제공 여부 확인\n- python library\n  - requests\n  - beautiful-Soup\n  - scrapy\n  - seleinum\n  - pyquery\n\n### 데이터 수집 2_크롤링 (실습)\n- seleinum 을 이용한 이미지 크롤링\n  - 구글이미지의 옵션을 설정하여 크롤링하는 예제\n  - 크리에이티브 커먼즈 라이센스\n- 실습은 생략\n\n### 데이터 수집 3_오픈 소스\n- 데이터 자체를 참고\n- 데이터 수집 방법 참고\n- 오픈 소스 데이터 플랫폼\n  - 국내 \n    - 공공데이터 포털\n    - 서울 열린데이터광장\n    - AI 허브\n  - 해외\n    - Kaggle\n    - Huggingface\n    - PapersWithCode\n    - UCI ML Repo\n    - 국가별 공공데이터 포털이 존재\n      - data.gov.fr\n      - data.gov.sg\n\n### 데이터 수집 4_크라우드 소싱\n- 업체선정해서 외주맡기는 형태\n\n### 데이터 수집시 주의 사항 1_라이선스\n- 코드\n  - OSL\n    - BSD\n    - Apache License\n    - MIT\n- 데이터\n  - CCL Creative Commons License\n    - 저작권\n    - 이용허락조건\n      - 저작권자 표시\n      - 비영리\n      - 변경금지\n      - 동일조건변경허락\n\n### 데이터 수집시 주의 사항 2_개인정보보호\n- 개인정보가 아닌경우\n  - 사망한 정보\n  - 집단의 통계값\n- 개인정보인 경우\n  - 개인에 대한 특정이 가능한경우\n\n### 데이터 수집시 주의 사항 3_윤리\n\n### 데이터 전처리\n- 중복데이터는\n  - 제거\n  - 표시\n- 결측데이터\n  - 평균,중앙,최빈값을 사용하여 대체\n  - 모델을 사용해서 예측\n  - 제거\n- 이상치 처리\n  - 관측치에서 멀리 덜어진 값\n  - 제거, 대체, 표시\n- 도메인별 전처리\n  - 이미지\n    - 포맷 통일\n    - 중복, 잘못찰영된 것 제거\n  - 텍스트\n    - \"ㅋㅋㅋ\", \"ㅎㅎㅎ\", 이모지등\n      - 제거 또는 규측으로 처리\n    - `utf-8` 인코딩으로 변호나\n    - 어휘나 종류의 수가 미달인경우 제거등의 처리\n- 데이터 스키마 설계\n  - 원본데이터, 타스크 수행 결과, 메타데이터 등을 저장\n\n### 라벨링 가이드라인 작성 방법\n- 라벨링은 툴을 사용하기도 한다\n  - 문서 같은 경우 Label Studio 등\n\n### 데이터 라벨링 규칙 설정 1_CV\n- 방식\n  - 바운딩 박스\n    - 직사각형, 타이트하게, 노이즈없이\n  - 큐보인드\n    - 3d 박스\n  - 폴리곤\n    - 다각형 형태의 바운딩 박스, 폐곡선\n  - 폴리라인\n    - 선형 객체의 경계나 위치등을 연속선으로 지정, 폐곡선이 아닌경우\n  - 의미 분할\n    - 픽셀 라벨링\n  - 키 포인트\n    - 객체의 주요 지점을 라벨링, 관절\n- 모호성 제거\n  - 띄어쓰기는 분리하여, 기호 분리등\n  - `é` 와 같은 기호들을 라벨러가 통일성있게 기록할 수 있도록\n  - 통일성이 가장 중요\n\n### 데이터 라벨링 규칙 설정 2_NLP\n- 기법\n  - 분류 및 태깅\n    - 다큐먼트(문단 등)의 분류\n    - 텍스트의 부분을 태깅, NER\n  - 전사\n    - 음성 to 텍스트\n    - 종류\n      - 일반전사\n        - 발음 전사\n      - 이중 전사\n        - 발음 전사와 철자(표준어) 전사 병기\n      - 화자 전사\n        - 화자 구분\n- 사례\n  - 방송 컨텐츠 전사(tool: zeroth)\n- 번역 및 요약의 특징\n  - 의미를 보존한체 텍스트를 변환하는 작업\n  - 특별한 툴 없이 작업 가능\n- 분류 또는 태깅시 고려할 사항\n  - 태깅 대상 구분\n    - 동일 군이 연속으로 등장하는 경우 태그를 합침\n      - `Lorem` `Ipsum`\n- 전사 규칙\n  - 맞춤법 교육을 먼저받는다\n  - 축약형, 방언은 이중 전사로 표기한다\n  - 비식별화, 둘 이상인 경우 그 둘을 구분할 수 있어야한다\n  - 주소는 동까지 표현\n  - 이런것들은 규칙이 중요\n- 요약\n  - 몇 문장으로 요약해야하는지\n  - 수정 불가능한 단어와, 수정 가능한 범주\n  - 필수로 포함되어야하는 내용\n    - 육하 원칙\n  - 핵심 키워드가 2개이상 포함되어야한다\n\n### 라벨링 툴 소개\n- pass\n\n### 데이터 클렌징 방법\n- 라벨링 에러\n  - 휴먼 에러\n  - 라벨링 규칙 에러\n    - 사람마다 다르게 해석 가능\n    - 라벨링 중간에 규칙을 바꾸는 경우\n- 데이터 클렌징\n  - 규칙으로 정상화 할 수 있으면 좋지마 그렇지 않은 경우가 대다수\n- 에러 확인\n  - 샘플 직접 검수\n    - 에러발견 -\u003e 전체에서 해당 에러 필터링\n  - 모델 결과 분석\n  - IAA Inter Annotator Agreement\n  - Confident Learning\n    - 컨피던트가 낮은 데이터는 제외하고 사용\n      - 제외한 데이터는 추가 검수\n- 데이터 클렌징\n  - 직접 클렌징\n    - 라벨링 에러가 규칙적인지 않은 경우, 직접 클렌징\n    - 비용, 휴먼에러 이슈\n  - 규칙 기반 코드로 클렌징\n- 라벨링 규칙 수정\n  - 규칙 업데이트\n\n### 데이터 평가 방법 - IAA\n- 정의\n  - IAA Inter Annotator Agreement\n    - 작업자들간의 일치 정도\n- 평가 방법들이 존재\n  - 작업자들의 일치도록 평가하기 때문에 다수가 잘못된 선택을 하는 경우 보완\n\n### IAA를 활용한 데이터 클렌징 방법\n- pass\n\n### 데이터 스플릿\n- 과적합 방지\n- 데이터 샘플링\n  - 이점\n    - 정확성, 편향 제거, 위험 감소\n  - 방식\n    - 확률적 샘프링\n    - 비확률적 샘플링\n  - 한계\n    - 편향이 생길 수도 있다.\n\n### 합성 데이터 - CV (이론)\n- GANs\n- VAE\n- Diffusion\n\n### 합성 데이터 - CV (실습)\n\n### 합성 데이터 - NLP (이론)\n- RNN\n- BART\n- LLM\n\n### 합성 데이터 - NLP (실습)\n\n### 액티브 러닝 (이론)\n- 모델로 라벨링 -\u003e 사람이 다시 라벨링 -\u003e 라벨링 경계 업데이트\n\n### 액티브 러닝 (실습)\n- 생략\n\n### 데이터 릴리즈\n- 고려사항\n  - 품질\n  - 라이센스 권리표시\n  - 개인정보 보호 문제\n  - 윤리적 고려사항\n- 릴리즈 플랫폼\n  - https://paperswithcode.com/datasets\n  - https://huggingface.co/datasets\n  - https://kaggle.com/datasets\n\n### CV 데이터 제작 실습\n- 세그멘테이션 관련\n\n### NLP 데이터 제작 실습\n- 데이터 NER관련해서 해당 수동 태깅(툴 사용)하고 돌려보라는 뜻\n- 생략\n\n## link\n- [[wn.private:upstage-ai-lab-day-102]]\n- [[upstage-ai-lab]]\n- [[upstage-ai-lab-day-98]]\n"])</script><script>self.__next_f.push([1,"17:T310f,"])</script><script>self.__next_f.push([1,"\n## 학습\n- 학습 순서\n  - 데이터 기획\n  - 데이터 수집\n  - 데이터 라벨링\n  - 데이터 클렌징\n  - 데이터 마무리\n  - 데이터 제작 실습\n\n### Data-Centric AI란 무엇인가?\n- AI System = Code + Data\n- 데이터 품질 -\u003e 성능 향상\n  - 데이터 어노테이션 일관성이 꺠지면 노이즈로 인식됨\n- AI 프로젝트는 66~80%가 데이터 관련 작업\n  - 그외에 알고리즘, 모델 학습, 모델 조정, 서비스 배포등\n- Model-Centric AI\n  - 데이터가 많아지면 노이즈는 묻힌다는 개념\n- Data-Centric\n  - 데이터 품질에 집중\n- AI 서비스 개발 과정\n  - 프로젝트 셋업\n  - 데이터 준비\n  - 모델 훈련\n  - 배포\n- 서비스 출시 이전 중요도\n  - 모델 1:1 데이터\n- 서비스 출시 이후 중요도\n  - 모델 2:8 데이터\n- MLOps\n  - 데이터 구축을 위한 인프라\n  - google, nvidia 참조\n- 요즘은 파인튜닝\n  - 요즘 LoRA\n  - 적은 데이터로도 최적화가 가능\n- 연구분야\n  - 윤리\n  - 품질\n    - 이상 탐지및 제거\n    - 에러 탐지 및 수정\n      + https://labelerrors.com\n    - 데이터 증강\n      - back translation\n    - 피처 엔지니어링\n    - 컨센서스 라벨링\n      - 다수의 라벨러로 부터 얻은 라벨들의 일관성을 높이는 방법\n    - 액티브 러닝\n      - 모든 데이터가 아니라 중요한 데이터를 식별하고 학습하는 방식\n    - 커리큘럼 학습\n      - 쉬운 데이터부터 차근차근 학습할 수 있도록 학습 순서 조절하는 방식\n  - 평가\n    - 테스트데이터 추가로 평가\n    - 부분집합으로 평가\n    - 손상된 학습데이터 식별\n\n### Data-Centric AI의 미래\n- foundation model 시대\n  - multilingual\n    - 과거는 unilingual\n    - transformer 이전(LSTM)에는 모델도 키우기 어려움\n    - transforemr 이후로는 모델이 커지면서 multilingual이 대세\n    - 성능도 unilingual 을 뛰어 넘음\n  - multimodal\n    - LMM Large Multimodal Model\n    - LLM 이후로 멀티모달의 성능이 향상됨\n    - VQA Visual Question Answering\n      - 이미지 -\u003e 텍스트 디스크립션 표현\n    - Multimodal Data VidLN\n      - 동영상 -\u003e 텍스트 디스크립션 표현\n    - VDialogUE\n      - 이미지+텍스트\n    - 로봇 센서등 여러 입력을 기반으로한 데이터들이 많음\n  - synthetic data\n    - 합성 데이터\n    - 모델이 생성한 데이터 -\u003e 다른 모델 훈련\n      - chatgpt 4로 생성된 데이터가 이미 사람의 것을 넘어섬\n    - 싸고 빠르다\n    - 어려운 조건의 데이터도 생성가능\n    - 데이터 편향 회피\n    - 사례\n      - 자율주행\n      - VQA\n      - 오디오도 생성\n\n### 데이터 구축 프로세스 소개\n- 데이터 구축 프로세스\n  - 수집\n    - 방법\n      - 원시(raw) 데이터\n      - 수집\n      - 크롤링\n      - 오픈소스\n      - 크라우드 소싱\n    - 데이터 타당성 검토\n      - 다양성\n      - 편향 방지\n      - 윤리 준수\n      - 수집 방법\n      - 법, 제도 준수\n  - 전처리\n    - 원천(source) 데이터\n    - 품질 확보\n      - 품질 기준 마련\n      - 개인정보 비식별화\n      - 중복성 방지\n        - 유사 데이터 및 특성이 없는 데이터 제거\n    - 품질 검사 지표\n      - 적합성, 신뢰성, 정합성 등등\n    - 스키마 설계\n      - 어떻게 저장할지 구조 설계\n      - 의미 분할, 요약시 압축 정도, 추출할 것인지 추상화할 것인지\n      - 감성 분석, 전체 텍스트에 하나만 혹은 요소별로 라벨링할 것인지\n      - 예시\n        - 문서 요약\n          - 압축할 양\n          - 추출 추출 단어 수\n          - 추상화 생성, 타겟 글자 수\n  - 라벨링\n    - 라벨링을 할 기준을 마련\n    - 가이드라인 작성 -\u003e 작업자 교육 -\u003e 라벨링 진행\n      - 데이터 구축 목적 정의\n      - 사용 용어 정의\n      - 예시를 통한 체계 설명\n      - 버전 관리\n    - 단계\n      - 파일럿 테스트를 통한 소규모 데이터셋 구축\n        - 문제, 엣지케이스발견\n      - 잘 설계된 데이터 라벨링 툴을 사용해서 라벨링하는 것이 핵심\n        - 잘 설계된 툴\n          - Quality Control\n            - 일관성 있고 정확한 데이터 생성가능여부\n          - Efficientcy\n          - Scalability\n  - 클렌징\n    - 라벨링 된 데이터의 품질 검수\n    - 기준이하 폐기\n    - 종류\n      - 내재적 요소 검수\n        - 가이드 라인이 준수 되었는지\n        - 작업자들간 라벨링이 일치하는지\n        - IAA Inter Annotator Agreement 평가 지표를 통해 확인\n      - 외재적 요소 검수\n        - 다양성, 신뢰성, 충분성, 윤리 적합성을 살펴보는 과정\n        - 외부 자문위원들도 있다\n  - 스플릿\n    - 학습, 검증, 테스트셋으로 분할\n  - 릴리즈\n    - 배포내용, 있으면 좋다\n      - 라벨링 데이터\n      - 버전 및 로그\n      - 샘플데이터 형태\n      - 데이터 분석서\n      - 품질 평가서\n- 데이터 구축 프로세스의 진행\n  - 사이클이 존재\n    - 폭포수(Waterfall) 모델\n      - 순차적\n      - 이터레이션이 별로 필요없는 경우\n    - 나선형(Spiral) 모델\n      - 빠르게 이터레이션\n      - 장기간\n  - 과정의 이동간에 유연성이있다\n\n### 데이터 구축 기획서 작성\n- 데이터 구축 기획서의 작성\n  - 기획\n    - 어던 방식으로 수집되는가\n    - 무슨 문제를 해결하는가\n    - 수집 필요 양\n    - 수집 방법\n    - AI Hub 데이터 구축 기획서 참고\n- 데이터 구축 기획서의 구성\n  - 수업 생략\n\n### 데이터 수집 1_직접 수집\n- 수집 방법\n  - 직접\n    - 전문성 떨어져서 사이드 프로젝트 등에서 수행\n  - 크롤링\n  - 오픈소스\n  - 크라우드 소싱\n- 증강\n  - 혼합 Belding\n    - 유사 데이터를 합친다, 데이터 머징, 조인\n  - 증강 Augmentation\n    - back translation\n    - image retation\n  - 합성 Synthetic\n    - 모델을 통해 생성\n\n### 데이터 수집 2_크롤링 (이론)\n- api 제공 여부 확인\n- python library\n  - requests\n  - beautiful-Soup\n  - scrapy\n  - seleinum\n  - pyquery\n\n### 데이터 수집 2_크롤링 (실습)\n- seleinum 을 이용한 이미지 크롤링\n  - 구글이미지의 옵션을 설정하여 크롤링하는 예제\n  - 크리에이티브 커먼즈 라이센스\n- 실습은 생략\n\n### 데이터 수집 3_오픈 소스\n- 데이터 자체를 참고\n- 데이터 수집 방법 참고\n- 오픈 소스 데이터 플랫폼\n  - 국내 \n    - 공공데이터 포털\n    - 서울 열린데이터광장\n    - AI 허브\n  - 해외\n    - Kaggle\n    - Huggingface\n    - PapersWithCode\n    - UCI ML Repo\n    - 국가별 공공데이터 포털이 존재\n      - data.gov.fr\n      - data.gov.sg\n\n### 데이터 수집 4_크라우드 소싱\n- 업체선정해서 외주맡기는 형태\n\n### 데이터 수집시 주의 사항 1_라이선스\n- 코드\n  - OSL\n    - BSD\n    - Apache License\n    - MIT\n- 데이터\n  - CCL Creative Commons License\n    - 저작권\n    - 이용허락조건\n      - 저작권자 표시\n      - 비영리\n      - 변경금지\n      - 동일조건변경허락\n\n### 데이터 수집시 주의 사항 2_개인정보보호\n- 개인정보가 아닌경우\n  - 사망한 정보\n  - 집단의 통계값\n- 개인정보인 경우\n  - 개인에 대한 특정이 가능한경우\n\n### 데이터 수집시 주의 사항 3_윤리\n\n### 데이터 전처리\n- 중복데이터는\n  - 제거\n  - 표시\n- 결측데이터\n  - 평균,중앙,최빈값을 사용하여 대체\n  - 모델을 사용해서 예측\n  - 제거\n- 이상치 처리\n  - 관측치에서 멀리 덜어진 값\n  - 제거, 대체, 표시\n- 도메인별 전처리\n  - 이미지\n    - 포맷 통일\n    - 중복, 잘못찰영된 것 제거\n  - 텍스트\n    - \"ㅋㅋㅋ\", \"ㅎㅎㅎ\", 이모지등\n      - 제거 또는 규측으로 처리\n    - `utf-8` 인코딩으로 변호나\n    - 어휘나 종류의 수가 미달인경우 제거등의 처리\n- 데이터 스키마 설계\n  - 원본데이터, 타스크 수행 결과, 메타데이터 등을 저장\n\n### 라벨링 가이드라인 작성 방법\n- 라벨링은 툴을 사용하기도 한다\n  - 문서 같은 경우 Label Studio 등\n\n### 데이터 라벨링 규칙 설정 1_CV\n- 방식\n  - 바운딩 박스\n    - 직사각형, 타이트하게, 노이즈없이\n  - 큐보인드\n    - 3d 박스\n  - 폴리곤\n    - 다각형 형태의 바운딩 박스, 폐곡선\n  - 폴리라인\n    - 선형 객체의 경계나 위치등을 연속선으로 지정, 폐곡선이 아닌경우\n  - 의미 분할\n    - 픽셀 라벨링\n  - 키 포인트\n    - 객체의 주요 지점을 라벨링, 관절\n- 모호성 제거\n  - 띄어쓰기는 분리하여, 기호 분리등\n  - `é` 와 같은 기호들을 라벨러가 통일성있게 기록할 수 있도록\n  - 통일성이 가장 중요\n\n### 데이터 라벨링 규칙 설정 2_NLP\n- 기법\n  - 분류 및 태깅\n    - 다큐먼트(문단 등)의 분류\n    - 텍스트의 부분을 태깅, NER\n  - 전사\n    - 음성 to 텍스트\n    - 종류\n      - 일반전사\n        - 발음 전사\n      - 이중 전사\n        - 발음 전사와 철자(표준어) 전사 병기\n      - 화자 전사\n        - 화자 구분\n- 사례\n  - 방송 컨텐츠 전사(tool: zeroth)\n- 번역 및 요약의 특징\n  - 의미를 보존한체 텍스트를 변환하는 작업\n  - 특별한 툴 없이 작업 가능\n- 분류 또는 태깅시 고려할 사항\n  - 태깅 대상 구분\n    - 동일 군이 연속으로 등장하는 경우 태그를 합침\n      - `Lorem` `Ipsum`\n- 전사 규칙\n  - 맞춤법 교육을 먼저받는다\n  - 축약형, 방언은 이중 전사로 표기한다\n  - 비식별화, 둘 이상인 경우 그 둘을 구분할 수 있어야한다\n  - 주소는 동까지 표현\n  - 이런것들은 규칙이 중요\n- 요약\n  - 몇 문장으로 요약해야하는지\n  - 수정 불가능한 단어와, 수정 가능한 범주\n  - 필수로 포함되어야하는 내용\n    - 육하 원칙\n  - 핵심 키워드가 2개이상 포함되어야한다\n\n### 라벨링 툴 소개\n- pass\n\n### 데이터 클렌징 방법\n- 라벨링 에러\n  - 휴먼 에러\n  - 라벨링 규칙 에러\n    - 사람마다 다르게 해석 가능\n    - 라벨링 중간에 규칙을 바꾸는 경우\n- 데이터 클렌징\n  - 규칙으로 정상화 할 수 있으면 좋지마 그렇지 않은 경우가 대다수\n- 에러 확인\n  - 샘플 직접 검수\n    - 에러발견 -\u003e 전체에서 해당 에러 필터링\n  - 모델 결과 분석\n  - IAA Inter Annotator Agreement\n  - Confident Learning\n    - 컨피던트가 낮은 데이터는 제외하고 사용\n      - 제외한 데이터는 추가 검수\n- 데이터 클렌징\n  - 직접 클렌징\n    - 라벨링 에러가 규칙적인지 않은 경우, 직접 클렌징\n    - 비용, 휴먼에러 이슈\n  - 규칙 기반 코드로 클렌징\n- 라벨링 규칙 수정\n  - 규칙 업데이트\n\n### 데이터 평가 방법 - IAA\n- 정의\n  - IAA Inter Annotator Agreement\n    - 작업자들간의 일치 정도\n- 평가 방법들이 존재\n  - 작업자들의 일치도록 평가하기 때문에 다수가 잘못된 선택을 하는 경우 보완\n\n### IAA를 활용한 데이터 클렌징 방법\n- pass\n\n### 데이터 스플릿\n- 과적합 방지\n- 데이터 샘플링\n  - 이점\n    - 정확성, 편향 제거, 위험 감소\n  - 방식\n    - 확률적 샘프링\n    - 비확률적 샘플링\n  - 한계\n    - 편향이 생길 수도 있다.\n\n### 합성 데이터 - CV (이론)\n- GANs\n- VAE\n- Diffusion\n\n### 합성 데이터 - CV (실습)\n\n### 합성 데이터 - NLP (이론)\n- RNN\n- BART\n- LLM\n\n### 합성 데이터 - NLP (실습)\n\n### 액티브 러닝 (이론)\n- 모델로 라벨링 -\u003e 사람이 다시 라벨링 -\u003e 라벨링 경계 업데이트\n\n### 액티브 러닝 (실습)\n- 생략\n\n### 데이터 릴리즈\n- 고려사항\n  - 품질\n  - 라이센스 권리표시\n  - 개인정보 보호 문제\n  - 윤리적 고려사항\n- 릴리즈 플랫폼\n  - https://paperswithcode.com/datasets\n  - https://huggingface.co/datasets\n  - https://kaggle.com/datasets\n\n### CV 데이터 제작 실습\n- 세그멘테이션 관련\n\n### NLP 데이터 제작 실습\n- 데이터 NER관련해서 해당 수동 태깅(툴 사용)하고 돌려보라는 뜻\n- 생략\n\n## link\n- [[wn.private:upstage-ai-lab-day-102]]\n- [[upstage-ai-lab]]\n- [[upstage-ai-lab-day-98]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"### Data Centric\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"### Data Centric\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/upstage-ai-lab-day-102\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"### Data Centric\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

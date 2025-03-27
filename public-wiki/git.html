@@ -1,0 +1,833 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-4cf5e0b6c08b989f.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-bfc5f34ea7491706.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># Git</title><meta name="description" content="
+분산저장관리
+공식문서: https://git-scm.com/book/ko/v2
+
+## by-command
+- [[git-apply]]
+- [[git-add]]
+- [[git-branch]]
+- [[git-commit]]
+- [[git-check-ignore]]
+- [[git-checkout]]
+- [[git-cherry-pick]]
+- [[git-clean]]
+- [[git-clone]]
+- [[git-config]]
+- [[git-diff]]
+- [[git-difftool]]
+- [[git-fetch]]
+- [[git-grep]]
+- [[git-log]]
+- [[git-pull]]
+- [[git-rebase]]
+- [[git-reset]]
+- [[git-merge-base]]
+- [[git-restore]]
+- [[git-show]]
+- [[git-sparse-checkout]]
+- [[git-stash]]
+- [[git-status]]
+- [[git-subtree]]
+- [[git-submodule]]
+- [[git-tag]]
+- [[git-bisect]]
+- [[git-credential-manager]]
+- [[git-filter-branch]]
+- [[git-filter-repo]]
+- [[git-bundle]]
+- [[git-unbundle]]
+
+## files
+- [[path|.gitconfig]]
+
+## 특정 커밋 내용 가져와서 적용
+  - https://stackoverflow.com/questions/5717026/how-to-git-cherry-pick-only-changes-to-certain-files
+  ```sh
+   git show [SHA] -- [FILE1] [FILE2] | git apply -
+  ```
+  ```sh
+   git cherry-pink -n [SHA]
+  ```
+
+## 특정 커밋 내용 확인
+  ```sh
+  git show [SHA]:[PATH]
+  ```
+
+##  특정 커밋 내용 비교
+  ```sh
+  git diff [SHA0] [SHA1] [PATH]
+  ```
+
+## 깃에서 관리하는 파일인지 확인
+```sh
+git ls-files [FILE]
+```
+
+## 깃에서 무시하는 파일인지 확인
+```sh
+git check-ignore -v [FILE]
+```
+```sh
+# list
+git status --ignored [FILE]
+```
+
+## rebase -i
+```sh
+git log branch/a branch/b
+* (3시간 전) c003c2c
+* (3시간 전) c338742
+* (3시간 전) ab1a091
+* (3시간 전) b44a769
+* (3시간 전) 93c7114
+* (3시간 전) 54d0235
+* (3시간 전) 77c0b5b
+* (3시간 전) e5143b1
+* (3시간 전) 4c1a5db
+* (3시간 전) a288ffb
+* (3시간 전) b86b554
+* (3시간 전) 75942cd
+* (3시간 전) dece25b
+* (3시간 전) 3e293e3
+* (3시간 전) e21c75b
+* (3시간 전) c79629d
+| * (6시간 전) 20ad4e2
+| * (7시간 전) 88fa156
+| * (8시간 전) 063c591
+| * (8시간 전) c8c7df7
+| * (8시간 전) 282f7b9
+| * (8시간 전) fae9472
+| * (8시간 전) 4a0981a
+| * (8시간 전) b500bf4
+| * (9시간 전) 3edc586
+| * (9시간 전) e7027c5
+| * (9시간 전) 643d23a
+| * (9시간 전) 4725f0f
+| * (9시간 전) e32ed20
+| * (9시간 전) db03f27
+| * (9시간 전) 5b84a5f
+| * (9시간 전) 1a3949f
+| * (10시간 전) 365b2e1
+| * (11시간 전) 62b965b
+| * (11시간 전) 215e993
+| * (11시간 전) 9ba8cba
+| * (11시간 전) 3235509
+|/
+* (12시간 전) 93e9e47
+* 
+```
+```sh
+$ git log branch/a..branch/b
+* (3시간 전) c003c2c
+* (3시간 전) c338742
+* (3시간 전) ab1a091
+* (3시간 전) b44a769
+* (3시간 전) 93c7114
+* (3시간 전) 54d0235
+* (3시간 전) 77c0b5b
+* (3시간 전) e5143b1
+* (3시간 전) 4c1a5db
+* (3시간 전) a288ffb
+* (3시간 전) b86b554
+* (3시간 전) 75942cd
+* (3시간 전) dece25b
+* (3시간 전) 3e293e3
+* (3시간 전) e21c75b
+* (3시간 전) c79629d
+```
+```sh
+$ git rebase -i \
+ $(git merge-base master branch/air) # vimwiki [[issue]] 로 2줄 작성
+```
+
+## --ancestry-path
+&gt; HEAD 가 아닌 중간으로 checkout 한 경우 HEAD(SHA_02) 까지 전진
+```sh
+$ git log --ancestry-path [SHA_01]..HEAD
+```
+
+```sh
+$ git merge-base branch/a branch/b
+93e9e47
+```
+```sh
+$ git log --ancestry-path 93e9e47..branch/b
+* (3시간 전) c003c2c
+* (3시간 전) c338742
+* (3시간 전) ab1a091
+* (3시간 전) b44a769
+* (3시간 전) 93c7114
+* (3시간 전) 54d0235
+* (3시간 전) 77c0b5b
+* (3시간 전) e5143b1
+* (3시간 전) 4c1a5db
+* (3시간 전) a288ffb
+* (3시간 전) b86b554
+* (3시간 전) 75942cd
+* (3시간 전) dece25b
+* (3시간 전) 3e293e3
+* (3시간 전) e21c75b
+* (3시간 전) c79629d
+```
+```sh
+$ git 
+```
+
+## untracked 파일 지우기
+```sh
+git clean -fd
+```
+- `-f` : 파일
+- `-d` : 디렉토리
+
+## url 변경하기
+하드코딩된 url 때문에 다중 계정을 이용하는 경우 고통받을 수 있다.
+다중 계정은 로컬에서key 파일을 통해서 인증 정보를 관리할 텐데 이런 경우 ssh 가 사용된다.
+
+`[[.gitconfig-url]]` 을 설정한다.
+
+## feature 브랜치 변경된 파일들 stage 화
+### reset 후
+```sh
+git switch feature
+git reset --mixed $(git merge-base master @)
+```
+
+#### 1. 변경된 파일 모두 버퍼로
+`vim $(git diff --name-only)`
+#### 2. 상태값으로 필터
+`vim $(git status -s | grep &quot;[^D] &quot; | awk &#x27;{print $2}&#x27;)`
+
+### 보기만
+`vim $(git diff --name-status master.. | rg &quot;[^D]\t&quot; | awk &#x27;{print $[[2]]}&#x27;)`
+
+## plumping 명령어
+- `git rev-parse`: 브랜치명이나 태그를 커밋 해시로 리턴한다.
+- `git rev-list`: git log 등의 레인지를 가지는 결과를 기반으로 커밋 해시만 뽑아낸다.
+  - `--abbrev-commit` 옵션 가능
+
+## releated
+- [[github]]
+- [[vim]]
+- [[tig]]
+- [[alias]]
+- [[git-alias]]
+- [[git-lfs]]
+- [[gist]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# Git"/><meta property="og:description" content="
+분산저장관리
+공식문서: https://git-scm.com/book/ko/v2
+
+## by-command
+- [[git-apply]]
+- [[git-add]]
+- [[git-branch]]
+- [[git-commit]]
+- [[git-check-ignore]]
+- [[git-checkout]]
+- [[git-cherry-pick]]
+- [[git-clean]]
+- [[git-clone]]
+- [[git-config]]
+- [[git-diff]]
+- [[git-difftool]]
+- [[git-fetch]]
+- [[git-grep]]
+- [[git-log]]
+- [[git-pull]]
+- [[git-rebase]]
+- [[git-reset]]
+- [[git-merge-base]]
+- [[git-restore]]
+- [[git-show]]
+- [[git-sparse-checkout]]
+- [[git-stash]]
+- [[git-status]]
+- [[git-subtree]]
+- [[git-submodule]]
+- [[git-tag]]
+- [[git-bisect]]
+- [[git-credential-manager]]
+- [[git-filter-branch]]
+- [[git-filter-repo]]
+- [[git-bundle]]
+- [[git-unbundle]]
+
+## files
+- [[path|.gitconfig]]
+
+## 특정 커밋 내용 가져와서 적용
+  - https://stackoverflow.com/questions/5717026/how-to-git-cherry-pick-only-changes-to-certain-files
+  ```sh
+   git show [SHA] -- [FILE1] [FILE2] | git apply -
+  ```
+  ```sh
+   git cherry-pink -n [SHA]
+  ```
+
+## 특정 커밋 내용 확인
+  ```sh
+  git show [SHA]:[PATH]
+  ```
+
+##  특정 커밋 내용 비교
+  ```sh
+  git diff [SHA0] [SHA1] [PATH]
+  ```
+
+## 깃에서 관리하는 파일인지 확인
+```sh
+git ls-files [FILE]
+```
+
+## 깃에서 무시하는 파일인지 확인
+```sh
+git check-ignore -v [FILE]
+```
+```sh
+# list
+git status --ignored [FILE]
+```
+
+## rebase -i
+```sh
+git log branch/a branch/b
+* (3시간 전) c003c2c
+* (3시간 전) c338742
+* (3시간 전) ab1a091
+* (3시간 전) b44a769
+* (3시간 전) 93c7114
+* (3시간 전) 54d0235
+* (3시간 전) 77c0b5b
+* (3시간 전) e5143b1
+* (3시간 전) 4c1a5db
+* (3시간 전) a288ffb
+* (3시간 전) b86b554
+* (3시간 전) 75942cd
+* (3시간 전) dece25b
+* (3시간 전) 3e293e3
+* (3시간 전) e21c75b
+* (3시간 전) c79629d
+| * (6시간 전) 20ad4e2
+| * (7시간 전) 88fa156
+| * (8시간 전) 063c591
+| * (8시간 전) c8c7df7
+| * (8시간 전) 282f7b9
+| * (8시간 전) fae9472
+| * (8시간 전) 4a0981a
+| * (8시간 전) b500bf4
+| * (9시간 전) 3edc586
+| * (9시간 전) e7027c5
+| * (9시간 전) 643d23a
+| * (9시간 전) 4725f0f
+| * (9시간 전) e32ed20
+| * (9시간 전) db03f27
+| * (9시간 전) 5b84a5f
+| * (9시간 전) 1a3949f
+| * (10시간 전) 365b2e1
+| * (11시간 전) 62b965b
+| * (11시간 전) 215e993
+| * (11시간 전) 9ba8cba
+| * (11시간 전) 3235509
+|/
+* (12시간 전) 93e9e47
+* 
+```
+```sh
+$ git log branch/a..branch/b
+* (3시간 전) c003c2c
+* (3시간 전) c338742
+* (3시간 전) ab1a091
+* (3시간 전) b44a769
+* (3시간 전) 93c7114
+* (3시간 전) 54d0235
+* (3시간 전) 77c0b5b
+* (3시간 전) e5143b1
+* (3시간 전) 4c1a5db
+* (3시간 전) a288ffb
+* (3시간 전) b86b554
+* (3시간 전) 75942cd
+* (3시간 전) dece25b
+* (3시간 전) 3e293e3
+* (3시간 전) e21c75b
+* (3시간 전) c79629d
+```
+```sh
+$ git rebase -i \
+ $(git merge-base master branch/air) # vimwiki [[issue]] 로 2줄 작성
+```
+
+## --ancestry-path
+&gt; HEAD 가 아닌 중간으로 checkout 한 경우 HEAD(SHA_02) 까지 전진
+```sh
+$ git log --ancestry-path [SHA_01]..HEAD
+```
+
+```sh
+$ git merge-base branch/a branch/b
+93e9e47
+```
+```sh
+$ git log --ancestry-path 93e9e47..branch/b
+* (3시간 전) c003c2c
+* (3시간 전) c338742
+* (3시간 전) ab1a091
+* (3시간 전) b44a769
+* (3시간 전) 93c7114
+* (3시간 전) 54d0235
+* (3시간 전) 77c0b5b
+* (3시간 전) e5143b1
+* (3시간 전) 4c1a5db
+* (3시간 전) a288ffb
+* (3시간 전) b86b554
+* (3시간 전) 75942cd
+* (3시간 전) dece25b
+* (3시간 전) 3e293e3
+* (3시간 전) e21c75b
+* (3시간 전) c79629d
+```
+```sh
+$ git 
+```
+
+## untracked 파일 지우기
+```sh
+git clean -fd
+```
+- `-f` : 파일
+- `-d` : 디렉토리
+
+## url 변경하기
+하드코딩된 url 때문에 다중 계정을 이용하는 경우 고통받을 수 있다.
+다중 계정은 로컬에서key 파일을 통해서 인증 정보를 관리할 텐데 이런 경우 ssh 가 사용된다.
+
+`[[.gitconfig-url]]` 을 설정한다.
+
+## feature 브랜치 변경된 파일들 stage 화
+### reset 후
+```sh
+git switch feature
+git reset --mixed $(git merge-base master @)
+```
+
+#### 1. 변경된 파일 모두 버퍼로
+`vim $(git diff --name-only)`
+#### 2. 상태값으로 필터
+`vim $(git status -s | grep &quot;[^D] &quot; | awk &#x27;{print $2}&#x27;)`
+
+### 보기만
+`vim $(git diff --name-status master.. | rg &quot;[^D]\t&quot; | awk &#x27;{print $[[2]]}&#x27;)`
+
+## plumping 명령어
+- `git rev-parse`: 브랜치명이나 태그를 커밋 해시로 리턴한다.
+- `git rev-list`: git log 등의 레인지를 가지는 결과를 기반으로 커밋 해시만 뽑아낸다.
+  - `--abbrev-commit` 옵션 가능
+
+## releated
+- [[github]]
+- [[vim]]
+- [[tig]]
+- [[alias]]
+- [[git-alias]]
+- [[git-lfs]]
+- [[gist]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/git"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# Git"/><meta name="twitter:description" content="
+분산저장관리
+공식문서: https://git-scm.com/book/ko/v2
+
+## by-command
+- [[git-apply]]
+- [[git-add]]
+- [[git-branch]]
+- [[git-commit]]
+- [[git-check-ignore]]
+- [[git-checkout]]
+- [[git-cherry-pick]]
+- [[git-clean]]
+- [[git-clone]]
+- [[git-config]]
+- [[git-diff]]
+- [[git-difftool]]
+- [[git-fetch]]
+- [[git-grep]]
+- [[git-log]]
+- [[git-pull]]
+- [[git-rebase]]
+- [[git-reset]]
+- [[git-merge-base]]
+- [[git-restore]]
+- [[git-show]]
+- [[git-sparse-checkout]]
+- [[git-stash]]
+- [[git-status]]
+- [[git-subtree]]
+- [[git-submodule]]
+- [[git-tag]]
+- [[git-bisect]]
+- [[git-credential-manager]]
+- [[git-filter-branch]]
+- [[git-filter-repo]]
+- [[git-bundle]]
+- [[git-unbundle]]
+
+## files
+- [[path|.gitconfig]]
+
+## 특정 커밋 내용 가져와서 적용
+  - https://stackoverflow.com/questions/5717026/how-to-git-cherry-pick-only-changes-to-certain-files
+  ```sh
+   git show [SHA] -- [FILE1] [FILE2] | git apply -
+  ```
+  ```sh
+   git cherry-pink -n [SHA]
+  ```
+
+## 특정 커밋 내용 확인
+  ```sh
+  git show [SHA]:[PATH]
+  ```
+
+##  특정 커밋 내용 비교
+  ```sh
+  git diff [SHA0] [SHA1] [PATH]
+  ```
+
+## 깃에서 관리하는 파일인지 확인
+```sh
+git ls-files [FILE]
+```
+
+## 깃에서 무시하는 파일인지 확인
+```sh
+git check-ignore -v [FILE]
+```
+```sh
+# list
+git status --ignored [FILE]
+```
+
+## rebase -i
+```sh
+git log branch/a branch/b
+* (3시간 전) c003c2c
+* (3시간 전) c338742
+* (3시간 전) ab1a091
+* (3시간 전) b44a769
+* (3시간 전) 93c7114
+* (3시간 전) 54d0235
+* (3시간 전) 77c0b5b
+* (3시간 전) e5143b1
+* (3시간 전) 4c1a5db
+* (3시간 전) a288ffb
+* (3시간 전) b86b554
+* (3시간 전) 75942cd
+* (3시간 전) dece25b
+* (3시간 전) 3e293e3
+* (3시간 전) e21c75b
+* (3시간 전) c79629d
+| * (6시간 전) 20ad4e2
+| * (7시간 전) 88fa156
+| * (8시간 전) 063c591
+| * (8시간 전) c8c7df7
+| * (8시간 전) 282f7b9
+| * (8시간 전) fae9472
+| * (8시간 전) 4a0981a
+| * (8시간 전) b500bf4
+| * (9시간 전) 3edc586
+| * (9시간 전) e7027c5
+| * (9시간 전) 643d23a
+| * (9시간 전) 4725f0f
+| * (9시간 전) e32ed20
+| * (9시간 전) db03f27
+| * (9시간 전) 5b84a5f
+| * (9시간 전) 1a3949f
+| * (10시간 전) 365b2e1
+| * (11시간 전) 62b965b
+| * (11시간 전) 215e993
+| * (11시간 전) 9ba8cba
+| * (11시간 전) 3235509
+|/
+* (12시간 전) 93e9e47
+* 
+```
+```sh
+$ git log branch/a..branch/b
+* (3시간 전) c003c2c
+* (3시간 전) c338742
+* (3시간 전) ab1a091
+* (3시간 전) b44a769
+* (3시간 전) 93c7114
+* (3시간 전) 54d0235
+* (3시간 전) 77c0b5b
+* (3시간 전) e5143b1
+* (3시간 전) 4c1a5db
+* (3시간 전) a288ffb
+* (3시간 전) b86b554
+* (3시간 전) 75942cd
+* (3시간 전) dece25b
+* (3시간 전) 3e293e3
+* (3시간 전) e21c75b
+* (3시간 전) c79629d
+```
+```sh
+$ git rebase -i \
+ $(git merge-base master branch/air) # vimwiki [[issue]] 로 2줄 작성
+```
+
+## --ancestry-path
+&gt; HEAD 가 아닌 중간으로 checkout 한 경우 HEAD(SHA_02) 까지 전진
+```sh
+$ git log --ancestry-path [SHA_01]..HEAD
+```
+
+```sh
+$ git merge-base branch/a branch/b
+93e9e47
+```
+```sh
+$ git log --ancestry-path 93e9e47..branch/b
+* (3시간 전) c003c2c
+* (3시간 전) c338742
+* (3시간 전) ab1a091
+* (3시간 전) b44a769
+* (3시간 전) 93c7114
+* (3시간 전) 54d0235
+* (3시간 전) 77c0b5b
+* (3시간 전) e5143b1
+* (3시간 전) 4c1a5db
+* (3시간 전) a288ffb
+* (3시간 전) b86b554
+* (3시간 전) 75942cd
+* (3시간 전) dece25b
+* (3시간 전) 3e293e3
+* (3시간 전) e21c75b
+* (3시간 전) c79629d
+```
+```sh
+$ git 
+```
+
+## untracked 파일 지우기
+```sh
+git clean -fd
+```
+- `-f` : 파일
+- `-d` : 디렉토리
+
+## url 변경하기
+하드코딩된 url 때문에 다중 계정을 이용하는 경우 고통받을 수 있다.
+다중 계정은 로컬에서key 파일을 통해서 인증 정보를 관리할 텐데 이런 경우 ssh 가 사용된다.
+
+`[[.gitconfig-url]]` 을 설정한다.
+
+## feature 브랜치 변경된 파일들 stage 화
+### reset 후
+```sh
+git switch feature
+git reset --mixed $(git merge-base master @)
+```
+
+#### 1. 변경된 파일 모두 버퍼로
+`vim $(git diff --name-only)`
+#### 2. 상태값으로 필터
+`vim $(git status -s | grep &quot;[^D] &quot; | awk &#x27;{print $2}&#x27;)`
+
+### 보기만
+`vim $(git diff --name-status master.. | rg &quot;[^D]\t&quot; | awk &#x27;{print $[[2]]}&#x27;)`
+
+## plumping 명령어
+- `git rev-parse`: 브랜치명이나 태그를 커밋 해시로 리턴한다.
+- `git rev-list`: git log 등의 레인지를 가지는 결과를 기반으로 커밋 해시만 뽑아낸다.
+  - `--abbrev-commit` 옵션 가능
+
+## releated
+- [[github]]
+- [[vim]]
+- [[tig]]
+- [[alias]]
+- [[git-alias]]
+- [[git-lfs]]
+- [[gist]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/a51c46d
+" class="bg-white text-black">a51c46d</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/git.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/git.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/git.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/git"><span class="underline">git</span><sup>44</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-apply"><span class="underline">git-apply</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-add"><span class="underline">git-add</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-branch"><span class="underline">git-branch</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-commit"><span class="underline">git-commit</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-check-ignore"><span class="underline">git-check-ignore</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-checkout"><span class="underline">git-checkout</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-cherry-pick"><span class="underline">git-cherry-pick</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-clean"><span class="underline">git-clean</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-clone"><span class="underline">git-clone</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-config"><span class="underline">git-config</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-diff"><span class="underline">git-diff</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-difftool"><span class="underline">git-difftool</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-fetch"><span class="underline">git-fetch</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-grep"><span class="underline">git-grep</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-log"><span class="underline">git-log</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-pull"><span class="underline">git-pull</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-rebase"><span class="underline">git-rebase</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-reset"><span class="underline">git-reset</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-merge-base"><span class="underline">git-merge-base</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-restore"><span class="underline">git-restore</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-show"><span class="underline">git-show</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-sparse-checkout"><span class="underline">git-sparse-checkout</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-stash"><span class="underline">git-stash</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-status"><span class="underline">git-status</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-subtree"><span class="underline">git-subtree</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-submodule"><span class="underline">git-submodule</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-tag"><span class="underline">git-tag</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-bisect"><span class="underline">git-bisect</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-credential-manager"><span class="underline">git-credential-manager</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-filter-branch"><span class="underline">git-filter-branch</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-filter-repo"><span class="underline">git-filter-repo</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-bundle"><span class="underline">git-bundle</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-unbundle"><span class="underline">git-unbundle</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/path"><span class="underline">path</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/issue"><span class="underline">issue</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/.gitconfig-url"><span class="underline">.gitconfig-url</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/2"><span class="underline">2</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/github"><span class="underline">github</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vim"><span class="underline">vim</span><sup>20</sup></a></span><span><a class="text-blue-600" href="/public-wiki/tig"><span class="underline">tig</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/alias"><span class="underline">alias</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-alias"><span class="underline">git-alias</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-lfs"><span class="underline">git-lfs</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/gist"><span class="underline">gist</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/@todo"><span class="underline">@todo</span><sup>24</sup></a></span><span><a class="text-blue-600" href="/public-wiki/alacritty"><span class="underline">alacritty</span><sup>12</sup></a></span><span><a class="text-blue-600" href="/public-wiki/argocd"><span class="underline">argocd</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/bruno"><span class="underline">bruno</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ci"><span class="underline">ci</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/delta"><span class="underline">delta</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/deptno.dev"><span class="underline">deptno.dev</span><sup>17</sup></a></span><span><a class="text-blue-600" href="/public-wiki/difftastic"><span class="underline">difftastic</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/dvc"><span class="underline">dvc</span><sup>18</sup></a></span><span><a class="text-blue-600" href="/public-wiki/fzf"><span class="underline">fzf</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-push"><span class="underline">git-push</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/gitsigns"><span class="underline">gitsigns</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ios"><span class="underline">ios</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/lazygit"><span class="underline">lazygit</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/neovim"><span class="underline">neovim</span><sup>22</sup></a></span><span><a class="text-blue-600" href="/public-wiki/retrospect"><span class="underline">retrospect</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/terminal"><span class="underline">terminal</span><sup>86</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-19"><span class="underline">upstage-ai-lab-day-19</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-24"><span class="underline">upstage-ai-lab-day-24</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-43"><span class="underline">upstage-ai-lab-day-43</span><sup>10</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-project-04"><span class="underline">upstage-ai-lab-project-04</span><sup>31</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-project-05"><span class="underline">upstage-ai-lab-project-05</span><sup>27</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-11-18"><span class="underline">diary/2023-11-18</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-12"><span class="underline">diary/2023-12-12</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-02"><span class="underline">diary/2024-01-02</span><sup>10</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-12-31"><span class="underline">diary/2024-12-31</span><sup>441</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#git">Git</a></div><div class="pl-2"><a href="#by-command">by-command</a></div><div class="pl-2"><a href="#files">files</a></div><div class="pl-2"><a href="#특정-커밋-내용-가져와서-적용">특정 커밋 내용 가져와서 적용</a></div><div class="pl-2"><a href="#특정-커밋-내용-확인">특정 커밋 내용 확인</a></div><div class="pl-2"><a href="#특정-커밋-내용-비교">특정 커밋 내용 비교</a></div><div class="pl-2"><a href="#깃에서-관리하는-파일인지-확인">깃에서 관리하는 파일인지 확인</a></div><div class="pl-2"><a href="#깃에서-무시하는-파일인지-확인">깃에서 무시하는 파일인지 확인</a></div><div class="pl-2"><a href="#rebase--i">rebase -i</a></div><div class="pl-2"><a href="#--ancestry-path">--ancestry-path</a></div><div class="pl-2"><a href="#untracked-파일-지우기">untracked 파일 지우기</a></div><div class="pl-2"><a href="#url-변경하기">url 변경하기</a></div><div class="pl-2"><a href="#feature-브랜치-변경된-파일들-stage-화">feature 브랜치 변경된 파일들 stage 화</a></div><div class="pl-4"><a href="#reset-후">reset 후</a></div><div class="pl-6"><a href="#1-변경된-파일-모두-버퍼로">1. 변경된 파일 모두 버퍼로</a></div><div class="pl-6"><a href="#2-상태값으로-필터">2. 상태값으로 필터</a></div><div class="pl-4"><a href="#보기만">보기만</a></div><div class="pl-2"><a href="#plumping-명령어">plumping 명령어</a></div><div class="pl-2"><a href="#releated">releated</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="git">Git</h1>
+<p>분산저장관리
+공식문서: <a href="https://git-scm.com/book/ko/v2" target="_blank">[URL] https://git-scm.com/book/ko/v2</a></p>
+<h2 id="by-command">by-command</h2>
+<ul>
+<li><a href="git-apply">git-apply</a></li>
+<li><a href="git-add">git-add</a></li>
+<li><a href="git-branch">git-branch</a></li>
+<li><a href="git-commit">git-commit</a></li>
+<li><a href="git-check-ignore">git-check-ignore</a></li>
+<li><a href="git-checkout">git-checkout</a></li>
+<li><a href="git-cherry-pick">git-cherry-pick</a></li>
+<li><a href="git-clean">git-clean</a></li>
+<li><a href="git-clone">git-clone</a></li>
+<li><a href="git-config">git-config</a></li>
+<li><a href="git-diff">git-diff</a></li>
+<li><a href="git-difftool">git-difftool</a></li>
+<li><a href="git-fetch">git-fetch</a></li>
+<li><a href="git-grep">git-grep</a></li>
+<li><a href="git-log">git-log</a></li>
+<li><a href="git-pull">git-pull</a></li>
+<li><a href="git-rebase">git-rebase</a></li>
+<li><a href="git-reset">git-reset</a></li>
+<li><a href="git-merge-base">git-merge-base</a></li>
+<li><a href="git-restore">git-restore</a></li>
+<li><a href="git-show">git-show</a></li>
+<li><a href="git-sparse-checkout">git-sparse-checkout</a></li>
+<li><a href="git-stash">git-stash</a></li>
+<li><a href="git-status">git-status</a></li>
+<li><a href="git-subtree">git-subtree</a></li>
+<li><a href="git-submodule">git-submodule</a></li>
+<li><a href="git-tag">git-tag</a></li>
+<li><a href="git-bisect">git-bisect</a></li>
+<li><a href="git-credential-manager">git-credential-manager</a></li>
+<li><a href="git-filter-branch">git-filter-branch</a></li>
+<li><a href="git-filter-repo">git-filter-repo</a></li>
+<li><a href="git-bundle">git-bundle</a></li>
+<li><a href="git-unbundle">git-unbundle</a></li>
+</ul>
+<h2 id="files">files</h2>
+<ul>
+<li><a href="path">.gitconfig</a></li>
+</ul>
+<h2 id="특정-커밋-내용-가져와서-적용">특정 커밋 내용 가져와서 적용</h2>
+<ul>
+<li><a href="https://stackoverflow.com/questions/5717026/how-to-git-cherry-pick-only-changes-to-certain-files" target="_blank">[URL] https://stackoverflow.com/questions/5717026/how-to-git-cherry-pick-only-changes-to-certain-files</a></li>
+</ul>
+<pre><code class="hljs language-sh"> git show [SHA] -- [FILE1] [FILE2] | git apply -
+</code></pre><pre><code class="hljs language-sh"> git cherry-pink -n [SHA]
+</code></pre><h2 id="특정-커밋-내용-확인">특정 커밋 내용 확인</h2>
+<pre><code class="hljs language-sh">git show [SHA]:[PATH]
+</code></pre><h2 id="특정-커밋-내용-비교">특정 커밋 내용 비교</h2>
+<pre><code class="hljs language-sh">git diff [SHA0] [SHA1] [PATH]
+</code></pre><h2 id="깃에서-관리하는-파일인지-확인">깃에서 관리하는 파일인지 확인</h2>
+<pre><code class="hljs language-sh">git ls-files [FILE]
+</code></pre><h2 id="깃에서-무시하는-파일인지-확인">깃에서 무시하는 파일인지 확인</h2>
+<pre><code class="hljs language-sh">git check-ignore -v [FILE]
+</code></pre><pre><code class="hljs language-sh"><span class="hljs-comment"># list</span>
+git status --ignored [FILE]
+</code></pre><h2 id="rebase--i">rebase -i</h2>
+<pre><code class="hljs language-sh">git <span class="hljs-built_in">log</span> branch/a branch/b
+* (3시간 전) c003c2c
+* (3시간 전) c338742
+* (3시간 전) ab1a091
+* (3시간 전) b44a769
+* (3시간 전) 93c7114
+* (3시간 전) 54d0235
+* (3시간 전) 77c0b5b
+* (3시간 전) e5143b1
+* (3시간 전) 4c1a5db
+* (3시간 전) a288ffb
+* (3시간 전) b86b554
+* (3시간 전) 75942cd
+* (3시간 전) dece25b
+* (3시간 전) 3e293e3
+* (3시간 전) e21c75b
+* (3시간 전) c79629d
+| * (6시간 전) 20ad4e2
+| * (7시간 전) 88fa156
+| * (8시간 전) 063c591
+| * (8시간 전) c8c7df7
+| * (8시간 전) 282f7b9
+| * (8시간 전) fae9472
+| * (8시간 전) 4a0981a
+| * (8시간 전) b500bf4
+| * (9시간 전) 3edc586
+| * (9시간 전) e7027c5
+| * (9시간 전) 643d23a
+| * (9시간 전) 4725f0f
+| * (9시간 전) e32ed20
+| * (9시간 전) db03f27
+| * (9시간 전) 5b84a5f
+| * (9시간 전) 1a3949f
+| * (10시간 전) 365b2e1
+| * (11시간 전) 62b965b
+| * (11시간 전) 215e993
+| * (11시간 전) 9ba8cba
+| * (11시간 전) 3235509
+|/
+* (12시간 전) 93e9e47
+* 
+</code></pre><pre><code class="hljs language-sh">$ git <span class="hljs-built_in">log</span> branch/a..branch/b
+* (3시간 전) c003c2c
+* (3시간 전) c338742
+* (3시간 전) ab1a091
+* (3시간 전) b44a769
+* (3시간 전) 93c7114
+* (3시간 전) 54d0235
+* (3시간 전) 77c0b5b
+* (3시간 전) e5143b1
+* (3시간 전) 4c1a5db
+* (3시간 전) a288ffb
+* (3시간 전) b86b554
+* (3시간 전) 75942cd
+* (3시간 전) dece25b
+* (3시간 전) 3e293e3
+* (3시간 전) e21c75b
+* (3시간 전) c79629d
+</code></pre><pre><code class="hljs language-sh">$ git rebase -i \
+ $(git merge-base master branch/air) <span class="hljs-comment"># vimwiki [issue](issue) 로 2줄 작성</span>
+</code></pre><h2 id="--ancestry-path">--ancestry-path</h2>
+<blockquote><p>HEAD 가 아닌 중간으로 checkout 한 경우 HEAD(SHA_02) 까지 전진</p></blockquote><pre><code class="hljs language-sh">$ git <span class="hljs-built_in">log</span> --ancestry-path [SHA_01]..HEAD
+</code></pre><pre><code class="hljs language-sh">$ git merge-base branch/a branch/b
+93e9e47
+</code></pre><pre><code class="hljs language-sh">$ git <span class="hljs-built_in">log</span> --ancestry-path 93e9e47..branch/b
+* (3시간 전) c003c2c
+* (3시간 전) c338742
+* (3시간 전) ab1a091
+* (3시간 전) b44a769
+* (3시간 전) 93c7114
+* (3시간 전) 54d0235
+* (3시간 전) 77c0b5b
+* (3시간 전) e5143b1
+* (3시간 전) 4c1a5db
+* (3시간 전) a288ffb
+* (3시간 전) b86b554
+* (3시간 전) 75942cd
+* (3시간 전) dece25b
+* (3시간 전) 3e293e3
+* (3시간 전) e21c75b
+* (3시간 전) c79629d
+</code></pre><pre><code class="hljs language-sh">$ git 
+</code></pre><h2 id="untracked-파일-지우기">untracked 파일 지우기</h2>
+<pre><code class="hljs language-sh">git clean -fd
+</code></pre><ul>
+<li><code class="span">-f</code> : 파일</li>
+<li><code class="span">-d</code> : 디렉토리</li>
+</ul>
+<h2 id="url-변경하기">url 변경하기</h2>
+<p>하드코딩된 url 때문에 다중 계정을 이용하는 경우 고통받을 수 있다.
+다중 계정은 로컬에서key 파일을 통해서 인증 정보를 관리할 텐데 이런 경우 ssh 가 사용된다.</p>
+<p><code class="span">[.gitconfig-url](.gitconfig-url)</code> 을 설정한다.</p>
+<h2 id="feature-브랜치-변경된-파일들-stage-화">feature 브랜치 변경된 파일들 stage 화</h2>
+<h3 id="reset-후">reset 후</h3>
+<pre><code class="hljs language-sh">git switch feature
+git reset --mixed $(git merge-base master @)
+</code></pre><h4 id="1-변경된-파일-모두-버퍼로">1. 변경된 파일 모두 버퍼로</h4>
+<p><code class="span">vim $(git diff --name-only)</code></p>
+<h4 id="2-상태값으로-필터">2. 상태값으로 필터</h4>
+<p><code class="span">vim $(git status -s | grep &quot;[^D] &quot; | awk &#39;{print $2}&#39;)</code></p>
+<h3 id="보기만">보기만</h3>
+<p><code class="span">vim $(git diff --name-status master.. | rg &quot;[^D]\t&quot; | awk &#39;{print $[2](2)}&#39;)</code></p>
+<h2 id="plumping-명령어">plumping 명령어</h2>
+<ul>
+<li><code class="span">git rev-parse</code>: 브랜치명이나 태그를 커밋 해시로 리턴한다.</li>
+<li><code class="span">git rev-list</code>: git log 등의 레인지를 가지는 결과를 기반으로 커밋 해시만 뽑아낸다.<ul>
+<li><code class="span">--abbrev-commit</code> 옵션 가능</li>
+</ul>
+</li>
+</ul>
+<h2 id="releated">releated</h2>
+<ul>
+<li><a href="github">github</a></li>
+<li><a href="vim">vim</a></li>
+<li><a href="tig">tig</a></li>
+<li><a href="alias">alias</a></li>
+<li><a href="git-alias">git-alias</a></li>
+<li><a href="git-lfs">git-lfs</a></li>
+<li><a href="gist">gist</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-4cf5e0b6c08b989f.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-bfc5f34ea7491706.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"git\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"PlS6BXOsYAhJS3h0y3XpQ\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/git\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"git\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"git\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"git\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T1eac,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"git\"\u003eGit\u003c/h1\u003e\n\u003cp\u003e분산저장관리\n공식문서: \u003ca href=\"https://git-scm.com/book/ko/v2\" target=\"_blank\"\u003e[URL] https://git-scm.com/book/ko/v2\u003c/a\u003e\u003c/p\u003e\n\u003ch2 id=\"by-command\"\u003eby-command\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"git-apply\"\u003egit-apply\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-add\"\u003egit-add\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-branch\"\u003egit-branch\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-commit\"\u003egit-commit\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-check-ignore\"\u003egit-check-ignore\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-checkout\"\u003egit-checkout\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-cherry-pick\"\u003egit-cherry-pick\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-clean\"\u003egit-clean\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-clone\"\u003egit-clone\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-config\"\u003egit-config\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-diff\"\u003egit-diff\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-difftool\"\u003egit-difftool\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-fetch\"\u003egit-fetch\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-grep\"\u003egit-grep\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-log\"\u003egit-log\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-pull\"\u003egit-pull\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-rebase\"\u003egit-rebase\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-reset\"\u003egit-reset\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-merge-base\"\u003egit-merge-base\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-restore\"\u003egit-restore\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-show\"\u003egit-show\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-sparse-checkout\"\u003egit-sparse-checkout\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-stash\"\u003egit-stash\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-status\"\u003egit-status\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-subtree\"\u003egit-subtree\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-submodule\"\u003egit-submodule\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-tag\"\u003egit-tag\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-bisect\"\u003egit-bisect\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-credential-manager\"\u003egit-credential-manager\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-filter-branch\"\u003egit-filter-branch\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-filter-repo\"\u003egit-filter-repo\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-bundle\"\u003egit-bundle\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-unbundle\"\u003egit-unbundle\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"files\"\u003efiles\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"path\"\u003e.gitconfig\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"특정-커밋-내용-가져와서-적용\"\u003e특정 커밋 내용 가져와서 적용\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://stackoverflow.com/questions/5717026/how-to-git-cherry-pick-only-changes-to-certain-files\" target=\"_blank\"\u003e[URL] https://stackoverflow.com/questions/5717026/how-to-git-cherry-pick-only-changes-to-certain-files\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e git show [SHA] -- [FILE1] [FILE2] | git apply -\n\u003c/code\u003e\u003c/pre\u003e\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e git cherry-pink -n [SHA]\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"특정-커밋-내용-확인\"\u003e특정 커밋 내용 확인\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003egit show [SHA]:[PATH]\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"특정-커밋-내용-비교\"\u003e특정 커밋 내용 비교\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003egit diff [SHA0] [SHA1] [PATH]\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"깃에서-관리하는-파일인지-확인\"\u003e깃에서 관리하는 파일인지 확인\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003egit ls-files [FILE]\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"깃에서-무시하는-파일인지-확인\"\u003e깃에서 무시하는 파일인지 확인\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003egit check-ignore -v [FILE]\n\u003c/code\u003e\u003c/pre\u003e\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e\u003cspan class=\"hljs-comment\"\u003e# list\u003c/span\u003e\ngit status --ignored [FILE]\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"rebase--i\"\u003erebase -i\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003egit \u003cspan class=\"hljs-built_in\"\u003elog\u003c/span\u003e branch/a branch/b\n* (3시간 전) c003c2c\n* (3시간 전) c338742\n* (3시간 전) ab1a091\n* (3시간 전) b44a769\n* (3시간 전) 93c7114\n* (3시간 전) 54d0235\n* (3시간 전) 77c0b5b\n* (3시간 전) e5143b1\n* (3시간 전) 4c1a5db\n* (3시간 전) a288ffb\n* (3시간 전) b86b554\n* (3시간 전) 75942cd\n* (3시간 전) dece25b\n* (3시간 전) 3e293e3\n* (3시간 전) e21c75b\n* (3시간 전) c79629d\n| * (6시간 전) 20ad4e2\n| * (7시간 전) 88fa156\n| * (8시간 전) 063c591\n| * (8시간 전) c8c7df7\n| * (8시간 전) 282f7b9\n| * (8시간 전) fae9472\n| * (8시간 전) 4a0981a\n| * (8시간 전) b500bf4\n| * (9시간 전) 3edc586\n| * (9시간 전) e7027c5\n| * (9시간 전) 643d23a\n| * (9시간 전) 4725f0f\n| * (9시간 전) e32ed20\n| * (9시간 전) db03f27\n| * (9시간 전) 5b84a5f\n| * (9시간 전) 1a3949f\n| * (10시간 전) 365b2e1\n| * (11시간 전) 62b965b\n| * (11시간 전) 215e993\n| * (11시간 전) 9ba8cba\n| * (11시간 전) 3235509\n|/\n* (12시간 전) 93e9e47\n* \n\u003c/code\u003e\u003c/pre\u003e\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ git \u003cspan class=\"hljs-built_in\"\u003elog\u003c/span\u003e branch/a..branch/b\n* (3시간 전) c003c2c\n* (3시간 전) c338742\n* (3시간 전) ab1a091\n* (3시간 전) b44a769\n* (3시간 전) 93c7114\n* (3시간 전) 54d0235\n* (3시간 전) 77c0b5b\n* (3시간 전) e5143b1\n* (3시간 전) 4c1a5db\n* (3시간 전) a288ffb\n* (3시간 전) b86b554\n* (3시간 전) 75942cd\n* (3시간 전) dece25b\n* (3시간 전) 3e293e3\n* (3시간 전) e21c75b\n* (3시간 전) c79629d\n\u003c/code\u003e\u003c/pre\u003e\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ git rebase -i \\\n $(git merge-base master branch/air) \u003cspan class=\"hljs-comment\"\u003e# vimwiki [issue](issue) 로 2줄 작성\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"--ancestry-path\"\u003e--ancestry-path\u003c/h2\u003e\n\u003cblockquote\u003e\u003cp\u003eHEAD 가 아닌 중간으로 checkout 한 경우 HEAD(SHA_02) 까지 전진\u003c/p\u003e\u003c/blockquote\u003e\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ git \u003cspan class=\"hljs-built_in\"\u003elog\u003c/span\u003e --ancestry-path [SHA_01]..HEAD\n\u003c/code\u003e\u003c/pre\u003e\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ git merge-base branch/a branch/b\n93e9e47\n\u003c/code\u003e\u003c/pre\u003e\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ git \u003cspan class=\"hljs-built_in\"\u003elog\u003c/span\u003e --ancestry-path 93e9e47..branch/b\n* (3시간 전) c003c2c\n* (3시간 전) c338742\n* (3시간 전) ab1a091\n* (3시간 전) b44a769\n* (3시간 전) 93c7114\n* (3시간 전) 54d0235\n* (3시간 전) 77c0b5b\n* (3시간 전) e5143b1\n* (3시간 전) 4c1a5db\n* (3시간 전) a288ffb\n* (3시간 전) b86b554\n* (3시간 전) 75942cd\n* (3시간 전) dece25b\n* (3시간 전) 3e293e3\n* (3시간 전) e21c75b\n* (3시간 전) c79629d\n\u003c/code\u003e\u003c/pre\u003e\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ git \n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"untracked-파일-지우기\"\u003euntracked 파일 지우기\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003egit clean -fd\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e-f\u003c/code\u003e : 파일\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e-d\u003c/code\u003e : 디렉토리\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"url-변경하기\"\u003eurl 변경하기\u003c/h2\u003e\n\u003cp\u003e하드코딩된 url 때문에 다중 계정을 이용하는 경우 고통받을 수 있다.\n다중 계정은 로컬에서key 파일을 통해서 인증 정보를 관리할 텐데 이런 경우 ssh 가 사용된다.\u003c/p\u003e\n\u003cp\u003e\u003ccode class=\"span\"\u003e[.gitconfig-url](.gitconfig-url)\u003c/code\u003e 을 설정한다.\u003c/p\u003e\n\u003ch2 id=\"feature-브랜치-변경된-파일들-stage-화\"\u003efeature 브랜치 변경된 파일들 stage 화\u003c/h2\u003e\n\u003ch3 id=\"reset-후\"\u003ereset 후\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003egit switch feature\ngit reset --mixed $(git merge-base master @)\n\u003c/code\u003e\u003c/pre\u003e\u003ch4 id=\"1-변경된-파일-모두-버퍼로\"\u003e1. 변경된 파일 모두 버퍼로\u003c/h4\u003e\n\u003cp\u003e\u003ccode class=\"span\"\u003evim $(git diff --name-only)\u003c/code\u003e\u003c/p\u003e\n\u003ch4 id=\"2-상태값으로-필터\"\u003e2. 상태값으로 필터\u003c/h4\u003e\n\u003cp\u003e\u003ccode class=\"span\"\u003evim $(git status -s | grep \u0026quot;[^D] \u0026quot; | awk \u0026#39;{print $2}\u0026#39;)\u003c/code\u003e\u003c/p\u003e\n\u003ch3 id=\"보기만\"\u003e보기만\u003c/h3\u003e\n\u003cp\u003e\u003ccode class=\"span\"\u003evim $(git diff --name-status master.. | rg \u0026quot;[^D]\\t\u0026quot; | awk \u0026#39;{print $[2](2)}\u0026#39;)\u003c/code\u003e\u003c/p\u003e\n\u003ch2 id=\"plumping-명령어\"\u003eplumping 명령어\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003egit rev-parse\u003c/code\u003e: 브랜치명이나 태그를 커밋 해시로 리턴한다.\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003egit rev-list\u003c/code\u003e: git log 등의 레인지를 가지는 결과를 기반으로 커밋 해시만 뽑아낸다.\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e--abbrev-commit\u003c/code\u003e 옵션 가능\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"releated\"\u003ereleated\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"github\"\u003egithub\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"vim\"\u003evim\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"tig\"\u003etig\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"alias\"\u003ealias\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-alias\"\u003egit-alias\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"git-lfs\"\u003egit-lfs\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"gist\"\u003egist\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/a51c46d\\n\",\"className\":\"bg-white text-black\",\"children\":\"a51c46d\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/git.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/git.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/git.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"git\",\"name\":\"git\",\"val\":44},{\"id\":\"git-apply\",\"name\":\"git-apply\",\"val\":\"$undefined\"},{\"id\":\"git-add\",\"name\":\"git-add\",\"val\":2},{\"id\":\"git-branch\",\"name\":\"git-branch\",\"val\":2},{\"id\":\"git-commit\",\"name\":\"git-commit\",\"val\":2},{\"id\":\"git-check-ignore\",\"name\":\"git-check-ignore\",\"val\":\"$undefined\"},{\"id\":\"git-checkout\",\"name\":\"git-checkout\",\"val\":2},{\"id\":\"git-cherry-pick\",\"name\":\"git-cherry-pick\",\"val\":\"$undefined\"},{\"id\":\"git-clean\",\"name\":\"git-clean\",\"val\":2},{\"id\":\"git-clone\",\"name\":\"git-clone\",\"val\":2},{\"id\":\"git-config\",\"name\":\"git-config\",\"val\":1},{\"id\":\"git-diff\",\"name\":\"git-diff\",\"val\":1},{\"id\":\"git-difftool\",\"name\":\"git-difftool\",\"val\":2},{\"id\":\"git-fetch\",\"name\":\"git-fetch\",\"val\":2},{\"id\":\"git-grep\",\"name\":\"git-grep\",\"val\":4},{\"id\":\"git-log\",\"name\":\"git-log\",\"val\":6},{\"id\":\"git-pull\",\"name\":\"git-pull\",\"val\":3},{\"id\":\"git-rebase\",\"name\":\"git-rebase\",\"val\":1},{\"id\":\"git-reset\",\"name\":\"git-reset\",\"val\":1},{\"id\":\"git-merge-base\",\"name\":\"git-merge-base\",\"val\":1},{\"id\":\"git-restore\",\"name\":\"git-restore\",\"val\":1},{\"id\":\"git-show\",\"name\":\"git-show\",\"val\":1},{\"id\":\"git-sparse-checkout\",\"name\":\"git-sparse-checkout\",\"val\":1},{\"id\":\"git-stash\",\"name\":\"git-stash\",\"val\":1},{\"id\":\"git-status\",\"name\":\"git-status\",\"val\":1},{\"id\":\"git-subtree\",\"name\":\"git-subtree\",\"val\":3},{\"id\":\"git-submodule\",\"name\":\"git-submodule\",\"val\":\"$undefined\"},{\"id\":\"git-tag\",\"name\":\"git-tag\",\"val\":1},{\"id\":\"git-bisect\",\"name\":\"git-bisect\",\"val\":1},{\"id\":\"git-credential-manager\",\"name\":\"git-credential-manager\",\"val\":2},{\"id\":\"git-filter-branch\",\"name\":\"git-filter-branch\",\"val\":3},{\"id\":\"git-filter-repo\",\"name\":\"git-filter-repo\",\"val\":2},{\"id\":\"git-bundle\",\"name\":\"git-bundle\",\"val\":5},{\"id\":\"git-unbundle\",\"name\":\"git-unbundle\",\"val\":2},{\"id\":\"path\",\"name\":\"path\",\"val\":1},{\"id\":\"issue\",\"name\":\"issue\",\"val\":\"$undefined\"},{\"id\":\".gitconfig-url\",\"name\":\".gitconfig-url\",\"val\":1},{\"id\":\"2\",\"name\":\"2\",\"val\":\"$undefined\"},{\"id\":\"github\",\"name\":\"github\",\"val\":9},{\"id\":\"vim\",\"name\":\"vim\",\"val\":20},{\"id\":\"tig\",\"name\":\"tig\",\"val\":1},{\"id\":\"alias\",\"name\":\"alias\",\"val\":3},{\"id\":\"git-alias\",\"name\":\"git-alias\",\"val\":2},{\"id\":\"git-lfs\",\"name\":\"git-lfs\",\"val\":3},{\"id\":\"gist\",\"name\":\"gist\",\"val\":4},{\"id\":\"@todo\",\"name\":\"@todo\",\"val\":24},{\"id\":\"alacritty\",\"name\":\"alacritty\",\"val\":12},{\"id\":\"argocd\",\"name\":\"argocd\",\"val\":4},{\"id\":\"bruno\",\"name\":\"bruno\",\"val\":7},{\"id\":\"ci\",\"name\":\"ci\",\"val\":6},{\"id\":\"delta\",\"name\":\"delta\",\"val\":2},{\"id\":\"deptno.dev\",\"name\":\"deptno.dev\",\"val\":17},{\"id\":\"difftastic\",\"name\":\"difftastic\",\"val\":2},{\"id\":\"dvc\",\"name\":\"dvc\",\"val\":18},{\"id\":\"fzf\",\"name\":\"fzf\",\"val\":4},{\"id\":\"git-push\",\"name\":\"git-push\",\"val\":2},{\"id\":\"gitsigns\",\"name\":\"gitsigns\",\"val\":2},{\"id\":\"ios\",\"name\":\"ios\",\"val\":11},{\"id\":\"lazygit\",\"name\":\"lazygit\",\"val\":7},{\"id\":\"neovim\",\"name\":\"neovim\",\"val\":22},{\"id\":\"retrospect\",\"name\":\"retrospect\",\"val\":5},{\"id\":\"terminal\",\"name\":\"terminal\",\"val\":86},{\"id\":\"upstage-ai-lab-day-19\",\"name\":\"upstage-ai-lab-day-19\",\"val\":9},{\"id\":\"upstage-ai-lab-day-24\",\"name\":\"upstage-ai-lab-day-24\",\"val\":5},{\"id\":\"upstage-ai-lab-day-43\",\"name\":\"upstage-ai-lab-day-43\",\"val\":10},{\"id\":\"upstage-ai-lab-project-04\",\"name\":\"upstage-ai-lab-project-04\",\"val\":31},{\"id\":\"upstage-ai-lab-project-05\",\"name\":\"upstage-ai-lab-project-05\",\"val\":27},{\"id\":\"diary/2023-11-18\",\"name\":\"diary/2023-11-18\",\"val\":4},{\"id\":\"diary/2023-12-12\",\"name\":\"diary/2023-12-12\",\"val\":9},{\"id\":\"diary/2024-01-02\",\"name\":\"diary/2024-01-02\",\"val\":10},{\"id\":\"diary/2024-12-31\",\"name\":\"diary/2024-12-31\",\"val\":441}],\"links\":[{\"source\":\"git\",\"target\":\"git-apply\"},{\"source\":\"git\",\"target\":\"git-add\"},{\"source\":\"git\",\"target\":\"git-branch\"},{\"source\":\"git\",\"target\":\"git-commit\"},{\"source\":\"git\",\"target\":\"git-check-ignore\"},{\"source\":\"git\",\"target\":\"git-checkout\"},{\"source\":\"git\",\"target\":\"git-cherry-pick\"},{\"source\":\"git\",\"target\":\"git-clean\"},{\"source\":\"git\",\"target\":\"git-clone\"},{\"source\":\"git\",\"target\":\"git-config\"},{\"source\":\"git\",\"target\":\"git-diff\"},{\"source\":\"git\",\"target\":\"git-difftool\"},{\"source\":\"git\",\"target\":\"git-fetch\"},{\"source\":\"git\",\"target\":\"git-grep\"},{\"source\":\"git\",\"target\":\"git-log\"},{\"source\":\"git\",\"target\":\"git-pull\"},{\"source\":\"git\",\"target\":\"git-rebase\"},{\"source\":\"git\",\"target\":\"git-reset\"},{\"source\":\"git\",\"target\":\"git-merge-base\"},{\"source\":\"git\",\"target\":\"git-restore\"},{\"source\":\"git\",\"target\":\"git-show\"},{\"source\":\"git\",\"target\":\"git-sparse-checkout\"},{\"source\":\"git\",\"target\":\"git-stash\"},{\"source\":\"git\",\"target\":\"git-status\"},{\"source\":\"git\",\"target\":\"git-subtree\"},{\"source\":\"git\",\"target\":\"git-submodule\"},{\"source\":\"git\",\"target\":\"git-tag\"},{\"source\":\"git\",\"target\":\"git-bisect\"},{\"source\":\"git\",\"target\":\"git-credential-manager\"},{\"source\":\"git\",\"target\":\"git-filter-branch\"},{\"source\":\"git\",\"target\":\"git-filter-repo\"},{\"source\":\"git\",\"target\":\"git-bundle\"},{\"source\":\"git\",\"target\":\"git-unbundle\"},{\"source\":\"git\",\"target\":\"path\"},{\"source\":\"git\",\"target\":\"issue\"},{\"source\":\"git\",\"target\":\".gitconfig-url\"},{\"source\":\"git\",\"target\":\"2\"},{\"source\":\"git\",\"target\":\"github\"},{\"source\":\"git\",\"target\":\"vim\"},{\"source\":\"git\",\"target\":\"tig\"},{\"source\":\"git\",\"target\":\"alias\"},{\"source\":\"git\",\"target\":\"git-alias\"},{\"source\":\"git\",\"target\":\"git-lfs\"},{\"source\":\"git\",\"target\":\"gist\"},{\"source\":\"@todo\",\"target\":\"git\"},{\"source\":\"alacritty\",\"target\":\"git\"},{\"source\":\"argocd\",\"target\":\"git\"},{\"source\":\"bruno\",\"target\":\"git\"},{\"source\":\"ci\",\"target\":\"git\"},{\"source\":\"delta\",\"target\":\"git\"},{\"source\":\"deptno.dev\",\"target\":\"git\"},{\"source\":\"difftastic\",\"target\":\"git\"},{\"source\":\"dvc\",\"target\":\"git\"},{\"source\":\"dvc\",\"target\":\"git\"},{\"source\":\"dvc\",\"target\":\"git\"},{\"source\":\"dvc\",\"target\":\"git\"},{\"source\":\"dvc\",\"target\":\"git\"},{\"source\":\"fzf\",\"target\":\"git\"},{\"source\":\"gist\",\"target\":\"git\"},{\"source\":\"git-add\",\"target\":\"git\"},{\"source\":\"git-alias\",\"target\":\"git\"},{\"source\":\"git-bisect\",\"target\":\"git\"},{\"source\":\"git-branch\",\"target\":\"git\"},{\"source\":\"git-bundle\",\"target\":\"git\"},{\"source\":\"git-checkout\",\"target\":\"git\"},{\"source\":\"git-clean\",\"target\":\"git\"},{\"source\":\"git-clone\",\"target\":\"git\"},{\"source\":\"git-commit\",\"target\":\"git\"},{\"source\":\"git-config\",\"target\":\"git\"},{\"source\":\"git-credential-manager\",\"target\":\"git\"},{\"source\":\"git-diff\",\"target\":\"git\"},{\"source\":\"git-difftool\",\"target\":\"git\"},{\"source\":\"git-fetch\",\"target\":\"git\"},{\"source\":\"git-filter-branch\",\"target\":\"git\"},{\"source\":\"git-filter-repo\",\"target\":\"git\"},{\"source\":\"git-grep\",\"target\":\"git\"},{\"source\":\"git-lfs\",\"target\":\"git\"},{\"source\":\"git-log\",\"target\":\"git\"},{\"source\":\"git-log\",\"target\":\"git\"},{\"source\":\"git-merge-base\",\"target\":\"git\"},{\"source\":\"git-pull\",\"target\":\"git\"},{\"source\":\"git-push\",\"target\":\"git\"},{\"source\":\"git-rebase\",\"target\":\"git\"},{\"source\":\"git-reset\",\"target\":\"git\"},{\"source\":\"git-restore\",\"target\":\"git\"},{\"source\":\"git-show\",\"target\":\"git\"},{\"source\":\"git-sparse-checkout\",\"target\":\"git\"},{\"source\":\"git-stash\",\"target\":\"git\"},{\"source\":\"git-status\",\"target\":\"git\"},{\"source\":\"git-subtree\",\"target\":\"git\"},{\"source\":\"git-subtree\",\"target\":\"git\"},{\"source\":\"git-tag\",\"target\":\"git\"},{\"source\":\"git-unbundle\",\"target\":\"git\"},{\"source\":\"github\",\"target\":\"git\"},{\"source\":\"gitsigns\",\"target\":\"git\"},{\"source\":\"ios\",\"target\":\"git\"},{\"source\":\"lazygit\",\"target\":\"git\"},{\"source\":\"neovim\",\"target\":\"git\"},{\"source\":\"retrospect\",\"target\":\"git\"},{\"source\":\"terminal\",\"target\":\"git\"},{\"source\":\"tig\",\"target\":\"git\"},{\"source\":\"upstage-ai-lab-day-19\",\"target\":\"git\"},{\"source\":\"upstage-ai-lab-day-19\",\"target\":\"git\"},{\"source\":\"upstage-ai-lab-day-19\",\"target\":\"git\"},{\"source\":\"upstage-ai-lab-day-24\",\"target\":\"git\"},{\"source\":\"upstage-ai-lab-day-43\",\"target\":\"git\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"git\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"git\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"git\"},{\"source\":\"diary/2023-11-18\",\"target\":\"git\"},{\"source\":\"diary/2023-12-12\",\"target\":\"git\"},{\"source\":\"diary/2024-01-02\",\"target\":\"git\"},{\"source\":\"diary/2024-12-31\",\"target\":\"git\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"git\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git\"}],[\"$\",\"sup\",null,{\"children\":44}]]}]}],[\"$\",\"span\",\"git-apply\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-apply\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-apply\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"git-add\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-add\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-add\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"git-branch\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-branch\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-branch\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"git-commit\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-commit\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-commit\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"git-check-ignore\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-check-ignore\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-check-ignore\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"git-checkout\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-checkout\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-checkout\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"git-cherry-pick\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-cherry-pick\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-cherry-pick\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"git-clean\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-clean\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-clean\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"git-clone\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-clone\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-clone\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"git-config\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-config\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-config\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"git-diff\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-diff\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-diff\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"git-difftool\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-difftool\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-difftool\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"git-fetch\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-fetch\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-fetch\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"git-grep\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-grep\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-grep\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"git-log\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-log\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-log\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"git-pull\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-pull\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-pull\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"git-rebase\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-rebase\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-rebase\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"git-reset\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-reset\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-reset\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"git-merge-base\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-merge-base\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-merge-base\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"git-restore\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-restore\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-restore\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"git-show\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-show\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-show\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"git-sparse-checkout\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-sparse-checkout\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-sparse-checkout\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"git-stash\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-stash\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-stash\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"git-status\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-status\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-status\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"git-subtree\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-subtree\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-subtree\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"git-submodule\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-submodule\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-submodule\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"git-tag\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-tag\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-tag\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"git-bisect\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-bisect\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-bisect\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"git-credential-manager\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-credential-manager\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-credential-manager\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"git-filter-branch\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-filter-branch\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-filter-branch\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"git-filter-repo\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-filter-repo\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-filter-repo\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"git-bundle\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-bundle\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-bundle\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"git-unbundle\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-unbundle\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-unbundle\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"path\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/path\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"path\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"issue\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/issue\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"issue\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\".gitconfig-url\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/.gitconfig-url\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\".gitconfig-url\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"2\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/2\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"2\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"github\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/github\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"github\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"vim\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vim\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vim\"}],[\"$\",\"sup\",null,{\"children\":20}]]}]}],[\"$\",\"span\",\"tig\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/tig\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"tig\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"alias\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/alias\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"alias\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"git-alias\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-alias\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-alias\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"git-lfs\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-lfs\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-lfs\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"gist\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/gist\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"gist\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"@todo\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/@todo\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"@todo\"}],[\"$\",\"sup\",null,{\"children\":24}]]}]}],[\"$\",\"span\",\"alacritty\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/alacritty\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"alacritty\"}],[\"$\",\"sup\",null,{\"children\":12}]]}]}],[\"$\",\"span\",\"argocd\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/argocd\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"argocd\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"bruno\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/bruno\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"bruno\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"ci\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ci\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ci\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"delta\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/delta\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"delta\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"deptno.dev\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/deptno.dev\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"deptno.dev\"}],[\"$\",\"sup\",null,{\"children\":17}]]}]}],[\"$\",\"span\",\"difftastic\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/difftastic\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"difftastic\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"dvc\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/dvc\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"dvc\"}],[\"$\",\"sup\",null,{\"children\":18}]]}]}],[\"$\",\"span\",\"fzf\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/fzf\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"fzf\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"git-push\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-push\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-push\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"gitsigns\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/gitsigns\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"gitsigns\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"ios\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ios\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ios\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"lazygit\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/lazygit\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"lazygit\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"neovim\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/neovim\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"neovim\"}],[\"$\",\"sup\",null,{\"children\":22}]]}]}],[\"$\",\"span\",\"retrospect\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/retrospect\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"retrospect\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"terminal\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/terminal\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"terminal\"}],[\"$\",\"sup\",null,{\"children\":86}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-day-19\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-19\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-19\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-day-24\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-24\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-24\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-day-43\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-43\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-43\"}],[\"$\",\"sup\",null,{\"children\":10}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-project-04\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-project-04\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-project-04\"}],[\"$\",\"sup\",null,{\"children\":31}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-project-05\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-project-05\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-project-05\"}],[\"$\",\"sup\",null,{\"children\":27}]]}]}],[\"$\",\"span\",\"diary/2023-11-18\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-11-18\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-11-18\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"diary/2023-12-12\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-12\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-12\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"diary/2024-01-02\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-02\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-02\"}],[\"$\",\"sup\",null,{\"children\":10}]]}]}],[\"$\",\"span\",\"diary/2024-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-12-31\"}],[\"$\",\"sup\",null,{\"children\":441}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"git\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#git\",\"children\":\"Git\"}]}],[\"$\",\"div\",\"by-command\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#by-command\",\"children\":\"by-command\"}]}],[\"$\",\"div\",\"files\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#files\",\"children\":\"files\"}]}],[\"$\",\"div\",\"특정-커밋-내용-가져와서-적용\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#특정-커밋-내용-가져와서-적용\",\"children\":\"특정 커밋 내용 가져와서 적용\"}]}],[\"$\",\"div\",\"특정-커밋-내용-확인\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#특정-커밋-내용-확인\",\"children\":\"특정 커밋 내용 확인\"}]}],[\"$\",\"div\",\"특정-커밋-내용-비교\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#특정-커밋-내용-비교\",\"children\":\"특정 커밋 내용 비교\"}]}],[\"$\",\"div\",\"깃에서-관리하는-파일인지-확인\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#깃에서-관리하는-파일인지-확인\",\"children\":\"깃에서 관리하는 파일인지 확인\"}]}],[\"$\",\"div\",\"깃에서-무시하는-파일인지-확인\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#깃에서-무시하는-파일인지-확인\",\"children\":\"깃에서 무시하는 파일인지 확인\"}]}],[\"$\",\"div\",\"rebase--i\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#rebase--i\",\"children\":\"rebase -i\"}]}],[\"$\",\"div\",\"--ancestry-path\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#--ancestry-path\",\"children\":\"--ancestry-path\"}]}],[\"$\",\"div\",\"untracked-파일-지우기\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#untracked-파일-지우기\",\"children\":\"untracked 파일 지우기\"}]}],[\"$\",\"div\",\"url-변경하기\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#url-변경하기\",\"children\":\"url 변경하기\"}]}],[\"$\",\"div\",\"feature-브랜치-변경된-파일들-stage-화\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#feature-브랜치-변경된-파일들-stage-화\",\"children\":\"feature 브랜치 변경된 파일들 stage 화\"}]}],[\"$\",\"div\",\"reset-후\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#reset-후\",\"children\":\"reset 후\"}]}],[\"$\",\"div\",\"1-변경된-파일-모두-버퍼로\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#1-변경된-파일-모두-버퍼로\",\"children\":\"1. 변경된 파일 모두 버퍼로\"}]}],[\"$\",\"div\",\"2-상태값으로-필터\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#2-상태값으로-필터\",\"children\":\"2. 상태값으로 필터\"}]}],[\"$\",\"div\",\"보기만\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#보기만\",\"children\":\"보기만\"}]}],[\"$\",\"div\",\"plumping-명령어\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#plumping-명령어\",\"children\":\"plumping 명령어\"}]}],[\"$\",\"div\",\"releated\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#releated\",\"children\":\"releated\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T1211,"])</script><script>self.__next_f.push([1,"\n분산저장관리\n공식문서: https://git-scm.com/book/ko/v2\n\n## by-command\n- [[git-apply]]\n- [[git-add]]\n- [[git-branch]]\n- [[git-commit]]\n- [[git-check-ignore]]\n- [[git-checkout]]\n- [[git-cherry-pick]]\n- [[git-clean]]\n- [[git-clone]]\n- [[git-config]]\n- [[git-diff]]\n- [[git-difftool]]\n- [[git-fetch]]\n- [[git-grep]]\n- [[git-log]]\n- [[git-pull]]\n- [[git-rebase]]\n- [[git-reset]]\n- [[git-merge-base]]\n- [[git-restore]]\n- [[git-show]]\n- [[git-sparse-checkout]]\n- [[git-stash]]\n- [[git-status]]\n- [[git-subtree]]\n- [[git-submodule]]\n- [[git-tag]]\n- [[git-bisect]]\n- [[git-credential-manager]]\n- [[git-filter-branch]]\n- [[git-filter-repo]]\n- [[git-bundle]]\n- [[git-unbundle]]\n\n## files\n- [[path|.gitconfig]]\n\n## 특정 커밋 내용 가져와서 적용\n  - https://stackoverflow.com/questions/5717026/how-to-git-cherry-pick-only-changes-to-certain-files\n  ```sh\n   git show [SHA] -- [FILE1] [FILE2] | git apply -\n  ```\n  ```sh\n   git cherry-pink -n [SHA]\n  ```\n\n## 특정 커밋 내용 확인\n  ```sh\n  git show [SHA]:[PATH]\n  ```\n\n##  특정 커밋 내용 비교\n  ```sh\n  git diff [SHA0] [SHA1] [PATH]\n  ```\n\n## 깃에서 관리하는 파일인지 확인\n```sh\ngit ls-files [FILE]\n```\n\n## 깃에서 무시하는 파일인지 확인\n```sh\ngit check-ignore -v [FILE]\n```\n```sh\n# list\ngit status --ignored [FILE]\n```\n\n## rebase -i\n```sh\ngit log branch/a branch/b\n* (3시간 전) c003c2c\n* (3시간 전) c338742\n* (3시간 전) ab1a091\n* (3시간 전) b44a769\n* (3시간 전) 93c7114\n* (3시간 전) 54d0235\n* (3시간 전) 77c0b5b\n* (3시간 전) e5143b1\n* (3시간 전) 4c1a5db\n* (3시간 전) a288ffb\n* (3시간 전) b86b554\n* (3시간 전) 75942cd\n* (3시간 전) dece25b\n* (3시간 전) 3e293e3\n* (3시간 전) e21c75b\n* (3시간 전) c79629d\n| * (6시간 전) 20ad4e2\n| * (7시간 전) 88fa156\n| * (8시간 전) 063c591\n| * (8시간 전) c8c7df7\n| * (8시간 전) 282f7b9\n| * (8시간 전) fae9472\n| * (8시간 전) 4a0981a\n| * (8시간 전) b500bf4\n| * (9시간 전) 3edc586\n| * (9시간 전) e7027c5\n| * (9시간 전) 643d23a\n| * (9시간 전) 4725f0f\n| * (9시간 전) e32ed20\n| * (9시간 전) db03f27\n| * (9시간 전) 5b84a5f\n| * (9시간 전) 1a3949f\n| * (10시간 전) 365b2e1\n| * (11시간 전) 62b965b\n| * (11시간 전) 215e993\n| * (11시간 전) 9ba8cba\n| * (11시간 전) 3235509\n|/\n* (12시간 전) 93e9e47\n* \n```\n```sh\n$ git log branch/a..branch/b\n* (3시간 전) c003c2c\n* (3시간 전) c338742\n* (3시간 전) ab1a091\n* (3시간 전) b44a769\n* (3시간 전) 93c7114\n* (3시간 전) 54d0235\n* (3시간 전) 77c0b5b\n* (3시간 전) e5143b1\n* (3시간 전) 4c1a5db\n* (3시간 전) a288ffb\n* (3시간 전) b86b554\n* (3시간 전) 75942cd\n* (3시간 전) dece25b\n* (3시간 전) 3e293e3\n* (3시간 전) e21c75b\n* (3시간 전) c79629d\n```\n```sh\n$ git rebase -i \\\n $(git merge-base master branch/air) # vimwiki [[issue]] 로 2줄 작성\n```\n\n## --ancestry-path\n\u003e HEAD 가 아닌 중간으로 checkout 한 경우 HEAD(SHA_02) 까지 전진\n```sh\n$ git log --ancestry-path [SHA_01]..HEAD\n```\n\n```sh\n$ git merge-base branch/a branch/b\n93e9e47\n```\n```sh\n$ git log --ancestry-path 93e9e47..branch/b\n* (3시간 전) c003c2c\n* (3시간 전) c338742\n* (3시간 전) ab1a091\n* (3시간 전) b44a769\n* (3시간 전) 93c7114\n* (3시간 전) 54d0235\n* (3시간 전) 77c0b5b\n* (3시간 전) e5143b1\n* (3시간 전) 4c1a5db\n* (3시간 전) a288ffb\n* (3시간 전) b86b554\n* (3시간 전) 75942cd\n* (3시간 전) dece25b\n* (3시간 전) 3e293e3\n* (3시간 전) e21c75b\n* (3시간 전) c79629d\n```\n```sh\n$ git \n```\n\n## untracked 파일 지우기\n```sh\ngit clean -fd\n```\n- `-f` : 파일\n- `-d` : 디렉토리\n\n## url 변경하기\n하드코딩된 url 때문에 다중 계정을 이용하는 경우 고통받을 수 있다.\n다중 계정은 로컬에서key 파일을 통해서 인증 정보를 관리할 텐데 이런 경우 ssh 가 사용된다.\n\n`[[.gitconfig-url]]` 을 설정한다.\n\n## feature 브랜치 변경된 파일들 stage 화\n### reset 후\n```sh\ngit switch feature\ngit reset --mixed $(git merge-base master @)\n```\n\n#### 1. 변경된 파일 모두 버퍼로\n`vim $(git diff --name-only)`\n#### 2. 상태값으로 필터\n`vim $(git status -s | grep \"[^D] \" | awk '{print $2}')`\n\n### 보기만\n`vim $(git diff --name-status master.. | rg \"[^D]\\t\" | awk '{print $[[2]]}')`\n\n## plumping 명령어\n- `git rev-parse`: 브랜치명이나 태그를 커밋 해시로 리턴한다.\n- `git rev-list`: git log 등의 레인지를 가지는 결과를 기반으로 커밋 해시만 뽑아낸다.\n  - `--abbrev-commit` 옵션 가능\n\n## releated\n- [[github]]\n- [[vim]]\n- [[tig]]\n- [[alias]]\n- [[git-alias]]\n- [[git-lfs]]\n- [[gist]]\n"])</script><script>self.__next_f.push([1,"16:T1211,"])</script><script>self.__next_f.push([1,"\n분산저장관리\n공식문서: https://git-scm.com/book/ko/v2\n\n## by-command\n- [[git-apply]]\n- [[git-add]]\n- [[git-branch]]\n- [[git-commit]]\n- [[git-check-ignore]]\n- [[git-checkout]]\n- [[git-cherry-pick]]\n- [[git-clean]]\n- [[git-clone]]\n- [[git-config]]\n- [[git-diff]]\n- [[git-difftool]]\n- [[git-fetch]]\n- [[git-grep]]\n- [[git-log]]\n- [[git-pull]]\n- [[git-rebase]]\n- [[git-reset]]\n- [[git-merge-base]]\n- [[git-restore]]\n- [[git-show]]\n- [[git-sparse-checkout]]\n- [[git-stash]]\n- [[git-status]]\n- [[git-subtree]]\n- [[git-submodule]]\n- [[git-tag]]\n- [[git-bisect]]\n- [[git-credential-manager]]\n- [[git-filter-branch]]\n- [[git-filter-repo]]\n- [[git-bundle]]\n- [[git-unbundle]]\n\n## files\n- [[path|.gitconfig]]\n\n## 특정 커밋 내용 가져와서 적용\n  - https://stackoverflow.com/questions/5717026/how-to-git-cherry-pick-only-changes-to-certain-files\n  ```sh\n   git show [SHA] -- [FILE1] [FILE2] | git apply -\n  ```\n  ```sh\n   git cherry-pink -n [SHA]\n  ```\n\n## 특정 커밋 내용 확인\n  ```sh\n  git show [SHA]:[PATH]\n  ```\n\n##  특정 커밋 내용 비교\n  ```sh\n  git diff [SHA0] [SHA1] [PATH]\n  ```\n\n## 깃에서 관리하는 파일인지 확인\n```sh\ngit ls-files [FILE]\n```\n\n## 깃에서 무시하는 파일인지 확인\n```sh\ngit check-ignore -v [FILE]\n```\n```sh\n# list\ngit status --ignored [FILE]\n```\n\n## rebase -i\n```sh\ngit log branch/a branch/b\n* (3시간 전) c003c2c\n* (3시간 전) c338742\n* (3시간 전) ab1a091\n* (3시간 전) b44a769\n* (3시간 전) 93c7114\n* (3시간 전) 54d0235\n* (3시간 전) 77c0b5b\n* (3시간 전) e5143b1\n* (3시간 전) 4c1a5db\n* (3시간 전) a288ffb\n* (3시간 전) b86b554\n* (3시간 전) 75942cd\n* (3시간 전) dece25b\n* (3시간 전) 3e293e3\n* (3시간 전) e21c75b\n* (3시간 전) c79629d\n| * (6시간 전) 20ad4e2\n| * (7시간 전) 88fa156\n| * (8시간 전) 063c591\n| * (8시간 전) c8c7df7\n| * (8시간 전) 282f7b9\n| * (8시간 전) fae9472\n| * (8시간 전) 4a0981a\n| * (8시간 전) b500bf4\n| * (9시간 전) 3edc586\n| * (9시간 전) e7027c5\n| * (9시간 전) 643d23a\n| * (9시간 전) 4725f0f\n| * (9시간 전) e32ed20\n| * (9시간 전) db03f27\n| * (9시간 전) 5b84a5f\n| * (9시간 전) 1a3949f\n| * (10시간 전) 365b2e1\n| * (11시간 전) 62b965b\n| * (11시간 전) 215e993\n| * (11시간 전) 9ba8cba\n| * (11시간 전) 3235509\n|/\n* (12시간 전) 93e9e47\n* \n```\n```sh\n$ git log branch/a..branch/b\n* (3시간 전) c003c2c\n* (3시간 전) c338742\n* (3시간 전) ab1a091\n* (3시간 전) b44a769\n* (3시간 전) 93c7114\n* (3시간 전) 54d0235\n* (3시간 전) 77c0b5b\n* (3시간 전) e5143b1\n* (3시간 전) 4c1a5db\n* (3시간 전) a288ffb\n* (3시간 전) b86b554\n* (3시간 전) 75942cd\n* (3시간 전) dece25b\n* (3시간 전) 3e293e3\n* (3시간 전) e21c75b\n* (3시간 전) c79629d\n```\n```sh\n$ git rebase -i \\\n $(git merge-base master branch/air) # vimwiki [[issue]] 로 2줄 작성\n```\n\n## --ancestry-path\n\u003e HEAD 가 아닌 중간으로 checkout 한 경우 HEAD(SHA_02) 까지 전진\n```sh\n$ git log --ancestry-path [SHA_01]..HEAD\n```\n\n```sh\n$ git merge-base branch/a branch/b\n93e9e47\n```\n```sh\n$ git log --ancestry-path 93e9e47..branch/b\n* (3시간 전) c003c2c\n* (3시간 전) c338742\n* (3시간 전) ab1a091\n* (3시간 전) b44a769\n* (3시간 전) 93c7114\n* (3시간 전) 54d0235\n* (3시간 전) 77c0b5b\n* (3시간 전) e5143b1\n* (3시간 전) 4c1a5db\n* (3시간 전) a288ffb\n* (3시간 전) b86b554\n* (3시간 전) 75942cd\n* (3시간 전) dece25b\n* (3시간 전) 3e293e3\n* (3시간 전) e21c75b\n* (3시간 전) c79629d\n```\n```sh\n$ git \n```\n\n## untracked 파일 지우기\n```sh\ngit clean -fd\n```\n- `-f` : 파일\n- `-d` : 디렉토리\n\n## url 변경하기\n하드코딩된 url 때문에 다중 계정을 이용하는 경우 고통받을 수 있다.\n다중 계정은 로컬에서key 파일을 통해서 인증 정보를 관리할 텐데 이런 경우 ssh 가 사용된다.\n\n`[[.gitconfig-url]]` 을 설정한다.\n\n## feature 브랜치 변경된 파일들 stage 화\n### reset 후\n```sh\ngit switch feature\ngit reset --mixed $(git merge-base master @)\n```\n\n#### 1. 변경된 파일 모두 버퍼로\n`vim $(git diff --name-only)`\n#### 2. 상태값으로 필터\n`vim $(git status -s | grep \"[^D] \" | awk '{print $2}')`\n\n### 보기만\n`vim $(git diff --name-status master.. | rg \"[^D]\\t\" | awk '{print $[[2]]}')`\n\n## plumping 명령어\n- `git rev-parse`: 브랜치명이나 태그를 커밋 해시로 리턴한다.\n- `git rev-list`: git log 등의 레인지를 가지는 결과를 기반으로 커밋 해시만 뽑아낸다.\n  - `--abbrev-commit` 옵션 가능\n\n## releated\n- [[github]]\n- [[vim]]\n- [[tig]]\n- [[alias]]\n- [[git-alias]]\n- [[git-lfs]]\n- [[gist]]\n"])</script><script>self.__next_f.push([1,"17:T1211,"])</script><script>self.__next_f.push([1,"\n분산저장관리\n공식문서: https://git-scm.com/book/ko/v2\n\n## by-command\n- [[git-apply]]\n- [[git-add]]\n- [[git-branch]]\n- [[git-commit]]\n- [[git-check-ignore]]\n- [[git-checkout]]\n- [[git-cherry-pick]]\n- [[git-clean]]\n- [[git-clone]]\n- [[git-config]]\n- [[git-diff]]\n- [[git-difftool]]\n- [[git-fetch]]\n- [[git-grep]]\n- [[git-log]]\n- [[git-pull]]\n- [[git-rebase]]\n- [[git-reset]]\n- [[git-merge-base]]\n- [[git-restore]]\n- [[git-show]]\n- [[git-sparse-checkout]]\n- [[git-stash]]\n- [[git-status]]\n- [[git-subtree]]\n- [[git-submodule]]\n- [[git-tag]]\n- [[git-bisect]]\n- [[git-credential-manager]]\n- [[git-filter-branch]]\n- [[git-filter-repo]]\n- [[git-bundle]]\n- [[git-unbundle]]\n\n## files\n- [[path|.gitconfig]]\n\n## 특정 커밋 내용 가져와서 적용\n  - https://stackoverflow.com/questions/5717026/how-to-git-cherry-pick-only-changes-to-certain-files\n  ```sh\n   git show [SHA] -- [FILE1] [FILE2] | git apply -\n  ```\n  ```sh\n   git cherry-pink -n [SHA]\n  ```\n\n## 특정 커밋 내용 확인\n  ```sh\n  git show [SHA]:[PATH]\n  ```\n\n##  특정 커밋 내용 비교\n  ```sh\n  git diff [SHA0] [SHA1] [PATH]\n  ```\n\n## 깃에서 관리하는 파일인지 확인\n```sh\ngit ls-files [FILE]\n```\n\n## 깃에서 무시하는 파일인지 확인\n```sh\ngit check-ignore -v [FILE]\n```\n```sh\n# list\ngit status --ignored [FILE]\n```\n\n## rebase -i\n```sh\ngit log branch/a branch/b\n* (3시간 전) c003c2c\n* (3시간 전) c338742\n* (3시간 전) ab1a091\n* (3시간 전) b44a769\n* (3시간 전) 93c7114\n* (3시간 전) 54d0235\n* (3시간 전) 77c0b5b\n* (3시간 전) e5143b1\n* (3시간 전) 4c1a5db\n* (3시간 전) a288ffb\n* (3시간 전) b86b554\n* (3시간 전) 75942cd\n* (3시간 전) dece25b\n* (3시간 전) 3e293e3\n* (3시간 전) e21c75b\n* (3시간 전) c79629d\n| * (6시간 전) 20ad4e2\n| * (7시간 전) 88fa156\n| * (8시간 전) 063c591\n| * (8시간 전) c8c7df7\n| * (8시간 전) 282f7b9\n| * (8시간 전) fae9472\n| * (8시간 전) 4a0981a\n| * (8시간 전) b500bf4\n| * (9시간 전) 3edc586\n| * (9시간 전) e7027c5\n| * (9시간 전) 643d23a\n| * (9시간 전) 4725f0f\n| * (9시간 전) e32ed20\n| * (9시간 전) db03f27\n| * (9시간 전) 5b84a5f\n| * (9시간 전) 1a3949f\n| * (10시간 전) 365b2e1\n| * (11시간 전) 62b965b\n| * (11시간 전) 215e993\n| * (11시간 전) 9ba8cba\n| * (11시간 전) 3235509\n|/\n* (12시간 전) 93e9e47\n* \n```\n```sh\n$ git log branch/a..branch/b\n* (3시간 전) c003c2c\n* (3시간 전) c338742\n* (3시간 전) ab1a091\n* (3시간 전) b44a769\n* (3시간 전) 93c7114\n* (3시간 전) 54d0235\n* (3시간 전) 77c0b5b\n* (3시간 전) e5143b1\n* (3시간 전) 4c1a5db\n* (3시간 전) a288ffb\n* (3시간 전) b86b554\n* (3시간 전) 75942cd\n* (3시간 전) dece25b\n* (3시간 전) 3e293e3\n* (3시간 전) e21c75b\n* (3시간 전) c79629d\n```\n```sh\n$ git rebase -i \\\n $(git merge-base master branch/air) # vimwiki [[issue]] 로 2줄 작성\n```\n\n## --ancestry-path\n\u003e HEAD 가 아닌 중간으로 checkout 한 경우 HEAD(SHA_02) 까지 전진\n```sh\n$ git log --ancestry-path [SHA_01]..HEAD\n```\n\n```sh\n$ git merge-base branch/a branch/b\n93e9e47\n```\n```sh\n$ git log --ancestry-path 93e9e47..branch/b\n* (3시간 전) c003c2c\n* (3시간 전) c338742\n* (3시간 전) ab1a091\n* (3시간 전) b44a769\n* (3시간 전) 93c7114\n* (3시간 전) 54d0235\n* (3시간 전) 77c0b5b\n* (3시간 전) e5143b1\n* (3시간 전) 4c1a5db\n* (3시간 전) a288ffb\n* (3시간 전) b86b554\n* (3시간 전) 75942cd\n* (3시간 전) dece25b\n* (3시간 전) 3e293e3\n* (3시간 전) e21c75b\n* (3시간 전) c79629d\n```\n```sh\n$ git \n```\n\n## untracked 파일 지우기\n```sh\ngit clean -fd\n```\n- `-f` : 파일\n- `-d` : 디렉토리\n\n## url 변경하기\n하드코딩된 url 때문에 다중 계정을 이용하는 경우 고통받을 수 있다.\n다중 계정은 로컬에서key 파일을 통해서 인증 정보를 관리할 텐데 이런 경우 ssh 가 사용된다.\n\n`[[.gitconfig-url]]` 을 설정한다.\n\n## feature 브랜치 변경된 파일들 stage 화\n### reset 후\n```sh\ngit switch feature\ngit reset --mixed $(git merge-base master @)\n```\n\n#### 1. 변경된 파일 모두 버퍼로\n`vim $(git diff --name-only)`\n#### 2. 상태값으로 필터\n`vim $(git status -s | grep \"[^D] \" | awk '{print $2}')`\n\n### 보기만\n`vim $(git diff --name-status master.. | rg \"[^D]\\t\" | awk '{print $[[2]]}')`\n\n## plumping 명령어\n- `git rev-parse`: 브랜치명이나 태그를 커밋 해시로 리턴한다.\n- `git rev-list`: git log 등의 레인지를 가지는 결과를 기반으로 커밋 해시만 뽑아낸다.\n  - `--abbrev-commit` 옵션 가능\n\n## releated\n- [[github]]\n- [[vim]]\n- [[tig]]\n- [[alias]]\n- [[git-alias]]\n- [[git-lfs]]\n- [[gist]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# Git\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# Git\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/git\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# Git\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
