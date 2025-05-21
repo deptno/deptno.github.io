@@ -1,0 +1,6 @@
+User-Agent: *
+Allow: /public-wiki/
+Disallow: /public-wiki/diary/
+Crawl-delay: 1
+
+Sitemap: https://deptno.dev/sitemap.xml

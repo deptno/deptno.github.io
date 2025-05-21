@@ -1,0 +1,377 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-a049f68e7ea32292.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","neovim-lua-plugins","c"]
+0:["uD_gdiyY_JRNajr3VfOb8",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","neovim-lua-plugins","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"neovim-lua-plugins\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","neovim-lua-plugins","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/51cae7d269711d54.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:T172a,<h1 id="neovim-lua-plugins">neovim-lua-plugins</h1>
+<h2 id="구조">구조</h2>
+<ul>
+<li><a href="path">~/.config/nvim/init.lua</a></li>
+<li><a href="path">~/.local/share/nvim/site/pack/*/start</a> - 시작시 로딩</li>
+<li><a href="path">~/.local/share/nvim/site/pack/*/opt</a> - 원하는 타이밍에 스크립트를 통해서 로딩</li>
+</ul>
+<h2 id="lua-전환">lua 전환</h2>
+<h3 id="시작-설정-옮기기-전">시작 설정 옮기기 전</h3>
+<pre><code class="hljs language-sh">Permissions Links Size User   Date Modified    Git Name
+drwxr-xr-x      3    - deptno 2022-01-10 13:02  -N  .
+drwxr-xr-x     31    - deptno 2022-01-12 18:48  -N └──  start
+drwxr-xr-x     15    - deptno 2022-01-12 18:48  -N    ├──  vim-rest-console
+drwxr-xr-x     10    - deptno 2022-01-12 01:16  -N    ├──  goyo.vim
+drwxr-xr-x      9    - deptno 2022-01-12 01:16  -N    ├──  limelight.vim
+drwxr-xr-x      8    - deptno 2022-01-11 21:56  -N    ├──  vim-unimpaired
+drwxr-xr-x     13    - deptno 2022-01-11 21:54  -N    ├──  bufferline.nvim
+drwxr-xr-x     15    - deptno 2022-01-11 19:34  -N    ├──  null-ls.nvim
+drwxr-xr-x     21    - deptno 2022-01-11 19:14  -N    ├──  gitsigns.nvim
+drwxr-xr-x     20    - deptno 2022-01-10 23:08  -N    ├──  plenary.nvim
+drwxr-xr-x     21    - deptno 2022-01-10 23:03  -N    ├──  telescope.nvim
+drwxr-xr-x     25    - deptno 2022-01-10 17:57  -N    ├──  nvim-treesitter
+drwxr-xr-x     13    - deptno 2022-01-10 14:25  -N    ├──  copilot.vim
+drwxr-xr-x      6    - deptno 2022-01-06 21:04  -N    ├──  vim-autoswap
+drwxr-xr-x     13    - deptno 2022-01-06 20:56  -N    ├──  vim
+drwxr-xr-x      7    - deptno 2022-01-06 13:43  -N    ├──  defx-icons
+drwxr-xr-x      7    - deptno 2022-01-06 13:42  -N    ├──  defx-git
+drwxr-xr-x     13    - deptno 2022-01-06 13:42  -N    ├──  defx.nvim
+drwxr-xr-x      6    - deptno 2022-01-05 02:47  -N    ├──  nvim-web-devicons
+drwxr-xr-x      6    - deptno 2022-01-05 02:46  -N    ├──  nvim-nonicons
+drwxr-xr-x     10    - deptno 2022-01-05 02:46  -N    ├──  galaxyline.nvim
+drwxr-xr-x      8    - deptno 2022-01-05 02:43  -N    ├──  vim-surround
+drwxr-xr-x     12    - deptno 2022-01-05 02:43  -N    ├──  vim-rhubarb
+drwxr-xr-x     14    - deptno 2022-01-05 02:42  -N    ├──  vim-fugitive
+drwxr-xr-x     17    - deptno 2022-01-05 02:19  -N    ├──  nvim-cmp
+drwxr-xr-x      8    - deptno 2022-01-05 02:18  -N    ├──  rust-tools.nvim
+drwxr-xr-x     23    - deptno 2022-01-05 02:17  -N    ├──  rust.vim
+drwxr-xr-x     24    - deptno 2022-01-05 02:17  -N    ├──  nvim-lspconfig
+drwxr-xr-x     14    - deptno 2022-01-05 02:16  -N    ├──  tagbar
+drwxr-xr-x     14    - deptno 2022-01-05 02:16  -N    ├──  vim-startify
+drwxr-xr-x     17    - deptno 2022-01-05 02:15  -N    └──  vimwiki
+</code></pre><h3 id="전환-체크">전환 체크</h3>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> vim-rest-console<ul>
+<li><input checked="" disabled="" type="checkbox"> NTBBloodbath/rest.nvim.git</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> goyo.vim</li>
+<li><input disabled="" type="checkbox"> limelight.vim</li>
+<li><input disabled="" type="checkbox"> vim-unimpaired<ul>
+<li>필요성을 아직 못느낌</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> bufferline.nvim<ul>
+<li>써보니 일반 buffer 는 일반 에디터의 tab과 매치되지 않아 혼란 tab === tab</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> null-ls.nvim</li>
+<li><input checked="" disabled="" type="checkbox"> gitsigns.nvim</li>
+<li><input checked="" disabled="" type="checkbox"> plenary.nvim</li>
+<li><input checked="" disabled="" type="checkbox"> telescope.nvim</li>
+<li><input checked="" disabled="" type="checkbox"> nvim-treesitter</li>
+<li><input checked="" disabled="" type="checkbox"> copilot.vim</li>
+<li><input disabled="" type="checkbox"> vim-autoswap<ul>
+<li><code class="span">vim.opt.swapfile</code> off 인 인하여 현재 필요 없다고 판단</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> vim (dracula theme)</li>
+<li>[.] defx.nvim<ul>
+<li><input disabled="" type="checkbox"> defx-icons</li>
+<li><input disabled="" type="checkbox"> defx-git</li>
+<li><input checked="" disabled="" type="checkbox"> nvim-tree 로 전환, python 종속성 에러가 너무 많이 남</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> nvim-web-devicons</li>
+<li><input checked="" disabled="" type="checkbox"> nvim-nonicons</li>
+<li><input checked="" disabled="" type="checkbox"> galaxyline.nvim<ul>
+<li><input checked="" disabled="" type="checkbox"> lualine 으로 전환, 개발 비활성화 deprecated 된 api 호출로 워닝</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> vim-surround</li>
+<li><input checked="" disabled="" type="checkbox"> vim-rhubarb</li>
+<li><input checked="" disabled="" type="checkbox"> vim-fugitive</li>
+<li><input checked="" disabled="" type="checkbox"> nvim-cmp</li>
+<li><input checked="" disabled="" type="checkbox"> rust-tools.nvim</li>
+<li><input disabled="" type="checkbox"> rust.vim</li>
+<li><input checked="" disabled="" type="checkbox"> nvim-lspconfig</li>
+<li><input disabled="" type="checkbox"> tagbar</li>
+<li><input checked="" disabled="" type="checkbox"> vim-startify</li>
+<li><input checked="" disabled="" type="checkbox"> vimwiki</li>
+<li><input disabled="" type="checkbox"> nvim-orgmode</li>
+<li><input disabled="" type="checkbox"> <a href="image.nvim">image.nvim</a></li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="setup-terminal">맥 터미널 설정</a></li>
+<li><a href="orgmode">orgmode</a></li>
+<li><a href="neovim">neovim</a></li>
+<li><a href="lua">lua</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/c7c4ea6\n","className":"bg-white text-black","children":"c7c4ea6"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/neovim-lua-plugins.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/neovim-lua-plugins.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/neovim-lua-plugins.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"neovim-lua-plugins","name":"neovim-lua-plugins","val":8},{"id":"path","name":"path","val":1},{"id":"image.nvim","name":"image.nvim","val":2},{"id":"setup-terminal","name":"setup-terminal","val":16},{"id":"orgmode","name":"orgmode","val":2},{"id":"neovim","name":"neovim","val":22},{"id":"lua","name":"lua","val":4},{"id":"neovim-setup","name":"neovim-setup","val":37},{"id":"diary/2024-12-31","name":"diary/2024-12-31","val":441}],"links":[{"source":"neovim-lua-plugins","target":"path"},{"source":"neovim-lua-plugins","target":"path"},{"source":"neovim-lua-plugins","target":"path"},{"source":"neovim-lua-plugins","target":"image.nvim"},{"source":"neovim-lua-plugins","target":"setup-terminal"},{"source":"neovim-lua-plugins","target":"orgmode"},{"source":"neovim-lua-plugins","target":"neovim"},{"source":"neovim-lua-plugins","target":"lua"},{"source":"image.nvim","target":"neovim-lua-plugins"},{"source":"neovim-setup","target":"neovim-lua-plugins"},{"source":"neovim","target":"neovim-lua-plugins"},{"source":"neovim","target":"neovim-lua-plugins"},{"source":"orgmode","target":"neovim-lua-plugins"},{"source":"diary/2024-12-31","target":"neovim-lua-plugins"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","neovim-lua-plugins",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim-lua-plugins","children":[["$","span",null,{"className":"underline","children":"neovim-lua-plugins"}],["$","sup",null,{"children":8}]]}]}],["$","span","path",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/path","children":[["$","span",null,{"className":"underline","children":"path"}],["$","sup",null,{"children":1}]]}]}],["$","span","image.nvim",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/image.nvim","children":[["$","span",null,{"className":"underline","children":"image.nvim"}],["$","sup",null,{"children":2}]]}]}],["$","span","setup-terminal",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/setup-terminal","children":[["$","span",null,{"className":"underline","children":"setup-terminal"}],["$","sup",null,{"children":16}]]}]}],["$","span","orgmode",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/orgmode","children":[["$","span",null,{"className":"underline","children":"orgmode"}],["$","sup",null,{"children":2}]]}]}],["$","span","neovim",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim","children":[["$","span",null,{"className":"underline","children":"neovim"}],["$","sup",null,{"children":22}]]}]}],["$","span","lua",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/lua","children":[["$","span",null,{"className":"underline","children":"lua"}],["$","sup",null,{"children":4}]]}]}],["$","span","neovim-setup",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim-setup","children":[["$","span",null,{"className":"underline","children":"neovim-setup"}],["$","sup",null,{"children":37}]]}]}],["$","span","diary/2024-12-31",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-12-31","children":[["$","span",null,{"className":"underline","children":"diary/2024-12-31"}],["$","sup",null,{"children":441}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","neovim-lua-plugins",{"className":"pl-0","children":["$","a",null,{"href":"#neovim-lua-plugins","children":"neovim-lua-plugins"}]}],["$","div","구조",{"className":"pl-2","children":["$","a",null,{"href":"#구조","children":"구조"}]}],["$","div","lua-전환",{"className":"pl-2","children":["$","a",null,{"href":"#lua-전환","children":"lua 전환"}]}],["$","div","시작-설정-옮기기-전",{"className":"pl-4","children":["$","a",null,{"href":"#시작-설정-옮기기-전","children":"시작 설정 옮기기 전"}]}],["$","div","전환-체크",{"className":"pl-4","children":["$","a",null,{"href":"#전환-체크","children":"전환 체크"}]}],["$","div","link",{"className":"pl-2","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:Tf3e,
+## 구조
+- [[path|~/.config/nvim/init.lua]]
+- [[path|~/.local/share/nvim/site/pack/*/start]] - 시작시 로딩
+- [[path|~/.local/share/nvim/site/pack/*/opt]] - 원하는 타이밍에 스크립트를 통해서 로딩
+
+## lua 전환
+### 시작 설정 옮기기 전
+```sh
+Permissions Links Size User   Date Modified    Git Name
+drwxr-xr-x      3    - deptno 2022-01-10 13:02  -N  .
+drwxr-xr-x     31    - deptno 2022-01-12 18:48  -N └──  start
+drwxr-xr-x     15    - deptno 2022-01-12 18:48  -N    ├──  vim-rest-console
+drwxr-xr-x     10    - deptno 2022-01-12 01:16  -N    ├──  goyo.vim
+drwxr-xr-x      9    - deptno 2022-01-12 01:16  -N    ├──  limelight.vim
+drwxr-xr-x      8    - deptno 2022-01-11 21:56  -N    ├──  vim-unimpaired
+drwxr-xr-x     13    - deptno 2022-01-11 21:54  -N    ├──  bufferline.nvim
+drwxr-xr-x     15    - deptno 2022-01-11 19:34  -N    ├──  null-ls.nvim
+drwxr-xr-x     21    - deptno 2022-01-11 19:14  -N    ├──  gitsigns.nvim
+drwxr-xr-x     20    - deptno 2022-01-10 23:08  -N    ├──  plenary.nvim
+drwxr-xr-x     21    - deptno 2022-01-10 23:03  -N    ├──  telescope.nvim
+drwxr-xr-x     25    - deptno 2022-01-10 17:57  -N    ├──  nvim-treesitter
+drwxr-xr-x     13    - deptno 2022-01-10 14:25  -N    ├──  copilot.vim
+drwxr-xr-x      6    - deptno 2022-01-06 21:04  -N    ├──  vim-autoswap
+drwxr-xr-x     13    - deptno 2022-01-06 20:56  -N    ├──  vim
+drwxr-xr-x      7    - deptno 2022-01-06 13:43  -N    ├──  defx-icons
+drwxr-xr-x      7    - deptno 2022-01-06 13:42  -N    ├──  defx-git
+drwxr-xr-x     13    - deptno 2022-01-06 13:42  -N    ├──  defx.nvim
+drwxr-xr-x      6    - deptno 2022-01-05 02:47  -N    ├──  nvim-web-devicons
+drwxr-xr-x      6    - deptno 2022-01-05 02:46  -N    ├──  nvim-nonicons
+drwxr-xr-x     10    - deptno 2022-01-05 02:46  -N    ├──  galaxyline.nvim
+drwxr-xr-x      8    - deptno 2022-01-05 02:43  -N    ├──  vim-surround
+drwxr-xr-x     12    - deptno 2022-01-05 02:43  -N    ├──  vim-rhubarb
+drwxr-xr-x     14    - deptno 2022-01-05 02:42  -N    ├──  vim-fugitive
+drwxr-xr-x     17    - deptno 2022-01-05 02:19  -N    ├──  nvim-cmp
+drwxr-xr-x      8    - deptno 2022-01-05 02:18  -N    ├──  rust-tools.nvim
+drwxr-xr-x     23    - deptno 2022-01-05 02:17  -N    ├──  rust.vim
+drwxr-xr-x     24    - deptno 2022-01-05 02:17  -N    ├──  nvim-lspconfig
+drwxr-xr-x     14    - deptno 2022-01-05 02:16  -N    ├──  tagbar
+drwxr-xr-x     14    - deptno 2022-01-05 02:16  -N    ├──  vim-startify
+drwxr-xr-x     17    - deptno 2022-01-05 02:15  -N    └──  vimwiki
+```
+
+### 전환 체크
+- [X] vim-rest-console
+  - [X] NTBBloodbath/rest.nvim.git
+- [ ] goyo.vim
+- [ ] limelight.vim
+- [ ] vim-unimpaired
+  - 필요성을 아직 못느낌
+- [ ] bufferline.nvim
+  - 써보니 일반 buffer 는 일반 에디터의 tab과 매치되지 않아 혼란 tab === tab
+- [X] null-ls.nvim
+- [X] gitsigns.nvim
+- [X] plenary.nvim
+- [X] telescope.nvim
+- [X] nvim-treesitter
+- [X] copilot.vim
+- [ ] vim-autoswap
+  - `vim.opt.swapfile` off 인 인하여 현재 필요 없다고 판단
+- [X] vim (dracula theme)
+- [.] defx.nvim
+  - [ ] defx-icons
+  - [ ] defx-git
+  - [X] nvim-tree 로 전환, python 종속성 에러가 너무 많이 남
+- [X] nvim-web-devicons
+- [X] nvim-nonicons
+- [X] galaxyline.nvim
+  - [X] lualine 으로 전환, 개발 비활성화 deprecated 된 api 호출로 워닝
+- [X] vim-surround
+- [X] vim-rhubarb
+- [X] vim-fugitive
+- [X] nvim-cmp
+- [X] rust-tools.nvim
+- [ ] rust.vim
+- [X] nvim-lspconfig
+- [ ] tagbar
+- [X] vim-startify
+- [X] vimwiki
+- [ ] nvim-orgmode
+- [ ] [[image.nvim]]
+
+## link
+- [[setup-terminal|맥 터미널 설정]]
+- [[orgmode]]
+- [[neovim]]
+- [[lua]]
+12:Tf3e,
+## 구조
+- [[path|~/.config/nvim/init.lua]]
+- [[path|~/.local/share/nvim/site/pack/*/start]] - 시작시 로딩
+- [[path|~/.local/share/nvim/site/pack/*/opt]] - 원하는 타이밍에 스크립트를 통해서 로딩
+
+## lua 전환
+### 시작 설정 옮기기 전
+```sh
+Permissions Links Size User   Date Modified    Git Name
+drwxr-xr-x      3    - deptno 2022-01-10 13:02  -N  .
+drwxr-xr-x     31    - deptno 2022-01-12 18:48  -N └──  start
+drwxr-xr-x     15    - deptno 2022-01-12 18:48  -N    ├──  vim-rest-console
+drwxr-xr-x     10    - deptno 2022-01-12 01:16  -N    ├──  goyo.vim
+drwxr-xr-x      9    - deptno 2022-01-12 01:16  -N    ├──  limelight.vim
+drwxr-xr-x      8    - deptno 2022-01-11 21:56  -N    ├──  vim-unimpaired
+drwxr-xr-x     13    - deptno 2022-01-11 21:54  -N    ├──  bufferline.nvim
+drwxr-xr-x     15    - deptno 2022-01-11 19:34  -N    ├──  null-ls.nvim
+drwxr-xr-x     21    - deptno 2022-01-11 19:14  -N    ├──  gitsigns.nvim
+drwxr-xr-x     20    - deptno 2022-01-10 23:08  -N    ├──  plenary.nvim
+drwxr-xr-x     21    - deptno 2022-01-10 23:03  -N    ├──  telescope.nvim
+drwxr-xr-x     25    - deptno 2022-01-10 17:57  -N    ├──  nvim-treesitter
+drwxr-xr-x     13    - deptno 2022-01-10 14:25  -N    ├──  copilot.vim
+drwxr-xr-x      6    - deptno 2022-01-06 21:04  -N    ├──  vim-autoswap
+drwxr-xr-x     13    - deptno 2022-01-06 20:56  -N    ├──  vim
+drwxr-xr-x      7    - deptno 2022-01-06 13:43  -N    ├──  defx-icons
+drwxr-xr-x      7    - deptno 2022-01-06 13:42  -N    ├──  defx-git
+drwxr-xr-x     13    - deptno 2022-01-06 13:42  -N    ├──  defx.nvim
+drwxr-xr-x      6    - deptno 2022-01-05 02:47  -N    ├──  nvim-web-devicons
+drwxr-xr-x      6    - deptno 2022-01-05 02:46  -N    ├──  nvim-nonicons
+drwxr-xr-x     10    - deptno 2022-01-05 02:46  -N    ├──  galaxyline.nvim
+drwxr-xr-x      8    - deptno 2022-01-05 02:43  -N    ├──  vim-surround
+drwxr-xr-x     12    - deptno 2022-01-05 02:43  -N    ├──  vim-rhubarb
+drwxr-xr-x     14    - deptno 2022-01-05 02:42  -N    ├──  vim-fugitive
+drwxr-xr-x     17    - deptno 2022-01-05 02:19  -N    ├──  nvim-cmp
+drwxr-xr-x      8    - deptno 2022-01-05 02:18  -N    ├──  rust-tools.nvim
+drwxr-xr-x     23    - deptno 2022-01-05 02:17  -N    ├──  rust.vim
+drwxr-xr-x     24    - deptno 2022-01-05 02:17  -N    ├──  nvim-lspconfig
+drwxr-xr-x     14    - deptno 2022-01-05 02:16  -N    ├──  tagbar
+drwxr-xr-x     14    - deptno 2022-01-05 02:16  -N    ├──  vim-startify
+drwxr-xr-x     17    - deptno 2022-01-05 02:15  -N    └──  vimwiki
+```
+
+### 전환 체크
+- [X] vim-rest-console
+  - [X] NTBBloodbath/rest.nvim.git
+- [ ] goyo.vim
+- [ ] limelight.vim
+- [ ] vim-unimpaired
+  - 필요성을 아직 못느낌
+- [ ] bufferline.nvim
+  - 써보니 일반 buffer 는 일반 에디터의 tab과 매치되지 않아 혼란 tab === tab
+- [X] null-ls.nvim
+- [X] gitsigns.nvim
+- [X] plenary.nvim
+- [X] telescope.nvim
+- [X] nvim-treesitter
+- [X] copilot.vim
+- [ ] vim-autoswap
+  - `vim.opt.swapfile` off 인 인하여 현재 필요 없다고 판단
+- [X] vim (dracula theme)
+- [.] defx.nvim
+  - [ ] defx-icons
+  - [ ] defx-git
+  - [X] nvim-tree 로 전환, python 종속성 에러가 너무 많이 남
+- [X] nvim-web-devicons
+- [X] nvim-nonicons
+- [X] galaxyline.nvim
+  - [X] lualine 으로 전환, 개발 비활성화 deprecated 된 api 호출로 워닝
+- [X] vim-surround
+- [X] vim-rhubarb
+- [X] vim-fugitive
+- [X] nvim-cmp
+- [X] rust-tools.nvim
+- [ ] rust.vim
+- [X] nvim-lspconfig
+- [ ] tagbar
+- [X] vim-startify
+- [X] vimwiki
+- [ ] nvim-orgmode
+- [ ] [[image.nvim]]
+
+## link
+- [[setup-terminal|맥 터미널 설정]]
+- [[orgmode]]
+- [[neovim]]
+- [[lua]]
+13:Tf3e,
+## 구조
+- [[path|~/.config/nvim/init.lua]]
+- [[path|~/.local/share/nvim/site/pack/*/start]] - 시작시 로딩
+- [[path|~/.local/share/nvim/site/pack/*/opt]] - 원하는 타이밍에 스크립트를 통해서 로딩
+
+## lua 전환
+### 시작 설정 옮기기 전
+```sh
+Permissions Links Size User   Date Modified    Git Name
+drwxr-xr-x      3    - deptno 2022-01-10 13:02  -N  .
+drwxr-xr-x     31    - deptno 2022-01-12 18:48  -N └──  start
+drwxr-xr-x     15    - deptno 2022-01-12 18:48  -N    ├──  vim-rest-console
+drwxr-xr-x     10    - deptno 2022-01-12 01:16  -N    ├──  goyo.vim
+drwxr-xr-x      9    - deptno 2022-01-12 01:16  -N    ├──  limelight.vim
+drwxr-xr-x      8    - deptno 2022-01-11 21:56  -N    ├──  vim-unimpaired
+drwxr-xr-x     13    - deptno 2022-01-11 21:54  -N    ├──  bufferline.nvim
+drwxr-xr-x     15    - deptno 2022-01-11 19:34  -N    ├──  null-ls.nvim
+drwxr-xr-x     21    - deptno 2022-01-11 19:14  -N    ├──  gitsigns.nvim
+drwxr-xr-x     20    - deptno 2022-01-10 23:08  -N    ├──  plenary.nvim
+drwxr-xr-x     21    - deptno 2022-01-10 23:03  -N    ├──  telescope.nvim
+drwxr-xr-x     25    - deptno 2022-01-10 17:57  -N    ├──  nvim-treesitter
+drwxr-xr-x     13    - deptno 2022-01-10 14:25  -N    ├──  copilot.vim
+drwxr-xr-x      6    - deptno 2022-01-06 21:04  -N    ├──  vim-autoswap
+drwxr-xr-x     13    - deptno 2022-01-06 20:56  -N    ├──  vim
+drwxr-xr-x      7    - deptno 2022-01-06 13:43  -N    ├──  defx-icons
+drwxr-xr-x      7    - deptno 2022-01-06 13:42  -N    ├──  defx-git
+drwxr-xr-x     13    - deptno 2022-01-06 13:42  -N    ├──  defx.nvim
+drwxr-xr-x      6    - deptno 2022-01-05 02:47  -N    ├──  nvim-web-devicons
+drwxr-xr-x      6    - deptno 2022-01-05 02:46  -N    ├──  nvim-nonicons
+drwxr-xr-x     10    - deptno 2022-01-05 02:46  -N    ├──  galaxyline.nvim
+drwxr-xr-x      8    - deptno 2022-01-05 02:43  -N    ├──  vim-surround
+drwxr-xr-x     12    - deptno 2022-01-05 02:43  -N    ├──  vim-rhubarb
+drwxr-xr-x     14    - deptno 2022-01-05 02:42  -N    ├──  vim-fugitive
+drwxr-xr-x     17    - deptno 2022-01-05 02:19  -N    ├──  nvim-cmp
+drwxr-xr-x      8    - deptno 2022-01-05 02:18  -N    ├──  rust-tools.nvim
+drwxr-xr-x     23    - deptno 2022-01-05 02:17  -N    ├──  rust.vim
+drwxr-xr-x     24    - deptno 2022-01-05 02:17  -N    ├──  nvim-lspconfig
+drwxr-xr-x     14    - deptno 2022-01-05 02:16  -N    ├──  tagbar
+drwxr-xr-x     14    - deptno 2022-01-05 02:16  -N    ├──  vim-startify
+drwxr-xr-x     17    - deptno 2022-01-05 02:15  -N    └──  vimwiki
+```
+
+### 전환 체크
+- [X] vim-rest-console
+  - [X] NTBBloodbath/rest.nvim.git
+- [ ] goyo.vim
+- [ ] limelight.vim
+- [ ] vim-unimpaired
+  - 필요성을 아직 못느낌
+- [ ] bufferline.nvim
+  - 써보니 일반 buffer 는 일반 에디터의 tab과 매치되지 않아 혼란 tab === tab
+- [X] null-ls.nvim
+- [X] gitsigns.nvim
+- [X] plenary.nvim
+- [X] telescope.nvim
+- [X] nvim-treesitter
+- [X] copilot.vim
+- [ ] vim-autoswap
+  - `vim.opt.swapfile` off 인 인하여 현재 필요 없다고 판단
+- [X] vim (dracula theme)
+- [.] defx.nvim
+  - [ ] defx-icons
+  - [ ] defx-git
+  - [X] nvim-tree 로 전환, python 종속성 에러가 너무 많이 남
+- [X] nvim-web-devicons
+- [X] nvim-nonicons
+- [X] galaxyline.nvim
+  - [X] lualine 으로 전환, 개발 비활성화 deprecated 된 api 호출로 워닝
+- [X] vim-surround
+- [X] vim-rhubarb
+- [X] vim-fugitive
+- [X] nvim-cmp
+- [X] rust-tools.nvim
+- [ ] rust.vim
+- [X] nvim-lspconfig
+- [ ] tagbar
+- [X] vim-startify
+- [X] vimwiki
+- [ ] nvim-orgmode
+- [ ] [[image.nvim]]
+
+## link
+- [[setup-terminal|맥 터미널 설정]]
+- [[orgmode]]
+- [[neovim]]
+- [[lua]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# neovim-lua-plugins"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# neovim-lua-plugins"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/neovim-lua-plugins"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# neovim-lua-plugins"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null
