@@ -1,0 +1,574 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-e6f48f16817ae44e.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","practical-deep-learning","c"]
+0:["pEha9E_9A7vil-zwJtPto",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","practical-deep-learning","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"practical-deep-learning\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","practical-deep-learning","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:T2404,<h1 id="practical-deep-learning">practical-deep-learning</h1>
+<ul>
+<li><a href="https://course.fast.ai" target="_blank">[URL] https://course.fast.ai/</a></li>
+<li><a href="https://github.com/deptno/study-ai" target="_blank">[URL] https://github.com/deptno/study-ai</a></li>
+</ul>
+<h2 id="강의">강의</h2>
+<h3 id="01-getting-started">01. getting started</h3>
+<ul>
+<li>이미지 분석기 따라 생성해보기</li>
+<li>imagenet 을 학습한 기본 모델, resnet18 기반 개/고양이이를 추가학습(파인튜닝)</li>
+</ul>
+<h3 id="02-deployment">02. deployment</h3>
+<ul>
+<li>huggingface 에 gradio 등을 통한 app + api endpoint 배포</li>
+<li>Image Classifier Cleaner, 학습시 잘못된 데이터 제거</li>
+<li>Data augmentation -&gt; 데이터 증강, 이미지를 랜덤 사이즈 크롭, 혹은 변형을 통해 학습을 증대시킨다</li>
+<li>leaner 를 pickle 파일로 export -&gt; import 사용</li>
+</ul>
+<h3 id="03-nautral-net-foundations">03. nautral net foundations</h3>
+<ul>
+<li>loss 를 개선하는 원리 설명</li>
+<li>ReLU (Rectificed Linear Unit)<ul>
+<li>0 이상에서만 값을 가짐</li>
+<li>큰수의 ReLU 계산을 행렬곱셈을 통해 가능(GPU 가 잘하는)</li>
+</ul>
+</li>
+<li>Gradient descent</li>
+<li>Excel 의 spreadsheet 을 가지고 kaggle 문제를 수동으로 푸는 것 보여줌<ul>
+<li>데이터 정규화<ul>
+<li>나이가 없는 것을 제거</li>
+<li>승선지가 없는 경우 제거</li>
+<li>남은 데이터 컬럼(인자)들에 계수를 곱해야한다 -&gt; 수치화 되어야함<ul>
+<li>남/여 -&gt; isMail(1/0)</li>
+<li>승선 -&gt; [어디에] 승선 컬럼으로 컬럼 분화 -&gt; 1/0(이진 변수화)<ul>
+<li>a/b/c 승선지인경우</li>
+<li>isA, isB, isC 는 isA, isB 가 모두 0일때 확정되므로 필요없다<ul>
+<li>n-1 개의 dummy variable</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code class="span">y = mx + b</code> 와 같이 방정식에는 상수항이있는데 이는 컬럼을 하나 만들어서 1로 채워서사용(랜덤 계수곱을 위해)</li>
+<li>각 인자들에 곱할 랜덤 계수들을 만듬(-0.5 ~ 0.5)</li>
+<li>나이 -&gt; 맥시멈값을 가지고 각 컬럼값을 나눠서 0 ~ 1 로 정규화한다</li>
+<li>fare(티켓값) -&gt; 큰숫자가 많고 작은숫자가 조금 있는 경우, 극단적 데이터의 경우는 로그를 취한다</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="04-natural-language-nlp">04. natural language (NLP)</h3>
+<h2 id="책">책</h2>
+<h3 id="04">04</h3>
+<ul>
+<li><p>파이토치 텐서</p>
+<ul>
+<li><a href="https://wikidocs.net/52460" target="_blank">[URL] https://wikidocs.net/52460</a></li>
+</ul>
+</li>
+<li><p>평가 함수, 좋은지 여부를 사람이 확인하기 위해 사용, high is better</p>
+</li>
+<li><p>loss 함수, 손실 최적화를 위해 학습에 사용됨, low is better</p>
+<ul>
+<li>loss 가 낮을 수록 좋다<ul>
+<li>loss 가 낮다, 확신을 갖고 맞춘 경우</li>
+<li>loss 가 높다, 확신을 갖고 틀린 경우, 맞췄으나 확신이 없는 경우</li>
+</ul>
+</li>
+<li>loss 함수로 <strong>mse(mean sequare error)</strong> 사용시<ul>
+<li><code class="span">평가할 데이터 - 정답</code> 을 제곱한뒤 평균을 내서 루트하는 방식</li>
+<li>평가데이터가 정답과 얼마나 근접한지 확인</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>loss 함수의 결과를 미분하면 학습 방향을 알 수 있음</p>
+</li>
+<li><p>미분 결과 * learning rate 를 파라메터에서 뺀다</p>
+<ul>
+<li>기울기가 낮아지는 방향(0) 을 향해 전진</li>
+<li>learning rate 를 찾는 것은 또다른 중요한 일, 여기선 낮은 값(0.001)정도로 생각</li>
+<li>다음 train set + 수정된 파라메터를 가지고 다시 loss 함수를 사용</li>
+<li>반복해서 낮은 loss 획득</li>
+<li>parameter 를 모델 실행 후 결과에서 <code class="span">backward()</code>시 parameter에서 미분된 값을 <code class="span">grad</code> 속성을 통해 접근가능<ul>
+<li>가중치가 벡터인 경우 <code class="span">.sum()</code> 후 <code class="span">backward()</code>실행으로 미분</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="정리">정리</h4>
+<ul>
+<li>model 을 함수 f로 보고 모델은 입력을 받아 결과를 예측한다<ul>
+<li>뭔 받아서 뭘 예측할 건지가 f</li>
+</ul>
+</li>
+<li>loss 함수, f 의 결과가 답에 얼마나 부합하는지 확인한다<ul>
+<li>답은 label data 에서 확인</li>
+</ul>
+</li>
+<li>임의의 파라메터를 설정하고 f 의 결과를 구하고 답과의 차이(거리)인 loss 구한다</li>
+<li>loss 를 미분(<code class="span">backward</code> 함수가 여기있기 때문에 이렇게 표현) 파라메터의 기울구한다</li>
+<li>파라메터의 기울기에 learning rate 를 곱하여 파라메터에 더하거나 빼서 더 낮은 loss 결과를 얻도록 한다</li>
+<li>반복한다</li>
+</ul>
+<h4 id="443-sgd">4.4.3 SGD</h4>
+<ul>
+<li>f: 모델, 속도를 측정하고자함</li>
+<li>loss: 모델의 속도가 실제 속도차를 비교</li>
+<li>속도 측정 흐름<ul>
+<li>x: time, y: speed, (a,y: weights, y: bias): parameter</li>
+<li>속도가 느려지다가 빨라진다 -&gt; 2차방정식 <code class="span">a(x**2) + bx + y</code></li>
+<li>loss가 적은 parameter 를 찾는게 목표, x, y 는 주어짐</li>
+<li>random parameter 로 시작</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<h4 id="용어">용어</h4>
+<ul>
+<li>브로드캐스팅: tensor 간의 연산, 높은 랭크의 텐서에 맞춰서 낮은 랭크의 텐서가 확장된다</li>
+<li>파라메터: weights + bias</li>
+</ul>
+<h4 id="numpy-vs-pytorch">numpy vs pytorch</h4>
+<table>
+<thead>
+<tr>
+<th>numpy</th>
+<th>pytorch</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>제약없음</td>
+<td>동일사이즈(제곱)</td>
+</tr>
+<tr>
+<td>제약없음</td>
+<td>수치형데이터만</td>
+</tr>
+<tr>
+<td>x</td>
+<td>자동 미분</td>
+</tr>
+<tr>
+<td>x</td>
+<td>GPU 활용 연산</td>
+</tr>
+</tbody></table>
+<h4 id="텐서-랭크">텐서 랭크</h4>
+<table>
+<thead>
+<tr>
+<th align="right">rank</th>
+<th>책에서의 언급</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">0</td>
+<td>0d tensor, scalr</td>
+</tr>
+<tr>
+<td align="right">1</td>
+<td>1d tensor, vector</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td>2d tensor, matrix, list of vector</td>
+</tr>
+<tr>
+<td align="right">3</td>
+<td>3d tensor, list of matrix</td>
+</tr>
+</tbody></table>
+<h2 id="error"><a href="error">error</a></h2>
+<h3 id="notimplementederror-the-operator-aten_linalg_solve_exresult-is-not-currently-implemented-for-the-mps-device-if-you-want-this-op-to-be-added-in-priority-during-the-prototype-phase-of-this-feature-please-comment-on-httpsgithubcompytorchpytorchissues77764-as-a-temporary-fix-you-can-set-the-environment-variable-pytorch_enable_mps_fallback1-to-use-the-cpu-as-a-fallback-for-this-op-warning-this-will-be-slower-than-running-natively-on-mps">NotImplementedError: The operator &#39;aten::_linalg_solve_ex.result&#39; is not currently implemented for the MPS device. If you want this op to be added in priority during the prototype phase of this feature, please comment on <a href="https://github.com/pytorch/pytorch/issues/77764" target="_blank">[URL] https://github.com/pytorch/pytorch/issues/77764</a>. As a temporary fix, you can set the environment variable <code class="span">PYTORCH_ENABLE_MPS_FALLBACK=1</code> to use the CPU as a fallback for this op. WARNING: this will be slower than running natively on MPS.</h3>
+<pre><code class="hljs language-python">NotImplementedError: The operator <span class="hljs-string">&#x27;aten::_linalg_solve_ex.result&#x27;</span> <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> currently implemented <span class="hljs-keyword">for</span> the MPS device. If you want this op to be added <span class="hljs-keyword">in</span> priority during the prototype phase of this feature, please comment on https://github.com/pytorch/pytorch/issues/<span class="hljs-number">77764.</span> As a temporary fix, you can <span class="hljs-built_in">set</span> the environment variable `PYTORCH_ENABLE_MPS_FALLBACK=<span class="hljs-number">1</span>` to use the CPU <span class="hljs-keyword">as</span> a fallback <span class="hljs-keyword">for</span> this op. WARNING: this will be slower than running natively on MPS.
+</code></pre><ul>
+<li><a href="https://forums.fast.ai/t/fastai-on-apple-m1/86059/21?page=3" target="_blank">[URL] https://forums.fast.ai/t/fastai-on-apple-m1/86059/21?page=3</a></li>
+</ul>
+<h3 id="error-displaying-widget">Error displaying widget</h3>
+<pre><code class="hljs language-python">cleaner = ImageClassifierCleaner(learn)
+cleaner
+</code></pre><ul>
+<li><a href="https://forums.fast.ai/t/beginner-setup/95289/259" target="_blank">[URL] https://forums.fast.ai/t/beginner-setup/95289/259</a></li>
+</ul>
+<ul>
+<li>python 버전 다운 필요. 3.11</li>
+<li>근데 나는 3.9.6 이었는데 에러발생</li>
+<li><code class="span">ipywidgets</code> uninstall 후 커널 재시작 install 로 해결 7.x -&gt; 8.x 로 버전업</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="ai">ai</a></li>
+<li><a href="jupyter">jupyter</a></li>
+<li><a href="huggingface">huggingface</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/3a684cf\n","className":"bg-white text-black","children":"3a684cf"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/practical-deep-learning.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/practical-deep-learning.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/practical-deep-learning.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"practical-deep-learning","name":"practical-deep-learning","val":4},{"id":"error","name":"error","val":4},{"id":"ai","name":"ai","val":16},{"id":"jupyter","name":"jupyter","val":8},{"id":"huggingface","name":"huggingface","val":7},{"id":"diary/2024-04-24","name":"diary/2024-04-24","val":3},{"id":"diary/2024-04-25","name":"diary/2024-04-25","val":2},{"id":"diary/2024-12-31","name":"diary/2024-12-31","val":441}],"links":[{"source":"practical-deep-learning","target":"error"},{"source":"practical-deep-learning","target":"ai"},{"source":"practical-deep-learning","target":"jupyter"},{"source":"practical-deep-learning","target":"huggingface"},{"source":"ai","target":"practical-deep-learning"},{"source":"huggingface","target":"practical-deep-learning"},{"source":"diary/2024-04-24","target":"practical-deep-learning"},{"source":"diary/2024-04-25","target":"practical-deep-learning"},{"source":"diary/2024-12-31","target":"practical-deep-learning"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","practical-deep-learning",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/practical-deep-learning","children":[["$","span",null,{"className":"underline","children":"practical-deep-learning"}],["$","sup",null,{"children":4}]]}]}],["$","span","error",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/error","children":[["$","span",null,{"className":"underline","children":"error"}],["$","sup",null,{"children":4}]]}]}],["$","span","ai",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ai","children":[["$","span",null,{"className":"underline","children":"ai"}],["$","sup",null,{"children":16}]]}]}],["$","span","jupyter",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/jupyter","children":[["$","span",null,{"className":"underline","children":"jupyter"}],["$","sup",null,{"children":8}]]}]}],["$","span","huggingface",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/huggingface","children":[["$","span",null,{"className":"underline","children":"huggingface"}],["$","sup",null,{"children":7}]]}]}],["$","span","diary/2024-04-24",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-04-24","children":[["$","span",null,{"className":"underline","children":"diary/2024-04-24"}],["$","sup",null,{"children":3}]]}]}],["$","span","diary/2024-04-25",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-04-25","children":[["$","span",null,{"className":"underline","children":"diary/2024-04-25"}],["$","sup",null,{"children":2}]]}]}],["$","span","diary/2024-12-31",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-12-31","children":[["$","span",null,{"className":"underline","children":"diary/2024-12-31"}],["$","sup",null,{"children":441}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","practical-deep-learning",{"className":"pl-0","children":["$","a",null,{"href":"#practical-deep-learning","children":"practical-deep-learning"}]}],["$","div","강의",{"className":"pl-2","children":["$","a",null,{"href":"#강의","children":"강의"}]}],["$","div","01-getting-started",{"className":"pl-4","children":["$","a",null,{"href":"#01-getting-started","children":"01. getting started"}]}],["$","div","02-deployment",{"className":"pl-4","children":["$","a",null,{"href":"#02-deployment","children":"02. deployment"}]}],["$","div","03-nautral-net-foundations",{"className":"pl-4","children":["$","a",null,{"href":"#03-nautral-net-foundations","children":"03. nautral net foundations"}]}],["$","div","04-natural-language-nlp",{"className":"pl-4","children":["$","a",null,{"href":"#04-natural-language-nlp","children":"04. natural language (NLP)"}]}],["$","div","책",{"className":"pl-2","children":["$","a",null,{"href":"#책","children":"책"}]}],["$","div","04",{"className":"pl-4","children":["$","a",null,{"href":"#04","children":"04"}]}],["$","div","정리",{"className":"pl-6","children":["$","a",null,{"href":"#정리","children":"정리"}]}],["$","div","443-sgd",{"className":"pl-6","children":["$","a",null,{"href":"#443-sgd","children":"4.4.3 SGD"}]}],["$","div","용어",{"className":"pl-6","children":["$","a",null,{"href":"#용어","children":"용어"}]}],["$","div","numpy-vs-pytorch",{"className":"pl-6","children":["$","a",null,{"href":"#numpy-vs-pytorch","children":"numpy vs pytorch"}]}],["$","div","텐서-랭크",{"className":"pl-6","children":["$","a",null,{"href":"#텐서-랭크","children":"텐서 랭크"}]}],["$","div","error",{"className":"pl-2","children":["$","a",null,{"href":"#error","children":"error"}]}],["$","div","notimplementederror-the-operator-aten_linalg_solve_exresult-is-not-currently-implemented-for-the-mps-device-if-you-want-this-op-to-be-added-in-priority-during-the-prototype-phase-of-this-feature-please-comment-on-url-httpsgithubcompytorchpytorchissues77764-as-a-temporary-fix-you-can-set-the-environment-variable-pytorch_enable_mps_fallback1-to-use-the-cpu-as-a-fallback-for-this-op-warning-this-will-be-slower-than-running-natively-on-mps",{"className":"pl-4","children":["$","a",null,{"href":"#notimplementederror-the-operator-aten_linalg_solve_exresult-is-not-currently-implemented-for-the-mps-device-if-you-want-this-op-to-be-added-in-priority-during-the-prototype-phase-of-this-feature-please-comment-on-url-httpsgithubcompytorchpytorchissues77764-as-a-temporary-fix-you-can-set-the-environment-variable-pytorch_enable_mps_fallback1-to-use-the-cpu-as-a-fallback-for-this-op-warning-this-will-be-slower-than-running-natively-on-mps","children":"NotImplementedError: The operator 'aten::_linalg_solve_ex.result' is not currently implemented for the MPS device. If you want this op to be added in priority during the prototype phase of this feature, please comment on [URL] https://github.com/pytorch/pytorch/issues/77764. As a temporary fix, you can set the environment variable PYTORCH_ENABLE_MPS_FALLBACK=1 to use the CPU as a fallback for this op. WARNING: this will be slower than running natively on MPS."}]}],["$","div","error-displaying-widget",{"className":"pl-4","children":["$","a",null,{"href":"#error-displaying-widget","children":"Error displaying widget"}]}],["$","div","link",{"className":"pl-2","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:T184f,+ https://course.fast.ai
++ https://github.com/deptno/study-ai
+
+## 강의
+### 01. getting started
+- 이미지 분석기 따라 생성해보기
+- imagenet 을 학습한 기본 모델, resnet18 기반 개/고양이이를 추가학습(파인튜닝)
+
+### 02. deployment
+- huggingface 에 gradio 등을 통한 app + api endpoint 배포
+- Image Classifier Cleaner, 학습시 잘못된 데이터 제거
+- Data augmentation -> 데이터 증강, 이미지를 랜덤 사이즈 크롭, 혹은 변형을 통해 학습을 증대시킨다
+- leaner 를 pickle 파일로 export -> import 사용
+
+### 03. nautral net foundations
+- loss 를 개선하는 원리 설명
+- ReLU (Rectificed Linear Unit)
+  - 0 이상에서만 값을 가짐
+  - 큰수의 ReLU 계산을 행렬곱셈을 통해 가능(GPU 가 잘하는)
+- Gradient descent
+- Excel 의 spreadsheet 을 가지고 kaggle 문제를 수동으로 푸는 것 보여줌
+  - 데이터 정규화
+    - 나이가 없는 것을 제거
+    - 승선지가 없는 경우 제거
+    - 남은 데이터 컬럼(인자)들에 계수를 곱해야한다 -> 수치화 되어야함
+      - 남/여 -> isMail(1/0)
+      - 승선 -> [어디에] 승선 컬럼으로 컬럼 분화 -> 1/0(이진 변수화)
+        - a/b/c 승선지인경우
+        - isA, isB, isC 는 isA, isB 가 모두 0일때 확정되므로 필요없다
+          - n-1 개의 dummy variable
+    - `y = mx + b` 와 같이 방정식에는 상수항이있는데 이는 컬럼을 하나 만들어서 1로 채워서사용(랜덤 계수곱을 위해)
+    - 각 인자들에 곱할 랜덤 계수들을 만듬(-0.5 ~ 0.5)
+    - 나이 -> 맥시멈값을 가지고 각 컬럼값을 나눠서 0 ~ 1 로 정규화한다
+    - fare(티켓값) -> 큰숫자가 많고 작은숫자가 조금 있는 경우, 극단적 데이터의 경우는 로그를 취한다
+
+### 04. natural language (NLP)
+
+## 책
+### 04
+- 파이토치 텐서
+  + https://wikidocs.net/52460
+
+- 평가 함수, 좋은지 여부를 사람이 확인하기 위해 사용, high is better
+- loss 함수, 손실 최적화를 위해 학습에 사용됨, low is better
+  - loss 가 낮을 수록 좋다
+    - loss 가 낮다, 확신을 갖고 맞춘 경우
+    - loss 가 높다, 확신을 갖고 틀린 경우, 맞췄으나 확신이 없는 경우
+  - loss 함수로 **mse(mean sequare error)** 사용시
+    - `평가할 데이터 - 정답` 을 제곱한뒤 평균을 내서 루트하는 방식
+    - 평가데이터가 정답과 얼마나 근접한지 확인
+- loss 함수의 결과를 미분하면 학습 방향을 알 수 있음
+- 미분 결과 * learning rate 를 파라메터에서 뺀다
+  - 기울기가 낮아지는 방향(0) 을 향해 전진
+  - learning rate 를 찾는 것은 또다른 중요한 일, 여기선 낮은 값(0.001)정도로 생각
+  - 다음 train set + 수정된 파라메터를 가지고 다시 loss 함수를 사용
+  - 반복해서 낮은 loss 획득
+  - parameter 를 모델 실행 후 결과에서 `backward()`시 parameter에서 미분된 값을 `grad` 속성을 통해 접근가능
+    - 가중치가 벡터인 경우 `.sum()` 후 `backward()`실행으로 미분
+
+#### 정리
+- model 을 함수 f로 보고 모델은 입력을 받아 결과를 예측한다
+  - 뭔 받아서 뭘 예측할 건지가 f
+- loss 함수, f 의 결과가 답에 얼마나 부합하는지 확인한다
+  - 답은 label data 에서 확인
+- 임의의 파라메터를 설정하고 f 의 결과를 구하고 답과의 차이(거리)인 loss 구한다
+- loss 를 미분(`backward` 함수가 여기있기 때문에 이렇게 표현) 파라메터의 기울구한다
+- 파라메터의 기울기에 learning rate 를 곱하여 파라메터에 더하거나 빼서 더 낮은 loss 결과를 얻도록 한다
+- 반복한다
+
+#### 4.4.3 SGD
+- f: 모델, 속도를 측정하고자함
+- loss: 모델의 속도가 실제 속도차를 비교
+- 속도 측정 흐름
+  - x: time, y: speed, (a,y: weights, y: bias): parameter
+  - 속도가 느려지다가 빨라진다 -> 2차방정식 `a(x**2) + bx + y`
+  - loss가 적은 parameter 를 찾는게 목표, x, y 는 주어짐
+  - random parameter 로 시작
+  - 
+#### 용어
+- 브로드캐스팅: tensor 간의 연산, 높은 랭크의 텐서에 맞춰서 낮은 랭크의 텐서가 확장된다
+- 파라메터: weights + bias
+
+#### numpy vs pytorch
+| numpy    | pytorch          |
+|----------|------------------|
+| 제약없음 | 동일사이즈(제곱) |
+| 제약없음 | 수치형데이터만   |
+| x        | 자동 미분        |
+| x        | GPU 활용 연산    |
+
+#### 텐서 랭크
+| rank | 책에서의 언급                     |
+|-----:|-----------------------------------|
+|    0 | 0d tensor, scalr                  |
+|    1 | 1d tensor, vector                 |
+|    2 | 2d tensor, matrix, list of vector |
+|    3 | 3d tensor, list of matrix         |
+
+## [[error]]
+### NotImplementedError: The operator 'aten::_linalg_solve_ex.result' is not currently implemented for the MPS device. If you want this op to be added in priority during the prototype phase of this feature, please comment on https://github.com/pytorch/pytorch/issues/77764. As a temporary fix, you can set the environment variable `PYTORCH_ENABLE_MPS_FALLBACK=1` to use the CPU as a fallback for this op. WARNING: this will be slower than running natively on MPS.
+```python
+NotImplementedError: The operator 'aten::_linalg_solve_ex.result' is not currently implemented for the MPS device. If you want this op to be added in priority during the prototype phase of this feature, please comment on https://github.com/pytorch/pytorch/issues/77764. As a temporary fix, you can set the environment variable `PYTORCH_ENABLE_MPS_FALLBACK=1` to use the CPU as a fallback for this op. WARNING: this will be slower than running natively on MPS.
+```
++ https://forums.fast.ai/t/fastai-on-apple-m1/86059/21?page=3
+
+
+### Error displaying widget
+```python
+cleaner = ImageClassifierCleaner(learn)
+cleaner
+```
++ https://forums.fast.ai/t/beginner-setup/95289/259
+- python 버전 다운 필요. 3.11
+- 근데 나는 3.9.6 이었는데 에러발생
+- `ipywidgets` uninstall 후 커널 재시작 install 로 해결 7.x -> 8.x 로 버전업
+
+## link
+- [[ai]]
+- [[jupyter]]
+- [[huggingface]]
+12:T184f,+ https://course.fast.ai
++ https://github.com/deptno/study-ai
+
+## 강의
+### 01. getting started
+- 이미지 분석기 따라 생성해보기
+- imagenet 을 학습한 기본 모델, resnet18 기반 개/고양이이를 추가학습(파인튜닝)
+
+### 02. deployment
+- huggingface 에 gradio 등을 통한 app + api endpoint 배포
+- Image Classifier Cleaner, 학습시 잘못된 데이터 제거
+- Data augmentation -> 데이터 증강, 이미지를 랜덤 사이즈 크롭, 혹은 변형을 통해 학습을 증대시킨다
+- leaner 를 pickle 파일로 export -> import 사용
+
+### 03. nautral net foundations
+- loss 를 개선하는 원리 설명
+- ReLU (Rectificed Linear Unit)
+  - 0 이상에서만 값을 가짐
+  - 큰수의 ReLU 계산을 행렬곱셈을 통해 가능(GPU 가 잘하는)
+- Gradient descent
+- Excel 의 spreadsheet 을 가지고 kaggle 문제를 수동으로 푸는 것 보여줌
+  - 데이터 정규화
+    - 나이가 없는 것을 제거
+    - 승선지가 없는 경우 제거
+    - 남은 데이터 컬럼(인자)들에 계수를 곱해야한다 -> 수치화 되어야함
+      - 남/여 -> isMail(1/0)
+      - 승선 -> [어디에] 승선 컬럼으로 컬럼 분화 -> 1/0(이진 변수화)
+        - a/b/c 승선지인경우
+        - isA, isB, isC 는 isA, isB 가 모두 0일때 확정되므로 필요없다
+          - n-1 개의 dummy variable
+    - `y = mx + b` 와 같이 방정식에는 상수항이있는데 이는 컬럼을 하나 만들어서 1로 채워서사용(랜덤 계수곱을 위해)
+    - 각 인자들에 곱할 랜덤 계수들을 만듬(-0.5 ~ 0.5)
+    - 나이 -> 맥시멈값을 가지고 각 컬럼값을 나눠서 0 ~ 1 로 정규화한다
+    - fare(티켓값) -> 큰숫자가 많고 작은숫자가 조금 있는 경우, 극단적 데이터의 경우는 로그를 취한다
+
+### 04. natural language (NLP)
+
+## 책
+### 04
+- 파이토치 텐서
+  + https://wikidocs.net/52460
+
+- 평가 함수, 좋은지 여부를 사람이 확인하기 위해 사용, high is better
+- loss 함수, 손실 최적화를 위해 학습에 사용됨, low is better
+  - loss 가 낮을 수록 좋다
+    - loss 가 낮다, 확신을 갖고 맞춘 경우
+    - loss 가 높다, 확신을 갖고 틀린 경우, 맞췄으나 확신이 없는 경우
+  - loss 함수로 **mse(mean sequare error)** 사용시
+    - `평가할 데이터 - 정답` 을 제곱한뒤 평균을 내서 루트하는 방식
+    - 평가데이터가 정답과 얼마나 근접한지 확인
+- loss 함수의 결과를 미분하면 학습 방향을 알 수 있음
+- 미분 결과 * learning rate 를 파라메터에서 뺀다
+  - 기울기가 낮아지는 방향(0) 을 향해 전진
+  - learning rate 를 찾는 것은 또다른 중요한 일, 여기선 낮은 값(0.001)정도로 생각
+  - 다음 train set + 수정된 파라메터를 가지고 다시 loss 함수를 사용
+  - 반복해서 낮은 loss 획득
+  - parameter 를 모델 실행 후 결과에서 `backward()`시 parameter에서 미분된 값을 `grad` 속성을 통해 접근가능
+    - 가중치가 벡터인 경우 `.sum()` 후 `backward()`실행으로 미분
+
+#### 정리
+- model 을 함수 f로 보고 모델은 입력을 받아 결과를 예측한다
+  - 뭔 받아서 뭘 예측할 건지가 f
+- loss 함수, f 의 결과가 답에 얼마나 부합하는지 확인한다
+  - 답은 label data 에서 확인
+- 임의의 파라메터를 설정하고 f 의 결과를 구하고 답과의 차이(거리)인 loss 구한다
+- loss 를 미분(`backward` 함수가 여기있기 때문에 이렇게 표현) 파라메터의 기울구한다
+- 파라메터의 기울기에 learning rate 를 곱하여 파라메터에 더하거나 빼서 더 낮은 loss 결과를 얻도록 한다
+- 반복한다
+
+#### 4.4.3 SGD
+- f: 모델, 속도를 측정하고자함
+- loss: 모델의 속도가 실제 속도차를 비교
+- 속도 측정 흐름
+  - x: time, y: speed, (a,y: weights, y: bias): parameter
+  - 속도가 느려지다가 빨라진다 -> 2차방정식 `a(x**2) + bx + y`
+  - loss가 적은 parameter 를 찾는게 목표, x, y 는 주어짐
+  - random parameter 로 시작
+  - 
+#### 용어
+- 브로드캐스팅: tensor 간의 연산, 높은 랭크의 텐서에 맞춰서 낮은 랭크의 텐서가 확장된다
+- 파라메터: weights + bias
+
+#### numpy vs pytorch
+| numpy    | pytorch          |
+|----------|------------------|
+| 제약없음 | 동일사이즈(제곱) |
+| 제약없음 | 수치형데이터만   |
+| x        | 자동 미분        |
+| x        | GPU 활용 연산    |
+
+#### 텐서 랭크
+| rank | 책에서의 언급                     |
+|-----:|-----------------------------------|
+|    0 | 0d tensor, scalr                  |
+|    1 | 1d tensor, vector                 |
+|    2 | 2d tensor, matrix, list of vector |
+|    3 | 3d tensor, list of matrix         |
+
+## [[error]]
+### NotImplementedError: The operator 'aten::_linalg_solve_ex.result' is not currently implemented for the MPS device. If you want this op to be added in priority during the prototype phase of this feature, please comment on https://github.com/pytorch/pytorch/issues/77764. As a temporary fix, you can set the environment variable `PYTORCH_ENABLE_MPS_FALLBACK=1` to use the CPU as a fallback for this op. WARNING: this will be slower than running natively on MPS.
+```python
+NotImplementedError: The operator 'aten::_linalg_solve_ex.result' is not currently implemented for the MPS device. If you want this op to be added in priority during the prototype phase of this feature, please comment on https://github.com/pytorch/pytorch/issues/77764. As a temporary fix, you can set the environment variable `PYTORCH_ENABLE_MPS_FALLBACK=1` to use the CPU as a fallback for this op. WARNING: this will be slower than running natively on MPS.
+```
++ https://forums.fast.ai/t/fastai-on-apple-m1/86059/21?page=3
+
+
+### Error displaying widget
+```python
+cleaner = ImageClassifierCleaner(learn)
+cleaner
+```
++ https://forums.fast.ai/t/beginner-setup/95289/259
+- python 버전 다운 필요. 3.11
+- 근데 나는 3.9.6 이었는데 에러발생
+- `ipywidgets` uninstall 후 커널 재시작 install 로 해결 7.x -> 8.x 로 버전업
+
+## link
+- [[ai]]
+- [[jupyter]]
+- [[huggingface]]
+13:T184f,+ https://course.fast.ai
++ https://github.com/deptno/study-ai
+
+## 강의
+### 01. getting started
+- 이미지 분석기 따라 생성해보기
+- imagenet 을 학습한 기본 모델, resnet18 기반 개/고양이이를 추가학습(파인튜닝)
+
+### 02. deployment
+- huggingface 에 gradio 등을 통한 app + api endpoint 배포
+- Image Classifier Cleaner, 학습시 잘못된 데이터 제거
+- Data augmentation -> 데이터 증강, 이미지를 랜덤 사이즈 크롭, 혹은 변형을 통해 학습을 증대시킨다
+- leaner 를 pickle 파일로 export -> import 사용
+
+### 03. nautral net foundations
+- loss 를 개선하는 원리 설명
+- ReLU (Rectificed Linear Unit)
+  - 0 이상에서만 값을 가짐
+  - 큰수의 ReLU 계산을 행렬곱셈을 통해 가능(GPU 가 잘하는)
+- Gradient descent
+- Excel 의 spreadsheet 을 가지고 kaggle 문제를 수동으로 푸는 것 보여줌
+  - 데이터 정규화
+    - 나이가 없는 것을 제거
+    - 승선지가 없는 경우 제거
+    - 남은 데이터 컬럼(인자)들에 계수를 곱해야한다 -> 수치화 되어야함
+      - 남/여 -> isMail(1/0)
+      - 승선 -> [어디에] 승선 컬럼으로 컬럼 분화 -> 1/0(이진 변수화)
+        - a/b/c 승선지인경우
+        - isA, isB, isC 는 isA, isB 가 모두 0일때 확정되므로 필요없다
+          - n-1 개의 dummy variable
+    - `y = mx + b` 와 같이 방정식에는 상수항이있는데 이는 컬럼을 하나 만들어서 1로 채워서사용(랜덤 계수곱을 위해)
+    - 각 인자들에 곱할 랜덤 계수들을 만듬(-0.5 ~ 0.5)
+    - 나이 -> 맥시멈값을 가지고 각 컬럼값을 나눠서 0 ~ 1 로 정규화한다
+    - fare(티켓값) -> 큰숫자가 많고 작은숫자가 조금 있는 경우, 극단적 데이터의 경우는 로그를 취한다
+
+### 04. natural language (NLP)
+
+## 책
+### 04
+- 파이토치 텐서
+  + https://wikidocs.net/52460
+
+- 평가 함수, 좋은지 여부를 사람이 확인하기 위해 사용, high is better
+- loss 함수, 손실 최적화를 위해 학습에 사용됨, low is better
+  - loss 가 낮을 수록 좋다
+    - loss 가 낮다, 확신을 갖고 맞춘 경우
+    - loss 가 높다, 확신을 갖고 틀린 경우, 맞췄으나 확신이 없는 경우
+  - loss 함수로 **mse(mean sequare error)** 사용시
+    - `평가할 데이터 - 정답` 을 제곱한뒤 평균을 내서 루트하는 방식
+    - 평가데이터가 정답과 얼마나 근접한지 확인
+- loss 함수의 결과를 미분하면 학습 방향을 알 수 있음
+- 미분 결과 * learning rate 를 파라메터에서 뺀다
+  - 기울기가 낮아지는 방향(0) 을 향해 전진
+  - learning rate 를 찾는 것은 또다른 중요한 일, 여기선 낮은 값(0.001)정도로 생각
+  - 다음 train set + 수정된 파라메터를 가지고 다시 loss 함수를 사용
+  - 반복해서 낮은 loss 획득
+  - parameter 를 모델 실행 후 결과에서 `backward()`시 parameter에서 미분된 값을 `grad` 속성을 통해 접근가능
+    - 가중치가 벡터인 경우 `.sum()` 후 `backward()`실행으로 미분
+
+#### 정리
+- model 을 함수 f로 보고 모델은 입력을 받아 결과를 예측한다
+  - 뭔 받아서 뭘 예측할 건지가 f
+- loss 함수, f 의 결과가 답에 얼마나 부합하는지 확인한다
+  - 답은 label data 에서 확인
+- 임의의 파라메터를 설정하고 f 의 결과를 구하고 답과의 차이(거리)인 loss 구한다
+- loss 를 미분(`backward` 함수가 여기있기 때문에 이렇게 표현) 파라메터의 기울구한다
+- 파라메터의 기울기에 learning rate 를 곱하여 파라메터에 더하거나 빼서 더 낮은 loss 결과를 얻도록 한다
+- 반복한다
+
+#### 4.4.3 SGD
+- f: 모델, 속도를 측정하고자함
+- loss: 모델의 속도가 실제 속도차를 비교
+- 속도 측정 흐름
+  - x: time, y: speed, (a,y: weights, y: bias): parameter
+  - 속도가 느려지다가 빨라진다 -> 2차방정식 `a(x**2) + bx + y`
+  - loss가 적은 parameter 를 찾는게 목표, x, y 는 주어짐
+  - random parameter 로 시작
+  - 
+#### 용어
+- 브로드캐스팅: tensor 간의 연산, 높은 랭크의 텐서에 맞춰서 낮은 랭크의 텐서가 확장된다
+- 파라메터: weights + bias
+
+#### numpy vs pytorch
+| numpy    | pytorch          |
+|----------|------------------|
+| 제약없음 | 동일사이즈(제곱) |
+| 제약없음 | 수치형데이터만   |
+| x        | 자동 미분        |
+| x        | GPU 활용 연산    |
+
+#### 텐서 랭크
+| rank | 책에서의 언급                     |
+|-----:|-----------------------------------|
+|    0 | 0d tensor, scalr                  |
+|    1 | 1d tensor, vector                 |
+|    2 | 2d tensor, matrix, list of vector |
+|    3 | 3d tensor, list of matrix         |
+
+## [[error]]
+### NotImplementedError: The operator 'aten::_linalg_solve_ex.result' is not currently implemented for the MPS device. If you want this op to be added in priority during the prototype phase of this feature, please comment on https://github.com/pytorch/pytorch/issues/77764. As a temporary fix, you can set the environment variable `PYTORCH_ENABLE_MPS_FALLBACK=1` to use the CPU as a fallback for this op. WARNING: this will be slower than running natively on MPS.
+```python
+NotImplementedError: The operator 'aten::_linalg_solve_ex.result' is not currently implemented for the MPS device. If you want this op to be added in priority during the prototype phase of this feature, please comment on https://github.com/pytorch/pytorch/issues/77764. As a temporary fix, you can set the environment variable `PYTORCH_ENABLE_MPS_FALLBACK=1` to use the CPU as a fallback for this op. WARNING: this will be slower than running natively on MPS.
+```
++ https://forums.fast.ai/t/fastai-on-apple-m1/86059/21?page=3
+
+
+### Error displaying widget
+```python
+cleaner = ImageClassifierCleaner(learn)
+cleaner
+```
++ https://forums.fast.ai/t/beginner-setup/95289/259
+- python 버전 다운 필요. 3.11
+- 근데 나는 3.9.6 이었는데 에러발생
+- `ipywidgets` uninstall 후 커널 재시작 install 로 해결 7.x -> 8.x 로 버전업
+
+## link
+- [[ai]]
+- [[jupyter]]
+- [[huggingface]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# practical-deep-learning"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# practical-deep-learning"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/practical-deep-learning"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# practical-deep-learning"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null

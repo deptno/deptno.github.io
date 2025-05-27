@@ -1,0 +1,634 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-5f0f3d25c7817892.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-e6f48f16817ae44e.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># jupyter</title><meta name="description" content="
+## 설치
+```sh 
+pip install jupyterlab
+# 커널 생성
+pip install ipykernel
+```
+&gt; [[pycharm]] 에서 쥬피터 노트북을 실행시에는 `jupyter` 의 설치가 필요
+
+### lsp
+```sh 
+# lsp
+pip install ipython jupyterlab-lsp python-lsp-server
+```
+- 결과적으로 잘 안됨, [[pycharm]] 하고 격차가 너무 크다
+
+## 실행
+```sh 
+jupyter lab [--ip 0.0.0.0]
+# 노트북으로 실행
+jupyter notebook
+```
+- 외부에서 접속 필요시 옵션 추가 `--ip 0.0.0.0` 대입
+
+## 소스 컨트롤
+```python
+doc([FUCTION_NAME]) # 함수 문서
+
+?[FUCTION_NAME] # 함수 시그니처, 위치 정보 및 문서
+[FUCTION_NAME]? # 동일
+
+%psource [FUCTION_NAME] # 함수의 정의 코드로 보여줌
+
+??[FUCTION_NAME] # ? + %psource
+FUCTION_NAME]?? # 동일
+```
+
+
+## hash
+```sh 
+#|export_exp [name] # export 파일 확장자
+#|export # 코드 익스포트시 포함되는 셀
+```
+
+## % 특수 명령어
+```sh 
+%time [code] # 소요 시간 표시
+%%time # 이건 셀 가장 윗줄에 사용
+%%timeit # 이것도 소요시간 표시인데 차이점 파악 필요
+%pip install [package-name]
+```
+
+## cli
+```sh 
+# 등록 된 커널 리스트
+jupyter kernelspec list
+
+# 커널 등록, 현재 파이썬 실행환경으로 커널 생성
+python -m ipykernel install --user --name=KERNEL_NAME --display-name &quot;KERNEL DISPLAY NAME&quot;
+
+# 커널 실행
+jupyter kernel --kernel=KERNEL_NAME
+```
+
+## 개념
+- kernel
+  - jupyter 에서 code block 을 실행하기 위한 주체
+    - `jupyter kernelspec list` 를 통해 확인된 디렉토리에 `kernel.json` 파일을 출력해보면 언어와 해당 언어의 인터프리터 위치가 연결된 것을 확인할 수 있다.
+  - 질문
+    - [X] 왜 [[pycharm]] 은 interpreter 를 통해 python 환경을 강제하나
+      - 아마도 jupyter notebook 이 아닌 순수 python 을 위한 용도로 생각됨
+      - 아마도 jupyter notebook 에서 설치한 패키지와 일반 파이썬 파일에서 사용되는 패키지위치는 서로 다를 것
+    - code block 에서 shell command 사용의 문제점
+      - `!pip install ...`, `%pip install ...` 등이 혼용되어 사용되고 있는데 차이점이 있다.
+      - `!` 는 jupyter 의 실행 환경인 파이썬의 범주에 설치된다
+        - jupyter 의 실행환경과 kernel 의 인터프리터(python) 이 다르면 다른 곳에 패키지가 설치된다
+      - `%` 는 kernel 에서 사용하는 파이썬의 범주에 설치된다
+      ```mermaid
+      flowchart RL
+        subgraph global
+          python0[python *system*]
+          subgraph package0[global packages]
+            jupyter[jupyter *runtime*]
+          end
+          subgraph kernel0[ipykernel]
+            subgraph c0[code block 0]
+              %0[%pip install PACKAGE_NAME]
+              !0[!pip install PACKAGE_NAME]
+            end
+          end
+        end
+        subgraph j[jupyter *runtime*]
+          subgraph virtual env 1
+            subgraph kernel1[ipykernel]
+              subgraph c1[code block 1]
+                %1[%pip install PACKAGE_NAME]
+                !1[!pip install PACKAGE_NAME]
+              end
+            end
+            subgraph package1[packages]
+              jupyter1[jupyter]
+            end
+          end
+          subgraph viertual env 2
+            subgraph kernel2[ipykernel]
+              subgraph c2[code block 2]
+                %2[%pip install PACKAGE_NAME]
+                !2[!pip install PACKAGE_NAME]
+              end
+            end
+            subgraph package2[packages]
+              jupyter2[jupyter]
+            end
+          end
+          jupyter1 -.ipykernel install.-&gt; kernel1
+          jupyter2 -.ipykernel install.-&gt; kernel2
+          %0 --&gt; package0
+          %1 --&gt; package1
+          %2 --&gt; package2
+          !0 ==&gt; package0
+          !1 ==&gt; package0
+          !2 ==&gt; package0
+        end
+      ```
+      - 중요한 차이는 jupyter kernel 이 `jupyter` 의 실행환경과 일치하는 인터프리터를 사용하지 않을 경우 `%`, `!` 사용에 따라 패키지를 불러오지 못하게된다
+      - viretual env 자체는 jupyter 안에 있는 것은 **아니다**
+      - 다만 kernel과 연결되어 있다
+
+## git
+- [[git-diff]] 를 위해서 `nbdime`
+
+## plugin
+### :nbconvert:
+#### `py` 파일로 변환
+```sh
+# `py` 파일로 변환
+jupyter nbconvert --to file.ipynb
+````
+
+#### 특정 셀을 제외하고 스크립트 변환을 할 수 있다.
+- jupyter notebook 파일에서 cell에 태그 입력, 예제 기준으로는 `remove` 삽입
+- 컨피그 생성
+  ```sh
+  ## nbconvert 를 위한 config 생성
+  jupyter nbconvert --generate-config
+  ```
+- `~/.jupyter/jupyter_nbconvert_config.py` 파일에 아래 내용 추가 후 스크립트 빌드
+  ```
+  c.Exporter.preprocessors = [&#x27;nbconvert.preprocessors.TagRemovePreprocessor&#x27;]
+  c.TagRemovePreprocessor.remove_cell_tags = {&quot;remove&quot;}
+  ```
+
+### jupytext
+- plugin 인지는 모르겠으나 jupyter notebook 과 py 를 sync 로 생성하여 관려가 가능한 것으로 보인다
+
+## link
+- [[ai]]
+- [[python]]
+- [[pycharm]]
+- [[huggingface]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# jupyter"/><meta property="og:description" content="
+## 설치
+```sh 
+pip install jupyterlab
+# 커널 생성
+pip install ipykernel
+```
+&gt; [[pycharm]] 에서 쥬피터 노트북을 실행시에는 `jupyter` 의 설치가 필요
+
+### lsp
+```sh 
+# lsp
+pip install ipython jupyterlab-lsp python-lsp-server
+```
+- 결과적으로 잘 안됨, [[pycharm]] 하고 격차가 너무 크다
+
+## 실행
+```sh 
+jupyter lab [--ip 0.0.0.0]
+# 노트북으로 실행
+jupyter notebook
+```
+- 외부에서 접속 필요시 옵션 추가 `--ip 0.0.0.0` 대입
+
+## 소스 컨트롤
+```python
+doc([FUCTION_NAME]) # 함수 문서
+
+?[FUCTION_NAME] # 함수 시그니처, 위치 정보 및 문서
+[FUCTION_NAME]? # 동일
+
+%psource [FUCTION_NAME] # 함수의 정의 코드로 보여줌
+
+??[FUCTION_NAME] # ? + %psource
+FUCTION_NAME]?? # 동일
+```
+
+
+## hash
+```sh 
+#|export_exp [name] # export 파일 확장자
+#|export # 코드 익스포트시 포함되는 셀
+```
+
+## % 특수 명령어
+```sh 
+%time [code] # 소요 시간 표시
+%%time # 이건 셀 가장 윗줄에 사용
+%%timeit # 이것도 소요시간 표시인데 차이점 파악 필요
+%pip install [package-name]
+```
+
+## cli
+```sh 
+# 등록 된 커널 리스트
+jupyter kernelspec list
+
+# 커널 등록, 현재 파이썬 실행환경으로 커널 생성
+python -m ipykernel install --user --name=KERNEL_NAME --display-name &quot;KERNEL DISPLAY NAME&quot;
+
+# 커널 실행
+jupyter kernel --kernel=KERNEL_NAME
+```
+
+## 개념
+- kernel
+  - jupyter 에서 code block 을 실행하기 위한 주체
+    - `jupyter kernelspec list` 를 통해 확인된 디렉토리에 `kernel.json` 파일을 출력해보면 언어와 해당 언어의 인터프리터 위치가 연결된 것을 확인할 수 있다.
+  - 질문
+    - [X] 왜 [[pycharm]] 은 interpreter 를 통해 python 환경을 강제하나
+      - 아마도 jupyter notebook 이 아닌 순수 python 을 위한 용도로 생각됨
+      - 아마도 jupyter notebook 에서 설치한 패키지와 일반 파이썬 파일에서 사용되는 패키지위치는 서로 다를 것
+    - code block 에서 shell command 사용의 문제점
+      - `!pip install ...`, `%pip install ...` 등이 혼용되어 사용되고 있는데 차이점이 있다.
+      - `!` 는 jupyter 의 실행 환경인 파이썬의 범주에 설치된다
+        - jupyter 의 실행환경과 kernel 의 인터프리터(python) 이 다르면 다른 곳에 패키지가 설치된다
+      - `%` 는 kernel 에서 사용하는 파이썬의 범주에 설치된다
+      ```mermaid
+      flowchart RL
+        subgraph global
+          python0[python *system*]
+          subgraph package0[global packages]
+            jupyter[jupyter *runtime*]
+          end
+          subgraph kernel0[ipykernel]
+            subgraph c0[code block 0]
+              %0[%pip install PACKAGE_NAME]
+              !0[!pip install PACKAGE_NAME]
+            end
+          end
+        end
+        subgraph j[jupyter *runtime*]
+          subgraph virtual env 1
+            subgraph kernel1[ipykernel]
+              subgraph c1[code block 1]
+                %1[%pip install PACKAGE_NAME]
+                !1[!pip install PACKAGE_NAME]
+              end
+            end
+            subgraph package1[packages]
+              jupyter1[jupyter]
+            end
+          end
+          subgraph viertual env 2
+            subgraph kernel2[ipykernel]
+              subgraph c2[code block 2]
+                %2[%pip install PACKAGE_NAME]
+                !2[!pip install PACKAGE_NAME]
+              end
+            end
+            subgraph package2[packages]
+              jupyter2[jupyter]
+            end
+          end
+          jupyter1 -.ipykernel install.-&gt; kernel1
+          jupyter2 -.ipykernel install.-&gt; kernel2
+          %0 --&gt; package0
+          %1 --&gt; package1
+          %2 --&gt; package2
+          !0 ==&gt; package0
+          !1 ==&gt; package0
+          !2 ==&gt; package0
+        end
+      ```
+      - 중요한 차이는 jupyter kernel 이 `jupyter` 의 실행환경과 일치하는 인터프리터를 사용하지 않을 경우 `%`, `!` 사용에 따라 패키지를 불러오지 못하게된다
+      - viretual env 자체는 jupyter 안에 있는 것은 **아니다**
+      - 다만 kernel과 연결되어 있다
+
+## git
+- [[git-diff]] 를 위해서 `nbdime`
+
+## plugin
+### :nbconvert:
+#### `py` 파일로 변환
+```sh
+# `py` 파일로 변환
+jupyter nbconvert --to file.ipynb
+````
+
+#### 특정 셀을 제외하고 스크립트 변환을 할 수 있다.
+- jupyter notebook 파일에서 cell에 태그 입력, 예제 기준으로는 `remove` 삽입
+- 컨피그 생성
+  ```sh
+  ## nbconvert 를 위한 config 생성
+  jupyter nbconvert --generate-config
+  ```
+- `~/.jupyter/jupyter_nbconvert_config.py` 파일에 아래 내용 추가 후 스크립트 빌드
+  ```
+  c.Exporter.preprocessors = [&#x27;nbconvert.preprocessors.TagRemovePreprocessor&#x27;]
+  c.TagRemovePreprocessor.remove_cell_tags = {&quot;remove&quot;}
+  ```
+
+### jupytext
+- plugin 인지는 모르겠으나 jupyter notebook 과 py 를 sync 로 생성하여 관려가 가능한 것으로 보인다
+
+## link
+- [[ai]]
+- [[python]]
+- [[pycharm]]
+- [[huggingface]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/jupyter"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# jupyter"/><meta name="twitter:description" content="
+## 설치
+```sh 
+pip install jupyterlab
+# 커널 생성
+pip install ipykernel
+```
+&gt; [[pycharm]] 에서 쥬피터 노트북을 실행시에는 `jupyter` 의 설치가 필요
+
+### lsp
+```sh 
+# lsp
+pip install ipython jupyterlab-lsp python-lsp-server
+```
+- 결과적으로 잘 안됨, [[pycharm]] 하고 격차가 너무 크다
+
+## 실행
+```sh 
+jupyter lab [--ip 0.0.0.0]
+# 노트북으로 실행
+jupyter notebook
+```
+- 외부에서 접속 필요시 옵션 추가 `--ip 0.0.0.0` 대입
+
+## 소스 컨트롤
+```python
+doc([FUCTION_NAME]) # 함수 문서
+
+?[FUCTION_NAME] # 함수 시그니처, 위치 정보 및 문서
+[FUCTION_NAME]? # 동일
+
+%psource [FUCTION_NAME] # 함수의 정의 코드로 보여줌
+
+??[FUCTION_NAME] # ? + %psource
+FUCTION_NAME]?? # 동일
+```
+
+
+## hash
+```sh 
+#|export_exp [name] # export 파일 확장자
+#|export # 코드 익스포트시 포함되는 셀
+```
+
+## % 특수 명령어
+```sh 
+%time [code] # 소요 시간 표시
+%%time # 이건 셀 가장 윗줄에 사용
+%%timeit # 이것도 소요시간 표시인데 차이점 파악 필요
+%pip install [package-name]
+```
+
+## cli
+```sh 
+# 등록 된 커널 리스트
+jupyter kernelspec list
+
+# 커널 등록, 현재 파이썬 실행환경으로 커널 생성
+python -m ipykernel install --user --name=KERNEL_NAME --display-name &quot;KERNEL DISPLAY NAME&quot;
+
+# 커널 실행
+jupyter kernel --kernel=KERNEL_NAME
+```
+
+## 개념
+- kernel
+  - jupyter 에서 code block 을 실행하기 위한 주체
+    - `jupyter kernelspec list` 를 통해 확인된 디렉토리에 `kernel.json` 파일을 출력해보면 언어와 해당 언어의 인터프리터 위치가 연결된 것을 확인할 수 있다.
+  - 질문
+    - [X] 왜 [[pycharm]] 은 interpreter 를 통해 python 환경을 강제하나
+      - 아마도 jupyter notebook 이 아닌 순수 python 을 위한 용도로 생각됨
+      - 아마도 jupyter notebook 에서 설치한 패키지와 일반 파이썬 파일에서 사용되는 패키지위치는 서로 다를 것
+    - code block 에서 shell command 사용의 문제점
+      - `!pip install ...`, `%pip install ...` 등이 혼용되어 사용되고 있는데 차이점이 있다.
+      - `!` 는 jupyter 의 실행 환경인 파이썬의 범주에 설치된다
+        - jupyter 의 실행환경과 kernel 의 인터프리터(python) 이 다르면 다른 곳에 패키지가 설치된다
+      - `%` 는 kernel 에서 사용하는 파이썬의 범주에 설치된다
+      ```mermaid
+      flowchart RL
+        subgraph global
+          python0[python *system*]
+          subgraph package0[global packages]
+            jupyter[jupyter *runtime*]
+          end
+          subgraph kernel0[ipykernel]
+            subgraph c0[code block 0]
+              %0[%pip install PACKAGE_NAME]
+              !0[!pip install PACKAGE_NAME]
+            end
+          end
+        end
+        subgraph j[jupyter *runtime*]
+          subgraph virtual env 1
+            subgraph kernel1[ipykernel]
+              subgraph c1[code block 1]
+                %1[%pip install PACKAGE_NAME]
+                !1[!pip install PACKAGE_NAME]
+              end
+            end
+            subgraph package1[packages]
+              jupyter1[jupyter]
+            end
+          end
+          subgraph viertual env 2
+            subgraph kernel2[ipykernel]
+              subgraph c2[code block 2]
+                %2[%pip install PACKAGE_NAME]
+                !2[!pip install PACKAGE_NAME]
+              end
+            end
+            subgraph package2[packages]
+              jupyter2[jupyter]
+            end
+          end
+          jupyter1 -.ipykernel install.-&gt; kernel1
+          jupyter2 -.ipykernel install.-&gt; kernel2
+          %0 --&gt; package0
+          %1 --&gt; package1
+          %2 --&gt; package2
+          !0 ==&gt; package0
+          !1 ==&gt; package0
+          !2 ==&gt; package0
+        end
+      ```
+      - 중요한 차이는 jupyter kernel 이 `jupyter` 의 실행환경과 일치하는 인터프리터를 사용하지 않을 경우 `%`, `!` 사용에 따라 패키지를 불러오지 못하게된다
+      - viretual env 자체는 jupyter 안에 있는 것은 **아니다**
+      - 다만 kernel과 연결되어 있다
+
+## git
+- [[git-diff]] 를 위해서 `nbdime`
+
+## plugin
+### :nbconvert:
+#### `py` 파일로 변환
+```sh
+# `py` 파일로 변환
+jupyter nbconvert --to file.ipynb
+````
+
+#### 특정 셀을 제외하고 스크립트 변환을 할 수 있다.
+- jupyter notebook 파일에서 cell에 태그 입력, 예제 기준으로는 `remove` 삽입
+- 컨피그 생성
+  ```sh
+  ## nbconvert 를 위한 config 생성
+  jupyter nbconvert --generate-config
+  ```
+- `~/.jupyter/jupyter_nbconvert_config.py` 파일에 아래 내용 추가 후 스크립트 빌드
+  ```
+  c.Exporter.preprocessors = [&#x27;nbconvert.preprocessors.TagRemovePreprocessor&#x27;]
+  c.TagRemovePreprocessor.remove_cell_tags = {&quot;remove&quot;}
+  ```
+
+### jupytext
+- plugin 인지는 모르겠으나 jupyter notebook 과 py 를 sync 로 생성하여 관려가 가능한 것으로 보인다
+
+## link
+- [[ai]]
+- [[python]]
+- [[pycharm]]
+- [[huggingface]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/3a684cf
+" class="bg-white text-black">3a684cf</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/jupyter.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/jupyter.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/jupyter.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/jupyter"><span class="underline">jupyter</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/pycharm"><span class="underline">pycharm</span><sup>13</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-diff"><span class="underline">git-diff</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ai"><span class="underline">ai</span><sup>16</sup></a></span><span><a class="text-blue-600" href="/public-wiki/python"><span class="underline">python</span><sup>12</sup></a></span><span><a class="text-blue-600" href="/public-wiki/huggingface"><span class="underline">huggingface</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/jupyter-notebook"><span class="underline">jupyter-notebook</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/mlflow"><span class="underline">mlflow</span><sup>21</sup></a></span><span><a class="text-blue-600" href="/public-wiki/practical-deep-learning"><span class="underline">practical-deep-learning</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-project-05"><span class="underline">upstage-ai-lab-project-05</span><sup>27</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vscode"><span class="underline">vscode</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-04-20"><span class="underline">diary/2024-04-20</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-12-24"><span class="underline">diary/2024-12-24</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-12-31"><span class="underline">diary/2024-12-31</span><sup>441</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#jupyter">jupyter</a></div><div class="pl-2"><a href="#설치">설치</a></div><div class="pl-4"><a href="#lsp">lsp</a></div><div class="pl-2"><a href="#실행">실행</a></div><div class="pl-2"><a href="#소스-컨트롤">소스 컨트롤</a></div><div class="pl-2"><a href="#hash">hash</a></div><div class="pl-2"><a href="#-특수-명령어">% 특수 명령어</a></div><div class="pl-2"><a href="#cli">cli</a></div><div class="pl-2"><a href="#개념">개념</a></div><div class="pl-2"><a href="#git">git</a></div><div class="pl-2"><a href="#plugin">plugin</a></div><div class="pl-4"><a href="#nbconvert">:nbconvert:</a></div><div class="pl-6"><a href="#py-파일로-변환">py 파일로 변환</a></div><div class="pl-6"><a href="#특정-셀을-제외하고-스크립트-변환을-할-수-있다">특정 셀을 제외하고 스크립트 변환을 할 수 있다.</a></div><div class="pl-4"><a href="#jupytext">jupytext</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="jupyter">jupyter</h1>
+<h2 id="설치">설치</h2>
+<pre><code class="hljs language-sh">pip install jupyterlab
+<span class="hljs-comment"># 커널 생성</span>
+pip install ipykernel
+</code></pre><blockquote><p><a href="pycharm">pycharm</a> 에서 쥬피터 노트북을 실행시에는 <code class="span">jupyter</code> 의 설치가 필요</p></blockquote><h3 id="lsp">lsp</h3>
+<pre><code class="hljs language-sh"><span class="hljs-comment"># lsp</span>
+pip install ipython jupyterlab-lsp python-lsp-server
+</code></pre><ul>
+<li>결과적으로 잘 안됨, <a href="pycharm">pycharm</a> 하고 격차가 너무 크다</li>
+</ul>
+<h2 id="실행">실행</h2>
+<pre><code class="hljs language-sh">jupyter lab [--ip 0.0.0.0]
+<span class="hljs-comment"># 노트북으로 실행</span>
+jupyter notebook
+</code></pre><ul>
+<li>외부에서 접속 필요시 옵션 추가 <code class="span">--ip 0.0.0.0</code> 대입</li>
+</ul>
+<h2 id="소스-컨트롤">소스 컨트롤</h2>
+<pre><code class="hljs language-python">doc([FUCTION_NAME]) <span class="hljs-comment"># 함수 문서</span>
+
+?[FUCTION_NAME] <span class="hljs-comment"># 함수 시그니처, 위치 정보 및 문서</span>
+[FUCTION_NAME]? <span class="hljs-comment"># 동일</span>
+
+%psource [FUCTION_NAME] <span class="hljs-comment"># 함수의 정의 코드로 보여줌</span>
+
+??[FUCTION_NAME] <span class="hljs-comment"># ? + %psource</span>
+FUCTION_NAME]?? <span class="hljs-comment"># 동일</span>
+</code></pre><h2 id="hash">hash</h2>
+<pre><code class="hljs language-sh"><span class="hljs-comment">#|export_exp [name] # export 파일 확장자</span>
+<span class="hljs-comment">#|export # 코드 익스포트시 포함되는 셀</span>
+</code></pre><h2 id="-특수-명령어">% 특수 명령어</h2>
+<pre><code class="hljs language-sh">%time [code] <span class="hljs-comment"># 소요 시간 표시</span>
+%%time <span class="hljs-comment"># 이건 셀 가장 윗줄에 사용</span>
+%%timeit <span class="hljs-comment"># 이것도 소요시간 표시인데 차이점 파악 필요</span>
+%pip install [package-name]
+</code></pre><h2 id="cli">cli</h2>
+<pre><code class="hljs language-sh"><span class="hljs-comment"># 등록 된 커널 리스트</span>
+jupyter kernelspec list
+
+<span class="hljs-comment"># 커널 등록, 현재 파이썬 실행환경으로 커널 생성</span>
+python -m ipykernel install --user --name=KERNEL_NAME --display-name <span class="hljs-string">&quot;KERNEL DISPLAY NAME&quot;</span>
+
+<span class="hljs-comment"># 커널 실행</span>
+jupyter kernel --kernel=KERNEL_NAME
+</code></pre><h2 id="개념">개념</h2>
+<ul>
+<li>kernel<ul>
+<li>jupyter 에서 code block 을 실행하기 위한 주체<ul>
+<li><code class="span">jupyter kernelspec list</code> 를 통해 확인된 디렉토리에 <code class="span">kernel.json</code> 파일을 출력해보면 언어와 해당 언어의 인터프리터 위치가 연결된 것을 확인할 수 있다.</li>
+</ul>
+</li>
+<li>질문<ul>
+<li><input checked="" disabled="" type="checkbox"> 왜 <a href="pycharm">pycharm</a> 은 interpreter 를 통해 python 환경을 강제하나<ul>
+<li>아마도 jupyter notebook 이 아닌 순수 python 을 위한 용도로 생각됨</li>
+<li>아마도 jupyter notebook 에서 설치한 패키지와 일반 파이썬 파일에서 사용되는 패키지위치는 서로 다를 것</li>
+</ul>
+</li>
+<li>code block 에서 shell command 사용의 문제점<ul>
+<li><code class="span">!pip install ...</code>, <code class="span">%pip install ...</code> 등이 혼용되어 사용되고 있는데 차이점이 있다.</li>
+<li><code class="span">!</code> 는 jupyter 의 실행 환경인 파이썬의 범주에 설치된다<ul>
+<li>jupyter 의 실행환경과 kernel 의 인터프리터(python) 이 다르면 다른 곳에 패키지가 설치된다</li>
+</ul>
+</li>
+<li><code class="span">%</code> 는 kernel 에서 사용하는 파이썬의 범주에 설치된다</li>
+</ul>
+<pre><code class="hljs language-mermaid">flowchart RL
+  subgraph global
+    python0[python *system*]
+    subgraph package0[global packages]
+      jupyter[jupyter *runtime*]
+    end
+    subgraph kernel0[ipykernel]
+      subgraph c0[code block 0]
+        %0[%pip install PACKAGE_NAME]
+        !0[!pip install PACKAGE_NAME]
+      end
+    end
+  end
+  subgraph j[jupyter *runtime*]
+    subgraph virtual env 1
+      subgraph kernel1[ipykernel]
+        subgraph c1[code block 1]
+          %1[%pip install PACKAGE_NAME]
+          !1[!pip install PACKAGE_NAME]
+        end
+      end
+      subgraph package1[packages]
+        jupyter1[jupyter]
+      end
+    end
+    subgraph viertual env 2
+      subgraph kernel2[ipykernel]
+        subgraph c2[code block 2]
+          %2[%pip install PACKAGE_NAME]
+          !2[!pip install PACKAGE_NAME]
+        end
+      end
+      subgraph package2[packages]
+        jupyter2[jupyter]
+      end
+    end
+    jupyter1 -.ipykernel install.-&gt; kernel1
+    jupyter2 -.ipykernel install.-&gt; kernel2
+    %0 --&gt; package0
+    %1 --&gt; package1
+    %2 --&gt; package2
+    !0 ==&gt; package0
+    !1 ==&gt; package0
+    !2 ==&gt; package0
+  end
+</code></pre><ul>
+<li>중요한 차이는 jupyter kernel 이 <code class="span">jupyter</code> 의 실행환경과 일치하는 인터프리터를 사용하지 않을 경우 <code class="span">%</code>, <code class="span">!</code> 사용에 따라 패키지를 불러오지 못하게된다</li>
+<li>viretual env 자체는 jupyter 안에 있는 것은 <strong>아니다</strong></li>
+<li>다만 kernel과 연결되어 있다</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="git">git</h2>
+<ul>
+<li><a href="git-diff">git-diff</a> 를 위해서 <code class="span">nbdime</code></li>
+</ul>
+<h2 id="plugin">plugin</h2>
+<h3 id="nbconvert">:nbconvert:</h3>
+<h4 id="py-파일로-변환"><code class="span">py</code> 파일로 변환</h4>
+<pre><code class="hljs language-sh"><span class="hljs-comment"># `py` 파일로 변환</span>
+jupyter nbconvert --to file.ipynb
+</code></pre><h4 id="특정-셀을-제외하고-스크립트-변환을-할-수-있다">특정 셀을 제외하고 스크립트 변환을 할 수 있다.</h4>
+<ul>
+<li>jupyter notebook 파일에서 cell에 태그 입력, 예제 기준으로는 <code class="span">remove</code> 삽입</li>
+<li>컨피그 생성<pre><code class="hljs language-sh"><span class="hljs-comment">## nbconvert 를 위한 config 생성</span>
+jupyter nbconvert --generate-config
+</code></pre></li>
+<li><code class="span">~/.jupyter/jupyter_nbconvert_config.py</code> 파일에 아래 내용 추가 후 스크립트 빌드<pre><code>c.Exporter.preprocessors = [&#x27;nbconvert.preprocessors.TagRemovePreprocessor&#x27;]
+c.TagRemovePreprocessor.remove_cell_tags = {&quot;remove&quot;}
+</code></pre></li>
+</ul>
+<h3 id="jupytext">jupytext</h3>
+<ul>
+<li>plugin 인지는 모르겠으나 jupyter notebook 과 py 를 sync 로 생성하여 관려가 가능한 것으로 보인다</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="ai">ai</a></li>
+<li><a href="python">python</a></li>
+<li><a href="pycharm">pycharm</a></li>
+<li><a href="huggingface">huggingface</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-5f0f3d25c7817892.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-e6f48f16817ae44e.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"jupyter\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"pEha9E_9A7vil-zwJtPto\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/jupyter\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"jupyter\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"jupyter\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"jupyter\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T1bcb,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"jupyter\"\u003ejupyter\u003c/h1\u003e\n\u003ch2 id=\"설치\"\u003e설치\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003epip install jupyterlab\n\u003cspan class=\"hljs-comment\"\u003e# 커널 생성\u003c/span\u003e\npip install ipykernel\n\u003c/code\u003e\u003c/pre\u003e\u003cblockquote\u003e\u003cp\u003e\u003ca href=\"pycharm\"\u003epycharm\u003c/a\u003e 에서 쥬피터 노트북을 실행시에는 \u003ccode class=\"span\"\u003ejupyter\u003c/code\u003e 의 설치가 필요\u003c/p\u003e\u003c/blockquote\u003e\u003ch3 id=\"lsp\"\u003elsp\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e\u003cspan class=\"hljs-comment\"\u003e# lsp\u003c/span\u003e\npip install ipython jupyterlab-lsp python-lsp-server\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e결과적으로 잘 안됨, \u003ca href=\"pycharm\"\u003epycharm\u003c/a\u003e 하고 격차가 너무 크다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"실행\"\u003e실행\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ejupyter lab [--ip 0.0.0.0]\n\u003cspan class=\"hljs-comment\"\u003e# 노트북으로 실행\u003c/span\u003e\njupyter notebook\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e외부에서 접속 필요시 옵션 추가 \u003ccode class=\"span\"\u003e--ip 0.0.0.0\u003c/code\u003e 대입\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"소스-컨트롤\"\u003e소스 컨트롤\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-python\"\u003edoc([FUCTION_NAME]) \u003cspan class=\"hljs-comment\"\u003e# 함수 문서\u003c/span\u003e\n\n?[FUCTION_NAME] \u003cspan class=\"hljs-comment\"\u003e# 함수 시그니처, 위치 정보 및 문서\u003c/span\u003e\n[FUCTION_NAME]? \u003cspan class=\"hljs-comment\"\u003e# 동일\u003c/span\u003e\n\n%psource [FUCTION_NAME] \u003cspan class=\"hljs-comment\"\u003e# 함수의 정의 코드로 보여줌\u003c/span\u003e\n\n??[FUCTION_NAME] \u003cspan class=\"hljs-comment\"\u003e# ? + %psource\u003c/span\u003e\nFUCTION_NAME]?? \u003cspan class=\"hljs-comment\"\u003e# 동일\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"hash\"\u003ehash\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e\u003cspan class=\"hljs-comment\"\u003e#|export_exp [name] # export 파일 확장자\u003c/span\u003e\n\u003cspan class=\"hljs-comment\"\u003e#|export # 코드 익스포트시 포함되는 셀\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"-특수-명령어\"\u003e% 특수 명령어\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e%time [code] \u003cspan class=\"hljs-comment\"\u003e# 소요 시간 표시\u003c/span\u003e\n%%time \u003cspan class=\"hljs-comment\"\u003e# 이건 셀 가장 윗줄에 사용\u003c/span\u003e\n%%timeit \u003cspan class=\"hljs-comment\"\u003e# 이것도 소요시간 표시인데 차이점 파악 필요\u003c/span\u003e\n%pip install [package-name]\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"cli\"\u003ecli\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e\u003cspan class=\"hljs-comment\"\u003e# 등록 된 커널 리스트\u003c/span\u003e\njupyter kernelspec list\n\n\u003cspan class=\"hljs-comment\"\u003e# 커널 등록, 현재 파이썬 실행환경으로 커널 생성\u003c/span\u003e\npython -m ipykernel install --user --name=KERNEL_NAME --display-name \u003cspan class=\"hljs-string\"\u003e\u0026quot;KERNEL DISPLAY NAME\u0026quot;\u003c/span\u003e\n\n\u003cspan class=\"hljs-comment\"\u003e# 커널 실행\u003c/span\u003e\njupyter kernel --kernel=KERNEL_NAME\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"개념\"\u003e개념\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003ekernel\u003cul\u003e\n\u003cli\u003ejupyter 에서 code block 을 실행하기 위한 주체\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ejupyter kernelspec list\u003c/code\u003e 를 통해 확인된 디렉토리에 \u003ccode class=\"span\"\u003ekernel.json\u003c/code\u003e 파일을 출력해보면 언어와 해당 언어의 인터프리터 위치가 연결된 것을 확인할 수 있다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e질문\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 왜 \u003ca href=\"pycharm\"\u003epycharm\u003c/a\u003e 은 interpreter 를 통해 python 환경을 강제하나\u003cul\u003e\n\u003cli\u003e아마도 jupyter notebook 이 아닌 순수 python 을 위한 용도로 생각됨\u003c/li\u003e\n\u003cli\u003e아마도 jupyter notebook 에서 설치한 패키지와 일반 파이썬 파일에서 사용되는 패키지위치는 서로 다를 것\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003ecode block 에서 shell command 사용의 문제점\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e!pip install ...\u003c/code\u003e, \u003ccode class=\"span\"\u003e%pip install ...\u003c/code\u003e 등이 혼용되어 사용되고 있는데 차이점이 있다.\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e!\u003c/code\u003e 는 jupyter 의 실행 환경인 파이썬의 범주에 설치된다\u003cul\u003e\n\u003cli\u003ejupyter 의 실행환경과 kernel 의 인터프리터(python) 이 다르면 다른 곳에 패키지가 설치된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e%\u003c/code\u003e 는 kernel 에서 사용하는 파이썬의 범주에 설치된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-mermaid\"\u003eflowchart RL\n  subgraph global\n    python0[python *system*]\n    subgraph package0[global packages]\n      jupyter[jupyter *runtime*]\n    end\n    subgraph kernel0[ipykernel]\n      subgraph c0[code block 0]\n        %0[%pip install PACKAGE_NAME]\n        !0[!pip install PACKAGE_NAME]\n      end\n    end\n  end\n  subgraph j[jupyter *runtime*]\n    subgraph virtual env 1\n      subgraph kernel1[ipykernel]\n        subgraph c1[code block 1]\n          %1[%pip install PACKAGE_NAME]\n          !1[!pip install PACKAGE_NAME]\n        end\n      end\n      subgraph package1[packages]\n        jupyter1[jupyter]\n      end\n    end\n    subgraph viertual env 2\n      subgraph kernel2[ipykernel]\n        subgraph c2[code block 2]\n          %2[%pip install PACKAGE_NAME]\n          !2[!pip install PACKAGE_NAME]\n        end\n      end\n      subgraph package2[packages]\n        jupyter2[jupyter]\n      end\n    end\n    jupyter1 -.ipykernel install.-\u0026gt; kernel1\n    jupyter2 -.ipykernel install.-\u0026gt; kernel2\n    %0 --\u0026gt; package0\n    %1 --\u0026gt; package1\n    %2 --\u0026gt; package2\n    !0 ==\u0026gt; package0\n    !1 ==\u0026gt; package0\n    !2 ==\u0026gt; package0\n  end\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e중요한 차이는 jupyter kernel 이 \u003ccode class=\"span\"\u003ejupyter\u003c/code\u003e 의 실행환경과 일치하는 인터프리터를 사용하지 않을 경우 \u003ccode class=\"span\"\u003e%\u003c/code\u003e, \u003ccode class=\"span\"\u003e!\u003c/code\u003e 사용에 따라 패키지를 불러오지 못하게된다\u003c/li\u003e\n\u003cli\u003eviretual env 자체는 jupyter 안에 있는 것은 \u003cstrong\u003e아니다\u003c/strong\u003e\u003c/li\u003e\n\u003cli\u003e다만 kernel과 연결되어 있다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"git\"\u003egit\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"git-diff\"\u003egit-diff\u003c/a\u003e 를 위해서 \u003ccode class=\"span\"\u003enbdime\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"plugin\"\u003eplugin\u003c/h2\u003e\n\u003ch3 id=\"nbconvert\"\u003e:nbconvert:\u003c/h3\u003e\n\u003ch4 id=\"py-파일로-변환\"\u003e\u003ccode class=\"span\"\u003epy\u003c/code\u003e 파일로 변환\u003c/h4\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e\u003cspan class=\"hljs-comment\"\u003e# `py` 파일로 변환\u003c/span\u003e\njupyter nbconvert --to file.ipynb\n\u003c/code\u003e\u003c/pre\u003e\u003ch4 id=\"특정-셀을-제외하고-스크립트-변환을-할-수-있다\"\u003e특정 셀을 제외하고 스크립트 변환을 할 수 있다.\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003ejupyter notebook 파일에서 cell에 태그 입력, 예제 기준으로는 \u003ccode class=\"span\"\u003eremove\u003c/code\u003e 삽입\u003c/li\u003e\n\u003cli\u003e컨피그 생성\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e\u003cspan class=\"hljs-comment\"\u003e## nbconvert 를 위한 config 생성\u003c/span\u003e\njupyter nbconvert --generate-config\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e~/.jupyter/jupyter_nbconvert_config.py\u003c/code\u003e 파일에 아래 내용 추가 후 스크립트 빌드\u003cpre\u003e\u003ccode\u003ec.Exporter.preprocessors = [\u0026#x27;nbconvert.preprocessors.TagRemovePreprocessor\u0026#x27;]\nc.TagRemovePreprocessor.remove_cell_tags = {\u0026quot;remove\u0026quot;}\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"jupytext\"\u003ejupytext\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eplugin 인지는 모르겠으나 jupyter notebook 과 py 를 sync 로 생성하여 관려가 가능한 것으로 보인다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"ai\"\u003eai\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"python\"\u003epython\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"pycharm\"\u003epycharm\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"huggingface\"\u003ehuggingface\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/3a684cf\\n\",\"className\":\"bg-white text-black\",\"children\":\"3a684cf\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/jupyter.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/jupyter.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/jupyter.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"jupyter\",\"name\":\"jupyter\",\"val\":8},{\"id\":\"pycharm\",\"name\":\"pycharm\",\"val\":13},{\"id\":\"git-diff\",\"name\":\"git-diff\",\"val\":1},{\"id\":\"ai\",\"name\":\"ai\",\"val\":16},{\"id\":\"python\",\"name\":\"python\",\"val\":12},{\"id\":\"huggingface\",\"name\":\"huggingface\",\"val\":7},{\"id\":\"jupyter-notebook\",\"name\":\"jupyter-notebook\",\"val\":4},{\"id\":\"mlflow\",\"name\":\"mlflow\",\"val\":21},{\"id\":\"practical-deep-learning\",\"name\":\"practical-deep-learning\",\"val\":4},{\"id\":\"upstage-ai-lab-project-05\",\"name\":\"upstage-ai-lab-project-05\",\"val\":27},{\"id\":\"vscode\",\"name\":\"vscode\",\"val\":1},{\"id\":\"diary/2024-04-20\",\"name\":\"diary/2024-04-20\",\"val\":3},{\"id\":\"diary/2024-12-24\",\"name\":\"diary/2024-12-24\",\"val\":2},{\"id\":\"diary/2024-12-31\",\"name\":\"diary/2024-12-31\",\"val\":441}],\"links\":[{\"source\":\"jupyter\",\"target\":\"pycharm\"},{\"source\":\"jupyter\",\"target\":\"pycharm\"},{\"source\":\"jupyter\",\"target\":\"pycharm\"},{\"source\":\"jupyter\",\"target\":\"git-diff\"},{\"source\":\"jupyter\",\"target\":\"ai\"},{\"source\":\"jupyter\",\"target\":\"python\"},{\"source\":\"jupyter\",\"target\":\"pycharm\"},{\"source\":\"jupyter\",\"target\":\"huggingface\"},{\"source\":\"huggingface\",\"target\":\"jupyter\"},{\"source\":\"jupyter-notebook\",\"target\":\"jupyter\"},{\"source\":\"jupyter-notebook\",\"target\":\"jupyter\"},{\"source\":\"mlflow\",\"target\":\"jupyter\"},{\"source\":\"practical-deep-learning\",\"target\":\"jupyter\"},{\"source\":\"pycharm\",\"target\":\"jupyter\"},{\"source\":\"python\",\"target\":\"jupyter\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"jupyter\"},{\"source\":\"vscode\",\"target\":\"jupyter\"},{\"source\":\"diary/2024-04-20\",\"target\":\"jupyter\"},{\"source\":\"diary/2024-12-24\",\"target\":\"jupyter\"},{\"source\":\"diary/2024-12-31\",\"target\":\"jupyter\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"jupyter\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/jupyter\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"jupyter\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"pycharm\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/pycharm\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"pycharm\"}],[\"$\",\"sup\",null,{\"children\":13}]]}]}],[\"$\",\"span\",\"git-diff\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-diff\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-diff\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"ai\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ai\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ai\"}],[\"$\",\"sup\",null,{\"children\":16}]]}]}],[\"$\",\"span\",\"python\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/python\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"python\"}],[\"$\",\"sup\",null,{\"children\":12}]]}]}],[\"$\",\"span\",\"huggingface\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/huggingface\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"huggingface\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"jupyter-notebook\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/jupyter-notebook\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"jupyter-notebook\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"mlflow\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/mlflow\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"mlflow\"}],[\"$\",\"sup\",null,{\"children\":21}]]}]}],[\"$\",\"span\",\"practical-deep-learning\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/practical-deep-learning\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"practical-deep-learning\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-project-05\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-project-05\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-project-05\"}],[\"$\",\"sup\",null,{\"children\":27}]]}]}],[\"$\",\"span\",\"vscode\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vscode\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vscode\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"diary/2024-04-20\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-04-20\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-04-20\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2024-12-24\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-12-24\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-12-24\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2024-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-12-31\"}],[\"$\",\"sup\",null,{\"children\":441}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"jupyter\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#jupyter\",\"children\":\"jupyter\"}]}],[\"$\",\"div\",\"설치\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#설치\",\"children\":\"설치\"}]}],[\"$\",\"div\",\"lsp\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#lsp\",\"children\":\"lsp\"}]}],[\"$\",\"div\",\"실행\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#실행\",\"children\":\"실행\"}]}],[\"$\",\"div\",\"소스-컨트롤\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#소스-컨트롤\",\"children\":\"소스 컨트롤\"}]}],[\"$\",\"div\",\"hash\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#hash\",\"children\":\"hash\"}]}],[\"$\",\"div\",\"-특수-명령어\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#-특수-명령어\",\"children\":\"% 특수 명령어\"}]}],[\"$\",\"div\",\"cli\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#cli\",\"children\":\"cli\"}]}],[\"$\",\"div\",\"개념\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#개념\",\"children\":\"개념\"}]}],[\"$\",\"div\",\"git\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#git\",\"children\":\"git\"}]}],[\"$\",\"div\",\"plugin\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#plugin\",\"children\":\"plugin\"}]}],[\"$\",\"div\",\"nbconvert\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#nbconvert\",\"children\":\":nbconvert:\"}]}],[\"$\",\"div\",\"py-파일로-변환\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#py-파일로-변환\",\"children\":\"py 파일로 변환\"}]}],[\"$\",\"div\",\"특정-셀을-제외하고-스크립트-변환을-할-수-있다\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#특정-셀을-제외하고-스크립트-변환을-할-수-있다\",\"children\":\"특정 셀을 제외하고 스크립트 변환을 할 수 있다.\"}]}],[\"$\",\"div\",\"jupytext\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#jupytext\",\"children\":\"jupytext\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T13ca,"])</script><script>self.__next_f.push([1,"\n## 설치\n```sh \npip install jupyterlab\n# 커널 생성\npip install ipykernel\n```\n\u003e [[pycharm]] 에서 쥬피터 노트북을 실행시에는 `jupyter` 의 설치가 필요\n\n### lsp\n```sh \n# lsp\npip install ipython jupyterlab-lsp python-lsp-server\n```\n- 결과적으로 잘 안됨, [[pycharm]] 하고 격차가 너무 크다\n\n## 실행\n```sh \njupyter lab [--ip 0.0.0.0]\n# 노트북으로 실행\njupyter notebook\n```\n- 외부에서 접속 필요시 옵션 추가 `--ip 0.0.0.0` 대입\n\n## 소스 컨트롤\n```python\ndoc([FUCTION_NAME]) # 함수 문서\n\n?[FUCTION_NAME] # 함수 시그니처, 위치 정보 및 문서\n[FUCTION_NAME]? # 동일\n\n%psource [FUCTION_NAME] # 함수의 정의 코드로 보여줌\n\n??[FUCTION_NAME] # ? + %psource\nFUCTION_NAME]?? # 동일\n```\n\n\n## hash\n```sh \n#|export_exp [name] # export 파일 확장자\n#|export # 코드 익스포트시 포함되는 셀\n```\n\n## % 특수 명령어\n```sh \n%time [code] # 소요 시간 표시\n%%time # 이건 셀 가장 윗줄에 사용\n%%timeit # 이것도 소요시간 표시인데 차이점 파악 필요\n%pip install [package-name]\n```\n\n## cli\n```sh \n# 등록 된 커널 리스트\njupyter kernelspec list\n\n# 커널 등록, 현재 파이썬 실행환경으로 커널 생성\npython -m ipykernel install --user --name=KERNEL_NAME --display-name \"KERNEL DISPLAY NAME\"\n\n# 커널 실행\njupyter kernel --kernel=KERNEL_NAME\n```\n\n## 개념\n- kernel\n  - jupyter 에서 code block 을 실행하기 위한 주체\n    - `jupyter kernelspec list` 를 통해 확인된 디렉토리에 `kernel.json` 파일을 출력해보면 언어와 해당 언어의 인터프리터 위치가 연결된 것을 확인할 수 있다.\n  - 질문\n    - [X] 왜 [[pycharm]] 은 interpreter 를 통해 python 환경을 강제하나\n      - 아마도 jupyter notebook 이 아닌 순수 python 을 위한 용도로 생각됨\n      - 아마도 jupyter notebook 에서 설치한 패키지와 일반 파이썬 파일에서 사용되는 패키지위치는 서로 다를 것\n    - code block 에서 shell command 사용의 문제점\n      - `!pip install ...`, `%pip install ...` 등이 혼용되어 사용되고 있는데 차이점이 있다.\n      - `!` 는 jupyter 의 실행 환경인 파이썬의 범주에 설치된다\n        - jupyter 의 실행환경과 kernel 의 인터프리터(python) 이 다르면 다른 곳에 패키지가 설치된다\n      - `%` 는 kernel 에서 사용하는 파이썬의 범주에 설치된다\n      ```mermaid\n      flowchart RL\n        subgraph global\n          python0[python *system*]\n          subgraph package0[global packages]\n            jupyter[jupyter *runtime*]\n          end\n          subgraph kernel0[ipykernel]\n            subgraph c0[code block 0]\n              %0[%pip install PACKAGE_NAME]\n              !0[!pip install PACKAGE_NAME]\n            end\n          end\n        end\n        subgraph j[jupyter *runtime*]\n          subgraph virtual env 1\n            subgraph kernel1[ipykernel]\n              subgraph c1[code block 1]\n                %1[%pip install PACKAGE_NAME]\n                !1[!pip install PACKAGE_NAME]\n              end\n            end\n            subgraph package1[packages]\n              jupyter1[jupyter]\n            end\n          end\n          subgraph viertual env 2\n            subgraph kernel2[ipykernel]\n              subgraph c2[code block 2]\n                %2[%pip install PACKAGE_NAME]\n                !2[!pip install PACKAGE_NAME]\n              end\n            end\n            subgraph package2[packages]\n              jupyter2[jupyter]\n            end\n          end\n          jupyter1 -.ipykernel install.-\u003e kernel1\n          jupyter2 -.ipykernel install.-\u003e kernel2\n          %0 --\u003e package0\n          %1 --\u003e package1\n          %2 --\u003e package2\n          !0 ==\u003e package0\n          !1 ==\u003e package0\n          !2 ==\u003e package0\n        end\n      ```\n      - 중요한 차이는 jupyter kernel 이 `jupyter` 의 실행환경과 일치하는 인터프리터를 사용하지 않을 경우 `%`, `!` 사용에 따라 패키지를 불러오지 못하게된다\n      - viretual env 자체는 jupyter 안에 있는 것은 **아니다**\n      - 다만 kernel과 연결되어 있다\n\n## git\n- [[git-diff]] 를 위해서 `nbdime`\n\n## plugin\n### :nbconvert:\n#### `py` 파일로 변환\n```sh\n# `py` 파일로 변환\njupyter nbconvert --to file.ipynb\n````\n\n#### 특정 셀을 제외하고 스크립트 변환을 할 수 있다.\n- jupyter notebook 파일에서 cell에 태그 입력, 예제 기준으로는 `remove` 삽입\n- 컨피그 생성\n  ```sh\n  ## nbconvert 를 위한 config 생성\n  jupyter nbconvert --generate-config\n  ```\n- `~/.jupyter/jupyter_nbconvert_config.py` 파일에 아래 내용 추가 후 스크립트 빌드\n  ```\n  c.Exporter.preprocessors = ['nbconvert.preprocessors.TagRemovePreprocessor']\n  c.TagRemovePreprocessor.remove_cell_tags = {\"remove\"}\n  ```\n\n### jupytext\n- plugin 인지는 모르겠으나 jupyter notebook 과 py 를 sync 로 생성하여 관려가 가능한 것으로 보인다\n\n## link\n- [[ai]]\n- [[python]]\n- [[pycharm]]\n- [[huggingface]]\n"])</script><script>self.__next_f.push([1,"16:T13ca,"])</script><script>self.__next_f.push([1,"\n## 설치\n```sh \npip install jupyterlab\n# 커널 생성\npip install ipykernel\n```\n\u003e [[pycharm]] 에서 쥬피터 노트북을 실행시에는 `jupyter` 의 설치가 필요\n\n### lsp\n```sh \n# lsp\npip install ipython jupyterlab-lsp python-lsp-server\n```\n- 결과적으로 잘 안됨, [[pycharm]] 하고 격차가 너무 크다\n\n## 실행\n```sh \njupyter lab [--ip 0.0.0.0]\n# 노트북으로 실행\njupyter notebook\n```\n- 외부에서 접속 필요시 옵션 추가 `--ip 0.0.0.0` 대입\n\n## 소스 컨트롤\n```python\ndoc([FUCTION_NAME]) # 함수 문서\n\n?[FUCTION_NAME] # 함수 시그니처, 위치 정보 및 문서\n[FUCTION_NAME]? # 동일\n\n%psource [FUCTION_NAME] # 함수의 정의 코드로 보여줌\n\n??[FUCTION_NAME] # ? + %psource\nFUCTION_NAME]?? # 동일\n```\n\n\n## hash\n```sh \n#|export_exp [name] # export 파일 확장자\n#|export # 코드 익스포트시 포함되는 셀\n```\n\n## % 특수 명령어\n```sh \n%time [code] # 소요 시간 표시\n%%time # 이건 셀 가장 윗줄에 사용\n%%timeit # 이것도 소요시간 표시인데 차이점 파악 필요\n%pip install [package-name]\n```\n\n## cli\n```sh \n# 등록 된 커널 리스트\njupyter kernelspec list\n\n# 커널 등록, 현재 파이썬 실행환경으로 커널 생성\npython -m ipykernel install --user --name=KERNEL_NAME --display-name \"KERNEL DISPLAY NAME\"\n\n# 커널 실행\njupyter kernel --kernel=KERNEL_NAME\n```\n\n## 개념\n- kernel\n  - jupyter 에서 code block 을 실행하기 위한 주체\n    - `jupyter kernelspec list` 를 통해 확인된 디렉토리에 `kernel.json` 파일을 출력해보면 언어와 해당 언어의 인터프리터 위치가 연결된 것을 확인할 수 있다.\n  - 질문\n    - [X] 왜 [[pycharm]] 은 interpreter 를 통해 python 환경을 강제하나\n      - 아마도 jupyter notebook 이 아닌 순수 python 을 위한 용도로 생각됨\n      - 아마도 jupyter notebook 에서 설치한 패키지와 일반 파이썬 파일에서 사용되는 패키지위치는 서로 다를 것\n    - code block 에서 shell command 사용의 문제점\n      - `!pip install ...`, `%pip install ...` 등이 혼용되어 사용되고 있는데 차이점이 있다.\n      - `!` 는 jupyter 의 실행 환경인 파이썬의 범주에 설치된다\n        - jupyter 의 실행환경과 kernel 의 인터프리터(python) 이 다르면 다른 곳에 패키지가 설치된다\n      - `%` 는 kernel 에서 사용하는 파이썬의 범주에 설치된다\n      ```mermaid\n      flowchart RL\n        subgraph global\n          python0[python *system*]\n          subgraph package0[global packages]\n            jupyter[jupyter *runtime*]\n          end\n          subgraph kernel0[ipykernel]\n            subgraph c0[code block 0]\n              %0[%pip install PACKAGE_NAME]\n              !0[!pip install PACKAGE_NAME]\n            end\n          end\n        end\n        subgraph j[jupyter *runtime*]\n          subgraph virtual env 1\n            subgraph kernel1[ipykernel]\n              subgraph c1[code block 1]\n                %1[%pip install PACKAGE_NAME]\n                !1[!pip install PACKAGE_NAME]\n              end\n            end\n            subgraph package1[packages]\n              jupyter1[jupyter]\n            end\n          end\n          subgraph viertual env 2\n            subgraph kernel2[ipykernel]\n              subgraph c2[code block 2]\n                %2[%pip install PACKAGE_NAME]\n                !2[!pip install PACKAGE_NAME]\n              end\n            end\n            subgraph package2[packages]\n              jupyter2[jupyter]\n            end\n          end\n          jupyter1 -.ipykernel install.-\u003e kernel1\n          jupyter2 -.ipykernel install.-\u003e kernel2\n          %0 --\u003e package0\n          %1 --\u003e package1\n          %2 --\u003e package2\n          !0 ==\u003e package0\n          !1 ==\u003e package0\n          !2 ==\u003e package0\n        end\n      ```\n      - 중요한 차이는 jupyter kernel 이 `jupyter` 의 실행환경과 일치하는 인터프리터를 사용하지 않을 경우 `%`, `!` 사용에 따라 패키지를 불러오지 못하게된다\n      - viretual env 자체는 jupyter 안에 있는 것은 **아니다**\n      - 다만 kernel과 연결되어 있다\n\n## git\n- [[git-diff]] 를 위해서 `nbdime`\n\n## plugin\n### :nbconvert:\n#### `py` 파일로 변환\n```sh\n# `py` 파일로 변환\njupyter nbconvert --to file.ipynb\n````\n\n#### 특정 셀을 제외하고 스크립트 변환을 할 수 있다.\n- jupyter notebook 파일에서 cell에 태그 입력, 예제 기준으로는 `remove` 삽입\n- 컨피그 생성\n  ```sh\n  ## nbconvert 를 위한 config 생성\n  jupyter nbconvert --generate-config\n  ```\n- `~/.jupyter/jupyter_nbconvert_config.py` 파일에 아래 내용 추가 후 스크립트 빌드\n  ```\n  c.Exporter.preprocessors = ['nbconvert.preprocessors.TagRemovePreprocessor']\n  c.TagRemovePreprocessor.remove_cell_tags = {\"remove\"}\n  ```\n\n### jupytext\n- plugin 인지는 모르겠으나 jupyter notebook 과 py 를 sync 로 생성하여 관려가 가능한 것으로 보인다\n\n## link\n- [[ai]]\n- [[python]]\n- [[pycharm]]\n- [[huggingface]]\n"])</script><script>self.__next_f.push([1,"17:T13ca,"])</script><script>self.__next_f.push([1,"\n## 설치\n```sh \npip install jupyterlab\n# 커널 생성\npip install ipykernel\n```\n\u003e [[pycharm]] 에서 쥬피터 노트북을 실행시에는 `jupyter` 의 설치가 필요\n\n### lsp\n```sh \n# lsp\npip install ipython jupyterlab-lsp python-lsp-server\n```\n- 결과적으로 잘 안됨, [[pycharm]] 하고 격차가 너무 크다\n\n## 실행\n```sh \njupyter lab [--ip 0.0.0.0]\n# 노트북으로 실행\njupyter notebook\n```\n- 외부에서 접속 필요시 옵션 추가 `--ip 0.0.0.0` 대입\n\n## 소스 컨트롤\n```python\ndoc([FUCTION_NAME]) # 함수 문서\n\n?[FUCTION_NAME] # 함수 시그니처, 위치 정보 및 문서\n[FUCTION_NAME]? # 동일\n\n%psource [FUCTION_NAME] # 함수의 정의 코드로 보여줌\n\n??[FUCTION_NAME] # ? + %psource\nFUCTION_NAME]?? # 동일\n```\n\n\n## hash\n```sh \n#|export_exp [name] # export 파일 확장자\n#|export # 코드 익스포트시 포함되는 셀\n```\n\n## % 특수 명령어\n```sh \n%time [code] # 소요 시간 표시\n%%time # 이건 셀 가장 윗줄에 사용\n%%timeit # 이것도 소요시간 표시인데 차이점 파악 필요\n%pip install [package-name]\n```\n\n## cli\n```sh \n# 등록 된 커널 리스트\njupyter kernelspec list\n\n# 커널 등록, 현재 파이썬 실행환경으로 커널 생성\npython -m ipykernel install --user --name=KERNEL_NAME --display-name \"KERNEL DISPLAY NAME\"\n\n# 커널 실행\njupyter kernel --kernel=KERNEL_NAME\n```\n\n## 개념\n- kernel\n  - jupyter 에서 code block 을 실행하기 위한 주체\n    - `jupyter kernelspec list` 를 통해 확인된 디렉토리에 `kernel.json` 파일을 출력해보면 언어와 해당 언어의 인터프리터 위치가 연결된 것을 확인할 수 있다.\n  - 질문\n    - [X] 왜 [[pycharm]] 은 interpreter 를 통해 python 환경을 강제하나\n      - 아마도 jupyter notebook 이 아닌 순수 python 을 위한 용도로 생각됨\n      - 아마도 jupyter notebook 에서 설치한 패키지와 일반 파이썬 파일에서 사용되는 패키지위치는 서로 다를 것\n    - code block 에서 shell command 사용의 문제점\n      - `!pip install ...`, `%pip install ...` 등이 혼용되어 사용되고 있는데 차이점이 있다.\n      - `!` 는 jupyter 의 실행 환경인 파이썬의 범주에 설치된다\n        - jupyter 의 실행환경과 kernel 의 인터프리터(python) 이 다르면 다른 곳에 패키지가 설치된다\n      - `%` 는 kernel 에서 사용하는 파이썬의 범주에 설치된다\n      ```mermaid\n      flowchart RL\n        subgraph global\n          python0[python *system*]\n          subgraph package0[global packages]\n            jupyter[jupyter *runtime*]\n          end\n          subgraph kernel0[ipykernel]\n            subgraph c0[code block 0]\n              %0[%pip install PACKAGE_NAME]\n              !0[!pip install PACKAGE_NAME]\n            end\n          end\n        end\n        subgraph j[jupyter *runtime*]\n          subgraph virtual env 1\n            subgraph kernel1[ipykernel]\n              subgraph c1[code block 1]\n                %1[%pip install PACKAGE_NAME]\n                !1[!pip install PACKAGE_NAME]\n              end\n            end\n            subgraph package1[packages]\n              jupyter1[jupyter]\n            end\n          end\n          subgraph viertual env 2\n            subgraph kernel2[ipykernel]\n              subgraph c2[code block 2]\n                %2[%pip install PACKAGE_NAME]\n                !2[!pip install PACKAGE_NAME]\n              end\n            end\n            subgraph package2[packages]\n              jupyter2[jupyter]\n            end\n          end\n          jupyter1 -.ipykernel install.-\u003e kernel1\n          jupyter2 -.ipykernel install.-\u003e kernel2\n          %0 --\u003e package0\n          %1 --\u003e package1\n          %2 --\u003e package2\n          !0 ==\u003e package0\n          !1 ==\u003e package0\n          !2 ==\u003e package0\n        end\n      ```\n      - 중요한 차이는 jupyter kernel 이 `jupyter` 의 실행환경과 일치하는 인터프리터를 사용하지 않을 경우 `%`, `!` 사용에 따라 패키지를 불러오지 못하게된다\n      - viretual env 자체는 jupyter 안에 있는 것은 **아니다**\n      - 다만 kernel과 연결되어 있다\n\n## git\n- [[git-diff]] 를 위해서 `nbdime`\n\n## plugin\n### :nbconvert:\n#### `py` 파일로 변환\n```sh\n# `py` 파일로 변환\njupyter nbconvert --to file.ipynb\n````\n\n#### 특정 셀을 제외하고 스크립트 변환을 할 수 있다.\n- jupyter notebook 파일에서 cell에 태그 입력, 예제 기준으로는 `remove` 삽입\n- 컨피그 생성\n  ```sh\n  ## nbconvert 를 위한 config 생성\n  jupyter nbconvert --generate-config\n  ```\n- `~/.jupyter/jupyter_nbconvert_config.py` 파일에 아래 내용 추가 후 스크립트 빌드\n  ```\n  c.Exporter.preprocessors = ['nbconvert.preprocessors.TagRemovePreprocessor']\n  c.TagRemovePreprocessor.remove_cell_tags = {\"remove\"}\n  ```\n\n### jupytext\n- plugin 인지는 모르겠으나 jupyter notebook 과 py 를 sync 로 생성하여 관려가 가능한 것으로 보인다\n\n## link\n- [[ai]]\n- [[python]]\n- [[pycharm]]\n- [[huggingface]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# jupyter\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# jupyter\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/jupyter\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# jupyter\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
