@@ -1,0 +1,344 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-5b3ea01efde2fc20.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-47fb5d53eefa3aa2.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># wsl</title><meta name="description" content="&gt; windows subsystem for linux
+
+## 설치
+- store 에서 wsl 설치
+- os 설치, wsl 실행(터미널)
+```sh
+wsl --list --online # distro 목록
+wsl --install [DISTRO] # directory 지정 가능
+```
+- os 설치(ubuntu 22.04 lts) 후, wsl 실행해서 subsystem shell 열기
+- [옵션] [[ai]] 활용을 위한 [[pipenv]] 설치
+```sh 
+apt update
+apt install python3-pip
+pip install pipenv
+```
+
+## 그외 기능
+```sh
+wsl --list --verbose # 설치 목록
+wsl --export # tar 파일로 export
+wsl --import # tar 로 부터 복구
+```
+
+## 설정
+- 하드웨어 리소스 설정이나 터널링등에 대한 설정이 `.wslconfig` 파일을 통해 가능하다
+- 탐색기에서 `%userprofile%` 주소로 이동
+- `.wslconfig` 생성
+- 기본값이나 설정할 수 있는 값을 확인하기 위해서는 관련 문서 참조 필요
+- CPU, memory 등을 통해서 하드웨어 스펙 전달 가능, **재부팅** 필요
+
+## 외부에서 ssh 를 통해 접속
+- 외부라 함은 lan 을 의미
+- lan 은 `192.168.x.x` 대역
+- wsl 은 `172.x.x.x` 대역
+- 이말인 즉슨
+  - A --ssh--&gt; B --nat--&gt; wsl
+  - A --ssh--&gt; B --bridge-- wsl
+- 방화벽으로 [[ssh]] 포트 개팡 필요 기본: `22`
+- [[ssh]] 최초 개방시 `sshd_config` 에  `PasswordAuthentication yes` 가 설정되어 있어야함
+
+### Mirrorod
+- windows host ip 를 공유
+- windows host 에 open ssh 가 떠있으면 wsl 까지 도달하지 못함
+
+### NAT
+- windows 내에 자체 대역으로 ip 존재
+- windows host 에서 port-forwaring 필요
+
+#### window host 설정
+1. window에서 openssh server 설치 및 시작
+2. 관리자 계정으로 power shell 오픈
+3. `net user [ID] [PASSWORD] /add` 명령으로 사용자 생성, 패스워드 필요
+4. `ssh [WINDOWS_HOST_IP]` 접속
+
+#### wsl os 설정
+1. `openssh-server` 설치
+```sh 
+apt update
+apt install openssh-server
+```
+
+#### remote -&gt; window host 
+&gt; `net user` 를 통해 생성한 계정으로 접속
+```sh 
+ssh [USER]@[WINDOWS_HOST_IP]
+```
+
+#### remote -&gt; window host -&gt; wsl
+
+### 종료
+- [[ssh]] 로 접속한 상태에서 pc 자체를 종료할 경우
+```sh
+/mnt/c/Windows/System32/cmd.exe /c shutdown /s /t 0
+```
+
+## error
+- wsl 실행하니 창 열리고 바로 꺼짐
+- 지우고 설치하니 default profile, guid 어쩌고하고 꺼짐
+- amd cpu 를 사용하고 있는데 bios 에서 svm 이 활성화가 꺼져있어서 생긴 문제로 다시 켜주면 실행됨
+
+## link
+- [[windows]]
+- [[ssh]]
+- [[ollama]]
+- [[powershell]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# wsl"/><meta property="og:description" content="&gt; windows subsystem for linux
+
+## 설치
+- store 에서 wsl 설치
+- os 설치, wsl 실행(터미널)
+```sh
+wsl --list --online # distro 목록
+wsl --install [DISTRO] # directory 지정 가능
+```
+- os 설치(ubuntu 22.04 lts) 후, wsl 실행해서 subsystem shell 열기
+- [옵션] [[ai]] 활용을 위한 [[pipenv]] 설치
+```sh 
+apt update
+apt install python3-pip
+pip install pipenv
+```
+
+## 그외 기능
+```sh
+wsl --list --verbose # 설치 목록
+wsl --export # tar 파일로 export
+wsl --import # tar 로 부터 복구
+```
+
+## 설정
+- 하드웨어 리소스 설정이나 터널링등에 대한 설정이 `.wslconfig` 파일을 통해 가능하다
+- 탐색기에서 `%userprofile%` 주소로 이동
+- `.wslconfig` 생성
+- 기본값이나 설정할 수 있는 값을 확인하기 위해서는 관련 문서 참조 필요
+- CPU, memory 등을 통해서 하드웨어 스펙 전달 가능, **재부팅** 필요
+
+## 외부에서 ssh 를 통해 접속
+- 외부라 함은 lan 을 의미
+- lan 은 `192.168.x.x` 대역
+- wsl 은 `172.x.x.x` 대역
+- 이말인 즉슨
+  - A --ssh--&gt; B --nat--&gt; wsl
+  - A --ssh--&gt; B --bridge-- wsl
+- 방화벽으로 [[ssh]] 포트 개팡 필요 기본: `22`
+- [[ssh]] 최초 개방시 `sshd_config` 에  `PasswordAuthentication yes` 가 설정되어 있어야함
+
+### Mirrorod
+- windows host ip 를 공유
+- windows host 에 open ssh 가 떠있으면 wsl 까지 도달하지 못함
+
+### NAT
+- windows 내에 자체 대역으로 ip 존재
+- windows host 에서 port-forwaring 필요
+
+#### window host 설정
+1. window에서 openssh server 설치 및 시작
+2. 관리자 계정으로 power shell 오픈
+3. `net user [ID] [PASSWORD] /add` 명령으로 사용자 생성, 패스워드 필요
+4. `ssh [WINDOWS_HOST_IP]` 접속
+
+#### wsl os 설정
+1. `openssh-server` 설치
+```sh 
+apt update
+apt install openssh-server
+```
+
+#### remote -&gt; window host 
+&gt; `net user` 를 통해 생성한 계정으로 접속
+```sh 
+ssh [USER]@[WINDOWS_HOST_IP]
+```
+
+#### remote -&gt; window host -&gt; wsl
+
+### 종료
+- [[ssh]] 로 접속한 상태에서 pc 자체를 종료할 경우
+```sh
+/mnt/c/Windows/System32/cmd.exe /c shutdown /s /t 0
+```
+
+## error
+- wsl 실행하니 창 열리고 바로 꺼짐
+- 지우고 설치하니 default profile, guid 어쩌고하고 꺼짐
+- amd cpu 를 사용하고 있는데 bios 에서 svm 이 활성화가 꺼져있어서 생긴 문제로 다시 켜주면 실행됨
+
+## link
+- [[windows]]
+- [[ssh]]
+- [[ollama]]
+- [[powershell]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/wsl"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# wsl"/><meta name="twitter:description" content="&gt; windows subsystem for linux
+
+## 설치
+- store 에서 wsl 설치
+- os 설치, wsl 실행(터미널)
+```sh
+wsl --list --online # distro 목록
+wsl --install [DISTRO] # directory 지정 가능
+```
+- os 설치(ubuntu 22.04 lts) 후, wsl 실행해서 subsystem shell 열기
+- [옵션] [[ai]] 활용을 위한 [[pipenv]] 설치
+```sh 
+apt update
+apt install python3-pip
+pip install pipenv
+```
+
+## 그외 기능
+```sh
+wsl --list --verbose # 설치 목록
+wsl --export # tar 파일로 export
+wsl --import # tar 로 부터 복구
+```
+
+## 설정
+- 하드웨어 리소스 설정이나 터널링등에 대한 설정이 `.wslconfig` 파일을 통해 가능하다
+- 탐색기에서 `%userprofile%` 주소로 이동
+- `.wslconfig` 생성
+- 기본값이나 설정할 수 있는 값을 확인하기 위해서는 관련 문서 참조 필요
+- CPU, memory 등을 통해서 하드웨어 스펙 전달 가능, **재부팅** 필요
+
+## 외부에서 ssh 를 통해 접속
+- 외부라 함은 lan 을 의미
+- lan 은 `192.168.x.x` 대역
+- wsl 은 `172.x.x.x` 대역
+- 이말인 즉슨
+  - A --ssh--&gt; B --nat--&gt; wsl
+  - A --ssh--&gt; B --bridge-- wsl
+- 방화벽으로 [[ssh]] 포트 개팡 필요 기본: `22`
+- [[ssh]] 최초 개방시 `sshd_config` 에  `PasswordAuthentication yes` 가 설정되어 있어야함
+
+### Mirrorod
+- windows host ip 를 공유
+- windows host 에 open ssh 가 떠있으면 wsl 까지 도달하지 못함
+
+### NAT
+- windows 내에 자체 대역으로 ip 존재
+- windows host 에서 port-forwaring 필요
+
+#### window host 설정
+1. window에서 openssh server 설치 및 시작
+2. 관리자 계정으로 power shell 오픈
+3. `net user [ID] [PASSWORD] /add` 명령으로 사용자 생성, 패스워드 필요
+4. `ssh [WINDOWS_HOST_IP]` 접속
+
+#### wsl os 설정
+1. `openssh-server` 설치
+```sh 
+apt update
+apt install openssh-server
+```
+
+#### remote -&gt; window host 
+&gt; `net user` 를 통해 생성한 계정으로 접속
+```sh 
+ssh [USER]@[WINDOWS_HOST_IP]
+```
+
+#### remote -&gt; window host -&gt; wsl
+
+### 종료
+- [[ssh]] 로 접속한 상태에서 pc 자체를 종료할 경우
+```sh
+/mnt/c/Windows/System32/cmd.exe /c shutdown /s /t 0
+```
+
+## error
+- wsl 실행하니 창 열리고 바로 꺼짐
+- 지우고 설치하니 default profile, guid 어쩌고하고 꺼짐
+- amd cpu 를 사용하고 있는데 bios 에서 svm 이 활성화가 꺼져있어서 생긴 문제로 다시 켜주면 실행됨
+
+## link
+- [[windows]]
+- [[ssh]]
+- [[ollama]]
+- [[powershell]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/ee2443e
+" class="bg-white text-black">ee2443e</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/wsl.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/wsl.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/wsl.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/wsl"><span class="underline">wsl</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ai"><span class="underline">ai</span><sup>17</sup></a></span><span><a class="text-blue-600" href="/public-wiki/pipenv"><span class="underline">pipenv</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ssh"><span class="underline">ssh</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/windows"><span class="underline">windows</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ollama"><span class="underline">ollama</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/powershell"><span class="underline">powershell</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/index"><span class="underline">index</span><sup>108</sup></a></span><span><a class="text-blue-600" href="/public-wiki/kubeadm"><span class="underline">kubeadm</span><sup>16</sup></a></span><span><a class="text-blue-600" href="/public-wiki/stable-diffusion"><span class="underline">stable-diffusion</span><sup>19</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ubuntu"><span class="underline">ubuntu</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-02-15"><span class="underline">diary/2024-02-15</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-06-04"><span class="underline">diary/2024-06-04</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-12-31"><span class="underline">diary/2024-12-31</span><sup>441</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2025-01-07"><span class="underline">diary/2025-01-07</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2025-01-10"><span class="underline">diary/2025-01-10</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2025-01-12"><span class="underline">diary/2025-01-12</span><sup>12</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2025-01-31"><span class="underline">diary/2025-01-31</span><sup>3</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#wsl">wsl</a></div><div class="pl-2"><a href="#설치">설치</a></div><div class="pl-2"><a href="#그외-기능">그외 기능</a></div><div class="pl-2"><a href="#설정">설정</a></div><div class="pl-2"><a href="#외부에서-ssh-를-통해-접속">외부에서 ssh 를 통해 접속</a></div><div class="pl-4"><a href="#mirrorod">Mirrorod</a></div><div class="pl-4"><a href="#nat">NAT</a></div><div class="pl-6"><a href="#window-host-설정">window host 설정</a></div><div class="pl-6"><a href="#wsl-os-설정">wsl os 설정</a></div><div class="pl-6"><a href="#remote---window-host">remote -&gt; window host</a></div><div class="pl-6"><a href="#remote---window-host---wsl">remote -&gt; window host -&gt; wsl</a></div><div class="pl-4"><a href="#종료">종료</a></div><div class="pl-2"><a href="#error">error</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="wsl">wsl</h1>
+<blockquote><p>windows subsystem for linux</p></blockquote><h2 id="설치">설치</h2>
+<ul>
+<li>store 에서 wsl 설치</li>
+<li>os 설치, wsl 실행(터미널)</li>
+</ul>
+<pre><code class="hljs language-sh">wsl --list --online <span class="hljs-comment"># distro 목록</span>
+wsl --install [DISTRO] <span class="hljs-comment"># directory 지정 가능</span>
+</code></pre><ul>
+<li>os 설치(ubuntu 22.04 lts) 후, wsl 실행해서 subsystem shell 열기</li>
+<li>[옵션] <a href="ai">ai</a> 활용을 위한 <a href="pipenv">pipenv</a> 설치</li>
+</ul>
+<pre><code class="hljs language-sh">apt update
+apt install python3-pip
+pip install pipenv
+</code></pre><h2 id="그외-기능">그외 기능</h2>
+<pre><code class="hljs language-sh">wsl --list --verbose <span class="hljs-comment"># 설치 목록</span>
+wsl --<span class="hljs-built_in">export</span> <span class="hljs-comment"># tar 파일로 export</span>
+wsl --import <span class="hljs-comment"># tar 로 부터 복구</span>
+</code></pre><h2 id="설정">설정</h2>
+<ul>
+<li>하드웨어 리소스 설정이나 터널링등에 대한 설정이 <code class="span">.wslconfig</code> 파일을 통해 가능하다</li>
+<li>탐색기에서 <code class="span">%userprofile%</code> 주소로 이동</li>
+<li><code class="span">.wslconfig</code> 생성</li>
+<li>기본값이나 설정할 수 있는 값을 확인하기 위해서는 관련 문서 참조 필요</li>
+<li>CPU, memory 등을 통해서 하드웨어 스펙 전달 가능, <strong>재부팅</strong> 필요</li>
+</ul>
+<h2 id="외부에서-ssh-를-통해-접속">외부에서 ssh 를 통해 접속</h2>
+<ul>
+<li>외부라 함은 lan 을 의미</li>
+<li>lan 은 <code class="span">192.168.x.x</code> 대역</li>
+<li>wsl 은 <code class="span">172.x.x.x</code> 대역</li>
+<li>이말인 즉슨<ul>
+<li>A --ssh--&gt; B --nat--&gt; wsl</li>
+<li>A --ssh--&gt; B --bridge-- wsl</li>
+</ul>
+</li>
+<li>방화벽으로 <a href="ssh">ssh</a> 포트 개팡 필요 기본: <code class="span">22</code></li>
+<li><a href="ssh">ssh</a> 최초 개방시 <code class="span">sshd_config</code> 에  <code class="span">PasswordAuthentication yes</code> 가 설정되어 있어야함</li>
+</ul>
+<h3 id="mirrorod">Mirrorod</h3>
+<ul>
+<li>windows host ip 를 공유</li>
+<li>windows host 에 open ssh 가 떠있으면 wsl 까지 도달하지 못함</li>
+</ul>
+<h3 id="nat">NAT</h3>
+<ul>
+<li>windows 내에 자체 대역으로 ip 존재</li>
+<li>windows host 에서 port-forwaring 필요</li>
+</ul>
+<h4 id="window-host-설정">window host 설정</h4>
+<ol>
+<li>window에서 openssh server 설치 및 시작</li>
+<li>관리자 계정으로 power shell 오픈</li>
+<li><code class="span">net user [ID] [PASSWORD] /add</code> 명령으로 사용자 생성, 패스워드 필요</li>
+<li><code class="span">ssh [WINDOWS_HOST_IP]</code> 접속</li>
+</ol>
+<h4 id="wsl-os-설정">wsl os 설정</h4>
+<ol>
+<li><code class="span">openssh-server</code> 설치</li>
+</ol>
+<pre><code class="hljs language-sh">apt update
+apt install openssh-server
+</code></pre><h4 id="remote---window-host">remote -&gt; window host</h4>
+<blockquote><p><code class="span">net user</code> 를 통해 생성한 계정으로 접속</p></blockquote><pre><code class="hljs language-sh">ssh [USER]@[WINDOWS_HOST_IP]
+</code></pre><h4 id="remote---window-host---wsl">remote -&gt; window host -&gt; wsl</h4>
+<h3 id="종료">종료</h3>
+<ul>
+<li><a href="ssh">ssh</a> 로 접속한 상태에서 pc 자체를 종료할 경우</li>
+</ul>
+<pre><code class="hljs language-sh">/mnt/c/Windows/System32/cmd.exe /c shutdown /s /t 0
+</code></pre><h2 id="error">error</h2>
+<ul>
+<li>wsl 실행하니 창 열리고 바로 꺼짐</li>
+<li>지우고 설치하니 default profile, guid 어쩌고하고 꺼짐</li>
+<li>amd cpu 를 사용하고 있는데 bios 에서 svm 이 활성화가 꺼져있어서 생긴 문제로 다시 켜주면 실행됨</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="windows">windows</a></li>
+<li><a href="ssh">ssh</a></li>
+<li><a href="ollama">ollama</a></li>
+<li><a href="powershell">powershell</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-5b3ea01efde2fc20.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-47fb5d53eefa3aa2.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"wsl\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"h21fFrlDrRVYhDxg2X5Qo\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/wsl\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"wsl\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"wsl\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"wsl\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T1000,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"wsl\"\u003ewsl\u003c/h1\u003e\n\u003cblockquote\u003e\u003cp\u003ewindows subsystem for linux\u003c/p\u003e\u003c/blockquote\u003e\u003ch2 id=\"설치\"\u003e설치\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003estore 에서 wsl 설치\u003c/li\u003e\n\u003cli\u003eos 설치, wsl 실행(터미널)\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ewsl --list --online \u003cspan class=\"hljs-comment\"\u003e# distro 목록\u003c/span\u003e\nwsl --install [DISTRO] \u003cspan class=\"hljs-comment\"\u003e# directory 지정 가능\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003eos 설치(ubuntu 22.04 lts) 후, wsl 실행해서 subsystem shell 열기\u003c/li\u003e\n\u003cli\u003e[옵션] \u003ca href=\"ai\"\u003eai\u003c/a\u003e 활용을 위한 \u003ca href=\"pipenv\"\u003epipenv\u003c/a\u003e 설치\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eapt update\napt install python3-pip\npip install pipenv\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"그외-기능\"\u003e그외 기능\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ewsl --list --verbose \u003cspan class=\"hljs-comment\"\u003e# 설치 목록\u003c/span\u003e\nwsl --\u003cspan class=\"hljs-built_in\"\u003eexport\u003c/span\u003e \u003cspan class=\"hljs-comment\"\u003e# tar 파일로 export\u003c/span\u003e\nwsl --import \u003cspan class=\"hljs-comment\"\u003e# tar 로 부터 복구\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"설정\"\u003e설정\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e하드웨어 리소스 설정이나 터널링등에 대한 설정이 \u003ccode class=\"span\"\u003e.wslconfig\u003c/code\u003e 파일을 통해 가능하다\u003c/li\u003e\n\u003cli\u003e탐색기에서 \u003ccode class=\"span\"\u003e%userprofile%\u003c/code\u003e 주소로 이동\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e.wslconfig\u003c/code\u003e 생성\u003c/li\u003e\n\u003cli\u003e기본값이나 설정할 수 있는 값을 확인하기 위해서는 관련 문서 참조 필요\u003c/li\u003e\n\u003cli\u003eCPU, memory 등을 통해서 하드웨어 스펙 전달 가능, \u003cstrong\u003e재부팅\u003c/strong\u003e 필요\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"외부에서-ssh-를-통해-접속\"\u003e외부에서 ssh 를 통해 접속\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e외부라 함은 lan 을 의미\u003c/li\u003e\n\u003cli\u003elan 은 \u003ccode class=\"span\"\u003e192.168.x.x\u003c/code\u003e 대역\u003c/li\u003e\n\u003cli\u003ewsl 은 \u003ccode class=\"span\"\u003e172.x.x.x\u003c/code\u003e 대역\u003c/li\u003e\n\u003cli\u003e이말인 즉슨\u003cul\u003e\n\u003cli\u003eA --ssh--\u0026gt; B --nat--\u0026gt; wsl\u003c/li\u003e\n\u003cli\u003eA --ssh--\u0026gt; B --bridge-- wsl\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e방화벽으로 \u003ca href=\"ssh\"\u003essh\u003c/a\u003e 포트 개팡 필요 기본: \u003ccode class=\"span\"\u003e22\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"ssh\"\u003essh\u003c/a\u003e 최초 개방시 \u003ccode class=\"span\"\u003esshd_config\u003c/code\u003e 에  \u003ccode class=\"span\"\u003ePasswordAuthentication yes\u003c/code\u003e 가 설정되어 있어야함\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"mirrorod\"\u003eMirrorod\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003ewindows host ip 를 공유\u003c/li\u003e\n\u003cli\u003ewindows host 에 open ssh 가 떠있으면 wsl 까지 도달하지 못함\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"nat\"\u003eNAT\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003ewindows 내에 자체 대역으로 ip 존재\u003c/li\u003e\n\u003cli\u003ewindows host 에서 port-forwaring 필요\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"window-host-설정\"\u003ewindow host 설정\u003c/h4\u003e\n\u003col\u003e\n\u003cli\u003ewindow에서 openssh server 설치 및 시작\u003c/li\u003e\n\u003cli\u003e관리자 계정으로 power shell 오픈\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003enet user [ID] [PASSWORD] /add\u003c/code\u003e 명령으로 사용자 생성, 패스워드 필요\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003essh [WINDOWS_HOST_IP]\u003c/code\u003e 접속\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch4 id=\"wsl-os-설정\"\u003ewsl os 설정\u003c/h4\u003e\n\u003col\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eopenssh-server\u003c/code\u003e 설치\u003c/li\u003e\n\u003c/ol\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eapt update\napt install openssh-server\n\u003c/code\u003e\u003c/pre\u003e\u003ch4 id=\"remote---window-host\"\u003eremote -\u0026gt; window host\u003c/h4\u003e\n\u003cblockquote\u003e\u003cp\u003e\u003ccode class=\"span\"\u003enet user\u003c/code\u003e 를 통해 생성한 계정으로 접속\u003c/p\u003e\u003c/blockquote\u003e\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003essh [USER]@[WINDOWS_HOST_IP]\n\u003c/code\u003e\u003c/pre\u003e\u003ch4 id=\"remote---window-host---wsl\"\u003eremote -\u0026gt; window host -\u0026gt; wsl\u003c/h4\u003e\n\u003ch3 id=\"종료\"\u003e종료\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"ssh\"\u003essh\u003c/a\u003e 로 접속한 상태에서 pc 자체를 종료할 경우\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e/mnt/c/Windows/System32/cmd.exe /c shutdown /s /t 0\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"error\"\u003eerror\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003ewsl 실행하니 창 열리고 바로 꺼짐\u003c/li\u003e\n\u003cli\u003e지우고 설치하니 default profile, guid 어쩌고하고 꺼짐\u003c/li\u003e\n\u003cli\u003eamd cpu 를 사용하고 있는데 bios 에서 svm 이 활성화가 꺼져있어서 생긴 문제로 다시 켜주면 실행됨\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"windows\"\u003ewindows\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"ssh\"\u003essh\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"ollama\"\u003eollama\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"powershell\"\u003epowershell\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/ee2443e\\n\",\"className\":\"bg-white text-black\",\"children\":\"ee2443e\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/wsl.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/wsl.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/wsl.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"wsl\",\"name\":\"wsl\",\"val\":9},{\"id\":\"ai\",\"name\":\"ai\",\"val\":17},{\"id\":\"pipenv\",\"name\":\"pipenv\",\"val\":8},{\"id\":\"ssh\",\"name\":\"ssh\",\"val\":8},{\"id\":\"windows\",\"name\":\"windows\",\"val\":3},{\"id\":\"ollama\",\"name\":\"ollama\",\"val\":5},{\"id\":\"powershell\",\"name\":\"powershell\",\"val\":2},{\"id\":\"index\",\"name\":\"index\",\"val\":108},{\"id\":\"kubeadm\",\"name\":\"kubeadm\",\"val\":16},{\"id\":\"stable-diffusion\",\"name\":\"stable-diffusion\",\"val\":19},{\"id\":\"ubuntu\",\"name\":\"ubuntu\",\"val\":6},{\"id\":\"diary/2024-02-15\",\"name\":\"diary/2024-02-15\",\"val\":3},{\"id\":\"diary/2024-06-04\",\"name\":\"diary/2024-06-04\",\"val\":2},{\"id\":\"diary/2024-12-31\",\"name\":\"diary/2024-12-31\",\"val\":441},{\"id\":\"diary/2025-01-07\",\"name\":\"diary/2025-01-07\",\"val\":3},{\"id\":\"diary/2025-01-10\",\"name\":\"diary/2025-01-10\",\"val\":2},{\"id\":\"diary/2025-01-12\",\"name\":\"diary/2025-01-12\",\"val\":12},{\"id\":\"diary/2025-01-31\",\"name\":\"diary/2025-01-31\",\"val\":3}],\"links\":[{\"source\":\"wsl\",\"target\":\"ai\"},{\"source\":\"wsl\",\"target\":\"pipenv\"},{\"source\":\"wsl\",\"target\":\"ssh\"},{\"source\":\"wsl\",\"target\":\"ssh\"},{\"source\":\"wsl\",\"target\":\"ssh\"},{\"source\":\"wsl\",\"target\":\"windows\"},{\"source\":\"wsl\",\"target\":\"ssh\"},{\"source\":\"wsl\",\"target\":\"ollama\"},{\"source\":\"wsl\",\"target\":\"powershell\"},{\"source\":\"index\",\"target\":\"wsl\"},{\"source\":\"kubeadm\",\"target\":\"wsl\"},{\"source\":\"kubeadm\",\"target\":\"wsl\"},{\"source\":\"ollama\",\"target\":\"wsl\"},{\"source\":\"ollama\",\"target\":\"wsl\"},{\"source\":\"powershell\",\"target\":\"wsl\"},{\"source\":\"ssh\",\"target\":\"wsl\"},{\"source\":\"stable-diffusion\",\"target\":\"wsl\"},{\"source\":\"ubuntu\",\"target\":\"wsl\"},{\"source\":\"windows\",\"target\":\"wsl\"},{\"source\":\"windows\",\"target\":\"wsl\"},{\"source\":\"diary/2024-02-15\",\"target\":\"wsl\"},{\"source\":\"diary/2024-06-04\",\"target\":\"wsl\"},{\"source\":\"diary/2024-12-31\",\"target\":\"wsl\"},{\"source\":\"diary/2025-01-07\",\"target\":\"wsl\"},{\"source\":\"diary/2025-01-07\",\"target\":\"wsl\"},{\"source\":\"diary/2025-01-10\",\"target\":\"wsl\"},{\"source\":\"diary/2025-01-12\",\"target\":\"wsl\"},{\"source\":\"diary/2025-01-12\",\"target\":\"wsl\"},{\"source\":\"diary/2025-01-12\",\"target\":\"wsl\"},{\"source\":\"diary/2025-01-31\",\"target\":\"wsl\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"wsl\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/wsl\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"wsl\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"ai\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ai\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ai\"}],[\"$\",\"sup\",null,{\"children\":17}]]}]}],[\"$\",\"span\",\"pipenv\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/pipenv\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"pipenv\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"ssh\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ssh\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ssh\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"windows\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/windows\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"windows\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"ollama\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ollama\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ollama\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"powershell\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/powershell\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"powershell\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"index\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/index\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"index\"}],[\"$\",\"sup\",null,{\"children\":108}]]}]}],[\"$\",\"span\",\"kubeadm\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/kubeadm\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"kubeadm\"}],[\"$\",\"sup\",null,{\"children\":16}]]}]}],[\"$\",\"span\",\"stable-diffusion\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/stable-diffusion\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"stable-diffusion\"}],[\"$\",\"sup\",null,{\"children\":19}]]}]}],[\"$\",\"span\",\"ubuntu\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ubuntu\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ubuntu\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"diary/2024-02-15\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-02-15\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-02-15\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2024-06-04\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-06-04\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-06-04\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2024-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-12-31\"}],[\"$\",\"sup\",null,{\"children\":441}]]}]}],[\"$\",\"span\",\"diary/2025-01-07\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2025-01-07\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2025-01-07\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2025-01-10\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2025-01-10\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2025-01-10\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2025-01-12\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2025-01-12\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2025-01-12\"}],[\"$\",\"sup\",null,{\"children\":12}]]}]}],[\"$\",\"span\",\"diary/2025-01-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2025-01-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2025-01-31\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"wsl\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#wsl\",\"children\":\"wsl\"}]}],[\"$\",\"div\",\"설치\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#설치\",\"children\":\"설치\"}]}],[\"$\",\"div\",\"그외-기능\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#그외-기능\",\"children\":\"그외 기능\"}]}],[\"$\",\"div\",\"설정\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#설정\",\"children\":\"설정\"}]}],[\"$\",\"div\",\"외부에서-ssh-를-통해-접속\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#외부에서-ssh-를-통해-접속\",\"children\":\"외부에서 ssh 를 통해 접속\"}]}],[\"$\",\"div\",\"mirrorod\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#mirrorod\",\"children\":\"Mirrorod\"}]}],[\"$\",\"div\",\"nat\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#nat\",\"children\":\"NAT\"}]}],[\"$\",\"div\",\"window-host-설정\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#window-host-설정\",\"children\":\"window host 설정\"}]}],[\"$\",\"div\",\"wsl-os-설정\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#wsl-os-설정\",\"children\":\"wsl os 설정\"}]}],[\"$\",\"div\",\"remote---window-host\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#remote---window-host\",\"children\":\"remote -\u003e window host\"}]}],[\"$\",\"div\",\"remote---window-host---wsl\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#remote---window-host---wsl\",\"children\":\"remote -\u003e window host -\u003e wsl\"}]}],[\"$\",\"div\",\"종료\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#종료\",\"children\":\"종료\"}]}],[\"$\",\"div\",\"error\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error\",\"children\":\"error\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T9a1,"])</script><script>self.__next_f.push([1,"\u003e windows subsystem for linux\n\n## 설치\n- store 에서 wsl 설치\n- os 설치, wsl 실행(터미널)\n```sh\nwsl --list --online # distro 목록\nwsl --install [DISTRO] # directory 지정 가능\n```\n- os 설치(ubuntu 22.04 lts) 후, wsl 실행해서 subsystem shell 열기\n- [옵션] [[ai]] 활용을 위한 [[pipenv]] 설치\n```sh \napt update\napt install python3-pip\npip install pipenv\n```\n\n## 그외 기능\n```sh\nwsl --list --verbose # 설치 목록\nwsl --export # tar 파일로 export\nwsl --import # tar 로 부터 복구\n```\n\n## 설정\n- 하드웨어 리소스 설정이나 터널링등에 대한 설정이 `.wslconfig` 파일을 통해 가능하다\n- 탐색기에서 `%userprofile%` 주소로 이동\n- `.wslconfig` 생성\n- 기본값이나 설정할 수 있는 값을 확인하기 위해서는 관련 문서 참조 필요\n- CPU, memory 등을 통해서 하드웨어 스펙 전달 가능, **재부팅** 필요\n\n## 외부에서 ssh 를 통해 접속\n- 외부라 함은 lan 을 의미\n- lan 은 `192.168.x.x` 대역\n- wsl 은 `172.x.x.x` 대역\n- 이말인 즉슨\n  - A --ssh--\u003e B --nat--\u003e wsl\n  - A --ssh--\u003e B --bridge-- wsl\n- 방화벽으로 [[ssh]] 포트 개팡 필요 기본: `22`\n- [[ssh]] 최초 개방시 `sshd_config` 에  `PasswordAuthentication yes` 가 설정되어 있어야함\n\n### Mirrorod\n- windows host ip 를 공유\n- windows host 에 open ssh 가 떠있으면 wsl 까지 도달하지 못함\n\n### NAT\n- windows 내에 자체 대역으로 ip 존재\n- windows host 에서 port-forwaring 필요\n\n#### window host 설정\n1. window에서 openssh server 설치 및 시작\n2. 관리자 계정으로 power shell 오픈\n3. `net user [ID] [PASSWORD] /add` 명령으로 사용자 생성, 패스워드 필요\n4. `ssh [WINDOWS_HOST_IP]` 접속\n\n#### wsl os 설정\n1. `openssh-server` 설치\n```sh \napt update\napt install openssh-server\n```\n\n#### remote -\u003e window host \n\u003e `net user` 를 통해 생성한 계정으로 접속\n```sh \nssh [USER]@[WINDOWS_HOST_IP]\n```\n\n#### remote -\u003e window host -\u003e wsl\n\n### 종료\n- [[ssh]] 로 접속한 상태에서 pc 자체를 종료할 경우\n```sh\n/mnt/c/Windows/System32/cmd.exe /c shutdown /s /t 0\n```\n\n## error\n- wsl 실행하니 창 열리고 바로 꺼짐\n- 지우고 설치하니 default profile, guid 어쩌고하고 꺼짐\n- amd cpu 를 사용하고 있는데 bios 에서 svm 이 활성화가 꺼져있어서 생긴 문제로 다시 켜주면 실행됨\n\n## link\n- [[windows]]\n- [[ssh]]\n- [[ollama]]\n- [[powershell]]\n"])</script><script>self.__next_f.push([1,"16:T9a1,"])</script><script>self.__next_f.push([1,"\u003e windows subsystem for linux\n\n## 설치\n- store 에서 wsl 설치\n- os 설치, wsl 실행(터미널)\n```sh\nwsl --list --online # distro 목록\nwsl --install [DISTRO] # directory 지정 가능\n```\n- os 설치(ubuntu 22.04 lts) 후, wsl 실행해서 subsystem shell 열기\n- [옵션] [[ai]] 활용을 위한 [[pipenv]] 설치\n```sh \napt update\napt install python3-pip\npip install pipenv\n```\n\n## 그외 기능\n```sh\nwsl --list --verbose # 설치 목록\nwsl --export # tar 파일로 export\nwsl --import # tar 로 부터 복구\n```\n\n## 설정\n- 하드웨어 리소스 설정이나 터널링등에 대한 설정이 `.wslconfig` 파일을 통해 가능하다\n- 탐색기에서 `%userprofile%` 주소로 이동\n- `.wslconfig` 생성\n- 기본값이나 설정할 수 있는 값을 확인하기 위해서는 관련 문서 참조 필요\n- CPU, memory 등을 통해서 하드웨어 스펙 전달 가능, **재부팅** 필요\n\n## 외부에서 ssh 를 통해 접속\n- 외부라 함은 lan 을 의미\n- lan 은 `192.168.x.x` 대역\n- wsl 은 `172.x.x.x` 대역\n- 이말인 즉슨\n  - A --ssh--\u003e B --nat--\u003e wsl\n  - A --ssh--\u003e B --bridge-- wsl\n- 방화벽으로 [[ssh]] 포트 개팡 필요 기본: `22`\n- [[ssh]] 최초 개방시 `sshd_config` 에  `PasswordAuthentication yes` 가 설정되어 있어야함\n\n### Mirrorod\n- windows host ip 를 공유\n- windows host 에 open ssh 가 떠있으면 wsl 까지 도달하지 못함\n\n### NAT\n- windows 내에 자체 대역으로 ip 존재\n- windows host 에서 port-forwaring 필요\n\n#### window host 설정\n1. window에서 openssh server 설치 및 시작\n2. 관리자 계정으로 power shell 오픈\n3. `net user [ID] [PASSWORD] /add` 명령으로 사용자 생성, 패스워드 필요\n4. `ssh [WINDOWS_HOST_IP]` 접속\n\n#### wsl os 설정\n1. `openssh-server` 설치\n```sh \napt update\napt install openssh-server\n```\n\n#### remote -\u003e window host \n\u003e `net user` 를 통해 생성한 계정으로 접속\n```sh \nssh [USER]@[WINDOWS_HOST_IP]\n```\n\n#### remote -\u003e window host -\u003e wsl\n\n### 종료\n- [[ssh]] 로 접속한 상태에서 pc 자체를 종료할 경우\n```sh\n/mnt/c/Windows/System32/cmd.exe /c shutdown /s /t 0\n```\n\n## error\n- wsl 실행하니 창 열리고 바로 꺼짐\n- 지우고 설치하니 default profile, guid 어쩌고하고 꺼짐\n- amd cpu 를 사용하고 있는데 bios 에서 svm 이 활성화가 꺼져있어서 생긴 문제로 다시 켜주면 실행됨\n\n## link\n- [[windows]]\n- [[ssh]]\n- [[ollama]]\n- [[powershell]]\n"])</script><script>self.__next_f.push([1,"17:T9a1,"])</script><script>self.__next_f.push([1,"\u003e windows subsystem for linux\n\n## 설치\n- store 에서 wsl 설치\n- os 설치, wsl 실행(터미널)\n```sh\nwsl --list --online # distro 목록\nwsl --install [DISTRO] # directory 지정 가능\n```\n- os 설치(ubuntu 22.04 lts) 후, wsl 실행해서 subsystem shell 열기\n- [옵션] [[ai]] 활용을 위한 [[pipenv]] 설치\n```sh \napt update\napt install python3-pip\npip install pipenv\n```\n\n## 그외 기능\n```sh\nwsl --list --verbose # 설치 목록\nwsl --export # tar 파일로 export\nwsl --import # tar 로 부터 복구\n```\n\n## 설정\n- 하드웨어 리소스 설정이나 터널링등에 대한 설정이 `.wslconfig` 파일을 통해 가능하다\n- 탐색기에서 `%userprofile%` 주소로 이동\n- `.wslconfig` 생성\n- 기본값이나 설정할 수 있는 값을 확인하기 위해서는 관련 문서 참조 필요\n- CPU, memory 등을 통해서 하드웨어 스펙 전달 가능, **재부팅** 필요\n\n## 외부에서 ssh 를 통해 접속\n- 외부라 함은 lan 을 의미\n- lan 은 `192.168.x.x` 대역\n- wsl 은 `172.x.x.x` 대역\n- 이말인 즉슨\n  - A --ssh--\u003e B --nat--\u003e wsl\n  - A --ssh--\u003e B --bridge-- wsl\n- 방화벽으로 [[ssh]] 포트 개팡 필요 기본: `22`\n- [[ssh]] 최초 개방시 `sshd_config` 에  `PasswordAuthentication yes` 가 설정되어 있어야함\n\n### Mirrorod\n- windows host ip 를 공유\n- windows host 에 open ssh 가 떠있으면 wsl 까지 도달하지 못함\n\n### NAT\n- windows 내에 자체 대역으로 ip 존재\n- windows host 에서 port-forwaring 필요\n\n#### window host 설정\n1. window에서 openssh server 설치 및 시작\n2. 관리자 계정으로 power shell 오픈\n3. `net user [ID] [PASSWORD] /add` 명령으로 사용자 생성, 패스워드 필요\n4. `ssh [WINDOWS_HOST_IP]` 접속\n\n#### wsl os 설정\n1. `openssh-server` 설치\n```sh \napt update\napt install openssh-server\n```\n\n#### remote -\u003e window host \n\u003e `net user` 를 통해 생성한 계정으로 접속\n```sh \nssh [USER]@[WINDOWS_HOST_IP]\n```\n\n#### remote -\u003e window host -\u003e wsl\n\n### 종료\n- [[ssh]] 로 접속한 상태에서 pc 자체를 종료할 경우\n```sh\n/mnt/c/Windows/System32/cmd.exe /c shutdown /s /t 0\n```\n\n## error\n- wsl 실행하니 창 열리고 바로 꺼짐\n- 지우고 설치하니 default profile, guid 어쩌고하고 꺼짐\n- amd cpu 를 사용하고 있는데 bios 에서 svm 이 활성화가 꺼져있어서 생긴 문제로 다시 켜주면 실행됨\n\n## link\n- [[windows]]\n- [[ssh]]\n- [[ollama]]\n- [[powershell]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# wsl\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# wsl\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/wsl\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# wsl\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
