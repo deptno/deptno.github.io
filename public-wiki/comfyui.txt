@@ -1,0 +1,1100 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-e6f48f16817ae44e.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","comfyui","c"]
+0:["nVKu0buaPqvZtlfe_SzQh",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","comfyui","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"comfyui\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","comfyui","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:T3846,<h1 id="comfyui">comfyui</h1>
+<ul>
+<li><a href="stable-diffusion">stable-diffusion</a> ui</li>
+<li>발전이 너무 빨라서 아래 내용은 기록으로만 참고</li>
+</ul>
+<h2 id="model--node-pair">model + node pair</h2>
+<table>
+<thead>
+<tr>
+<th>release date</th>
+<th>model</th>
+<th>설명</th>
+<th>url</th>
+<th>node</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2025/04/02</td>
+<td>InstantCharacter</td>
+<td>cref</td>
+<td><a href="https://github.com/Tencent-Hunyuan/InstantCharacter" target="_blank">[URL] https://github.com/Tencent-Hunyuan/InstantCharacter</a></td>
+<td><a href="https://github.com/jax-explorer/ComfyUI-InstantCharacter" target="_blank">[URL] https://github.com/jax-explorer/ComfyUI-InstantCharacter</a></td>
+</tr>
+</tbody></table>
+<ul>
+<li><a href="@todo">@todo</a><ul>
+<li><input disabled="" type="checkbox"> composition 유지 이미지 생성</li>
+<li><input disabled="" type="checkbox"> 배경합성<ul>
+<li><input disabled="" type="checkbox"> 배경 교체</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> 캐릭터 합성<ul>
+<li><input disabled="" type="checkbox"> 로라등으로 그리는방법</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> 인물 교체<blockquote><p>일론과 트럼프로 시작</p></blockquote><ul>
+<li><input disabled="" type="checkbox"> 얼굴만<ul>
+<li><input disabled="" type="checkbox"> pulid</li>
+<li><input disabled="" type="checkbox"> ipadapter</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> 몸까지</li>
+<li><input disabled="" type="checkbox"> 옷까지</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> 학습<ul>
+<li><input disabled="" type="checkbox"> 1 학습</li>
+<li><input disabled="" type="checkbox"> 2 학습</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> 학습<ul>
+<li><input disabled="" type="checkbox"> 속도<ul>
+<li><input disabled="" type="checkbox"> wavespeed</li>
+<li><input disabled="" type="checkbox"> sageattention</li>
+<li><input disabled="" type="checkbox"> teacache</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> context 수정<ul>
+<li><input disabled="" type="checkbox"> icedit</li>
+<li><input disabled="" type="checkbox"> </li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> 조명<ul>
+<li><input disabled="" type="checkbox"> iclight</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> 영상<ul>
+<li><input disabled="" type="checkbox"> wan<ul>
+<li><input disabled="" type="checkbox"> wan vace</li>
+<li><input disabled="" type="checkbox"> causvid</li>
+<li><input disabled="" type="checkbox"> moviigen</li>
+<li><input disabled="" type="checkbox"> wan fusion x</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> ltx</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="튜토리얼">튜토리얼</h2>
+<ul>
+<li><a href="youtube-playlist-pixaroma-comfyui-tutorial">youtube-playlist-pixaroma-comfyui-tutorial</a></li>
+</ul>
+<blockquote><p>memory leak 이 있는 것 같다 한번 느려지기 시작하면 계속 느림</p></blockquote><h2 id="module">module</h2>
+<ul>
+<li>animatediff<ul>
+<li>animatediff models, lora 관련해서는 커스텀 디렉토리를 쓸 수 없다 symbolic link 를 쓰자;</li>
+</ul>
+</li>
+</ul>
+<h2 id="확인사항">확인사항</h2>
+<ul>
+<li><input disabled="" type="checkbox"> <code class="span">comfyui-cli</code> 라는 놈도 있음</li>
+</ul>
+<h2 id="설치">설치</h2>
+<h3 id="comfyui-1">ComfyUI</h3>
+<pre><code class="hljs language-sh"><span class="hljs-comment"># 파이토치 for apple sillicon</span>
+<span class="hljs-comment"># + https://developer.apple.com/metal/pytorch/</span>
+$ pip3 install --pre torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/nightly/cpu
+
+<span class="hljs-comment"># 가상환경 구성, 혹시나 해서 한번 해봄</span>
+$ pipenv shell
+
+<span class="hljs-comment"># 디펜턴시 설치</span>
+$ pip install -r requirements.txt
+<span class="hljs-comment">## or</span>
+$ pipenv run pip install -r requirements.txt
+
+<span class="hljs-comment"># 실행</span>
+$ python main.py <span class="hljs-comment"># remote 접속허용을 원하는 경우 `--listen` 추가</span>
+
+Total VRAM 65536 MB, total RAM 65536 MB
+Set vram state to: SHARED
+Device: mps
+VAE dtype: torch.float32
+Using sub quadratic optimization <span class="hljs-keyword">for</span> cross attention, <span class="hljs-keyword">if</span> you have memory or speed issues try using: --use-split-cross-attention
+****** User settings have been changed to be stored on the server instead of browser storage. ******
+****** For multi-user setups add the --multi-user CLI argument to <span class="hljs-built_in">enable</span> multiple user profiles. ******
+Starting server
+
+To see the GUI go to: http://127.0.0.1:8188
+</code></pre><ul>
+<li>이후 주소 접속시 ui 확인 됨</li>
+<li>ui에서 queue 를 클릭하면 모델이 없다고 에러난다 아래 주소에서 다운로드후 <code class="span">models/checkpoints</code> 디렉토리에 넣어준다<ul>
+<li><a href="https://huggingface.co/runwayml/stable-diffusion-v1-5" target="_blank">[URL] https://huggingface.co/runwayml/stable-diffusion-v1-5</a></li>
+</ul>
+</li>
+<li><strong>Load checkpoint</strong> 노드에서 넣어준 <code class="span">checkpoint</code> 를 선택하고 <code class="span">queue</code> 를 누르면 실행된다<ul>
+<li>m1max 64ram 기준으로 아무것도 건드리지 않고 기본 프롬프트로 <strong>25.85s</strong> 가 소요</li>
+</ul>
+</li>
+</ul>
+<h3 id="comfyui-manager">ComfyUI Manager</h3>
+<ul>
+<li>커스텀노드(플러그인) 관리</li>
+<li>ComfyUi 폴더에서 <code class="span">custom_nodes</code> 디렉토리 진입후 클론한다</li>
+<li>ComfyUi 재시작 필요</li>
+</ul>
+<pre><code class="hljs language-sh">git <span class="hljs-built_in">clone</span> https://github.com/ltdrdata/ComfyUI-Manager.git
+</code></pre><h3 id="lora">Lora</h3>
+<h3 id="controlnet"><a href="controlnet">controlnet</a></h3>
+<ul>
+<li>생성되는 이미지의 윤곽선을 제안할 수 있음, 자세 혹은 건물 생김세</li>
+</ul>
+<h3 id="stable-diffusion-video">Stable Diffusion Video</h3>
+<ul>
+<li><a href="https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt/tree/main" target="_blank">[URL] https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt/tree/main</a></li>
+</ul>
+<ul>
+<li><code class="span">ComfyUI-VideoHelperSuite</code> 설치 필요</li>
+<li>image to video</li>
+<li><em>AnimationDiff</em> 의 경우 text to video</li>
+</ul>
+<h4 id="커스텀-노드">커스텀 노드</h4>
+<table>
+<thead>
+<tr>
+<th>세트</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>Canvas Tab</td>
+<td>마스크 이미지 생성</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>0</td>
+<td>ComfyUI&#39;s ControlNet Auxiliary Preprocessors</td>
+<td>자세등 처리</td>
+<td></td>
+<td>리눅스에서는 추가적으로 파이썬 디펜던시 추가해줘야함</td>
+</tr>
+<tr>
+<td>0</td>
+<td>ComfyUI_IPAdapter_plus</td>
+<td>Image Prompt</td>
+<td><a href="https://www.internetmap.kr/entry/IP-Adapter-too-many" target="_blank">[URL] https://www.internetmap.kr/entry/IP-Adapter-too-many</a></td>
+<td>InsightFace 추가 필요</td>
+</tr>
+<tr>
+<td></td>
+<td>ComfyUI-SDXL-EmptyLatentImage</td>
+<td>이미지 사이즈 설정시 유리</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>ReActor Node for ComfyUI</td>
+<td>다른 얼굴로 바꾸기</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Face Detailer / (a1111: ADetailer)</td>
+<td>얼굴 고치기</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>InstantID</td>
+<td>IPAdapter 와 유사 + 인물 유지</td>
+<td></td>
+<td>InsightFace 추가 필요, SDXL 전용</td>
+</tr>
+<tr>
+<td></td>
+<td>UltimateSDUpscale</td>
+<td>설정을 가진 업스케일러</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>pythongosssss/ComfyUI-Custom-Scripts</td>
+<td>편의기능 + workflow export</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>ComfyUI-VideoHelperSuite</td>
+<td></td>
+<td></td>
+<td>SVD, animationDiff 에서 필요</td>
+</tr>
+<tr>
+<td></td>
+<td>ComfyUI-Crystools</td>
+<td>컴퓨터 자원 모니터링 기능</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h5 id="controlnet-1"><a href="ControlNet">ControlNet</a></h5>
+<ul>
+<li>IP Adapter 등을 사용할때 text prompt 가 제대로 동작하지 않으면 <code class="span">weight</code> 를 0.7정도로 낮춰서 사용해본다</li>
+<li>IP Adapter<ul>
+<li><code class="span">Image Prompt</code> 로 현재 이미지에 대한 Text Prompt 가 입력된것으로 간주된다라고 생각하면 이해가 편하다</li>
+<li><code class="span">Plus</code> 가 들어간 모델은 더 많은 토큰을 써서 원본을 최대한 유지</li>
+</ul>
+</li>
+<li>Open Pose  <ul>
+<li>이미지에서 자세를 분석해서 자세를 적용한다</li>
+</ul>
+</li>
+<li><code class="span">Plus Face</code> 옵션은 얼굴 유지<ul>
+<li>인페인트 전용 체크포인트를 사용한다면 효과가 좋다</li>
+<li>인페인트 칠한 부분만 IP 가 적용된다</li>
+</ul>
+</li>
+<li>모델 다운로드 후<ul>
+<li>/ipdapter 생성 모델 복사</li>
+<li>/clip_vision 생성 후 encoder 모델(CLIP vision 에서 사용됨) 복사(이름 변경 필요)</li>
+</ul>
+</li>
+<li>custom_nodes<ul>
+<li>Apply IPAdapter</li>
+<li>Load IPAdapter Model</li>
+<li>Load CLIP Vision</li>
+<li>Batch Images - 이미지를 여러개 섞어서 입력하려는경우</li>
+</ul>
+</li>
+<li><code class="span">Apply ControlNet</code> 은 text prompt 의 positive 를 입력으로 받아 <code class="span">KSampler</code> 로 아웃된다</li>
+<li><code class="span">*Preprocessor</code>, ControlNet 을 적용하기 위해 이미지의 특성을 추출하여 이미지를 생성한다</li>
+</ul>
+<h5 id="upscale">Upscale</h5>
+<ul>
+<li>업스케일</li>
+<li>얼굴 복구를 위해서도 씀</li>
+</ul>
+<h5 id="reactor">ReActor</h5>
+<ul>
+<li>얼굴을 다른 사진의 인물과 바꿔준다</li>
+<li>여러명 가능</li>
+<li>비디오도 가능<ul>
+<li><code class="span">ComfyUI-N-Nodes</code> 설치 필요</li>
+</ul>
+</li>
+</ul>
+<h5 id="instantid">InstantID</h5>
+<ul>
+<li>SDXL (Turbo) 전용</li>
+<li>사진 -&gt; embedding -&gt; keypoint(얼굴정보 추출)</li>
+<li>눈 코입의 위치만 지정하므로, 원본 사진과 비슷한 표정을 하려면 text prompt 로 묘사를 추가한다</li>
+<li>설정<ul>
+<li><code class="span">Control Weight</code> 0.5</li>
+<li><code class="span">Ending Control Step</code> 0.4 ~ 0.6</li>
+<li>사용하는 checkpoint 마다 추천 설정이있으니 확인할 것</li>
+</ul>
+</li>
+</ul>
+<h3 id="sdxl-lightning">SDXL Lightning</h3>
+<ul>
+<li>checkpoint 1,2,4,8 step 용</li>
+<li>LoRA 도 제공, 이건 SDXL Lightning 대신 SDXL 모델을 사용하면서 LoRA 로 동일한 효과를 낼 수 있도록 함</li>
+</ul>
+<h2 id="사용">사용</h2>
+<ul>
+<li>ComfyUI Manager<ul>
+<li>컴스텀 노드 사용을 위해 사용됨<ul>
+<li>커스텀 노드는 일종의 익스텐션</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>AI 로 생성된 이미지를 드래그해서 넣으면 생성 노드가 나타남</li>
+<li>그룹화 가능</li>
+<li>노드이름 변경가능</li>
+<li>txt2img -&gt; <code class="span">KSampler</code> 에 입력되는 <code class="span">CLIP</code> 에 의해 결정</li>
+<li>img2img -&gt; <code class="span">KSampler</code> 에 입력되는 <code class="span">latent_iamge</code> 에 의해 결정</li>
+<li><code class="span">input</code> 디렉토리에 이미지 넣어두면 기본로드가 가능</li>
+</ul>
+<h3 id="체크-포인트-사용">체크 포인트 사용</h3>
+<ul>
+<li>모델마다 설정값이 다르니 참고</li>
+</ul>
+<h3 id="여러프롬프트를-사용해서-이미지-합성">여러프롬프트를 사용해서 이미지 합성</h3>
+<ul>
+<li><code class="span">Conditioning (Set Area)</code> -&gt; <code class="span">Conditioining (Combine)</code> 노드로 합성 후 샘플링</li>
+<li>주로 배경</li>
+</ul>
+<h3 id="denoising-중인-이미지-여러개의-이미지를-중간에-하나로-합쳐서-생성">denoising 중인 이미지 여러개의 이미지를 중간에 하나로 합쳐서 생성</h3>
+<ul>
+<li><code class="span">KSampler Advanced</code> 를 사용하여 denoising 중인 이미지를 <code class="span">Latent Composite</code> 노드를 통해 합성</li>
+<li>주로 배경 + 인물</li>
+</ul>
+<h2 id="개념">개념</h2>
+<h3 id="checkpoint">checkpoint</h3>
+<h4 id="clip">clip</h4>
+<ul>
+<li>prompt(string) -&gt; model 이 이해하는 형태</li>
+<li>text encoder 개념</li>
+</ul>
+<h4 id="model">model</h4>
+<ul>
+<li>denoise 주체</li>
+</ul>
+<h4 id="vae">vae</h4>
+<ul>
+<li>latent image - model 이 이해하는 이미지</li>
+<li>pixel image - 우리가 보는 이미지</li>
+<li>latent image(from sampler) -&gt; pixel image</li>
+<li>decoder</li>
+</ul>
+<h3 id="옵션">옵션</h3>
+<ul>
+<li>CFG<ul>
+<li>프롬프트를 얼마나 따를것인지, <strong>높을수록 따름</strong></li>
+</ul>
+</li>
+<li>sampler<ul>
+<li>lcm 로라 사용지 lcm 샘플러 사용<ul>
+<li>a1111 의 경우 lcm 샘플러는 <code class="span">AnimationDiff</code> 에 포함되어있음</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>KSampler:<code class="span">denoise</code> -&gt; 값이 높을 수록 랜덤성을 부여</li>
+</ul>
+<h2 id="error"><a href="error">error</a></h2>
+<h3 id="dwpose-onnxruntime-not-found-or-doesnt-come-with-acceleration-providers-switch-to-opencv-with-cpu-device-dwpose-might-run-very-slowly"><code class="span">DWPose: Onnxruntime not found or doesn&#39;t come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly</code></h3>
+<pre><code class="hljs language-sh">UserWarning: DWPose: Onnxruntime not found or doesn<span class="hljs-string">&#x27;t come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly</span>
+</code></pre><ul>
+<li>onnxruntime 이 없어서 가속을 받지 못하는 문제 관련 패키지 설치</li>
+</ul>
+<pre><code class="hljs language-sh">pip install onnxruntime onnxruntime-gpu
+</code></pre><ul>
+<li>확인</li>
+</ul>
+<pre><code class="hljs language-sh">DWPose: Onnxruntime with acceleration providers detected
+</code></pre><h2 id="link">link</h2>
+<ul>
+<li><a href="stable-diffusion">stable-diffusion</a></li>
+<li><a href="stable-diffusion-recipe">stable-diffusion-recipe</a></li>
+<li><a href="stable-diffusion-webui-forge">stable-diffusion-webui-forge</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/9989c8c\n","className":"bg-white text-black","children":"9989c8c"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/comfyui.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/comfyui.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/comfyui.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"comfyui","name":"comfyui","val":9},{"id":"stable-diffusion","name":"stable-diffusion","val":19},{"id":"@todo","name":"@todo","val":24},{"id":"youtube-playlist-pixaroma-comfyui-tutorial","name":"youtube-playlist-pixaroma-comfyui-tutorial","val":3},{"id":"controlnet","name":"controlnet","val":6},{"id":"ControlNet","name":"ControlNet","val":"$undefined"},{"id":"error","name":"error","val":4},{"id":"stable-diffusion-recipe","name":"stable-diffusion-recipe","val":2},{"id":"stable-diffusion-webui-forge","name":"stable-diffusion-webui-forge","val":4},{"id":"ai","name":"ai","val":17},{"id":"animatediff","name":"animatediff","val":6},{"id":"cuda","name":"cuda","val":7},{"id":"fizznodes","name":"fizznodes","val":2},{"id":"index","name":"index","val":108},{"id":"rvm","name":"rvm","val":3},{"id":"stable-diffusion-webui","name":"stable-diffusion-webui","val":11},{"id":"diary/2024-03-05","name":"diary/2024-03-05","val":1},{"id":"diary/2024-03-08","name":"diary/2024-03-08","val":5},{"id":"diary/2024-04-12","name":"diary/2024-04-12","val":5},{"id":"diary/2024-05-23","name":"diary/2024-05-23","val":4},{"id":"diary/2024-05-24","name":"diary/2024-05-24","val":5},{"id":"diary/2024-05-27","name":"diary/2024-05-27","val":1},{"id":"diary/2024-05-28","name":"diary/2024-05-28","val":1},{"id":"diary/2024-05-29","name":"diary/2024-05-29","val":2},{"id":"diary/2024-06-03","name":"diary/2024-06-03","val":1},{"id":"diary/2024-06-05","name":"diary/2024-06-05","val":2},{"id":"diary/2024-12-31","name":"diary/2024-12-31","val":441},{"id":"diary/2025-06-08","name":"diary/2025-06-08","val":1},{"id":"diary/2025-06-21","name":"diary/2025-06-21","val":1},{"id":"diary/2025-06-24","name":"diary/2025-06-24","val":3}],"links":[{"source":"comfyui","target":"stable-diffusion"},{"source":"comfyui","target":"@todo"},{"source":"comfyui","target":"youtube-playlist-pixaroma-comfyui-tutorial"},{"source":"comfyui","target":"controlnet"},{"source":"comfyui","target":"ControlNet"},{"source":"comfyui","target":"error"},{"source":"comfyui","target":"stable-diffusion"},{"source":"comfyui","target":"stable-diffusion-recipe"},{"source":"comfyui","target":"stable-diffusion-webui-forge"},{"source":"ai","target":"comfyui"},{"source":"animatediff","target":"comfyui"},{"source":"animatediff","target":"comfyui"},{"source":"controlnet","target":"comfyui"},{"source":"controlnet","target":"comfyui"},{"source":"controlnet","target":"comfyui"},{"source":"cuda","target":"comfyui"},{"source":"fizznodes","target":"comfyui"},{"source":"index","target":"comfyui"},{"source":"rvm","target":"comfyui"},{"source":"stable-diffusion-recipe","target":"comfyui"},{"source":"stable-diffusion-webui-forge","target":"comfyui"},{"source":"stable-diffusion-webui","target":"comfyui"},{"source":"stable-diffusion","target":"comfyui"},{"source":"stable-diffusion","target":"comfyui"},{"source":"youtube-playlist-pixaroma-comfyui-tutorial","target":"comfyui"},{"source":"youtube-playlist-pixaroma-comfyui-tutorial","target":"comfyui"},{"source":"diary/2024-03-05","target":"comfyui"},{"source":"diary/2024-03-08","target":"comfyui"},{"source":"diary/2024-04-12","target":"comfyui"},{"source":"diary/2024-04-12","target":"comfyui"},{"source":"diary/2024-05-23","target":"comfyui"},{"source":"diary/2024-05-24","target":"comfyui"},{"source":"diary/2024-05-27","target":"comfyui"},{"source":"diary/2024-05-28","target":"comfyui"},{"source":"diary/2024-05-29","target":"comfyui"},{"source":"diary/2024-06-03","target":"comfyui"},{"source":"diary/2024-06-05","target":"comfyui"},{"source":"diary/2024-12-31","target":"comfyui"},{"source":"diary/2025-06-08","target":"comfyui"},{"source":"diary/2025-06-21","target":"comfyui"},{"source":"diary/2025-06-24","target":"comfyui"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","comfyui",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/comfyui","children":[["$","span",null,{"className":"underline","children":"comfyui"}],["$","sup",null,{"children":9}]]}]}],["$","span","stable-diffusion",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/stable-diffusion","children":[["$","span",null,{"className":"underline","children":"stable-diffusion"}],["$","sup",null,{"children":19}]]}]}],["$","span","@todo",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/@todo","children":[["$","span",null,{"className":"underline","children":"@todo"}],["$","sup",null,{"children":24}]]}]}],["$","span","youtube-playlist-pixaroma-comfyui-tutorial",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/youtube-playlist-pixaroma-comfyui-tutorial","children":[["$","span",null,{"className":"underline","children":"youtube-playlist-pixaroma-comfyui-tutorial"}],["$","sup",null,{"children":3}]]}]}],["$","span","controlnet",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/controlnet","children":[["$","span",null,{"className":"underline","children":"controlnet"}],["$","sup",null,{"children":6}]]}]}],["$","span","ControlNet",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ControlNet","children":[["$","span",null,{"className":"underline","children":"ControlNet"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","error",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/error","children":[["$","span",null,{"className":"underline","children":"error"}],["$","sup",null,{"children":4}]]}]}],["$","span","stable-diffusion-recipe",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/stable-diffusion-recipe","children":[["$","span",null,{"className":"underline","children":"stable-diffusion-recipe"}],["$","sup",null,{"children":2}]]}]}],["$","span","stable-diffusion-webui-forge",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/stable-diffusion-webui-forge","children":[["$","span",null,{"className":"underline","children":"stable-diffusion-webui-forge"}],["$","sup",null,{"children":4}]]}]}],["$","span","ai",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ai","children":[["$","span",null,{"className":"underline","children":"ai"}],["$","sup",null,{"children":17}]]}]}],["$","span","animatediff",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/animatediff","children":[["$","span",null,{"className":"underline","children":"animatediff"}],["$","sup",null,{"children":6}]]}]}],["$","span","cuda",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/cuda","children":[["$","span",null,{"className":"underline","children":"cuda"}],["$","sup",null,{"children":7}]]}]}],["$","span","fizznodes",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/fizznodes","children":[["$","span",null,{"className":"underline","children":"fizznodes"}],["$","sup",null,{"children":2}]]}]}],["$","span","index",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/index","children":[["$","span",null,{"className":"underline","children":"index"}],["$","sup",null,{"children":108}]]}]}],["$","span","rvm",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/rvm","children":[["$","span",null,{"className":"underline","children":"rvm"}],["$","sup",null,{"children":3}]]}]}],["$","span","stable-diffusion-webui",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/stable-diffusion-webui","children":[["$","span",null,{"className":"underline","children":"stable-diffusion-webui"}],["$","sup",null,{"children":11}]]}]}],["$","span","diary/2024-03-05",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-03-05","children":[["$","span",null,{"className":"underline","children":"diary/2024-03-05"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2024-03-08",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-03-08","children":[["$","span",null,{"className":"underline","children":"diary/2024-03-08"}],["$","sup",null,{"children":5}]]}]}],["$","span","diary/2024-04-12",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-04-12","children":[["$","span",null,{"className":"underline","children":"diary/2024-04-12"}],["$","sup",null,{"children":5}]]}]}],["$","span","diary/2024-05-23",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-05-23","children":[["$","span",null,{"className":"underline","children":"diary/2024-05-23"}],["$","sup",null,{"children":4}]]}]}],["$","span","diary/2024-05-24",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-05-24","children":[["$","span",null,{"className":"underline","children":"diary/2024-05-24"}],["$","sup",null,{"children":5}]]}]}],["$","span","diary/2024-05-27",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-05-27","children":[["$","span",null,{"className":"underline","children":"diary/2024-05-27"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2024-05-28",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-05-28","children":[["$","span",null,{"className":"underline","children":"diary/2024-05-28"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2024-05-29",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-05-29","children":[["$","span",null,{"className":"underline","children":"diary/2024-05-29"}],["$","sup",null,{"children":2}]]}]}],["$","span","diary/2024-06-03",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-06-03","children":[["$","span",null,{"className":"underline","children":"diary/2024-06-03"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2024-06-05",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-06-05","children":[["$","span",null,{"className":"underline","children":"diary/2024-06-05"}],["$","sup",null,{"children":2}]]}]}],["$","span","diary/2024-12-31",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-12-31","children":[["$","span",null,{"className":"underline","children":"diary/2024-12-31"}],["$","sup",null,{"children":441}]]}]}],["$","span","diary/2025-06-08",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2025-06-08","children":[["$","span",null,{"className":"underline","children":"diary/2025-06-08"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2025-06-21",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2025-06-21","children":[["$","span",null,{"className":"underline","children":"diary/2025-06-21"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2025-06-24",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2025-06-24","children":[["$","span",null,{"className":"underline","children":"diary/2025-06-24"}],["$","sup",null,{"children":3}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","comfyui",{"className":"pl-0","children":["$","a",null,{"href":"#comfyui","children":"comfyui"}]}],["$","div","model--node-pair",{"className":"pl-2","children":["$","a",null,{"href":"#model--node-pair","children":"model + node pair"}]}],["$","div","튜토리얼",{"className":"pl-2","children":["$","a",null,{"href":"#튜토리얼","children":"튜토리얼"}]}],["$","div","module",{"className":"pl-2","children":["$","a",null,{"href":"#module","children":"module"}]}],["$","div","확인사항",{"className":"pl-2","children":["$","a",null,{"href":"#확인사항","children":"확인사항"}]}],["$","div","설치",{"className":"pl-2","children":["$","a",null,{"href":"#설치","children":"설치"}]}],["$","div","comfyui-1",{"className":"pl-4","children":["$","a",null,{"href":"#comfyui-1","children":"ComfyUI"}]}],["$","div","comfyui-manager",{"className":"pl-4","children":["$","a",null,{"href":"#comfyui-manager","children":"ComfyUI Manager"}]}],["$","div","lora",{"className":"pl-4","children":["$","a",null,{"href":"#lora","children":"Lora"}]}],["$","div","controlnet",{"className":"pl-4","children":["$","a",null,{"href":"#controlnet","children":"controlnet"}]}],["$","div","stable-diffusion-video",{"className":"pl-4","children":["$","a",null,{"href":"#stable-diffusion-video","children":"Stable Diffusion Video"}]}],["$","div","커스텀-노드",{"className":"pl-6","children":["$","a",null,{"href":"#커스텀-노드","children":"커스텀 노드"}]}],["$","div","controlnet-1",{"className":"pl-8","children":["$","a",null,{"href":"#controlnet-1","children":"ControlNet"}]}],["$","div","upscale",{"className":"pl-8","children":["$","a",null,{"href":"#upscale","children":"Upscale"}]}],["$","div","reactor",{"className":"pl-8","children":["$","a",null,{"href":"#reactor","children":"ReActor"}]}],["$","div","instantid",{"className":"pl-8","children":["$","a",null,{"href":"#instantid","children":"InstantID"}]}],["$","div","sdxl-lightning",{"className":"pl-4","children":["$","a",null,{"href":"#sdxl-lightning","children":"SDXL Lightning"}]}],["$","div","사용",{"className":"pl-2","children":["$","a",null,{"href":"#사용","children":"사용"}]}],["$","div","체크-포인트-사용",{"className":"pl-4","children":["$","a",null,{"href":"#체크-포인트-사용","children":"체크 포인트 사용"}]}],["$","div","여러프롬프트를-사용해서-이미지-합성",{"className":"pl-4","children":["$","a",null,{"href":"#여러프롬프트를-사용해서-이미지-합성","children":"여러프롬프트를 사용해서 이미지 합성"}]}],["$","div","denoising-중인-이미지-여러개의-이미지를-중간에-하나로-합쳐서-생성",{"className":"pl-4","children":["$","a",null,{"href":"#denoising-중인-이미지-여러개의-이미지를-중간에-하나로-합쳐서-생성","children":"denoising 중인 이미지 여러개의 이미지를 중간에 하나로 합쳐서 생성"}]}],["$","div","개념",{"className":"pl-2","children":["$","a",null,{"href":"#개념","children":"개념"}]}],["$","div","checkpoint",{"className":"pl-4","children":["$","a",null,{"href":"#checkpoint","children":"checkpoint"}]}],["$","div","clip",{"className":"pl-6","children":["$","a",null,{"href":"#clip","children":"clip"}]}],["$","div","model",{"className":"pl-6","children":["$","a",null,{"href":"#model","children":"model"}]}],["$","div","vae",{"className":"pl-6","children":["$","a",null,{"href":"#vae","children":"vae"}]}],["$","div","옵션",{"className":"pl-4","children":["$","a",null,{"href":"#옵션","children":"옵션"}]}],["$","div","error",{"className":"pl-2","children":["$","a",null,{"href":"#error","children":"error"}]}],["$","div","dwpose-onnxruntime-not-found-or-doesnt-come-with-acceleration-providers-switch-to-opencv-with-cpu-device-dwpose-might-run-very-slowly",{"className":"pl-4","children":["$","a",null,{"href":"#dwpose-onnxruntime-not-found-or-doesnt-come-with-acceleration-providers-switch-to-opencv-with-cpu-device-dwpose-might-run-very-slowly","children":"DWPose: Onnxruntime not found or doesn't come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly"}]}],["$","div","link",{"className":"pl-2","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:T28c9,- [[stable-diffusion]] ui
+- 발전이 너무 빨라서 아래 내용은 기록으로만 참고
+
+## model + node pair
+| release date | model            | 설명 | url                                                 | node                                                     |
+|--------------|------------------|------|-----------------------------------------------------|----------------------------------------------------------|
+| 2025/04/02   | InstantCharacter | cref | https://github.com/Tencent-Hunyuan/InstantCharacter | https://github.com/jax-explorer/ComfyUI-InstantCharacter |
+
+
+- [[@todo]]
+  - [ ] composition 유지 이미지 생성
+  - [ ] 배경합성
+    - [ ] 배경 교체
+  - [ ] 캐릭터 합성
+    - [ ] 로라등으로 그리는방법
+  - [ ] 인물 교체
+    > 일론과 트럼프로 시작
+    - [ ] 얼굴만
+      - [ ] pulid
+      - [ ] ipadapter
+    - [ ] 몸까지
+    - [ ] 옷까지
+  - [ ] 학습
+    - [ ] 1 학습
+    - [ ] 2 학습
+- [ ] 학습
+  - [ ] 속도
+    - [ ] wavespeed
+    - [ ] sageattention
+    - [ ] teacache
+  - [ ] context 수정
+    - [ ] icedit
+    - [ ] 
+  - [ ] 조명
+    - [ ] iclight
+  - [ ] 영상
+    - [ ] wan
+      - [ ] wan vace
+      - [ ] causvid
+      - [ ] moviigen
+      - [ ] wan fusion x
+    - [ ] ltx
+
+## 튜토리얼
+- [[youtube-playlist-pixaroma-comfyui-tutorial]]
+
+> memory leak 이 있는 것 같다 한번 느려지기 시작하면 계속 느림
+
+## module
+- animatediff
+  - animatediff models, lora 관련해서는 커스텀 디렉토리를 쓸 수 없다 symbolic link 를 쓰자;
+
+## 확인사항
+- [ ] `comfyui-cli` 라는 놈도 있음
+
+## 설치
+### ComfyUI
+```sh 
+# 파이토치 for apple sillicon
+# + https://developer.apple.com/metal/pytorch/
+$ pip3 install --pre torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/nightly/cpu
+
+# 가상환경 구성, 혹시나 해서 한번 해봄
+$ pipenv shell
+
+# 디펜턴시 설치
+$ pip install -r requirements.txt
+## or
+$ pipenv run pip install -r requirements.txt
+
+# 실행
+$ python main.py # remote 접속허용을 원하는 경우 `--listen` 추가
+
+Total VRAM 65536 MB, total RAM 65536 MB
+Set vram state to: SHARED
+Device: mps
+VAE dtype: torch.float32
+Using sub quadratic optimization for cross attention, if you have memory or speed issues try using: --use-split-cross-attention
+****** User settings have been changed to be stored on the server instead of browser storage. ******
+****** For multi-user setups add the --multi-user CLI argument to enable multiple user profiles. ******
+Starting server
+
+To see the GUI go to: http://127.0.0.1:8188
+```
+- 이후 주소 접속시 ui 확인 됨
+- ui에서 queue 를 클릭하면 모델이 없다고 에러난다 아래 주소에서 다운로드후 `models/checkpoints` 디렉토리에 넣어준다
+  + https://huggingface.co/runwayml/stable-diffusion-v1-5
+- **Load checkpoint** 노드에서 넣어준 `checkpoint` 를 선택하고 `queue` 를 누르면 실행된다
+  - m1max 64ram 기준으로 아무것도 건드리지 않고 기본 프롬프트로 **25.85s** 가 소요
+
+### ComfyUI Manager
+- 커스텀노드(플러그인) 관리
+- ComfyUi 폴더에서 `custom_nodes` 디렉토리 진입후 클론한다
+- ComfyUi 재시작 필요
+```sh 
+git clone https://github.com/ltdrdata/ComfyUI-Manager.git
+```
+
+### Lora
+
+### [[controlnet]]
+- 생성되는 이미지의 윤곽선을 제안할 수 있음, 자세 혹은 건물 생김세
+
+### Stable Diffusion Video
++ https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt/tree/main
+- `ComfyUI-VideoHelperSuite` 설치 필요
+- image to video
+- *AnimationDiff* 의 경우 text to video
+
+#### 커스텀 노드
+| 세트 |                                              |                               |                                                      |                                                      |
+|------|----------------------------------------------|-------------------------------|------------------------------------------------------|------------------------------------------------------|
+|      | Canvas Tab                                   | 마스크 이미지 생성            |                                                      |                                                      |
+| 0    | ComfyUI's ControlNet Auxiliary Preprocessors | 자세등 처리                   |                                                      | 리눅스에서는 추가적으로 파이썬 디펜던시 추가해줘야함 |
+| 0    | ComfyUI_IPAdapter_plus                       | Image Prompt                  | https://www.internetmap.kr/entry/IP-Adapter-too-many | InsightFace 추가 필요                                |
+|      | ComfyUI-SDXL-EmptyLatentImage                | 이미지 사이즈 설정시 유리     |                                                      |                                                      |
+|      | ReActor Node for ComfyUI                     | 다른 얼굴로 바꾸기            |                                                      |                                                      |
+|      | Face Detailer / (a1111: ADetailer)           | 얼굴 고치기                   |                                                      |                                                      |
+|      | InstantID                                    | IPAdapter 와 유사 + 인물 유지 |                                                      | InsightFace 추가 필요, SDXL 전용                     |
+|      | UltimateSDUpscale                            | 설정을 가진 업스케일러        |                                                      |                                                      |
+|      | pythongosssss/ComfyUI-Custom-Scripts         | 편의기능 + workflow export    |                                                      |                                                      |
+|      | ComfyUI-VideoHelperSuite                     |                               |                                                      | SVD, animationDiff 에서 필요                         |
+|      | ComfyUI-Crystools                            | 컴퓨터 자원 모니터링 기능     |                                                      |                                                      |
+
+
+##### [[ControlNet]]
+- IP Adapter 등을 사용할때 text prompt 가 제대로 동작하지 않으면 `weight` 를 0.7정도로 낮춰서 사용해본다
+- IP Adapter
+  - `Image Prompt` 로 현재 이미지에 대한 Text Prompt 가 입력된것으로 간주된다라고 생각하면 이해가 편하다
+  - `Plus` 가 들어간 모델은 더 많은 토큰을 써서 원본을 최대한 유지
+- Open Pose  
+  - 이미지에서 자세를 분석해서 자세를 적용한다
+- `Plus Face` 옵션은 얼굴 유지
+  - 인페인트 전용 체크포인트를 사용한다면 효과가 좋다
+  - 인페인트 칠한 부분만 IP 가 적용된다
+- 모델 다운로드 후
+  - /ipdapter 생성 모델 복사
+  - /clip_vision 생성 후 encoder 모델(CLIP vision 에서 사용됨) 복사(이름 변경 필요)
+- custom_nodes
+  - Apply IPAdapter
+  - Load IPAdapter Model
+  - Load CLIP Vision
+  - Batch Images - 이미지를 여러개 섞어서 입력하려는경우
+- `Apply ControlNet` 은 text prompt 의 positive 를 입력으로 받아 `KSampler` 로 아웃된다
+- `*Preprocessor`, ControlNet 을 적용하기 위해 이미지의 특성을 추출하여 이미지를 생성한다
+
+##### Upscale
+- 업스케일
+- 얼굴 복구를 위해서도 씀
+
+##### ReActor 
+- 얼굴을 다른 사진의 인물과 바꿔준다
+- 여러명 가능
+- 비디오도 가능
+  - `ComfyUI-N-Nodes` 설치 필요
+
+##### InstantID 
+- SDXL (Turbo) 전용
+- 사진 -> embedding -> keypoint(얼굴정보 추출)
+- 눈 코입의 위치만 지정하므로, 원본 사진과 비슷한 표정을 하려면 text prompt 로 묘사를 추가한다
+- 설정
+  - `Control Weight` 0.5
+  - `Ending Control Step` 0.4 ~ 0.6
+  - 사용하는 checkpoint 마다 추천 설정이있으니 확인할 것
+
+### SDXL Lightning
+- checkpoint 1,2,4,8 step 용
+- LoRA 도 제공, 이건 SDXL Lightning 대신 SDXL 모델을 사용하면서 LoRA 로 동일한 효과를 낼 수 있도록 함
+
+## 사용
+- ComfyUI Manager
+  - 컴스텀 노드 사용을 위해 사용됨
+    - 커스텀 노드는 일종의 익스텐션
+- AI 로 생성된 이미지를 드래그해서 넣으면 생성 노드가 나타남
+- 그룹화 가능
+- 노드이름 변경가능
+- txt2img -> `KSampler` 에 입력되는 `CLIP` 에 의해 결정
+- img2img -> `KSampler` 에 입력되는 `latent_iamge` 에 의해 결정
+- `input` 디렉토리에 이미지 넣어두면 기본로드가 가능
+
+### 체크 포인트 사용
+- 모델마다 설정값이 다르니 참고
+
+### 여러프롬프트를 사용해서 이미지 합성
+- `Conditioning (Set Area)` -> `Conditioining (Combine)` 노드로 합성 후 샘플링
+- 주로 배경
+
+### denoising 중인 이미지 여러개의 이미지를 중간에 하나로 합쳐서 생성
+- `KSampler Advanced` 를 사용하여 denoising 중인 이미지를 `Latent Composite` 노드를 통해 합성
+- 주로 배경 + 인물
+
+## 개념
+### checkpoint
+#### clip
+- prompt(string) -> model 이 이해하는 형태
+- text encoder 개념
+
+#### model
+- denoise 주체
+
+#### vae
+- latent image - model 이 이해하는 이미지
+- pixel image - 우리가 보는 이미지
+- latent image(from sampler) -> pixel image
+- decoder
+
+### 옵션
+- CFG
+  - 프롬프트를 얼마나 따를것인지, **높을수록 따름**
+- sampler
+  - lcm 로라 사용지 lcm 샘플러 사용
+    - a1111 의 경우 lcm 샘플러는 `AnimationDiff` 에 포함되어있음
+- KSampler:`denoise` -> 값이 높을 수록 랜덤성을 부여
+
+## [[error]]
+### `DWPose: Onnxruntime not found or doesn't come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly`
+```sh 
+UserWarning: DWPose: Onnxruntime not found or doesn't come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly
+```
+- onnxruntime 이 없어서 가속을 받지 못하는 문제 관련 패키지 설치
+```sh 
+pip install onnxruntime onnxruntime-gpu
+```
+- 확인
+```sh 
+DWPose: Onnxruntime with acceleration providers detected
+```
+
+## link
+- [[stable-diffusion]]
+- [[stable-diffusion-recipe]]
+- [[stable-diffusion-webui-forge]]
+12:T28c9,- [[stable-diffusion]] ui
+- 발전이 너무 빨라서 아래 내용은 기록으로만 참고
+
+## model + node pair
+| release date | model            | 설명 | url                                                 | node                                                     |
+|--------------|------------------|------|-----------------------------------------------------|----------------------------------------------------------|
+| 2025/04/02   | InstantCharacter | cref | https://github.com/Tencent-Hunyuan/InstantCharacter | https://github.com/jax-explorer/ComfyUI-InstantCharacter |
+
+
+- [[@todo]]
+  - [ ] composition 유지 이미지 생성
+  - [ ] 배경합성
+    - [ ] 배경 교체
+  - [ ] 캐릭터 합성
+    - [ ] 로라등으로 그리는방법
+  - [ ] 인물 교체
+    > 일론과 트럼프로 시작
+    - [ ] 얼굴만
+      - [ ] pulid
+      - [ ] ipadapter
+    - [ ] 몸까지
+    - [ ] 옷까지
+  - [ ] 학습
+    - [ ] 1 학습
+    - [ ] 2 학습
+- [ ] 학습
+  - [ ] 속도
+    - [ ] wavespeed
+    - [ ] sageattention
+    - [ ] teacache
+  - [ ] context 수정
+    - [ ] icedit
+    - [ ] 
+  - [ ] 조명
+    - [ ] iclight
+  - [ ] 영상
+    - [ ] wan
+      - [ ] wan vace
+      - [ ] causvid
+      - [ ] moviigen
+      - [ ] wan fusion x
+    - [ ] ltx
+
+## 튜토리얼
+- [[youtube-playlist-pixaroma-comfyui-tutorial]]
+
+> memory leak 이 있는 것 같다 한번 느려지기 시작하면 계속 느림
+
+## module
+- animatediff
+  - animatediff models, lora 관련해서는 커스텀 디렉토리를 쓸 수 없다 symbolic link 를 쓰자;
+
+## 확인사항
+- [ ] `comfyui-cli` 라는 놈도 있음
+
+## 설치
+### ComfyUI
+```sh 
+# 파이토치 for apple sillicon
+# + https://developer.apple.com/metal/pytorch/
+$ pip3 install --pre torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/nightly/cpu
+
+# 가상환경 구성, 혹시나 해서 한번 해봄
+$ pipenv shell
+
+# 디펜턴시 설치
+$ pip install -r requirements.txt
+## or
+$ pipenv run pip install -r requirements.txt
+
+# 실행
+$ python main.py # remote 접속허용을 원하는 경우 `--listen` 추가
+
+Total VRAM 65536 MB, total RAM 65536 MB
+Set vram state to: SHARED
+Device: mps
+VAE dtype: torch.float32
+Using sub quadratic optimization for cross attention, if you have memory or speed issues try using: --use-split-cross-attention
+****** User settings have been changed to be stored on the server instead of browser storage. ******
+****** For multi-user setups add the --multi-user CLI argument to enable multiple user profiles. ******
+Starting server
+
+To see the GUI go to: http://127.0.0.1:8188
+```
+- 이후 주소 접속시 ui 확인 됨
+- ui에서 queue 를 클릭하면 모델이 없다고 에러난다 아래 주소에서 다운로드후 `models/checkpoints` 디렉토리에 넣어준다
+  + https://huggingface.co/runwayml/stable-diffusion-v1-5
+- **Load checkpoint** 노드에서 넣어준 `checkpoint` 를 선택하고 `queue` 를 누르면 실행된다
+  - m1max 64ram 기준으로 아무것도 건드리지 않고 기본 프롬프트로 **25.85s** 가 소요
+
+### ComfyUI Manager
+- 커스텀노드(플러그인) 관리
+- ComfyUi 폴더에서 `custom_nodes` 디렉토리 진입후 클론한다
+- ComfyUi 재시작 필요
+```sh 
+git clone https://github.com/ltdrdata/ComfyUI-Manager.git
+```
+
+### Lora
+
+### [[controlnet]]
+- 생성되는 이미지의 윤곽선을 제안할 수 있음, 자세 혹은 건물 생김세
+
+### Stable Diffusion Video
++ https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt/tree/main
+- `ComfyUI-VideoHelperSuite` 설치 필요
+- image to video
+- *AnimationDiff* 의 경우 text to video
+
+#### 커스텀 노드
+| 세트 |                                              |                               |                                                      |                                                      |
+|------|----------------------------------------------|-------------------------------|------------------------------------------------------|------------------------------------------------------|
+|      | Canvas Tab                                   | 마스크 이미지 생성            |                                                      |                                                      |
+| 0    | ComfyUI's ControlNet Auxiliary Preprocessors | 자세등 처리                   |                                                      | 리눅스에서는 추가적으로 파이썬 디펜던시 추가해줘야함 |
+| 0    | ComfyUI_IPAdapter_plus                       | Image Prompt                  | https://www.internetmap.kr/entry/IP-Adapter-too-many | InsightFace 추가 필요                                |
+|      | ComfyUI-SDXL-EmptyLatentImage                | 이미지 사이즈 설정시 유리     |                                                      |                                                      |
+|      | ReActor Node for ComfyUI                     | 다른 얼굴로 바꾸기            |                                                      |                                                      |
+|      | Face Detailer / (a1111: ADetailer)           | 얼굴 고치기                   |                                                      |                                                      |
+|      | InstantID                                    | IPAdapter 와 유사 + 인물 유지 |                                                      | InsightFace 추가 필요, SDXL 전용                     |
+|      | UltimateSDUpscale                            | 설정을 가진 업스케일러        |                                                      |                                                      |
+|      | pythongosssss/ComfyUI-Custom-Scripts         | 편의기능 + workflow export    |                                                      |                                                      |
+|      | ComfyUI-VideoHelperSuite                     |                               |                                                      | SVD, animationDiff 에서 필요                         |
+|      | ComfyUI-Crystools                            | 컴퓨터 자원 모니터링 기능     |                                                      |                                                      |
+
+
+##### [[ControlNet]]
+- IP Adapter 등을 사용할때 text prompt 가 제대로 동작하지 않으면 `weight` 를 0.7정도로 낮춰서 사용해본다
+- IP Adapter
+  - `Image Prompt` 로 현재 이미지에 대한 Text Prompt 가 입력된것으로 간주된다라고 생각하면 이해가 편하다
+  - `Plus` 가 들어간 모델은 더 많은 토큰을 써서 원본을 최대한 유지
+- Open Pose  
+  - 이미지에서 자세를 분석해서 자세를 적용한다
+- `Plus Face` 옵션은 얼굴 유지
+  - 인페인트 전용 체크포인트를 사용한다면 효과가 좋다
+  - 인페인트 칠한 부분만 IP 가 적용된다
+- 모델 다운로드 후
+  - /ipdapter 생성 모델 복사
+  - /clip_vision 생성 후 encoder 모델(CLIP vision 에서 사용됨) 복사(이름 변경 필요)
+- custom_nodes
+  - Apply IPAdapter
+  - Load IPAdapter Model
+  - Load CLIP Vision
+  - Batch Images - 이미지를 여러개 섞어서 입력하려는경우
+- `Apply ControlNet` 은 text prompt 의 positive 를 입력으로 받아 `KSampler` 로 아웃된다
+- `*Preprocessor`, ControlNet 을 적용하기 위해 이미지의 특성을 추출하여 이미지를 생성한다
+
+##### Upscale
+- 업스케일
+- 얼굴 복구를 위해서도 씀
+
+##### ReActor 
+- 얼굴을 다른 사진의 인물과 바꿔준다
+- 여러명 가능
+- 비디오도 가능
+  - `ComfyUI-N-Nodes` 설치 필요
+
+##### InstantID 
+- SDXL (Turbo) 전용
+- 사진 -> embedding -> keypoint(얼굴정보 추출)
+- 눈 코입의 위치만 지정하므로, 원본 사진과 비슷한 표정을 하려면 text prompt 로 묘사를 추가한다
+- 설정
+  - `Control Weight` 0.5
+  - `Ending Control Step` 0.4 ~ 0.6
+  - 사용하는 checkpoint 마다 추천 설정이있으니 확인할 것
+
+### SDXL Lightning
+- checkpoint 1,2,4,8 step 용
+- LoRA 도 제공, 이건 SDXL Lightning 대신 SDXL 모델을 사용하면서 LoRA 로 동일한 효과를 낼 수 있도록 함
+
+## 사용
+- ComfyUI Manager
+  - 컴스텀 노드 사용을 위해 사용됨
+    - 커스텀 노드는 일종의 익스텐션
+- AI 로 생성된 이미지를 드래그해서 넣으면 생성 노드가 나타남
+- 그룹화 가능
+- 노드이름 변경가능
+- txt2img -> `KSampler` 에 입력되는 `CLIP` 에 의해 결정
+- img2img -> `KSampler` 에 입력되는 `latent_iamge` 에 의해 결정
+- `input` 디렉토리에 이미지 넣어두면 기본로드가 가능
+
+### 체크 포인트 사용
+- 모델마다 설정값이 다르니 참고
+
+### 여러프롬프트를 사용해서 이미지 합성
+- `Conditioning (Set Area)` -> `Conditioining (Combine)` 노드로 합성 후 샘플링
+- 주로 배경
+
+### denoising 중인 이미지 여러개의 이미지를 중간에 하나로 합쳐서 생성
+- `KSampler Advanced` 를 사용하여 denoising 중인 이미지를 `Latent Composite` 노드를 통해 합성
+- 주로 배경 + 인물
+
+## 개념
+### checkpoint
+#### clip
+- prompt(string) -> model 이 이해하는 형태
+- text encoder 개념
+
+#### model
+- denoise 주체
+
+#### vae
+- latent image - model 이 이해하는 이미지
+- pixel image - 우리가 보는 이미지
+- latent image(from sampler) -> pixel image
+- decoder
+
+### 옵션
+- CFG
+  - 프롬프트를 얼마나 따를것인지, **높을수록 따름**
+- sampler
+  - lcm 로라 사용지 lcm 샘플러 사용
+    - a1111 의 경우 lcm 샘플러는 `AnimationDiff` 에 포함되어있음
+- KSampler:`denoise` -> 값이 높을 수록 랜덤성을 부여
+
+## [[error]]
+### `DWPose: Onnxruntime not found or doesn't come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly`
+```sh 
+UserWarning: DWPose: Onnxruntime not found or doesn't come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly
+```
+- onnxruntime 이 없어서 가속을 받지 못하는 문제 관련 패키지 설치
+```sh 
+pip install onnxruntime onnxruntime-gpu
+```
+- 확인
+```sh 
+DWPose: Onnxruntime with acceleration providers detected
+```
+
+## link
+- [[stable-diffusion]]
+- [[stable-diffusion-recipe]]
+- [[stable-diffusion-webui-forge]]
+13:T28c9,- [[stable-diffusion]] ui
+- 발전이 너무 빨라서 아래 내용은 기록으로만 참고
+
+## model + node pair
+| release date | model            | 설명 | url                                                 | node                                                     |
+|--------------|------------------|------|-----------------------------------------------------|----------------------------------------------------------|
+| 2025/04/02   | InstantCharacter | cref | https://github.com/Tencent-Hunyuan/InstantCharacter | https://github.com/jax-explorer/ComfyUI-InstantCharacter |
+
+
+- [[@todo]]
+  - [ ] composition 유지 이미지 생성
+  - [ ] 배경합성
+    - [ ] 배경 교체
+  - [ ] 캐릭터 합성
+    - [ ] 로라등으로 그리는방법
+  - [ ] 인물 교체
+    > 일론과 트럼프로 시작
+    - [ ] 얼굴만
+      - [ ] pulid
+      - [ ] ipadapter
+    - [ ] 몸까지
+    - [ ] 옷까지
+  - [ ] 학습
+    - [ ] 1 학습
+    - [ ] 2 학습
+- [ ] 학습
+  - [ ] 속도
+    - [ ] wavespeed
+    - [ ] sageattention
+    - [ ] teacache
+  - [ ] context 수정
+    - [ ] icedit
+    - [ ] 
+  - [ ] 조명
+    - [ ] iclight
+  - [ ] 영상
+    - [ ] wan
+      - [ ] wan vace
+      - [ ] causvid
+      - [ ] moviigen
+      - [ ] wan fusion x
+    - [ ] ltx
+
+## 튜토리얼
+- [[youtube-playlist-pixaroma-comfyui-tutorial]]
+
+> memory leak 이 있는 것 같다 한번 느려지기 시작하면 계속 느림
+
+## module
+- animatediff
+  - animatediff models, lora 관련해서는 커스텀 디렉토리를 쓸 수 없다 symbolic link 를 쓰자;
+
+## 확인사항
+- [ ] `comfyui-cli` 라는 놈도 있음
+
+## 설치
+### ComfyUI
+```sh 
+# 파이토치 for apple sillicon
+# + https://developer.apple.com/metal/pytorch/
+$ pip3 install --pre torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/nightly/cpu
+
+# 가상환경 구성, 혹시나 해서 한번 해봄
+$ pipenv shell
+
+# 디펜턴시 설치
+$ pip install -r requirements.txt
+## or
+$ pipenv run pip install -r requirements.txt
+
+# 실행
+$ python main.py # remote 접속허용을 원하는 경우 `--listen` 추가
+
+Total VRAM 65536 MB, total RAM 65536 MB
+Set vram state to: SHARED
+Device: mps
+VAE dtype: torch.float32
+Using sub quadratic optimization for cross attention, if you have memory or speed issues try using: --use-split-cross-attention
+****** User settings have been changed to be stored on the server instead of browser storage. ******
+****** For multi-user setups add the --multi-user CLI argument to enable multiple user profiles. ******
+Starting server
+
+To see the GUI go to: http://127.0.0.1:8188
+```
+- 이후 주소 접속시 ui 확인 됨
+- ui에서 queue 를 클릭하면 모델이 없다고 에러난다 아래 주소에서 다운로드후 `models/checkpoints` 디렉토리에 넣어준다
+  + https://huggingface.co/runwayml/stable-diffusion-v1-5
+- **Load checkpoint** 노드에서 넣어준 `checkpoint` 를 선택하고 `queue` 를 누르면 실행된다
+  - m1max 64ram 기준으로 아무것도 건드리지 않고 기본 프롬프트로 **25.85s** 가 소요
+
+### ComfyUI Manager
+- 커스텀노드(플러그인) 관리
+- ComfyUi 폴더에서 `custom_nodes` 디렉토리 진입후 클론한다
+- ComfyUi 재시작 필요
+```sh 
+git clone https://github.com/ltdrdata/ComfyUI-Manager.git
+```
+
+### Lora
+
+### [[controlnet]]
+- 생성되는 이미지의 윤곽선을 제안할 수 있음, 자세 혹은 건물 생김세
+
+### Stable Diffusion Video
++ https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt/tree/main
+- `ComfyUI-VideoHelperSuite` 설치 필요
+- image to video
+- *AnimationDiff* 의 경우 text to video
+
+#### 커스텀 노드
+| 세트 |                                              |                               |                                                      |                                                      |
+|------|----------------------------------------------|-------------------------------|------------------------------------------------------|------------------------------------------------------|
+|      | Canvas Tab                                   | 마스크 이미지 생성            |                                                      |                                                      |
+| 0    | ComfyUI's ControlNet Auxiliary Preprocessors | 자세등 처리                   |                                                      | 리눅스에서는 추가적으로 파이썬 디펜던시 추가해줘야함 |
+| 0    | ComfyUI_IPAdapter_plus                       | Image Prompt                  | https://www.internetmap.kr/entry/IP-Adapter-too-many | InsightFace 추가 필요                                |
+|      | ComfyUI-SDXL-EmptyLatentImage                | 이미지 사이즈 설정시 유리     |                                                      |                                                      |
+|      | ReActor Node for ComfyUI                     | 다른 얼굴로 바꾸기            |                                                      |                                                      |
+|      | Face Detailer / (a1111: ADetailer)           | 얼굴 고치기                   |                                                      |                                                      |
+|      | InstantID                                    | IPAdapter 와 유사 + 인물 유지 |                                                      | InsightFace 추가 필요, SDXL 전용                     |
+|      | UltimateSDUpscale                            | 설정을 가진 업스케일러        |                                                      |                                                      |
+|      | pythongosssss/ComfyUI-Custom-Scripts         | 편의기능 + workflow export    |                                                      |                                                      |
+|      | ComfyUI-VideoHelperSuite                     |                               |                                                      | SVD, animationDiff 에서 필요                         |
+|      | ComfyUI-Crystools                            | 컴퓨터 자원 모니터링 기능     |                                                      |                                                      |
+
+
+##### [[ControlNet]]
+- IP Adapter 등을 사용할때 text prompt 가 제대로 동작하지 않으면 `weight` 를 0.7정도로 낮춰서 사용해본다
+- IP Adapter
+  - `Image Prompt` 로 현재 이미지에 대한 Text Prompt 가 입력된것으로 간주된다라고 생각하면 이해가 편하다
+  - `Plus` 가 들어간 모델은 더 많은 토큰을 써서 원본을 최대한 유지
+- Open Pose  
+  - 이미지에서 자세를 분석해서 자세를 적용한다
+- `Plus Face` 옵션은 얼굴 유지
+  - 인페인트 전용 체크포인트를 사용한다면 효과가 좋다
+  - 인페인트 칠한 부분만 IP 가 적용된다
+- 모델 다운로드 후
+  - /ipdapter 생성 모델 복사
+  - /clip_vision 생성 후 encoder 모델(CLIP vision 에서 사용됨) 복사(이름 변경 필요)
+- custom_nodes
+  - Apply IPAdapter
+  - Load IPAdapter Model
+  - Load CLIP Vision
+  - Batch Images - 이미지를 여러개 섞어서 입력하려는경우
+- `Apply ControlNet` 은 text prompt 의 positive 를 입력으로 받아 `KSampler` 로 아웃된다
+- `*Preprocessor`, ControlNet 을 적용하기 위해 이미지의 특성을 추출하여 이미지를 생성한다
+
+##### Upscale
+- 업스케일
+- 얼굴 복구를 위해서도 씀
+
+##### ReActor 
+- 얼굴을 다른 사진의 인물과 바꿔준다
+- 여러명 가능
+- 비디오도 가능
+  - `ComfyUI-N-Nodes` 설치 필요
+
+##### InstantID 
+- SDXL (Turbo) 전용
+- 사진 -> embedding -> keypoint(얼굴정보 추출)
+- 눈 코입의 위치만 지정하므로, 원본 사진과 비슷한 표정을 하려면 text prompt 로 묘사를 추가한다
+- 설정
+  - `Control Weight` 0.5
+  - `Ending Control Step` 0.4 ~ 0.6
+  - 사용하는 checkpoint 마다 추천 설정이있으니 확인할 것
+
+### SDXL Lightning
+- checkpoint 1,2,4,8 step 용
+- LoRA 도 제공, 이건 SDXL Lightning 대신 SDXL 모델을 사용하면서 LoRA 로 동일한 효과를 낼 수 있도록 함
+
+## 사용
+- ComfyUI Manager
+  - 컴스텀 노드 사용을 위해 사용됨
+    - 커스텀 노드는 일종의 익스텐션
+- AI 로 생성된 이미지를 드래그해서 넣으면 생성 노드가 나타남
+- 그룹화 가능
+- 노드이름 변경가능
+- txt2img -> `KSampler` 에 입력되는 `CLIP` 에 의해 결정
+- img2img -> `KSampler` 에 입력되는 `latent_iamge` 에 의해 결정
+- `input` 디렉토리에 이미지 넣어두면 기본로드가 가능
+
+### 체크 포인트 사용
+- 모델마다 설정값이 다르니 참고
+
+### 여러프롬프트를 사용해서 이미지 합성
+- `Conditioning (Set Area)` -> `Conditioining (Combine)` 노드로 합성 후 샘플링
+- 주로 배경
+
+### denoising 중인 이미지 여러개의 이미지를 중간에 하나로 합쳐서 생성
+- `KSampler Advanced` 를 사용하여 denoising 중인 이미지를 `Latent Composite` 노드를 통해 합성
+- 주로 배경 + 인물
+
+## 개념
+### checkpoint
+#### clip
+- prompt(string) -> model 이 이해하는 형태
+- text encoder 개념
+
+#### model
+- denoise 주체
+
+#### vae
+- latent image - model 이 이해하는 이미지
+- pixel image - 우리가 보는 이미지
+- latent image(from sampler) -> pixel image
+- decoder
+
+### 옵션
+- CFG
+  - 프롬프트를 얼마나 따를것인지, **높을수록 따름**
+- sampler
+  - lcm 로라 사용지 lcm 샘플러 사용
+    - a1111 의 경우 lcm 샘플러는 `AnimationDiff` 에 포함되어있음
+- KSampler:`denoise` -> 값이 높을 수록 랜덤성을 부여
+
+## [[error]]
+### `DWPose: Onnxruntime not found or doesn't come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly`
+```sh 
+UserWarning: DWPose: Onnxruntime not found or doesn't come with acceleration providers, switch to OpenCV with CPU device. DWPose might run very slowly
+```
+- onnxruntime 이 없어서 가속을 받지 못하는 문제 관련 패키지 설치
+```sh 
+pip install onnxruntime onnxruntime-gpu
+```
+- 확인
+```sh 
+DWPose: Onnxruntime with acceleration providers detected
+```
+
+## link
+- [[stable-diffusion]]
+- [[stable-diffusion-recipe]]
+- [[stable-diffusion-webui-forge]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# comfyui"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# comfyui"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/comfyui"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# comfyui"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null

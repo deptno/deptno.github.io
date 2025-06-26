@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-5f0f3d25c7817892.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-e6f48f16817ae44e.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># k9s</title><meta name="description" content="터미널 기반 k8s 매니징 툴
+```sh
+brew install k9s
+```
+
+vim 에서와 같이 `:` 로 이동이 가능하다.
+
+| command             | description                          |
+| -------             | -----------------------              |
+| :q                  | 종료                                 |
+| :dp                 | deployment                           |
+| :svc                | service                              |
+| :sec                | secret                               |
+| :ns                 | namespace                            |
+| :po                 | pod                                  |
+| :pv                 | persistent volume                    |
+| :pvc                | persistent volume clame              |
+| :cm                 | config map                           |
+| :pu[lses]           | show graph                           |
+| :popeye             | show [[popeye]]                      |
+| :xray [type] [name] | show hierachy                        |
+| :sd                 | show dumps (log 에서 ctrl-s 로 저장) |
+
+- `:secret` -&gt; `x` decrypt
+
+## history
+- `0.29.0` 을 기준으로 스킨 적용 방식이 방식 변경
+- `0.30.0` 을 바로보는 디렉토리가 바뀌고 yaml 스펙이 재정이 되었다
+  - `yml` -&gt; `yaml` 로 파일도 변경되어 헬이다 [[date:2023-12-29]]
+- 아직 0.28.2 쓰는 중
+
+## skin
+- `$XDG_CONFIG_HOME/k9s/[context]_skin.yml` 위치에 파일을 만들고 skin 설정을 적용하면 해당 컨텍스트의 스킨이 적용된다.
+- 0.29.0 버전에서 방식이 변경됨 0.29.1 에서 현재 신규 설정이 제대로 동작하지 않음 [[diary:2023-12-09]]
+  - 다운그레이드는 [[brew]] 참조
+
+## nodeShell
++ https://k9scli.io/topics/shell/
+- `shellPod` 기능이 있는데 떠있는 컨테이너에 접속을 하는 개념이다
+- [X] neovim 설정상태로 [[docker]] 이미지를 생성해서 붙을 수 있는지
+  - shellPod 에서 셋업된 컨테이너를 띄우면 될 것으로 보인다
+- `nodeShell` 의 개념은 해당 `node` 자체에 접속을 허용하는 것이며 원하는 파드를 통해서 띄우게된다
+  - `/host` 를 통해서 해당 노드의 파일 시스템이 마운트 된다
+  - `chroot /host` 를 통해서 해당 노드에 `ssh` 와 같은 형태로 접속하는 것을 갈음할 수 있다
+
+## plugin
+- [[metrics-server]] 를 설치하면 노드에 cpu, mem, pod 등의 정보를 얻어올 수 있다
+
+## [[error]]
+### pod 접근시 바로 종료되는 문제
+- [[kubernetes#error]] [[pod]] 참고
+
+### &lt; Ruroh? `list access denied for user on &quot;default&quot;:v1/pods 
+- 0.30.0 부터 `v1/pods` 의 get 권한이 필요한 것으로 보인다 
+- `pods` 는 원래 그룹([[kubernetes]], `1.26.0` 기준)이 없는데 이 부분이 업데이트 된 것인지 확인이 필요
+
+## link
+- [[kubernetes]]
+- [[lens]]
+- [[metrics-server]]
+- [[popeye]]
+- [[docker]]
+- [[pod]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# k9s"/><meta property="og:description" content="터미널 기반 k8s 매니징 툴
+```sh
+brew install k9s
+```
+
+vim 에서와 같이 `:` 로 이동이 가능하다.
+
+| command             | description                          |
+| -------             | -----------------------              |
+| :q                  | 종료                                 |
+| :dp                 | deployment                           |
+| :svc                | service                              |
+| :sec                | secret                               |
+| :ns                 | namespace                            |
+| :po                 | pod                                  |
+| :pv                 | persistent volume                    |
+| :pvc                | persistent volume clame              |
+| :cm                 | config map                           |
+| :pu[lses]           | show graph                           |
+| :popeye             | show [[popeye]]                      |
+| :xray [type] [name] | show hierachy                        |
+| :sd                 | show dumps (log 에서 ctrl-s 로 저장) |
+
+- `:secret` -&gt; `x` decrypt
+
+## history
+- `0.29.0` 을 기준으로 스킨 적용 방식이 방식 변경
+- `0.30.0` 을 바로보는 디렉토리가 바뀌고 yaml 스펙이 재정이 되었다
+  - `yml` -&gt; `yaml` 로 파일도 변경되어 헬이다 [[date:2023-12-29]]
+- 아직 0.28.2 쓰는 중
+
+## skin
+- `$XDG_CONFIG_HOME/k9s/[context]_skin.yml` 위치에 파일을 만들고 skin 설정을 적용하면 해당 컨텍스트의 스킨이 적용된다.
+- 0.29.0 버전에서 방식이 변경됨 0.29.1 에서 현재 신규 설정이 제대로 동작하지 않음 [[diary:2023-12-09]]
+  - 다운그레이드는 [[brew]] 참조
+
+## nodeShell
++ https://k9scli.io/topics/shell/
+- `shellPod` 기능이 있는데 떠있는 컨테이너에 접속을 하는 개념이다
+- [X] neovim 설정상태로 [[docker]] 이미지를 생성해서 붙을 수 있는지
+  - shellPod 에서 셋업된 컨테이너를 띄우면 될 것으로 보인다
+- `nodeShell` 의 개념은 해당 `node` 자체에 접속을 허용하는 것이며 원하는 파드를 통해서 띄우게된다
+  - `/host` 를 통해서 해당 노드의 파일 시스템이 마운트 된다
+  - `chroot /host` 를 통해서 해당 노드에 `ssh` 와 같은 형태로 접속하는 것을 갈음할 수 있다
+
+## plugin
+- [[metrics-server]] 를 설치하면 노드에 cpu, mem, pod 등의 정보를 얻어올 수 있다
+
+## [[error]]
+### pod 접근시 바로 종료되는 문제
+- [[kubernetes#error]] [[pod]] 참고
+
+### &lt; Ruroh? `list access denied for user on &quot;default&quot;:v1/pods 
+- 0.30.0 부터 `v1/pods` 의 get 권한이 필요한 것으로 보인다 
+- `pods` 는 원래 그룹([[kubernetes]], `1.26.0` 기준)이 없는데 이 부분이 업데이트 된 것인지 확인이 필요
+
+## link
+- [[kubernetes]]
+- [[lens]]
+- [[metrics-server]]
+- [[popeye]]
+- [[docker]]
+- [[pod]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/k9s"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# k9s"/><meta name="twitter:description" content="터미널 기반 k8s 매니징 툴
+```sh
+brew install k9s
+```
+
+vim 에서와 같이 `:` 로 이동이 가능하다.
+
+| command             | description                          |
+| -------             | -----------------------              |
+| :q                  | 종료                                 |
+| :dp                 | deployment                           |
+| :svc                | service                              |
+| :sec                | secret                               |
+| :ns                 | namespace                            |
+| :po                 | pod                                  |
+| :pv                 | persistent volume                    |
+| :pvc                | persistent volume clame              |
+| :cm                 | config map                           |
+| :pu[lses]           | show graph                           |
+| :popeye             | show [[popeye]]                      |
+| :xray [type] [name] | show hierachy                        |
+| :sd                 | show dumps (log 에서 ctrl-s 로 저장) |
+
+- `:secret` -&gt; `x` decrypt
+
+## history
+- `0.29.0` 을 기준으로 스킨 적용 방식이 방식 변경
+- `0.30.0` 을 바로보는 디렉토리가 바뀌고 yaml 스펙이 재정이 되었다
+  - `yml` -&gt; `yaml` 로 파일도 변경되어 헬이다 [[date:2023-12-29]]
+- 아직 0.28.2 쓰는 중
+
+## skin
+- `$XDG_CONFIG_HOME/k9s/[context]_skin.yml` 위치에 파일을 만들고 skin 설정을 적용하면 해당 컨텍스트의 스킨이 적용된다.
+- 0.29.0 버전에서 방식이 변경됨 0.29.1 에서 현재 신규 설정이 제대로 동작하지 않음 [[diary:2023-12-09]]
+  - 다운그레이드는 [[brew]] 참조
+
+## nodeShell
++ https://k9scli.io/topics/shell/
+- `shellPod` 기능이 있는데 떠있는 컨테이너에 접속을 하는 개념이다
+- [X] neovim 설정상태로 [[docker]] 이미지를 생성해서 붙을 수 있는지
+  - shellPod 에서 셋업된 컨테이너를 띄우면 될 것으로 보인다
+- `nodeShell` 의 개념은 해당 `node` 자체에 접속을 허용하는 것이며 원하는 파드를 통해서 띄우게된다
+  - `/host` 를 통해서 해당 노드의 파일 시스템이 마운트 된다
+  - `chroot /host` 를 통해서 해당 노드에 `ssh` 와 같은 형태로 접속하는 것을 갈음할 수 있다
+
+## plugin
+- [[metrics-server]] 를 설치하면 노드에 cpu, mem, pod 등의 정보를 얻어올 수 있다
+
+## [[error]]
+### pod 접근시 바로 종료되는 문제
+- [[kubernetes#error]] [[pod]] 참고
+
+### &lt; Ruroh? `list access denied for user on &quot;default&quot;:v1/pods 
+- 0.30.0 부터 `v1/pods` 의 get 권한이 필요한 것으로 보인다 
+- `pods` 는 원래 그룹([[kubernetes]], `1.26.0` 기준)이 없는데 이 부분이 업데이트 된 것인지 확인이 필요
+
+## link
+- [[kubernetes]]
+- [[lens]]
+- [[metrics-server]]
+- [[popeye]]
+- [[docker]]
+- [[pod]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/9989c8c
+" class="bg-white text-black">9989c8c</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/k9s.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/k9s.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/k9s.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/k9s"><span class="underline">k9s</span><sup>15</sup></a></span><span><a class="text-blue-600" href="/public-wiki/popeye"><span class="underline">popeye</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/date:2023-12-29"><span class="underline">date:2023-12-29</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-09"><span class="underline">diary/2023-12-09</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/brew"><span class="underline">brew</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/docker"><span class="underline">docker</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/metrics-server"><span class="underline">metrics-server</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/error"><span class="underline">error</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/kubernetes"><span class="underline">kubernetes</span><sup>44</sup></a></span><span><a class="text-blue-600" href="/public-wiki/lens"><span class="underline">lens</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/pod"><span class="underline">pod</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/about-me"><span class="underline">about-me</span><sup>60</sup></a></span><span><a class="text-blue-600" href="/public-wiki/index"><span class="underline">index</span><sup>108</sup></a></span><span><a class="text-blue-600" href="/public-wiki/terminal"><span class="underline">terminal</span><sup>88</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-21"><span class="underline">diary/2023-12-21</span><sup>20</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-23"><span class="underline">diary/2023-12-23</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-28"><span class="underline">diary/2023-12-28</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-29"><span class="underline">diary/2023-12-29</span><sup>10</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#k9s">k9s</a></div><div class="pl-2"><a href="#history">history</a></div><div class="pl-2"><a href="#skin">skin</a></div><div class="pl-2"><a href="#nodeshell">nodeShell</a></div><div class="pl-2"><a href="#plugin">plugin</a></div><div class="pl-2"><a href="#error">error</a></div><div class="pl-4"><a href="#pod-접근시-바로-종료되는-문제">pod 접근시 바로 종료되는 문제</a></div><div class="pl-4"><a href="#-ruroh-list-access-denied-for-user-on-defaultv1pods">&lt; Ruroh? `list access denied for user on &quot;default&quot;:v1/pods</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="k9s">k9s</h1>
+<p>터미널 기반 k8s 매니징 툴</p>
+<pre><code class="hljs language-sh">brew install k9s
+</code></pre><p>vim 에서와 같이 <code class="span">:</code> 로 이동이 가능하다.</p>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>:q</td>
+<td>종료</td>
+</tr>
+<tr>
+<td>:dp</td>
+<td>deployment</td>
+</tr>
+<tr>
+<td>:svc</td>
+<td>service</td>
+</tr>
+<tr>
+<td>:sec</td>
+<td>secret</td>
+</tr>
+<tr>
+<td>:ns</td>
+<td>namespace</td>
+</tr>
+<tr>
+<td>:po</td>
+<td>pod</td>
+</tr>
+<tr>
+<td>:pv</td>
+<td>persistent volume</td>
+</tr>
+<tr>
+<td>:pvc</td>
+<td>persistent volume clame</td>
+</tr>
+<tr>
+<td>:cm</td>
+<td>config map</td>
+</tr>
+<tr>
+<td>:pu[lses]</td>
+<td>show graph</td>
+</tr>
+<tr>
+<td>:popeye</td>
+<td>show <a href="popeye">popeye</a></td>
+</tr>
+<tr>
+<td>:xray [type] [name]</td>
+<td>show hierachy</td>
+</tr>
+<tr>
+<td>:sd</td>
+<td>show dumps (log 에서 ctrl-s 로 저장)</td>
+</tr>
+</tbody></table>
+<ul>
+<li><code class="span">:secret</code> -&gt; <code class="span">x</code> decrypt</li>
+</ul>
+<h2 id="history">history</h2>
+<ul>
+<li><code class="span">0.29.0</code> 을 기준으로 스킨 적용 방식이 방식 변경</li>
+<li><code class="span">0.30.0</code> 을 바로보는 디렉토리가 바뀌고 yaml 스펙이 재정이 되었다<ul>
+<li><code class="span">yml</code> -&gt; <code class="span">yaml</code> 로 파일도 변경되어 헬이다 <a href="date:2023-12-29">date:2023-12-29</a></li>
+</ul>
+</li>
+<li>아직 0.28.2 쓰는 중</li>
+</ul>
+<h2 id="skin">skin</h2>
+<ul>
+<li><code class="span">$XDG_CONFIG_HOME/k9s/[context]_skin.yml</code> 위치에 파일을 만들고 skin 설정을 적용하면 해당 컨텍스트의 스킨이 적용된다.</li>
+<li>0.29.0 버전에서 방식이 변경됨 0.29.1 에서 현재 신규 설정이 제대로 동작하지 않음 <a href="/public-wiki/diary/2023-12-09">[diary] diary:2023-12-09</a><ul>
+<li>다운그레이드는 <a href="brew">brew</a> 참조</li>
+</ul>
+</li>
+</ul>
+<h2 id="nodeshell">nodeShell</h2>
+<ul>
+<li><a href="https://k9scli.io/topics/shell/" target="_blank">[URL] https://k9scli.io/topics/shell/</a></li>
+</ul>
+<ul>
+<li><code class="span">shellPod</code> 기능이 있는데 떠있는 컨테이너에 접속을 하는 개념이다</li>
+<li><input checked="" disabled="" type="checkbox"> neovim 설정상태로 <a href="docker">docker</a> 이미지를 생성해서 붙을 수 있는지<ul>
+<li>shellPod 에서 셋업된 컨테이너를 띄우면 될 것으로 보인다</li>
+</ul>
+</li>
+<li><code class="span">nodeShell</code> 의 개념은 해당 <code class="span">node</code> 자체에 접속을 허용하는 것이며 원하는 파드를 통해서 띄우게된다<ul>
+<li><code class="span">/host</code> 를 통해서 해당 노드의 파일 시스템이 마운트 된다</li>
+<li><code class="span">chroot /host</code> 를 통해서 해당 노드에 <code class="span">ssh</code> 와 같은 형태로 접속하는 것을 갈음할 수 있다</li>
+</ul>
+</li>
+</ul>
+<h2 id="plugin">plugin</h2>
+<ul>
+<li><a href="metrics-server">metrics-server</a> 를 설치하면 노드에 cpu, mem, pod 등의 정보를 얻어올 수 있다</li>
+</ul>
+<h2 id="error"><a href="error">error</a></h2>
+<h3 id="pod-접근시-바로-종료되는-문제">pod 접근시 바로 종료되는 문제</h3>
+<ul>
+<li>[kubernetes#error]] [[pod](kubernetes#error]] [[pod) 참고</li>
+</ul>
+<h3 id="ruroh-list-access-denied-for-user-on-defaultv1pods">&lt; Ruroh? `list access denied for user on &quot;default&quot;:v1/pods</h3>
+<ul>
+<li>0.30.0 부터 <code class="span">v1/pods</code> 의 get 권한이 필요한 것으로 보인다 </li>
+<li><code class="span">pods</code> 는 원래 그룹(<a href="kubernetes">kubernetes</a>, <code class="span">1.26.0</code> 기준)이 없는데 이 부분이 업데이트 된 것인지 확인이 필요</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="kubernetes">kubernetes</a></li>
+<li><a href="lens">lens</a></li>
+<li><a href="metrics-server">metrics-server</a></li>
+<li><a href="popeye">popeye</a></li>
+<li><a href="docker">docker</a></li>
+<li><a href="pod">pod</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-5f0f3d25c7817892.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-e6f48f16817ae44e.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"k9s\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"nVKu0buaPqvZtlfe_SzQh\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/k9s\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"k9s\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"k9s\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"k9s\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T102a,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"k9s\"\u003ek9s\u003c/h1\u003e\n\u003cp\u003e터미널 기반 k8s 매니징 툴\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ebrew install k9s\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003evim 에서와 같이 \u003ccode class=\"span\"\u003e:\u003c/code\u003e 로 이동이 가능하다.\u003c/p\u003e\n\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003ecommand\u003c/th\u003e\n\u003cth\u003edescription\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\u003ctr\u003e\n\u003ctd\u003e:q\u003c/td\u003e\n\u003ctd\u003e종료\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e:dp\u003c/td\u003e\n\u003ctd\u003edeployment\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e:svc\u003c/td\u003e\n\u003ctd\u003eservice\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e:sec\u003c/td\u003e\n\u003ctd\u003esecret\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e:ns\u003c/td\u003e\n\u003ctd\u003enamespace\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e:po\u003c/td\u003e\n\u003ctd\u003epod\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e:pv\u003c/td\u003e\n\u003ctd\u003epersistent volume\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e:pvc\u003c/td\u003e\n\u003ctd\u003epersistent volume clame\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e:cm\u003c/td\u003e\n\u003ctd\u003econfig map\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e:pu[lses]\u003c/td\u003e\n\u003ctd\u003eshow graph\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e:popeye\u003c/td\u003e\n\u003ctd\u003eshow \u003ca href=\"popeye\"\u003epopeye\u003c/a\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e:xray [type] [name]\u003c/td\u003e\n\u003ctd\u003eshow hierachy\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e:sd\u003c/td\u003e\n\u003ctd\u003eshow dumps (log 에서 ctrl-s 로 저장)\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\u003c/table\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e:secret\u003c/code\u003e -\u0026gt; \u003ccode class=\"span\"\u003ex\u003c/code\u003e decrypt\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"history\"\u003ehistory\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e0.29.0\u003c/code\u003e 을 기준으로 스킨 적용 방식이 방식 변경\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e0.30.0\u003c/code\u003e 을 바로보는 디렉토리가 바뀌고 yaml 스펙이 재정이 되었다\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eyml\u003c/code\u003e -\u0026gt; \u003ccode class=\"span\"\u003eyaml\u003c/code\u003e 로 파일도 변경되어 헬이다 \u003ca href=\"date:2023-12-29\"\u003edate:2023-12-29\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e아직 0.28.2 쓰는 중\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"skin\"\u003eskin\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e$XDG_CONFIG_HOME/k9s/[context]_skin.yml\u003c/code\u003e 위치에 파일을 만들고 skin 설정을 적용하면 해당 컨텍스트의 스킨이 적용된다.\u003c/li\u003e\n\u003cli\u003e0.29.0 버전에서 방식이 변경됨 0.29.1 에서 현재 신규 설정이 제대로 동작하지 않음 \u003ca href=\"/public-wiki/diary/2023-12-09\"\u003e[diary] diary:2023-12-09\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e다운그레이드는 \u003ca href=\"brew\"\u003ebrew\u003c/a\u003e 참조\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"nodeshell\"\u003enodeShell\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://k9scli.io/topics/shell/\" target=\"_blank\"\u003e[URL] https://k9scli.io/topics/shell/\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eshellPod\u003c/code\u003e 기능이 있는데 떠있는 컨테이너에 접속을 하는 개념이다\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e neovim 설정상태로 \u003ca href=\"docker\"\u003edocker\u003c/a\u003e 이미지를 생성해서 붙을 수 있는지\u003cul\u003e\n\u003cli\u003eshellPod 에서 셋업된 컨테이너를 띄우면 될 것으로 보인다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003enodeShell\u003c/code\u003e 의 개념은 해당 \u003ccode class=\"span\"\u003enode\u003c/code\u003e 자체에 접속을 허용하는 것이며 원하는 파드를 통해서 띄우게된다\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e/host\u003c/code\u003e 를 통해서 해당 노드의 파일 시스템이 마운트 된다\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003echroot /host\u003c/code\u003e 를 통해서 해당 노드에 \u003ccode class=\"span\"\u003essh\u003c/code\u003e 와 같은 형태로 접속하는 것을 갈음할 수 있다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"plugin\"\u003eplugin\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"metrics-server\"\u003emetrics-server\u003c/a\u003e 를 설치하면 노드에 cpu, mem, pod 등의 정보를 얻어올 수 있다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"error\"\u003e\u003ca href=\"error\"\u003eerror\u003c/a\u003e\u003c/h2\u003e\n\u003ch3 id=\"pod-접근시-바로-종료되는-문제\"\u003epod 접근시 바로 종료되는 문제\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e[kubernetes#error]] [[pod](kubernetes#error]] [[pod) 참고\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"ruroh-list-access-denied-for-user-on-defaultv1pods\"\u003e\u0026lt; Ruroh? `list access denied for user on \u0026quot;default\u0026quot;:v1/pods\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e0.30.0 부터 \u003ccode class=\"span\"\u003ev1/pods\u003c/code\u003e 의 get 권한이 필요한 것으로 보인다 \u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003epods\u003c/code\u003e 는 원래 그룹(\u003ca href=\"kubernetes\"\u003ekubernetes\u003c/a\u003e, \u003ccode class=\"span\"\u003e1.26.0\u003c/code\u003e 기준)이 없는데 이 부분이 업데이트 된 것인지 확인이 필요\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"kubernetes\"\u003ekubernetes\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"lens\"\u003elens\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"metrics-server\"\u003emetrics-server\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"popeye\"\u003epopeye\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"docker\"\u003edocker\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"pod\"\u003epod\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/9989c8c\\n\",\"className\":\"bg-white text-black\",\"children\":\"9989c8c\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/k9s.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/k9s.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/k9s.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"k9s\",\"name\":\"k9s\",\"val\":15},{\"id\":\"popeye\",\"name\":\"popeye\",\"val\":1},{\"id\":\"date:2023-12-29\",\"name\":\"date:2023-12-29\",\"val\":\"$undefined\"},{\"id\":\"diary/2023-12-09\",\"name\":\"diary/2023-12-09\",\"val\":2},{\"id\":\"brew\",\"name\":\"brew\",\"val\":2},{\"id\":\"docker\",\"name\":\"docker\",\"val\":7},{\"id\":\"metrics-server\",\"name\":\"metrics-server\",\"val\":3},{\"id\":\"error\",\"name\":\"error\",\"val\":4},{\"id\":\"kubernetes\",\"name\":\"kubernetes\",\"val\":44},{\"id\":\"lens\",\"name\":\"lens\",\"val\":2},{\"id\":\"pod\",\"name\":\"pod\",\"val\":6},{\"id\":\"about-me\",\"name\":\"about-me\",\"val\":60},{\"id\":\"index\",\"name\":\"index\",\"val\":108},{\"id\":\"terminal\",\"name\":\"terminal\",\"val\":88},{\"id\":\"diary/2023-12-21\",\"name\":\"diary/2023-12-21\",\"val\":20},{\"id\":\"diary/2023-12-23\",\"name\":\"diary/2023-12-23\",\"val\":8},{\"id\":\"diary/2023-12-28\",\"name\":\"diary/2023-12-28\",\"val\":2},{\"id\":\"diary/2023-12-29\",\"name\":\"diary/2023-12-29\",\"val\":10}],\"links\":[{\"source\":\"k9s\",\"target\":\"popeye\"},{\"source\":\"k9s\",\"target\":\"date:2023-12-29\"},{\"source\":\"k9s\",\"target\":\"diary/2023-12-09\"},{\"source\":\"k9s\",\"target\":\"brew\"},{\"source\":\"k9s\",\"target\":\"docker\"},{\"source\":\"k9s\",\"target\":\"metrics-server\"},{\"source\":\"k9s\",\"target\":\"error\"},{\"source\":\"k9s\",\"target\":\"kubernetes\"},{\"source\":\"k9s\",\"target\":\"kubernetes\"},{\"source\":\"k9s\",\"target\":\"kubernetes\"},{\"source\":\"k9s\",\"target\":\"lens\"},{\"source\":\"k9s\",\"target\":\"metrics-server\"},{\"source\":\"k9s\",\"target\":\"popeye\"},{\"source\":\"k9s\",\"target\":\"docker\"},{\"source\":\"k9s\",\"target\":\"pod\"},{\"source\":\"about-me\",\"target\":\"k9s\"},{\"source\":\"index\",\"target\":\"k9s\"},{\"source\":\"kubernetes\",\"target\":\"k9s\"},{\"source\":\"kubernetes\",\"target\":\"k9s\"},{\"source\":\"kubernetes\",\"target\":\"k9s\"},{\"source\":\"lens\",\"target\":\"k9s\"},{\"source\":\"metrics-server\",\"target\":\"k9s\"},{\"source\":\"pod\",\"target\":\"k9s\"},{\"source\":\"popeye\",\"target\":\"k9s\"},{\"source\":\"terminal\",\"target\":\"k9s\"},{\"source\":\"diary/2023-12-09\",\"target\":\"k9s\"},{\"source\":\"diary/2023-12-21\",\"target\":\"k9s\"},{\"source\":\"diary/2023-12-21\",\"target\":\"k9s\"},{\"source\":\"diary/2023-12-23\",\"target\":\"k9s\"},{\"source\":\"diary/2023-12-28\",\"target\":\"k9s\"},{\"source\":\"diary/2023-12-29\",\"target\":\"k9s\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"k9s\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/k9s\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"k9s\"}],[\"$\",\"sup\",null,{\"children\":15}]]}]}],[\"$\",\"span\",\"popeye\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/popeye\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"popeye\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"date:2023-12-29\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/date:2023-12-29\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"date:2023-12-29\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"diary/2023-12-09\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-09\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-09\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"brew\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/brew\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"brew\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"docker\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/docker\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"docker\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"metrics-server\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/metrics-server\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"metrics-server\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"error\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/error\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"error\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"kubernetes\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/kubernetes\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"kubernetes\"}],[\"$\",\"sup\",null,{\"children\":44}]]}]}],[\"$\",\"span\",\"lens\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/lens\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"lens\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"pod\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/pod\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"pod\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"about-me\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/about-me\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"about-me\"}],[\"$\",\"sup\",null,{\"children\":60}]]}]}],[\"$\",\"span\",\"index\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/index\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"index\"}],[\"$\",\"sup\",null,{\"children\":108}]]}]}],[\"$\",\"span\",\"terminal\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/terminal\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"terminal\"}],[\"$\",\"sup\",null,{\"children\":88}]]}]}],[\"$\",\"span\",\"diary/2023-12-21\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-21\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-21\"}],[\"$\",\"sup\",null,{\"children\":20}]]}]}],[\"$\",\"span\",\"diary/2023-12-23\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-23\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-23\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"diary/2023-12-28\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-28\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-28\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2023-12-29\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-29\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-29\"}],[\"$\",\"sup\",null,{\"children\":10}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"k9s\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#k9s\",\"children\":\"k9s\"}]}],[\"$\",\"div\",\"history\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#history\",\"children\":\"history\"}]}],[\"$\",\"div\",\"skin\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#skin\",\"children\":\"skin\"}]}],[\"$\",\"div\",\"nodeshell\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#nodeshell\",\"children\":\"nodeShell\"}]}],[\"$\",\"div\",\"plugin\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#plugin\",\"children\":\"plugin\"}]}],[\"$\",\"div\",\"error\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error\",\"children\":\"error\"}]}],[\"$\",\"div\",\"pod-접근시-바로-종료되는-문제\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#pod-접근시-바로-종료되는-문제\",\"children\":\"pod 접근시 바로 종료되는 문제\"}]}],[\"$\",\"div\",\"-ruroh-list-access-denied-for-user-on-defaultv1pods\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#-ruroh-list-access-denied-for-user-on-defaultv1pods\",\"children\":\"\u003c Ruroh? `list access denied for user on \\\"default\\\":v1/pods\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:Tb59,"])</script><script>self.__next_f.push([1,"터미널 기반 k8s 매니징 툴\n```sh\nbrew install k9s\n```\n\nvim 에서와 같이 `:` 로 이동이 가능하다.\n\n| command             | description                          |\n| -------             | -----------------------              |\n| :q                  | 종료                                 |\n| :dp                 | deployment                           |\n| :svc                | service                              |\n| :sec                | secret                               |\n| :ns                 | namespace                            |\n| :po                 | pod                                  |\n| :pv                 | persistent volume                    |\n| :pvc                | persistent volume clame              |\n| :cm                 | config map                           |\n| :pu[lses]           | show graph                           |\n| :popeye             | show [[popeye]]                      |\n| :xray [type] [name] | show hierachy                        |\n| :sd                 | show dumps (log 에서 ctrl-s 로 저장) |\n\n- `:secret` -\u003e `x` decrypt\n\n## history\n- `0.29.0` 을 기준으로 스킨 적용 방식이 방식 변경\n- `0.30.0` 을 바로보는 디렉토리가 바뀌고 yaml 스펙이 재정이 되었다\n  - `yml` -\u003e `yaml` 로 파일도 변경되어 헬이다 [[date:2023-12-29]]\n- 아직 0.28.2 쓰는 중\n\n## skin\n- `$XDG_CONFIG_HOME/k9s/[context]_skin.yml` 위치에 파일을 만들고 skin 설정을 적용하면 해당 컨텍스트의 스킨이 적용된다.\n- 0.29.0 버전에서 방식이 변경됨 0.29.1 에서 현재 신규 설정이 제대로 동작하지 않음 [[diary:2023-12-09]]\n  - 다운그레이드는 [[brew]] 참조\n\n## nodeShell\n+ https://k9scli.io/topics/shell/\n- `shellPod` 기능이 있는데 떠있는 컨테이너에 접속을 하는 개념이다\n- [X] neovim 설정상태로 [[docker]] 이미지를 생성해서 붙을 수 있는지\n  - shellPod 에서 셋업된 컨테이너를 띄우면 될 것으로 보인다\n- `nodeShell` 의 개념은 해당 `node` 자체에 접속을 허용하는 것이며 원하는 파드를 통해서 띄우게된다\n  - `/host` 를 통해서 해당 노드의 파일 시스템이 마운트 된다\n  - `chroot /host` 를 통해서 해당 노드에 `ssh` 와 같은 형태로 접속하는 것을 갈음할 수 있다\n\n## plugin\n- [[metrics-server]] 를 설치하면 노드에 cpu, mem, pod 등의 정보를 얻어올 수 있다\n\n## [[error]]\n### pod 접근시 바로 종료되는 문제\n- [[kubernetes#error]] [[pod]] 참고\n\n### \u003c Ruroh? `list access denied for user on \"default\":v1/pods \n- 0.30.0 부터 `v1/pods` 의 get 권한이 필요한 것으로 보인다 \n- `pods` 는 원래 그룹([[kubernetes]], `1.26.0` 기준)이 없는데 이 부분이 업데이트 된 것인지 확인이 필요\n\n## link\n- [[kubernetes]]\n- [[lens]]\n- [[metrics-server]]\n- [[popeye]]\n- [[docker]]\n- [[pod]]\n"])</script><script>self.__next_f.push([1,"16:Tb59,"])</script><script>self.__next_f.push([1,"터미널 기반 k8s 매니징 툴\n```sh\nbrew install k9s\n```\n\nvim 에서와 같이 `:` 로 이동이 가능하다.\n\n| command             | description                          |\n| -------             | -----------------------              |\n| :q                  | 종료                                 |\n| :dp                 | deployment                           |\n| :svc                | service                              |\n| :sec                | secret                               |\n| :ns                 | namespace                            |\n| :po                 | pod                                  |\n| :pv                 | persistent volume                    |\n| :pvc                | persistent volume clame              |\n| :cm                 | config map                           |\n| :pu[lses]           | show graph                           |\n| :popeye             | show [[popeye]]                      |\n| :xray [type] [name] | show hierachy                        |\n| :sd                 | show dumps (log 에서 ctrl-s 로 저장) |\n\n- `:secret` -\u003e `x` decrypt\n\n## history\n- `0.29.0` 을 기준으로 스킨 적용 방식이 방식 변경\n- `0.30.0` 을 바로보는 디렉토리가 바뀌고 yaml 스펙이 재정이 되었다\n  - `yml` -\u003e `yaml` 로 파일도 변경되어 헬이다 [[date:2023-12-29]]\n- 아직 0.28.2 쓰는 중\n\n## skin\n- `$XDG_CONFIG_HOME/k9s/[context]_skin.yml` 위치에 파일을 만들고 skin 설정을 적용하면 해당 컨텍스트의 스킨이 적용된다.\n- 0.29.0 버전에서 방식이 변경됨 0.29.1 에서 현재 신규 설정이 제대로 동작하지 않음 [[diary:2023-12-09]]\n  - 다운그레이드는 [[brew]] 참조\n\n## nodeShell\n+ https://k9scli.io/topics/shell/\n- `shellPod` 기능이 있는데 떠있는 컨테이너에 접속을 하는 개념이다\n- [X] neovim 설정상태로 [[docker]] 이미지를 생성해서 붙을 수 있는지\n  - shellPod 에서 셋업된 컨테이너를 띄우면 될 것으로 보인다\n- `nodeShell` 의 개념은 해당 `node` 자체에 접속을 허용하는 것이며 원하는 파드를 통해서 띄우게된다\n  - `/host` 를 통해서 해당 노드의 파일 시스템이 마운트 된다\n  - `chroot /host` 를 통해서 해당 노드에 `ssh` 와 같은 형태로 접속하는 것을 갈음할 수 있다\n\n## plugin\n- [[metrics-server]] 를 설치하면 노드에 cpu, mem, pod 등의 정보를 얻어올 수 있다\n\n## [[error]]\n### pod 접근시 바로 종료되는 문제\n- [[kubernetes#error]] [[pod]] 참고\n\n### \u003c Ruroh? `list access denied for user on \"default\":v1/pods \n- 0.30.0 부터 `v1/pods` 의 get 권한이 필요한 것으로 보인다 \n- `pods` 는 원래 그룹([[kubernetes]], `1.26.0` 기준)이 없는데 이 부분이 업데이트 된 것인지 확인이 필요\n\n## link\n- [[kubernetes]]\n- [[lens]]\n- [[metrics-server]]\n- [[popeye]]\n- [[docker]]\n- [[pod]]\n"])</script><script>self.__next_f.push([1,"17:Tb59,"])</script><script>self.__next_f.push([1,"터미널 기반 k8s 매니징 툴\n```sh\nbrew install k9s\n```\n\nvim 에서와 같이 `:` 로 이동이 가능하다.\n\n| command             | description                          |\n| -------             | -----------------------              |\n| :q                  | 종료                                 |\n| :dp                 | deployment                           |\n| :svc                | service                              |\n| :sec                | secret                               |\n| :ns                 | namespace                            |\n| :po                 | pod                                  |\n| :pv                 | persistent volume                    |\n| :pvc                | persistent volume clame              |\n| :cm                 | config map                           |\n| :pu[lses]           | show graph                           |\n| :popeye             | show [[popeye]]                      |\n| :xray [type] [name] | show hierachy                        |\n| :sd                 | show dumps (log 에서 ctrl-s 로 저장) |\n\n- `:secret` -\u003e `x` decrypt\n\n## history\n- `0.29.0` 을 기준으로 스킨 적용 방식이 방식 변경\n- `0.30.0` 을 바로보는 디렉토리가 바뀌고 yaml 스펙이 재정이 되었다\n  - `yml` -\u003e `yaml` 로 파일도 변경되어 헬이다 [[date:2023-12-29]]\n- 아직 0.28.2 쓰는 중\n\n## skin\n- `$XDG_CONFIG_HOME/k9s/[context]_skin.yml` 위치에 파일을 만들고 skin 설정을 적용하면 해당 컨텍스트의 스킨이 적용된다.\n- 0.29.0 버전에서 방식이 변경됨 0.29.1 에서 현재 신규 설정이 제대로 동작하지 않음 [[diary:2023-12-09]]\n  - 다운그레이드는 [[brew]] 참조\n\n## nodeShell\n+ https://k9scli.io/topics/shell/\n- `shellPod` 기능이 있는데 떠있는 컨테이너에 접속을 하는 개념이다\n- [X] neovim 설정상태로 [[docker]] 이미지를 생성해서 붙을 수 있는지\n  - shellPod 에서 셋업된 컨테이너를 띄우면 될 것으로 보인다\n- `nodeShell` 의 개념은 해당 `node` 자체에 접속을 허용하는 것이며 원하는 파드를 통해서 띄우게된다\n  - `/host` 를 통해서 해당 노드의 파일 시스템이 마운트 된다\n  - `chroot /host` 를 통해서 해당 노드에 `ssh` 와 같은 형태로 접속하는 것을 갈음할 수 있다\n\n## plugin\n- [[metrics-server]] 를 설치하면 노드에 cpu, mem, pod 등의 정보를 얻어올 수 있다\n\n## [[error]]\n### pod 접근시 바로 종료되는 문제\n- [[kubernetes#error]] [[pod]] 참고\n\n### \u003c Ruroh? `list access denied for user on \"default\":v1/pods \n- 0.30.0 부터 `v1/pods` 의 get 권한이 필요한 것으로 보인다 \n- `pods` 는 원래 그룹([[kubernetes]], `1.26.0` 기준)이 없는데 이 부분이 업데이트 된 것인지 확인이 필요\n\n## link\n- [[kubernetes]]\n- [[lens]]\n- [[metrics-server]]\n- [[popeye]]\n- [[docker]]\n- [[pod]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# k9s\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# k9s\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/k9s\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# k9s\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
