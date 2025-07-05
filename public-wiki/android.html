@@ -1,0 +1,773 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-5f0f3d25c7817892.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-e6f48f16817ae44e.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># android</title><meta name="description" content="
+## 개발
+
+### 개발자 콘솔
++ https://play.google.com/console
+
+### 물리 디바이스 연결
+- 실기기 개발자모드 활성화
+  - 설정 -&gt;  시스템 -&gt;  휴대폰 정보 -&gt;  소프트웨어 정보 -&gt; 빌드 번호 7회 터치
+- USB 디버깅 활성화
+  - 설정 -&gt;  시스템 -&gt;  개발자 옵션 -&gt; USB 디버깅 활성화 -&gt; 추가 다이얼로그 확인
+- `adb devices` 로 물리 디바이스가 연결된 것 확인 가능
+
+### SHA-1 인증서 디지털 지문
+- [[keytool]] 참고
+- google 인증에서 사용됨
+
+## Android android-studio
+- Actions -&gt; New Module
+
+### [[mac]] -&gt; [[android]] 파일복사
+#### android file transfer 를 통한 복사
+```sh 
+brew install --cask android-file-transfer
+```
+- 설치하고 나서 안드로이드 기기를 연결하면, finder 형태로 디바이스 스토리지가 보인다
+
+#### [[adb]] 를 이용한 복사
+```sh 
+adb push app/build/outputs/apk/release/app-release.apk /storage/self/primary/Download/
+```
+
+## 설정
+### Android Studio
+#### Auto import
+- Settings -&gt; Editor -&gt; General -&gt; Auto import -&gt; Kotlin
+  - [X] Add unambiguous imports on to fly
+  - [X] Optimize imports on the fly (for current project)
+  
+### Emulator|에뮬레이터
+- 아래서 위로 스와이프 -&gt; 시스템
+  - Auto Rotate
+  - System Language -&gt; 테스트할 언어 첫번째로
+
+## Layout|레이아웃
+- LinearLayout
+- RelativeLayout
+- FrameLayout
+- GridLayout
+- ConstraintLayout
+
+## viewBinding
+- as-is
+```kt
+overridefunonCreate(savedlnstanceState: Bundle?) {
+    super.onCreate(savedlnstanceState)
+    
+    setContentView(R.layout.main_activity)
+    findViewById(R.id.text1)
+}
+```
+- to-be
+findViewById 사용을 피하기 위해서 [[gradle]] 에서 `viewBinding` 설정이 사용된다.
+```gradle
+android {
+    viewBinding {
+        enabled true
+    }
+}
+```
+```kt
+overridefunonCreate(savedlnstanceState: Bundle?) {
+    super.onCreate(savedlnstanceState)
+    
+    val binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+}
+```
+
+## Event|이벤트
+- Single Abstract Method(SAM) - 오브젝트 대신 메소드를 할당하여 처리한다.
+
+```kt
+override fun onCreate(savedlnstanceState: Bundle?) {
+    super.onCreate(savedlnstanceState)
+    
+    val binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+    
+    binding.startButton.setOnClickListener {
+        // 이벤트 처리
+    }
+}
+
+```
+
+## Life Cycle|생명주기
+- 액티비티 시작
+- onCreate call setContentView
+- onStart
+- onResume
+- 액티비티 실행(setContentView 에서 지정한 UI)
+- onPause 포커스가 없는상태, 화면 분할 등 -&gt; onResume
+- onStop 비활성화 상태, 홈 버튼을 눌러서 나간 상태 등-&gt; onRestart -&gt; onStart
+- onDestroy -&gt; onCreate
+- 액티비티 종료
+[[@todo]] restart 등 추가 필요
+
+### 화면을 회전화는 경우
+onResume -&gt; onPause -&gt; onStop -&gt; onSaveInstanceState -&gt; onDestroy
+-&gt; onCreate -&gt; onStart -&gt; onRestoreInstanceState -&gt; onResume
+
+## Intent|인텐트
+인텐트를 통해 시스템에 액티비티의 생성을 요청한다.
+```kotlin
+val intent = Intent(this, MainActivity::class.java)
+intent.putExtra(&quot;key&quot;, &quot;value&quot;)
+startActivity(intent)
+startActivityForResult(intent, intrequestCode)
+```
+생성 후 받는 쪽에서는 `getIntent` 를 통해서 인텐트를 얻고 인자를 가져올 수 있다.
+인텐트 실행시에 특정 앱을 지정하고싶다면 패키지를 설정한다.
+```kotlin
+intent.setPackage(&quot;com.google.android.apps.maps&quot;)
+```
+
+### error
+#### 없는 activity 를 지정한 경우(없는 intent)
+실행한 쪽에서 에러가 난다.
+#### Coludn&#x27;t sign in
+```text
+There was a problem communicating with Google servers.
+```
+
+### 액티비티 실행
+#### 명시적 
+앱의 내부에서는 명시적으로 클래스를 지정해서 실행, 암시적으로도 가능하나 권장된다.
+암시적으로는 실행할 수 없는 경우도 존재한다.
+```kotlin
+val intent = Intent(this, MainActivity::class.java)
+```
+
+#### 암시적
+외부에서 액티비티를 실행할 수 있도록 manifest 파일에 intent 설정을 해줘야한다.
+```xml
+&lt;activity android:name=&quot;.oneActivity&quot; /&gt;
+&lt;activity android:name=&quot;.TwoActivity&quot;&gt;
+  &lt;intent-filter&gt;
+    &lt;actlon android:name=&quot;ACTION EDIT&quot; /&gt;
+  &lt;/intent-filter&gt;
+&lt;/activity&gt;
+&lt;service ... /&gt;
+&lt;receiver ... /&gt;
+```
+
+### 인텐트 필터
+데이터 전달
+- &lt;action /&gt; - android:name 은 유일하지 않아도된다. 기능을 보여주는 이름을 사용하자. eg, android.intent.action.MAIN
+- &lt;category /&gt; - android:name -&gt; android.intent.category.LAUNCHER
+- &lt;data /&gt; - 필요한 데이
+
+&gt; 런처앱은 `android.intent.category.LAUNCHER` 카테고리의 `action.intent.action.MAIN` 을 가져와서 리스트업하는 액티비티다.
+
+
+
+## Resource|리소스
+### 구성 한정자
+- https://developer.android.com/guide/topics/resources/providing-resources?hl=ko
+해당 리스트를 통해 리소스 디렉토리에 suffix 를 붙임으로써 특정 상황에서 사용되는 리소스 임을 명시한다. 언어, 디바이스 방향 상태, 해상도 등이 포함된다. 중복 명시도 가능한데 순서가 존재한다.
+- res/layout/activity_main.xml - 세로 모드에서 사용
+- res/layout/`land`/activity_main.xml - 가로 모드에서 사용
+
+## [[error]]
+
+### 설치 실패
+- [[firebase]] app distribution, [[app]] tester 등을 통해서 앱을 설치하려고하는데 계속 에러가 난다면 빌드를 universal apk 로 진행한다 [[diary:2023-12-31]]
+
+### 배포 버전에서 구글로그인 로그인 안됨
+- 플레이스토어 버전은 자체 핑거 프린트를 가지고 있음
+- [[play-console]] 에 접속 -&gt; 설정 -&gt; 앱 서명 -&gt; SHA-1 지문 **복사**
+- console.cloud.google.com -&gt; SHA-1 참조하여 *OAuth 2.0 클라이언트 ID* **생성** -&gt; 추가적으로 제공되는 json 은 신경쓸 필요 없음
+
+## link
+- [[flipper]]
+- [[scrcpy]]
+- [[adb]]
+- [[android-studio]]
+- [[react-native]]
+- [[emulator]]
+- [[java]]
+- [[kotlin]]
+- [[proxyman]]
+- [[mac]]
+- [[gradle]]
+- [[play-console]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# android"/><meta property="og:description" content="
+## 개발
+
+### 개발자 콘솔
++ https://play.google.com/console
+
+### 물리 디바이스 연결
+- 실기기 개발자모드 활성화
+  - 설정 -&gt;  시스템 -&gt;  휴대폰 정보 -&gt;  소프트웨어 정보 -&gt; 빌드 번호 7회 터치
+- USB 디버깅 활성화
+  - 설정 -&gt;  시스템 -&gt;  개발자 옵션 -&gt; USB 디버깅 활성화 -&gt; 추가 다이얼로그 확인
+- `adb devices` 로 물리 디바이스가 연결된 것 확인 가능
+
+### SHA-1 인증서 디지털 지문
+- [[keytool]] 참고
+- google 인증에서 사용됨
+
+## Android android-studio
+- Actions -&gt; New Module
+
+### [[mac]] -&gt; [[android]] 파일복사
+#### android file transfer 를 통한 복사
+```sh 
+brew install --cask android-file-transfer
+```
+- 설치하고 나서 안드로이드 기기를 연결하면, finder 형태로 디바이스 스토리지가 보인다
+
+#### [[adb]] 를 이용한 복사
+```sh 
+adb push app/build/outputs/apk/release/app-release.apk /storage/self/primary/Download/
+```
+
+## 설정
+### Android Studio
+#### Auto import
+- Settings -&gt; Editor -&gt; General -&gt; Auto import -&gt; Kotlin
+  - [X] Add unambiguous imports on to fly
+  - [X] Optimize imports on the fly (for current project)
+  
+### Emulator|에뮬레이터
+- 아래서 위로 스와이프 -&gt; 시스템
+  - Auto Rotate
+  - System Language -&gt; 테스트할 언어 첫번째로
+
+## Layout|레이아웃
+- LinearLayout
+- RelativeLayout
+- FrameLayout
+- GridLayout
+- ConstraintLayout
+
+## viewBinding
+- as-is
+```kt
+overridefunonCreate(savedlnstanceState: Bundle?) {
+    super.onCreate(savedlnstanceState)
+    
+    setContentView(R.layout.main_activity)
+    findViewById(R.id.text1)
+}
+```
+- to-be
+findViewById 사용을 피하기 위해서 [[gradle]] 에서 `viewBinding` 설정이 사용된다.
+```gradle
+android {
+    viewBinding {
+        enabled true
+    }
+}
+```
+```kt
+overridefunonCreate(savedlnstanceState: Bundle?) {
+    super.onCreate(savedlnstanceState)
+    
+    val binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+}
+```
+
+## Event|이벤트
+- Single Abstract Method(SAM) - 오브젝트 대신 메소드를 할당하여 처리한다.
+
+```kt
+override fun onCreate(savedlnstanceState: Bundle?) {
+    super.onCreate(savedlnstanceState)
+    
+    val binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+    
+    binding.startButton.setOnClickListener {
+        // 이벤트 처리
+    }
+}
+
+```
+
+## Life Cycle|생명주기
+- 액티비티 시작
+- onCreate call setContentView
+- onStart
+- onResume
+- 액티비티 실행(setContentView 에서 지정한 UI)
+- onPause 포커스가 없는상태, 화면 분할 등 -&gt; onResume
+- onStop 비활성화 상태, 홈 버튼을 눌러서 나간 상태 등-&gt; onRestart -&gt; onStart
+- onDestroy -&gt; onCreate
+- 액티비티 종료
+[[@todo]] restart 등 추가 필요
+
+### 화면을 회전화는 경우
+onResume -&gt; onPause -&gt; onStop -&gt; onSaveInstanceState -&gt; onDestroy
+-&gt; onCreate -&gt; onStart -&gt; onRestoreInstanceState -&gt; onResume
+
+## Intent|인텐트
+인텐트를 통해 시스템에 액티비티의 생성을 요청한다.
+```kotlin
+val intent = Intent(this, MainActivity::class.java)
+intent.putExtra(&quot;key&quot;, &quot;value&quot;)
+startActivity(intent)
+startActivityForResult(intent, intrequestCode)
+```
+생성 후 받는 쪽에서는 `getIntent` 를 통해서 인텐트를 얻고 인자를 가져올 수 있다.
+인텐트 실행시에 특정 앱을 지정하고싶다면 패키지를 설정한다.
+```kotlin
+intent.setPackage(&quot;com.google.android.apps.maps&quot;)
+```
+
+### error
+#### 없는 activity 를 지정한 경우(없는 intent)
+실행한 쪽에서 에러가 난다.
+#### Coludn&#x27;t sign in
+```text
+There was a problem communicating with Google servers.
+```
+
+### 액티비티 실행
+#### 명시적 
+앱의 내부에서는 명시적으로 클래스를 지정해서 실행, 암시적으로도 가능하나 권장된다.
+암시적으로는 실행할 수 없는 경우도 존재한다.
+```kotlin
+val intent = Intent(this, MainActivity::class.java)
+```
+
+#### 암시적
+외부에서 액티비티를 실행할 수 있도록 manifest 파일에 intent 설정을 해줘야한다.
+```xml
+&lt;activity android:name=&quot;.oneActivity&quot; /&gt;
+&lt;activity android:name=&quot;.TwoActivity&quot;&gt;
+  &lt;intent-filter&gt;
+    &lt;actlon android:name=&quot;ACTION EDIT&quot; /&gt;
+  &lt;/intent-filter&gt;
+&lt;/activity&gt;
+&lt;service ... /&gt;
+&lt;receiver ... /&gt;
+```
+
+### 인텐트 필터
+데이터 전달
+- &lt;action /&gt; - android:name 은 유일하지 않아도된다. 기능을 보여주는 이름을 사용하자. eg, android.intent.action.MAIN
+- &lt;category /&gt; - android:name -&gt; android.intent.category.LAUNCHER
+- &lt;data /&gt; - 필요한 데이
+
+&gt; 런처앱은 `android.intent.category.LAUNCHER` 카테고리의 `action.intent.action.MAIN` 을 가져와서 리스트업하는 액티비티다.
+
+
+
+## Resource|리소스
+### 구성 한정자
+- https://developer.android.com/guide/topics/resources/providing-resources?hl=ko
+해당 리스트를 통해 리소스 디렉토리에 suffix 를 붙임으로써 특정 상황에서 사용되는 리소스 임을 명시한다. 언어, 디바이스 방향 상태, 해상도 등이 포함된다. 중복 명시도 가능한데 순서가 존재한다.
+- res/layout/activity_main.xml - 세로 모드에서 사용
+- res/layout/`land`/activity_main.xml - 가로 모드에서 사용
+
+## [[error]]
+
+### 설치 실패
+- [[firebase]] app distribution, [[app]] tester 등을 통해서 앱을 설치하려고하는데 계속 에러가 난다면 빌드를 universal apk 로 진행한다 [[diary:2023-12-31]]
+
+### 배포 버전에서 구글로그인 로그인 안됨
+- 플레이스토어 버전은 자체 핑거 프린트를 가지고 있음
+- [[play-console]] 에 접속 -&gt; 설정 -&gt; 앱 서명 -&gt; SHA-1 지문 **복사**
+- console.cloud.google.com -&gt; SHA-1 참조하여 *OAuth 2.0 클라이언트 ID* **생성** -&gt; 추가적으로 제공되는 json 은 신경쓸 필요 없음
+
+## link
+- [[flipper]]
+- [[scrcpy]]
+- [[adb]]
+- [[android-studio]]
+- [[react-native]]
+- [[emulator]]
+- [[java]]
+- [[kotlin]]
+- [[proxyman]]
+- [[mac]]
+- [[gradle]]
+- [[play-console]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/android"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# android"/><meta name="twitter:description" content="
+## 개발
+
+### 개발자 콘솔
++ https://play.google.com/console
+
+### 물리 디바이스 연결
+- 실기기 개발자모드 활성화
+  - 설정 -&gt;  시스템 -&gt;  휴대폰 정보 -&gt;  소프트웨어 정보 -&gt; 빌드 번호 7회 터치
+- USB 디버깅 활성화
+  - 설정 -&gt;  시스템 -&gt;  개발자 옵션 -&gt; USB 디버깅 활성화 -&gt; 추가 다이얼로그 확인
+- `adb devices` 로 물리 디바이스가 연결된 것 확인 가능
+
+### SHA-1 인증서 디지털 지문
+- [[keytool]] 참고
+- google 인증에서 사용됨
+
+## Android android-studio
+- Actions -&gt; New Module
+
+### [[mac]] -&gt; [[android]] 파일복사
+#### android file transfer 를 통한 복사
+```sh 
+brew install --cask android-file-transfer
+```
+- 설치하고 나서 안드로이드 기기를 연결하면, finder 형태로 디바이스 스토리지가 보인다
+
+#### [[adb]] 를 이용한 복사
+```sh 
+adb push app/build/outputs/apk/release/app-release.apk /storage/self/primary/Download/
+```
+
+## 설정
+### Android Studio
+#### Auto import
+- Settings -&gt; Editor -&gt; General -&gt; Auto import -&gt; Kotlin
+  - [X] Add unambiguous imports on to fly
+  - [X] Optimize imports on the fly (for current project)
+  
+### Emulator|에뮬레이터
+- 아래서 위로 스와이프 -&gt; 시스템
+  - Auto Rotate
+  - System Language -&gt; 테스트할 언어 첫번째로
+
+## Layout|레이아웃
+- LinearLayout
+- RelativeLayout
+- FrameLayout
+- GridLayout
+- ConstraintLayout
+
+## viewBinding
+- as-is
+```kt
+overridefunonCreate(savedlnstanceState: Bundle?) {
+    super.onCreate(savedlnstanceState)
+    
+    setContentView(R.layout.main_activity)
+    findViewById(R.id.text1)
+}
+```
+- to-be
+findViewById 사용을 피하기 위해서 [[gradle]] 에서 `viewBinding` 설정이 사용된다.
+```gradle
+android {
+    viewBinding {
+        enabled true
+    }
+}
+```
+```kt
+overridefunonCreate(savedlnstanceState: Bundle?) {
+    super.onCreate(savedlnstanceState)
+    
+    val binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+}
+```
+
+## Event|이벤트
+- Single Abstract Method(SAM) - 오브젝트 대신 메소드를 할당하여 처리한다.
+
+```kt
+override fun onCreate(savedlnstanceState: Bundle?) {
+    super.onCreate(savedlnstanceState)
+    
+    val binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+    
+    binding.startButton.setOnClickListener {
+        // 이벤트 처리
+    }
+}
+
+```
+
+## Life Cycle|생명주기
+- 액티비티 시작
+- onCreate call setContentView
+- onStart
+- onResume
+- 액티비티 실행(setContentView 에서 지정한 UI)
+- onPause 포커스가 없는상태, 화면 분할 등 -&gt; onResume
+- onStop 비활성화 상태, 홈 버튼을 눌러서 나간 상태 등-&gt; onRestart -&gt; onStart
+- onDestroy -&gt; onCreate
+- 액티비티 종료
+[[@todo]] restart 등 추가 필요
+
+### 화면을 회전화는 경우
+onResume -&gt; onPause -&gt; onStop -&gt; onSaveInstanceState -&gt; onDestroy
+-&gt; onCreate -&gt; onStart -&gt; onRestoreInstanceState -&gt; onResume
+
+## Intent|인텐트
+인텐트를 통해 시스템에 액티비티의 생성을 요청한다.
+```kotlin
+val intent = Intent(this, MainActivity::class.java)
+intent.putExtra(&quot;key&quot;, &quot;value&quot;)
+startActivity(intent)
+startActivityForResult(intent, intrequestCode)
+```
+생성 후 받는 쪽에서는 `getIntent` 를 통해서 인텐트를 얻고 인자를 가져올 수 있다.
+인텐트 실행시에 특정 앱을 지정하고싶다면 패키지를 설정한다.
+```kotlin
+intent.setPackage(&quot;com.google.android.apps.maps&quot;)
+```
+
+### error
+#### 없는 activity 를 지정한 경우(없는 intent)
+실행한 쪽에서 에러가 난다.
+#### Coludn&#x27;t sign in
+```text
+There was a problem communicating with Google servers.
+```
+
+### 액티비티 실행
+#### 명시적 
+앱의 내부에서는 명시적으로 클래스를 지정해서 실행, 암시적으로도 가능하나 권장된다.
+암시적으로는 실행할 수 없는 경우도 존재한다.
+```kotlin
+val intent = Intent(this, MainActivity::class.java)
+```
+
+#### 암시적
+외부에서 액티비티를 실행할 수 있도록 manifest 파일에 intent 설정을 해줘야한다.
+```xml
+&lt;activity android:name=&quot;.oneActivity&quot; /&gt;
+&lt;activity android:name=&quot;.TwoActivity&quot;&gt;
+  &lt;intent-filter&gt;
+    &lt;actlon android:name=&quot;ACTION EDIT&quot; /&gt;
+  &lt;/intent-filter&gt;
+&lt;/activity&gt;
+&lt;service ... /&gt;
+&lt;receiver ... /&gt;
+```
+
+### 인텐트 필터
+데이터 전달
+- &lt;action /&gt; - android:name 은 유일하지 않아도된다. 기능을 보여주는 이름을 사용하자. eg, android.intent.action.MAIN
+- &lt;category /&gt; - android:name -&gt; android.intent.category.LAUNCHER
+- &lt;data /&gt; - 필요한 데이
+
+&gt; 런처앱은 `android.intent.category.LAUNCHER` 카테고리의 `action.intent.action.MAIN` 을 가져와서 리스트업하는 액티비티다.
+
+
+
+## Resource|리소스
+### 구성 한정자
+- https://developer.android.com/guide/topics/resources/providing-resources?hl=ko
+해당 리스트를 통해 리소스 디렉토리에 suffix 를 붙임으로써 특정 상황에서 사용되는 리소스 임을 명시한다. 언어, 디바이스 방향 상태, 해상도 등이 포함된다. 중복 명시도 가능한데 순서가 존재한다.
+- res/layout/activity_main.xml - 세로 모드에서 사용
+- res/layout/`land`/activity_main.xml - 가로 모드에서 사용
+
+## [[error]]
+
+### 설치 실패
+- [[firebase]] app distribution, [[app]] tester 등을 통해서 앱을 설치하려고하는데 계속 에러가 난다면 빌드를 universal apk 로 진행한다 [[diary:2023-12-31]]
+
+### 배포 버전에서 구글로그인 로그인 안됨
+- 플레이스토어 버전은 자체 핑거 프린트를 가지고 있음
+- [[play-console]] 에 접속 -&gt; 설정 -&gt; 앱 서명 -&gt; SHA-1 지문 **복사**
+- console.cloud.google.com -&gt; SHA-1 참조하여 *OAuth 2.0 클라이언트 ID* **생성** -&gt; 추가적으로 제공되는 json 은 신경쓸 필요 없음
+
+## link
+- [[flipper]]
+- [[scrcpy]]
+- [[adb]]
+- [[android-studio]]
+- [[react-native]]
+- [[emulator]]
+- [[java]]
+- [[kotlin]]
+- [[proxyman]]
+- [[mac]]
+- [[gradle]]
+- [[play-console]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/9ca9b03
+" class="bg-white text-black">9ca9b03</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/android.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/android.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/android.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/android"><span class="underline">android</span><sup>23</sup></a></span><span><a class="text-blue-600" href="/public-wiki/keytool"><span class="underline">keytool</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/mac"><span class="underline">mac</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/adb"><span class="underline">adb</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/gradle"><span class="underline">gradle</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/@todo"><span class="underline">@todo</span><sup>24</sup></a></span><span><a class="text-blue-600" href="/public-wiki/error"><span class="underline">error</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/firebase"><span class="underline">firebase</span><sup>14</sup></a></span><span><a class="text-blue-600" href="/public-wiki/app"><span class="underline">app</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-31"><span class="underline">diary/2023-12-31</span><sup>93</sup></a></span><span><a class="text-blue-600" href="/public-wiki/play-console"><span class="underline">play-console</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/flipper"><span class="underline">flipper</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/scrcpy"><span class="underline">scrcpy</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/android-studio"><span class="underline">android-studio</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/react-native"><span class="underline">react-native</span><sup>90</sup></a></span><span><a class="text-blue-600" href="/public-wiki/emulator"><span class="underline">emulator</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/java"><span class="underline">java</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/kotlin"><span class="underline">kotlin</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/proxyman"><span class="underline">proxyman</span><sup>13</sup></a></span><span><a class="text-blue-600" href="/public-wiki/crash"><span class="underline">crash</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/deeplink"><span class="underline">deeplink</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/dev-tools"><span class="underline">dev-tools</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/devide-app-by-development-env"><span class="underline">devide-app-by-development-env</span><sup>30</sup></a></span><span><a class="text-blue-600" href="/public-wiki/fastlane"><span class="underline">fastlane</span><sup>26</sup></a></span><span><a class="text-blue-600" href="/public-wiki/fcm"><span class="underline">fcm</span><sup>21</sup></a></span><span><a class="text-blue-600" href="/public-wiki/firebase-app-check"><span class="underline">firebase-app-check</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/google-admob"><span class="underline">google-admob</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/google-analytics-for-firebase"><span class="underline">google-analytics-for-firebase</span><sup>16</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ios"><span class="underline">ios</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/mct"><span class="underline">mct</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/mobile"><span class="underline">mobile</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/proguard"><span class="underline">proguard</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/react-navigation"><span class="underline">react-navigation</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/uri-scheme"><span class="underline">uri-scheme</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-22"><span class="underline">diary/2023-12-22</span><sup>12</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-24"><span class="underline">diary/2023-12-24</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-26"><span class="underline">diary/2023-12-26</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-01"><span class="underline">diary/2024-01-01</span><sup>16</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-05"><span class="underline">diary/2024-01-05</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-15"><span class="underline">diary/2024-01-15</span><sup>14</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-16"><span class="underline">diary/2024-01-16</span><sup>15</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-20"><span class="underline">diary/2024-01-20</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-23"><span class="underline">diary/2024-01-23</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-25"><span class="underline">diary/2024-01-25</span><sup>59</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-02-25"><span class="underline">diary/2024-02-25</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-03-19"><span class="underline">diary/2024-03-19</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-03-20"><span class="underline">diary/2024-03-20</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-07-06"><span class="underline">diary/2024-07-06</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-07-07"><span class="underline">diary/2024-07-07</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-12-31"><span class="underline">diary/2024-12-31</span><sup>441</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#android">android</a></div><div class="pl-2"><a href="#개발">개발</a></div><div class="pl-4"><a href="#개발자-콘솔">개발자 콘솔</a></div><div class="pl-4"><a href="#물리-디바이스-연결">물리 디바이스 연결</a></div><div class="pl-4"><a href="#sha-1-인증서-디지털-지문">SHA-1 인증서 디지털 지문</a></div><div class="pl-2"><a href="#android-android-studio">Android android-studio</a></div><div class="pl-4"><a href="#mac---android-파일복사">mac -&gt; android 파일복사</a></div><div class="pl-6"><a href="#android-file-transfer-를-통한-복사">android file transfer 를 통한 복사</a></div><div class="pl-6"><a href="#adb-를-이용한-복사">adb 를 이용한 복사</a></div><div class="pl-2"><a href="#설정">설정</a></div><div class="pl-4"><a href="#android-studio">Android Studio</a></div><div class="pl-6"><a href="#auto-import">Auto import</a></div><div class="pl-4"><a href="#emulator에뮬레이터">Emulator|에뮬레이터</a></div><div class="pl-2"><a href="#layout레이아웃">Layout|레이아웃</a></div><div class="pl-2"><a href="#viewbinding">viewBinding</a></div><div class="pl-2"><a href="#event이벤트">Event|이벤트</a></div><div class="pl-2"><a href="#life-cycle생명주기">Life Cycle|생명주기</a></div><div class="pl-4"><a href="#화면을-회전화는-경우">화면을 회전화는 경우</a></div><div class="pl-2"><a href="#intent인텐트">Intent|인텐트</a></div><div class="pl-4"><a href="#error">error</a></div><div class="pl-6"><a href="#없는-activity-를-지정한-경우없는-intent">없는 activity 를 지정한 경우(없는 intent)</a></div><div class="pl-6"><a href="#coludnt-sign-in">Coludn&#x27;t sign in</a></div><div class="pl-4"><a href="#액티비티-실행">액티비티 실행</a></div><div class="pl-6"><a href="#명시적">명시적</a></div><div class="pl-6"><a href="#암시적">암시적</a></div><div class="pl-4"><a href="#인텐트-필터">인텐트 필터</a></div><div class="pl-2"><a href="#resource리소스">Resource|리소스</a></div><div class="pl-4"><a href="#구성-한정자">구성 한정자</a></div><div class="pl-2"><a href="#error-1">error</a></div><div class="pl-4"><a href="#설치-실패">설치 실패</a></div><div class="pl-4"><a href="#배포-버전에서-구글로그인-로그인-안됨">배포 버전에서 구글로그인 로그인 안됨</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="android">android</h1>
+<h2 id="개발">개발</h2>
+<h3 id="개발자-콘솔">개발자 콘솔</h3>
+<ul>
+<li><a href="https://play.google.com/console" target="_blank">[URL] https://play.google.com/console</a></li>
+</ul>
+<h3 id="물리-디바이스-연결">물리 디바이스 연결</h3>
+<ul>
+<li>실기기 개발자모드 활성화<ul>
+<li>설정 -&gt;  시스템 -&gt;  휴대폰 정보 -&gt;  소프트웨어 정보 -&gt; 빌드 번호 7회 터치</li>
+</ul>
+</li>
+<li>USB 디버깅 활성화<ul>
+<li>설정 -&gt;  시스템 -&gt;  개발자 옵션 -&gt; USB 디버깅 활성화 -&gt; 추가 다이얼로그 확인</li>
+</ul>
+</li>
+<li><code class="span">adb devices</code> 로 물리 디바이스가 연결된 것 확인 가능</li>
+</ul>
+<h3 id="sha-1-인증서-디지털-지문">SHA-1 인증서 디지털 지문</h3>
+<ul>
+<li><a href="keytool">keytool</a> 참고</li>
+<li>google 인증에서 사용됨</li>
+</ul>
+<h2 id="android-android-studio">Android android-studio</h2>
+<ul>
+<li>Actions -&gt; New Module</li>
+</ul>
+<h3 id="mac---android-파일복사"><a href="mac">mac</a> -&gt; <a href="android">android</a> 파일복사</h3>
+<h4 id="android-file-transfer-를-통한-복사">android file transfer 를 통한 복사</h4>
+<pre><code class="hljs language-sh">brew install --cask android-file-transfer
+</code></pre><ul>
+<li>설치하고 나서 안드로이드 기기를 연결하면, finder 형태로 디바이스 스토리지가 보인다</li>
+</ul>
+<h4 id="adb-를-이용한-복사"><a href="adb">adb</a> 를 이용한 복사</h4>
+<pre><code class="hljs language-sh">adb push app/build/outputs/apk/release/app-release.apk /storage/self/primary/Download/
+</code></pre><h2 id="설정">설정</h2>
+<h3 id="android-studio">Android Studio</h3>
+<h4 id="auto-import">Auto import</h4>
+<ul>
+<li>Settings -&gt; Editor -&gt; General -&gt; Auto import -&gt; Kotlin<ul>
+<li><input checked="" disabled="" type="checkbox"> Add unambiguous imports on to fly</li>
+<li><input checked="" disabled="" type="checkbox"> Optimize imports on the fly (for current project)</li>
+</ul>
+</li>
+</ul>
+<h3 id="emulator에뮬레이터">Emulator|에뮬레이터</h3>
+<ul>
+<li>아래서 위로 스와이프 -&gt; 시스템<ul>
+<li>Auto Rotate</li>
+<li>System Language -&gt; 테스트할 언어 첫번째로</li>
+</ul>
+</li>
+</ul>
+<h2 id="layout레이아웃">Layout|레이아웃</h2>
+<ul>
+<li>LinearLayout</li>
+<li>RelativeLayout</li>
+<li>FrameLayout</li>
+<li>GridLayout</li>
+<li>ConstraintLayout</li>
+</ul>
+<h2 id="viewbinding">viewBinding</h2>
+<ul>
+<li>as-is</li>
+</ul>
+<pre><code class="hljs language-kt">overridefunonCreate(savedlnstanceState: Bundle?) {
+    <span class="hljs-keyword">super</span>.onCreate(savedlnstanceState)
+    
+    setContentView(R.layout.main_activity)
+    findViewById(R.id.text1)
+}
+</code></pre><ul>
+<li>to-be
+findViewById 사용을 피하기 위해서 <a href="gradle">gradle</a> 에서 <code class="span">viewBinding</code> 설정이 사용된다.</li>
+</ul>
+<pre><code class="hljs language-gradle">android {
+    viewBinding {
+        enabled <span class="hljs-keyword">true</span>
+    }
+}
+</code></pre><pre><code class="hljs language-kt">overridefunonCreate(savedlnstanceState: Bundle?) {
+    <span class="hljs-keyword">super</span>.onCreate(savedlnstanceState)
+    
+    <span class="hljs-keyword">val</span> binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+}
+</code></pre><h2 id="event이벤트">Event|이벤트</h2>
+<ul>
+<li>Single Abstract Method(SAM) - 오브젝트 대신 메소드를 할당하여 처리한다.</li>
+</ul>
+<pre><code class="hljs language-kt"><span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(savedlnstanceState: <span class="hljs-type">Bundle</span>?)</span></span> {
+    <span class="hljs-keyword">super</span>.onCreate(savedlnstanceState)
+    
+    <span class="hljs-keyword">val</span> binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
+    
+    binding.startButton.setOnClickListener {
+        <span class="hljs-comment">// 이벤트 처리</span>
+    }
+}
+</code></pre><h2 id="life-cycle생명주기">Life Cycle|생명주기</h2>
+<ul>
+<li>액티비티 시작</li>
+<li>onCreate call setContentView</li>
+<li>onStart</li>
+<li>onResume</li>
+<li>액티비티 실행(setContentView 에서 지정한 UI)</li>
+<li>onPause 포커스가 없는상태, 화면 분할 등 -&gt; onResume</li>
+<li>onStop 비활성화 상태, 홈 버튼을 눌러서 나간 상태 등-&gt; onRestart -&gt; onStart</li>
+<li>onDestroy -&gt; onCreate</li>
+<li>액티비티 종료
+<a href="@todo">@todo</a> restart 등 추가 필요</li>
+</ul>
+<h3 id="화면을-회전화는-경우">화면을 회전화는 경우</h3>
+<p>onResume -&gt; onPause -&gt; onStop -&gt; onSaveInstanceState -&gt; onDestroy
+-&gt; onCreate -&gt; onStart -&gt; onRestoreInstanceState -&gt; onResume</p>
+<h2 id="intent인텐트">Intent|인텐트</h2>
+<p>인텐트를 통해 시스템에 액티비티의 생성을 요청한다.</p>
+<pre><code class="hljs language-kotlin"><span class="hljs-keyword">val</span> intent = Intent(<span class="hljs-keyword">this</span>, MainActivity::<span class="hljs-keyword">class</span>.java)
+intent.putExtra(<span class="hljs-string">&quot;key&quot;</span>, <span class="hljs-string">&quot;value&quot;</span>)
+startActivity(intent)
+startActivityForResult(intent, intrequestCode)
+</code></pre><p>생성 후 받는 쪽에서는 <code class="span">getIntent</code> 를 통해서 인텐트를 얻고 인자를 가져올 수 있다.
+인텐트 실행시에 특정 앱을 지정하고싶다면 패키지를 설정한다.</p>
+<pre><code class="hljs language-kotlin">intent.setPackage(<span class="hljs-string">&quot;com.google.android.apps.maps&quot;</span>)
+</code></pre><h3 id="error">error</h3>
+<h4 id="없는-activity-를-지정한-경우없는-intent">없는 activity 를 지정한 경우(없는 intent)</h4>
+<p>실행한 쪽에서 에러가 난다.</p>
+<h4 id="coludnt-sign-in">Coludn&#39;t sign in</h4>
+<pre><code class="hljs language-text">There was a problem communicating with Google servers.
+</code></pre><h3 id="액티비티-실행">액티비티 실행</h3>
+<h4 id="명시적">명시적</h4>
+<p>앱의 내부에서는 명시적으로 클래스를 지정해서 실행, 암시적으로도 가능하나 권장된다.
+암시적으로는 실행할 수 없는 경우도 존재한다.</p>
+<pre><code class="hljs language-kotlin"><span class="hljs-keyword">val</span> intent = Intent(<span class="hljs-keyword">this</span>, MainActivity::<span class="hljs-keyword">class</span>.java)
+</code></pre><h4 id="암시적">암시적</h4>
+<p>외부에서 액티비티를 실행할 수 있도록 manifest 파일에 intent 설정을 해줘야한다.</p>
+<pre><code class="hljs language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">activity</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">&quot;.oneActivity&quot;</span> /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">activity</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">&quot;.TwoActivity&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">intent-filter</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">actlon</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">&quot;ACTION EDIT&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">intent-filter</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">activity</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">service</span> <span class="hljs-attr">...</span> /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">receiver</span> <span class="hljs-attr">...</span> /&gt;</span>
+</code></pre><h3 id="인텐트-필터">인텐트 필터</h3>
+<p>데이터 전달</p>
+<ul>
+<li><action /> - android:name 은 유일하지 않아도된다. 기능을 보여주는 이름을 사용하자. eg, android.intent.action.MAIN</li>
+<li><category /> - android:name -&gt; android.intent.category.LAUNCHER</li>
+<li><data /> - 필요한 데이</li>
+</ul>
+<blockquote><p>런처앱은 <code class="span">android.intent.category.LAUNCHER</code> 카테고리의 <code class="span">action.intent.action.MAIN</code> 을 가져와서 리스트업하는 액티비티다.</p></blockquote><h2 id="resource리소스">Resource|리소스</h2>
+<h3 id="구성-한정자">구성 한정자</h3>
+<ul>
+<li><a href="https://developer.android.com/guide/topics/resources/providing-resources?hl=ko" target="_blank">[URL] https://developer.android.com/guide/topics/resources/providing-resources?hl=ko</a>
+해당 리스트를 통해 리소스 디렉토리에 suffix 를 붙임으로써 특정 상황에서 사용되는 리소스 임을 명시한다. 언어, 디바이스 방향 상태, 해상도 등이 포함된다. 중복 명시도 가능한데 순서가 존재한다.</li>
+<li>res/layout/activity_main.xml - 세로 모드에서 사용</li>
+<li>res/layout/<code class="span">land</code>/activity_main.xml - 가로 모드에서 사용</li>
+</ul>
+<h2 id="error-1"><a href="error">error</a></h2>
+<h3 id="설치-실패">설치 실패</h3>
+<ul>
+<li><a href="firebase">firebase</a> app distribution, <a href="app">app</a> tester 등을 통해서 앱을 설치하려고하는데 계속 에러가 난다면 빌드를 universal apk 로 진행한다 <a href="/public-wiki/diary/2023-12-31">[diary] diary:2023-12-31</a></li>
+</ul>
+<h3 id="배포-버전에서-구글로그인-로그인-안됨">배포 버전에서 구글로그인 로그인 안됨</h3>
+<ul>
+<li>플레이스토어 버전은 자체 핑거 프린트를 가지고 있음</li>
+<li><a href="play-console">play-console</a> 에 접속 -&gt; 설정 -&gt; 앱 서명 -&gt; SHA-1 지문 <strong>복사</strong></li>
+<li>console.cloud.google.com -&gt; SHA-1 참조하여 <em>OAuth 2.0 클라이언트 ID</em> <strong>생성</strong> -&gt; 추가적으로 제공되는 json 은 신경쓸 필요 없음</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="flipper">flipper</a></li>
+<li><a href="scrcpy">scrcpy</a></li>
+<li><a href="adb">adb</a></li>
+<li><a href="android-studio">android-studio</a></li>
+<li><a href="react-native">react-native</a></li>
+<li><a href="emulator">emulator</a></li>
+<li><a href="java">java</a></li>
+<li><a href="kotlin">kotlin</a></li>
+<li><a href="proxyman">proxyman</a></li>
+<li><a href="mac">mac</a></li>
+<li><a href="gradle">gradle</a></li>
+<li><a href="play-console">play-console</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-5f0f3d25c7817892.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-e6f48f16817ae44e.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"android\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"Mb4fhV7INNfskzQrtUOiE\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/android\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"android\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"android\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"android\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n14:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n13:{\"source\":\"android\",\"target\":\"android\"}\n15:T299c,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"android\"\u003eandroid\u003c/h1\u003e\n\u003ch2 id=\"개발\"\u003e개발\u003c/h2\u003e\n\u003ch3 id=\"개발자-콘솔\"\u003e개발자 콘솔\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://play.google.com/console\" target=\"_blank\"\u003e[URL] https://play.google.com/console\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"물리-디바이스-연결\"\u003e물리 디바이스 연결\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e실기기 개발자모드 활성화\u003cul\u003e\n\u003cli\u003e설정 -\u0026gt;  시스템 -\u0026gt;  휴대폰 정보 -\u0026gt;  소프트웨어 정보 -\u0026gt; 빌드 번호 7회 터치\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eUSB 디버깅 활성화\u003cul\u003e\n\u003cli\u003e설정 -\u0026gt;  시스템 -\u0026gt;  개발자 옵션 -\u0026gt; USB 디버깅 활성화 -\u0026gt; 추가 다이얼로그 확인\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eadb devices\u003c/code\u003e 로 물리 디바이스가 연결된 것 확인 가능\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"sha-1-인증서-디지털-지문\"\u003eSHA-1 인증서 디지털 지문\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"keytool\"\u003ekeytool\u003c/a\u003e 참고\u003c/li\u003e\n\u003cli\u003egoogle 인증에서 사용됨\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"android-android-studio\"\u003eAndroid android-studio\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eActions -\u0026gt; New Module\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"mac---android-파일복사\"\u003e\u003ca href=\"mac\"\u003emac\u003c/a\u003e -\u0026gt; \u003ca href=\"android\"\u003eandroid\u003c/a\u003e 파일복사\u003c/h3\u003e\n\u003ch4 id=\"android-file-transfer-를-통한-복사\"\u003eandroid file transfer 를 통한 복사\u003c/h4\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ebrew install --cask android-file-transfer\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e설치하고 나서 안드로이드 기기를 연결하면, finder 형태로 디바이스 스토리지가 보인다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4 id=\"adb-를-이용한-복사\"\u003e\u003ca href=\"adb\"\u003eadb\u003c/a\u003e 를 이용한 복사\u003c/h4\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eadb push app/build/outputs/apk/release/app-release.apk /storage/self/primary/Download/\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"설정\"\u003e설정\u003c/h2\u003e\n\u003ch3 id=\"android-studio\"\u003eAndroid Studio\u003c/h3\u003e\n\u003ch4 id=\"auto-import\"\u003eAuto import\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003eSettings -\u0026gt; Editor -\u0026gt; General -\u0026gt; Auto import -\u0026gt; Kotlin\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e Add unambiguous imports on to fly\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e Optimize imports on the fly (for current project)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"emulator에뮬레이터\"\u003eEmulator|에뮬레이터\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e아래서 위로 스와이프 -\u0026gt; 시스템\u003cul\u003e\n\u003cli\u003eAuto Rotate\u003c/li\u003e\n\u003cli\u003eSystem Language -\u0026gt; 테스트할 언어 첫번째로\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"layout레이아웃\"\u003eLayout|레이아웃\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eLinearLayout\u003c/li\u003e\n\u003cli\u003eRelativeLayout\u003c/li\u003e\n\u003cli\u003eFrameLayout\u003c/li\u003e\n\u003cli\u003eGridLayout\u003c/li\u003e\n\u003cli\u003eConstraintLayout\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"viewbinding\"\u003eviewBinding\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eas-is\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-kt\"\u003eoverridefunonCreate(savedlnstanceState: Bundle?) {\n    \u003cspan class=\"hljs-keyword\"\u003esuper\u003c/span\u003e.onCreate(savedlnstanceState)\n    \n    setContentView(R.layout.main_activity)\n    findViewById(R.id.text1)\n}\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003eto-be\nfindViewById 사용을 피하기 위해서 \u003ca href=\"gradle\"\u003egradle\u003c/a\u003e 에서 \u003ccode class=\"span\"\u003eviewBinding\u003c/code\u003e 설정이 사용된다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-gradle\"\u003eandroid {\n    viewBinding {\n        enabled \u003cspan class=\"hljs-keyword\"\u003etrue\u003c/span\u003e\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\u003cpre\u003e\u003ccode class=\"hljs language-kt\"\u003eoverridefunonCreate(savedlnstanceState: Bundle?) {\n    \u003cspan class=\"hljs-keyword\"\u003esuper\u003c/span\u003e.onCreate(savedlnstanceState)\n    \n    \u003cspan class=\"hljs-keyword\"\u003eval\u003c/span\u003e binding = ActivityMainBinding.inflate(layoutInflater)\n    setContentView(binding.root)\n}\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"event이벤트\"\u003eEvent|이벤트\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eSingle Abstract Method(SAM) - 오브젝트 대신 메소드를 할당하여 처리한다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-kt\"\u003e\u003cspan class=\"hljs-keyword\"\u003eoverride\u003c/span\u003e \u003cspan class=\"hljs-function\"\u003e\u003cspan class=\"hljs-keyword\"\u003efun\u003c/span\u003e \u003cspan class=\"hljs-title\"\u003eonCreate\u003c/span\u003e\u003cspan class=\"hljs-params\"\u003e(savedlnstanceState: \u003cspan class=\"hljs-type\"\u003eBundle\u003c/span\u003e?)\u003c/span\u003e\u003c/span\u003e {\n    \u003cspan class=\"hljs-keyword\"\u003esuper\u003c/span\u003e.onCreate(savedlnstanceState)\n    \n    \u003cspan class=\"hljs-keyword\"\u003eval\u003c/span\u003e binding = ActivityMainBinding.inflate(layoutInflater)\n    setContentView(binding.root)\n    \n    binding.startButton.setOnClickListener {\n        \u003cspan class=\"hljs-comment\"\u003e// 이벤트 처리\u003c/span\u003e\n    }\n}\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"life-cycle생명주기\"\u003eLife Cycle|생명주기\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e액티비티 시작\u003c/li\u003e\n\u003cli\u003eonCreate call setContentView\u003c/li\u003e\n\u003cli\u003eonStart\u003c/li\u003e\n\u003cli\u003eonResume\u003c/li\u003e\n\u003cli\u003e액티비티 실행(setContentView 에서 지정한 UI)\u003c/li\u003e\n\u003cli\u003eonPause 포커스가 없는상태, 화면 분할 등 -\u0026gt; onResume\u003c/li\u003e\n\u003cli\u003eonStop 비활성화 상태, 홈 버튼을 눌러서 나간 상태 등-\u0026gt; onRestart -\u0026gt; onStart\u003c/li\u003e\n\u003cli\u003eonDestroy -\u0026gt; onCreate\u003c/li\u003e\n\u003cli\u003e액티비티 종료\n\u003ca href=\"@todo\"\u003e@todo\u003c/a\u003e restart 등 추가 필요\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"화면을-회전화는-경우\"\u003e화면을 회전화는 경우\u003c/h3\u003e\n\u003cp\u003eonResume -\u0026gt; onPause -\u0026gt; onStop -\u0026gt; onSaveInstanceState -\u0026gt; onDestroy\n-\u0026gt; onCreate -\u0026gt; onStart -\u0026gt; onRestoreInstanceState -\u0026gt; onResume\u003c/p\u003e\n\u003ch2 id=\"intent인텐트\"\u003eIntent|인텐트\u003c/h2\u003e\n\u003cp\u003e인텐트를 통해 시스템에 액티비티의 생성을 요청한다.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-kotlin\"\u003e\u003cspan class=\"hljs-keyword\"\u003eval\u003c/span\u003e intent = Intent(\u003cspan class=\"hljs-keyword\"\u003ethis\u003c/span\u003e, MainActivity::\u003cspan class=\"hljs-keyword\"\u003eclass\u003c/span\u003e.java)\nintent.putExtra(\u003cspan class=\"hljs-string\"\u003e\u0026quot;key\u0026quot;\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e\u0026quot;value\u0026quot;\u003c/span\u003e)\nstartActivity(intent)\nstartActivityForResult(intent, intrequestCode)\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003e생성 후 받는 쪽에서는 \u003ccode class=\"span\"\u003egetIntent\u003c/code\u003e 를 통해서 인텐트를 얻고 인자를 가져올 수 있다.\n인텐트 실행시에 특정 앱을 지정하고싶다면 패키지를 설정한다.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-kotlin\"\u003eintent.setPackage(\u003cspan class=\"hljs-string\"\u003e\u0026quot;com.google.android.apps.maps\u0026quot;\u003c/span\u003e)\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"error\"\u003eerror\u003c/h3\u003e\n\u003ch4 id=\"없는-activity-를-지정한-경우없는-intent\"\u003e없는 activity 를 지정한 경우(없는 intent)\u003c/h4\u003e\n\u003cp\u003e실행한 쪽에서 에러가 난다.\u003c/p\u003e\n\u003ch4 id=\"coludnt-sign-in\"\u003eColudn\u0026#39;t sign in\u003c/h4\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-text\"\u003eThere was a problem communicating with Google servers.\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"액티비티-실행\"\u003e액티비티 실행\u003c/h3\u003e\n\u003ch4 id=\"명시적\"\u003e명시적\u003c/h4\u003e\n\u003cp\u003e앱의 내부에서는 명시적으로 클래스를 지정해서 실행, 암시적으로도 가능하나 권장된다.\n암시적으로는 실행할 수 없는 경우도 존재한다.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-kotlin\"\u003e\u003cspan class=\"hljs-keyword\"\u003eval\u003c/span\u003e intent = Intent(\u003cspan class=\"hljs-keyword\"\u003ethis\u003c/span\u003e, MainActivity::\u003cspan class=\"hljs-keyword\"\u003eclass\u003c/span\u003e.java)\n\u003c/code\u003e\u003c/pre\u003e\u003ch4 id=\"암시적\"\u003e암시적\u003c/h4\u003e\n\u003cp\u003e외부에서 액티비티를 실행할 수 있도록 manifest 파일에 intent 설정을 해줘야한다.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-xml\"\u003e\u003cspan class=\"hljs-tag\"\u003e\u0026lt;\u003cspan class=\"hljs-name\"\u003eactivity\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003eandroid:name\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e\u0026quot;.oneActivity\u0026quot;\u003c/span\u003e /\u0026gt;\u003c/span\u003e\n\u003cspan class=\"hljs-tag\"\u003e\u0026lt;\u003cspan class=\"hljs-name\"\u003eactivity\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003eandroid:name\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e\u0026quot;.TwoActivity\u0026quot;\u003c/span\u003e\u0026gt;\u003c/span\u003e\n  \u003cspan class=\"hljs-tag\"\u003e\u0026lt;\u003cspan class=\"hljs-name\"\u003eintent-filter\u003c/span\u003e\u0026gt;\u003c/span\u003e\n    \u003cspan class=\"hljs-tag\"\u003e\u0026lt;\u003cspan class=\"hljs-name\"\u003eactlon\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003eandroid:name\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e\u0026quot;ACTION EDIT\u0026quot;\u003c/span\u003e /\u0026gt;\u003c/span\u003e\n  \u003cspan class=\"hljs-tag\"\u003e\u0026lt;/\u003cspan class=\"hljs-name\"\u003eintent-filter\u003c/span\u003e\u0026gt;\u003c/span\u003e\n\u003cspan class=\"hljs-tag\"\u003e\u0026lt;/\u003cspan class=\"hljs-name\"\u003eactivity\u003c/span\u003e\u0026gt;\u003c/span\u003e\n\u003cspan class=\"hljs-tag\"\u003e\u0026lt;\u003cspan class=\"hljs-name\"\u003eservice\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003e...\u003c/span\u003e /\u0026gt;\u003c/span\u003e\n\u003cspan class=\"hljs-tag\"\u003e\u0026lt;\u003cspan class=\"hljs-name\"\u003ereceiver\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003e...\u003c/span\u003e /\u0026gt;\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"인텐트-필터\"\u003e인텐트 필터\u003c/h3\u003e\n\u003cp\u003e데이터 전달\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003caction /\u003e - android:name 은 유일하지 않아도된다. 기능을 보여주는 이름을 사용하자. eg, android.intent.action.MAIN\u003c/li\u003e\n\u003cli\u003e\u003ccategory /\u003e - android:name -\u0026gt; android.intent.category.LAUNCHER\u003c/li\u003e\n\u003cli\u003e\u003cdata /\u003e - 필요한 데이\u003c/li\u003e\n\u003c/ul\u003e\n\u003cblockquote\u003e\u003cp\u003e런처앱은 \u003ccode class=\"span\"\u003eandroid.intent.category.LAUNCHER\u003c/code\u003e 카테고리의 \u003ccode class=\"span\"\u003eaction.intent.action.MAIN\u003c/code\u003e 을 가져와서 리스트업하는 액티비티다.\u003c/p\u003e\u003c/blockquote\u003e\u003ch2 id=\"resource리소스\"\u003eResource|리소스\u003c/h2\u003e\n\u003ch3 id=\"구성-한정자\"\u003e구성 한정자\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://developer.android.com/guide/topics/resources/providing-resources?hl=ko\" target=\"_blank\"\u003e[URL] https://developer.android.com/guide/topics/resources/providing-resources?hl=ko\u003c/a\u003e\n해당 리스트를 통해 리소스 디렉토리에 suffix 를 붙임으로써 특정 상황에서 사용되는 리소스 임을 명시한다. 언어, 디바이스 방향 상태, 해상도 등이 포함된다. 중복 명시도 가능한데 순서가 존재한다.\u003c/li\u003e\n\u003cli\u003eres/layout/activity_main.xml - 세로 모드에서 사용\u003c/li\u003e\n\u003cli\u003eres/layout/\u003ccode class=\"span\"\u003eland\u003c/code\u003e/activity_main.xml - 가로 모드에서 사용\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"error-1\"\u003e\u003ca href=\"error\"\u003eerror\u003c/a\u003e\u003c/h2\u003e\n\u003ch3 id=\"설치-실패\"\u003e설치 실패\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"firebase\"\u003efirebase\u003c/a\u003e app distribution, \u003ca href=\"app\"\u003eapp\u003c/a\u003e tester 등을 통해서 앱을 설치하려고하는데 계속 에러가 난다면 빌드를 universal apk 로 진행한다 \u003ca href=\"/public-wiki/diary/2023-12-31\"\u003e[diary] diary:2023-12-31\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"배포-버전에서-구글로그인-로그인-안됨\"\u003e배포 버전에서 구글로그인 로그인 안됨\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e플레이스토어 버전은 자체 핑거 프린트를 가지고 있음\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"play-console\"\u003eplay-console\u003c/a\u003e 에 접속 -\u0026gt; 설정 -\u0026gt; 앱 서명 -\u0026gt; SHA-1 지문 \u003cstrong\u003e복사\u003c/strong\u003e\u003c/li\u003e\n\u003cli\u003econsole.cloud.google.com -\u0026gt; SHA-1 참조하여 \u003cem\u003eOAuth 2.0 클라이언트 ID\u003c/em\u003e \u003cstrong\u003e생성\u003c/strong\u003e -\u0026gt; 추가적으로 제공되는 json 은 신경쓸 필요 없음\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"flipper\"\u003eflipper\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"scrcpy\"\u003escrcpy\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"adb\"\u003eadb\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"android-studio\"\u003eandroid-studio\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"react-native\"\u003ereact-native\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"emulator\"\u003eemulator\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"java\"\u003ejava\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"kotlin\"\u003ekotlin\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"proxyman\"\u003eproxyman\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"mac\"\u003emac\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"gradle\"\u003egradle\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"play-console\"\u003eplay-console\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/9ca9b03\\n\",\"className\":\"bg-white text-black\",\"children\":\"9ca9b03\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/android.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/android.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/android.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"android\",\"name\":\"android\",\"val\":23},{\"id\":\"keytool\",\"name\":\"keytool\",\"val\":5},{\"id\":\"mac\",\"name\":\"mac\",\"val\":\"$undefined\"},{\"id\":\"adb\",\"name\":\"adb\",\"val\":6},{\"id\":\"gradle\",\"name\":\"gradle\",\"val\":1},{\"id\":\"@todo\",\"name\":\"@todo\",\"val\":24},{\"id\":\"error\",\"name\":\"error\",\"val\":4},{\"id\":\"firebase\",\"name\":\"firebase\",\"val\":14},{\"id\":\"app\",\"name\":\"app\",\"val\":3},{\"id\":\"diary/2023-12-31\",\"name\":\"diary/2023-12-31\",\"val\":93},{\"id\":\"play-console\",\"name\":\"play-console\",\"val\":8},{\"id\":\"flipper\",\"name\":\"flipper\",\"val\":4},{\"id\":\"scrcpy\",\"name\":\"scrcpy\",\"val\":2},{\"id\":\"android-studio\",\"name\":\"android-studio\",\"val\":9},{\"id\":\"react-native\",\"name\":\"react-native\",\"val\":90},{\"id\":\"emulator\",\"name\":\"emulator\",\"val\":2},{\"id\":\"java\",\"name\":\"java\",\"val\":2},{\"id\":\"kotlin\",\"name\":\"kotlin\",\"val\":2},{\"id\":\"proxyman\",\"name\":\"proxyman\",\"val\":13},{\"id\":\"crash\",\"name\":\"crash\",\"val\":6},{\"id\":\"deeplink\",\"name\":\"deeplink\",\"val\":6},{\"id\":\"dev-tools\",\"name\":\"dev-tools\",\"val\":8},{\"id\":\"devide-app-by-development-env\",\"name\":\"devide-app-by-development-env\",\"val\":30},{\"id\":\"fastlane\",\"name\":\"fastlane\",\"val\":26},{\"id\":\"fcm\",\"name\":\"fcm\",\"val\":21},{\"id\":\"firebase-app-check\",\"name\":\"firebase-app-check\",\"val\":11},{\"id\":\"google-admob\",\"name\":\"google-admob\",\"val\":7},{\"id\":\"google-analytics-for-firebase\",\"name\":\"google-analytics-for-firebase\",\"val\":16},{\"id\":\"ios\",\"name\":\"ios\",\"val\":11},{\"id\":\"mct\",\"name\":\"mct\",\"val\":3},{\"id\":\"mobile\",\"name\":\"mobile\",\"val\":8},{\"id\":\"proguard\",\"name\":\"proguard\",\"val\":3},{\"id\":\"react-navigation\",\"name\":\"react-navigation\",\"val\":3},{\"id\":\"uri-scheme\",\"name\":\"uri-scheme\",\"val\":4},{\"id\":\"diary/2023-12-22\",\"name\":\"diary/2023-12-22\",\"val\":12},{\"id\":\"diary/2023-12-24\",\"name\":\"diary/2023-12-24\",\"val\":7},{\"id\":\"diary/2023-12-26\",\"name\":\"diary/2023-12-26\",\"val\":9},{\"id\":\"diary/2024-01-01\",\"name\":\"diary/2024-01-01\",\"val\":16},{\"id\":\"diary/2024-01-05\",\"name\":\"diary/2024-01-05\",\"val\":5},{\"id\":\"diary/2024-01-15\",\"name\":\"diary/2024-01-15\",\"val\":14},{\"id\":\"diary/2024-01-16\",\"name\":\"diary/2024-01-16\",\"val\":15},{\"id\":\"diary/2024-01-20\",\"name\":\"diary/2024-01-20\",\"val\":2},{\"id\":\"diary/2024-01-23\",\"name\":\"diary/2024-01-23\",\"val\":7},{\"id\":\"diary/2024-01-25\",\"name\":\"diary/2024-01-25\",\"val\":59},{\"id\":\"diary/2024-02-25\",\"name\":\"diary/2024-02-25\",\"val\":4},{\"id\":\"diary/2024-03-19\",\"name\":\"diary/2024-03-19\",\"val\":4},{\"id\":\"diary/2024-03-20\",\"name\":\"diary/2024-03-20\",\"val\":6},{\"id\":\"diary/2024-07-06\",\"name\":\"diary/2024-07-06\",\"val\":3},{\"id\":\"diary/2024-07-07\",\"name\":\"diary/2024-07-07\",\"val\":3},{\"id\":\"diary/2024-12-31\",\"name\":\"diary/2024-12-31\",\"val\":441}],\"links\":[{\"source\":\"android\",\"target\":\"keytool\"},{\"source\":\"android\",\"target\":\"mac\"},{\"source\":\"android\",\"target\":\"android\"},{\"source\":\"android\",\"target\":\"adb\"},{\"source\":\"android\",\"target\":\"gradle\"},{\"source\":\"android\",\"target\":\"@todo\"},{\"source\":\"android\",\"target\":\"error\"},{\"source\":\"android\",\"target\":\"firebase\"},{\"source\":\"android\",\"target\":\"app\"},{\"source\":\"android\",\"target\":\"diary/2023-12-31\"},{\"source\":\"android\",\"target\":\"play-console\"},{\"source\":\"android\",\"target\":\"flipper\"},{\"source\":\"android\",\"target\":\"scrcpy\"},{\"source\":\"android\",\"target\":\"adb\"},{\"source\":\"android\",\"target\":\"android-studio\"},{\"source\":\"android\",\"target\":\"react-native\"},{\"source\":\"android\",\"target\":\"emulator\"},{\"source\":\"android\",\"target\":\"java\"},{\"source\":\"android\",\"target\":\"kotlin\"},{\"source\":\"android\",\"target\":\"proxyman\"},{\"source\":\"android\",\"target\":\"mac\"},{\"source\":\"android\",\"target\":\"gradle\"},{\"source\":\"android\",\"target\":\"play-console\"},{\"source\":\"adb\",\"target\":\"android\"},{\"source\":\"android-studio\",\"target\":\"android\"},\"$13\",{\"source\":\"app\",\"target\":\"android\"},{\"source\":\"crash\",\"target\":\"android\"},{\"source\":\"deeplink\",\"target\":\"android\"},{\"source\":\"dev-tools\",\"target\":\"android\"},{\"source\":\"devide-app-by-development-env\",\"target\":\"android\"},{\"source\":\"emulator\",\"target\":\"android\"},{\"source\":\"fastlane\",\"target\":\"android\"},{\"source\":\"fastlane\",\"target\":\"android\"},{\"source\":\"fcm\",\"target\":\"android\"},{\"source\":\"fcm\",\"target\":\"android\"},{\"source\":\"fcm\",\"target\":\"android\"},{\"source\":\"fcm\",\"target\":\"android\"},{\"source\":\"firebase-app-check\",\"target\":\"android\"},{\"source\":\"firebase\",\"target\":\"android\"},{\"source\":\"firebase\",\"target\":\"android\"},{\"source\":\"google-admob\",\"target\":\"android\"},{\"source\":\"google-analytics-for-firebase\",\"target\":\"android\"},{\"source\":\"google-analytics-for-firebase\",\"target\":\"android\"},{\"source\":\"gradle\",\"target\":\"android\"},{\"source\":\"ios\",\"target\":\"android\"},{\"source\":\"java\",\"target\":\"android\"},{\"source\":\"keytool\",\"target\":\"android\"},{\"source\":\"kotlin\",\"target\":\"android\"},{\"source\":\"mct\",\"target\":\"android\"},{\"source\":\"mobile\",\"target\":\"android\"},{\"source\":\"play-console\",\"target\":\"android\"},{\"source\":\"proguard\",\"target\":\"android\"},{\"source\":\"proxyman\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-native\",\"target\":\"android\"},{\"source\":\"react-navigation\",\"target\":\"android\"},{\"source\":\"scrcpy\",\"target\":\"android\"},{\"source\":\"uri-scheme\",\"target\":\"android\"},{\"source\":\"diary/2023-12-22\",\"target\":\"android\"},{\"source\":\"diary/2023-12-24\",\"target\":\"android\"},{\"source\":\"diary/2023-12-26\",\"target\":\"android\"},{\"source\":\"diary/2024-01-01\",\"target\":\"android\"},{\"source\":\"diary/2024-01-01\",\"target\":\"android\"},{\"source\":\"diary/2024-01-01\",\"target\":\"android\"},{\"source\":\"diary/2024-01-05\",\"target\":\"android\"},{\"source\":\"diary/2024-01-15\",\"target\":\"android\"},{\"source\":\"diary/2024-01-16\",\"target\":\"android\"},{\"source\":\"diary/2024-01-16\",\"target\":\"android\"},{\"source\":\"diary/2024-01-16\",\"target\":\"android\"},{\"source\":\"diary/2024-01-20\",\"target\":\"android\"},{\"source\":\"diary/2024-01-23\",\"target\":\"android\"},{\"source\":\"diary/2024-01-25\",\"target\":\"android\"},{\"source\":\"diary/2024-02-25\",\"target\":\"android\"},{\"source\":\"diary/2024-03-19\",\"target\":\"android\"},{\"source\":\"diary/2024-03-20\",\"target\":\"android\"},{\"source\":\"diary/2024-07-06\",\"target\":\"android\"},{\"source\":\"diary/2024-07-07\",\"target\":\"android\"},{\"source\":\"diary/2024-12-31\",\"target\":\"android\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"android\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/android\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"android\"}],[\"$\",\"sup\",null,{\"children\":23}]]}]}],[\"$\",\"span\",\"keytool\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/keytool\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"keytool\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"mac\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/mac\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"mac\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"adb\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/adb\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"adb\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"gradle\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/gradle\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"gradle\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"@todo\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/@todo\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"@todo\"}],[\"$\",\"sup\",null,{\"children\":24}]]}]}],[\"$\",\"span\",\"error\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/error\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"error\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"firebase\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/firebase\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"firebase\"}],[\"$\",\"sup\",null,{\"children\":14}]]}]}],[\"$\",\"span\",\"app\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/app\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"app\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2023-12-31\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-31\"}],[\"$\",\"sup\",null,{\"children\":93}]]}]}],[\"$\",\"span\",\"play-console\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/play-console\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"play-console\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"flipper\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/flipper\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"flipper\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"scrcpy\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/scrcpy\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"scrcpy\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"android-studio\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/android-studio\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"android-studio\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"react-native\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/react-native\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"react-native\"}],[\"$\",\"sup\",null,{\"children\":90}]]}]}],[\"$\",\"span\",\"emulator\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/emulator\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"emulator\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"java\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/java\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"java\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"kotlin\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/kotlin\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"kotlin\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"proxyman\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/proxyman\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"proxyman\"}],[\"$\",\"sup\",null,{\"children\":13}]]}]}],[\"$\",\"span\",\"crash\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/crash\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"crash\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"deeplink\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/deeplink\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"deeplink\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"dev-tools\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/dev-tools\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"dev-tools\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"devide-app-by-development-env\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/devide-app-by-development-env\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"devide-app-by-development-env\"}],[\"$\",\"sup\",null,{\"children\":30}]]}]}],[\"$\",\"span\",\"fastlane\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/fastlane\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"fastlane\"}],[\"$\",\"sup\",null,{\"children\":26}]]}]}],[\"$\",\"span\",\"fcm\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/fcm\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"fcm\"}],[\"$\",\"sup\",null,{\"children\":21}]]}]}],[\"$\",\"span\",\"firebase-app-check\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/firebase-app-check\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"firebase-app-check\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"google-admob\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/google-admob\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"google-admob\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"google-analytics-for-firebase\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/google-analytics-for-firebase\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"google-analytics-for-firebase\"}],[\"$\",\"sup\",null,{\"children\":16}]]}]}],[\"$\",\"span\",\"ios\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ios\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ios\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"mct\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/mct\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"mct\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"mobile\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/mobile\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"mobile\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"proguard\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/proguard\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"proguard\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"react-navigation\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/react-navigation\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"react-navigation\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"uri-scheme\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/uri-scheme\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"uri-scheme\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"diary/2023-12-22\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-22\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-22\"}],[\"$\",\"sup\",null,{\"children\":12}]]}]}],[\"$\",\"span\",\"diary/2023-12-24\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-24\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-24\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"diary/2023-12-26\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-26\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-26\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"diary/2024-01-01\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-01\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-01\"}],[\"$\",\"sup\",null,{\"children\":16}]]}]}],[\"$\",\"span\",\"diary/2024-01-05\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-05\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-05\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"diary/2024-01-15\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-15\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-15\"}],[\"$\",\"sup\",null,{\"children\":14}]]}]}],[\"$\",\"span\",\"diary/2024-01-16\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-16\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-16\"}],[\"$\",\"sup\",null,{\"children\":15}]]}]}],[\"$\",\"span\",\"diary/2024-01-20\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-20\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-20\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2024-01-23\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-23\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-23\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"diary/2024-01-25\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-25\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-25\"}],[\"$\",\"sup\",null,{\"children\":59}]]}]}],[\"$\",\"span\",\"diary/2024-02-25\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-02-25\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-02-25\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"diary/2024-03-19\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-03-19\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-03-19\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"diary/2024-03-20\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-03-20\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-03-20\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"diary/2024-07-06\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-07-06\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-07-06\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2024-07-07\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-07-07\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-07-07\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2024-12-31\",{\"children\":[\"$\",\"$L14\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-12-31\"}],[\"$\",\"sup\",null,{\"children\":441}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"android\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#android\",\"children\":\"android\"}]}],[\"$\",\"div\",\"개발\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#개발\",\"children\":\"개발\"}]}],[\"$\",\"div\",\"개발자-콘솔\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#개발자-콘솔\",\"children\":\"개발자 콘솔\"}]}],[\"$\",\"div\",\"물리-디바이스-연결\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#물리-디바이스-연결\",\"children\":\"물리 디바이스 연결\"}]}],[\"$\",\"div\",\"sha-1-인증서-디지털-지문\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#sha-1-인증서-디지털-지문\",\"children\":\"SHA-1 인증서 디지털 지문\"}]}],[\"$\",\"div\",\"android-android-studio\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#android-android-studio\",\"children\":\"Android android-studio\"}]}],[\"$\",\"div\",\"mac---android-파일복사\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#mac---android-파일복사\",\"children\":\"mac -\u003e android 파일복사\"}]}],[\"$\",\"div\",\"android-file-transfer-를-통한-복사\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#android-file-transfer-를-통한-복사\",\"children\":\"android file transfer 를 통한 복사\"}]}],[\"$\",\"div\",\"adb-를-이용한-복사\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#adb-를-이용한-복사\",\"children\":\"adb 를 이용한 복사\"}]}],[\"$\",\"div\",\"설정\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#설정\",\"children\":\"설정\"}]}],[\"$\",\"div\",\"android-studio\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#android-studio\",\"children\":\"Android Studio\"}]}],[\"$\",\"div\",\"auto-import\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#auto-import\",\"children\":\"Auto import\"}]}],[\"$\",\"div\",\"emulator에뮬레이터\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#emulator에뮬레이터\",\"children\":\"Emulator|에뮬레이터\"}]}],[\"$\",\"div\",\"layout레이아웃\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#layout레이아웃\",\"children\":\"Layout|레이아웃\"}]}],[\"$\",\"div\",\"viewbinding\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#viewbinding\",\"children\":\"viewBinding\"}]}],[\"$\",\"div\",\"event이벤트\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#event이벤트\",\"children\":\"Event|이벤트\"}]}],[\"$\",\"div\",\"life-cycle생명주기\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#life-cycle생명주기\",\"children\":\"Life Cycle|생명주기\"}]}],[\"$\",\"div\",\"화면을-회전화는-경우\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#화면을-회전화는-경우\",\"children\":\"화면을 회전화는 경우\"}]}],[\"$\",\"div\",\"intent인텐트\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#intent인텐트\",\"children\":\"Intent|인텐트\"}]}],[\"$\",\"div\",\"error\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error\",\"children\":\"error\"}]}],[\"$\",\"div\",\"없는-activity-를-지정한-경우없는-intent\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#없는-activity-를-지정한-경우없는-intent\",\"children\":\"없는 activity 를 지정한 경우(없는 intent)\"}]}],[\"$\",\"div\",\"coludnt-sign-in\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#coludnt-sign-in\",\"children\":\"Coludn't sign in\"}]}],[\"$\",\"div\",\"액티비티-실행\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#액티비티-실행\",\"children\":\"액티비티 실행\"}]}],[\"$\",\"div\",\"명시적\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#명시적\",\"children\":\"명시적\"}]}],[\"$\",\"div\",\"암시적\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#암시적\",\"children\":\"암시적\"}]}],[\"$\",\"div\",\"인텐트-필터\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#인텐트-필터\",\"children\":\"인텐트 필터\"}]}],[\"$\",\"div\",\"resource리소스\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#resource리소스\",\"children\":\"Resource|리소스\"}]}],[\"$\",\"div\",\"구성-한정자\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#구성-한정자\",\"children\":\"구성 한정자\"}]}],[\"$\",\"div\",\"error-1\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error-1\",\"children\":\"error\"}]}],[\"$\",\"div\",\"설치-실패\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#설치-실패\",\"children\":\"설치 실패\"}]}],[\"$\",\"div\",\"배포-버전에서-구글로그인-로그인-안됨\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#배포-버전에서-구글로그인-로그인-안됨\",\"children\":\"배포 버전에서 구글로그인 로그인 안됨\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$15\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"16:T1793,"])</script><script>self.__next_f.push([1,"\n## 개발\n\n### 개발자 콘솔\n+ https://play.google.com/console\n\n### 물리 디바이스 연결\n- 실기기 개발자모드 활성화\n  - 설정 -\u003e  시스템 -\u003e  휴대폰 정보 -\u003e  소프트웨어 정보 -\u003e 빌드 번호 7회 터치\n- USB 디버깅 활성화\n  - 설정 -\u003e  시스템 -\u003e  개발자 옵션 -\u003e USB 디버깅 활성화 -\u003e 추가 다이얼로그 확인\n- `adb devices` 로 물리 디바이스가 연결된 것 확인 가능\n\n### SHA-1 인증서 디지털 지문\n- [[keytool]] 참고\n- google 인증에서 사용됨\n\n## Android android-studio\n- Actions -\u003e New Module\n\n### [[mac]] -\u003e [[android]] 파일복사\n#### android file transfer 를 통한 복사\n```sh \nbrew install --cask android-file-transfer\n```\n- 설치하고 나서 안드로이드 기기를 연결하면, finder 형태로 디바이스 스토리지가 보인다\n\n#### [[adb]] 를 이용한 복사\n```sh \nadb push app/build/outputs/apk/release/app-release.apk /storage/self/primary/Download/\n```\n\n## 설정\n### Android Studio\n#### Auto import\n- Settings -\u003e Editor -\u003e General -\u003e Auto import -\u003e Kotlin\n  - [X] Add unambiguous imports on to fly\n  - [X] Optimize imports on the fly (for current project)\n  \n### Emulator|에뮬레이터\n- 아래서 위로 스와이프 -\u003e 시스템\n  - Auto Rotate\n  - System Language -\u003e 테스트할 언어 첫번째로\n\n## Layout|레이아웃\n- LinearLayout\n- RelativeLayout\n- FrameLayout\n- GridLayout\n- ConstraintLayout\n\n## viewBinding\n- as-is\n```kt\noverridefunonCreate(savedlnstanceState: Bundle?) {\n    super.onCreate(savedlnstanceState)\n    \n    setContentView(R.layout.main_activity)\n    findViewById(R.id.text1)\n}\n```\n- to-be\nfindViewById 사용을 피하기 위해서 [[gradle]] 에서 `viewBinding` 설정이 사용된다.\n```gradle\nandroid {\n    viewBinding {\n        enabled true\n    }\n}\n```\n```kt\noverridefunonCreate(savedlnstanceState: Bundle?) {\n    super.onCreate(savedlnstanceState)\n    \n    val binding = ActivityMainBinding.inflate(layoutInflater)\n    setContentView(binding.root)\n}\n```\n\n## Event|이벤트\n- Single Abstract Method(SAM) - 오브젝트 대신 메소드를 할당하여 처리한다.\n\n```kt\noverride fun onCreate(savedlnstanceState: Bundle?) {\n    super.onCreate(savedlnstanceState)\n    \n    val binding = ActivityMainBinding.inflate(layoutInflater)\n    setContentView(binding.root)\n    \n    binding.startButton.setOnClickListener {\n        // 이벤트 처리\n    }\n}\n\n```\n\n## Life Cycle|생명주기\n- 액티비티 시작\n- onCreate call setContentView\n- onStart\n- onResume\n- 액티비티 실행(setContentView 에서 지정한 UI)\n- onPause 포커스가 없는상태, 화면 분할 등 -\u003e onResume\n- onStop 비활성화 상태, 홈 버튼을 눌러서 나간 상태 등-\u003e onRestart -\u003e onStart\n- onDestroy -\u003e onCreate\n- 액티비티 종료\n[[@todo]] restart 등 추가 필요\n\n### 화면을 회전화는 경우\nonResume -\u003e onPause -\u003e onStop -\u003e onSaveInstanceState -\u003e onDestroy\n-\u003e onCreate -\u003e onStart -\u003e onRestoreInstanceState -\u003e onResume\n\n## Intent|인텐트\n인텐트를 통해 시스템에 액티비티의 생성을 요청한다.\n```kotlin\nval intent = Intent(this, MainActivity::class.java)\nintent.putExtra(\"key\", \"value\")\nstartActivity(intent)\nstartActivityForResult(intent, intrequestCode)\n```\n생성 후 받는 쪽에서는 `getIntent` 를 통해서 인텐트를 얻고 인자를 가져올 수 있다.\n인텐트 실행시에 특정 앱을 지정하고싶다면 패키지를 설정한다.\n```kotlin\nintent.setPackage(\"com.google.android.apps.maps\")\n```\n\n### error\n#### 없는 activity 를 지정한 경우(없는 intent)\n실행한 쪽에서 에러가 난다.\n#### Coludn't sign in\n```text\nThere was a problem communicating with Google servers.\n```\n\n### 액티비티 실행\n#### 명시적 \n앱의 내부에서는 명시적으로 클래스를 지정해서 실행, 암시적으로도 가능하나 권장된다.\n암시적으로는 실행할 수 없는 경우도 존재한다.\n```kotlin\nval intent = Intent(this, MainActivity::class.java)\n```\n\n#### 암시적\n외부에서 액티비티를 실행할 수 있도록 manifest 파일에 intent 설정을 해줘야한다.\n```xml\n\u003cactivity android:name=\".oneActivity\" /\u003e\n\u003cactivity android:name=\".TwoActivity\"\u003e\n  \u003cintent-filter\u003e\n    \u003cactlon android:name=\"ACTION EDIT\" /\u003e\n  \u003c/intent-filter\u003e\n\u003c/activity\u003e\n\u003cservice ... /\u003e\n\u003creceiver ... /\u003e\n```\n\n### 인텐트 필터\n데이터 전달\n- \u003caction /\u003e - android:name 은 유일하지 않아도된다. 기능을 보여주는 이름을 사용하자. eg, android.intent.action.MAIN\n- \u003ccategory /\u003e - android:name -\u003e android.intent.category.LAUNCHER\n- \u003cdata /\u003e - 필요한 데이\n\n\u003e 런처앱은 `android.intent.category.LAUNCHER` 카테고리의 `action.intent.action.MAIN` 을 가져와서 리스트업하는 액티비티다.\n\n\n\n## Resource|리소스\n### 구성 한정자\n- https://developer.android.com/guide/topics/resources/providing-resources?hl=ko\n해당 리스트를 통해 리소스 디렉토리에 suffix 를 붙임으로써 특정 상황에서 사용되는 리소스 임을 명시한다. 언어, 디바이스 방향 상태, 해상도 등이 포함된다. 중복 명시도 가능한데 순서가 존재한다.\n- res/layout/activity_main.xml - 세로 모드에서 사용\n- res/layout/`land`/activity_main.xml - 가로 모드에서 사용\n\n## [[error]]\n\n### 설치 실패\n- [[firebase]] app distribution, [[app]] tester 등을 통해서 앱을 설치하려고하는데 계속 에러가 난다면 빌드를 universal apk 로 진행한다 [[diary:2023-12-31]]\n\n### 배포 버전에서 구글로그인 로그인 안됨\n- 플레이스토어 버전은 자체 핑거 프린트를 가지고 있음\n- [[play-console]] 에 접속 -\u003e 설정 -\u003e 앱 서명 -\u003e SHA-1 지문 **복사**\n- console.cloud.google.com -\u003e SHA-1 참조하여 *OAuth 2.0 클라이언트 ID* **생성** -\u003e 추가적으로 제공되는 json 은 신경쓸 필요 없음\n\n## link\n- [[flipper]]\n- [[scrcpy]]\n- [[adb]]\n- [[android-studio]]\n- [[react-native]]\n- [[emulator]]\n- [[java]]\n- [[kotlin]]\n- [[proxyman]]\n- [[mac]]\n- [[gradle]]\n- [[play-console]]\n"])</script><script>self.__next_f.push([1,"17:T1793,"])</script><script>self.__next_f.push([1,"\n## 개발\n\n### 개발자 콘솔\n+ https://play.google.com/console\n\n### 물리 디바이스 연결\n- 실기기 개발자모드 활성화\n  - 설정 -\u003e  시스템 -\u003e  휴대폰 정보 -\u003e  소프트웨어 정보 -\u003e 빌드 번호 7회 터치\n- USB 디버깅 활성화\n  - 설정 -\u003e  시스템 -\u003e  개발자 옵션 -\u003e USB 디버깅 활성화 -\u003e 추가 다이얼로그 확인\n- `adb devices` 로 물리 디바이스가 연결된 것 확인 가능\n\n### SHA-1 인증서 디지털 지문\n- [[keytool]] 참고\n- google 인증에서 사용됨\n\n## Android android-studio\n- Actions -\u003e New Module\n\n### [[mac]] -\u003e [[android]] 파일복사\n#### android file transfer 를 통한 복사\n```sh \nbrew install --cask android-file-transfer\n```\n- 설치하고 나서 안드로이드 기기를 연결하면, finder 형태로 디바이스 스토리지가 보인다\n\n#### [[adb]] 를 이용한 복사\n```sh \nadb push app/build/outputs/apk/release/app-release.apk /storage/self/primary/Download/\n```\n\n## 설정\n### Android Studio\n#### Auto import\n- Settings -\u003e Editor -\u003e General -\u003e Auto import -\u003e Kotlin\n  - [X] Add unambiguous imports on to fly\n  - [X] Optimize imports on the fly (for current project)\n  \n### Emulator|에뮬레이터\n- 아래서 위로 스와이프 -\u003e 시스템\n  - Auto Rotate\n  - System Language -\u003e 테스트할 언어 첫번째로\n\n## Layout|레이아웃\n- LinearLayout\n- RelativeLayout\n- FrameLayout\n- GridLayout\n- ConstraintLayout\n\n## viewBinding\n- as-is\n```kt\noverridefunonCreate(savedlnstanceState: Bundle?) {\n    super.onCreate(savedlnstanceState)\n    \n    setContentView(R.layout.main_activity)\n    findViewById(R.id.text1)\n}\n```\n- to-be\nfindViewById 사용을 피하기 위해서 [[gradle]] 에서 `viewBinding` 설정이 사용된다.\n```gradle\nandroid {\n    viewBinding {\n        enabled true\n    }\n}\n```\n```kt\noverridefunonCreate(savedlnstanceState: Bundle?) {\n    super.onCreate(savedlnstanceState)\n    \n    val binding = ActivityMainBinding.inflate(layoutInflater)\n    setContentView(binding.root)\n}\n```\n\n## Event|이벤트\n- Single Abstract Method(SAM) - 오브젝트 대신 메소드를 할당하여 처리한다.\n\n```kt\noverride fun onCreate(savedlnstanceState: Bundle?) {\n    super.onCreate(savedlnstanceState)\n    \n    val binding = ActivityMainBinding.inflate(layoutInflater)\n    setContentView(binding.root)\n    \n    binding.startButton.setOnClickListener {\n        // 이벤트 처리\n    }\n}\n\n```\n\n## Life Cycle|생명주기\n- 액티비티 시작\n- onCreate call setContentView\n- onStart\n- onResume\n- 액티비티 실행(setContentView 에서 지정한 UI)\n- onPause 포커스가 없는상태, 화면 분할 등 -\u003e onResume\n- onStop 비활성화 상태, 홈 버튼을 눌러서 나간 상태 등-\u003e onRestart -\u003e onStart\n- onDestroy -\u003e onCreate\n- 액티비티 종료\n[[@todo]] restart 등 추가 필요\n\n### 화면을 회전화는 경우\nonResume -\u003e onPause -\u003e onStop -\u003e onSaveInstanceState -\u003e onDestroy\n-\u003e onCreate -\u003e onStart -\u003e onRestoreInstanceState -\u003e onResume\n\n## Intent|인텐트\n인텐트를 통해 시스템에 액티비티의 생성을 요청한다.\n```kotlin\nval intent = Intent(this, MainActivity::class.java)\nintent.putExtra(\"key\", \"value\")\nstartActivity(intent)\nstartActivityForResult(intent, intrequestCode)\n```\n생성 후 받는 쪽에서는 `getIntent` 를 통해서 인텐트를 얻고 인자를 가져올 수 있다.\n인텐트 실행시에 특정 앱을 지정하고싶다면 패키지를 설정한다.\n```kotlin\nintent.setPackage(\"com.google.android.apps.maps\")\n```\n\n### error\n#### 없는 activity 를 지정한 경우(없는 intent)\n실행한 쪽에서 에러가 난다.\n#### Coludn't sign in\n```text\nThere was a problem communicating with Google servers.\n```\n\n### 액티비티 실행\n#### 명시적 \n앱의 내부에서는 명시적으로 클래스를 지정해서 실행, 암시적으로도 가능하나 권장된다.\n암시적으로는 실행할 수 없는 경우도 존재한다.\n```kotlin\nval intent = Intent(this, MainActivity::class.java)\n```\n\n#### 암시적\n외부에서 액티비티를 실행할 수 있도록 manifest 파일에 intent 설정을 해줘야한다.\n```xml\n\u003cactivity android:name=\".oneActivity\" /\u003e\n\u003cactivity android:name=\".TwoActivity\"\u003e\n  \u003cintent-filter\u003e\n    \u003cactlon android:name=\"ACTION EDIT\" /\u003e\n  \u003c/intent-filter\u003e\n\u003c/activity\u003e\n\u003cservice ... /\u003e\n\u003creceiver ... /\u003e\n```\n\n### 인텐트 필터\n데이터 전달\n- \u003caction /\u003e - android:name 은 유일하지 않아도된다. 기능을 보여주는 이름을 사용하자. eg, android.intent.action.MAIN\n- \u003ccategory /\u003e - android:name -\u003e android.intent.category.LAUNCHER\n- \u003cdata /\u003e - 필요한 데이\n\n\u003e 런처앱은 `android.intent.category.LAUNCHER` 카테고리의 `action.intent.action.MAIN` 을 가져와서 리스트업하는 액티비티다.\n\n\n\n## Resource|리소스\n### 구성 한정자\n- https://developer.android.com/guide/topics/resources/providing-resources?hl=ko\n해당 리스트를 통해 리소스 디렉토리에 suffix 를 붙임으로써 특정 상황에서 사용되는 리소스 임을 명시한다. 언어, 디바이스 방향 상태, 해상도 등이 포함된다. 중복 명시도 가능한데 순서가 존재한다.\n- res/layout/activity_main.xml - 세로 모드에서 사용\n- res/layout/`land`/activity_main.xml - 가로 모드에서 사용\n\n## [[error]]\n\n### 설치 실패\n- [[firebase]] app distribution, [[app]] tester 등을 통해서 앱을 설치하려고하는데 계속 에러가 난다면 빌드를 universal apk 로 진행한다 [[diary:2023-12-31]]\n\n### 배포 버전에서 구글로그인 로그인 안됨\n- 플레이스토어 버전은 자체 핑거 프린트를 가지고 있음\n- [[play-console]] 에 접속 -\u003e 설정 -\u003e 앱 서명 -\u003e SHA-1 지문 **복사**\n- console.cloud.google.com -\u003e SHA-1 참조하여 *OAuth 2.0 클라이언트 ID* **생성** -\u003e 추가적으로 제공되는 json 은 신경쓸 필요 없음\n\n## link\n- [[flipper]]\n- [[scrcpy]]\n- [[adb]]\n- [[android-studio]]\n- [[react-native]]\n- [[emulator]]\n- [[java]]\n- [[kotlin]]\n- [[proxyman]]\n- [[mac]]\n- [[gradle]]\n- [[play-console]]\n"])</script><script>self.__next_f.push([1,"18:T1793,"])</script><script>self.__next_f.push([1,"\n## 개발\n\n### 개발자 콘솔\n+ https://play.google.com/console\n\n### 물리 디바이스 연결\n- 실기기 개발자모드 활성화\n  - 설정 -\u003e  시스템 -\u003e  휴대폰 정보 -\u003e  소프트웨어 정보 -\u003e 빌드 번호 7회 터치\n- USB 디버깅 활성화\n  - 설정 -\u003e  시스템 -\u003e  개발자 옵션 -\u003e USB 디버깅 활성화 -\u003e 추가 다이얼로그 확인\n- `adb devices` 로 물리 디바이스가 연결된 것 확인 가능\n\n### SHA-1 인증서 디지털 지문\n- [[keytool]] 참고\n- google 인증에서 사용됨\n\n## Android android-studio\n- Actions -\u003e New Module\n\n### [[mac]] -\u003e [[android]] 파일복사\n#### android file transfer 를 통한 복사\n```sh \nbrew install --cask android-file-transfer\n```\n- 설치하고 나서 안드로이드 기기를 연결하면, finder 형태로 디바이스 스토리지가 보인다\n\n#### [[adb]] 를 이용한 복사\n```sh \nadb push app/build/outputs/apk/release/app-release.apk /storage/self/primary/Download/\n```\n\n## 설정\n### Android Studio\n#### Auto import\n- Settings -\u003e Editor -\u003e General -\u003e Auto import -\u003e Kotlin\n  - [X] Add unambiguous imports on to fly\n  - [X] Optimize imports on the fly (for current project)\n  \n### Emulator|에뮬레이터\n- 아래서 위로 스와이프 -\u003e 시스템\n  - Auto Rotate\n  - System Language -\u003e 테스트할 언어 첫번째로\n\n## Layout|레이아웃\n- LinearLayout\n- RelativeLayout\n- FrameLayout\n- GridLayout\n- ConstraintLayout\n\n## viewBinding\n- as-is\n```kt\noverridefunonCreate(savedlnstanceState: Bundle?) {\n    super.onCreate(savedlnstanceState)\n    \n    setContentView(R.layout.main_activity)\n    findViewById(R.id.text1)\n}\n```\n- to-be\nfindViewById 사용을 피하기 위해서 [[gradle]] 에서 `viewBinding` 설정이 사용된다.\n```gradle\nandroid {\n    viewBinding {\n        enabled true\n    }\n}\n```\n```kt\noverridefunonCreate(savedlnstanceState: Bundle?) {\n    super.onCreate(savedlnstanceState)\n    \n    val binding = ActivityMainBinding.inflate(layoutInflater)\n    setContentView(binding.root)\n}\n```\n\n## Event|이벤트\n- Single Abstract Method(SAM) - 오브젝트 대신 메소드를 할당하여 처리한다.\n\n```kt\noverride fun onCreate(savedlnstanceState: Bundle?) {\n    super.onCreate(savedlnstanceState)\n    \n    val binding = ActivityMainBinding.inflate(layoutInflater)\n    setContentView(binding.root)\n    \n    binding.startButton.setOnClickListener {\n        // 이벤트 처리\n    }\n}\n\n```\n\n## Life Cycle|생명주기\n- 액티비티 시작\n- onCreate call setContentView\n- onStart\n- onResume\n- 액티비티 실행(setContentView 에서 지정한 UI)\n- onPause 포커스가 없는상태, 화면 분할 등 -\u003e onResume\n- onStop 비활성화 상태, 홈 버튼을 눌러서 나간 상태 등-\u003e onRestart -\u003e onStart\n- onDestroy -\u003e onCreate\n- 액티비티 종료\n[[@todo]] restart 등 추가 필요\n\n### 화면을 회전화는 경우\nonResume -\u003e onPause -\u003e onStop -\u003e onSaveInstanceState -\u003e onDestroy\n-\u003e onCreate -\u003e onStart -\u003e onRestoreInstanceState -\u003e onResume\n\n## Intent|인텐트\n인텐트를 통해 시스템에 액티비티의 생성을 요청한다.\n```kotlin\nval intent = Intent(this, MainActivity::class.java)\nintent.putExtra(\"key\", \"value\")\nstartActivity(intent)\nstartActivityForResult(intent, intrequestCode)\n```\n생성 후 받는 쪽에서는 `getIntent` 를 통해서 인텐트를 얻고 인자를 가져올 수 있다.\n인텐트 실행시에 특정 앱을 지정하고싶다면 패키지를 설정한다.\n```kotlin\nintent.setPackage(\"com.google.android.apps.maps\")\n```\n\n### error\n#### 없는 activity 를 지정한 경우(없는 intent)\n실행한 쪽에서 에러가 난다.\n#### Coludn't sign in\n```text\nThere was a problem communicating with Google servers.\n```\n\n### 액티비티 실행\n#### 명시적 \n앱의 내부에서는 명시적으로 클래스를 지정해서 실행, 암시적으로도 가능하나 권장된다.\n암시적으로는 실행할 수 없는 경우도 존재한다.\n```kotlin\nval intent = Intent(this, MainActivity::class.java)\n```\n\n#### 암시적\n외부에서 액티비티를 실행할 수 있도록 manifest 파일에 intent 설정을 해줘야한다.\n```xml\n\u003cactivity android:name=\".oneActivity\" /\u003e\n\u003cactivity android:name=\".TwoActivity\"\u003e\n  \u003cintent-filter\u003e\n    \u003cactlon android:name=\"ACTION EDIT\" /\u003e\n  \u003c/intent-filter\u003e\n\u003c/activity\u003e\n\u003cservice ... /\u003e\n\u003creceiver ... /\u003e\n```\n\n### 인텐트 필터\n데이터 전달\n- \u003caction /\u003e - android:name 은 유일하지 않아도된다. 기능을 보여주는 이름을 사용하자. eg, android.intent.action.MAIN\n- \u003ccategory /\u003e - android:name -\u003e android.intent.category.LAUNCHER\n- \u003cdata /\u003e - 필요한 데이\n\n\u003e 런처앱은 `android.intent.category.LAUNCHER` 카테고리의 `action.intent.action.MAIN` 을 가져와서 리스트업하는 액티비티다.\n\n\n\n## Resource|리소스\n### 구성 한정자\n- https://developer.android.com/guide/topics/resources/providing-resources?hl=ko\n해당 리스트를 통해 리소스 디렉토리에 suffix 를 붙임으로써 특정 상황에서 사용되는 리소스 임을 명시한다. 언어, 디바이스 방향 상태, 해상도 등이 포함된다. 중복 명시도 가능한데 순서가 존재한다.\n- res/layout/activity_main.xml - 세로 모드에서 사용\n- res/layout/`land`/activity_main.xml - 가로 모드에서 사용\n\n## [[error]]\n\n### 설치 실패\n- [[firebase]] app distribution, [[app]] tester 등을 통해서 앱을 설치하려고하는데 계속 에러가 난다면 빌드를 universal apk 로 진행한다 [[diary:2023-12-31]]\n\n### 배포 버전에서 구글로그인 로그인 안됨\n- 플레이스토어 버전은 자체 핑거 프린트를 가지고 있음\n- [[play-console]] 에 접속 -\u003e 설정 -\u003e 앱 서명 -\u003e SHA-1 지문 **복사**\n- console.cloud.google.com -\u003e SHA-1 참조하여 *OAuth 2.0 클라이언트 ID* **생성** -\u003e 추가적으로 제공되는 json 은 신경쓸 필요 없음\n\n## link\n- [[flipper]]\n- [[scrcpy]]\n- [[adb]]\n- [[android-studio]]\n- [[react-native]]\n- [[emulator]]\n- [[java]]\n- [[kotlin]]\n- [[proxyman]]\n- [[mac]]\n- [[gradle]]\n- [[play-console]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# android\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$16\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# android\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$17\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/android\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# android\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$18\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

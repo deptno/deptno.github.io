@@ -1,0 +1,427 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-e6f48f16817ae44e.js"],""]
+8:I[6172,["601","static/chunks/app/error-0cbc5f9ddb24b3eb.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-c35a854c58adf9fe.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","terminal","c"]
+0:["Mb4fhV7INNfskzQrtUOiE",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","terminal","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"terminal\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","terminal","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js"],""]
+10:Te3e,<h1 id="terminal">terminal</h1>
+<ul>
+<li><a href="alacritty">alacritty</a> gpu 기반 터미널</li>
+<li><a href="alias">alias</a></li>
+<li><a href="apache-benchmark">ab</a></li>
+<li><a href="atuin">atuin</a></li>
+<li><a href="authbind">authbind</a></li>
+<li><a href="awk">awk</a></li>
+<li><a href="bc">bc</a></li>
+<li><a href="bg">bg</a></li>
+<li><a href="blkid">blkid</a></li>
+<li><a href="brctl">brctl</a></li>
+<li><a href="brew">brew</a></li>
+<li><a href="calicoctl">calicoctl</a></li>
+<li><a href="cat">cat</a></li>
+<li><a href="ctags">ctags</a></li>
+<li><a href="curl">curl</a></li>
+<li><a href="cut">cut</a></li>
+<li><a href="date">date</a></li>
+<li><a href="df">df</a></li>
+<li><a href="dhclient">dhclient</a></li>
+<li><a href="difftastic">difftastic</a></li>
+<li><a href="direnv">direnv</a></li>
+<li><a href="du">du</a></li>
+<li><a href="dunst">dunst</a></li>
+<li><a href="emulator">emulator</a></li>
+<li><a href="envsubst">envsubst</a></li>
+<li><a href="expr">expr</a></li>
+<li><a href="faketime">faketime</a></li>
+<li><a href="fdisk">fdisk</a></li>
+<li><a href="fg">fg</a></li>
+<li><a href="figlet">figlet</a></li>
+<li><a href="frum">frum</a></li>
+<li><a href="fzf">fzf</a></li>
+<li><a href="git">git</a> 분산 버전 관리 시스템(DVCS)</li>
+<li><a href="goaccess">goaccess</a></li>
+<li><a href="grep">grep</a> 정규표현식을 통한 필터링, 강조</li>
+<li><a href="hostname">hostname</a></li>
+<li><a href="hostnamectl">hostnamectl</a></li>
+<li><a href="ifconfig">ifconfig</a></li>
+<li><a href="ip">ip</a></li>
+<li><a href="jira-cli">jira-cli</a></li>
+<li><a href="jobs">jobs</a></li>
+<li><a href="jq">jq</a></li>
+<li><a href="k9s">k9s</a></li>
+<li><a href="keytool">keytool</a></li>
+<li><a href="kill">kill</a></li>
+<li><a href="kitty">kitty</a> </li>
+<li><a href="lnav">lnav</a></li>
+<li><a href="lt">lt</a></li>
+<li><a href="lsof">lsof</a></li>
+<li><a href="lvextend">lvextend</a></li>
+<li><a href="mpv">mpv</a></li>
+<li><a href="msgcat">msgcat</a> 터미널 색상 확인</li>
+<li><a href="mutt">mutt</a></li>
+<li><a href="nc">nc</a></li>
+<li><a href="neofetch">neofetch</a></li>
+<li><a href="neomutt">neomutt</a></li>
+<li><a href="neovim">neovim</a></li>
+<li><a href="netplan">netplan</a></li>
+<li><a href="nmcli">nmcli</a></li>
+<li><a href="nslookup">nslookup</a></li>
+<li><a href="scp">scp</a></li>
+<li><a href="sed">sed</a></li>
+<li><a href="setcaps">setcaps</a></li>
+<li><a href="sort">sort</a></li>
+<li><a href="ssh-keygen">ssh-keygen</a></li>
+<li><a href="ssh">ssh</a></li>
+<li><a href="task">task</a> 태스크 관리 시스템</li>
+<li><a href="terminal-notifier">terminal-notifier</a></li>
+<li><a href="tmux">tmux</a></li>
+<li><a href="tr">tr</a></li>
+<li><a href="tspin">tspin</a></li>
+<li><a href="universal-ctags">universal-ctags</a></li>
+<li><a href="valgrind">valgrind</a></li>
+<li><a href="vim">vim</a> </li>
+<li><a href="xsv">xsv</a></li>
+<li><a href="yazi">yazi</a></li>
+<li><a href="yq">yq</a></li>
+<li><a href="zoxide">zoxide</a></li>
+</ul>
+<h3 id="file">file</h3>
+<ul>
+<li>/etc/netplan</li>
+<li>/etc/sudoers</li>
+</ul>
+<h3 id="node">node</h3>
+<ul>
+<li><a href="npm">npm</a></li>
+<li><a href="yarn">yarn</a></li>
+</ul>
+<h2 id="mobile">mobile</h2>
+<ul>
+<li><a href="uri-scheme">uri-scheme</a></li>
+</ul>
+<h2 id="modern-core-utils-replacement">modern core-utils replacement</h2>
+<ul>
+<li><a href="delta">delta</a> diff</li>
+<li><a href="exa">exa</a> ls</li>
+<li><a href="bottom">btm</a> top</li>
+<li><a href="z">z</a> cd</li>
+<li><a href="ripgrep">rg</a> grep</li>
+<li><a href="fd">fd</a> find</li>
+</ul>
+<h2 id="setup">setup</h2>
+<ul>
+<li><a href="setup-terminal">맥 터미널 설정</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/9ca9b03\n","className":"bg-white text-black","children":"9ca9b03"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/terminal.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/terminal.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/terminal.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"terminal","name":"terminal","val":88},{"id":"alacritty","name":"alacritty","val":12},{"id":"alias","name":"alias","val":3},{"id":"apache-benchmark","name":"apache-benchmark","val":"$undefined"},{"id":"atuin","name":"atuin","val":3},{"id":"authbind","name":"authbind","val":2},{"id":"awk","name":"awk","val":2},{"id":"bc","name":"bc","val":2},{"id":"bg","name":"bg","val":3},{"id":"blkid","name":"blkid","val":"$undefined"},{"id":"brctl","name":"brctl","val":1},{"id":"brew","name":"brew","val":2},{"id":"calicoctl","name":"calicoctl","val":1},{"id":"cat","name":"cat","val":"$undefined"},{"id":"ctags","name":"ctags","val":2},{"id":"curl","name":"curl","val":4},{"id":"cut","name":"cut","val":5},{"id":"date","name":"date","val":2},{"id":"df","name":"df","val":3},{"id":"dhclient","name":"dhclient","val":3},{"id":"difftastic","name":"difftastic","val":2},{"id":"direnv","name":"direnv","val":4},{"id":"du","name":"du","val":3},{"id":"dunst","name":"dunst","val":"$undefined"},{"id":"emulator","name":"emulator","val":2},{"id":"envsubst","name":"envsubst","val":2},{"id":"expr","name":"expr","val":2},{"id":"faketime","name":"faketime","val":"$undefined"},{"id":"fdisk","name":"fdisk","val":"$undefined"},{"id":"fg","name":"fg","val":3},{"id":"figlet","name":"figlet","val":1},{"id":"frum","name":"frum","val":5},{"id":"fzf","name":"fzf","val":4},{"id":"git","name":"git","val":44},{"id":"goaccess","name":"goaccess","val":2},{"id":"grep","name":"grep","val":10},{"id":"hostname","name":"hostname","val":"$undefined"},{"id":"hostnamectl","name":"hostnamectl","val":2},{"id":"ifconfig","name":"ifconfig","val":4},{"id":"ip","name":"ip","val":5},{"id":"jira-cli","name":"jira-cli","val":3},{"id":"jobs","name":"jobs","val":2},{"id":"jq","name":"jq","val":6},{"id":"k9s","name":"k9s","val":15},{"id":"keytool","name":"keytool","val":5},{"id":"kill","name":"kill","val":1},{"id":"kitty","name":"kitty","val":3},{"id":"lnav","name":"lnav","val":2},{"id":"localtunnel","name":"localtunnel","val":2},{"id":"lsof","name":"lsof","val":1},{"id":"lvextend","name":"lvextend","val":3},{"id":"mpv","name":"mpv","val":2},{"id":"msgcat","name":"msgcat","val":1},{"id":"mutt","name":"mutt","val":1},{"id":"nc","name":"nc","val":4},{"id":"neofetch","name":"neofetch","val":1},{"id":"neomutt","name":"neomutt","val":5},{"id":"neovim","name":"neovim","val":22},{"id":"netplan","name":"netplan","val":3},{"id":"nmcli","name":"nmcli","val":3},{"id":"nslookup","name":"nslookup","val":"$undefined"},{"id":"scp","name":"scp","val":2},{"id":"sed","name":"sed","val":4},{"id":"setcaps","name":"setcaps","val":3},{"id":"sort","name":"sort","val":2},{"id":"ssh-keygen","name":"ssh-keygen","val":3},{"id":"ssh","name":"ssh","val":8},{"id":"taskwarrior","name":"taskwarrior","val":2},{"id":"terminal-notifier","name":"terminal-notifier","val":1},{"id":"tmux","name":"tmux","val":7},{"id":"tr","name":"tr","val":6},{"id":"tspin","name":"tspin","val":1},{"id":"universal-ctags","name":"universal-ctags","val":3},{"id":"valgrind","name":"valgrind","val":"$undefined"},{"id":"vim","name":"vim","val":20},{"id":"xsv","name":"xsv","val":4},{"id":"yazi","name":"yazi","val":"$undefined"},{"id":"yq","name":"yq","val":1},{"id":"zoxide","name":"zoxide","val":5},{"id":"npm","name":"npm","val":"$undefined"},{"id":"yarn","name":"yarn","val":11},{"id":"uri-scheme","name":"uri-scheme","val":4},{"id":"delta","name":"delta","val":2},{"id":"exa","name":"exa","val":1},{"id":"bottom","name":"bottom","val":1},{"id":"z","name":"z","val":2},{"id":"ripgrep","name":"ripgrep","val":3},{"id":"fd","name":"fd","val":4},{"id":"setup-terminal","name":"setup-terminal","val":16},{"id":"about-me","name":"about-me","val":60},{"id":"awscli","name":"awscli","val":5},{"id":"find","name":"find","val":2},{"id":"iconv","name":"iconv","val":4},{"id":"index","name":"index","val":108},{"id":"infocmp","name":"infocmp","val":3},{"id":"macos","name":"macos","val":13},{"id":"nfs","name":"nfs","val":6},{"id":"pycharm","name":"pycharm","val":13},{"id":"random","name":"random","val":3},{"id":"rsync","name":"rsync","val":2},{"id":"shell-script","name":"shell-script","val":14},{"id":"sudo","name":"sudo","val":3},{"id":"tailspin","name":"tailspin","val":4},{"id":"diary/2024-12-31","name":"diary/2024-12-31","val":441},{"id":"diary/2025-05-21","name":"diary/2025-05-21","val":3}],"links":[{"source":"terminal","target":"alacritty"},{"source":"terminal","target":"alias"},{"source":"terminal","target":"apache-benchmark"},{"source":"terminal","target":"atuin"},{"source":"terminal","target":"authbind"},{"source":"terminal","target":"awk"},{"source":"terminal","target":"bc"},{"source":"terminal","target":"bg"},{"source":"terminal","target":"blkid"},{"source":"terminal","target":"brctl"},{"source":"terminal","target":"brew"},{"source":"terminal","target":"calicoctl"},{"source":"terminal","target":"cat"},{"source":"terminal","target":"ctags"},{"source":"terminal","target":"curl"},{"source":"terminal","target":"cut"},{"source":"terminal","target":"date"},{"source":"terminal","target":"df"},{"source":"terminal","target":"dhclient"},{"source":"terminal","target":"difftastic"},{"source":"terminal","target":"direnv"},{"source":"terminal","target":"du"},{"source":"terminal","target":"dunst"},{"source":"terminal","target":"emulator"},{"source":"terminal","target":"envsubst"},{"source":"terminal","target":"expr"},{"source":"terminal","target":"faketime"},{"source":"terminal","target":"fdisk"},{"source":"terminal","target":"fg"},{"source":"terminal","target":"figlet"},{"source":"terminal","target":"frum"},{"source":"terminal","target":"fzf"},{"source":"terminal","target":"git"},{"source":"terminal","target":"goaccess"},{"source":"terminal","target":"grep"},{"source":"terminal","target":"hostname"},{"source":"terminal","target":"hostnamectl"},{"source":"terminal","target":"ifconfig"},{"source":"terminal","target":"ip"},{"source":"terminal","target":"jira-cli"},{"source":"terminal","target":"jobs"},{"source":"terminal","target":"jq"},{"source":"terminal","target":"k9s"},{"source":"terminal","target":"keytool"},{"source":"terminal","target":"kill"},{"source":"terminal","target":"kitty"},{"source":"terminal","target":"lnav"},{"source":"terminal","target":"localtunnel"},{"source":"terminal","target":"lsof"},{"source":"terminal","target":"lvextend"},{"source":"terminal","target":"mpv"},{"source":"terminal","target":"msgcat"},{"source":"terminal","target":"mutt"},{"source":"terminal","target":"nc"},{"source":"terminal","target":"neofetch"},{"source":"terminal","target":"neomutt"},{"source":"terminal","target":"neovim"},{"source":"terminal","target":"netplan"},{"source":"terminal","target":"nmcli"},{"source":"terminal","target":"nslookup"},{"source":"terminal","target":"scp"},{"source":"terminal","target":"sed"},{"source":"terminal","target":"setcaps"},{"source":"terminal","target":"sort"},{"source":"terminal","target":"ssh-keygen"},{"source":"terminal","target":"ssh"},{"source":"terminal","target":"taskwarrior"},{"source":"terminal","target":"terminal-notifier"},{"source":"terminal","target":"tmux"},{"source":"terminal","target":"tr"},{"source":"terminal","target":"tspin"},{"source":"terminal","target":"universal-ctags"},{"source":"terminal","target":"valgrind"},{"source":"terminal","target":"vim"},{"source":"terminal","target":"xsv"},{"source":"terminal","target":"yazi"},{"source":"terminal","target":"yq"},{"source":"terminal","target":"zoxide"},{"source":"terminal","target":"npm"},{"source":"terminal","target":"yarn"},{"source":"terminal","target":"uri-scheme"},{"source":"terminal","target":"delta"},{"source":"terminal","target":"exa"},{"source":"terminal","target":"bottom"},{"source":"terminal","target":"z"},{"source":"terminal","target":"ripgrep"},{"source":"terminal","target":"fd"},{"source":"terminal","target":"setup-terminal"},{"source":"about-me","target":"terminal"},{"source":"alias","target":"terminal"},{"source":"atuin","target":"terminal"},{"source":"authbind","target":"terminal"},{"source":"awk","target":"terminal"},{"source":"awscli","target":"terminal"},{"source":"bc","target":"terminal"},{"source":"brctl","target":"terminal"},{"source":"brew","target":"terminal"},{"source":"curl","target":"terminal"},{"source":"date","target":"terminal"},{"source":"df","target":"terminal"},{"source":"dhclient","target":"terminal"},{"source":"du","target":"terminal"},{"source":"envsubst","target":"terminal"},{"source":"exa","target":"terminal"},{"source":"expr","target":"terminal"},{"source":"figlet","target":"terminal"},{"source":"find","target":"terminal"},{"source":"fzf","target":"terminal"},{"source":"hostnamectl","target":"terminal"},{"source":"iconv","target":"terminal"},{"source":"ifconfig","target":"terminal"},{"source":"index","target":"terminal"},{"source":"infocmp","target":"terminal"},{"source":"jira-cli","target":"terminal"},{"source":"kitty","target":"terminal"},{"source":"macos","target":"terminal"},{"source":"msgcat","target":"terminal"},{"source":"nc","target":"terminal"},{"source":"neofetch","target":"terminal"},{"source":"netplan","target":"terminal"},{"source":"nfs","target":"terminal"},{"source":"pycharm","target":"terminal"},{"source":"random","target":"terminal"},{"source":"ripgrep","target":"terminal"},{"source":"rsync","target":"terminal"},{"source":"sed","target":"terminal"},{"source":"setcaps","target":"terminal"},{"source":"shell-script","target":"terminal"},{"source":"sort","target":"terminal"},{"source":"ssh-keygen","target":"terminal"},{"source":"sudo","target":"terminal"},{"source":"tailspin","target":"terminal"},{"source":"terminal-notifier","target":"terminal"},{"source":"tmux","target":"terminal"},{"source":"tr","target":"terminal"},{"source":"uri-scheme","target":"terminal"},{"source":"z","target":"terminal"},{"source":"zoxide","target":"terminal"},{"source":"diary/2024-12-31","target":"terminal"},{"source":"diary/2025-05-21","target":"terminal"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","terminal",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/terminal","children":[["$","span",null,{"className":"underline","children":"terminal"}],["$","sup",null,{"children":88}]]}]}],["$","span","alacritty",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/alacritty","children":[["$","span",null,{"className":"underline","children":"alacritty"}],["$","sup",null,{"children":12}]]}]}],["$","span","alias",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/alias","children":[["$","span",null,{"className":"underline","children":"alias"}],["$","sup",null,{"children":3}]]}]}],["$","span","apache-benchmark",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/apache-benchmark","children":[["$","span",null,{"className":"underline","children":"apache-benchmark"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","atuin",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/atuin","children":[["$","span",null,{"className":"underline","children":"atuin"}],["$","sup",null,{"children":3}]]}]}],["$","span","authbind",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/authbind","children":[["$","span",null,{"className":"underline","children":"authbind"}],["$","sup",null,{"children":2}]]}]}],["$","span","awk",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/awk","children":[["$","span",null,{"className":"underline","children":"awk"}],["$","sup",null,{"children":2}]]}]}],["$","span","bc",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/bc","children":[["$","span",null,{"className":"underline","children":"bc"}],["$","sup",null,{"children":2}]]}]}],["$","span","bg",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/bg","children":[["$","span",null,{"className":"underline","children":"bg"}],["$","sup",null,{"children":3}]]}]}],["$","span","blkid",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/blkid","children":[["$","span",null,{"className":"underline","children":"blkid"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","brctl",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/brctl","children":[["$","span",null,{"className":"underline","children":"brctl"}],["$","sup",null,{"children":1}]]}]}],["$","span","brew",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/brew","children":[["$","span",null,{"className":"underline","children":"brew"}],["$","sup",null,{"children":2}]]}]}],["$","span","calicoctl",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/calicoctl","children":[["$","span",null,{"className":"underline","children":"calicoctl"}],["$","sup",null,{"children":1}]]}]}],["$","span","cat",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/cat","children":[["$","span",null,{"className":"underline","children":"cat"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","ctags",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ctags","children":[["$","span",null,{"className":"underline","children":"ctags"}],["$","sup",null,{"children":2}]]}]}],["$","span","curl",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/curl","children":[["$","span",null,{"className":"underline","children":"curl"}],["$","sup",null,{"children":4}]]}]}],["$","span","cut",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/cut","children":[["$","span",null,{"className":"underline","children":"cut"}],["$","sup",null,{"children":5}]]}]}],["$","span","date",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/date","children":[["$","span",null,{"className":"underline","children":"date"}],["$","sup",null,{"children":2}]]}]}],["$","span","df",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/df","children":[["$","span",null,{"className":"underline","children":"df"}],["$","sup",null,{"children":3}]]}]}],["$","span","dhclient",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/dhclient","children":[["$","span",null,{"className":"underline","children":"dhclient"}],["$","sup",null,{"children":3}]]}]}],["$","span","difftastic",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/difftastic","children":[["$","span",null,{"className":"underline","children":"difftastic"}],["$","sup",null,{"children":2}]]}]}],["$","span","direnv",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/direnv","children":[["$","span",null,{"className":"underline","children":"direnv"}],["$","sup",null,{"children":4}]]}]}],["$","span","du",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/du","children":[["$","span",null,{"className":"underline","children":"du"}],["$","sup",null,{"children":3}]]}]}],["$","span","dunst",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/dunst","children":[["$","span",null,{"className":"underline","children":"dunst"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","emulator",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/emulator","children":[["$","span",null,{"className":"underline","children":"emulator"}],["$","sup",null,{"children":2}]]}]}],["$","span","envsubst",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/envsubst","children":[["$","span",null,{"className":"underline","children":"envsubst"}],["$","sup",null,{"children":2}]]}]}],["$","span","expr",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/expr","children":[["$","span",null,{"className":"underline","children":"expr"}],["$","sup",null,{"children":2}]]}]}],["$","span","faketime",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/faketime","children":[["$","span",null,{"className":"underline","children":"faketime"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","fdisk",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/fdisk","children":[["$","span",null,{"className":"underline","children":"fdisk"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","fg",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/fg","children":[["$","span",null,{"className":"underline","children":"fg"}],["$","sup",null,{"children":3}]]}]}],["$","span","figlet",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/figlet","children":[["$","span",null,{"className":"underline","children":"figlet"}],["$","sup",null,{"children":1}]]}]}],["$","span","frum",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/frum","children":[["$","span",null,{"className":"underline","children":"frum"}],["$","sup",null,{"children":5}]]}]}],["$","span","fzf",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/fzf","children":[["$","span",null,{"className":"underline","children":"fzf"}],["$","sup",null,{"children":4}]]}]}],["$","span","git",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/git","children":[["$","span",null,{"className":"underline","children":"git"}],["$","sup",null,{"children":44}]]}]}],["$","span","goaccess",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/goaccess","children":[["$","span",null,{"className":"underline","children":"goaccess"}],["$","sup",null,{"children":2}]]}]}],["$","span","grep",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/grep","children":[["$","span",null,{"className":"underline","children":"grep"}],["$","sup",null,{"children":10}]]}]}],["$","span","hostname",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/hostname","children":[["$","span",null,{"className":"underline","children":"hostname"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","hostnamectl",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/hostnamectl","children":[["$","span",null,{"className":"underline","children":"hostnamectl"}],["$","sup",null,{"children":2}]]}]}],["$","span","ifconfig",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ifconfig","children":[["$","span",null,{"className":"underline","children":"ifconfig"}],["$","sup",null,{"children":4}]]}]}],["$","span","ip",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ip","children":[["$","span",null,{"className":"underline","children":"ip"}],["$","sup",null,{"children":5}]]}]}],["$","span","jira-cli",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/jira-cli","children":[["$","span",null,{"className":"underline","children":"jira-cli"}],["$","sup",null,{"children":3}]]}]}],["$","span","jobs",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/jobs","children":[["$","span",null,{"className":"underline","children":"jobs"}],["$","sup",null,{"children":2}]]}]}],["$","span","jq",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/jq","children":[["$","span",null,{"className":"underline","children":"jq"}],["$","sup",null,{"children":6}]]}]}],["$","span","k9s",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/k9s","children":[["$","span",null,{"className":"underline","children":"k9s"}],["$","sup",null,{"children":15}]]}]}],["$","span","keytool",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/keytool","children":[["$","span",null,{"className":"underline","children":"keytool"}],["$","sup",null,{"children":5}]]}]}],["$","span","kill",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/kill","children":[["$","span",null,{"className":"underline","children":"kill"}],["$","sup",null,{"children":1}]]}]}],["$","span","kitty",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/kitty","children":[["$","span",null,{"className":"underline","children":"kitty"}],["$","sup",null,{"children":3}]]}]}],["$","span","lnav",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/lnav","children":[["$","span",null,{"className":"underline","children":"lnav"}],["$","sup",null,{"children":2}]]}]}],["$","span","localtunnel",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/localtunnel","children":[["$","span",null,{"className":"underline","children":"localtunnel"}],["$","sup",null,{"children":2}]]}]}],["$","span","lsof",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/lsof","children":[["$","span",null,{"className":"underline","children":"lsof"}],["$","sup",null,{"children":1}]]}]}],["$","span","lvextend",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/lvextend","children":[["$","span",null,{"className":"underline","children":"lvextend"}],["$","sup",null,{"children":3}]]}]}],["$","span","mpv",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/mpv","children":[["$","span",null,{"className":"underline","children":"mpv"}],["$","sup",null,{"children":2}]]}]}],["$","span","msgcat",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/msgcat","children":[["$","span",null,{"className":"underline","children":"msgcat"}],["$","sup",null,{"children":1}]]}]}],["$","span","mutt",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/mutt","children":[["$","span",null,{"className":"underline","children":"mutt"}],["$","sup",null,{"children":1}]]}]}],["$","span","nc",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/nc","children":[["$","span",null,{"className":"underline","children":"nc"}],["$","sup",null,{"children":4}]]}]}],["$","span","neofetch",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neofetch","children":[["$","span",null,{"className":"underline","children":"neofetch"}],["$","sup",null,{"children":1}]]}]}],["$","span","neomutt",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neomutt","children":[["$","span",null,{"className":"underline","children":"neomutt"}],["$","sup",null,{"children":5}]]}]}],["$","span","neovim",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim","children":[["$","span",null,{"className":"underline","children":"neovim"}],["$","sup",null,{"children":22}]]}]}],["$","span","netplan",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/netplan","children":[["$","span",null,{"className":"underline","children":"netplan"}],["$","sup",null,{"children":3}]]}]}],["$","span","nmcli",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/nmcli","children":[["$","span",null,{"className":"underline","children":"nmcli"}],["$","sup",null,{"children":3}]]}]}],["$","span","nslookup",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/nslookup","children":[["$","span",null,{"className":"underline","children":"nslookup"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","scp",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/scp","children":[["$","span",null,{"className":"underline","children":"scp"}],["$","sup",null,{"children":2}]]}]}],["$","span","sed",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/sed","children":[["$","span",null,{"className":"underline","children":"sed"}],["$","sup",null,{"children":4}]]}]}],["$","span","setcaps",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/setcaps","children":[["$","span",null,{"className":"underline","children":"setcaps"}],["$","sup",null,{"children":3}]]}]}],["$","span","sort",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/sort","children":[["$","span",null,{"className":"underline","children":"sort"}],["$","sup",null,{"children":2}]]}]}],["$","span","ssh-keygen",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ssh-keygen","children":[["$","span",null,{"className":"underline","children":"ssh-keygen"}],["$","sup",null,{"children":3}]]}]}],["$","span","ssh",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ssh","children":[["$","span",null,{"className":"underline","children":"ssh"}],["$","sup",null,{"children":8}]]}]}],["$","span","taskwarrior",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/taskwarrior","children":[["$","span",null,{"className":"underline","children":"taskwarrior"}],["$","sup",null,{"children":2}]]}]}],["$","span","terminal-notifier",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/terminal-notifier","children":[["$","span",null,{"className":"underline","children":"terminal-notifier"}],["$","sup",null,{"children":1}]]}]}],["$","span","tmux",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/tmux","children":[["$","span",null,{"className":"underline","children":"tmux"}],["$","sup",null,{"children":7}]]}]}],["$","span","tr",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/tr","children":[["$","span",null,{"className":"underline","children":"tr"}],["$","sup",null,{"children":6}]]}]}],["$","span","tspin",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/tspin","children":[["$","span",null,{"className":"underline","children":"tspin"}],["$","sup",null,{"children":1}]]}]}],["$","span","universal-ctags",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/universal-ctags","children":[["$","span",null,{"className":"underline","children":"universal-ctags"}],["$","sup",null,{"children":3}]]}]}],["$","span","valgrind",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/valgrind","children":[["$","span",null,{"className":"underline","children":"valgrind"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","vim",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/vim","children":[["$","span",null,{"className":"underline","children":"vim"}],["$","sup",null,{"children":20}]]}]}],["$","span","xsv",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/xsv","children":[["$","span",null,{"className":"underline","children":"xsv"}],["$","sup",null,{"children":4}]]}]}],["$","span","yazi",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/yazi","children":[["$","span",null,{"className":"underline","children":"yazi"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","yq",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/yq","children":[["$","span",null,{"className":"underline","children":"yq"}],["$","sup",null,{"children":1}]]}]}],["$","span","zoxide",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/zoxide","children":[["$","span",null,{"className":"underline","children":"zoxide"}],["$","sup",null,{"children":5}]]}]}],["$","span","npm",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/npm","children":[["$","span",null,{"className":"underline","children":"npm"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","yarn",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/yarn","children":[["$","span",null,{"className":"underline","children":"yarn"}],["$","sup",null,{"children":11}]]}]}],["$","span","uri-scheme",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/uri-scheme","children":[["$","span",null,{"className":"underline","children":"uri-scheme"}],["$","sup",null,{"children":4}]]}]}],["$","span","delta",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/delta","children":[["$","span",null,{"className":"underline","children":"delta"}],["$","sup",null,{"children":2}]]}]}],["$","span","exa",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/exa","children":[["$","span",null,{"className":"underline","children":"exa"}],["$","sup",null,{"children":1}]]}]}],["$","span","bottom",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/bottom","children":[["$","span",null,{"className":"underline","children":"bottom"}],["$","sup",null,{"children":1}]]}]}],["$","span","z",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/z","children":[["$","span",null,{"className":"underline","children":"z"}],["$","sup",null,{"children":2}]]}]}],["$","span","ripgrep",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/ripgrep","children":[["$","span",null,{"className":"underline","children":"ripgrep"}],["$","sup",null,{"children":3}]]}]}],["$","span","fd",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/fd","children":[["$","span",null,{"className":"underline","children":"fd"}],["$","sup",null,{"children":4}]]}]}],["$","span","setup-terminal",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/setup-terminal","children":[["$","span",null,{"className":"underline","children":"setup-terminal"}],["$","sup",null,{"children":16}]]}]}],["$","span","about-me",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/about-me","children":[["$","span",null,{"className":"underline","children":"about-me"}],["$","sup",null,{"children":60}]]}]}],["$","span","awscli",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/awscli","children":[["$","span",null,{"className":"underline","children":"awscli"}],["$","sup",null,{"children":5}]]}]}],["$","span","find",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/find","children":[["$","span",null,{"className":"underline","children":"find"}],["$","sup",null,{"children":2}]]}]}],["$","span","iconv",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/iconv","children":[["$","span",null,{"className":"underline","children":"iconv"}],["$","sup",null,{"children":4}]]}]}],["$","span","index",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/index","children":[["$","span",null,{"className":"underline","children":"index"}],["$","sup",null,{"children":108}]]}]}],["$","span","infocmp",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/infocmp","children":[["$","span",null,{"className":"underline","children":"infocmp"}],["$","sup",null,{"children":3}]]}]}],["$","span","macos",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/macos","children":[["$","span",null,{"className":"underline","children":"macos"}],["$","sup",null,{"children":13}]]}]}],["$","span","nfs",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/nfs","children":[["$","span",null,{"className":"underline","children":"nfs"}],["$","sup",null,{"children":6}]]}]}],["$","span","pycharm",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/pycharm","children":[["$","span",null,{"className":"underline","children":"pycharm"}],["$","sup",null,{"children":13}]]}]}],["$","span","random",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/random","children":[["$","span",null,{"className":"underline","children":"random"}],["$","sup",null,{"children":3}]]}]}],["$","span","rsync",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/rsync","children":[["$","span",null,{"className":"underline","children":"rsync"}],["$","sup",null,{"children":2}]]}]}],["$","span","shell-script",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/shell-script","children":[["$","span",null,{"className":"underline","children":"shell-script"}],["$","sup",null,{"children":14}]]}]}],["$","span","sudo",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/sudo","children":[["$","span",null,{"className":"underline","children":"sudo"}],["$","sup",null,{"children":3}]]}]}],["$","span","tailspin",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/tailspin","children":[["$","span",null,{"className":"underline","children":"tailspin"}],["$","sup",null,{"children":4}]]}]}],["$","span","diary/2024-12-31",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-12-31","children":[["$","span",null,{"className":"underline","children":"diary/2024-12-31"}],["$","sup",null,{"children":441}]]}]}],["$","span","diary/2025-05-21",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2025-05-21","children":[["$","span",null,{"className":"underline","children":"diary/2025-05-21"}],["$","sup",null,{"children":3}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","terminal",{"className":"pl-0","children":["$","a",null,{"href":"#terminal","children":"terminal"}]}],["$","div","file",{"className":"pl-4","children":["$","a",null,{"href":"#file","children":"file"}]}],["$","div","node",{"className":"pl-4","children":["$","a",null,{"href":"#node","children":"node"}]}],["$","div","mobile",{"className":"pl-2","children":["$","a",null,{"href":"#mobile","children":"mobile"}]}],["$","div","modern-core-utils-replacement",{"className":"pl-2","children":["$","a",null,{"href":"#modern-core-utils-replacement","children":"modern core-utils replacement"}]}],["$","div","setup",{"className":"pl-2","children":["$","a",null,{"href":"#setup","children":"setup"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:T59f,
+- [[alacritty]] gpu 기반 터미널
+- [[alias]]
+- [[apache-benchmark|ab]]
+- [[atuin]]
+- [[authbind]]
+- [[awk]]
+- [[bc]]
+- [[bg]]
+- [[blkid]]
+- [[brctl]]
+- [[brew]]
+- [[calicoctl]]
+- [[cat]]
+- [[ctags]]
+- [[curl]]
+- [[cut]]
+- [[date]]
+- [[df]]
+- [[dhclient]]
+- [[difftastic]]
+- [[direnv]]
+- [[du]]
+- [[dunst]]
+- [[emulator]]
+- [[envsubst]]
+- [[expr]]
+- [[faketime]]
+- [[fdisk]]
+- [[fg]]
+- [[figlet]]
+- [[frum]]
+- [[fzf]]
+- [[git]] 분산 버전 관리 시스템(DVCS)
+- [[goaccess]]
+- [[grep]] 정규표현식을 통한 필터링, 강조
+- [[hostname]]
+- [[hostnamectl]]
+- [[ifconfig]]
+- [[ip]]
+- [[jira-cli]]
+- [[jobs]]
+- [[jq]]
+- [[k9s]]
+- [[keytool]]
+- [[kill]]
+- [[kitty]] 
+- [[lnav]]
+- [[localtunnel|lt]]
+- [[lsof]]
+- [[lvextend]]
+- [[mpv]]
+- [[msgcat]] 터미널 색상 확인
+- [[mutt]]
+- [[nc]]
+- [[neofetch]]
+- [[neomutt]]
+- [[neovim]]
+- [[netplan]]
+- [[nmcli]]
+- [[nslookup]]
+- [[scp]]
+- [[sed]]
+- [[setcaps]]
+- [[sort]]
+- [[ssh-keygen]]
+- [[ssh]]
+- [[taskwarrior|task]] 태스크 관리 시스템
+- [[terminal-notifier]]
+- [[tmux]]
+- [[tr]]
+- [[tspin]]
+- [[universal-ctags]]
+- [[valgrind]]
+- [[vim]] 
+- [[xsv]]
+- [[yazi]]
+- [[yq]]
+- [[zoxide]]
+
+### file
+- /etc/netplan
+- /etc/sudoers
+
+### node
+- [[npm]]
+- [[yarn]]
+
+## mobile
+- [[uri-scheme]]
+
+## modern core-utils replacement
+- [[delta]] diff
+- [[exa]] ls
+- [[bottom|btm]] top
+- [[z]] cd
+- [[ripgrep|rg]] grep
+- [[fd]] find
+
+## setup
+- [[setup-terminal|맥 터미널 설정]]
+12:T59f,
+- [[alacritty]] gpu 기반 터미널
+- [[alias]]
+- [[apache-benchmark|ab]]
+- [[atuin]]
+- [[authbind]]
+- [[awk]]
+- [[bc]]
+- [[bg]]
+- [[blkid]]
+- [[brctl]]
+- [[brew]]
+- [[calicoctl]]
+- [[cat]]
+- [[ctags]]
+- [[curl]]
+- [[cut]]
+- [[date]]
+- [[df]]
+- [[dhclient]]
+- [[difftastic]]
+- [[direnv]]
+- [[du]]
+- [[dunst]]
+- [[emulator]]
+- [[envsubst]]
+- [[expr]]
+- [[faketime]]
+- [[fdisk]]
+- [[fg]]
+- [[figlet]]
+- [[frum]]
+- [[fzf]]
+- [[git]] 분산 버전 관리 시스템(DVCS)
+- [[goaccess]]
+- [[grep]] 정규표현식을 통한 필터링, 강조
+- [[hostname]]
+- [[hostnamectl]]
+- [[ifconfig]]
+- [[ip]]
+- [[jira-cli]]
+- [[jobs]]
+- [[jq]]
+- [[k9s]]
+- [[keytool]]
+- [[kill]]
+- [[kitty]] 
+- [[lnav]]
+- [[localtunnel|lt]]
+- [[lsof]]
+- [[lvextend]]
+- [[mpv]]
+- [[msgcat]] 터미널 색상 확인
+- [[mutt]]
+- [[nc]]
+- [[neofetch]]
+- [[neomutt]]
+- [[neovim]]
+- [[netplan]]
+- [[nmcli]]
+- [[nslookup]]
+- [[scp]]
+- [[sed]]
+- [[setcaps]]
+- [[sort]]
+- [[ssh-keygen]]
+- [[ssh]]
+- [[taskwarrior|task]] 태스크 관리 시스템
+- [[terminal-notifier]]
+- [[tmux]]
+- [[tr]]
+- [[tspin]]
+- [[universal-ctags]]
+- [[valgrind]]
+- [[vim]] 
+- [[xsv]]
+- [[yazi]]
+- [[yq]]
+- [[zoxide]]
+
+### file
+- /etc/netplan
+- /etc/sudoers
+
+### node
+- [[npm]]
+- [[yarn]]
+
+## mobile
+- [[uri-scheme]]
+
+## modern core-utils replacement
+- [[delta]] diff
+- [[exa]] ls
+- [[bottom|btm]] top
+- [[z]] cd
+- [[ripgrep|rg]] grep
+- [[fd]] find
+
+## setup
+- [[setup-terminal|맥 터미널 설정]]
+13:T59f,
+- [[alacritty]] gpu 기반 터미널
+- [[alias]]
+- [[apache-benchmark|ab]]
+- [[atuin]]
+- [[authbind]]
+- [[awk]]
+- [[bc]]
+- [[bg]]
+- [[blkid]]
+- [[brctl]]
+- [[brew]]
+- [[calicoctl]]
+- [[cat]]
+- [[ctags]]
+- [[curl]]
+- [[cut]]
+- [[date]]
+- [[df]]
+- [[dhclient]]
+- [[difftastic]]
+- [[direnv]]
+- [[du]]
+- [[dunst]]
+- [[emulator]]
+- [[envsubst]]
+- [[expr]]
+- [[faketime]]
+- [[fdisk]]
+- [[fg]]
+- [[figlet]]
+- [[frum]]
+- [[fzf]]
+- [[git]] 분산 버전 관리 시스템(DVCS)
+- [[goaccess]]
+- [[grep]] 정규표현식을 통한 필터링, 강조
+- [[hostname]]
+- [[hostnamectl]]
+- [[ifconfig]]
+- [[ip]]
+- [[jira-cli]]
+- [[jobs]]
+- [[jq]]
+- [[k9s]]
+- [[keytool]]
+- [[kill]]
+- [[kitty]] 
+- [[lnav]]
+- [[localtunnel|lt]]
+- [[lsof]]
+- [[lvextend]]
+- [[mpv]]
+- [[msgcat]] 터미널 색상 확인
+- [[mutt]]
+- [[nc]]
+- [[neofetch]]
+- [[neomutt]]
+- [[neovim]]
+- [[netplan]]
+- [[nmcli]]
+- [[nslookup]]
+- [[scp]]
+- [[sed]]
+- [[setcaps]]
+- [[sort]]
+- [[ssh-keygen]]
+- [[ssh]]
+- [[taskwarrior|task]] 태스크 관리 시스템
+- [[terminal-notifier]]
+- [[tmux]]
+- [[tr]]
+- [[tspin]]
+- [[universal-ctags]]
+- [[valgrind]]
+- [[vim]] 
+- [[xsv]]
+- [[yazi]]
+- [[yq]]
+- [[zoxide]]
+
+### file
+- /etc/netplan
+- /etc/sudoers
+
+### node
+- [[npm]]
+- [[yarn]]
+
+## mobile
+- [[uri-scheme]]
+
+## modern core-utils replacement
+- [[delta]] diff
+- [[exa]] ls
+- [[bottom|btm]] top
+- [[z]] cd
+- [[ripgrep|rg]] grep
+- [[fd]] find
+
+## setup
+- [[setup-terminal|맥 터미널 설정]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# terminal"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# terminal"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/terminal"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# terminal"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null
