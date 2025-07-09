@@ -1,0 +1,1137 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-06ccd392a2835508.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-e61c4b6da020d258.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title>- [X] 구글 로그인 심사</title><meta name="description" content="  - [X] 피드백 반영해서 privacy-policy 업데이트, 홈페이지에 개인정보 처리방침 링크
+- [O] 안드로이드 플레이 스토어 등록
+  - [X] 계정삭제를 웹으로 지원 [[2024-01-24]]
+  - [X] ad id
+    - [X] 플레이 콘솔 -&gt;  앱 콘텐트 -&gt;  광고 ID -&gt; 사용,  애널리틱스에서 어차피사용되서 포함됨
+  - [X] 앱 서명 google playstore 에서 제공하는 키사용 체크
+  - [o] 플레이 콘솔 -&gt;  설정 -&gt;  앱 서명, 여기에 나오는 서명키들을 firebase 등에 추가로 등록해야하는지 확인 필요
+    - [ ] 앱 서명키 인증서 - 구글에서 추가로 사인을 한 것으로 추측
+      - [ ] 업로드키 인증서가 이미 [[../firebase|firebase]] 에 등록되었기 때문에 다른 곳에 등록을 안하면 어떻게되는지 확인 필요하다
+      - [ ] 이 것도 firebase 쪽에 등록 필요
+      - [ ] `https://[DOMAIN.COM]/.well-known/assetlinks.json` 파일도 교체해야할 것으로 보임
+        - [[../deployment|deployment]] 에서 fine mount
+    - [X] 업로드키 인증서 - fastlane 에서 업로드할때 로컬에서 sign 한 키가 보여진다
+  - [[../fastlane|fastlane]] 배포
+    - 최소 한번의 수동 배포가 필요하다
+      ```sh 
+      - [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].
+      ```
+    - 테스트 -&gt;  내부테스트 -&gt;  업로드 번들에 생성된 `app-release.aab` 파일을 업로드한다.
+      - `./gradlew bundleRelease` 를 통해 생성
+    - 한번 배포하고 나면 버전 코드 충돌난다고 나온다, 버전코드는 트랙과 무관.
+      ```sh
+      Google Api Error: Invalid request - Version code 1 has already been used.
+      ```
+    - 버전 코드를 올린다
+      ```sh
+      Google Api Error: Invalid request - Precondition check failed.
+      ```
+    - upload_to_play_store(track: &#x27;internal&#x27;) 을 주었더니 에러가 다른 에러가 발생
+      ```sh
+      Google Api Error: Invalid request - Only releases with status draft may be created on draft app.
+      ```
+    + https://github.com/fastlane/fastlane/discussions/18293
+      - 테스트는 내부-internal,  비공개-alhpa, 공개-beta 트랙으로 분류하는것으로 추측
+      - 글에 따르면 alpha 이상에서 릴리즈가 수등으로 되어야한다고 말하고 있음
+- [X] 앱 개발 과정에 대한 정리
+- [[../apple|apple]] 아케이드 체험 등록
+- [[../react-native|react-native]] [[../ios|ios]] 는 `Text` 컴포넌트 스타일에 `borderRadius` 가 동작하지않음
+
+---
+
+# 리액트 네이티브 앱 개발 기록
+- [[../react-native|react-native]] 를 통해 앱 배포까지의 기록
+- 데이터와 관련해서는 기존에 웹으로 제공하고 있던 데이터를 활용할 수 있는 상황에서 시작했다.
+
+## 앱개발의 4 허들
+&gt; 프론트엔드 고도화를 하기 전에 아래 4개의 허들을 넘어야한다.  
+&gt; 하지만 원하는 앱에 따라 스토어 배포를 제외한 나머지는 선택적이다.
+
+- [[../authentication|authentication]]
+  - [[../oauth|oauth]] 인증을 지원하는 경우 [[../apple|apple]] 은 필수적으로 [[../apple|apple]] 로그인을 요구한다
+- [[../firebase|firebase]] [[../fcm|fcm]]
+  - [[../app|app]] 에서 차별화되는 가장 중요한 서비스중 하나는 [[../push-notification|push-notification]]
+  - 이를 위해선 [[../fcm|fcm]] 이 defacto 로 사용되고 있다.
+- [[../code-push|code-push]]
+  - 선택적이나 앱은 배포이후 문제가 생겼을때 치명적이므로 이에 대한 보험이 필요
+  - [[../react-native|react-native]] 그 외에도 여러가지 활용폭이 있으므로
+- [[../apple|apple]] app store, [[../google|google]] play store 배포
+  - code signing 등 모르는 개념에 대해 얕게나마 이해가 필요하다
+  - 컴파일이 필요하기 때문에 [[../xcode|xcode]] 나 `build.gradle` 등에 대한 수정도 다소 필요하다
+  - 배포를 위해서는 스크린샷등 이미지 준비도해야한다
+  - 개인정보 처리방침도 작성해야한다
+
+## 필수 라이브러리들에 대한 학습
+- 네비게이션 학습, 네비게이션 없는 앱은 존재할 수 없다
+  - `react-navigation` 
+- 스플래시 스크린 혹은 런치 스크린이라 불리는 로딩 화면 처리
+- [[../push-notification|push-notification]] 을 받아야하므로 이에 대한 처리
+  - `@react-native-firebase/*`
+  - `@notifee/react-native`
+
+## 배포 자동화
+- 완전히 선택적인 옵션이기 때문에 허들이라 할 순 없다.
+- 다만 지속적인 업데이트를 통한 생산성을 확보하고자 한다면 도움이 될 것
+- [[../fastlane|fastlane]] 을 통한 자동화 또한 다소 코드 작성이 필요했다.
+- [[../ruby|ruby]] 언어 기반이기때문에 조금 찾아보면서 작업을 해야한다
+- 사실 이런 부분도 secret 관리를 그냥 코드에 때려밖는다고한다면 상당히 단순화된다
+
+## 개발 과정
+- 라이브러리들이 네이티브를 포함하기 때문에 다소 설정이 들어가는것이 일반적이다.
+- [[../react-native|react-native]] 는 자바스크립트 환경이지만 runtime 이 다르므로 global 객체가 있을 것이라고 가정해서는 안된다
+  - `URLSearchParams` - 얜 `polyfill` 이 있어서 다행
+  - `Intl` - 상대시간 표기를 한글로 하고싶었는데 얘가 없어서 정규표현식을 통한 변환 처리했다
+- [[../react-native|react-native]] [[../app|app]] 을 개발하면서 모르는 [[../app|app]] 의 개념, 환경을 받아들이는고 설정하는데 많은 시간이 소요
+  - [[../xcode|xcode]]
+  - [[../pod|pod]]
+  - [[../gradle|gradle]]
+  - [[../fastlane|fastlane]]
+- 처음에는 하이브리드 앱을 생각했으나 full [[../webview|webview]] [[../app|app]] 이 아닌이상 인증처리가 더 복잡한 문제가 있어 native 로 전환
+  - 미세하게 느껴지는 퍼포먼스 혹은 느낌의 차이
+  - 401 처리를 앱과 네이티브 두영역에서 해야하다보니 전파의 이슈
+  - single [[../webview|webview]] 가아닌 multi [[../webview|webview]] 이다보니 이 또한 전파의 이슈를 깊게 고민해야했다
+    ```mermaid
+    flowchart
+      server --401--&gt; native
+      native &lt;-.갱신.-&gt; server
+      native --token--&gt; wv0[webview 0]
+      native --token--&gt; wv1[webview 1]
+      native --token--&gt; wv2[webview 2]
+      native --token--&gt; wv3[webview 3]
+    ```
+    ```mermaid
+    flowchart
+      server --401--&gt; wv1
+      wv1 &lt;-.갱신.-&gt; server
+      wv1 --token--&gt; native
+      native --token--&gt; wv0[webview 0]
+      native --token--&gt; wv2[webview 2]
+      native --token--&gt; wv3[webview 3]
+    ```
+    ```mermaid
+    flowchart
+      server --401--&gt; wv1
+      wv1 --token--&gt; native
+      native &lt;-.갱신.-&gt; server
+      native --token--&gt; wv0[webview 0]
+      native --token--&gt; wv2[webview 2]
+      native --token--&gt; wv3[webview 3]
+    ```
+- 추후 웹까지의 서비스 확장을 위해 next-auth 기반으로 구현을 하다보니 여기서 시간이 꽤나 소요되었다
+  - next-auth 는 rn을 지원하지 않으나 이를 커스텀하여 중간에 같은 로직과 테이블 구조를 사용하고자 했다
+  - native 로 전환을 하고자하니 next-auth 는 쿠키기반이라 이를 헤더기반으로 풀기위해서 시간이 소요
+    - 이를 위해 코드를 일부 떠와야했고 패스워드없는 이메일 기반 로직등을 추가로 구현
+- navigation 에 종속적이므로 코드 구조 또한 선택한 [[../react-navigation|react-navigation]] 에 맞춰줘야하는 경향이 있다.
+  - 옵션이 많이 있었고 [[../ios|ios]], [[../android|android]] 간에도 잘 동작해서 어려움이 없었다.
+- 로그인을 지원하는 [[../app|app]] 은 로그인이 풀리지 않는 것이 중요하므로 **refresh token** 을 통한 갱신이 필수적이므로 이에 대한 구현을 공통화 해서 잘처리해야한다
+  - 앱이 background 에 있다가 foreground 로 올라왔을때 연속적인 api call 이 발생하여 401 이 중복으로 발생하여 생긴 문제가 있었다.
+```mermaid
+flowchart
+  server --401--&gt; s0[screen 0]
+  s0 &lt;-.갱신.-&gt; server
+  server --401--&gt; s1[screen 1]
+  s1 x-.갱신에러.-x server
+  s0 --1. 저장--&gt; s[(stoarge)]
+  s1 ==2. 초기화==&gt; s[(stoarge)]
+```
+- 직접 [[../fcm|fcm]] 토큰을 통해서 [[push-notification]] 을 발행할 수도 있지만 topic 을 통해서 전송도 가능하다.  이 경우 한글을 지원하지 않아 인코딩이 필요했다.
+
+## 툴 활용
+- ipad 의 *procreator* 를 사용해서 플레이 스토어에서 요구하는 그래픽 이미지(1024x500) 에 대한 문구 처리를 했다
+- `react-native-bootsplash` 라이브러리에서 스플래시 스크린에대한 요구사항 처리
+
+### 웹 서비스
++ [[../dev-tools|dev-tools]]  
+- [[../midjourney|midjourney]] 를 통해 작성된 아이콘을 여러 사이즈로 변환
+  + https://easyappicon.com
+- 인터넷에 공개된 figma 템플릿을 활용해서 스토어에 필요한 이미지들을 작성
+
+### 생성 [[../ai|ai]]
+- 스플래시 스크린과,  앱 아이콘 및 몇가지 앱 내 로고 처리를 [[../midjourney|midjourney]] 를 통해 작성했다
+- 개인정보 처리 방침 작성
+  - [[../chatgpt|chatgpt]] 에게 앱이 하는 일과 수집하는 정보를 설명하고 작성해달라했다
+  - appstore 통과, playstore 는 아직 google 로그인 허가 안떨어져서 대기중이다
+  - google 로그인에서는 개인정보 처리방침이 부족하다는 피드백이었다.
+
+## 후기
+- [[../react-native|react-native]] 를 사용하고 있는만큼 웹 개발과 그다지 이질감은 없다.
+- 다만 위에 정리한 4허들이 존재한다
+- [[../push-notification|push-notification]] 경우는 멀티디바이스를 지원할 것인지와 같은 고민포인트 들이 있다. 트레이트드 오프가 필요하다.
+- 첫 app 개발에 대해서는 설정등에 대한 부담이 강하나 두번째 개발부터  더 빠르게 개발이 가능할 것으로 생각한다
+
+## git commit 분석
+- 커밋으로 의미있는 타임라인을 추출하지는 못했다.
+  - 일 자체를 선형으로 하지 않고 앱, 웹서버, 알림서버 등을 동시에 처리했기 때문
+  - 그외에도 삽질이 너무 많았고, 되돌리는 경우도 많았다
+
+### 2023-w49, 2023-12-03
+- web
+  - 서버 + [[../yarn|yarn]]@4
+- app
+  - [[../react-native|react-native]] 프로젝트 생성 + [[../bun|bun]]
+  - [[../react-navigation|react-navigation]] 설정
+  - [[../webview|webview]],  인앱브라우저
+
+### 2023-w50, 2023-12-10
+- web
+  - 배포 +  [[../docker|docker]] build 스크립트
+  - [[../nextjs|nextjs]] standalone 위해 [[../yarn|yarn]] cache 튜닝
+  - 도메인 + ingress 설정
+  - logger 설정
+  - [[../next-auth|next-auth]] 설정
+    - 인증 데이터를 위한 table 생성
+  - 로그인 스크린 구현
+  - 구글 로그인 flow 구현
+- app
+  - 테스트 스크린 구현
+  - 커스텀 타입처리를 위한 `global.d.ts` 추가
+  - 구글 로그인 패키지 설정
+  - email 로그인을 위한 sendgrid 설정
+- firebase 프로젝트 설정 시작
+
+### 2023-w51, 2023-12-17
+- web
+  - email 로그인 flow 구현
+  - assetlinks.json 추가
+- app
+  - 딥링크 처리
+  - react-native-permission 추가
+  - @react-native-firebase/* 추가
+  - notifee 추가
+  - react-native-url-polyfill 추가
+
+### 2023-w52, 2023-12-24
+- app
+  - react-native@0.73.1
+  - apple 로그인
+  - ios deeplink 설정
+  - ios 실기기에서 테스트시 localhost 처리 못하는 문제를 git stage 를 활용해서 처리
+- 배포
+  - fastlane 을 이용해 firebase app distribution 배포
+
+### 2024-w01, 2023-12-31
+- web
+  - next-auth 커스텀 처리를 위한 soft-fork 및 디버깅
+  - fcm 테이블 생성 및 토큰 저장
+- app
+  - xcode remote push 활성화 및 테스트
+  - android react-native-config + proguard 충돌 이슈 처리
+  - react-native-async-storage 추가
+  - firebase anlytics, crashlytics, app-check 추가
+    - app-check 제거
+  - android 에서 appsignin 로직 분리 제거
+  - 키워드 관리 구현
+  - react-navigation 타입 주입
+  - 웹뷰 통신을 통한 로그인 구현
+  - safearea 적용
+- 배포
+  - fastlane 을 이용해 android 로컬 디바이스에 복사처리
+
+### 2024-w02, 2024-01-06
+- refresh token 로직 구현
+- 피드화면 구현
+- 401 + refresh token 재 인증 구현
+- 등록된 키워드에 맞춰서 푸시 발송 구현
+- 푸시를 받아서 알람 띄우기 구현
+- 알람 누른경우 딥링크 처리 로직
+- 내 피드 스크린 구현
+- 키보드내려가는 로직 처리
+- 스플래시 스크린 추가
+
+### 2024-w03, 2024-01-13
+- react-native@0.73.2
+- fcm 토픽이 한글지원을 하지 않아서 인코딩
+- 키워드 검색 구현
+- 로그인 화면 앱으로 재구현
+- 웹서버 yarn -&gt; pnpm 으로 마이그레이션
+- 아이콘 변경
+- android 빌드 환경 분리
+- 바탐탭 active 색상 적용
+- 바탐탭 alarm 카운 표시
+- code-push 적용
+- ui, 시간 포맷 적용
+- 환경에따른 .env 로드 분리
+- email ui 처리
+- lottie 적용
+- 로고 적용
+- 로그인에 따른 애널리틱스 속성 설정
+
+### 2024-w04, 2024-01-20
+- 스크린 계정 조정
+- 헤더 추가
+- 종료딜 표시
+- 배포
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="- [X] 구글 로그인 심사"/><meta property="og:description" content="  - [X] 피드백 반영해서 privacy-policy 업데이트, 홈페이지에 개인정보 처리방침 링크
+- [O] 안드로이드 플레이 스토어 등록
+  - [X] 계정삭제를 웹으로 지원 [[2024-01-24]]
+  - [X] ad id
+    - [X] 플레이 콘솔 -&gt;  앱 콘텐트 -&gt;  광고 ID -&gt; 사용,  애널리틱스에서 어차피사용되서 포함됨
+  - [X] 앱 서명 google playstore 에서 제공하는 키사용 체크
+  - [o] 플레이 콘솔 -&gt;  설정 -&gt;  앱 서명, 여기에 나오는 서명키들을 firebase 등에 추가로 등록해야하는지 확인 필요
+    - [ ] 앱 서명키 인증서 - 구글에서 추가로 사인을 한 것으로 추측
+      - [ ] 업로드키 인증서가 이미 [[../firebase|firebase]] 에 등록되었기 때문에 다른 곳에 등록을 안하면 어떻게되는지 확인 필요하다
+      - [ ] 이 것도 firebase 쪽에 등록 필요
+      - [ ] `https://[DOMAIN.COM]/.well-known/assetlinks.json` 파일도 교체해야할 것으로 보임
+        - [[../deployment|deployment]] 에서 fine mount
+    - [X] 업로드키 인증서 - fastlane 에서 업로드할때 로컬에서 sign 한 키가 보여진다
+  - [[../fastlane|fastlane]] 배포
+    - 최소 한번의 수동 배포가 필요하다
+      ```sh 
+      - [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].
+      ```
+    - 테스트 -&gt;  내부테스트 -&gt;  업로드 번들에 생성된 `app-release.aab` 파일을 업로드한다.
+      - `./gradlew bundleRelease` 를 통해 생성
+    - 한번 배포하고 나면 버전 코드 충돌난다고 나온다, 버전코드는 트랙과 무관.
+      ```sh
+      Google Api Error: Invalid request - Version code 1 has already been used.
+      ```
+    - 버전 코드를 올린다
+      ```sh
+      Google Api Error: Invalid request - Precondition check failed.
+      ```
+    - upload_to_play_store(track: &#x27;internal&#x27;) 을 주었더니 에러가 다른 에러가 발생
+      ```sh
+      Google Api Error: Invalid request - Only releases with status draft may be created on draft app.
+      ```
+    + https://github.com/fastlane/fastlane/discussions/18293
+      - 테스트는 내부-internal,  비공개-alhpa, 공개-beta 트랙으로 분류하는것으로 추측
+      - 글에 따르면 alpha 이상에서 릴리즈가 수등으로 되어야한다고 말하고 있음
+- [X] 앱 개발 과정에 대한 정리
+- [[../apple|apple]] 아케이드 체험 등록
+- [[../react-native|react-native]] [[../ios|ios]] 는 `Text` 컴포넌트 스타일에 `borderRadius` 가 동작하지않음
+
+---
+
+# 리액트 네이티브 앱 개발 기록
+- [[../react-native|react-native]] 를 통해 앱 배포까지의 기록
+- 데이터와 관련해서는 기존에 웹으로 제공하고 있던 데이터를 활용할 수 있는 상황에서 시작했다.
+
+## 앱개발의 4 허들
+&gt; 프론트엔드 고도화를 하기 전에 아래 4개의 허들을 넘어야한다.  
+&gt; 하지만 원하는 앱에 따라 스토어 배포를 제외한 나머지는 선택적이다.
+
+- [[../authentication|authentication]]
+  - [[../oauth|oauth]] 인증을 지원하는 경우 [[../apple|apple]] 은 필수적으로 [[../apple|apple]] 로그인을 요구한다
+- [[../firebase|firebase]] [[../fcm|fcm]]
+  - [[../app|app]] 에서 차별화되는 가장 중요한 서비스중 하나는 [[../push-notification|push-notification]]
+  - 이를 위해선 [[../fcm|fcm]] 이 defacto 로 사용되고 있다.
+- [[../code-push|code-push]]
+  - 선택적이나 앱은 배포이후 문제가 생겼을때 치명적이므로 이에 대한 보험이 필요
+  - [[../react-native|react-native]] 그 외에도 여러가지 활용폭이 있으므로
+- [[../apple|apple]] app store, [[../google|google]] play store 배포
+  - code signing 등 모르는 개념에 대해 얕게나마 이해가 필요하다
+  - 컴파일이 필요하기 때문에 [[../xcode|xcode]] 나 `build.gradle` 등에 대한 수정도 다소 필요하다
+  - 배포를 위해서는 스크린샷등 이미지 준비도해야한다
+  - 개인정보 처리방침도 작성해야한다
+
+## 필수 라이브러리들에 대한 학습
+- 네비게이션 학습, 네비게이션 없는 앱은 존재할 수 없다
+  - `react-navigation` 
+- 스플래시 스크린 혹은 런치 스크린이라 불리는 로딩 화면 처리
+- [[../push-notification|push-notification]] 을 받아야하므로 이에 대한 처리
+  - `@react-native-firebase/*`
+  - `@notifee/react-native`
+
+## 배포 자동화
+- 완전히 선택적인 옵션이기 때문에 허들이라 할 순 없다.
+- 다만 지속적인 업데이트를 통한 생산성을 확보하고자 한다면 도움이 될 것
+- [[../fastlane|fastlane]] 을 통한 자동화 또한 다소 코드 작성이 필요했다.
+- [[../ruby|ruby]] 언어 기반이기때문에 조금 찾아보면서 작업을 해야한다
+- 사실 이런 부분도 secret 관리를 그냥 코드에 때려밖는다고한다면 상당히 단순화된다
+
+## 개발 과정
+- 라이브러리들이 네이티브를 포함하기 때문에 다소 설정이 들어가는것이 일반적이다.
+- [[../react-native|react-native]] 는 자바스크립트 환경이지만 runtime 이 다르므로 global 객체가 있을 것이라고 가정해서는 안된다
+  - `URLSearchParams` - 얜 `polyfill` 이 있어서 다행
+  - `Intl` - 상대시간 표기를 한글로 하고싶었는데 얘가 없어서 정규표현식을 통한 변환 처리했다
+- [[../react-native|react-native]] [[../app|app]] 을 개발하면서 모르는 [[../app|app]] 의 개념, 환경을 받아들이는고 설정하는데 많은 시간이 소요
+  - [[../xcode|xcode]]
+  - [[../pod|pod]]
+  - [[../gradle|gradle]]
+  - [[../fastlane|fastlane]]
+- 처음에는 하이브리드 앱을 생각했으나 full [[../webview|webview]] [[../app|app]] 이 아닌이상 인증처리가 더 복잡한 문제가 있어 native 로 전환
+  - 미세하게 느껴지는 퍼포먼스 혹은 느낌의 차이
+  - 401 처리를 앱과 네이티브 두영역에서 해야하다보니 전파의 이슈
+  - single [[../webview|webview]] 가아닌 multi [[../webview|webview]] 이다보니 이 또한 전파의 이슈를 깊게 고민해야했다
+    ```mermaid
+    flowchart
+      server --401--&gt; native
+      native &lt;-.갱신.-&gt; server
+      native --token--&gt; wv0[webview 0]
+      native --token--&gt; wv1[webview 1]
+      native --token--&gt; wv2[webview 2]
+      native --token--&gt; wv3[webview 3]
+    ```
+    ```mermaid
+    flowchart
+      server --401--&gt; wv1
+      wv1 &lt;-.갱신.-&gt; server
+      wv1 --token--&gt; native
+      native --token--&gt; wv0[webview 0]
+      native --token--&gt; wv2[webview 2]
+      native --token--&gt; wv3[webview 3]
+    ```
+    ```mermaid
+    flowchart
+      server --401--&gt; wv1
+      wv1 --token--&gt; native
+      native &lt;-.갱신.-&gt; server
+      native --token--&gt; wv0[webview 0]
+      native --token--&gt; wv2[webview 2]
+      native --token--&gt; wv3[webview 3]
+    ```
+- 추후 웹까지의 서비스 확장을 위해 next-auth 기반으로 구현을 하다보니 여기서 시간이 꽤나 소요되었다
+  - next-auth 는 rn을 지원하지 않으나 이를 커스텀하여 중간에 같은 로직과 테이블 구조를 사용하고자 했다
+  - native 로 전환을 하고자하니 next-auth 는 쿠키기반이라 이를 헤더기반으로 풀기위해서 시간이 소요
+    - 이를 위해 코드를 일부 떠와야했고 패스워드없는 이메일 기반 로직등을 추가로 구현
+- navigation 에 종속적이므로 코드 구조 또한 선택한 [[../react-navigation|react-navigation]] 에 맞춰줘야하는 경향이 있다.
+  - 옵션이 많이 있었고 [[../ios|ios]], [[../android|android]] 간에도 잘 동작해서 어려움이 없었다.
+- 로그인을 지원하는 [[../app|app]] 은 로그인이 풀리지 않는 것이 중요하므로 **refresh token** 을 통한 갱신이 필수적이므로 이에 대한 구현을 공통화 해서 잘처리해야한다
+  - 앱이 background 에 있다가 foreground 로 올라왔을때 연속적인 api call 이 발생하여 401 이 중복으로 발생하여 생긴 문제가 있었다.
+```mermaid
+flowchart
+  server --401--&gt; s0[screen 0]
+  s0 &lt;-.갱신.-&gt; server
+  server --401--&gt; s1[screen 1]
+  s1 x-.갱신에러.-x server
+  s0 --1. 저장--&gt; s[(stoarge)]
+  s1 ==2. 초기화==&gt; s[(stoarge)]
+```
+- 직접 [[../fcm|fcm]] 토큰을 통해서 [[push-notification]] 을 발행할 수도 있지만 topic 을 통해서 전송도 가능하다.  이 경우 한글을 지원하지 않아 인코딩이 필요했다.
+
+## 툴 활용
+- ipad 의 *procreator* 를 사용해서 플레이 스토어에서 요구하는 그래픽 이미지(1024x500) 에 대한 문구 처리를 했다
+- `react-native-bootsplash` 라이브러리에서 스플래시 스크린에대한 요구사항 처리
+
+### 웹 서비스
++ [[../dev-tools|dev-tools]]  
+- [[../midjourney|midjourney]] 를 통해 작성된 아이콘을 여러 사이즈로 변환
+  + https://easyappicon.com
+- 인터넷에 공개된 figma 템플릿을 활용해서 스토어에 필요한 이미지들을 작성
+
+### 생성 [[../ai|ai]]
+- 스플래시 스크린과,  앱 아이콘 및 몇가지 앱 내 로고 처리를 [[../midjourney|midjourney]] 를 통해 작성했다
+- 개인정보 처리 방침 작성
+  - [[../chatgpt|chatgpt]] 에게 앱이 하는 일과 수집하는 정보를 설명하고 작성해달라했다
+  - appstore 통과, playstore 는 아직 google 로그인 허가 안떨어져서 대기중이다
+  - google 로그인에서는 개인정보 처리방침이 부족하다는 피드백이었다.
+
+## 후기
+- [[../react-native|react-native]] 를 사용하고 있는만큼 웹 개발과 그다지 이질감은 없다.
+- 다만 위에 정리한 4허들이 존재한다
+- [[../push-notification|push-notification]] 경우는 멀티디바이스를 지원할 것인지와 같은 고민포인트 들이 있다. 트레이트드 오프가 필요하다.
+- 첫 app 개발에 대해서는 설정등에 대한 부담이 강하나 두번째 개발부터  더 빠르게 개발이 가능할 것으로 생각한다
+
+## git commit 분석
+- 커밋으로 의미있는 타임라인을 추출하지는 못했다.
+  - 일 자체를 선형으로 하지 않고 앱, 웹서버, 알림서버 등을 동시에 처리했기 때문
+  - 그외에도 삽질이 너무 많았고, 되돌리는 경우도 많았다
+
+### 2023-w49, 2023-12-03
+- web
+  - 서버 + [[../yarn|yarn]]@4
+- app
+  - [[../react-native|react-native]] 프로젝트 생성 + [[../bun|bun]]
+  - [[../react-navigation|react-navigation]] 설정
+  - [[../webview|webview]],  인앱브라우저
+
+### 2023-w50, 2023-12-10
+- web
+  - 배포 +  [[../docker|docker]] build 스크립트
+  - [[../nextjs|nextjs]] standalone 위해 [[../yarn|yarn]] cache 튜닝
+  - 도메인 + ingress 설정
+  - logger 설정
+  - [[../next-auth|next-auth]] 설정
+    - 인증 데이터를 위한 table 생성
+  - 로그인 스크린 구현
+  - 구글 로그인 flow 구현
+- app
+  - 테스트 스크린 구현
+  - 커스텀 타입처리를 위한 `global.d.ts` 추가
+  - 구글 로그인 패키지 설정
+  - email 로그인을 위한 sendgrid 설정
+- firebase 프로젝트 설정 시작
+
+### 2023-w51, 2023-12-17
+- web
+  - email 로그인 flow 구현
+  - assetlinks.json 추가
+- app
+  - 딥링크 처리
+  - react-native-permission 추가
+  - @react-native-firebase/* 추가
+  - notifee 추가
+  - react-native-url-polyfill 추가
+
+### 2023-w52, 2023-12-24
+- app
+  - react-native@0.73.1
+  - apple 로그인
+  - ios deeplink 설정
+  - ios 실기기에서 테스트시 localhost 처리 못하는 문제를 git stage 를 활용해서 처리
+- 배포
+  - fastlane 을 이용해 firebase app distribution 배포
+
+### 2024-w01, 2023-12-31
+- web
+  - next-auth 커스텀 처리를 위한 soft-fork 및 디버깅
+  - fcm 테이블 생성 및 토큰 저장
+- app
+  - xcode remote push 활성화 및 테스트
+  - android react-native-config + proguard 충돌 이슈 처리
+  - react-native-async-storage 추가
+  - firebase anlytics, crashlytics, app-check 추가
+    - app-check 제거
+  - android 에서 appsignin 로직 분리 제거
+  - 키워드 관리 구현
+  - react-navigation 타입 주입
+  - 웹뷰 통신을 통한 로그인 구현
+  - safearea 적용
+- 배포
+  - fastlane 을 이용해 android 로컬 디바이스에 복사처리
+
+### 2024-w02, 2024-01-06
+- refresh token 로직 구현
+- 피드화면 구현
+- 401 + refresh token 재 인증 구현
+- 등록된 키워드에 맞춰서 푸시 발송 구현
+- 푸시를 받아서 알람 띄우기 구현
+- 알람 누른경우 딥링크 처리 로직
+- 내 피드 스크린 구현
+- 키보드내려가는 로직 처리
+- 스플래시 스크린 추가
+
+### 2024-w03, 2024-01-13
+- react-native@0.73.2
+- fcm 토픽이 한글지원을 하지 않아서 인코딩
+- 키워드 검색 구현
+- 로그인 화면 앱으로 재구현
+- 웹서버 yarn -&gt; pnpm 으로 마이그레이션
+- 아이콘 변경
+- android 빌드 환경 분리
+- 바탐탭 active 색상 적용
+- 바탐탭 alarm 카운 표시
+- code-push 적용
+- ui, 시간 포맷 적용
+- 환경에따른 .env 로드 분리
+- email ui 처리
+- lottie 적용
+- 로고 적용
+- 로그인에 따른 애널리틱스 속성 설정
+
+### 2024-w04, 2024-01-20
+- 스크린 계정 조정
+- 헤더 추가
+- 종료딜 표시
+- 배포
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/diary/2024-01-25"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="- [X] 구글 로그인 심사"/><meta name="twitter:description" content="  - [X] 피드백 반영해서 privacy-policy 업데이트, 홈페이지에 개인정보 처리방침 링크
+- [O] 안드로이드 플레이 스토어 등록
+  - [X] 계정삭제를 웹으로 지원 [[2024-01-24]]
+  - [X] ad id
+    - [X] 플레이 콘솔 -&gt;  앱 콘텐트 -&gt;  광고 ID -&gt; 사용,  애널리틱스에서 어차피사용되서 포함됨
+  - [X] 앱 서명 google playstore 에서 제공하는 키사용 체크
+  - [o] 플레이 콘솔 -&gt;  설정 -&gt;  앱 서명, 여기에 나오는 서명키들을 firebase 등에 추가로 등록해야하는지 확인 필요
+    - [ ] 앱 서명키 인증서 - 구글에서 추가로 사인을 한 것으로 추측
+      - [ ] 업로드키 인증서가 이미 [[../firebase|firebase]] 에 등록되었기 때문에 다른 곳에 등록을 안하면 어떻게되는지 확인 필요하다
+      - [ ] 이 것도 firebase 쪽에 등록 필요
+      - [ ] `https://[DOMAIN.COM]/.well-known/assetlinks.json` 파일도 교체해야할 것으로 보임
+        - [[../deployment|deployment]] 에서 fine mount
+    - [X] 업로드키 인증서 - fastlane 에서 업로드할때 로컬에서 sign 한 키가 보여진다
+  - [[../fastlane|fastlane]] 배포
+    - 최소 한번의 수동 배포가 필요하다
+      ```sh 
+      - [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].
+      ```
+    - 테스트 -&gt;  내부테스트 -&gt;  업로드 번들에 생성된 `app-release.aab` 파일을 업로드한다.
+      - `./gradlew bundleRelease` 를 통해 생성
+    - 한번 배포하고 나면 버전 코드 충돌난다고 나온다, 버전코드는 트랙과 무관.
+      ```sh
+      Google Api Error: Invalid request - Version code 1 has already been used.
+      ```
+    - 버전 코드를 올린다
+      ```sh
+      Google Api Error: Invalid request - Precondition check failed.
+      ```
+    - upload_to_play_store(track: &#x27;internal&#x27;) 을 주었더니 에러가 다른 에러가 발생
+      ```sh
+      Google Api Error: Invalid request - Only releases with status draft may be created on draft app.
+      ```
+    + https://github.com/fastlane/fastlane/discussions/18293
+      - 테스트는 내부-internal,  비공개-alhpa, 공개-beta 트랙으로 분류하는것으로 추측
+      - 글에 따르면 alpha 이상에서 릴리즈가 수등으로 되어야한다고 말하고 있음
+- [X] 앱 개발 과정에 대한 정리
+- [[../apple|apple]] 아케이드 체험 등록
+- [[../react-native|react-native]] [[../ios|ios]] 는 `Text` 컴포넌트 스타일에 `borderRadius` 가 동작하지않음
+
+---
+
+# 리액트 네이티브 앱 개발 기록
+- [[../react-native|react-native]] 를 통해 앱 배포까지의 기록
+- 데이터와 관련해서는 기존에 웹으로 제공하고 있던 데이터를 활용할 수 있는 상황에서 시작했다.
+
+## 앱개발의 4 허들
+&gt; 프론트엔드 고도화를 하기 전에 아래 4개의 허들을 넘어야한다.  
+&gt; 하지만 원하는 앱에 따라 스토어 배포를 제외한 나머지는 선택적이다.
+
+- [[../authentication|authentication]]
+  - [[../oauth|oauth]] 인증을 지원하는 경우 [[../apple|apple]] 은 필수적으로 [[../apple|apple]] 로그인을 요구한다
+- [[../firebase|firebase]] [[../fcm|fcm]]
+  - [[../app|app]] 에서 차별화되는 가장 중요한 서비스중 하나는 [[../push-notification|push-notification]]
+  - 이를 위해선 [[../fcm|fcm]] 이 defacto 로 사용되고 있다.
+- [[../code-push|code-push]]
+  - 선택적이나 앱은 배포이후 문제가 생겼을때 치명적이므로 이에 대한 보험이 필요
+  - [[../react-native|react-native]] 그 외에도 여러가지 활용폭이 있으므로
+- [[../apple|apple]] app store, [[../google|google]] play store 배포
+  - code signing 등 모르는 개념에 대해 얕게나마 이해가 필요하다
+  - 컴파일이 필요하기 때문에 [[../xcode|xcode]] 나 `build.gradle` 등에 대한 수정도 다소 필요하다
+  - 배포를 위해서는 스크린샷등 이미지 준비도해야한다
+  - 개인정보 처리방침도 작성해야한다
+
+## 필수 라이브러리들에 대한 학습
+- 네비게이션 학습, 네비게이션 없는 앱은 존재할 수 없다
+  - `react-navigation` 
+- 스플래시 스크린 혹은 런치 스크린이라 불리는 로딩 화면 처리
+- [[../push-notification|push-notification]] 을 받아야하므로 이에 대한 처리
+  - `@react-native-firebase/*`
+  - `@notifee/react-native`
+
+## 배포 자동화
+- 완전히 선택적인 옵션이기 때문에 허들이라 할 순 없다.
+- 다만 지속적인 업데이트를 통한 생산성을 확보하고자 한다면 도움이 될 것
+- [[../fastlane|fastlane]] 을 통한 자동화 또한 다소 코드 작성이 필요했다.
+- [[../ruby|ruby]] 언어 기반이기때문에 조금 찾아보면서 작업을 해야한다
+- 사실 이런 부분도 secret 관리를 그냥 코드에 때려밖는다고한다면 상당히 단순화된다
+
+## 개발 과정
+- 라이브러리들이 네이티브를 포함하기 때문에 다소 설정이 들어가는것이 일반적이다.
+- [[../react-native|react-native]] 는 자바스크립트 환경이지만 runtime 이 다르므로 global 객체가 있을 것이라고 가정해서는 안된다
+  - `URLSearchParams` - 얜 `polyfill` 이 있어서 다행
+  - `Intl` - 상대시간 표기를 한글로 하고싶었는데 얘가 없어서 정규표현식을 통한 변환 처리했다
+- [[../react-native|react-native]] [[../app|app]] 을 개발하면서 모르는 [[../app|app]] 의 개념, 환경을 받아들이는고 설정하는데 많은 시간이 소요
+  - [[../xcode|xcode]]
+  - [[../pod|pod]]
+  - [[../gradle|gradle]]
+  - [[../fastlane|fastlane]]
+- 처음에는 하이브리드 앱을 생각했으나 full [[../webview|webview]] [[../app|app]] 이 아닌이상 인증처리가 더 복잡한 문제가 있어 native 로 전환
+  - 미세하게 느껴지는 퍼포먼스 혹은 느낌의 차이
+  - 401 처리를 앱과 네이티브 두영역에서 해야하다보니 전파의 이슈
+  - single [[../webview|webview]] 가아닌 multi [[../webview|webview]] 이다보니 이 또한 전파의 이슈를 깊게 고민해야했다
+    ```mermaid
+    flowchart
+      server --401--&gt; native
+      native &lt;-.갱신.-&gt; server
+      native --token--&gt; wv0[webview 0]
+      native --token--&gt; wv1[webview 1]
+      native --token--&gt; wv2[webview 2]
+      native --token--&gt; wv3[webview 3]
+    ```
+    ```mermaid
+    flowchart
+      server --401--&gt; wv1
+      wv1 &lt;-.갱신.-&gt; server
+      wv1 --token--&gt; native
+      native --token--&gt; wv0[webview 0]
+      native --token--&gt; wv2[webview 2]
+      native --token--&gt; wv3[webview 3]
+    ```
+    ```mermaid
+    flowchart
+      server --401--&gt; wv1
+      wv1 --token--&gt; native
+      native &lt;-.갱신.-&gt; server
+      native --token--&gt; wv0[webview 0]
+      native --token--&gt; wv2[webview 2]
+      native --token--&gt; wv3[webview 3]
+    ```
+- 추후 웹까지의 서비스 확장을 위해 next-auth 기반으로 구현을 하다보니 여기서 시간이 꽤나 소요되었다
+  - next-auth 는 rn을 지원하지 않으나 이를 커스텀하여 중간에 같은 로직과 테이블 구조를 사용하고자 했다
+  - native 로 전환을 하고자하니 next-auth 는 쿠키기반이라 이를 헤더기반으로 풀기위해서 시간이 소요
+    - 이를 위해 코드를 일부 떠와야했고 패스워드없는 이메일 기반 로직등을 추가로 구현
+- navigation 에 종속적이므로 코드 구조 또한 선택한 [[../react-navigation|react-navigation]] 에 맞춰줘야하는 경향이 있다.
+  - 옵션이 많이 있었고 [[../ios|ios]], [[../android|android]] 간에도 잘 동작해서 어려움이 없었다.
+- 로그인을 지원하는 [[../app|app]] 은 로그인이 풀리지 않는 것이 중요하므로 **refresh token** 을 통한 갱신이 필수적이므로 이에 대한 구현을 공통화 해서 잘처리해야한다
+  - 앱이 background 에 있다가 foreground 로 올라왔을때 연속적인 api call 이 발생하여 401 이 중복으로 발생하여 생긴 문제가 있었다.
+```mermaid
+flowchart
+  server --401--&gt; s0[screen 0]
+  s0 &lt;-.갱신.-&gt; server
+  server --401--&gt; s1[screen 1]
+  s1 x-.갱신에러.-x server
+  s0 --1. 저장--&gt; s[(stoarge)]
+  s1 ==2. 초기화==&gt; s[(stoarge)]
+```
+- 직접 [[../fcm|fcm]] 토큰을 통해서 [[push-notification]] 을 발행할 수도 있지만 topic 을 통해서 전송도 가능하다.  이 경우 한글을 지원하지 않아 인코딩이 필요했다.
+
+## 툴 활용
+- ipad 의 *procreator* 를 사용해서 플레이 스토어에서 요구하는 그래픽 이미지(1024x500) 에 대한 문구 처리를 했다
+- `react-native-bootsplash` 라이브러리에서 스플래시 스크린에대한 요구사항 처리
+
+### 웹 서비스
++ [[../dev-tools|dev-tools]]  
+- [[../midjourney|midjourney]] 를 통해 작성된 아이콘을 여러 사이즈로 변환
+  + https://easyappicon.com
+- 인터넷에 공개된 figma 템플릿을 활용해서 스토어에 필요한 이미지들을 작성
+
+### 생성 [[../ai|ai]]
+- 스플래시 스크린과,  앱 아이콘 및 몇가지 앱 내 로고 처리를 [[../midjourney|midjourney]] 를 통해 작성했다
+- 개인정보 처리 방침 작성
+  - [[../chatgpt|chatgpt]] 에게 앱이 하는 일과 수집하는 정보를 설명하고 작성해달라했다
+  - appstore 통과, playstore 는 아직 google 로그인 허가 안떨어져서 대기중이다
+  - google 로그인에서는 개인정보 처리방침이 부족하다는 피드백이었다.
+
+## 후기
+- [[../react-native|react-native]] 를 사용하고 있는만큼 웹 개발과 그다지 이질감은 없다.
+- 다만 위에 정리한 4허들이 존재한다
+- [[../push-notification|push-notification]] 경우는 멀티디바이스를 지원할 것인지와 같은 고민포인트 들이 있다. 트레이트드 오프가 필요하다.
+- 첫 app 개발에 대해서는 설정등에 대한 부담이 강하나 두번째 개발부터  더 빠르게 개발이 가능할 것으로 생각한다
+
+## git commit 분석
+- 커밋으로 의미있는 타임라인을 추출하지는 못했다.
+  - 일 자체를 선형으로 하지 않고 앱, 웹서버, 알림서버 등을 동시에 처리했기 때문
+  - 그외에도 삽질이 너무 많았고, 되돌리는 경우도 많았다
+
+### 2023-w49, 2023-12-03
+- web
+  - 서버 + [[../yarn|yarn]]@4
+- app
+  - [[../react-native|react-native]] 프로젝트 생성 + [[../bun|bun]]
+  - [[../react-navigation|react-navigation]] 설정
+  - [[../webview|webview]],  인앱브라우저
+
+### 2023-w50, 2023-12-10
+- web
+  - 배포 +  [[../docker|docker]] build 스크립트
+  - [[../nextjs|nextjs]] standalone 위해 [[../yarn|yarn]] cache 튜닝
+  - 도메인 + ingress 설정
+  - logger 설정
+  - [[../next-auth|next-auth]] 설정
+    - 인증 데이터를 위한 table 생성
+  - 로그인 스크린 구현
+  - 구글 로그인 flow 구현
+- app
+  - 테스트 스크린 구현
+  - 커스텀 타입처리를 위한 `global.d.ts` 추가
+  - 구글 로그인 패키지 설정
+  - email 로그인을 위한 sendgrid 설정
+- firebase 프로젝트 설정 시작
+
+### 2023-w51, 2023-12-17
+- web
+  - email 로그인 flow 구현
+  - assetlinks.json 추가
+- app
+  - 딥링크 처리
+  - react-native-permission 추가
+  - @react-native-firebase/* 추가
+  - notifee 추가
+  - react-native-url-polyfill 추가
+
+### 2023-w52, 2023-12-24
+- app
+  - react-native@0.73.1
+  - apple 로그인
+  - ios deeplink 설정
+  - ios 실기기에서 테스트시 localhost 처리 못하는 문제를 git stage 를 활용해서 처리
+- 배포
+  - fastlane 을 이용해 firebase app distribution 배포
+
+### 2024-w01, 2023-12-31
+- web
+  - next-auth 커스텀 처리를 위한 soft-fork 및 디버깅
+  - fcm 테이블 생성 및 토큰 저장
+- app
+  - xcode remote push 활성화 및 테스트
+  - android react-native-config + proguard 충돌 이슈 처리
+  - react-native-async-storage 추가
+  - firebase anlytics, crashlytics, app-check 추가
+    - app-check 제거
+  - android 에서 appsignin 로직 분리 제거
+  - 키워드 관리 구현
+  - react-navigation 타입 주입
+  - 웹뷰 통신을 통한 로그인 구현
+  - safearea 적용
+- 배포
+  - fastlane 을 이용해 android 로컬 디바이스에 복사처리
+
+### 2024-w02, 2024-01-06
+- refresh token 로직 구현
+- 피드화면 구현
+- 401 + refresh token 재 인증 구현
+- 등록된 키워드에 맞춰서 푸시 발송 구현
+- 푸시를 받아서 알람 띄우기 구현
+- 알람 누른경우 딥링크 처리 로직
+- 내 피드 스크린 구현
+- 키보드내려가는 로직 처리
+- 스플래시 스크린 추가
+
+### 2024-w03, 2024-01-13
+- react-native@0.73.2
+- fcm 토픽이 한글지원을 하지 않아서 인코딩
+- 키워드 검색 구현
+- 로그인 화면 앱으로 재구현
+- 웹서버 yarn -&gt; pnpm 으로 마이그레이션
+- 아이콘 변경
+- android 빌드 환경 분리
+- 바탐탭 active 색상 적용
+- 바탐탭 alarm 카운 표시
+- code-push 적용
+- ui, 시간 포맷 적용
+- 환경에따른 .env 로드 분리
+- email ui 처리
+- lottie 적용
+- 로고 적용
+- 로그인에 따른 애널리틱스 속성 설정
+
+### 2024-w04, 2024-01-20
+- 스크린 계정 조정
+- 헤더 추가
+- 종료딜 표시
+- 배포
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/0d7e976
+" class="bg-white text-black">0d7e976</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki/diary">diary<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/diary/2024-01-25.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/diary/2024-01-25.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/diary/2024-01-25.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-25"><span class="underline">diary/2024-01-25</span><sup>59</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-24"><span class="underline">diary/2024-01-24</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/firebase"><span class="underline">firebase</span><sup>14</sup></a></span><span><a class="text-blue-600" href="/public-wiki/deployment"><span class="underline">deployment</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/fastlane"><span class="underline">fastlane</span><sup>26</sup></a></span><span><a class="text-blue-600" href="/public-wiki/apple"><span class="underline">apple</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/react-native"><span class="underline">react-native</span><sup>90</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ios"><span class="underline">ios</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/authentication"><span class="underline">authentication</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/oauth"><span class="underline">oauth</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/fcm"><span class="underline">fcm</span><sup>21</sup></a></span><span><a class="text-blue-600" href="/public-wiki/app"><span class="underline">app</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/push-notification"><span class="underline">push-notification</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/code-push"><span class="underline">code-push</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/google"><span class="underline">google</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/xcode"><span class="underline">xcode</span><sup>16</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ruby"><span class="underline">ruby</span><sup>28</sup></a></span><span><a class="text-blue-600" href="/public-wiki/pod"><span class="underline">pod</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/gradle"><span class="underline">gradle</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/webview"><span class="underline">webview</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/react-navigation"><span class="underline">react-navigation</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/android"><span class="underline">android</span><sup>23</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/push-notification"><span class="underline">diary/push-notification</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/dev-tools"><span class="underline">dev-tools</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/midjourney"><span class="underline">midjourney</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ai"><span class="underline">ai</span><sup>17</sup></a></span><span><a class="text-blue-600" href="/public-wiki/chatgpt"><span class="underline">chatgpt</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/yarn"><span class="underline">yarn</span><sup>11</sup></a></span><span><a class="text-blue-600" href="/public-wiki/bun"><span class="underline">bun</span><sup>10</sup></a></span><span><a class="text-blue-600" href="/public-wiki/docker"><span class="underline">docker</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/nextjs"><span class="underline">nextjs</span><sup>12</sup></a></span><span><a class="text-blue-600" href="/public-wiki/next-auth"><span class="underline">next-auth</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/about-me"><span class="underline">about-me</span><sup>60</sup></a></span><span><a class="text-blue-600" href="/public-wiki/play-console"><span class="underline">play-console</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/retrospect"><span class="underline">retrospect</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-04-24"><span class="underline">diary/2024-04-24</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-12-31"><span class="underline">diary/2024-12-31</span><sup>441</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/index"><span class="underline">diary/index</span><sup>467</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#리액트-네이티브-앱-개발-기록">리액트 네이티브 앱 개발 기록</a></div><div class="pl-2"><a href="#앱개발의-4-허들">앱개발의 4 허들</a></div><div class="pl-2"><a href="#필수-라이브러리들에-대한-학습">필수 라이브러리들에 대한 학습</a></div><div class="pl-2"><a href="#배포-자동화">배포 자동화</a></div><div class="pl-2"><a href="#개발-과정">개발 과정</a></div><div class="pl-2"><a href="#툴-활용">툴 활용</a></div><div class="pl-4"><a href="#웹-서비스">웹 서비스</a></div><div class="pl-4"><a href="#생성-ai">생성 ai</a></div><div class="pl-2"><a href="#후기">후기</a></div><div class="pl-2"><a href="#git-commit-분석">git commit 분석</a></div><div class="pl-4"><a href="#2023-w49-2023-12-03">2023-w49, 2023-12-03</a></div><div class="pl-4"><a href="#2023-w50-2023-12-10">2023-w50, 2023-12-10</a></div><div class="pl-4"><a href="#2023-w51-2023-12-17">2023-w51, 2023-12-17</a></div><div class="pl-4"><a href="#2023-w52-2023-12-24">2023-w52, 2023-12-24</a></div><div class="pl-4"><a href="#2024-w01-2023-12-31">2024-w01, 2023-12-31</a></div><div class="pl-4"><a href="#2024-w02-2024-01-06">2024-w02, 2024-01-06</a></div><div class="pl-4"><a href="#2024-w03-2024-01-13">2024-w03, 2024-01-13</a></div><div class="pl-4"><a href="#2024-w04-2024-01-20">2024-w04, 2024-01-20</a></div></div><div class="flex flex-wrap gap-2 pb-2 m-0 leading-tight ml-auto"><a class="text-blue-600 underline" href="/public-wiki/diary/2024-01-24">이전(<!-- -->2024-01-24<!-- -->)</a><a class="text-blue-600 underline" href="/public-wiki/diary/2024-01-26">다음(<!-- -->2024-01-26<!-- -->)</a></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><ul>
+<li><input checked="" disabled="" type="checkbox"> 구글 로그인 심사<ul>
+<li><input checked="" disabled="" type="checkbox"> 피드백 반영해서 privacy-policy 업데이트, 홈페이지에 개인정보 처리방침 링크</li>
+</ul>
+</li>
+<li>[O] 안드로이드 플레이 스토어 등록<ul>
+<li><input checked="" disabled="" type="checkbox"> 계정삭제를 웹으로 지원 <a href="2024-01-24">2024-01-24</a></li>
+<li><input checked="" disabled="" type="checkbox"> ad id<ul>
+<li><input checked="" disabled="" type="checkbox"> 플레이 콘솔 -&gt;  앱 콘텐트 -&gt;  광고 ID -&gt; 사용,  애널리틱스에서 어차피사용되서 포함됨</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> 앱 서명 google playstore 에서 제공하는 키사용 체크</li>
+<li>[o] 플레이 콘솔 -&gt;  설정 -&gt;  앱 서명, 여기에 나오는 서명키들을 firebase 등에 추가로 등록해야하는지 확인 필요<ul>
+<li><input disabled="" type="checkbox"> 앱 서명키 인증서 - 구글에서 추가로 사인을 한 것으로 추측<ul>
+<li><input disabled="" type="checkbox"> 업로드키 인증서가 이미 <a href="../firebase">firebase</a> 에 등록되었기 때문에 다른 곳에 등록을 안하면 어떻게되는지 확인 필요하다</li>
+<li><input disabled="" type="checkbox"> 이 것도 firebase 쪽에 등록 필요</li>
+<li><input disabled="" type="checkbox"> <code class="span">https://[DOMAIN.COM]/.well-known/assetlinks.json</code> 파일도 교체해야할 것으로 보임<ul>
+<li><a href="../deployment">deployment</a> 에서 fine mount</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> 업로드키 인증서 - fastlane 에서 업로드할때 로컬에서 sign 한 키가 보여진다</li>
+</ul>
+</li>
+<li><a href="../fastlane">fastlane</a> 배포<ul>
+<li>최소 한번의 수동 배포가 필요하다<pre><code class="hljs language-sh">- [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].
+</code></pre></li>
+<li>테스트 -&gt;  내부테스트 -&gt;  업로드 번들에 생성된 <code class="span">app-release.aab</code> 파일을 업로드한다.<ul>
+<li><code class="span">./gradlew bundleRelease</code> 를 통해 생성</li>
+</ul>
+</li>
+<li>한번 배포하고 나면 버전 코드 충돌난다고 나온다, 버전코드는 트랙과 무관.<pre><code class="hljs language-sh">Google Api Error: Invalid request - Version code 1 has already been used.
+</code></pre></li>
+<li>버전 코드를 올린다<pre><code class="hljs language-sh">Google Api Error: Invalid request - Precondition check failed.
+</code></pre></li>
+<li>upload_to_play_store(track: &#39;internal&#39;) 을 주었더니 에러가 다른 에러가 발생<pre><code class="hljs language-sh">Google Api Error: Invalid request - Only releases with status draft may be created on draft app.
+</code></pre></li>
+</ul>
+<ul>
+<li><a href="https://github.com/fastlane/fastlane/discussions/18293" target="_blank">[URL] https://github.com/fastlane/fastlane/discussions/18293</a><ul>
+<li>테스트는 내부-internal,  비공개-alhpa, 공개-beta 트랙으로 분류하는것으로 추측</li>
+<li>글에 따르면 alpha 이상에서 릴리즈가 수등으로 되어야한다고 말하고 있음</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> 앱 개발 과정에 대한 정리</li>
+<li><a href="../apple">apple</a> 아케이드 체험 등록</li>
+<li><a href="../react-native">react-native</a> <a href="../ios">ios</a> 는 <code class="span">Text</code> 컴포넌트 스타일에 <code class="span">borderRadius</code> 가 동작하지않음</li>
+</ul>
+<hr>
+<h1 id="리액트-네이티브-앱-개발-기록">리액트 네이티브 앱 개발 기록</h1>
+<ul>
+<li><a href="../react-native">react-native</a> 를 통해 앱 배포까지의 기록</li>
+<li>데이터와 관련해서는 기존에 웹으로 제공하고 있던 데이터를 활용할 수 있는 상황에서 시작했다.</li>
+</ul>
+<h2 id="앱개발의-4-허들">앱개발의 4 허들</h2>
+<blockquote><p>프론트엔드 고도화를 하기 전에 아래 4개의 허들을 넘어야한다.<br>하지만 원하는 앱에 따라 스토어 배포를 제외한 나머지는 선택적이다.</p></blockquote><ul>
+<li><a href="../authentication">authentication</a><ul>
+<li><a href="../oauth">oauth</a> 인증을 지원하는 경우 <a href="../apple">apple</a> 은 필수적으로 <a href="../apple">apple</a> 로그인을 요구한다</li>
+</ul>
+</li>
+<li><a href="../firebase">firebase</a> <a href="../fcm">fcm</a><ul>
+<li><a href="../app">app</a> 에서 차별화되는 가장 중요한 서비스중 하나는 <a href="../push-notification">push-notification</a></li>
+<li>이를 위해선 <a href="../fcm">fcm</a> 이 defacto 로 사용되고 있다.</li>
+</ul>
+</li>
+<li><a href="../code-push">code-push</a><ul>
+<li>선택적이나 앱은 배포이후 문제가 생겼을때 치명적이므로 이에 대한 보험이 필요</li>
+<li><a href="../react-native">react-native</a> 그 외에도 여러가지 활용폭이 있으므로</li>
+</ul>
+</li>
+<li><a href="../apple">apple</a> app store, <a href="../google">google</a> play store 배포<ul>
+<li>code signing 등 모르는 개념에 대해 얕게나마 이해가 필요하다</li>
+<li>컴파일이 필요하기 때문에 <a href="../xcode">xcode</a> 나 <code class="span">build.gradle</code> 등에 대한 수정도 다소 필요하다</li>
+<li>배포를 위해서는 스크린샷등 이미지 준비도해야한다</li>
+<li>개인정보 처리방침도 작성해야한다</li>
+</ul>
+</li>
+</ul>
+<h2 id="필수-라이브러리들에-대한-학습">필수 라이브러리들에 대한 학습</h2>
+<ul>
+<li>네비게이션 학습, 네비게이션 없는 앱은 존재할 수 없다<ul>
+<li><code class="span">react-navigation</code></li>
+</ul>
+</li>
+<li>스플래시 스크린 혹은 런치 스크린이라 불리는 로딩 화면 처리</li>
+<li><a href="../push-notification">push-notification</a> 을 받아야하므로 이에 대한 처리<ul>
+<li><code class="span">@react-native-firebase/*</code></li>
+<li><code class="span">@notifee/react-native</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="배포-자동화">배포 자동화</h2>
+<ul>
+<li>완전히 선택적인 옵션이기 때문에 허들이라 할 순 없다.</li>
+<li>다만 지속적인 업데이트를 통한 생산성을 확보하고자 한다면 도움이 될 것</li>
+<li><a href="../fastlane">fastlane</a> 을 통한 자동화 또한 다소 코드 작성이 필요했다.</li>
+<li><a href="../ruby">ruby</a> 언어 기반이기때문에 조금 찾아보면서 작업을 해야한다</li>
+<li>사실 이런 부분도 secret 관리를 그냥 코드에 때려밖는다고한다면 상당히 단순화된다</li>
+</ul>
+<h2 id="개발-과정">개발 과정</h2>
+<ul>
+<li>라이브러리들이 네이티브를 포함하기 때문에 다소 설정이 들어가는것이 일반적이다.</li>
+<li><a href="../react-native">react-native</a> 는 자바스크립트 환경이지만 runtime 이 다르므로 global 객체가 있을 것이라고 가정해서는 안된다<ul>
+<li><code class="span">URLSearchParams</code> - 얜 <code class="span">polyfill</code> 이 있어서 다행</li>
+<li><code class="span">Intl</code> - 상대시간 표기를 한글로 하고싶었는데 얘가 없어서 정규표현식을 통한 변환 처리했다</li>
+</ul>
+</li>
+<li><a href="../react-native">react-native</a> <a href="../app">app</a> 을 개발하면서 모르는 <a href="../app">app</a> 의 개념, 환경을 받아들이는고 설정하는데 많은 시간이 소요<ul>
+<li><a href="../xcode">xcode</a></li>
+<li><a href="../pod">pod</a></li>
+<li><a href="../gradle">gradle</a></li>
+<li><a href="../fastlane">fastlane</a></li>
+</ul>
+</li>
+<li>처음에는 하이브리드 앱을 생각했으나 full <a href="../webview">webview</a> <a href="../app">app</a> 이 아닌이상 인증처리가 더 복잡한 문제가 있어 native 로 전환<ul>
+<li>미세하게 느껴지는 퍼포먼스 혹은 느낌의 차이</li>
+<li>401 처리를 앱과 네이티브 두영역에서 해야하다보니 전파의 이슈</li>
+<li>single <a href="../webview">webview</a> 가아닌 multi <a href="../webview">webview</a> 이다보니 이 또한 전파의 이슈를 깊게 고민해야했다<pre><code class="hljs language-mermaid">flowchart
+  server --401--&gt; native
+  native &lt;-.갱신.-&gt; server
+  native --token--&gt; wv0[webview 0]
+  native --token--&gt; wv1[webview 1]
+  native --token--&gt; wv2[webview 2]
+  native --token--&gt; wv3[webview 3]
+</code></pre><pre><code class="hljs language-mermaid">flowchart
+  server --401--&gt; wv1
+  wv1 &lt;-.갱신.-&gt; server
+  wv1 --token--&gt; native
+  native --token--&gt; wv0[webview 0]
+  native --token--&gt; wv2[webview 2]
+  native --token--&gt; wv3[webview 3]
+</code></pre><pre><code class="hljs language-mermaid">flowchart
+  server --401--&gt; wv1
+  wv1 --token--&gt; native
+  native &lt;-.갱신.-&gt; server
+  native --token--&gt; wv0[webview 0]
+  native --token--&gt; wv2[webview 2]
+  native --token--&gt; wv3[webview 3]
+</code></pre></li>
+</ul>
+</li>
+<li>추후 웹까지의 서비스 확장을 위해 next-auth 기반으로 구현을 하다보니 여기서 시간이 꽤나 소요되었다<ul>
+<li>next-auth 는 rn을 지원하지 않으나 이를 커스텀하여 중간에 같은 로직과 테이블 구조를 사용하고자 했다</li>
+<li>native 로 전환을 하고자하니 next-auth 는 쿠키기반이라 이를 헤더기반으로 풀기위해서 시간이 소요<ul>
+<li>이를 위해 코드를 일부 떠와야했고 패스워드없는 이메일 기반 로직등을 추가로 구현</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>navigation 에 종속적이므로 코드 구조 또한 선택한 <a href="../react-navigation">react-navigation</a> 에 맞춰줘야하는 경향이 있다.<ul>
+<li>옵션이 많이 있었고 <a href="../ios">ios</a>, <a href="../android">android</a> 간에도 잘 동작해서 어려움이 없었다.</li>
+</ul>
+</li>
+<li>로그인을 지원하는 <a href="../app">app</a> 은 로그인이 풀리지 않는 것이 중요하므로 <strong>refresh token</strong> 을 통한 갱신이 필수적이므로 이에 대한 구현을 공통화 해서 잘처리해야한다<ul>
+<li>앱이 background 에 있다가 foreground 로 올라왔을때 연속적인 api call 이 발생하여 401 이 중복으로 발생하여 생긴 문제가 있었다.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs language-mermaid">flowchart
+  server --401--&gt; s0[screen 0]
+  s0 &lt;-.갱신.-&gt; server
+  server --401--&gt; s1[screen 1]
+  s1 x-.갱신에러.-x server
+  s0 --1. 저장--&gt; s[(stoarge)]
+  s1 ==2. 초기화==&gt; s[(stoarge)]
+</code></pre><ul>
+<li>직접 <a href="../fcm">fcm</a> 토큰을 통해서 <a href="push-notification">push-notification</a> 을 발행할 수도 있지만 topic 을 통해서 전송도 가능하다.  이 경우 한글을 지원하지 않아 인코딩이 필요했다.</li>
+</ul>
+<h2 id="툴-활용">툴 활용</h2>
+<ul>
+<li>ipad 의 <em>procreator</em> 를 사용해서 플레이 스토어에서 요구하는 그래픽 이미지(1024x500) 에 대한 문구 처리를 했다</li>
+<li><code class="span">react-native-bootsplash</code> 라이브러리에서 스플래시 스크린에대한 요구사항 처리</li>
+</ul>
+<h3 id="웹-서비스">웹 서비스</h3>
+<ul>
+<li><a href="../dev-tools">dev-tools</a></li>
+</ul>
+<ul>
+<li><a href="../midjourney">midjourney</a> 를 통해 작성된 아이콘을 여러 사이즈로 변환<ul>
+<li><a href="https://easyappicon.com" target="_blank">[URL] https://easyappicon.com/</a></li>
+</ul>
+</li>
+<li>인터넷에 공개된 figma 템플릿을 활용해서 스토어에 필요한 이미지들을 작성</li>
+</ul>
+<h3 id="생성-ai">생성 <a href="../ai">ai</a></h3>
+<ul>
+<li>스플래시 스크린과,  앱 아이콘 및 몇가지 앱 내 로고 처리를 <a href="../midjourney">midjourney</a> 를 통해 작성했다</li>
+<li>개인정보 처리 방침 작성<ul>
+<li><a href="../chatgpt">chatgpt</a> 에게 앱이 하는 일과 수집하는 정보를 설명하고 작성해달라했다</li>
+<li>appstore 통과, playstore 는 아직 google 로그인 허가 안떨어져서 대기중이다</li>
+<li>google 로그인에서는 개인정보 처리방침이 부족하다는 피드백이었다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="후기">후기</h2>
+<ul>
+<li><a href="../react-native">react-native</a> 를 사용하고 있는만큼 웹 개발과 그다지 이질감은 없다.</li>
+<li>다만 위에 정리한 4허들이 존재한다</li>
+<li><a href="../push-notification">push-notification</a> 경우는 멀티디바이스를 지원할 것인지와 같은 고민포인트 들이 있다. 트레이트드 오프가 필요하다.</li>
+<li>첫 app 개발에 대해서는 설정등에 대한 부담이 강하나 두번째 개발부터  더 빠르게 개발이 가능할 것으로 생각한다</li>
+</ul>
+<h2 id="git-commit-분석">git commit 분석</h2>
+<ul>
+<li>커밋으로 의미있는 타임라인을 추출하지는 못했다.<ul>
+<li>일 자체를 선형으로 하지 않고 앱, 웹서버, 알림서버 등을 동시에 처리했기 때문</li>
+<li>그외에도 삽질이 너무 많았고, 되돌리는 경우도 많았다</li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-w49-2023-12-03">2023-w49, 2023-12-03</h3>
+<ul>
+<li>web<ul>
+<li>서버 + <a href="../yarn">yarn</a>@4</li>
+</ul>
+</li>
+<li>app<ul>
+<li><a href="../react-native">react-native</a> 프로젝트 생성 + <a href="../bun">bun</a></li>
+<li><a href="../react-navigation">react-navigation</a> 설정</li>
+<li><a href="../webview">webview</a>,  인앱브라우저</li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-w50-2023-12-10">2023-w50, 2023-12-10</h3>
+<ul>
+<li>web<ul>
+<li>배포 +  <a href="../docker">docker</a> build 스크립트</li>
+<li><a href="../nextjs">nextjs</a> standalone 위해 <a href="../yarn">yarn</a> cache 튜닝</li>
+<li>도메인 + ingress 설정</li>
+<li>logger 설정</li>
+<li><a href="../next-auth">next-auth</a> 설정<ul>
+<li>인증 데이터를 위한 table 생성</li>
+</ul>
+</li>
+<li>로그인 스크린 구현</li>
+<li>구글 로그인 flow 구현</li>
+</ul>
+</li>
+<li>app<ul>
+<li>테스트 스크린 구현</li>
+<li>커스텀 타입처리를 위한 <code class="span">global.d.ts</code> 추가</li>
+<li>구글 로그인 패키지 설정</li>
+<li>email 로그인을 위한 sendgrid 설정</li>
+</ul>
+</li>
+<li>firebase 프로젝트 설정 시작</li>
+</ul>
+<h3 id="2023-w51-2023-12-17">2023-w51, 2023-12-17</h3>
+<ul>
+<li>web<ul>
+<li>email 로그인 flow 구현</li>
+<li>assetlinks.json 추가</li>
+</ul>
+</li>
+<li>app<ul>
+<li>딥링크 처리</li>
+<li>react-native-permission 추가</li>
+<li>@react-native-firebase/* 추가</li>
+<li>notifee 추가</li>
+<li>react-native-url-polyfill 추가</li>
+</ul>
+</li>
+</ul>
+<h3 id="2023-w52-2023-12-24">2023-w52, 2023-12-24</h3>
+<ul>
+<li>app<ul>
+<li><a href="mailto:react-native@0.73.1" target="_blank">react-native@0.73.1</a> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=react-native@0.73.1&body=from deptno.dev" target="_blank">[지메일로 보내기]</a></li>
+<li>apple 로그인</li>
+<li>ios deeplink 설정</li>
+<li>ios 실기기에서 테스트시 localhost 처리 못하는 문제를 git stage 를 활용해서 처리</li>
+</ul>
+</li>
+<li>배포<ul>
+<li>fastlane 을 이용해 firebase app distribution 배포</li>
+</ul>
+</li>
+</ul>
+<h3 id="2024-w01-2023-12-31">2024-w01, 2023-12-31</h3>
+<ul>
+<li>web<ul>
+<li>next-auth 커스텀 처리를 위한 soft-fork 및 디버깅</li>
+<li>fcm 테이블 생성 및 토큰 저장</li>
+</ul>
+</li>
+<li>app<ul>
+<li>xcode remote push 활성화 및 테스트</li>
+<li>android react-native-config + proguard 충돌 이슈 처리</li>
+<li>react-native-async-storage 추가</li>
+<li>firebase anlytics, crashlytics, app-check 추가<ul>
+<li>app-check 제거</li>
+</ul>
+</li>
+<li>android 에서 appsignin 로직 분리 제거</li>
+<li>키워드 관리 구현</li>
+<li>react-navigation 타입 주입</li>
+<li>웹뷰 통신을 통한 로그인 구현</li>
+<li>safearea 적용</li>
+</ul>
+</li>
+<li>배포<ul>
+<li>fastlane 을 이용해 android 로컬 디바이스에 복사처리</li>
+</ul>
+</li>
+</ul>
+<h3 id="2024-w02-2024-01-06">2024-w02, 2024-01-06</h3>
+<ul>
+<li>refresh token 로직 구현</li>
+<li>피드화면 구현</li>
+<li>401 + refresh token 재 인증 구현</li>
+<li>등록된 키워드에 맞춰서 푸시 발송 구현</li>
+<li>푸시를 받아서 알람 띄우기 구현</li>
+<li>알람 누른경우 딥링크 처리 로직</li>
+<li>내 피드 스크린 구현</li>
+<li>키보드내려가는 로직 처리</li>
+<li>스플래시 스크린 추가</li>
+</ul>
+<h3 id="2024-w03-2024-01-13">2024-w03, 2024-01-13</h3>
+<ul>
+<li><a href="mailto:react-native@0.73.2" target="_blank">react-native@0.73.2</a> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=react-native@0.73.2&body=from deptno.dev" target="_blank">[지메일로 보내기]</a></li>
+<li>fcm 토픽이 한글지원을 하지 않아서 인코딩</li>
+<li>키워드 검색 구현</li>
+<li>로그인 화면 앱으로 재구현</li>
+<li>웹서버 yarn -&gt; pnpm 으로 마이그레이션</li>
+<li>아이콘 변경</li>
+<li>android 빌드 환경 분리</li>
+<li>바탐탭 active 색상 적용</li>
+<li>바탐탭 alarm 카운 표시</li>
+<li>code-push 적용</li>
+<li>ui, 시간 포맷 적용</li>
+<li>환경에따른 .env 로드 분리</li>
+<li>email ui 처리</li>
+<li>lottie 적용</li>
+<li>로고 적용</li>
+<li>로그인에 따른 애널리틱스 속성 설정</li>
+</ul>
+<h3 id="2024-w04-2024-01-20">2024-w04, 2024-01-20</h3>
+<ul>
+<li>스크린 계정 조정</li>
+<li>헤더 추가</li>
+<li>종료딜 표시</li>
+<li>배포</li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-06ccd392a2835508.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-e61c4b6da020d258.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"diary/2024-01-25\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"xyVpFPh8SLq576-kwLJuy\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/diary/2024-01-25\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"diary/2024-01-25\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"diary\\\",\\\"2024-01-25\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"diary/2024-01-25\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T4586,"])</script><script>self.__next_f.push([1,"\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 구글 로그인 심사\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 피드백 반영해서 privacy-policy 업데이트, 홈페이지에 개인정보 처리방침 링크\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e[O] 안드로이드 플레이 스토어 등록\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 계정삭제를 웹으로 지원 \u003ca href=\"2024-01-24\"\u003e2024-01-24\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e ad id\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 플레이 콘솔 -\u0026gt;  앱 콘텐트 -\u0026gt;  광고 ID -\u0026gt; 사용,  애널리틱스에서 어차피사용되서 포함됨\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 앱 서명 google playstore 에서 제공하는 키사용 체크\u003c/li\u003e\n\u003cli\u003e[o] 플레이 콘솔 -\u0026gt;  설정 -\u0026gt;  앱 서명, 여기에 나오는 서명키들을 firebase 등에 추가로 등록해야하는지 확인 필요\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 앱 서명키 인증서 - 구글에서 추가로 사인을 한 것으로 추측\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 업로드키 인증서가 이미 \u003ca href=\"../firebase\"\u003efirebase\u003c/a\u003e 에 등록되었기 때문에 다른 곳에 등록을 안하면 어떻게되는지 확인 필요하다\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 이 것도 firebase 쪽에 등록 필요\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003ccode class=\"span\"\u003ehttps://[DOMAIN.COM]/.well-known/assetlinks.json\u003c/code\u003e 파일도 교체해야할 것으로 보임\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../deployment\"\u003edeployment\u003c/a\u003e 에서 fine mount\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 업로드키 인증서 - fastlane 에서 업로드할때 로컬에서 sign 한 키가 보여진다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../fastlane\"\u003efastlane\u003c/a\u003e 배포\u003cul\u003e\n\u003cli\u003e최소 한번의 수동 배포가 필요하다\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e- [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003e테스트 -\u0026gt;  내부테스트 -\u0026gt;  업로드 번들에 생성된 \u003ccode class=\"span\"\u003eapp-release.aab\u003c/code\u003e 파일을 업로드한다.\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e./gradlew bundleRelease\u003c/code\u003e 를 통해 생성\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e한번 배포하고 나면 버전 코드 충돌난다고 나온다, 버전코드는 트랙과 무관.\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eGoogle Api Error: Invalid request - Version code 1 has already been used.\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003e버전 코드를 올린다\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eGoogle Api Error: Invalid request - Precondition check failed.\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003eupload_to_play_store(track: \u0026#39;internal\u0026#39;) 을 주었더니 에러가 다른 에러가 발생\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003eGoogle Api Error: Invalid request - Only releases with status draft may be created on draft app.\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/fastlane/fastlane/discussions/18293\" target=\"_blank\"\u003e[URL] https://github.com/fastlane/fastlane/discussions/18293\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e테스트는 내부-internal,  비공개-alhpa, 공개-beta 트랙으로 분류하는것으로 추측\u003c/li\u003e\n\u003cli\u003e글에 따르면 alpha 이상에서 릴리즈가 수등으로 되어야한다고 말하고 있음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 앱 개발 과정에 대한 정리\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../apple\"\u003eapple\u003c/a\u003e 아케이드 체험 등록\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../react-native\"\u003ereact-native\u003c/a\u003e \u003ca href=\"../ios\"\u003eios\u003c/a\u003e 는 \u003ccode class=\"span\"\u003eText\u003c/code\u003e 컴포넌트 스타일에 \u003ccode class=\"span\"\u003eborderRadius\u003c/code\u003e 가 동작하지않음\u003c/li\u003e\n\u003c/ul\u003e\n\u003chr\u003e\n\u003ch1 id=\"리액트-네이티브-앱-개발-기록\"\u003e리액트 네이티브 앱 개발 기록\u003c/h1\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../react-native\"\u003ereact-native\u003c/a\u003e 를 통해 앱 배포까지의 기록\u003c/li\u003e\n\u003cli\u003e데이터와 관련해서는 기존에 웹으로 제공하고 있던 데이터를 활용할 수 있는 상황에서 시작했다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"앱개발의-4-허들\"\u003e앱개발의 4 허들\u003c/h2\u003e\n\u003cblockquote\u003e\u003cp\u003e프론트엔드 고도화를 하기 전에 아래 4개의 허들을 넘어야한다.\u003cbr\u003e하지만 원하는 앱에 따라 스토어 배포를 제외한 나머지는 선택적이다.\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../authentication\"\u003eauthentication\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../oauth\"\u003eoauth\u003c/a\u003e 인증을 지원하는 경우 \u003ca href=\"../apple\"\u003eapple\u003c/a\u003e 은 필수적으로 \u003ca href=\"../apple\"\u003eapple\u003c/a\u003e 로그인을 요구한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../firebase\"\u003efirebase\u003c/a\u003e \u003ca href=\"../fcm\"\u003efcm\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../app\"\u003eapp\u003c/a\u003e 에서 차별화되는 가장 중요한 서비스중 하나는 \u003ca href=\"../push-notification\"\u003epush-notification\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e이를 위해선 \u003ca href=\"../fcm\"\u003efcm\u003c/a\u003e 이 defacto 로 사용되고 있다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../code-push\"\u003ecode-push\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e선택적이나 앱은 배포이후 문제가 생겼을때 치명적이므로 이에 대한 보험이 필요\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../react-native\"\u003ereact-native\u003c/a\u003e 그 외에도 여러가지 활용폭이 있으므로\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../apple\"\u003eapple\u003c/a\u003e app store, \u003ca href=\"../google\"\u003egoogle\u003c/a\u003e play store 배포\u003cul\u003e\n\u003cli\u003ecode signing 등 모르는 개념에 대해 얕게나마 이해가 필요하다\u003c/li\u003e\n\u003cli\u003e컴파일이 필요하기 때문에 \u003ca href=\"../xcode\"\u003excode\u003c/a\u003e 나 \u003ccode class=\"span\"\u003ebuild.gradle\u003c/code\u003e 등에 대한 수정도 다소 필요하다\u003c/li\u003e\n\u003cli\u003e배포를 위해서는 스크린샷등 이미지 준비도해야한다\u003c/li\u003e\n\u003cli\u003e개인정보 처리방침도 작성해야한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"필수-라이브러리들에-대한-학습\"\u003e필수 라이브러리들에 대한 학습\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e네비게이션 학습, 네비게이션 없는 앱은 존재할 수 없다\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ereact-navigation\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e스플래시 스크린 혹은 런치 스크린이라 불리는 로딩 화면 처리\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../push-notification\"\u003epush-notification\u003c/a\u003e 을 받아야하므로 이에 대한 처리\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e@react-native-firebase/*\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e@notifee/react-native\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"배포-자동화\"\u003e배포 자동화\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e완전히 선택적인 옵션이기 때문에 허들이라 할 순 없다.\u003c/li\u003e\n\u003cli\u003e다만 지속적인 업데이트를 통한 생산성을 확보하고자 한다면 도움이 될 것\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../fastlane\"\u003efastlane\u003c/a\u003e 을 통한 자동화 또한 다소 코드 작성이 필요했다.\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../ruby\"\u003eruby\u003c/a\u003e 언어 기반이기때문에 조금 찾아보면서 작업을 해야한다\u003c/li\u003e\n\u003cli\u003e사실 이런 부분도 secret 관리를 그냥 코드에 때려밖는다고한다면 상당히 단순화된다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"개발-과정\"\u003e개발 과정\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e라이브러리들이 네이티브를 포함하기 때문에 다소 설정이 들어가는것이 일반적이다.\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../react-native\"\u003ereact-native\u003c/a\u003e 는 자바스크립트 환경이지만 runtime 이 다르므로 global 객체가 있을 것이라고 가정해서는 안된다\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eURLSearchParams\u003c/code\u003e - 얜 \u003ccode class=\"span\"\u003epolyfill\u003c/code\u003e 이 있어서 다행\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003eIntl\u003c/code\u003e - 상대시간 표기를 한글로 하고싶었는데 얘가 없어서 정규표현식을 통한 변환 처리했다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../react-native\"\u003ereact-native\u003c/a\u003e \u003ca href=\"../app\"\u003eapp\u003c/a\u003e 을 개발하면서 모르는 \u003ca href=\"../app\"\u003eapp\u003c/a\u003e 의 개념, 환경을 받아들이는고 설정하는데 많은 시간이 소요\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../xcode\"\u003excode\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../pod\"\u003epod\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../gradle\"\u003egradle\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../fastlane\"\u003efastlane\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e처음에는 하이브리드 앱을 생각했으나 full \u003ca href=\"../webview\"\u003ewebview\u003c/a\u003e \u003ca href=\"../app\"\u003eapp\u003c/a\u003e 이 아닌이상 인증처리가 더 복잡한 문제가 있어 native 로 전환\u003cul\u003e\n\u003cli\u003e미세하게 느껴지는 퍼포먼스 혹은 느낌의 차이\u003c/li\u003e\n\u003cli\u003e401 처리를 앱과 네이티브 두영역에서 해야하다보니 전파의 이슈\u003c/li\u003e\n\u003cli\u003esingle \u003ca href=\"../webview\"\u003ewebview\u003c/a\u003e 가아닌 multi \u003ca href=\"../webview\"\u003ewebview\u003c/a\u003e 이다보니 이 또한 전파의 이슈를 깊게 고민해야했다\u003cpre\u003e\u003ccode class=\"hljs language-mermaid\"\u003eflowchart\n  server --401--\u0026gt; native\n  native \u0026lt;-.갱신.-\u0026gt; server\n  native --token--\u0026gt; wv0[webview 0]\n  native --token--\u0026gt; wv1[webview 1]\n  native --token--\u0026gt; wv2[webview 2]\n  native --token--\u0026gt; wv3[webview 3]\n\u003c/code\u003e\u003c/pre\u003e\u003cpre\u003e\u003ccode class=\"hljs language-mermaid\"\u003eflowchart\n  server --401--\u0026gt; wv1\n  wv1 \u0026lt;-.갱신.-\u0026gt; server\n  wv1 --token--\u0026gt; native\n  native --token--\u0026gt; wv0[webview 0]\n  native --token--\u0026gt; wv2[webview 2]\n  native --token--\u0026gt; wv3[webview 3]\n\u003c/code\u003e\u003c/pre\u003e\u003cpre\u003e\u003ccode class=\"hljs language-mermaid\"\u003eflowchart\n  server --401--\u0026gt; wv1\n  wv1 --token--\u0026gt; native\n  native \u0026lt;-.갱신.-\u0026gt; server\n  native --token--\u0026gt; wv0[webview 0]\n  native --token--\u0026gt; wv2[webview 2]\n  native --token--\u0026gt; wv3[webview 3]\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e추후 웹까지의 서비스 확장을 위해 next-auth 기반으로 구현을 하다보니 여기서 시간이 꽤나 소요되었다\u003cul\u003e\n\u003cli\u003enext-auth 는 rn을 지원하지 않으나 이를 커스텀하여 중간에 같은 로직과 테이블 구조를 사용하고자 했다\u003c/li\u003e\n\u003cli\u003enative 로 전환을 하고자하니 next-auth 는 쿠키기반이라 이를 헤더기반으로 풀기위해서 시간이 소요\u003cul\u003e\n\u003cli\u003e이를 위해 코드를 일부 떠와야했고 패스워드없는 이메일 기반 로직등을 추가로 구현\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003enavigation 에 종속적이므로 코드 구조 또한 선택한 \u003ca href=\"../react-navigation\"\u003ereact-navigation\u003c/a\u003e 에 맞춰줘야하는 경향이 있다.\u003cul\u003e\n\u003cli\u003e옵션이 많이 있었고 \u003ca href=\"../ios\"\u003eios\u003c/a\u003e, \u003ca href=\"../android\"\u003eandroid\u003c/a\u003e 간에도 잘 동작해서 어려움이 없었다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e로그인을 지원하는 \u003ca href=\"../app\"\u003eapp\u003c/a\u003e 은 로그인이 풀리지 않는 것이 중요하므로 \u003cstrong\u003erefresh token\u003c/strong\u003e 을 통한 갱신이 필수적이므로 이에 대한 구현을 공통화 해서 잘처리해야한다\u003cul\u003e\n\u003cli\u003e앱이 background 에 있다가 foreground 로 올라왔을때 연속적인 api call 이 발생하여 401 이 중복으로 발생하여 생긴 문제가 있었다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-mermaid\"\u003eflowchart\n  server --401--\u0026gt; s0[screen 0]\n  s0 \u0026lt;-.갱신.-\u0026gt; server\n  server --401--\u0026gt; s1[screen 1]\n  s1 x-.갱신에러.-x server\n  s0 --1. 저장--\u0026gt; s[(stoarge)]\n  s1 ==2. 초기화==\u0026gt; s[(stoarge)]\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e직접 \u003ca href=\"../fcm\"\u003efcm\u003c/a\u003e 토큰을 통해서 \u003ca href=\"push-notification\"\u003epush-notification\u003c/a\u003e 을 발행할 수도 있지만 topic 을 통해서 전송도 가능하다.  이 경우 한글을 지원하지 않아 인코딩이 필요했다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"툴-활용\"\u003e툴 활용\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eipad 의 \u003cem\u003eprocreator\u003c/em\u003e 를 사용해서 플레이 스토어에서 요구하는 그래픽 이미지(1024x500) 에 대한 문구 처리를 했다\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ereact-native-bootsplash\u003c/code\u003e 라이브러리에서 스플래시 스크린에대한 요구사항 처리\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"웹-서비스\"\u003e웹 서비스\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../dev-tools\"\u003edev-tools\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../midjourney\"\u003emidjourney\u003c/a\u003e 를 통해 작성된 아이콘을 여러 사이즈로 변환\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://easyappicon.com\" target=\"_blank\"\u003e[URL] https://easyappicon.com/\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e인터넷에 공개된 figma 템플릿을 활용해서 스토어에 필요한 이미지들을 작성\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"생성-ai\"\u003e생성 \u003ca href=\"../ai\"\u003eai\u003c/a\u003e\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e스플래시 스크린과,  앱 아이콘 및 몇가지 앱 내 로고 처리를 \u003ca href=\"../midjourney\"\u003emidjourney\u003c/a\u003e 를 통해 작성했다\u003c/li\u003e\n\u003cli\u003e개인정보 처리 방침 작성\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../chatgpt\"\u003echatgpt\u003c/a\u003e 에게 앱이 하는 일과 수집하는 정보를 설명하고 작성해달라했다\u003c/li\u003e\n\u003cli\u003eappstore 통과, playstore 는 아직 google 로그인 허가 안떨어져서 대기중이다\u003c/li\u003e\n\u003cli\u003egoogle 로그인에서는 개인정보 처리방침이 부족하다는 피드백이었다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"후기\"\u003e후기\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../react-native\"\u003ereact-native\u003c/a\u003e 를 사용하고 있는만큼 웹 개발과 그다지 이질감은 없다.\u003c/li\u003e\n\u003cli\u003e다만 위에 정리한 4허들이 존재한다\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../push-notification\"\u003epush-notification\u003c/a\u003e 경우는 멀티디바이스를 지원할 것인지와 같은 고민포인트 들이 있다. 트레이트드 오프가 필요하다.\u003c/li\u003e\n\u003cli\u003e첫 app 개발에 대해서는 설정등에 대한 부담이 강하나 두번째 개발부터  더 빠르게 개발이 가능할 것으로 생각한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"git-commit-분석\"\u003egit commit 분석\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e커밋으로 의미있는 타임라인을 추출하지는 못했다.\u003cul\u003e\n\u003cli\u003e일 자체를 선형으로 하지 않고 앱, 웹서버, 알림서버 등을 동시에 처리했기 때문\u003c/li\u003e\n\u003cli\u003e그외에도 삽질이 너무 많았고, 되돌리는 경우도 많았다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"2023-w49-2023-12-03\"\u003e2023-w49, 2023-12-03\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eweb\u003cul\u003e\n\u003cli\u003e서버 + \u003ca href=\"../yarn\"\u003eyarn\u003c/a\u003e@4\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eapp\u003cul\u003e\n\u003cli\u003e\u003ca href=\"../react-native\"\u003ereact-native\u003c/a\u003e 프로젝트 생성 + \u003ca href=\"../bun\"\u003ebun\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../react-navigation\"\u003ereact-navigation\u003c/a\u003e 설정\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../webview\"\u003ewebview\u003c/a\u003e,  인앱브라우저\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"2023-w50-2023-12-10\"\u003e2023-w50, 2023-12-10\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eweb\u003cul\u003e\n\u003cli\u003e배포 +  \u003ca href=\"../docker\"\u003edocker\u003c/a\u003e build 스크립트\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../nextjs\"\u003enextjs\u003c/a\u003e standalone 위해 \u003ca href=\"../yarn\"\u003eyarn\u003c/a\u003e cache 튜닝\u003c/li\u003e\n\u003cli\u003e도메인 + ingress 설정\u003c/li\u003e\n\u003cli\u003elogger 설정\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"../next-auth\"\u003enext-auth\u003c/a\u003e 설정\u003cul\u003e\n\u003cli\u003e인증 데이터를 위한 table 생성\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e로그인 스크린 구현\u003c/li\u003e\n\u003cli\u003e구글 로그인 flow 구현\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eapp\u003cul\u003e\n\u003cli\u003e테스트 스크린 구현\u003c/li\u003e\n\u003cli\u003e커스텀 타입처리를 위한 \u003ccode class=\"span\"\u003eglobal.d.ts\u003c/code\u003e 추가\u003c/li\u003e\n\u003cli\u003e구글 로그인 패키지 설정\u003c/li\u003e\n\u003cli\u003eemail 로그인을 위한 sendgrid 설정\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003efirebase 프로젝트 설정 시작\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"2023-w51-2023-12-17\"\u003e2023-w51, 2023-12-17\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eweb\u003cul\u003e\n\u003cli\u003eemail 로그인 flow 구현\u003c/li\u003e\n\u003cli\u003eassetlinks.json 추가\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eapp\u003cul\u003e\n\u003cli\u003e딥링크 처리\u003c/li\u003e\n\u003cli\u003ereact-native-permission 추가\u003c/li\u003e\n\u003cli\u003e@react-native-firebase/* 추가\u003c/li\u003e\n\u003cli\u003enotifee 추가\u003c/li\u003e\n\u003cli\u003ereact-native-url-polyfill 추가\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"2023-w52-2023-12-24\"\u003e2023-w52, 2023-12-24\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eapp\u003cul\u003e\n\u003cli\u003e\u003ca href=\"mailto:react-native@0.73.1\" target=\"_blank\"\u003ereact-native@0.73.1\u003c/a\u003e \u003ca href=\"https://mail.google.com/mail/?view=cm\u0026fs=1\u0026to=react-native@0.73.1\u0026body=from deptno.dev\" target=\"_blank\"\u003e[지메일로 보내기]\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003eapple 로그인\u003c/li\u003e\n\u003cli\u003eios deeplink 설정\u003c/li\u003e\n\u003cli\u003eios 실기기에서 테스트시 localhost 처리 못하는 문제를 git stage 를 활용해서 처리\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e배포\u003cul\u003e\n\u003cli\u003efastlane 을 이용해 firebase app distribution 배포\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"2024-w01-2023-12-31\"\u003e2024-w01, 2023-12-31\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eweb\u003cul\u003e\n\u003cli\u003enext-auth 커스텀 처리를 위한 soft-fork 및 디버깅\u003c/li\u003e\n\u003cli\u003efcm 테이블 생성 및 토큰 저장\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eapp\u003cul\u003e\n\u003cli\u003excode remote push 활성화 및 테스트\u003c/li\u003e\n\u003cli\u003eandroid react-native-config + proguard 충돌 이슈 처리\u003c/li\u003e\n\u003cli\u003ereact-native-async-storage 추가\u003c/li\u003e\n\u003cli\u003efirebase anlytics, crashlytics, app-check 추가\u003cul\u003e\n\u003cli\u003eapp-check 제거\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eandroid 에서 appsignin 로직 분리 제거\u003c/li\u003e\n\u003cli\u003e키워드 관리 구현\u003c/li\u003e\n\u003cli\u003ereact-navigation 타입 주입\u003c/li\u003e\n\u003cli\u003e웹뷰 통신을 통한 로그인 구현\u003c/li\u003e\n\u003cli\u003esafearea 적용\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e배포\u003cul\u003e\n\u003cli\u003efastlane 을 이용해 android 로컬 디바이스에 복사처리\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"2024-w02-2024-01-06\"\u003e2024-w02, 2024-01-06\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003erefresh token 로직 구현\u003c/li\u003e\n\u003cli\u003e피드화면 구현\u003c/li\u003e\n\u003cli\u003e401 + refresh token 재 인증 구현\u003c/li\u003e\n\u003cli\u003e등록된 키워드에 맞춰서 푸시 발송 구현\u003c/li\u003e\n\u003cli\u003e푸시를 받아서 알람 띄우기 구현\u003c/li\u003e\n\u003cli\u003e알람 누른경우 딥링크 처리 로직\u003c/li\u003e\n\u003cli\u003e내 피드 스크린 구현\u003c/li\u003e\n\u003cli\u003e키보드내려가는 로직 처리\u003c/li\u003e\n\u003cli\u003e스플래시 스크린 추가\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"2024-w03-2024-01-13\"\u003e2024-w03, 2024-01-13\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"mailto:react-native@0.73.2\" target=\"_blank\"\u003ereact-native@0.73.2\u003c/a\u003e \u003ca href=\"https://mail.google.com/mail/?view=cm\u0026fs=1\u0026to=react-native@0.73.2\u0026body=from deptno.dev\" target=\"_blank\"\u003e[지메일로 보내기]\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003efcm 토픽이 한글지원을 하지 않아서 인코딩\u003c/li\u003e\n\u003cli\u003e키워드 검색 구현\u003c/li\u003e\n\u003cli\u003e로그인 화면 앱으로 재구현\u003c/li\u003e\n\u003cli\u003e웹서버 yarn -\u0026gt; pnpm 으로 마이그레이션\u003c/li\u003e\n\u003cli\u003e아이콘 변경\u003c/li\u003e\n\u003cli\u003eandroid 빌드 환경 분리\u003c/li\u003e\n\u003cli\u003e바탐탭 active 색상 적용\u003c/li\u003e\n\u003cli\u003e바탐탭 alarm 카운 표시\u003c/li\u003e\n\u003cli\u003ecode-push 적용\u003c/li\u003e\n\u003cli\u003eui, 시간 포맷 적용\u003c/li\u003e\n\u003cli\u003e환경에따른 .env 로드 분리\u003c/li\u003e\n\u003cli\u003eemail ui 처리\u003c/li\u003e\n\u003cli\u003elottie 적용\u003c/li\u003e\n\u003cli\u003e로고 적용\u003c/li\u003e\n\u003cli\u003e로그인에 따른 애널리틱스 속성 설정\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"2024-w04-2024-01-20\"\u003e2024-w04, 2024-01-20\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e스크린 계정 조정\u003c/li\u003e\n\u003cli\u003e헤더 추가\u003c/li\u003e\n\u003cli\u003e종료딜 표시\u003c/li\u003e\n\u003cli\u003e배포\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/0d7e976\\n\",\"className\":\"bg-white text-black\",\"children\":\"0d7e976\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/diary/2024-01-25.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/diary/2024-01-25.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/diary/2024-01-25.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"diary/2024-01-25\",\"name\":\"diary/2024-01-25\",\"val\":59},{\"id\":\"diary/2024-01-24\",\"name\":\"diary/2024-01-24\",\"val\":2},{\"id\":\"firebase\",\"name\":\"firebase\",\"val\":14},{\"id\":\"deployment\",\"name\":\"deployment\",\"val\":2},{\"id\":\"fastlane\",\"name\":\"fastlane\",\"val\":26},{\"id\":\"apple\",\"name\":\"apple\",\"val\":11},{\"id\":\"react-native\",\"name\":\"react-native\",\"val\":90},{\"id\":\"ios\",\"name\":\"ios\",\"val\":11},{\"id\":\"authentication\",\"name\":\"authentication\",\"val\":3},{\"id\":\"oauth\",\"name\":\"oauth\",\"val\":11},{\"id\":\"fcm\",\"name\":\"fcm\",\"val\":21},{\"id\":\"app\",\"name\":\"app\",\"val\":3},{\"id\":\"push-notification\",\"name\":\"push-notification\",\"val\":6},{\"id\":\"code-push\",\"name\":\"code-push\",\"val\":3},{\"id\":\"google\",\"name\":\"google\",\"val\":8},{\"id\":\"xcode\",\"name\":\"xcode\",\"val\":16},{\"id\":\"ruby\",\"name\":\"ruby\",\"val\":28},{\"id\":\"pod\",\"name\":\"pod\",\"val\":6},{\"id\":\"gradle\",\"name\":\"gradle\",\"val\":1},{\"id\":\"webview\",\"name\":\"webview\",\"val\":6},{\"id\":\"react-navigation\",\"name\":\"react-navigation\",\"val\":3},{\"id\":\"android\",\"name\":\"android\",\"val\":23},{\"id\":\"diary/push-notification\",\"name\":\"diary/push-notification\",\"val\":\"$undefined\"},{\"id\":\"dev-tools\",\"name\":\"dev-tools\",\"val\":8},{\"id\":\"midjourney\",\"name\":\"midjourney\",\"val\":5},{\"id\":\"ai\",\"name\":\"ai\",\"val\":17},{\"id\":\"chatgpt\",\"name\":\"chatgpt\",\"val\":5},{\"id\":\"yarn\",\"name\":\"yarn\",\"val\":11},{\"id\":\"bun\",\"name\":\"bun\",\"val\":10},{\"id\":\"docker\",\"name\":\"docker\",\"val\":7},{\"id\":\"nextjs\",\"name\":\"nextjs\",\"val\":12},{\"id\":\"next-auth\",\"name\":\"next-auth\",\"val\":8},{\"id\":\"about-me\",\"name\":\"about-me\",\"val\":60},{\"id\":\"play-console\",\"name\":\"play-console\",\"val\":8},{\"id\":\"retrospect\",\"name\":\"retrospect\",\"val\":5},{\"id\":\"diary/2024-04-24\",\"name\":\"diary/2024-04-24\",\"val\":3},{\"id\":\"diary/2024-12-31\",\"name\":\"diary/2024-12-31\",\"val\":441},{\"id\":\"diary/index\",\"name\":\"diary/index\",\"val\":467}],\"links\":[{\"source\":\"diary/2024-01-25\",\"target\":\"diary/2024-01-24\"},{\"source\":\"diary/2024-01-25\",\"target\":\"firebase\"},{\"source\":\"diary/2024-01-25\",\"target\":\"deployment\"},{\"source\":\"diary/2024-01-25\",\"target\":\"fastlane\"},{\"source\":\"diary/2024-01-25\",\"target\":\"apple\"},{\"source\":\"diary/2024-01-25\",\"target\":\"react-native\"},{\"source\":\"diary/2024-01-25\",\"target\":\"ios\"},{\"source\":\"diary/2024-01-25\",\"target\":\"react-native\"},{\"source\":\"diary/2024-01-25\",\"target\":\"authentication\"},{\"source\":\"diary/2024-01-25\",\"target\":\"oauth\"},{\"source\":\"diary/2024-01-25\",\"target\":\"apple\"},{\"source\":\"diary/2024-01-25\",\"target\":\"apple\"},{\"source\":\"diary/2024-01-25\",\"target\":\"firebase\"},{\"source\":\"diary/2024-01-25\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-25\",\"target\":\"app\"},{\"source\":\"diary/2024-01-25\",\"target\":\"push-notification\"},{\"source\":\"diary/2024-01-25\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-25\",\"target\":\"code-push\"},{\"source\":\"diary/2024-01-25\",\"target\":\"react-native\"},{\"source\":\"diary/2024-01-25\",\"target\":\"apple\"},{\"source\":\"diary/2024-01-25\",\"target\":\"google\"},{\"source\":\"diary/2024-01-25\",\"target\":\"xcode\"},{\"source\":\"diary/2024-01-25\",\"target\":\"push-notification\"},{\"source\":\"diary/2024-01-25\",\"target\":\"fastlane\"},{\"source\":\"diary/2024-01-25\",\"target\":\"ruby\"},{\"source\":\"diary/2024-01-25\",\"target\":\"react-native\"},{\"source\":\"diary/2024-01-25\",\"target\":\"react-native\"},{\"source\":\"diary/2024-01-25\",\"target\":\"app\"},{\"source\":\"diary/2024-01-25\",\"target\":\"app\"},{\"source\":\"diary/2024-01-25\",\"target\":\"xcode\"},{\"source\":\"diary/2024-01-25\",\"target\":\"pod\"},{\"source\":\"diary/2024-01-25\",\"target\":\"gradle\"},{\"source\":\"diary/2024-01-25\",\"target\":\"fastlane\"},{\"source\":\"diary/2024-01-25\",\"target\":\"webview\"},{\"source\":\"diary/2024-01-25\",\"target\":\"app\"},{\"source\":\"diary/2024-01-25\",\"target\":\"webview\"},{\"source\":\"diary/2024-01-25\",\"target\":\"webview\"},{\"source\":\"diary/2024-01-25\",\"target\":\"react-navigation\"},{\"source\":\"diary/2024-01-25\",\"target\":\"ios\"},{\"source\":\"diary/2024-01-25\",\"target\":\"android\"},{\"source\":\"diary/2024-01-25\",\"target\":\"app\"},{\"source\":\"diary/2024-01-25\",\"target\":\"fcm\"},{\"source\":\"diary/2024-01-25\",\"target\":\"diary/push-notification\"},{\"source\":\"diary/2024-01-25\",\"target\":\"dev-tools\"},{\"source\":\"diary/2024-01-25\",\"target\":\"midjourney\"},{\"source\":\"diary/2024-01-25\",\"target\":\"ai\"},{\"source\":\"diary/2024-01-25\",\"target\":\"midjourney\"},{\"source\":\"diary/2024-01-25\",\"target\":\"chatgpt\"},{\"source\":\"diary/2024-01-25\",\"target\":\"react-native\"},{\"source\":\"diary/2024-01-25\",\"target\":\"push-notification\"},{\"source\":\"diary/2024-01-25\",\"target\":\"yarn\"},{\"source\":\"diary/2024-01-25\",\"target\":\"react-native\"},{\"source\":\"diary/2024-01-25\",\"target\":\"bun\"},{\"source\":\"diary/2024-01-25\",\"target\":\"react-navigation\"},{\"source\":\"diary/2024-01-25\",\"target\":\"webview\"},{\"source\":\"diary/2024-01-25\",\"target\":\"docker\"},{\"source\":\"diary/2024-01-25\",\"target\":\"nextjs\"},{\"source\":\"diary/2024-01-25\",\"target\":\"yarn\"},{\"source\":\"diary/2024-01-25\",\"target\":\"next-auth\"},{\"source\":\"about-me\",\"target\":\"diary/2024-01-25\"},{\"source\":\"play-console\",\"target\":\"diary/2024-01-25\"},{\"source\":\"react-native\",\"target\":\"diary/2024-01-25\"},{\"source\":\"retrospect\",\"target\":\"diary/2024-01-25\"},{\"source\":\"diary/2024-04-24\",\"target\":\"diary/2024-01-25\"},{\"source\":\"diary/2024-12-31\",\"target\":\"diary/2024-01-25\"},{\"source\":\"diary/index\",\"target\":\"diary/2024-01-25\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"diary/2024-01-25\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-25\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-25\"}],[\"$\",\"sup\",null,{\"children\":59}]]}]}],[\"$\",\"span\",\"diary/2024-01-24\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-24\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-24\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"firebase\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/firebase\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"firebase\"}],[\"$\",\"sup\",null,{\"children\":14}]]}]}],[\"$\",\"span\",\"deployment\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/deployment\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"deployment\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"fastlane\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/fastlane\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"fastlane\"}],[\"$\",\"sup\",null,{\"children\":26}]]}]}],[\"$\",\"span\",\"apple\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/apple\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"apple\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"react-native\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/react-native\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"react-native\"}],[\"$\",\"sup\",null,{\"children\":90}]]}]}],[\"$\",\"span\",\"ios\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ios\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ios\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"authentication\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/authentication\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"authentication\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"oauth\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/oauth\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"oauth\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"fcm\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/fcm\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"fcm\"}],[\"$\",\"sup\",null,{\"children\":21}]]}]}],[\"$\",\"span\",\"app\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/app\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"app\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"push-notification\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/push-notification\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"push-notification\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"code-push\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/code-push\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"code-push\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"google\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/google\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"google\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"xcode\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/xcode\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"xcode\"}],[\"$\",\"sup\",null,{\"children\":16}]]}]}],[\"$\",\"span\",\"ruby\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ruby\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ruby\"}],[\"$\",\"sup\",null,{\"children\":28}]]}]}],[\"$\",\"span\",\"pod\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/pod\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"pod\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"gradle\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/gradle\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"gradle\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"webview\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/webview\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"webview\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"react-navigation\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/react-navigation\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"react-navigation\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"android\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/android\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"android\"}],[\"$\",\"sup\",null,{\"children\":23}]]}]}],[\"$\",\"span\",\"diary/push-notification\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/push-notification\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/push-notification\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"dev-tools\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/dev-tools\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"dev-tools\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"midjourney\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/midjourney\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"midjourney\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"ai\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ai\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ai\"}],[\"$\",\"sup\",null,{\"children\":17}]]}]}],[\"$\",\"span\",\"chatgpt\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/chatgpt\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"chatgpt\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"yarn\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/yarn\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"yarn\"}],[\"$\",\"sup\",null,{\"children\":11}]]}]}],[\"$\",\"span\",\"bun\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/bun\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"bun\"}],[\"$\",\"sup\",null,{\"children\":10}]]}]}],[\"$\",\"span\",\"docker\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/docker\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"docker\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"nextjs\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/nextjs\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"nextjs\"}],[\"$\",\"sup\",null,{\"children\":12}]]}]}],[\"$\",\"span\",\"next-auth\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/next-auth\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"next-auth\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"about-me\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/about-me\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"about-me\"}],[\"$\",\"sup\",null,{\"children\":60}]]}]}],[\"$\",\"span\",\"play-console\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/play-console\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"play-console\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"retrospect\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/retrospect\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"retrospect\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"diary/2024-04-24\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-04-24\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-04-24\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2024-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-12-31\"}],[\"$\",\"sup\",null,{\"children\":441}]]}]}],[\"$\",\"span\",\"diary/index\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/index\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/index\"}],[\"$\",\"sup\",null,{\"children\":467}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"리액트-네이티브-앱-개발-기록\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#리액트-네이티브-앱-개발-기록\",\"children\":\"리액트 네이티브 앱 개발 기록\"}]}],[\"$\",\"div\",\"앱개발의-4-허들\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#앱개발의-4-허들\",\"children\":\"앱개발의 4 허들\"}]}],[\"$\",\"div\",\"필수-라이브러리들에-대한-학습\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#필수-라이브러리들에-대한-학습\",\"children\":\"필수 라이브러리들에 대한 학습\"}]}],[\"$\",\"div\",\"배포-자동화\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#배포-자동화\",\"children\":\"배포 자동화\"}]}],[\"$\",\"div\",\"개발-과정\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#개발-과정\",\"children\":\"개발 과정\"}]}],[\"$\",\"div\",\"툴-활용\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#툴-활용\",\"children\":\"툴 활용\"}]}],[\"$\",\"div\",\"웹-서비스\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#웹-서비스\",\"children\":\"웹 서비스\"}]}],[\"$\",\"div\",\"생성-ai\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#생성-ai\",\"children\":\"생성 ai\"}]}],[\"$\",\"div\",\"후기\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#후기\",\"children\":\"후기\"}]}],[\"$\",\"div\",\"git-commit-분석\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#git-commit-분석\",\"children\":\"git commit 분석\"}]}],[\"$\",\"div\",\"2023-w49-2023-12-03\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#2023-w49-2023-12-03\",\"children\":\"2023-w49, 2023-12-03\"}]}],[\"$\",\"div\",\"2023-w50-2023-12-10\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#2023-w50-2023-12-10\",\"children\":\"2023-w50, 2023-12-10\"}]}],[\"$\",\"div\",\"2023-w51-2023-12-17\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#2023-w51-2023-12-17\",\"children\":\"2023-w51, 2023-12-17\"}]}],[\"$\",\"div\",\"2023-w52-2023-12-24\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#2023-w52-2023-12-24\",\"children\":\"2023-w52, 2023-12-24\"}]}],[\"$\",\"div\",\"2024-w01-2023-12-31\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#2024-w01-2023-12-31\",\"children\":\"2024-w01, 2023-12-31\"}]}],[\"$\",\"div\",\"2024-w02-2024-01-06\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#2024-w02-2024-01-06\",\"children\":\"2024-w02, 2024-01-06\"}]}],[\"$\",\"div\",\"2024-w03-2024-01-13\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#2024-w03-2024-01-13\",\"children\":\"2024-w03, 2024-01-13\"}]}],[\"$\",\"div\",\"2024-w04-2024-01-20\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#2024-w04-2024-01-20\",\"children\":\"2024-w04, 2024-01-20\"}]}]]}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 pb-2 m-0 leading-tight ml-auto\",\"children\":[[\"$\",\"$L13\",null,{\"className\":\"text-blue-600 underline\",\"href\":\"/public-wiki/diary/2024-01-24\",\"children\":[\"이전(\",\"2024-01-24\",\")\"]}],[\"$\",\"$L13\",null,{\"className\":\"text-blue-600 underline\",\"href\":\"/public-wiki/diary/2024-01-26\",\"children\":[\"다음(\",\"2024-01-26\",\")\"]}]]}]]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T3416,"])</script><script>self.__next_f.push([1,"  - [X] 피드백 반영해서 privacy-policy 업데이트, 홈페이지에 개인정보 처리방침 링크\n- [O] 안드로이드 플레이 스토어 등록\n  - [X] 계정삭제를 웹으로 지원 [[2024-01-24]]\n  - [X] ad id\n    - [X] 플레이 콘솔 -\u003e  앱 콘텐트 -\u003e  광고 ID -\u003e 사용,  애널리틱스에서 어차피사용되서 포함됨\n  - [X] 앱 서명 google playstore 에서 제공하는 키사용 체크\n  - [o] 플레이 콘솔 -\u003e  설정 -\u003e  앱 서명, 여기에 나오는 서명키들을 firebase 등에 추가로 등록해야하는지 확인 필요\n    - [ ] 앱 서명키 인증서 - 구글에서 추가로 사인을 한 것으로 추측\n      - [ ] 업로드키 인증서가 이미 [[../firebase|firebase]] 에 등록되었기 때문에 다른 곳에 등록을 안하면 어떻게되는지 확인 필요하다\n      - [ ] 이 것도 firebase 쪽에 등록 필요\n      - [ ] `https://[DOMAIN.COM]/.well-known/assetlinks.json` 파일도 교체해야할 것으로 보임\n        - [[../deployment|deployment]] 에서 fine mount\n    - [X] 업로드키 인증서 - fastlane 에서 업로드할때 로컬에서 sign 한 키가 보여진다\n  - [[../fastlane|fastlane]] 배포\n    - 최소 한번의 수동 배포가 필요하다\n      ```sh \n      - [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].\n      ```\n    - 테스트 -\u003e  내부테스트 -\u003e  업로드 번들에 생성된 `app-release.aab` 파일을 업로드한다.\n      - `./gradlew bundleRelease` 를 통해 생성\n    - 한번 배포하고 나면 버전 코드 충돌난다고 나온다, 버전코드는 트랙과 무관.\n      ```sh\n      Google Api Error: Invalid request - Version code 1 has already been used.\n      ```\n    - 버전 코드를 올린다\n      ```sh\n      Google Api Error: Invalid request - Precondition check failed.\n      ```\n    - upload_to_play_store(track: 'internal') 을 주었더니 에러가 다른 에러가 발생\n      ```sh\n      Google Api Error: Invalid request - Only releases with status draft may be created on draft app.\n      ```\n    + https://github.com/fastlane/fastlane/discussions/18293\n      - 테스트는 내부-internal,  비공개-alhpa, 공개-beta 트랙으로 분류하는것으로 추측\n      - 글에 따르면 alpha 이상에서 릴리즈가 수등으로 되어야한다고 말하고 있음\n- [X] 앱 개발 과정에 대한 정리\n- [[../apple|apple]] 아케이드 체험 등록\n- [[../react-native|react-native]] [[../ios|ios]] 는 `Text` 컴포넌트 스타일에 `borderRadius` 가 동작하지않음\n\n---\n\n# 리액트 네이티브 앱 개발 기록\n- [[../react-native|react-native]] 를 통해 앱 배포까지의 기록\n- 데이터와 관련해서는 기존에 웹으로 제공하고 있던 데이터를 활용할 수 있는 상황에서 시작했다.\n\n## 앱개발의 4 허들\n\u003e 프론트엔드 고도화를 하기 전에 아래 4개의 허들을 넘어야한다.  \n\u003e 하지만 원하는 앱에 따라 스토어 배포를 제외한 나머지는 선택적이다.\n\n- [[../authentication|authentication]]\n  - [[../oauth|oauth]] 인증을 지원하는 경우 [[../apple|apple]] 은 필수적으로 [[../apple|apple]] 로그인을 요구한다\n- [[../firebase|firebase]] [[../fcm|fcm]]\n  - [[../app|app]] 에서 차별화되는 가장 중요한 서비스중 하나는 [[../push-notification|push-notification]]\n  - 이를 위해선 [[../fcm|fcm]] 이 defacto 로 사용되고 있다.\n- [[../code-push|code-push]]\n  - 선택적이나 앱은 배포이후 문제가 생겼을때 치명적이므로 이에 대한 보험이 필요\n  - [[../react-native|react-native]] 그 외에도 여러가지 활용폭이 있으므로\n- [[../apple|apple]] app store, [[../google|google]] play store 배포\n  - code signing 등 모르는 개념에 대해 얕게나마 이해가 필요하다\n  - 컴파일이 필요하기 때문에 [[../xcode|xcode]] 나 `build.gradle` 등에 대한 수정도 다소 필요하다\n  - 배포를 위해서는 스크린샷등 이미지 준비도해야한다\n  - 개인정보 처리방침도 작성해야한다\n\n## 필수 라이브러리들에 대한 학습\n- 네비게이션 학습, 네비게이션 없는 앱은 존재할 수 없다\n  - `react-navigation` \n- 스플래시 스크린 혹은 런치 스크린이라 불리는 로딩 화면 처리\n- [[../push-notification|push-notification]] 을 받아야하므로 이에 대한 처리\n  - `@react-native-firebase/*`\n  - `@notifee/react-native`\n\n## 배포 자동화\n- 완전히 선택적인 옵션이기 때문에 허들이라 할 순 없다.\n- 다만 지속적인 업데이트를 통한 생산성을 확보하고자 한다면 도움이 될 것\n- [[../fastlane|fastlane]] 을 통한 자동화 또한 다소 코드 작성이 필요했다.\n- [[../ruby|ruby]] 언어 기반이기때문에 조금 찾아보면서 작업을 해야한다\n- 사실 이런 부분도 secret 관리를 그냥 코드에 때려밖는다고한다면 상당히 단순화된다\n\n## 개발 과정\n- 라이브러리들이 네이티브를 포함하기 때문에 다소 설정이 들어가는것이 일반적이다.\n- [[../react-native|react-native]] 는 자바스크립트 환경이지만 runtime 이 다르므로 global 객체가 있을 것이라고 가정해서는 안된다\n  - `URLSearchParams` - 얜 `polyfill` 이 있어서 다행\n  - `Intl` - 상대시간 표기를 한글로 하고싶었는데 얘가 없어서 정규표현식을 통한 변환 처리했다\n- [[../react-native|react-native]] [[../app|app]] 을 개발하면서 모르는 [[../app|app]] 의 개념, 환경을 받아들이는고 설정하는데 많은 시간이 소요\n  - [[../xcode|xcode]]\n  - [[../pod|pod]]\n  - [[../gradle|gradle]]\n  - [[../fastlane|fastlane]]\n- 처음에는 하이브리드 앱을 생각했으나 full [[../webview|webview]] [[../app|app]] 이 아닌이상 인증처리가 더 복잡한 문제가 있어 native 로 전환\n  - 미세하게 느껴지는 퍼포먼스 혹은 느낌의 차이\n  - 401 처리를 앱과 네이티브 두영역에서 해야하다보니 전파의 이슈\n  - single [[../webview|webview]] 가아닌 multi [[../webview|webview]] 이다보니 이 또한 전파의 이슈를 깊게 고민해야했다\n    ```mermaid\n    flowchart\n      server --401--\u003e native\n      native \u003c-.갱신.-\u003e server\n      native --token--\u003e wv0[webview 0]\n      native --token--\u003e wv1[webview 1]\n      native --token--\u003e wv2[webview 2]\n      native --token--\u003e wv3[webview 3]\n    ```\n    ```mermaid\n    flowchart\n      server --401--\u003e wv1\n      wv1 \u003c-.갱신.-\u003e server\n      wv1 --token--\u003e native\n      native --token--\u003e wv0[webview 0]\n      native --token--\u003e wv2[webview 2]\n      native --token--\u003e wv3[webview 3]\n    ```\n    ```mermaid\n    flowchart\n      server --401--\u003e wv1\n      wv1 --token--\u003e native\n      native \u003c-.갱신.-\u003e server\n      native --token--\u003e wv0[webview 0]\n      native --token--\u003e wv2[webview 2]\n      native --token--\u003e wv3[webview 3]\n    ```\n- 추후 웹까지의 서비스 확장을 위해 next-auth 기반으로 구현을 하다보니 여기서 시간이 꽤나 소요되었다\n  - next-auth 는 rn을 지원하지 않으나 이를 커스텀하여 중간에 같은 로직과 테이블 구조를 사용하고자 했다\n  - native 로 전환을 하고자하니 next-auth 는 쿠키기반이라 이를 헤더기반으로 풀기위해서 시간이 소요\n    - 이를 위해 코드를 일부 떠와야했고 패스워드없는 이메일 기반 로직등을 추가로 구현\n- navigation 에 종속적이므로 코드 구조 또한 선택한 [[../react-navigation|react-navigation]] 에 맞춰줘야하는 경향이 있다.\n  - 옵션이 많이 있었고 [[../ios|ios]], [[../android|android]] 간에도 잘 동작해서 어려움이 없었다.\n- 로그인을 지원하는 [[../app|app]] 은 로그인이 풀리지 않는 것이 중요하므로 **refresh token** 을 통한 갱신이 필수적이므로 이에 대한 구현을 공통화 해서 잘처리해야한다\n  - 앱이 background 에 있다가 foreground 로 올라왔을때 연속적인 api call 이 발생하여 401 이 중복으로 발생하여 생긴 문제가 있었다.\n```mermaid\nflowchart\n  server --401--\u003e s0[screen 0]\n  s0 \u003c-.갱신.-\u003e server\n  server --401--\u003e s1[screen 1]\n  s1 x-.갱신에러.-x server\n  s0 --1. 저장--\u003e s[(stoarge)]\n  s1 ==2. 초기화==\u003e s[(stoarge)]\n```\n- 직접 [[../fcm|fcm]] 토큰을 통해서 [[push-notification]] 을 발행할 수도 있지만 topic 을 통해서 전송도 가능하다.  이 경우 한글을 지원하지 않아 인코딩이 필요했다.\n\n## 툴 활용\n- ipad 의 *procreator* 를 사용해서 플레이 스토어에서 요구하는 그래픽 이미지(1024x500) 에 대한 문구 처리를 했다\n- `react-native-bootsplash` 라이브러리에서 스플래시 스크린에대한 요구사항 처리\n\n### 웹 서비스\n+ [[../dev-tools|dev-tools]]  \n- [[../midjourney|midjourney]] 를 통해 작성된 아이콘을 여러 사이즈로 변환\n  + https://easyappicon.com\n- 인터넷에 공개된 figma 템플릿을 활용해서 스토어에 필요한 이미지들을 작성\n\n### 생성 [[../ai|ai]]\n- 스플래시 스크린과,  앱 아이콘 및 몇가지 앱 내 로고 처리를 [[../midjourney|midjourney]] 를 통해 작성했다\n- 개인정보 처리 방침 작성\n  - [[../chatgpt|chatgpt]] 에게 앱이 하는 일과 수집하는 정보를 설명하고 작성해달라했다\n  - appstore 통과, playstore 는 아직 google 로그인 허가 안떨어져서 대기중이다\n  - google 로그인에서는 개인정보 처리방침이 부족하다는 피드백이었다.\n\n## 후기\n- [[../react-native|react-native]] 를 사용하고 있는만큼 웹 개발과 그다지 이질감은 없다.\n- 다만 위에 정리한 4허들이 존재한다\n- [[../push-notification|push-notification]] 경우는 멀티디바이스를 지원할 것인지와 같은 고민포인트 들이 있다. 트레이트드 오프가 필요하다.\n- 첫 app 개발에 대해서는 설정등에 대한 부담이 강하나 두번째 개발부터  더 빠르게 개발이 가능할 것으로 생각한다\n\n## git commit 분석\n- 커밋으로 의미있는 타임라인을 추출하지는 못했다.\n  - 일 자체를 선형으로 하지 않고 앱, 웹서버, 알림서버 등을 동시에 처리했기 때문\n  - 그외에도 삽질이 너무 많았고, 되돌리는 경우도 많았다\n\n### 2023-w49, 2023-12-03\n- web\n  - 서버 + [[../yarn|yarn]]@4\n- app\n  - [[../react-native|react-native]] 프로젝트 생성 + [[../bun|bun]]\n  - [[../react-navigation|react-navigation]] 설정\n  - [[../webview|webview]],  인앱브라우저\n\n### 2023-w50, 2023-12-10\n- web\n  - 배포 +  [[../docker|docker]] build 스크립트\n  - [[../nextjs|nextjs]] standalone 위해 [[../yarn|yarn]] cache 튜닝\n  - 도메인 + ingress 설정\n  - logger 설정\n  - [[../next-auth|next-auth]] 설정\n    - 인증 데이터를 위한 table 생성\n  - 로그인 스크린 구현\n  - 구글 로그인 flow 구현\n- app\n  - 테스트 스크린 구현\n  - 커스텀 타입처리를 위한 `global.d.ts` 추가\n  - 구글 로그인 패키지 설정\n  - email 로그인을 위한 sendgrid 설정\n- firebase 프로젝트 설정 시작\n\n### 2023-w51, 2023-12-17\n- web\n  - email 로그인 flow 구현\n  - assetlinks.json 추가\n- app\n  - 딥링크 처리\n  - react-native-permission 추가\n  - @react-native-firebase/* 추가\n  - notifee 추가\n  - react-native-url-polyfill 추가\n\n### 2023-w52, 2023-12-24\n- app\n  - react-native@0.73.1\n  - apple 로그인\n  - ios deeplink 설정\n  - ios 실기기에서 테스트시 localhost 처리 못하는 문제를 git stage 를 활용해서 처리\n- 배포\n  - fastlane 을 이용해 firebase app distribution 배포\n\n### 2024-w01, 2023-12-31\n- web\n  - next-auth 커스텀 처리를 위한 soft-fork 및 디버깅\n  - fcm 테이블 생성 및 토큰 저장\n- app\n  - xcode remote push 활성화 및 테스트\n  - android react-native-config + proguard 충돌 이슈 처리\n  - react-native-async-storage 추가\n  - firebase anlytics, crashlytics, app-check 추가\n    - app-check 제거\n  - android 에서 appsignin 로직 분리 제거\n  - 키워드 관리 구현\n  - react-navigation 타입 주입\n  - 웹뷰 통신을 통한 로그인 구현\n  - safearea 적용\n- 배포\n  - fastlane 을 이용해 android 로컬 디바이스에 복사처리\n\n### 2024-w02, 2024-01-06\n- refresh token 로직 구현\n- 피드화면 구현\n- 401 + refresh token 재 인증 구현\n- 등록된 키워드에 맞춰서 푸시 발송 구현\n- 푸시를 받아서 알람 띄우기 구현\n- 알람 누른경우 딥링크 처리 로직\n- 내 피드 스크린 구현\n- 키보드내려가는 로직 처리\n- 스플래시 스크린 추가\n\n### 2024-w03, 2024-01-13\n- react-native@0.73.2\n- fcm 토픽이 한글지원을 하지 않아서 인코딩\n- 키워드 검색 구현\n- 로그인 화면 앱으로 재구현\n- 웹서버 yarn -\u003e pnpm 으로 마이그레이션\n- 아이콘 변경\n- android 빌드 환경 분리\n- 바탐탭 active 색상 적용\n- 바탐탭 alarm 카운 표시\n- code-push 적용\n- ui, 시간 포맷 적용\n- 환경에따른 .env 로드 분리\n- email ui 처리\n- lottie 적용\n- 로고 적용\n- 로그인에 따른 애널리틱스 속성 설정\n\n### 2024-w04, 2024-01-20\n- 스크린 계정 조정\n- 헤더 추가\n- 종료딜 표시\n- 배포\n"])</script><script>self.__next_f.push([1,"16:T3416,"])</script><script>self.__next_f.push([1,"  - [X] 피드백 반영해서 privacy-policy 업데이트, 홈페이지에 개인정보 처리방침 링크\n- [O] 안드로이드 플레이 스토어 등록\n  - [X] 계정삭제를 웹으로 지원 [[2024-01-24]]\n  - [X] ad id\n    - [X] 플레이 콘솔 -\u003e  앱 콘텐트 -\u003e  광고 ID -\u003e 사용,  애널리틱스에서 어차피사용되서 포함됨\n  - [X] 앱 서명 google playstore 에서 제공하는 키사용 체크\n  - [o] 플레이 콘솔 -\u003e  설정 -\u003e  앱 서명, 여기에 나오는 서명키들을 firebase 등에 추가로 등록해야하는지 확인 필요\n    - [ ] 앱 서명키 인증서 - 구글에서 추가로 사인을 한 것으로 추측\n      - [ ] 업로드키 인증서가 이미 [[../firebase|firebase]] 에 등록되었기 때문에 다른 곳에 등록을 안하면 어떻게되는지 확인 필요하다\n      - [ ] 이 것도 firebase 쪽에 등록 필요\n      - [ ] `https://[DOMAIN.COM]/.well-known/assetlinks.json` 파일도 교체해야할 것으로 보임\n        - [[../deployment|deployment]] 에서 fine mount\n    - [X] 업로드키 인증서 - fastlane 에서 업로드할때 로컬에서 sign 한 키가 보여진다\n  - [[../fastlane|fastlane]] 배포\n    - 최소 한번의 수동 배포가 필요하다\n      ```sh \n      - [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].\n      ```\n    - 테스트 -\u003e  내부테스트 -\u003e  업로드 번들에 생성된 `app-release.aab` 파일을 업로드한다.\n      - `./gradlew bundleRelease` 를 통해 생성\n    - 한번 배포하고 나면 버전 코드 충돌난다고 나온다, 버전코드는 트랙과 무관.\n      ```sh\n      Google Api Error: Invalid request - Version code 1 has already been used.\n      ```\n    - 버전 코드를 올린다\n      ```sh\n      Google Api Error: Invalid request - Precondition check failed.\n      ```\n    - upload_to_play_store(track: 'internal') 을 주었더니 에러가 다른 에러가 발생\n      ```sh\n      Google Api Error: Invalid request - Only releases with status draft may be created on draft app.\n      ```\n    + https://github.com/fastlane/fastlane/discussions/18293\n      - 테스트는 내부-internal,  비공개-alhpa, 공개-beta 트랙으로 분류하는것으로 추측\n      - 글에 따르면 alpha 이상에서 릴리즈가 수등으로 되어야한다고 말하고 있음\n- [X] 앱 개발 과정에 대한 정리\n- [[../apple|apple]] 아케이드 체험 등록\n- [[../react-native|react-native]] [[../ios|ios]] 는 `Text` 컴포넌트 스타일에 `borderRadius` 가 동작하지않음\n\n---\n\n# 리액트 네이티브 앱 개발 기록\n- [[../react-native|react-native]] 를 통해 앱 배포까지의 기록\n- 데이터와 관련해서는 기존에 웹으로 제공하고 있던 데이터를 활용할 수 있는 상황에서 시작했다.\n\n## 앱개발의 4 허들\n\u003e 프론트엔드 고도화를 하기 전에 아래 4개의 허들을 넘어야한다.  \n\u003e 하지만 원하는 앱에 따라 스토어 배포를 제외한 나머지는 선택적이다.\n\n- [[../authentication|authentication]]\n  - [[../oauth|oauth]] 인증을 지원하는 경우 [[../apple|apple]] 은 필수적으로 [[../apple|apple]] 로그인을 요구한다\n- [[../firebase|firebase]] [[../fcm|fcm]]\n  - [[../app|app]] 에서 차별화되는 가장 중요한 서비스중 하나는 [[../push-notification|push-notification]]\n  - 이를 위해선 [[../fcm|fcm]] 이 defacto 로 사용되고 있다.\n- [[../code-push|code-push]]\n  - 선택적이나 앱은 배포이후 문제가 생겼을때 치명적이므로 이에 대한 보험이 필요\n  - [[../react-native|react-native]] 그 외에도 여러가지 활용폭이 있으므로\n- [[../apple|apple]] app store, [[../google|google]] play store 배포\n  - code signing 등 모르는 개념에 대해 얕게나마 이해가 필요하다\n  - 컴파일이 필요하기 때문에 [[../xcode|xcode]] 나 `build.gradle` 등에 대한 수정도 다소 필요하다\n  - 배포를 위해서는 스크린샷등 이미지 준비도해야한다\n  - 개인정보 처리방침도 작성해야한다\n\n## 필수 라이브러리들에 대한 학습\n- 네비게이션 학습, 네비게이션 없는 앱은 존재할 수 없다\n  - `react-navigation` \n- 스플래시 스크린 혹은 런치 스크린이라 불리는 로딩 화면 처리\n- [[../push-notification|push-notification]] 을 받아야하므로 이에 대한 처리\n  - `@react-native-firebase/*`\n  - `@notifee/react-native`\n\n## 배포 자동화\n- 완전히 선택적인 옵션이기 때문에 허들이라 할 순 없다.\n- 다만 지속적인 업데이트를 통한 생산성을 확보하고자 한다면 도움이 될 것\n- [[../fastlane|fastlane]] 을 통한 자동화 또한 다소 코드 작성이 필요했다.\n- [[../ruby|ruby]] 언어 기반이기때문에 조금 찾아보면서 작업을 해야한다\n- 사실 이런 부분도 secret 관리를 그냥 코드에 때려밖는다고한다면 상당히 단순화된다\n\n## 개발 과정\n- 라이브러리들이 네이티브를 포함하기 때문에 다소 설정이 들어가는것이 일반적이다.\n- [[../react-native|react-native]] 는 자바스크립트 환경이지만 runtime 이 다르므로 global 객체가 있을 것이라고 가정해서는 안된다\n  - `URLSearchParams` - 얜 `polyfill` 이 있어서 다행\n  - `Intl` - 상대시간 표기를 한글로 하고싶었는데 얘가 없어서 정규표현식을 통한 변환 처리했다\n- [[../react-native|react-native]] [[../app|app]] 을 개발하면서 모르는 [[../app|app]] 의 개념, 환경을 받아들이는고 설정하는데 많은 시간이 소요\n  - [[../xcode|xcode]]\n  - [[../pod|pod]]\n  - [[../gradle|gradle]]\n  - [[../fastlane|fastlane]]\n- 처음에는 하이브리드 앱을 생각했으나 full [[../webview|webview]] [[../app|app]] 이 아닌이상 인증처리가 더 복잡한 문제가 있어 native 로 전환\n  - 미세하게 느껴지는 퍼포먼스 혹은 느낌의 차이\n  - 401 처리를 앱과 네이티브 두영역에서 해야하다보니 전파의 이슈\n  - single [[../webview|webview]] 가아닌 multi [[../webview|webview]] 이다보니 이 또한 전파의 이슈를 깊게 고민해야했다\n    ```mermaid\n    flowchart\n      server --401--\u003e native\n      native \u003c-.갱신.-\u003e server\n      native --token--\u003e wv0[webview 0]\n      native --token--\u003e wv1[webview 1]\n      native --token--\u003e wv2[webview 2]\n      native --token--\u003e wv3[webview 3]\n    ```\n    ```mermaid\n    flowchart\n      server --401--\u003e wv1\n      wv1 \u003c-.갱신.-\u003e server\n      wv1 --token--\u003e native\n      native --token--\u003e wv0[webview 0]\n      native --token--\u003e wv2[webview 2]\n      native --token--\u003e wv3[webview 3]\n    ```\n    ```mermaid\n    flowchart\n      server --401--\u003e wv1\n      wv1 --token--\u003e native\n      native \u003c-.갱신.-\u003e server\n      native --token--\u003e wv0[webview 0]\n      native --token--\u003e wv2[webview 2]\n      native --token--\u003e wv3[webview 3]\n    ```\n- 추후 웹까지의 서비스 확장을 위해 next-auth 기반으로 구현을 하다보니 여기서 시간이 꽤나 소요되었다\n  - next-auth 는 rn을 지원하지 않으나 이를 커스텀하여 중간에 같은 로직과 테이블 구조를 사용하고자 했다\n  - native 로 전환을 하고자하니 next-auth 는 쿠키기반이라 이를 헤더기반으로 풀기위해서 시간이 소요\n    - 이를 위해 코드를 일부 떠와야했고 패스워드없는 이메일 기반 로직등을 추가로 구현\n- navigation 에 종속적이므로 코드 구조 또한 선택한 [[../react-navigation|react-navigation]] 에 맞춰줘야하는 경향이 있다.\n  - 옵션이 많이 있었고 [[../ios|ios]], [[../android|android]] 간에도 잘 동작해서 어려움이 없었다.\n- 로그인을 지원하는 [[../app|app]] 은 로그인이 풀리지 않는 것이 중요하므로 **refresh token** 을 통한 갱신이 필수적이므로 이에 대한 구현을 공통화 해서 잘처리해야한다\n  - 앱이 background 에 있다가 foreground 로 올라왔을때 연속적인 api call 이 발생하여 401 이 중복으로 발생하여 생긴 문제가 있었다.\n```mermaid\nflowchart\n  server --401--\u003e s0[screen 0]\n  s0 \u003c-.갱신.-\u003e server\n  server --401--\u003e s1[screen 1]\n  s1 x-.갱신에러.-x server\n  s0 --1. 저장--\u003e s[(stoarge)]\n  s1 ==2. 초기화==\u003e s[(stoarge)]\n```\n- 직접 [[../fcm|fcm]] 토큰을 통해서 [[push-notification]] 을 발행할 수도 있지만 topic 을 통해서 전송도 가능하다.  이 경우 한글을 지원하지 않아 인코딩이 필요했다.\n\n## 툴 활용\n- ipad 의 *procreator* 를 사용해서 플레이 스토어에서 요구하는 그래픽 이미지(1024x500) 에 대한 문구 처리를 했다\n- `react-native-bootsplash` 라이브러리에서 스플래시 스크린에대한 요구사항 처리\n\n### 웹 서비스\n+ [[../dev-tools|dev-tools]]  \n- [[../midjourney|midjourney]] 를 통해 작성된 아이콘을 여러 사이즈로 변환\n  + https://easyappicon.com\n- 인터넷에 공개된 figma 템플릿을 활용해서 스토어에 필요한 이미지들을 작성\n\n### 생성 [[../ai|ai]]\n- 스플래시 스크린과,  앱 아이콘 및 몇가지 앱 내 로고 처리를 [[../midjourney|midjourney]] 를 통해 작성했다\n- 개인정보 처리 방침 작성\n  - [[../chatgpt|chatgpt]] 에게 앱이 하는 일과 수집하는 정보를 설명하고 작성해달라했다\n  - appstore 통과, playstore 는 아직 google 로그인 허가 안떨어져서 대기중이다\n  - google 로그인에서는 개인정보 처리방침이 부족하다는 피드백이었다.\n\n## 후기\n- [[../react-native|react-native]] 를 사용하고 있는만큼 웹 개발과 그다지 이질감은 없다.\n- 다만 위에 정리한 4허들이 존재한다\n- [[../push-notification|push-notification]] 경우는 멀티디바이스를 지원할 것인지와 같은 고민포인트 들이 있다. 트레이트드 오프가 필요하다.\n- 첫 app 개발에 대해서는 설정등에 대한 부담이 강하나 두번째 개발부터  더 빠르게 개발이 가능할 것으로 생각한다\n\n## git commit 분석\n- 커밋으로 의미있는 타임라인을 추출하지는 못했다.\n  - 일 자체를 선형으로 하지 않고 앱, 웹서버, 알림서버 등을 동시에 처리했기 때문\n  - 그외에도 삽질이 너무 많았고, 되돌리는 경우도 많았다\n\n### 2023-w49, 2023-12-03\n- web\n  - 서버 + [[../yarn|yarn]]@4\n- app\n  - [[../react-native|react-native]] 프로젝트 생성 + [[../bun|bun]]\n  - [[../react-navigation|react-navigation]] 설정\n  - [[../webview|webview]],  인앱브라우저\n\n### 2023-w50, 2023-12-10\n- web\n  - 배포 +  [[../docker|docker]] build 스크립트\n  - [[../nextjs|nextjs]] standalone 위해 [[../yarn|yarn]] cache 튜닝\n  - 도메인 + ingress 설정\n  - logger 설정\n  - [[../next-auth|next-auth]] 설정\n    - 인증 데이터를 위한 table 생성\n  - 로그인 스크린 구현\n  - 구글 로그인 flow 구현\n- app\n  - 테스트 스크린 구현\n  - 커스텀 타입처리를 위한 `global.d.ts` 추가\n  - 구글 로그인 패키지 설정\n  - email 로그인을 위한 sendgrid 설정\n- firebase 프로젝트 설정 시작\n\n### 2023-w51, 2023-12-17\n- web\n  - email 로그인 flow 구현\n  - assetlinks.json 추가\n- app\n  - 딥링크 처리\n  - react-native-permission 추가\n  - @react-native-firebase/* 추가\n  - notifee 추가\n  - react-native-url-polyfill 추가\n\n### 2023-w52, 2023-12-24\n- app\n  - react-native@0.73.1\n  - apple 로그인\n  - ios deeplink 설정\n  - ios 실기기에서 테스트시 localhost 처리 못하는 문제를 git stage 를 활용해서 처리\n- 배포\n  - fastlane 을 이용해 firebase app distribution 배포\n\n### 2024-w01, 2023-12-31\n- web\n  - next-auth 커스텀 처리를 위한 soft-fork 및 디버깅\n  - fcm 테이블 생성 및 토큰 저장\n- app\n  - xcode remote push 활성화 및 테스트\n  - android react-native-config + proguard 충돌 이슈 처리\n  - react-native-async-storage 추가\n  - firebase anlytics, crashlytics, app-check 추가\n    - app-check 제거\n  - android 에서 appsignin 로직 분리 제거\n  - 키워드 관리 구현\n  - react-navigation 타입 주입\n  - 웹뷰 통신을 통한 로그인 구현\n  - safearea 적용\n- 배포\n  - fastlane 을 이용해 android 로컬 디바이스에 복사처리\n\n### 2024-w02, 2024-01-06\n- refresh token 로직 구현\n- 피드화면 구현\n- 401 + refresh token 재 인증 구현\n- 등록된 키워드에 맞춰서 푸시 발송 구현\n- 푸시를 받아서 알람 띄우기 구현\n- 알람 누른경우 딥링크 처리 로직\n- 내 피드 스크린 구현\n- 키보드내려가는 로직 처리\n- 스플래시 스크린 추가\n\n### 2024-w03, 2024-01-13\n- react-native@0.73.2\n- fcm 토픽이 한글지원을 하지 않아서 인코딩\n- 키워드 검색 구현\n- 로그인 화면 앱으로 재구현\n- 웹서버 yarn -\u003e pnpm 으로 마이그레이션\n- 아이콘 변경\n- android 빌드 환경 분리\n- 바탐탭 active 색상 적용\n- 바탐탭 alarm 카운 표시\n- code-push 적용\n- ui, 시간 포맷 적용\n- 환경에따른 .env 로드 분리\n- email ui 처리\n- lottie 적용\n- 로고 적용\n- 로그인에 따른 애널리틱스 속성 설정\n\n### 2024-w04, 2024-01-20\n- 스크린 계정 조정\n- 헤더 추가\n- 종료딜 표시\n- 배포\n"])</script><script>self.__next_f.push([1,"17:T3416,"])</script><script>self.__next_f.push([1,"  - [X] 피드백 반영해서 privacy-policy 업데이트, 홈페이지에 개인정보 처리방침 링크\n- [O] 안드로이드 플레이 스토어 등록\n  - [X] 계정삭제를 웹으로 지원 [[2024-01-24]]\n  - [X] ad id\n    - [X] 플레이 콘솔 -\u003e  앱 콘텐트 -\u003e  광고 ID -\u003e 사용,  애널리틱스에서 어차피사용되서 포함됨\n  - [X] 앱 서명 google playstore 에서 제공하는 키사용 체크\n  - [o] 플레이 콘솔 -\u003e  설정 -\u003e  앱 서명, 여기에 나오는 서명키들을 firebase 등에 추가로 등록해야하는지 확인 필요\n    - [ ] 앱 서명키 인증서 - 구글에서 추가로 사인을 한 것으로 추측\n      - [ ] 업로드키 인증서가 이미 [[../firebase|firebase]] 에 등록되었기 때문에 다른 곳에 등록을 안하면 어떻게되는지 확인 필요하다\n      - [ ] 이 것도 firebase 쪽에 등록 필요\n      - [ ] `https://[DOMAIN.COM]/.well-known/assetlinks.json` 파일도 교체해야할 것으로 보임\n        - [[../deployment|deployment]] 에서 fine mount\n    - [X] 업로드키 인증서 - fastlane 에서 업로드할때 로컬에서 sign 한 키가 보여진다\n  - [[../fastlane|fastlane]] 배포\n    - 최소 한번의 수동 배포가 필요하다\n      ```sh \n      - [!] Google Api Error: Invalid request - Package not found: [BUNDLE_IDENTIFIER].\n      ```\n    - 테스트 -\u003e  내부테스트 -\u003e  업로드 번들에 생성된 `app-release.aab` 파일을 업로드한다.\n      - `./gradlew bundleRelease` 를 통해 생성\n    - 한번 배포하고 나면 버전 코드 충돌난다고 나온다, 버전코드는 트랙과 무관.\n      ```sh\n      Google Api Error: Invalid request - Version code 1 has already been used.\n      ```\n    - 버전 코드를 올린다\n      ```sh\n      Google Api Error: Invalid request - Precondition check failed.\n      ```\n    - upload_to_play_store(track: 'internal') 을 주었더니 에러가 다른 에러가 발생\n      ```sh\n      Google Api Error: Invalid request - Only releases with status draft may be created on draft app.\n      ```\n    + https://github.com/fastlane/fastlane/discussions/18293\n      - 테스트는 내부-internal,  비공개-alhpa, 공개-beta 트랙으로 분류하는것으로 추측\n      - 글에 따르면 alpha 이상에서 릴리즈가 수등으로 되어야한다고 말하고 있음\n- [X] 앱 개발 과정에 대한 정리\n- [[../apple|apple]] 아케이드 체험 등록\n- [[../react-native|react-native]] [[../ios|ios]] 는 `Text` 컴포넌트 스타일에 `borderRadius` 가 동작하지않음\n\n---\n\n# 리액트 네이티브 앱 개발 기록\n- [[../react-native|react-native]] 를 통해 앱 배포까지의 기록\n- 데이터와 관련해서는 기존에 웹으로 제공하고 있던 데이터를 활용할 수 있는 상황에서 시작했다.\n\n## 앱개발의 4 허들\n\u003e 프론트엔드 고도화를 하기 전에 아래 4개의 허들을 넘어야한다.  \n\u003e 하지만 원하는 앱에 따라 스토어 배포를 제외한 나머지는 선택적이다.\n\n- [[../authentication|authentication]]\n  - [[../oauth|oauth]] 인증을 지원하는 경우 [[../apple|apple]] 은 필수적으로 [[../apple|apple]] 로그인을 요구한다\n- [[../firebase|firebase]] [[../fcm|fcm]]\n  - [[../app|app]] 에서 차별화되는 가장 중요한 서비스중 하나는 [[../push-notification|push-notification]]\n  - 이를 위해선 [[../fcm|fcm]] 이 defacto 로 사용되고 있다.\n- [[../code-push|code-push]]\n  - 선택적이나 앱은 배포이후 문제가 생겼을때 치명적이므로 이에 대한 보험이 필요\n  - [[../react-native|react-native]] 그 외에도 여러가지 활용폭이 있으므로\n- [[../apple|apple]] app store, [[../google|google]] play store 배포\n  - code signing 등 모르는 개념에 대해 얕게나마 이해가 필요하다\n  - 컴파일이 필요하기 때문에 [[../xcode|xcode]] 나 `build.gradle` 등에 대한 수정도 다소 필요하다\n  - 배포를 위해서는 스크린샷등 이미지 준비도해야한다\n  - 개인정보 처리방침도 작성해야한다\n\n## 필수 라이브러리들에 대한 학습\n- 네비게이션 학습, 네비게이션 없는 앱은 존재할 수 없다\n  - `react-navigation` \n- 스플래시 스크린 혹은 런치 스크린이라 불리는 로딩 화면 처리\n- [[../push-notification|push-notification]] 을 받아야하므로 이에 대한 처리\n  - `@react-native-firebase/*`\n  - `@notifee/react-native`\n\n## 배포 자동화\n- 완전히 선택적인 옵션이기 때문에 허들이라 할 순 없다.\n- 다만 지속적인 업데이트를 통한 생산성을 확보하고자 한다면 도움이 될 것\n- [[../fastlane|fastlane]] 을 통한 자동화 또한 다소 코드 작성이 필요했다.\n- [[../ruby|ruby]] 언어 기반이기때문에 조금 찾아보면서 작업을 해야한다\n- 사실 이런 부분도 secret 관리를 그냥 코드에 때려밖는다고한다면 상당히 단순화된다\n\n## 개발 과정\n- 라이브러리들이 네이티브를 포함하기 때문에 다소 설정이 들어가는것이 일반적이다.\n- [[../react-native|react-native]] 는 자바스크립트 환경이지만 runtime 이 다르므로 global 객체가 있을 것이라고 가정해서는 안된다\n  - `URLSearchParams` - 얜 `polyfill` 이 있어서 다행\n  - `Intl` - 상대시간 표기를 한글로 하고싶었는데 얘가 없어서 정규표현식을 통한 변환 처리했다\n- [[../react-native|react-native]] [[../app|app]] 을 개발하면서 모르는 [[../app|app]] 의 개념, 환경을 받아들이는고 설정하는데 많은 시간이 소요\n  - [[../xcode|xcode]]\n  - [[../pod|pod]]\n  - [[../gradle|gradle]]\n  - [[../fastlane|fastlane]]\n- 처음에는 하이브리드 앱을 생각했으나 full [[../webview|webview]] [[../app|app]] 이 아닌이상 인증처리가 더 복잡한 문제가 있어 native 로 전환\n  - 미세하게 느껴지는 퍼포먼스 혹은 느낌의 차이\n  - 401 처리를 앱과 네이티브 두영역에서 해야하다보니 전파의 이슈\n  - single [[../webview|webview]] 가아닌 multi [[../webview|webview]] 이다보니 이 또한 전파의 이슈를 깊게 고민해야했다\n    ```mermaid\n    flowchart\n      server --401--\u003e native\n      native \u003c-.갱신.-\u003e server\n      native --token--\u003e wv0[webview 0]\n      native --token--\u003e wv1[webview 1]\n      native --token--\u003e wv2[webview 2]\n      native --token--\u003e wv3[webview 3]\n    ```\n    ```mermaid\n    flowchart\n      server --401--\u003e wv1\n      wv1 \u003c-.갱신.-\u003e server\n      wv1 --token--\u003e native\n      native --token--\u003e wv0[webview 0]\n      native --token--\u003e wv2[webview 2]\n      native --token--\u003e wv3[webview 3]\n    ```\n    ```mermaid\n    flowchart\n      server --401--\u003e wv1\n      wv1 --token--\u003e native\n      native \u003c-.갱신.-\u003e server\n      native --token--\u003e wv0[webview 0]\n      native --token--\u003e wv2[webview 2]\n      native --token--\u003e wv3[webview 3]\n    ```\n- 추후 웹까지의 서비스 확장을 위해 next-auth 기반으로 구현을 하다보니 여기서 시간이 꽤나 소요되었다\n  - next-auth 는 rn을 지원하지 않으나 이를 커스텀하여 중간에 같은 로직과 테이블 구조를 사용하고자 했다\n  - native 로 전환을 하고자하니 next-auth 는 쿠키기반이라 이를 헤더기반으로 풀기위해서 시간이 소요\n    - 이를 위해 코드를 일부 떠와야했고 패스워드없는 이메일 기반 로직등을 추가로 구현\n- navigation 에 종속적이므로 코드 구조 또한 선택한 [[../react-navigation|react-navigation]] 에 맞춰줘야하는 경향이 있다.\n  - 옵션이 많이 있었고 [[../ios|ios]], [[../android|android]] 간에도 잘 동작해서 어려움이 없었다.\n- 로그인을 지원하는 [[../app|app]] 은 로그인이 풀리지 않는 것이 중요하므로 **refresh token** 을 통한 갱신이 필수적이므로 이에 대한 구현을 공통화 해서 잘처리해야한다\n  - 앱이 background 에 있다가 foreground 로 올라왔을때 연속적인 api call 이 발생하여 401 이 중복으로 발생하여 생긴 문제가 있었다.\n```mermaid\nflowchart\n  server --401--\u003e s0[screen 0]\n  s0 \u003c-.갱신.-\u003e server\n  server --401--\u003e s1[screen 1]\n  s1 x-.갱신에러.-x server\n  s0 --1. 저장--\u003e s[(stoarge)]\n  s1 ==2. 초기화==\u003e s[(stoarge)]\n```\n- 직접 [[../fcm|fcm]] 토큰을 통해서 [[push-notification]] 을 발행할 수도 있지만 topic 을 통해서 전송도 가능하다.  이 경우 한글을 지원하지 않아 인코딩이 필요했다.\n\n## 툴 활용\n- ipad 의 *procreator* 를 사용해서 플레이 스토어에서 요구하는 그래픽 이미지(1024x500) 에 대한 문구 처리를 했다\n- `react-native-bootsplash` 라이브러리에서 스플래시 스크린에대한 요구사항 처리\n\n### 웹 서비스\n+ [[../dev-tools|dev-tools]]  \n- [[../midjourney|midjourney]] 를 통해 작성된 아이콘을 여러 사이즈로 변환\n  + https://easyappicon.com\n- 인터넷에 공개된 figma 템플릿을 활용해서 스토어에 필요한 이미지들을 작성\n\n### 생성 [[../ai|ai]]\n- 스플래시 스크린과,  앱 아이콘 및 몇가지 앱 내 로고 처리를 [[../midjourney|midjourney]] 를 통해 작성했다\n- 개인정보 처리 방침 작성\n  - [[../chatgpt|chatgpt]] 에게 앱이 하는 일과 수집하는 정보를 설명하고 작성해달라했다\n  - appstore 통과, playstore 는 아직 google 로그인 허가 안떨어져서 대기중이다\n  - google 로그인에서는 개인정보 처리방침이 부족하다는 피드백이었다.\n\n## 후기\n- [[../react-native|react-native]] 를 사용하고 있는만큼 웹 개발과 그다지 이질감은 없다.\n- 다만 위에 정리한 4허들이 존재한다\n- [[../push-notification|push-notification]] 경우는 멀티디바이스를 지원할 것인지와 같은 고민포인트 들이 있다. 트레이트드 오프가 필요하다.\n- 첫 app 개발에 대해서는 설정등에 대한 부담이 강하나 두번째 개발부터  더 빠르게 개발이 가능할 것으로 생각한다\n\n## git commit 분석\n- 커밋으로 의미있는 타임라인을 추출하지는 못했다.\n  - 일 자체를 선형으로 하지 않고 앱, 웹서버, 알림서버 등을 동시에 처리했기 때문\n  - 그외에도 삽질이 너무 많았고, 되돌리는 경우도 많았다\n\n### 2023-w49, 2023-12-03\n- web\n  - 서버 + [[../yarn|yarn]]@4\n- app\n  - [[../react-native|react-native]] 프로젝트 생성 + [[../bun|bun]]\n  - [[../react-navigation|react-navigation]] 설정\n  - [[../webview|webview]],  인앱브라우저\n\n### 2023-w50, 2023-12-10\n- web\n  - 배포 +  [[../docker|docker]] build 스크립트\n  - [[../nextjs|nextjs]] standalone 위해 [[../yarn|yarn]] cache 튜닝\n  - 도메인 + ingress 설정\n  - logger 설정\n  - [[../next-auth|next-auth]] 설정\n    - 인증 데이터를 위한 table 생성\n  - 로그인 스크린 구현\n  - 구글 로그인 flow 구현\n- app\n  - 테스트 스크린 구현\n  - 커스텀 타입처리를 위한 `global.d.ts` 추가\n  - 구글 로그인 패키지 설정\n  - email 로그인을 위한 sendgrid 설정\n- firebase 프로젝트 설정 시작\n\n### 2023-w51, 2023-12-17\n- web\n  - email 로그인 flow 구현\n  - assetlinks.json 추가\n- app\n  - 딥링크 처리\n  - react-native-permission 추가\n  - @react-native-firebase/* 추가\n  - notifee 추가\n  - react-native-url-polyfill 추가\n\n### 2023-w52, 2023-12-24\n- app\n  - react-native@0.73.1\n  - apple 로그인\n  - ios deeplink 설정\n  - ios 실기기에서 테스트시 localhost 처리 못하는 문제를 git stage 를 활용해서 처리\n- 배포\n  - fastlane 을 이용해 firebase app distribution 배포\n\n### 2024-w01, 2023-12-31\n- web\n  - next-auth 커스텀 처리를 위한 soft-fork 및 디버깅\n  - fcm 테이블 생성 및 토큰 저장\n- app\n  - xcode remote push 활성화 및 테스트\n  - android react-native-config + proguard 충돌 이슈 처리\n  - react-native-async-storage 추가\n  - firebase anlytics, crashlytics, app-check 추가\n    - app-check 제거\n  - android 에서 appsignin 로직 분리 제거\n  - 키워드 관리 구현\n  - react-navigation 타입 주입\n  - 웹뷰 통신을 통한 로그인 구현\n  - safearea 적용\n- 배포\n  - fastlane 을 이용해 android 로컬 디바이스에 복사처리\n\n### 2024-w02, 2024-01-06\n- refresh token 로직 구현\n- 피드화면 구현\n- 401 + refresh token 재 인증 구현\n- 등록된 키워드에 맞춰서 푸시 발송 구현\n- 푸시를 받아서 알람 띄우기 구현\n- 알람 누른경우 딥링크 처리 로직\n- 내 피드 스크린 구현\n- 키보드내려가는 로직 처리\n- 스플래시 스크린 추가\n\n### 2024-w03, 2024-01-13\n- react-native@0.73.2\n- fcm 토픽이 한글지원을 하지 않아서 인코딩\n- 키워드 검색 구현\n- 로그인 화면 앱으로 재구현\n- 웹서버 yarn -\u003e pnpm 으로 마이그레이션\n- 아이콘 변경\n- android 빌드 환경 분리\n- 바탐탭 active 색상 적용\n- 바탐탭 alarm 카운 표시\n- code-push 적용\n- ui, 시간 포맷 적용\n- 환경에따른 .env 로드 분리\n- email ui 처리\n- lottie 적용\n- 로고 적용\n- 로그인에 따른 애널리틱스 속성 설정\n\n### 2024-w04, 2024-01-20\n- 스크린 계정 조정\n- 헤더 추가\n- 종료딜 표시\n- 배포\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"- [X] 구글 로그인 심사\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"- [X] 구글 로그인 심사\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/diary/2024-01-25\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"- [X] 구글 로그인 심사\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

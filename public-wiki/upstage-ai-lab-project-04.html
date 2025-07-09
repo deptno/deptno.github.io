@@ -1,0 +1,1235 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-06ccd392a2835508.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-e61c4b6da020d258.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># Image Classification 대회</title><meta name="description" content="
+## 대회
+### 개요
+- 3500개 정도의 이미지를 17개 클래스로 이미지 분류 후 csv 제출
+- f1 macro score 가 평가 기준
+
+### 분석
+- csv 하나 제출인데 score 는 public, private 이 존재
+  - public 은 아마도 제출된 csv 에서 특정 분포에 대한 점수 일 것으로 생각
+    - f1 macro 기 때문에 특정 클래스에 가중을 줄 순 없다 판단
+      - macro 는 클래스별 동일 가중치
+    - 그렇다며 좀 더 augmentation 이 덜 적용되어 train 데이터가 효과적으로 예측할 수 있는 분포일까?
+  - private 은 모델 성능을 평가해야하므로 전체 데이터 혹은 좀더 예측이 어려운 데이터를 포함한 분포일 것으로 생각
+
+### 제공 환경
+- [[vpn]]
+- [[ssh]]
+- AMD Ryzen Threadripper 3970X 32-Core Processor
+- RTX 3090, 24Gb
+
+## 개인적인 목표
+- [X] wandb 사용
+- [X] model 생성 끝까지
+  - 이제 까지 프로젝트에서 모델링쪽 롤을 하지 않았으니 이번엔 모델링을 따라가 보자
+
+## 팀
+### 운영
+- 각자 모델링 -&gt; 앙상블
+  - 각자의 augmentation 데이터로 모델링 -&gt; 앙상블
+  - 개인 산출물
+    - model weight
+    - class 예측에 대한 confusion matrix
+    - f1 macro score
+- 공유는 지속적으로
+
+## EDA
+- 제공된 이미지들의 크기 분포를 확인
+- 훈련 데이터 셋의 이미지들의 클래스 분포를 확인
+  - 14 클래스는 각 100개
+  - 1  클래스가 50개 정도
+  - 2  클래스가 75개 정도
+- 14 개 클래스는 문서, 나머지는 자동차 번호판, 자동차 대시보드등
+- 눈으로 데이터 셋 차이 확인
+  - 데이터 셋 별 특징
+    - train set
+      - 1500 장 정도
+      - 정방향
+    - test dataset
+      - 3000 장 정도, `train datset x 2`
+      - 각종 noise 가 중첩으로 적용되어 있음
+        - 회전, filp 포함
+        - 가우시안 노이즈
+        - 색상 변경
+      - 눈으로 글자식별이 어려운 경우도 꽤 있음
+      - 노이즈가 너무 심한 경우 선도 식별이 어려울 정도
+  - 문서이기 때문에 각종 글자가 많이 포함됨
+
+## 계획
+- ~~ocr~~
+  - 멘토의 조언에 의한
+- data augmentation
+  - test 에만 noise 가 포함되어 있음
+    - train set 에 각종 noise 를 포함켜 양을 늘리는 augmentation 이 **필수적으로** 필요
+    - noise 를 여러 조합으로 랜덤하게 늘림
+  - train set 데이터 양이 더 적음
+  - 데이터 부족한 class 도 있음
+    - over sampling
+      - 추가 증강 의미
+- 팀원이 새로이 baseline 를 기반으로 데이터를 증강으로 시작
+- 모델 교체 + 하이퍼파라메터 튜닝을 해가면서 진행
+- f1 스코어가 높은 아이템을 모델 저장
+
+## 멘토링
+- ocr 까진 필요 없을 것 
+- 모델 선택의 근거는?
+  - 테스트의 영역
+  - 모델군들에서 라이트한 모델을 선택해서 테스트 진행
+    - 각 모델군은 경향성을 보이기 때문
+    - 대충 파라메터 모델 튜닝후 모델 선택
+- loss 는 데이터에 imbalance가 있으니 아래 것들을 고민해 봐라
+  - focal loss
+  - asymmetric loss
+  - weighted cross entropy loss
+
+## 진행
+- augmentation
+  - 훈련 이미지 1,500 개 -&gt; 팀원 마다 80,000 ~ 180,000 개 수준으로 증강
+- model
+  - 후보선정
+    - 멘토링때 언급된 모델
+    - sota
+    - 팀원과 겹치지 않는 것도 앙상블을 위해 의미있을 것
+  - 선택
+    - *efficientnet-b5* 를 선택
+      - 이유 
+        - 팀원과 겹치지 않는 모델
+        - 이미지가 눈으로 식별이 어려워서 resnet34 등이 학습한 `224`x`224` 해상도로는 식별이 안되 분류가 어려울 것으로 예상
+        - 문서의 복잡도를 감안하여 test dataset 에 가까운 이미지 크기로 학습된 모델을 사용하고자 함
+          - 24gb 의 rtx3090 으로는 `b7`, `b6` 에 대한 학습 진행이 불가하여 `b5` 를 차선으로 선택
+          - `batchsize=16` 에서 훈련 가능한 것 확인
+- modeling
+  - 초반에는 팀원이 baseline 코드로 제공한 *convnext* 모델로 데이터만 증강하여 진행
+  - *efficientnet-b5* 선택 이후 성능을 더 올리기 위해 추가 데이터를 증강
+  - 이 과정에서 데이터도 versioning 이 필요하다는 것을 직감
+    - 이미 팀원은 그렇게 하시는 분이 존재
+    - 데이터 증강후 눈으로 샘플 확인, 분포 그래프 화를 위해 [[jupyter-notebook]] 로 진행
+      - jupyter-notebook 특성상 버전관리([[git]])가 어려워 파일명에 버저닝을 붙여 복사 진행
+      - 생성되는 데이터도 버전 디렉토리를 만들어서 생성
+  - 모델링 진행
+    - 1 epoch 기준 40분 정도 소요
+  - loss 는 모델마다 cross entropy 부터 focal loss, assymmetric loss 등이 다양하게 적용되었다
+  - cosine annealing lr 적용
+  - efficientdet 같은 모델은 BiFPN 레이어를 장착하여 학습
+  - stratified k-fold 가 기본이 될줄알았으나 데이터 증강을 통해 양이 늘어났기 때문인지 모두가 random split을 사용
+- 사고
+  - 서버가 갑자기 접속이 되지 않고 메시지 웹을 보니
+    ```
+    The server was shut down due to excessive use of disk or memory. Due to the nature of the system, data recovery is not possible, so please create a new server and use it.
+    ```
+  - 문의 결과 데이터 복구 불가, 상시 백업하라는 피드백
+  - 마지막 날이라 복구가 불가능해서 모델 뽑지 못함
+- 이후
+  - 난 서버가 터져서 작업본이 날아갔기 때문에
+    - 팀원들이 제출한 csv 파일에서 서로 틀리게 예측한 것들을 diff
+    - 이를 시각화하여 어떤 것을 예측못하나 확인
+  - 마지막날이니만큼 팀원들이 각자의 데이터에서 훈련한 각자의 모델 가중치를 가지고 앙상블
+    - 앙상블 할때마다 연금술 마냥 public f1 score가 상승
+    - 팀원들이 생성한 모델, 전부다 앙상블에 참여한 것은 아님
+      - *convnext_tiny*
+      - *densenet121*
+      - *efficientnet_b0*
+      - *mobilenet_v2*
+      - *mobilenet_v3*
+      - *resnet18*
+      - *resnet50*
+      - *shufflenet*
+      - *squeezenet*
+
+## 최종 결과
+- 1등
+  - leader board
+    - public 2등
+    - private 1등
+
+## 결과 피드백
+- 앙상블은 다양성이 중요
+  - 학습 데이터 차이
+  - 특히 모델 차이, 모델마다 잘뽑는 피쳐에 강점이 다르다
+- 타 팀들은 잘못 레이블된 train set을 잡고 시작함
+- TTA 를 적용한 팀들이 좀 있음, 적용하면 좋을 것 같다
+  - denoise 를 할건지 학습한 noise 를 할건지는 선택일까?
+- online augmentation
+  - 적용시 gpu가 놀지 않도록 해야하며 상황에 맞춰서 cpu 자원을 활용해야한다
+- 결과를 보고 다시 피드백하는 과정이 중요, 모델이 무엇을 못하는가
+  - 가설과 실험 수정의 루프
+- wandb
+  - sweep
+    - 하이퍼파라메터 시각화
+  - eda
+    - [ ] 예측결과 시각화가 가능, 찾아볼 것 [[@todo]]
+- 실제 대회에서, 롤 관련해서 나누게되면 나중에 앙상블 재료가 없는 단점이 있다.
+
+## wrap up
+- 대회의 목표
+  - cv 모델 학습부터 평가까지의 프로세스에 대한 경험
+  - 모델의 점진적 개선 프로세스 경험
+- 메인 루트
+  - eda 전 눈으로 데이터 확인 -&gt; 어떤 실험할지 결정
+  - 일단 제출해서 점수가 어디서 시작하는지 체크
+  - epoch, lr, backbone 들 확인하면서 리더보드 감 잡기
+  - validation set 디자인
+    - public score 와 correlation 이 있어야한다
+      - test set 면밀히 검토
+  - eda 시작
+    - imbalance, mislable
+  - 예측 결과를 가지고 무엇을 못하는지 판단해야한단하고 피드백
+  - 앙상블해서 제출좀해본다
+- 제작자의 의도
+  - 현업에서 풀고자 하는 문제 
+  - 대회가 운에의해서 좌우되지 않도록
+    - 적용한 augmentation 을 적용하면 점수가 오르도록
+    - 기본적인 efficientnet, resnet 등으로 테스트
+    - 앙상블시 점수 오르는 것 확인됨
+- 중요한 경험, 생각의 관점
+  - 대회의 목적이 뭘까, 문제가 풀고자하는 것의 이해
+  - ml/dl 로만 풀어 풀어야하는 문제인가?
+  - 대회의 평가 지표가 해당문제를 잘 풀었다고 할 수 있는건가?
+  - 풀고자하는 문제, 평가 지표 지표에 맞춰 eda -&gt; 가설
+  - 가설 노트 정리
+  - 대회 종류 이후
+    - one-page 정리
+    - 내재화, 타팀의 솔루션 포함
+    - 읽었던 논문등 깊게 이해
+- 대회의 의미
+ 
+## 회고 :retrospective:
+- ssh 개발 환경
+  - [[pycharm]] 은 유료 버전인데도 [[ssh]] 개발환경에서는 [[jupyter-notebook]] 파일에서 [[markdown]] cell 을 표시 못함
+    - [[vscode]] 로 진행
+  - 기본적인 것은 서버에 몇개 바로 설치하고 가는게 빠르다
+    - [[tmux]] 
+    - [[vim]]
+    - [[lazygit]]
+  - 데이터 셋도 서버에 있다보니 사실 눈으로 확인만 하면되는데 [[jupyter-notebook]] 을 통해 불편하게 확인해서 시간이 소모
+    - local 에서 서버 디렉토리를 [[mount]] 해버렸어도 되었을 것 같고
+    - [[jupyter-notebook]] 에서 코드로 시각화 하느니
+      - target class 로 분류된 이미지들을 각각의 target class 디렉토리에 나눠서 이미지 뷰어로 확인하는게 나은것 같다
+        - [[scp]] 로 로컬 전송후 확인
+- eda
+  - 내가 어떤 데이터를 분류하려고하는지, 어떤 노이즈가 있는지를 시각적으로 확인
+  - class 분포를 가지고 loss 함수에 대한 선택 인사이트 제공
+    - 따라가기 급급해서 나는 그냥 cross entropy 씀
+    - 다음에는 제대로된 loss 도 적용해보자
+  - 데이터 해상도를 시각화하여 어떤 모델(규모)을 선택할지에 대한 인사이트
+    - [ ] 이건 이론적으로 의미있는지 검증되지 않은 내 생각
+      - [[chatgpt]] 는 긍정적으로 답변
+- 서버 터짐 사고
+  - 서버에 [[git]] 을 설치해서 버전관리를 하고 있었는데 서버가 깨질것을 상상하지 못해 push를 하지 않아 결과를 만들지 못함
+  - remote 에 주기적으로 [[git-push]] 하자
+- 일정 관리
+  - 대회 기간전 학습 마지막주에 서버가 열리는데 이때 학습이 아닌 대회에 집중을 해야한다
+    - gpu 사용과 submission 이 시간에 비례하기 때문
+    - 어차피 수업이 논문 설명이 갑자기 시작되는 구조기 때문에 사전지식이 없다면 시간낭비일 가능성이 높다
+      - 먼저 손으로 해봐야 이론에 대한 니즈가 생길 것
+    - 프로토타입은 먼저 만들어서 구동하고 모델 돌리면서 수업을 듣던가 하자
+- 코드 익숙도
+  - `albumentations` 라는 라이브러리를 썼는데
+    - `mix-up` noise 생성을 지원하지 않아 해당 noise 는 코드로 구현해야 하는 부분에서 시간이 다소 소요되었다
+    - 이 부분은 코드를 적극적으로 쓰면서 늘어갈 것 기대
+- 모델링
+  - 모델 선택에 대한 근거가 부족했는데 멘토링때 질문을 통해 다소 해소되었다
+  - 모델보다는 데이터에 대한 중요성이 우선
+  - 지금 까지의 경험으로는 모델링은 틀이 있어서 이에 대해 익숙해지고 프로토타입 코드를 빠르게 뽑도록 익숙해져야 유리
+- 툴
+  - 강의나 특강에서도 계속적으로 언급되는 wandb 를 이번에 맛보기로 사용
+    - wandb 는 파라메터 튜닝을 지원
+      - 그럼 optuna 는?
+  - 이전 강의 때 배운 [[mlflow]] 가 이쁘진 않지만 이런 실험에서 많은 고민을 덜어줄 수 있을 것 같다고 생각
+  - wandb vs [[mlflow]]
+    - [[mlflow]] 는
+      - 좀 찾아보니 linux foundation 재단에서 운영
+      - [[github]] star 가 가장 많음
+      - ui 이가 상대적으로 구려서 선택에 고민이 있는 사람들이 많은 것 같음
+      - 추가적으로 model registry 를 지원하는 점이 wandb 와 구분되는 특징으로 선택의 기준이 되기도 했었던듯
+        - 그러나 지금은 wandb 도 artifact 저장을 지원
+          - cloud 5gb 무료
+  - 필요한 기능은?
+    - 파라메터 튜닝에 대한 시각화 기록
+    - 모델 가중치 저장
+  - 필요한 기능은 어차피 지원하는 거 같고 하나를 정해서 쓰면 될텐데
+    - 가중치는 여러개 저장하기에 5gb는 힘들 수 있으니 [[mlflow]] 를 환경으로 가져가는게 좋겠음
+- 결과에서
+  - 이번에는 computer-vision 석사 전공자 분이 계서 리드를 받으면서 캐리해주심
+  - 딥러닝이나 머신러닝 모두 데이터처리, loss, 하이퍼파라메터 튜닝, 앙상블등 큰흐름이 같음
+    - 좀 더 능력자를 빨리 만나는게 이 프로세스를 빨리 경험하고 이해하는게 상황을 많이 바꿧을 것이란 생각하니 안타까움이 반
+
+## link
+- [[upstage-ai-lab]]
+- [[fastapi]]
+- [[docker]]
+- [[docker-compose]]
+- [[upstage-ai-lab-project-03]]
+- [[upstage-ai-lab-project-05]]
+- [[wn.private:upstage-ai-lab-project-04]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# Image Classification 대회"/><meta property="og:description" content="
+## 대회
+### 개요
+- 3500개 정도의 이미지를 17개 클래스로 이미지 분류 후 csv 제출
+- f1 macro score 가 평가 기준
+
+### 분석
+- csv 하나 제출인데 score 는 public, private 이 존재
+  - public 은 아마도 제출된 csv 에서 특정 분포에 대한 점수 일 것으로 생각
+    - f1 macro 기 때문에 특정 클래스에 가중을 줄 순 없다 판단
+      - macro 는 클래스별 동일 가중치
+    - 그렇다며 좀 더 augmentation 이 덜 적용되어 train 데이터가 효과적으로 예측할 수 있는 분포일까?
+  - private 은 모델 성능을 평가해야하므로 전체 데이터 혹은 좀더 예측이 어려운 데이터를 포함한 분포일 것으로 생각
+
+### 제공 환경
+- [[vpn]]
+- [[ssh]]
+- AMD Ryzen Threadripper 3970X 32-Core Processor
+- RTX 3090, 24Gb
+
+## 개인적인 목표
+- [X] wandb 사용
+- [X] model 생성 끝까지
+  - 이제 까지 프로젝트에서 모델링쪽 롤을 하지 않았으니 이번엔 모델링을 따라가 보자
+
+## 팀
+### 운영
+- 각자 모델링 -&gt; 앙상블
+  - 각자의 augmentation 데이터로 모델링 -&gt; 앙상블
+  - 개인 산출물
+    - model weight
+    - class 예측에 대한 confusion matrix
+    - f1 macro score
+- 공유는 지속적으로
+
+## EDA
+- 제공된 이미지들의 크기 분포를 확인
+- 훈련 데이터 셋의 이미지들의 클래스 분포를 확인
+  - 14 클래스는 각 100개
+  - 1  클래스가 50개 정도
+  - 2  클래스가 75개 정도
+- 14 개 클래스는 문서, 나머지는 자동차 번호판, 자동차 대시보드등
+- 눈으로 데이터 셋 차이 확인
+  - 데이터 셋 별 특징
+    - train set
+      - 1500 장 정도
+      - 정방향
+    - test dataset
+      - 3000 장 정도, `train datset x 2`
+      - 각종 noise 가 중첩으로 적용되어 있음
+        - 회전, filp 포함
+        - 가우시안 노이즈
+        - 색상 변경
+      - 눈으로 글자식별이 어려운 경우도 꽤 있음
+      - 노이즈가 너무 심한 경우 선도 식별이 어려울 정도
+  - 문서이기 때문에 각종 글자가 많이 포함됨
+
+## 계획
+- ~~ocr~~
+  - 멘토의 조언에 의한
+- data augmentation
+  - test 에만 noise 가 포함되어 있음
+    - train set 에 각종 noise 를 포함켜 양을 늘리는 augmentation 이 **필수적으로** 필요
+    - noise 를 여러 조합으로 랜덤하게 늘림
+  - train set 데이터 양이 더 적음
+  - 데이터 부족한 class 도 있음
+    - over sampling
+      - 추가 증강 의미
+- 팀원이 새로이 baseline 를 기반으로 데이터를 증강으로 시작
+- 모델 교체 + 하이퍼파라메터 튜닝을 해가면서 진행
+- f1 스코어가 높은 아이템을 모델 저장
+
+## 멘토링
+- ocr 까진 필요 없을 것 
+- 모델 선택의 근거는?
+  - 테스트의 영역
+  - 모델군들에서 라이트한 모델을 선택해서 테스트 진행
+    - 각 모델군은 경향성을 보이기 때문
+    - 대충 파라메터 모델 튜닝후 모델 선택
+- loss 는 데이터에 imbalance가 있으니 아래 것들을 고민해 봐라
+  - focal loss
+  - asymmetric loss
+  - weighted cross entropy loss
+
+## 진행
+- augmentation
+  - 훈련 이미지 1,500 개 -&gt; 팀원 마다 80,000 ~ 180,000 개 수준으로 증강
+- model
+  - 후보선정
+    - 멘토링때 언급된 모델
+    - sota
+    - 팀원과 겹치지 않는 것도 앙상블을 위해 의미있을 것
+  - 선택
+    - *efficientnet-b5* 를 선택
+      - 이유 
+        - 팀원과 겹치지 않는 모델
+        - 이미지가 눈으로 식별이 어려워서 resnet34 등이 학습한 `224`x`224` 해상도로는 식별이 안되 분류가 어려울 것으로 예상
+        - 문서의 복잡도를 감안하여 test dataset 에 가까운 이미지 크기로 학습된 모델을 사용하고자 함
+          - 24gb 의 rtx3090 으로는 `b7`, `b6` 에 대한 학습 진행이 불가하여 `b5` 를 차선으로 선택
+          - `batchsize=16` 에서 훈련 가능한 것 확인
+- modeling
+  - 초반에는 팀원이 baseline 코드로 제공한 *convnext* 모델로 데이터만 증강하여 진행
+  - *efficientnet-b5* 선택 이후 성능을 더 올리기 위해 추가 데이터를 증강
+  - 이 과정에서 데이터도 versioning 이 필요하다는 것을 직감
+    - 이미 팀원은 그렇게 하시는 분이 존재
+    - 데이터 증강후 눈으로 샘플 확인, 분포 그래프 화를 위해 [[jupyter-notebook]] 로 진행
+      - jupyter-notebook 특성상 버전관리([[git]])가 어려워 파일명에 버저닝을 붙여 복사 진행
+      - 생성되는 데이터도 버전 디렉토리를 만들어서 생성
+  - 모델링 진행
+    - 1 epoch 기준 40분 정도 소요
+  - loss 는 모델마다 cross entropy 부터 focal loss, assymmetric loss 등이 다양하게 적용되었다
+  - cosine annealing lr 적용
+  - efficientdet 같은 모델은 BiFPN 레이어를 장착하여 학습
+  - stratified k-fold 가 기본이 될줄알았으나 데이터 증강을 통해 양이 늘어났기 때문인지 모두가 random split을 사용
+- 사고
+  - 서버가 갑자기 접속이 되지 않고 메시지 웹을 보니
+    ```
+    The server was shut down due to excessive use of disk or memory. Due to the nature of the system, data recovery is not possible, so please create a new server and use it.
+    ```
+  - 문의 결과 데이터 복구 불가, 상시 백업하라는 피드백
+  - 마지막 날이라 복구가 불가능해서 모델 뽑지 못함
+- 이후
+  - 난 서버가 터져서 작업본이 날아갔기 때문에
+    - 팀원들이 제출한 csv 파일에서 서로 틀리게 예측한 것들을 diff
+    - 이를 시각화하여 어떤 것을 예측못하나 확인
+  - 마지막날이니만큼 팀원들이 각자의 데이터에서 훈련한 각자의 모델 가중치를 가지고 앙상블
+    - 앙상블 할때마다 연금술 마냥 public f1 score가 상승
+    - 팀원들이 생성한 모델, 전부다 앙상블에 참여한 것은 아님
+      - *convnext_tiny*
+      - *densenet121*
+      - *efficientnet_b0*
+      - *mobilenet_v2*
+      - *mobilenet_v3*
+      - *resnet18*
+      - *resnet50*
+      - *shufflenet*
+      - *squeezenet*
+
+## 최종 결과
+- 1등
+  - leader board
+    - public 2등
+    - private 1등
+
+## 결과 피드백
+- 앙상블은 다양성이 중요
+  - 학습 데이터 차이
+  - 특히 모델 차이, 모델마다 잘뽑는 피쳐에 강점이 다르다
+- 타 팀들은 잘못 레이블된 train set을 잡고 시작함
+- TTA 를 적용한 팀들이 좀 있음, 적용하면 좋을 것 같다
+  - denoise 를 할건지 학습한 noise 를 할건지는 선택일까?
+- online augmentation
+  - 적용시 gpu가 놀지 않도록 해야하며 상황에 맞춰서 cpu 자원을 활용해야한다
+- 결과를 보고 다시 피드백하는 과정이 중요, 모델이 무엇을 못하는가
+  - 가설과 실험 수정의 루프
+- wandb
+  - sweep
+    - 하이퍼파라메터 시각화
+  - eda
+    - [ ] 예측결과 시각화가 가능, 찾아볼 것 [[@todo]]
+- 실제 대회에서, 롤 관련해서 나누게되면 나중에 앙상블 재료가 없는 단점이 있다.
+
+## wrap up
+- 대회의 목표
+  - cv 모델 학습부터 평가까지의 프로세스에 대한 경험
+  - 모델의 점진적 개선 프로세스 경험
+- 메인 루트
+  - eda 전 눈으로 데이터 확인 -&gt; 어떤 실험할지 결정
+  - 일단 제출해서 점수가 어디서 시작하는지 체크
+  - epoch, lr, backbone 들 확인하면서 리더보드 감 잡기
+  - validation set 디자인
+    - public score 와 correlation 이 있어야한다
+      - test set 면밀히 검토
+  - eda 시작
+    - imbalance, mislable
+  - 예측 결과를 가지고 무엇을 못하는지 판단해야한단하고 피드백
+  - 앙상블해서 제출좀해본다
+- 제작자의 의도
+  - 현업에서 풀고자 하는 문제 
+  - 대회가 운에의해서 좌우되지 않도록
+    - 적용한 augmentation 을 적용하면 점수가 오르도록
+    - 기본적인 efficientnet, resnet 등으로 테스트
+    - 앙상블시 점수 오르는 것 확인됨
+- 중요한 경험, 생각의 관점
+  - 대회의 목적이 뭘까, 문제가 풀고자하는 것의 이해
+  - ml/dl 로만 풀어 풀어야하는 문제인가?
+  - 대회의 평가 지표가 해당문제를 잘 풀었다고 할 수 있는건가?
+  - 풀고자하는 문제, 평가 지표 지표에 맞춰 eda -&gt; 가설
+  - 가설 노트 정리
+  - 대회 종류 이후
+    - one-page 정리
+    - 내재화, 타팀의 솔루션 포함
+    - 읽었던 논문등 깊게 이해
+- 대회의 의미
+ 
+## 회고 :retrospective:
+- ssh 개발 환경
+  - [[pycharm]] 은 유료 버전인데도 [[ssh]] 개발환경에서는 [[jupyter-notebook]] 파일에서 [[markdown]] cell 을 표시 못함
+    - [[vscode]] 로 진행
+  - 기본적인 것은 서버에 몇개 바로 설치하고 가는게 빠르다
+    - [[tmux]] 
+    - [[vim]]
+    - [[lazygit]]
+  - 데이터 셋도 서버에 있다보니 사실 눈으로 확인만 하면되는데 [[jupyter-notebook]] 을 통해 불편하게 확인해서 시간이 소모
+    - local 에서 서버 디렉토리를 [[mount]] 해버렸어도 되었을 것 같고
+    - [[jupyter-notebook]] 에서 코드로 시각화 하느니
+      - target class 로 분류된 이미지들을 각각의 target class 디렉토리에 나눠서 이미지 뷰어로 확인하는게 나은것 같다
+        - [[scp]] 로 로컬 전송후 확인
+- eda
+  - 내가 어떤 데이터를 분류하려고하는지, 어떤 노이즈가 있는지를 시각적으로 확인
+  - class 분포를 가지고 loss 함수에 대한 선택 인사이트 제공
+    - 따라가기 급급해서 나는 그냥 cross entropy 씀
+    - 다음에는 제대로된 loss 도 적용해보자
+  - 데이터 해상도를 시각화하여 어떤 모델(규모)을 선택할지에 대한 인사이트
+    - [ ] 이건 이론적으로 의미있는지 검증되지 않은 내 생각
+      - [[chatgpt]] 는 긍정적으로 답변
+- 서버 터짐 사고
+  - 서버에 [[git]] 을 설치해서 버전관리를 하고 있었는데 서버가 깨질것을 상상하지 못해 push를 하지 않아 결과를 만들지 못함
+  - remote 에 주기적으로 [[git-push]] 하자
+- 일정 관리
+  - 대회 기간전 학습 마지막주에 서버가 열리는데 이때 학습이 아닌 대회에 집중을 해야한다
+    - gpu 사용과 submission 이 시간에 비례하기 때문
+    - 어차피 수업이 논문 설명이 갑자기 시작되는 구조기 때문에 사전지식이 없다면 시간낭비일 가능성이 높다
+      - 먼저 손으로 해봐야 이론에 대한 니즈가 생길 것
+    - 프로토타입은 먼저 만들어서 구동하고 모델 돌리면서 수업을 듣던가 하자
+- 코드 익숙도
+  - `albumentations` 라는 라이브러리를 썼는데
+    - `mix-up` noise 생성을 지원하지 않아 해당 noise 는 코드로 구현해야 하는 부분에서 시간이 다소 소요되었다
+    - 이 부분은 코드를 적극적으로 쓰면서 늘어갈 것 기대
+- 모델링
+  - 모델 선택에 대한 근거가 부족했는데 멘토링때 질문을 통해 다소 해소되었다
+  - 모델보다는 데이터에 대한 중요성이 우선
+  - 지금 까지의 경험으로는 모델링은 틀이 있어서 이에 대해 익숙해지고 프로토타입 코드를 빠르게 뽑도록 익숙해져야 유리
+- 툴
+  - 강의나 특강에서도 계속적으로 언급되는 wandb 를 이번에 맛보기로 사용
+    - wandb 는 파라메터 튜닝을 지원
+      - 그럼 optuna 는?
+  - 이전 강의 때 배운 [[mlflow]] 가 이쁘진 않지만 이런 실험에서 많은 고민을 덜어줄 수 있을 것 같다고 생각
+  - wandb vs [[mlflow]]
+    - [[mlflow]] 는
+      - 좀 찾아보니 linux foundation 재단에서 운영
+      - [[github]] star 가 가장 많음
+      - ui 이가 상대적으로 구려서 선택에 고민이 있는 사람들이 많은 것 같음
+      - 추가적으로 model registry 를 지원하는 점이 wandb 와 구분되는 특징으로 선택의 기준이 되기도 했었던듯
+        - 그러나 지금은 wandb 도 artifact 저장을 지원
+          - cloud 5gb 무료
+  - 필요한 기능은?
+    - 파라메터 튜닝에 대한 시각화 기록
+    - 모델 가중치 저장
+  - 필요한 기능은 어차피 지원하는 거 같고 하나를 정해서 쓰면 될텐데
+    - 가중치는 여러개 저장하기에 5gb는 힘들 수 있으니 [[mlflow]] 를 환경으로 가져가는게 좋겠음
+- 결과에서
+  - 이번에는 computer-vision 석사 전공자 분이 계서 리드를 받으면서 캐리해주심
+  - 딥러닝이나 머신러닝 모두 데이터처리, loss, 하이퍼파라메터 튜닝, 앙상블등 큰흐름이 같음
+    - 좀 더 능력자를 빨리 만나는게 이 프로세스를 빨리 경험하고 이해하는게 상황을 많이 바꿧을 것이란 생각하니 안타까움이 반
+
+## link
+- [[upstage-ai-lab]]
+- [[fastapi]]
+- [[docker]]
+- [[docker-compose]]
+- [[upstage-ai-lab-project-03]]
+- [[upstage-ai-lab-project-05]]
+- [[wn.private:upstage-ai-lab-project-04]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/upstage-ai-lab-project-04"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# Image Classification 대회"/><meta name="twitter:description" content="
+## 대회
+### 개요
+- 3500개 정도의 이미지를 17개 클래스로 이미지 분류 후 csv 제출
+- f1 macro score 가 평가 기준
+
+### 분석
+- csv 하나 제출인데 score 는 public, private 이 존재
+  - public 은 아마도 제출된 csv 에서 특정 분포에 대한 점수 일 것으로 생각
+    - f1 macro 기 때문에 특정 클래스에 가중을 줄 순 없다 판단
+      - macro 는 클래스별 동일 가중치
+    - 그렇다며 좀 더 augmentation 이 덜 적용되어 train 데이터가 효과적으로 예측할 수 있는 분포일까?
+  - private 은 모델 성능을 평가해야하므로 전체 데이터 혹은 좀더 예측이 어려운 데이터를 포함한 분포일 것으로 생각
+
+### 제공 환경
+- [[vpn]]
+- [[ssh]]
+- AMD Ryzen Threadripper 3970X 32-Core Processor
+- RTX 3090, 24Gb
+
+## 개인적인 목표
+- [X] wandb 사용
+- [X] model 생성 끝까지
+  - 이제 까지 프로젝트에서 모델링쪽 롤을 하지 않았으니 이번엔 모델링을 따라가 보자
+
+## 팀
+### 운영
+- 각자 모델링 -&gt; 앙상블
+  - 각자의 augmentation 데이터로 모델링 -&gt; 앙상블
+  - 개인 산출물
+    - model weight
+    - class 예측에 대한 confusion matrix
+    - f1 macro score
+- 공유는 지속적으로
+
+## EDA
+- 제공된 이미지들의 크기 분포를 확인
+- 훈련 데이터 셋의 이미지들의 클래스 분포를 확인
+  - 14 클래스는 각 100개
+  - 1  클래스가 50개 정도
+  - 2  클래스가 75개 정도
+- 14 개 클래스는 문서, 나머지는 자동차 번호판, 자동차 대시보드등
+- 눈으로 데이터 셋 차이 확인
+  - 데이터 셋 별 특징
+    - train set
+      - 1500 장 정도
+      - 정방향
+    - test dataset
+      - 3000 장 정도, `train datset x 2`
+      - 각종 noise 가 중첩으로 적용되어 있음
+        - 회전, filp 포함
+        - 가우시안 노이즈
+        - 색상 변경
+      - 눈으로 글자식별이 어려운 경우도 꽤 있음
+      - 노이즈가 너무 심한 경우 선도 식별이 어려울 정도
+  - 문서이기 때문에 각종 글자가 많이 포함됨
+
+## 계획
+- ~~ocr~~
+  - 멘토의 조언에 의한
+- data augmentation
+  - test 에만 noise 가 포함되어 있음
+    - train set 에 각종 noise 를 포함켜 양을 늘리는 augmentation 이 **필수적으로** 필요
+    - noise 를 여러 조합으로 랜덤하게 늘림
+  - train set 데이터 양이 더 적음
+  - 데이터 부족한 class 도 있음
+    - over sampling
+      - 추가 증강 의미
+- 팀원이 새로이 baseline 를 기반으로 데이터를 증강으로 시작
+- 모델 교체 + 하이퍼파라메터 튜닝을 해가면서 진행
+- f1 스코어가 높은 아이템을 모델 저장
+
+## 멘토링
+- ocr 까진 필요 없을 것 
+- 모델 선택의 근거는?
+  - 테스트의 영역
+  - 모델군들에서 라이트한 모델을 선택해서 테스트 진행
+    - 각 모델군은 경향성을 보이기 때문
+    - 대충 파라메터 모델 튜닝후 모델 선택
+- loss 는 데이터에 imbalance가 있으니 아래 것들을 고민해 봐라
+  - focal loss
+  - asymmetric loss
+  - weighted cross entropy loss
+
+## 진행
+- augmentation
+  - 훈련 이미지 1,500 개 -&gt; 팀원 마다 80,000 ~ 180,000 개 수준으로 증강
+- model
+  - 후보선정
+    - 멘토링때 언급된 모델
+    - sota
+    - 팀원과 겹치지 않는 것도 앙상블을 위해 의미있을 것
+  - 선택
+    - *efficientnet-b5* 를 선택
+      - 이유 
+        - 팀원과 겹치지 않는 모델
+        - 이미지가 눈으로 식별이 어려워서 resnet34 등이 학습한 `224`x`224` 해상도로는 식별이 안되 분류가 어려울 것으로 예상
+        - 문서의 복잡도를 감안하여 test dataset 에 가까운 이미지 크기로 학습된 모델을 사용하고자 함
+          - 24gb 의 rtx3090 으로는 `b7`, `b6` 에 대한 학습 진행이 불가하여 `b5` 를 차선으로 선택
+          - `batchsize=16` 에서 훈련 가능한 것 확인
+- modeling
+  - 초반에는 팀원이 baseline 코드로 제공한 *convnext* 모델로 데이터만 증강하여 진행
+  - *efficientnet-b5* 선택 이후 성능을 더 올리기 위해 추가 데이터를 증강
+  - 이 과정에서 데이터도 versioning 이 필요하다는 것을 직감
+    - 이미 팀원은 그렇게 하시는 분이 존재
+    - 데이터 증강후 눈으로 샘플 확인, 분포 그래프 화를 위해 [[jupyter-notebook]] 로 진행
+      - jupyter-notebook 특성상 버전관리([[git]])가 어려워 파일명에 버저닝을 붙여 복사 진행
+      - 생성되는 데이터도 버전 디렉토리를 만들어서 생성
+  - 모델링 진행
+    - 1 epoch 기준 40분 정도 소요
+  - loss 는 모델마다 cross entropy 부터 focal loss, assymmetric loss 등이 다양하게 적용되었다
+  - cosine annealing lr 적용
+  - efficientdet 같은 모델은 BiFPN 레이어를 장착하여 학습
+  - stratified k-fold 가 기본이 될줄알았으나 데이터 증강을 통해 양이 늘어났기 때문인지 모두가 random split을 사용
+- 사고
+  - 서버가 갑자기 접속이 되지 않고 메시지 웹을 보니
+    ```
+    The server was shut down due to excessive use of disk or memory. Due to the nature of the system, data recovery is not possible, so please create a new server and use it.
+    ```
+  - 문의 결과 데이터 복구 불가, 상시 백업하라는 피드백
+  - 마지막 날이라 복구가 불가능해서 모델 뽑지 못함
+- 이후
+  - 난 서버가 터져서 작업본이 날아갔기 때문에
+    - 팀원들이 제출한 csv 파일에서 서로 틀리게 예측한 것들을 diff
+    - 이를 시각화하여 어떤 것을 예측못하나 확인
+  - 마지막날이니만큼 팀원들이 각자의 데이터에서 훈련한 각자의 모델 가중치를 가지고 앙상블
+    - 앙상블 할때마다 연금술 마냥 public f1 score가 상승
+    - 팀원들이 생성한 모델, 전부다 앙상블에 참여한 것은 아님
+      - *convnext_tiny*
+      - *densenet121*
+      - *efficientnet_b0*
+      - *mobilenet_v2*
+      - *mobilenet_v3*
+      - *resnet18*
+      - *resnet50*
+      - *shufflenet*
+      - *squeezenet*
+
+## 최종 결과
+- 1등
+  - leader board
+    - public 2등
+    - private 1등
+
+## 결과 피드백
+- 앙상블은 다양성이 중요
+  - 학습 데이터 차이
+  - 특히 모델 차이, 모델마다 잘뽑는 피쳐에 강점이 다르다
+- 타 팀들은 잘못 레이블된 train set을 잡고 시작함
+- TTA 를 적용한 팀들이 좀 있음, 적용하면 좋을 것 같다
+  - denoise 를 할건지 학습한 noise 를 할건지는 선택일까?
+- online augmentation
+  - 적용시 gpu가 놀지 않도록 해야하며 상황에 맞춰서 cpu 자원을 활용해야한다
+- 결과를 보고 다시 피드백하는 과정이 중요, 모델이 무엇을 못하는가
+  - 가설과 실험 수정의 루프
+- wandb
+  - sweep
+    - 하이퍼파라메터 시각화
+  - eda
+    - [ ] 예측결과 시각화가 가능, 찾아볼 것 [[@todo]]
+- 실제 대회에서, 롤 관련해서 나누게되면 나중에 앙상블 재료가 없는 단점이 있다.
+
+## wrap up
+- 대회의 목표
+  - cv 모델 학습부터 평가까지의 프로세스에 대한 경험
+  - 모델의 점진적 개선 프로세스 경험
+- 메인 루트
+  - eda 전 눈으로 데이터 확인 -&gt; 어떤 실험할지 결정
+  - 일단 제출해서 점수가 어디서 시작하는지 체크
+  - epoch, lr, backbone 들 확인하면서 리더보드 감 잡기
+  - validation set 디자인
+    - public score 와 correlation 이 있어야한다
+      - test set 면밀히 검토
+  - eda 시작
+    - imbalance, mislable
+  - 예측 결과를 가지고 무엇을 못하는지 판단해야한단하고 피드백
+  - 앙상블해서 제출좀해본다
+- 제작자의 의도
+  - 현업에서 풀고자 하는 문제 
+  - 대회가 운에의해서 좌우되지 않도록
+    - 적용한 augmentation 을 적용하면 점수가 오르도록
+    - 기본적인 efficientnet, resnet 등으로 테스트
+    - 앙상블시 점수 오르는 것 확인됨
+- 중요한 경험, 생각의 관점
+  - 대회의 목적이 뭘까, 문제가 풀고자하는 것의 이해
+  - ml/dl 로만 풀어 풀어야하는 문제인가?
+  - 대회의 평가 지표가 해당문제를 잘 풀었다고 할 수 있는건가?
+  - 풀고자하는 문제, 평가 지표 지표에 맞춰 eda -&gt; 가설
+  - 가설 노트 정리
+  - 대회 종류 이후
+    - one-page 정리
+    - 내재화, 타팀의 솔루션 포함
+    - 읽었던 논문등 깊게 이해
+- 대회의 의미
+ 
+## 회고 :retrospective:
+- ssh 개발 환경
+  - [[pycharm]] 은 유료 버전인데도 [[ssh]] 개발환경에서는 [[jupyter-notebook]] 파일에서 [[markdown]] cell 을 표시 못함
+    - [[vscode]] 로 진행
+  - 기본적인 것은 서버에 몇개 바로 설치하고 가는게 빠르다
+    - [[tmux]] 
+    - [[vim]]
+    - [[lazygit]]
+  - 데이터 셋도 서버에 있다보니 사실 눈으로 확인만 하면되는데 [[jupyter-notebook]] 을 통해 불편하게 확인해서 시간이 소모
+    - local 에서 서버 디렉토리를 [[mount]] 해버렸어도 되었을 것 같고
+    - [[jupyter-notebook]] 에서 코드로 시각화 하느니
+      - target class 로 분류된 이미지들을 각각의 target class 디렉토리에 나눠서 이미지 뷰어로 확인하는게 나은것 같다
+        - [[scp]] 로 로컬 전송후 확인
+- eda
+  - 내가 어떤 데이터를 분류하려고하는지, 어떤 노이즈가 있는지를 시각적으로 확인
+  - class 분포를 가지고 loss 함수에 대한 선택 인사이트 제공
+    - 따라가기 급급해서 나는 그냥 cross entropy 씀
+    - 다음에는 제대로된 loss 도 적용해보자
+  - 데이터 해상도를 시각화하여 어떤 모델(규모)을 선택할지에 대한 인사이트
+    - [ ] 이건 이론적으로 의미있는지 검증되지 않은 내 생각
+      - [[chatgpt]] 는 긍정적으로 답변
+- 서버 터짐 사고
+  - 서버에 [[git]] 을 설치해서 버전관리를 하고 있었는데 서버가 깨질것을 상상하지 못해 push를 하지 않아 결과를 만들지 못함
+  - remote 에 주기적으로 [[git-push]] 하자
+- 일정 관리
+  - 대회 기간전 학습 마지막주에 서버가 열리는데 이때 학습이 아닌 대회에 집중을 해야한다
+    - gpu 사용과 submission 이 시간에 비례하기 때문
+    - 어차피 수업이 논문 설명이 갑자기 시작되는 구조기 때문에 사전지식이 없다면 시간낭비일 가능성이 높다
+      - 먼저 손으로 해봐야 이론에 대한 니즈가 생길 것
+    - 프로토타입은 먼저 만들어서 구동하고 모델 돌리면서 수업을 듣던가 하자
+- 코드 익숙도
+  - `albumentations` 라는 라이브러리를 썼는데
+    - `mix-up` noise 생성을 지원하지 않아 해당 noise 는 코드로 구현해야 하는 부분에서 시간이 다소 소요되었다
+    - 이 부분은 코드를 적극적으로 쓰면서 늘어갈 것 기대
+- 모델링
+  - 모델 선택에 대한 근거가 부족했는데 멘토링때 질문을 통해 다소 해소되었다
+  - 모델보다는 데이터에 대한 중요성이 우선
+  - 지금 까지의 경험으로는 모델링은 틀이 있어서 이에 대해 익숙해지고 프로토타입 코드를 빠르게 뽑도록 익숙해져야 유리
+- 툴
+  - 강의나 특강에서도 계속적으로 언급되는 wandb 를 이번에 맛보기로 사용
+    - wandb 는 파라메터 튜닝을 지원
+      - 그럼 optuna 는?
+  - 이전 강의 때 배운 [[mlflow]] 가 이쁘진 않지만 이런 실험에서 많은 고민을 덜어줄 수 있을 것 같다고 생각
+  - wandb vs [[mlflow]]
+    - [[mlflow]] 는
+      - 좀 찾아보니 linux foundation 재단에서 운영
+      - [[github]] star 가 가장 많음
+      - ui 이가 상대적으로 구려서 선택에 고민이 있는 사람들이 많은 것 같음
+      - 추가적으로 model registry 를 지원하는 점이 wandb 와 구분되는 특징으로 선택의 기준이 되기도 했었던듯
+        - 그러나 지금은 wandb 도 artifact 저장을 지원
+          - cloud 5gb 무료
+  - 필요한 기능은?
+    - 파라메터 튜닝에 대한 시각화 기록
+    - 모델 가중치 저장
+  - 필요한 기능은 어차피 지원하는 거 같고 하나를 정해서 쓰면 될텐데
+    - 가중치는 여러개 저장하기에 5gb는 힘들 수 있으니 [[mlflow]] 를 환경으로 가져가는게 좋겠음
+- 결과에서
+  - 이번에는 computer-vision 석사 전공자 분이 계서 리드를 받으면서 캐리해주심
+  - 딥러닝이나 머신러닝 모두 데이터처리, loss, 하이퍼파라메터 튜닝, 앙상블등 큰흐름이 같음
+    - 좀 더 능력자를 빨리 만나는게 이 프로세스를 빨리 경험하고 이해하는게 상황을 많이 바꿧을 것이란 생각하니 안타까움이 반
+
+## link
+- [[upstage-ai-lab]]
+- [[fastapi]]
+- [[docker]]
+- [[docker-compose]]
+- [[upstage-ai-lab-project-03]]
+- [[upstage-ai-lab-project-05]]
+- [[wn.private:upstage-ai-lab-project-04]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/0d7e976
+" class="bg-white text-black">0d7e976</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/upstage-ai-lab-project-04.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/upstage-ai-lab-project-04.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/upstage-ai-lab-project-04.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-project-04"><span class="underline">upstage-ai-lab-project-04</span><sup>31</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vpn"><span class="underline">vpn</span><sup>10</sup></a></span><span><a class="text-blue-600" href="/public-wiki/ssh"><span class="underline">ssh</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/jupyter-notebook"><span class="underline">jupyter-notebook</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git"><span class="underline">git</span><sup>44</sup></a></span><span><a class="text-blue-600" href="/public-wiki/@todo"><span class="underline">@todo</span><sup>24</sup></a></span><span><a class="text-blue-600" href="/public-wiki/pycharm"><span class="underline">pycharm</span><sup>13</sup></a></span><span><a class="text-blue-600" href="/public-wiki/markdown"><span class="underline">markdown</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vscode"><span class="underline">vscode</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/tmux"><span class="underline">tmux</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vim"><span class="underline">vim</span><sup>20</sup></a></span><span><a class="text-blue-600" href="/public-wiki/lazygit"><span class="underline">lazygit</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/mount"><span class="underline">mount</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/scp"><span class="underline">scp</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/chatgpt"><span class="underline">chatgpt</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-push"><span class="underline">git-push</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/mlflow"><span class="underline">mlflow</span><sup>21</sup></a></span><span><a class="text-blue-600" href="/public-wiki/github"><span class="underline">github</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab"><span class="underline">upstage-ai-lab</span><sup>20</sup></a></span><span><a class="text-blue-600" href="/public-wiki/fastapi"><span class="underline">fastapi</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/docker"><span class="underline">docker</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/docker-compose"><span class="underline">docker-compose</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-project-03"><span class="underline">upstage-ai-lab-project-03</span><sup>36</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-project-05"><span class="underline">upstage-ai-lab-project-05</span><sup>27</sup></a></span><span><a class="text-blue-600" href="/public-wiki/upstage-ai-lab-day-77"><span class="underline">upstage-ai-lab-day-77</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-12-31"><span class="underline">diary/2024-12-31</span><sup>441</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#image-classification-대회">Image Classification 대회</a></div><div class="pl-2"><a href="#대회">대회</a></div><div class="pl-4"><a href="#개요">개요</a></div><div class="pl-4"><a href="#분석">분석</a></div><div class="pl-4"><a href="#제공-환경">제공 환경</a></div><div class="pl-2"><a href="#개인적인-목표">개인적인 목표</a></div><div class="pl-2"><a href="#팀">팀</a></div><div class="pl-4"><a href="#운영">운영</a></div><div class="pl-2"><a href="#eda">EDA</a></div><div class="pl-2"><a href="#계획">계획</a></div><div class="pl-2"><a href="#멘토링">멘토링</a></div><div class="pl-2"><a href="#진행">진행</a></div><div class="pl-2"><a href="#최종-결과">최종 결과</a></div><div class="pl-2"><a href="#결과-피드백">결과 피드백</a></div><div class="pl-2"><a href="#wrap-up">wrap up</a></div><div class="pl-2"><a href="#회고-retrospective">회고 :retrospective:</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="image-classification-대회">Image Classification 대회</h1>
+<h2 id="대회">대회</h2>
+<h3 id="개요">개요</h3>
+<ul>
+<li>3500개 정도의 이미지를 17개 클래스로 이미지 분류 후 csv 제출</li>
+<li>f1 macro score 가 평가 기준</li>
+</ul>
+<h3 id="분석">분석</h3>
+<ul>
+<li>csv 하나 제출인데 score 는 public, private 이 존재<ul>
+<li>public 은 아마도 제출된 csv 에서 특정 분포에 대한 점수 일 것으로 생각<ul>
+<li>f1 macro 기 때문에 특정 클래스에 가중을 줄 순 없다 판단<ul>
+<li>macro 는 클래스별 동일 가중치</li>
+</ul>
+</li>
+<li>그렇다며 좀 더 augmentation 이 덜 적용되어 train 데이터가 효과적으로 예측할 수 있는 분포일까?</li>
+</ul>
+</li>
+<li>private 은 모델 성능을 평가해야하므로 전체 데이터 혹은 좀더 예측이 어려운 데이터를 포함한 분포일 것으로 생각</li>
+</ul>
+</li>
+</ul>
+<h3 id="제공-환경">제공 환경</h3>
+<ul>
+<li><a href="vpn">vpn</a></li>
+<li><a href="ssh">ssh</a></li>
+<li>AMD Ryzen Threadripper 3970X 32-Core Processor</li>
+<li>RTX 3090, 24Gb</li>
+</ul>
+<h2 id="개인적인-목표">개인적인 목표</h2>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> wandb 사용</li>
+<li><input checked="" disabled="" type="checkbox"> model 생성 끝까지<ul>
+<li>이제 까지 프로젝트에서 모델링쪽 롤을 하지 않았으니 이번엔 모델링을 따라가 보자</li>
+</ul>
+</li>
+</ul>
+<h2 id="팀">팀</h2>
+<h3 id="운영">운영</h3>
+<ul>
+<li>각자 모델링 -&gt; 앙상블<ul>
+<li>각자의 augmentation 데이터로 모델링 -&gt; 앙상블</li>
+<li>개인 산출물<ul>
+<li>model weight</li>
+<li>class 예측에 대한 confusion matrix</li>
+<li>f1 macro score</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>공유는 지속적으로</li>
+</ul>
+<h2 id="eda">EDA</h2>
+<ul>
+<li>제공된 이미지들의 크기 분포를 확인</li>
+<li>훈련 데이터 셋의 이미지들의 클래스 분포를 확인<ul>
+<li>14 클래스는 각 100개</li>
+<li>1  클래스가 50개 정도</li>
+<li>2  클래스가 75개 정도</li>
+</ul>
+</li>
+<li>14 개 클래스는 문서, 나머지는 자동차 번호판, 자동차 대시보드등</li>
+<li>눈으로 데이터 셋 차이 확인<ul>
+<li>데이터 셋 별 특징<ul>
+<li>train set<ul>
+<li>1500 장 정도</li>
+<li>정방향</li>
+</ul>
+</li>
+<li>test dataset<ul>
+<li>3000 장 정도, <code class="span">train datset x 2</code></li>
+<li>각종 noise 가 중첩으로 적용되어 있음<ul>
+<li>회전, filp 포함</li>
+<li>가우시안 노이즈</li>
+<li>색상 변경</li>
+</ul>
+</li>
+<li>눈으로 글자식별이 어려운 경우도 꽤 있음</li>
+<li>노이즈가 너무 심한 경우 선도 식별이 어려울 정도</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>문서이기 때문에 각종 글자가 많이 포함됨</li>
+</ul>
+</li>
+</ul>
+<h2 id="계획">계획</h2>
+<ul>
+<li><del>ocr</del><ul>
+<li>멘토의 조언에 의한</li>
+</ul>
+</li>
+<li>data augmentation<ul>
+<li>test 에만 noise 가 포함되어 있음<ul>
+<li>train set 에 각종 noise 를 포함켜 양을 늘리는 augmentation 이 <strong>필수적으로</strong> 필요</li>
+<li>noise 를 여러 조합으로 랜덤하게 늘림</li>
+</ul>
+</li>
+<li>train set 데이터 양이 더 적음</li>
+<li>데이터 부족한 class 도 있음<ul>
+<li>over sampling<ul>
+<li>추가 증강 의미</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>팀원이 새로이 baseline 를 기반으로 데이터를 증강으로 시작</li>
+<li>모델 교체 + 하이퍼파라메터 튜닝을 해가면서 진행</li>
+<li>f1 스코어가 높은 아이템을 모델 저장</li>
+</ul>
+<h2 id="멘토링">멘토링</h2>
+<ul>
+<li>ocr 까진 필요 없을 것 </li>
+<li>모델 선택의 근거는?<ul>
+<li>테스트의 영역</li>
+<li>모델군들에서 라이트한 모델을 선택해서 테스트 진행<ul>
+<li>각 모델군은 경향성을 보이기 때문</li>
+<li>대충 파라메터 모델 튜닝후 모델 선택</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>loss 는 데이터에 imbalance가 있으니 아래 것들을 고민해 봐라<ul>
+<li>focal loss</li>
+<li>asymmetric loss</li>
+<li>weighted cross entropy loss</li>
+</ul>
+</li>
+</ul>
+<h2 id="진행">진행</h2>
+<ul>
+<li>augmentation<ul>
+<li>훈련 이미지 1,500 개 -&gt; 팀원 마다 80,000 ~ 180,000 개 수준으로 증강</li>
+</ul>
+</li>
+<li>model<ul>
+<li>후보선정<ul>
+<li>멘토링때 언급된 모델</li>
+<li>sota</li>
+<li>팀원과 겹치지 않는 것도 앙상블을 위해 의미있을 것</li>
+</ul>
+</li>
+<li>선택<ul>
+<li><em>efficientnet-b5</em> 를 선택<ul>
+<li>이유 <ul>
+<li>팀원과 겹치지 않는 모델</li>
+<li>이미지가 눈으로 식별이 어려워서 resnet34 등이 학습한 <code class="span">224</code>x<code class="span">224</code> 해상도로는 식별이 안되 분류가 어려울 것으로 예상</li>
+<li>문서의 복잡도를 감안하여 test dataset 에 가까운 이미지 크기로 학습된 모델을 사용하고자 함<ul>
+<li>24gb 의 rtx3090 으로는 <code class="span">b7</code>, <code class="span">b6</code> 에 대한 학습 진행이 불가하여 <code class="span">b5</code> 를 차선으로 선택</li>
+<li><code class="span">batchsize=16</code> 에서 훈련 가능한 것 확인</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>modeling<ul>
+<li>초반에는 팀원이 baseline 코드로 제공한 <em>convnext</em> 모델로 데이터만 증강하여 진행</li>
+<li><em>efficientnet-b5</em> 선택 이후 성능을 더 올리기 위해 추가 데이터를 증강</li>
+<li>이 과정에서 데이터도 versioning 이 필요하다는 것을 직감<ul>
+<li>이미 팀원은 그렇게 하시는 분이 존재</li>
+<li>데이터 증강후 눈으로 샘플 확인, 분포 그래프 화를 위해 <a href="jupyter-notebook">jupyter-notebook</a> 로 진행<ul>
+<li>jupyter-notebook 특성상 버전관리(<a href="git">git</a>)가 어려워 파일명에 버저닝을 붙여 복사 진행</li>
+<li>생성되는 데이터도 버전 디렉토리를 만들어서 생성</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>모델링 진행<ul>
+<li>1 epoch 기준 40분 정도 소요</li>
+</ul>
+</li>
+<li>loss 는 모델마다 cross entropy 부터 focal loss, assymmetric loss 등이 다양하게 적용되었다</li>
+<li>cosine annealing lr 적용</li>
+<li>efficientdet 같은 모델은 BiFPN 레이어를 장착하여 학습</li>
+<li>stratified k-fold 가 기본이 될줄알았으나 데이터 증강을 통해 양이 늘어났기 때문인지 모두가 random split을 사용</li>
+</ul>
+</li>
+<li>사고<ul>
+<li>서버가 갑자기 접속이 되지 않고 메시지 웹을 보니<pre><code>The server was shut down due to excessive use of disk or memory. Due to the nature of the system, data recovery is not possible, so please create a new server and use it.
+</code></pre></li>
+<li>문의 결과 데이터 복구 불가, 상시 백업하라는 피드백</li>
+<li>마지막 날이라 복구가 불가능해서 모델 뽑지 못함</li>
+</ul>
+</li>
+<li>이후<ul>
+<li>난 서버가 터져서 작업본이 날아갔기 때문에<ul>
+<li>팀원들이 제출한 csv 파일에서 서로 틀리게 예측한 것들을 diff</li>
+<li>이를 시각화하여 어떤 것을 예측못하나 확인</li>
+</ul>
+</li>
+<li>마지막날이니만큼 팀원들이 각자의 데이터에서 훈련한 각자의 모델 가중치를 가지고 앙상블<ul>
+<li>앙상블 할때마다 연금술 마냥 public f1 score가 상승</li>
+<li>팀원들이 생성한 모델, 전부다 앙상블에 참여한 것은 아님<ul>
+<li><em>convnext_tiny</em></li>
+<li><em>densenet121</em></li>
+<li><em>efficientnet_b0</em></li>
+<li><em>mobilenet_v2</em></li>
+<li><em>mobilenet_v3</em></li>
+<li><em>resnet18</em></li>
+<li><em>resnet50</em></li>
+<li><em>shufflenet</em></li>
+<li><em>squeezenet</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="최종-결과">최종 결과</h2>
+<ul>
+<li>1등<ul>
+<li>leader board<ul>
+<li>public 2등</li>
+<li>private 1등</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="결과-피드백">결과 피드백</h2>
+<ul>
+<li>앙상블은 다양성이 중요<ul>
+<li>학습 데이터 차이</li>
+<li>특히 모델 차이, 모델마다 잘뽑는 피쳐에 강점이 다르다</li>
+</ul>
+</li>
+<li>타 팀들은 잘못 레이블된 train set을 잡고 시작함</li>
+<li>TTA 를 적용한 팀들이 좀 있음, 적용하면 좋을 것 같다<ul>
+<li>denoise 를 할건지 학습한 noise 를 할건지는 선택일까?</li>
+</ul>
+</li>
+<li>online augmentation<ul>
+<li>적용시 gpu가 놀지 않도록 해야하며 상황에 맞춰서 cpu 자원을 활용해야한다</li>
+</ul>
+</li>
+<li>결과를 보고 다시 피드백하는 과정이 중요, 모델이 무엇을 못하는가<ul>
+<li>가설과 실험 수정의 루프</li>
+</ul>
+</li>
+<li>wandb<ul>
+<li>sweep<ul>
+<li>하이퍼파라메터 시각화</li>
+</ul>
+</li>
+<li>eda<ul>
+<li><input disabled="" type="checkbox"> 예측결과 시각화가 가능, 찾아볼 것 <a href="@todo">@todo</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>실제 대회에서, 롤 관련해서 나누게되면 나중에 앙상블 재료가 없는 단점이 있다.</li>
+</ul>
+<h2 id="wrap-up">wrap up</h2>
+<ul>
+<li>대회의 목표<ul>
+<li>cv 모델 학습부터 평가까지의 프로세스에 대한 경험</li>
+<li>모델의 점진적 개선 프로세스 경험</li>
+</ul>
+</li>
+<li>메인 루트<ul>
+<li>eda 전 눈으로 데이터 확인 -&gt; 어떤 실험할지 결정</li>
+<li>일단 제출해서 점수가 어디서 시작하는지 체크</li>
+<li>epoch, lr, backbone 들 확인하면서 리더보드 감 잡기</li>
+<li>validation set 디자인<ul>
+<li>public score 와 correlation 이 있어야한다<ul>
+<li>test set 면밀히 검토</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>eda 시작<ul>
+<li>imbalance, mislable</li>
+</ul>
+</li>
+<li>예측 결과를 가지고 무엇을 못하는지 판단해야한단하고 피드백</li>
+<li>앙상블해서 제출좀해본다</li>
+</ul>
+</li>
+<li>제작자의 의도<ul>
+<li>현업에서 풀고자 하는 문제 </li>
+<li>대회가 운에의해서 좌우되지 않도록<ul>
+<li>적용한 augmentation 을 적용하면 점수가 오르도록</li>
+<li>기본적인 efficientnet, resnet 등으로 테스트</li>
+<li>앙상블시 점수 오르는 것 확인됨</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>중요한 경험, 생각의 관점<ul>
+<li>대회의 목적이 뭘까, 문제가 풀고자하는 것의 이해</li>
+<li>ml/dl 로만 풀어 풀어야하는 문제인가?</li>
+<li>대회의 평가 지표가 해당문제를 잘 풀었다고 할 수 있는건가?</li>
+<li>풀고자하는 문제, 평가 지표 지표에 맞춰 eda -&gt; 가설</li>
+<li>가설 노트 정리</li>
+<li>대회 종류 이후<ul>
+<li>one-page 정리</li>
+<li>내재화, 타팀의 솔루션 포함</li>
+<li>읽었던 논문등 깊게 이해</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>대회의 의미</li>
+</ul>
+<h2 id="회고-retrospective">회고 :retrospective:</h2>
+<ul>
+<li>ssh 개발 환경<ul>
+<li><a href="pycharm">pycharm</a> 은 유료 버전인데도 <a href="ssh">ssh</a> 개발환경에서는 <a href="jupyter-notebook">jupyter-notebook</a> 파일에서 <a href="markdown">markdown</a> cell 을 표시 못함<ul>
+<li><a href="vscode">vscode</a> 로 진행</li>
+</ul>
+</li>
+<li>기본적인 것은 서버에 몇개 바로 설치하고 가는게 빠르다<ul>
+<li><a href="tmux">tmux</a> </li>
+<li><a href="vim">vim</a></li>
+<li><a href="lazygit">lazygit</a></li>
+</ul>
+</li>
+<li>데이터 셋도 서버에 있다보니 사실 눈으로 확인만 하면되는데 <a href="jupyter-notebook">jupyter-notebook</a> 을 통해 불편하게 확인해서 시간이 소모<ul>
+<li>local 에서 서버 디렉토리를 <a href="mount">mount</a> 해버렸어도 되었을 것 같고</li>
+<li><a href="jupyter-notebook">jupyter-notebook</a> 에서 코드로 시각화 하느니<ul>
+<li>target class 로 분류된 이미지들을 각각의 target class 디렉토리에 나눠서 이미지 뷰어로 확인하는게 나은것 같다<ul>
+<li><a href="scp">scp</a> 로 로컬 전송후 확인</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>eda<ul>
+<li>내가 어떤 데이터를 분류하려고하는지, 어떤 노이즈가 있는지를 시각적으로 확인</li>
+<li>class 분포를 가지고 loss 함수에 대한 선택 인사이트 제공<ul>
+<li>따라가기 급급해서 나는 그냥 cross entropy 씀</li>
+<li>다음에는 제대로된 loss 도 적용해보자</li>
+</ul>
+</li>
+<li>데이터 해상도를 시각화하여 어떤 모델(규모)을 선택할지에 대한 인사이트<ul>
+<li><input disabled="" type="checkbox"> 이건 이론적으로 의미있는지 검증되지 않은 내 생각<ul>
+<li><a href="chatgpt">chatgpt</a> 는 긍정적으로 답변</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>서버 터짐 사고<ul>
+<li>서버에 <a href="git">git</a> 을 설치해서 버전관리를 하고 있었는데 서버가 깨질것을 상상하지 못해 push를 하지 않아 결과를 만들지 못함</li>
+<li>remote 에 주기적으로 <a href="git-push">git-push</a> 하자</li>
+</ul>
+</li>
+<li>일정 관리<ul>
+<li>대회 기간전 학습 마지막주에 서버가 열리는데 이때 학습이 아닌 대회에 집중을 해야한다<ul>
+<li>gpu 사용과 submission 이 시간에 비례하기 때문</li>
+<li>어차피 수업이 논문 설명이 갑자기 시작되는 구조기 때문에 사전지식이 없다면 시간낭비일 가능성이 높다<ul>
+<li>먼저 손으로 해봐야 이론에 대한 니즈가 생길 것</li>
+</ul>
+</li>
+<li>프로토타입은 먼저 만들어서 구동하고 모델 돌리면서 수업을 듣던가 하자</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>코드 익숙도<ul>
+<li><code class="span">albumentations</code> 라는 라이브러리를 썼는데<ul>
+<li><code class="span">mix-up</code> noise 생성을 지원하지 않아 해당 noise 는 코드로 구현해야 하는 부분에서 시간이 다소 소요되었다</li>
+<li>이 부분은 코드를 적극적으로 쓰면서 늘어갈 것 기대</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>모델링<ul>
+<li>모델 선택에 대한 근거가 부족했는데 멘토링때 질문을 통해 다소 해소되었다</li>
+<li>모델보다는 데이터에 대한 중요성이 우선</li>
+<li>지금 까지의 경험으로는 모델링은 틀이 있어서 이에 대해 익숙해지고 프로토타입 코드를 빠르게 뽑도록 익숙해져야 유리</li>
+</ul>
+</li>
+<li>툴<ul>
+<li>강의나 특강에서도 계속적으로 언급되는 wandb 를 이번에 맛보기로 사용<ul>
+<li>wandb 는 파라메터 튜닝을 지원<ul>
+<li>그럼 optuna 는?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>이전 강의 때 배운 <a href="mlflow">mlflow</a> 가 이쁘진 않지만 이런 실험에서 많은 고민을 덜어줄 수 있을 것 같다고 생각</li>
+<li>wandb vs <a href="mlflow">mlflow</a><ul>
+<li><a href="mlflow">mlflow</a> 는<ul>
+<li>좀 찾아보니 linux foundation 재단에서 운영</li>
+<li><a href="github">github</a> star 가 가장 많음</li>
+<li>ui 이가 상대적으로 구려서 선택에 고민이 있는 사람들이 많은 것 같음</li>
+<li>추가적으로 model registry 를 지원하는 점이 wandb 와 구분되는 특징으로 선택의 기준이 되기도 했었던듯<ul>
+<li>그러나 지금은 wandb 도 artifact 저장을 지원<ul>
+<li>cloud 5gb 무료</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>필요한 기능은?<ul>
+<li>파라메터 튜닝에 대한 시각화 기록</li>
+<li>모델 가중치 저장</li>
+</ul>
+</li>
+<li>필요한 기능은 어차피 지원하는 거 같고 하나를 정해서 쓰면 될텐데<ul>
+<li>가중치는 여러개 저장하기에 5gb는 힘들 수 있으니 <a href="mlflow">mlflow</a> 를 환경으로 가져가는게 좋겠음</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>결과에서<ul>
+<li>이번에는 computer-vision 석사 전공자 분이 계서 리드를 받으면서 캐리해주심</li>
+<li>딥러닝이나 머신러닝 모두 데이터처리, loss, 하이퍼파라메터 튜닝, 앙상블등 큰흐름이 같음<ul>
+<li>좀 더 능력자를 빨리 만나는게 이 프로세스를 빨리 경험하고 이해하는게 상황을 많이 바꿧을 것이란 생각하니 안타까움이 반</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="upstage-ai-lab">upstage-ai-lab</a></li>
+<li><a href="fastapi">fastapi</a></li>
+<li><a href="docker">docker</a></li>
+<li><a href="docker-compose">docker-compose</a></li>
+<li><a href="upstage-ai-lab-project-03">upstage-ai-lab-project-03</a></li>
+<li><a href="upstage-ai-lab-project-05">upstage-ai-lab-project-05</a></li>
+<li><strike>[wn.private] wn.private:upstage-ai-lab-project-04</strike></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-06ccd392a2835508.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-e61c4b6da020d258.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"upstage-ai-lab-project-04\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"xyVpFPh8SLq576-kwLJuy\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/upstage-ai-lab-project-04\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"upstage-ai-lab-project-04\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"upstage-ai-lab-project-04\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"upstage-ai-lab-project-04\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T4169,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"image-classification-대회\"\u003eImage Classification 대회\u003c/h1\u003e\n\u003ch2 id=\"대회\"\u003e대회\u003c/h2\u003e\n\u003ch3 id=\"개요\"\u003e개요\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e3500개 정도의 이미지를 17개 클래스로 이미지 분류 후 csv 제출\u003c/li\u003e\n\u003cli\u003ef1 macro score 가 평가 기준\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"분석\"\u003e분석\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003ecsv 하나 제출인데 score 는 public, private 이 존재\u003cul\u003e\n\u003cli\u003epublic 은 아마도 제출된 csv 에서 특정 분포에 대한 점수 일 것으로 생각\u003cul\u003e\n\u003cli\u003ef1 macro 기 때문에 특정 클래스에 가중을 줄 순 없다 판단\u003cul\u003e\n\u003cli\u003emacro 는 클래스별 동일 가중치\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e그렇다며 좀 더 augmentation 이 덜 적용되어 train 데이터가 효과적으로 예측할 수 있는 분포일까?\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eprivate 은 모델 성능을 평가해야하므로 전체 데이터 혹은 좀더 예측이 어려운 데이터를 포함한 분포일 것으로 생각\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"제공-환경\"\u003e제공 환경\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"vpn\"\u003evpn\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"ssh\"\u003essh\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003eAMD Ryzen Threadripper 3970X 32-Core Processor\u003c/li\u003e\n\u003cli\u003eRTX 3090, 24Gb\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"개인적인-목표\"\u003e개인적인 목표\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e wandb 사용\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e model 생성 끝까지\u003cul\u003e\n\u003cli\u003e이제 까지 프로젝트에서 모델링쪽 롤을 하지 않았으니 이번엔 모델링을 따라가 보자\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"팀\"\u003e팀\u003c/h2\u003e\n\u003ch3 id=\"운영\"\u003e운영\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e각자 모델링 -\u0026gt; 앙상블\u003cul\u003e\n\u003cli\u003e각자의 augmentation 데이터로 모델링 -\u0026gt; 앙상블\u003c/li\u003e\n\u003cli\u003e개인 산출물\u003cul\u003e\n\u003cli\u003emodel weight\u003c/li\u003e\n\u003cli\u003eclass 예측에 대한 confusion matrix\u003c/li\u003e\n\u003cli\u003ef1 macro score\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e공유는 지속적으로\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"eda\"\u003eEDA\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e제공된 이미지들의 크기 분포를 확인\u003c/li\u003e\n\u003cli\u003e훈련 데이터 셋의 이미지들의 클래스 분포를 확인\u003cul\u003e\n\u003cli\u003e14 클래스는 각 100개\u003c/li\u003e\n\u003cli\u003e1  클래스가 50개 정도\u003c/li\u003e\n\u003cli\u003e2  클래스가 75개 정도\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e14 개 클래스는 문서, 나머지는 자동차 번호판, 자동차 대시보드등\u003c/li\u003e\n\u003cli\u003e눈으로 데이터 셋 차이 확인\u003cul\u003e\n\u003cli\u003e데이터 셋 별 특징\u003cul\u003e\n\u003cli\u003etrain set\u003cul\u003e\n\u003cli\u003e1500 장 정도\u003c/li\u003e\n\u003cli\u003e정방향\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003etest dataset\u003cul\u003e\n\u003cli\u003e3000 장 정도, \u003ccode class=\"span\"\u003etrain datset x 2\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e각종 noise 가 중첩으로 적용되어 있음\u003cul\u003e\n\u003cli\u003e회전, filp 포함\u003c/li\u003e\n\u003cli\u003e가우시안 노이즈\u003c/li\u003e\n\u003cli\u003e색상 변경\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e눈으로 글자식별이 어려운 경우도 꽤 있음\u003c/li\u003e\n\u003cli\u003e노이즈가 너무 심한 경우 선도 식별이 어려울 정도\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e문서이기 때문에 각종 글자가 많이 포함됨\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"계획\"\u003e계획\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cdel\u003eocr\u003c/del\u003e\u003cul\u003e\n\u003cli\u003e멘토의 조언에 의한\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003edata augmentation\u003cul\u003e\n\u003cli\u003etest 에만 noise 가 포함되어 있음\u003cul\u003e\n\u003cli\u003etrain set 에 각종 noise 를 포함켜 양을 늘리는 augmentation 이 \u003cstrong\u003e필수적으로\u003c/strong\u003e 필요\u003c/li\u003e\n\u003cli\u003enoise 를 여러 조합으로 랜덤하게 늘림\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003etrain set 데이터 양이 더 적음\u003c/li\u003e\n\u003cli\u003e데이터 부족한 class 도 있음\u003cul\u003e\n\u003cli\u003eover sampling\u003cul\u003e\n\u003cli\u003e추가 증강 의미\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e팀원이 새로이 baseline 를 기반으로 데이터를 증강으로 시작\u003c/li\u003e\n\u003cli\u003e모델 교체 + 하이퍼파라메터 튜닝을 해가면서 진행\u003c/li\u003e\n\u003cli\u003ef1 스코어가 높은 아이템을 모델 저장\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"멘토링\"\u003e멘토링\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eocr 까진 필요 없을 것 \u003c/li\u003e\n\u003cli\u003e모델 선택의 근거는?\u003cul\u003e\n\u003cli\u003e테스트의 영역\u003c/li\u003e\n\u003cli\u003e모델군들에서 라이트한 모델을 선택해서 테스트 진행\u003cul\u003e\n\u003cli\u003e각 모델군은 경향성을 보이기 때문\u003c/li\u003e\n\u003cli\u003e대충 파라메터 모델 튜닝후 모델 선택\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eloss 는 데이터에 imbalance가 있으니 아래 것들을 고민해 봐라\u003cul\u003e\n\u003cli\u003efocal loss\u003c/li\u003e\n\u003cli\u003easymmetric loss\u003c/li\u003e\n\u003cli\u003eweighted cross entropy loss\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"진행\"\u003e진행\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eaugmentation\u003cul\u003e\n\u003cli\u003e훈련 이미지 1,500 개 -\u0026gt; 팀원 마다 80,000 ~ 180,000 개 수준으로 증강\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003emodel\u003cul\u003e\n\u003cli\u003e후보선정\u003cul\u003e\n\u003cli\u003e멘토링때 언급된 모델\u003c/li\u003e\n\u003cli\u003esota\u003c/li\u003e\n\u003cli\u003e팀원과 겹치지 않는 것도 앙상블을 위해 의미있을 것\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e선택\u003cul\u003e\n\u003cli\u003e\u003cem\u003eefficientnet-b5\u003c/em\u003e 를 선택\u003cul\u003e\n\u003cli\u003e이유 \u003cul\u003e\n\u003cli\u003e팀원과 겹치지 않는 모델\u003c/li\u003e\n\u003cli\u003e이미지가 눈으로 식별이 어려워서 resnet34 등이 학습한 \u003ccode class=\"span\"\u003e224\u003c/code\u003ex\u003ccode class=\"span\"\u003e224\u003c/code\u003e 해상도로는 식별이 안되 분류가 어려울 것으로 예상\u003c/li\u003e\n\u003cli\u003e문서의 복잡도를 감안하여 test dataset 에 가까운 이미지 크기로 학습된 모델을 사용하고자 함\u003cul\u003e\n\u003cli\u003e24gb 의 rtx3090 으로는 \u003ccode class=\"span\"\u003eb7\u003c/code\u003e, \u003ccode class=\"span\"\u003eb6\u003c/code\u003e 에 대한 학습 진행이 불가하여 \u003ccode class=\"span\"\u003eb5\u003c/code\u003e 를 차선으로 선택\u003c/li\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ebatchsize=16\u003c/code\u003e 에서 훈련 가능한 것 확인\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003emodeling\u003cul\u003e\n\u003cli\u003e초반에는 팀원이 baseline 코드로 제공한 \u003cem\u003econvnext\u003c/em\u003e 모델로 데이터만 증강하여 진행\u003c/li\u003e\n\u003cli\u003e\u003cem\u003eefficientnet-b5\u003c/em\u003e 선택 이후 성능을 더 올리기 위해 추가 데이터를 증강\u003c/li\u003e\n\u003cli\u003e이 과정에서 데이터도 versioning 이 필요하다는 것을 직감\u003cul\u003e\n\u003cli\u003e이미 팀원은 그렇게 하시는 분이 존재\u003c/li\u003e\n\u003cli\u003e데이터 증강후 눈으로 샘플 확인, 분포 그래프 화를 위해 \u003ca href=\"jupyter-notebook\"\u003ejupyter-notebook\u003c/a\u003e 로 진행\u003cul\u003e\n\u003cli\u003ejupyter-notebook 특성상 버전관리(\u003ca href=\"git\"\u003egit\u003c/a\u003e)가 어려워 파일명에 버저닝을 붙여 복사 진행\u003c/li\u003e\n\u003cli\u003e생성되는 데이터도 버전 디렉토리를 만들어서 생성\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e모델링 진행\u003cul\u003e\n\u003cli\u003e1 epoch 기준 40분 정도 소요\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eloss 는 모델마다 cross entropy 부터 focal loss, assymmetric loss 등이 다양하게 적용되었다\u003c/li\u003e\n\u003cli\u003ecosine annealing lr 적용\u003c/li\u003e\n\u003cli\u003eefficientdet 같은 모델은 BiFPN 레이어를 장착하여 학습\u003c/li\u003e\n\u003cli\u003estratified k-fold 가 기본이 될줄알았으나 데이터 증강을 통해 양이 늘어났기 때문인지 모두가 random split을 사용\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e사고\u003cul\u003e\n\u003cli\u003e서버가 갑자기 접속이 되지 않고 메시지 웹을 보니\u003cpre\u003e\u003ccode\u003eThe server was shut down due to excessive use of disk or memory. Due to the nature of the system, data recovery is not possible, so please create a new server and use it.\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003e문의 결과 데이터 복구 불가, 상시 백업하라는 피드백\u003c/li\u003e\n\u003cli\u003e마지막 날이라 복구가 불가능해서 모델 뽑지 못함\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e이후\u003cul\u003e\n\u003cli\u003e난 서버가 터져서 작업본이 날아갔기 때문에\u003cul\u003e\n\u003cli\u003e팀원들이 제출한 csv 파일에서 서로 틀리게 예측한 것들을 diff\u003c/li\u003e\n\u003cli\u003e이를 시각화하여 어떤 것을 예측못하나 확인\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e마지막날이니만큼 팀원들이 각자의 데이터에서 훈련한 각자의 모델 가중치를 가지고 앙상블\u003cul\u003e\n\u003cli\u003e앙상블 할때마다 연금술 마냥 public f1 score가 상승\u003c/li\u003e\n\u003cli\u003e팀원들이 생성한 모델, 전부다 앙상블에 참여한 것은 아님\u003cul\u003e\n\u003cli\u003e\u003cem\u003econvnext_tiny\u003c/em\u003e\u003c/li\u003e\n\u003cli\u003e\u003cem\u003edensenet121\u003c/em\u003e\u003c/li\u003e\n\u003cli\u003e\u003cem\u003eefficientnet_b0\u003c/em\u003e\u003c/li\u003e\n\u003cli\u003e\u003cem\u003emobilenet_v2\u003c/em\u003e\u003c/li\u003e\n\u003cli\u003e\u003cem\u003emobilenet_v3\u003c/em\u003e\u003c/li\u003e\n\u003cli\u003e\u003cem\u003eresnet18\u003c/em\u003e\u003c/li\u003e\n\u003cli\u003e\u003cem\u003eresnet50\u003c/em\u003e\u003c/li\u003e\n\u003cli\u003e\u003cem\u003eshufflenet\u003c/em\u003e\u003c/li\u003e\n\u003cli\u003e\u003cem\u003esqueezenet\u003c/em\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"최종-결과\"\u003e최종 결과\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e1등\u003cul\u003e\n\u003cli\u003eleader board\u003cul\u003e\n\u003cli\u003epublic 2등\u003c/li\u003e\n\u003cli\u003eprivate 1등\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"결과-피드백\"\u003e결과 피드백\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e앙상블은 다양성이 중요\u003cul\u003e\n\u003cli\u003e학습 데이터 차이\u003c/li\u003e\n\u003cli\u003e특히 모델 차이, 모델마다 잘뽑는 피쳐에 강점이 다르다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e타 팀들은 잘못 레이블된 train set을 잡고 시작함\u003c/li\u003e\n\u003cli\u003eTTA 를 적용한 팀들이 좀 있음, 적용하면 좋을 것 같다\u003cul\u003e\n\u003cli\u003edenoise 를 할건지 학습한 noise 를 할건지는 선택일까?\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eonline augmentation\u003cul\u003e\n\u003cli\u003e적용시 gpu가 놀지 않도록 해야하며 상황에 맞춰서 cpu 자원을 활용해야한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e결과를 보고 다시 피드백하는 과정이 중요, 모델이 무엇을 못하는가\u003cul\u003e\n\u003cli\u003e가설과 실험 수정의 루프\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003ewandb\u003cul\u003e\n\u003cli\u003esweep\u003cul\u003e\n\u003cli\u003e하이퍼파라메터 시각화\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eeda\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 예측결과 시각화가 가능, 찾아볼 것 \u003ca href=\"@todo\"\u003e@todo\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e실제 대회에서, 롤 관련해서 나누게되면 나중에 앙상블 재료가 없는 단점이 있다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"wrap-up\"\u003ewrap up\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e대회의 목표\u003cul\u003e\n\u003cli\u003ecv 모델 학습부터 평가까지의 프로세스에 대한 경험\u003c/li\u003e\n\u003cli\u003e모델의 점진적 개선 프로세스 경험\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e메인 루트\u003cul\u003e\n\u003cli\u003eeda 전 눈으로 데이터 확인 -\u0026gt; 어떤 실험할지 결정\u003c/li\u003e\n\u003cli\u003e일단 제출해서 점수가 어디서 시작하는지 체크\u003c/li\u003e\n\u003cli\u003eepoch, lr, backbone 들 확인하면서 리더보드 감 잡기\u003c/li\u003e\n\u003cli\u003evalidation set 디자인\u003cul\u003e\n\u003cli\u003epublic score 와 correlation 이 있어야한다\u003cul\u003e\n\u003cli\u003etest set 면밀히 검토\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eeda 시작\u003cul\u003e\n\u003cli\u003eimbalance, mislable\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e예측 결과를 가지고 무엇을 못하는지 판단해야한단하고 피드백\u003c/li\u003e\n\u003cli\u003e앙상블해서 제출좀해본다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e제작자의 의도\u003cul\u003e\n\u003cli\u003e현업에서 풀고자 하는 문제 \u003c/li\u003e\n\u003cli\u003e대회가 운에의해서 좌우되지 않도록\u003cul\u003e\n\u003cli\u003e적용한 augmentation 을 적용하면 점수가 오르도록\u003c/li\u003e\n\u003cli\u003e기본적인 efficientnet, resnet 등으로 테스트\u003c/li\u003e\n\u003cli\u003e앙상블시 점수 오르는 것 확인됨\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e중요한 경험, 생각의 관점\u003cul\u003e\n\u003cli\u003e대회의 목적이 뭘까, 문제가 풀고자하는 것의 이해\u003c/li\u003e\n\u003cli\u003eml/dl 로만 풀어 풀어야하는 문제인가?\u003c/li\u003e\n\u003cli\u003e대회의 평가 지표가 해당문제를 잘 풀었다고 할 수 있는건가?\u003c/li\u003e\n\u003cli\u003e풀고자하는 문제, 평가 지표 지표에 맞춰 eda -\u0026gt; 가설\u003c/li\u003e\n\u003cli\u003e가설 노트 정리\u003c/li\u003e\n\u003cli\u003e대회 종류 이후\u003cul\u003e\n\u003cli\u003eone-page 정리\u003c/li\u003e\n\u003cli\u003e내재화, 타팀의 솔루션 포함\u003c/li\u003e\n\u003cli\u003e읽었던 논문등 깊게 이해\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e대회의 의미\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"회고-retrospective\"\u003e회고 :retrospective:\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003essh 개발 환경\u003cul\u003e\n\u003cli\u003e\u003ca href=\"pycharm\"\u003epycharm\u003c/a\u003e 은 유료 버전인데도 \u003ca href=\"ssh\"\u003essh\u003c/a\u003e 개발환경에서는 \u003ca href=\"jupyter-notebook\"\u003ejupyter-notebook\u003c/a\u003e 파일에서 \u003ca href=\"markdown\"\u003emarkdown\u003c/a\u003e cell 을 표시 못함\u003cul\u003e\n\u003cli\u003e\u003ca href=\"vscode\"\u003evscode\u003c/a\u003e 로 진행\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e기본적인 것은 서버에 몇개 바로 설치하고 가는게 빠르다\u003cul\u003e\n\u003cli\u003e\u003ca href=\"tmux\"\u003etmux\u003c/a\u003e \u003c/li\u003e\n\u003cli\u003e\u003ca href=\"vim\"\u003evim\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"lazygit\"\u003elazygit\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터 셋도 서버에 있다보니 사실 눈으로 확인만 하면되는데 \u003ca href=\"jupyter-notebook\"\u003ejupyter-notebook\u003c/a\u003e 을 통해 불편하게 확인해서 시간이 소모\u003cul\u003e\n\u003cli\u003elocal 에서 서버 디렉토리를 \u003ca href=\"mount\"\u003emount\u003c/a\u003e 해버렸어도 되었을 것 같고\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"jupyter-notebook\"\u003ejupyter-notebook\u003c/a\u003e 에서 코드로 시각화 하느니\u003cul\u003e\n\u003cli\u003etarget class 로 분류된 이미지들을 각각의 target class 디렉토리에 나눠서 이미지 뷰어로 확인하는게 나은것 같다\u003cul\u003e\n\u003cli\u003e\u003ca href=\"scp\"\u003escp\u003c/a\u003e 로 로컬 전송후 확인\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eeda\u003cul\u003e\n\u003cli\u003e내가 어떤 데이터를 분류하려고하는지, 어떤 노이즈가 있는지를 시각적으로 확인\u003c/li\u003e\n\u003cli\u003eclass 분포를 가지고 loss 함수에 대한 선택 인사이트 제공\u003cul\u003e\n\u003cli\u003e따라가기 급급해서 나는 그냥 cross entropy 씀\u003c/li\u003e\n\u003cli\u003e다음에는 제대로된 loss 도 적용해보자\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e데이터 해상도를 시각화하여 어떤 모델(규모)을 선택할지에 대한 인사이트\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 이건 이론적으로 의미있는지 검증되지 않은 내 생각\u003cul\u003e\n\u003cli\u003e\u003ca href=\"chatgpt\"\u003echatgpt\u003c/a\u003e 는 긍정적으로 답변\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e서버 터짐 사고\u003cul\u003e\n\u003cli\u003e서버에 \u003ca href=\"git\"\u003egit\u003c/a\u003e 을 설치해서 버전관리를 하고 있었는데 서버가 깨질것을 상상하지 못해 push를 하지 않아 결과를 만들지 못함\u003c/li\u003e\n\u003cli\u003eremote 에 주기적으로 \u003ca href=\"git-push\"\u003egit-push\u003c/a\u003e 하자\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e일정 관리\u003cul\u003e\n\u003cli\u003e대회 기간전 학습 마지막주에 서버가 열리는데 이때 학습이 아닌 대회에 집중을 해야한다\u003cul\u003e\n\u003cli\u003egpu 사용과 submission 이 시간에 비례하기 때문\u003c/li\u003e\n\u003cli\u003e어차피 수업이 논문 설명이 갑자기 시작되는 구조기 때문에 사전지식이 없다면 시간낭비일 가능성이 높다\u003cul\u003e\n\u003cli\u003e먼저 손으로 해봐야 이론에 대한 니즈가 생길 것\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e프로토타입은 먼저 만들어서 구동하고 모델 돌리면서 수업을 듣던가 하자\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e코드 익숙도\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003ealbumentations\u003c/code\u003e 라는 라이브러리를 썼는데\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003emix-up\u003c/code\u003e noise 생성을 지원하지 않아 해당 noise 는 코드로 구현해야 하는 부분에서 시간이 다소 소요되었다\u003c/li\u003e\n\u003cli\u003e이 부분은 코드를 적극적으로 쓰면서 늘어갈 것 기대\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e모델링\u003cul\u003e\n\u003cli\u003e모델 선택에 대한 근거가 부족했는데 멘토링때 질문을 통해 다소 해소되었다\u003c/li\u003e\n\u003cli\u003e모델보다는 데이터에 대한 중요성이 우선\u003c/li\u003e\n\u003cli\u003e지금 까지의 경험으로는 모델링은 틀이 있어서 이에 대해 익숙해지고 프로토타입 코드를 빠르게 뽑도록 익숙해져야 유리\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e툴\u003cul\u003e\n\u003cli\u003e강의나 특강에서도 계속적으로 언급되는 wandb 를 이번에 맛보기로 사용\u003cul\u003e\n\u003cli\u003ewandb 는 파라메터 튜닝을 지원\u003cul\u003e\n\u003cli\u003e그럼 optuna 는?\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e이전 강의 때 배운 \u003ca href=\"mlflow\"\u003emlflow\u003c/a\u003e 가 이쁘진 않지만 이런 실험에서 많은 고민을 덜어줄 수 있을 것 같다고 생각\u003c/li\u003e\n\u003cli\u003ewandb vs \u003ca href=\"mlflow\"\u003emlflow\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"mlflow\"\u003emlflow\u003c/a\u003e 는\u003cul\u003e\n\u003cli\u003e좀 찾아보니 linux foundation 재단에서 운영\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"github\"\u003egithub\u003c/a\u003e star 가 가장 많음\u003c/li\u003e\n\u003cli\u003eui 이가 상대적으로 구려서 선택에 고민이 있는 사람들이 많은 것 같음\u003c/li\u003e\n\u003cli\u003e추가적으로 model registry 를 지원하는 점이 wandb 와 구분되는 특징으로 선택의 기준이 되기도 했었던듯\u003cul\u003e\n\u003cli\u003e그러나 지금은 wandb 도 artifact 저장을 지원\u003cul\u003e\n\u003cli\u003ecloud 5gb 무료\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e필요한 기능은?\u003cul\u003e\n\u003cli\u003e파라메터 튜닝에 대한 시각화 기록\u003c/li\u003e\n\u003cli\u003e모델 가중치 저장\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e필요한 기능은 어차피 지원하는 거 같고 하나를 정해서 쓰면 될텐데\u003cul\u003e\n\u003cli\u003e가중치는 여러개 저장하기에 5gb는 힘들 수 있으니 \u003ca href=\"mlflow\"\u003emlflow\u003c/a\u003e 를 환경으로 가져가는게 좋겠음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e결과에서\u003cul\u003e\n\u003cli\u003e이번에는 computer-vision 석사 전공자 분이 계서 리드를 받으면서 캐리해주심\u003c/li\u003e\n\u003cli\u003e딥러닝이나 머신러닝 모두 데이터처리, loss, 하이퍼파라메터 튜닝, 앙상블등 큰흐름이 같음\u003cul\u003e\n\u003cli\u003e좀 더 능력자를 빨리 만나는게 이 프로세스를 빨리 경험하고 이해하는게 상황을 많이 바꿧을 것이란 생각하니 안타까움이 반\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"upstage-ai-lab\"\u003eupstage-ai-lab\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"fastapi\"\u003efastapi\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"docker\"\u003edocker\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"docker-compose\"\u003edocker-compose\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"upstage-ai-lab-project-03\"\u003eupstage-ai-lab-project-03\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"upstage-ai-lab-project-05\"\u003eupstage-ai-lab-project-05\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cstrike\u003e[wn.private] wn.private:upstage-ai-lab-project-04\u003c/strike\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/0d7e976\\n\",\"className\":\"bg-white text-black\",\"children\":\"0d7e976\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/upstage-ai-lab-project-04.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/upstage-ai-lab-project-04.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/upstage-ai-lab-project-04.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"upstage-ai-lab-project-04\",\"name\":\"upstage-ai-lab-project-04\",\"val\":31},{\"id\":\"vpn\",\"name\":\"vpn\",\"val\":10},{\"id\":\"ssh\",\"name\":\"ssh\",\"val\":8},{\"id\":\"jupyter-notebook\",\"name\":\"jupyter-notebook\",\"val\":4},{\"id\":\"git\",\"name\":\"git\",\"val\":44},{\"id\":\"@todo\",\"name\":\"@todo\",\"val\":24},{\"id\":\"pycharm\",\"name\":\"pycharm\",\"val\":13},{\"id\":\"markdown\",\"name\":\"markdown\",\"val\":1},{\"id\":\"vscode\",\"name\":\"vscode\",\"val\":1},{\"id\":\"tmux\",\"name\":\"tmux\",\"val\":7},{\"id\":\"vim\",\"name\":\"vim\",\"val\":20},{\"id\":\"lazygit\",\"name\":\"lazygit\",\"val\":7},{\"id\":\"mount\",\"name\":\"mount\",\"val\":2},{\"id\":\"scp\",\"name\":\"scp\",\"val\":2},{\"id\":\"chatgpt\",\"name\":\"chatgpt\",\"val\":5},{\"id\":\"git-push\",\"name\":\"git-push\",\"val\":2},{\"id\":\"mlflow\",\"name\":\"mlflow\",\"val\":21},{\"id\":\"github\",\"name\":\"github\",\"val\":9},{\"id\":\"upstage-ai-lab\",\"name\":\"upstage-ai-lab\",\"val\":20},{\"id\":\"fastapi\",\"name\":\"fastapi\",\"val\":2},{\"id\":\"docker\",\"name\":\"docker\",\"val\":7},{\"id\":\"docker-compose\",\"name\":\"docker-compose\",\"val\":3},{\"id\":\"upstage-ai-lab-project-03\",\"name\":\"upstage-ai-lab-project-03\",\"val\":36},{\"id\":\"upstage-ai-lab-project-05\",\"name\":\"upstage-ai-lab-project-05\",\"val\":27},{\"id\":\"upstage-ai-lab-day-77\",\"name\":\"upstage-ai-lab-day-77\",\"val\":9},{\"id\":\"diary/2024-12-31\",\"name\":\"diary/2024-12-31\",\"val\":441}],\"links\":[{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"vpn\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"ssh\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"jupyter-notebook\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"git\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"@todo\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"pycharm\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"ssh\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"jupyter-notebook\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"markdown\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"vscode\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"tmux\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"vim\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"lazygit\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"jupyter-notebook\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"mount\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"jupyter-notebook\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"scp\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"chatgpt\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"git\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"git-push\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"mlflow\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"mlflow\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"mlflow\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"github\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"mlflow\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"upstage-ai-lab\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"fastapi\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"docker\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"docker-compose\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"upstage-ai-lab-project-03\"},{\"source\":\"upstage-ai-lab-project-04\",\"target\":\"upstage-ai-lab-project-05\"},{\"source\":\"upstage-ai-lab-day-77\",\"target\":\"upstage-ai-lab-project-04\"},{\"source\":\"upstage-ai-lab-project-03\",\"target\":\"upstage-ai-lab-project-04\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"upstage-ai-lab-project-04\"},{\"source\":\"upstage-ai-lab-project-05\",\"target\":\"upstage-ai-lab-project-04\"},{\"source\":\"upstage-ai-lab\",\"target\":\"upstage-ai-lab-project-04\"},{\"source\":\"diary/2024-12-31\",\"target\":\"upstage-ai-lab-project-04\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"upstage-ai-lab-project-04\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-project-04\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-project-04\"}],[\"$\",\"sup\",null,{\"children\":31}]]}]}],[\"$\",\"span\",\"vpn\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vpn\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vpn\"}],[\"$\",\"sup\",null,{\"children\":10}]]}]}],[\"$\",\"span\",\"ssh\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/ssh\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"ssh\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"jupyter-notebook\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/jupyter-notebook\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"jupyter-notebook\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"git\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git\"}],[\"$\",\"sup\",null,{\"children\":44}]]}]}],[\"$\",\"span\",\"@todo\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/@todo\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"@todo\"}],[\"$\",\"sup\",null,{\"children\":24}]]}]}],[\"$\",\"span\",\"pycharm\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/pycharm\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"pycharm\"}],[\"$\",\"sup\",null,{\"children\":13}]]}]}],[\"$\",\"span\",\"markdown\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/markdown\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"markdown\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"vscode\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vscode\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vscode\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"tmux\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/tmux\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"tmux\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"vim\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vim\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vim\"}],[\"$\",\"sup\",null,{\"children\":20}]]}]}],[\"$\",\"span\",\"lazygit\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/lazygit\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"lazygit\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"mount\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/mount\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"mount\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"scp\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/scp\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"scp\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"chatgpt\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/chatgpt\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"chatgpt\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"git-push\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-push\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-push\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"mlflow\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/mlflow\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"mlflow\"}],[\"$\",\"sup\",null,{\"children\":21}]]}]}],[\"$\",\"span\",\"github\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/github\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"github\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"upstage-ai-lab\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab\"}],[\"$\",\"sup\",null,{\"children\":20}]]}]}],[\"$\",\"span\",\"fastapi\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/fastapi\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"fastapi\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"docker\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/docker\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"docker\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"docker-compose\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/docker-compose\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"docker-compose\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-project-03\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-project-03\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-project-03\"}],[\"$\",\"sup\",null,{\"children\":36}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-project-05\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-project-05\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-project-05\"}],[\"$\",\"sup\",null,{\"children\":27}]]}]}],[\"$\",\"span\",\"upstage-ai-lab-day-77\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/upstage-ai-lab-day-77\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"upstage-ai-lab-day-77\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"diary/2024-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-12-31\"}],[\"$\",\"sup\",null,{\"children\":441}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"image-classification-대회\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#image-classification-대회\",\"children\":\"Image Classification 대회\"}]}],[\"$\",\"div\",\"대회\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#대회\",\"children\":\"대회\"}]}],[\"$\",\"div\",\"개요\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#개요\",\"children\":\"개요\"}]}],[\"$\",\"div\",\"분석\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#분석\",\"children\":\"분석\"}]}],[\"$\",\"div\",\"제공-환경\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#제공-환경\",\"children\":\"제공 환경\"}]}],[\"$\",\"div\",\"개인적인-목표\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#개인적인-목표\",\"children\":\"개인적인 목표\"}]}],[\"$\",\"div\",\"팀\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#팀\",\"children\":\"팀\"}]}],[\"$\",\"div\",\"운영\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#운영\",\"children\":\"운영\"}]}],[\"$\",\"div\",\"eda\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#eda\",\"children\":\"EDA\"}]}],[\"$\",\"div\",\"계획\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#계획\",\"children\":\"계획\"}]}],[\"$\",\"div\",\"멘토링\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#멘토링\",\"children\":\"멘토링\"}]}],[\"$\",\"div\",\"진행\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#진행\",\"children\":\"진행\"}]}],[\"$\",\"div\",\"최종-결과\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#최종-결과\",\"children\":\"최종 결과\"}]}],[\"$\",\"div\",\"결과-피드백\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#결과-피드백\",\"children\":\"결과 피드백\"}]}],[\"$\",\"div\",\"wrap-up\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#wrap-up\",\"children\":\"wrap up\"}]}],[\"$\",\"div\",\"회고-retrospective\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#회고-retrospective\",\"children\":\"회고 :retrospective:\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T339f,"])</script><script>self.__next_f.push([1,"\n## 대회\n### 개요\n- 3500개 정도의 이미지를 17개 클래스로 이미지 분류 후 csv 제출\n- f1 macro score 가 평가 기준\n\n### 분석\n- csv 하나 제출인데 score 는 public, private 이 존재\n  - public 은 아마도 제출된 csv 에서 특정 분포에 대한 점수 일 것으로 생각\n    - f1 macro 기 때문에 특정 클래스에 가중을 줄 순 없다 판단\n      - macro 는 클래스별 동일 가중치\n    - 그렇다며 좀 더 augmentation 이 덜 적용되어 train 데이터가 효과적으로 예측할 수 있는 분포일까?\n  - private 은 모델 성능을 평가해야하므로 전체 데이터 혹은 좀더 예측이 어려운 데이터를 포함한 분포일 것으로 생각\n\n### 제공 환경\n- [[vpn]]\n- [[ssh]]\n- AMD Ryzen Threadripper 3970X 32-Core Processor\n- RTX 3090, 24Gb\n\n## 개인적인 목표\n- [X] wandb 사용\n- [X] model 생성 끝까지\n  - 이제 까지 프로젝트에서 모델링쪽 롤을 하지 않았으니 이번엔 모델링을 따라가 보자\n\n## 팀\n### 운영\n- 각자 모델링 -\u003e 앙상블\n  - 각자의 augmentation 데이터로 모델링 -\u003e 앙상블\n  - 개인 산출물\n    - model weight\n    - class 예측에 대한 confusion matrix\n    - f1 macro score\n- 공유는 지속적으로\n\n## EDA\n- 제공된 이미지들의 크기 분포를 확인\n- 훈련 데이터 셋의 이미지들의 클래스 분포를 확인\n  - 14 클래스는 각 100개\n  - 1  클래스가 50개 정도\n  - 2  클래스가 75개 정도\n- 14 개 클래스는 문서, 나머지는 자동차 번호판, 자동차 대시보드등\n- 눈으로 데이터 셋 차이 확인\n  - 데이터 셋 별 특징\n    - train set\n      - 1500 장 정도\n      - 정방향\n    - test dataset\n      - 3000 장 정도, `train datset x 2`\n      - 각종 noise 가 중첩으로 적용되어 있음\n        - 회전, filp 포함\n        - 가우시안 노이즈\n        - 색상 변경\n      - 눈으로 글자식별이 어려운 경우도 꽤 있음\n      - 노이즈가 너무 심한 경우 선도 식별이 어려울 정도\n  - 문서이기 때문에 각종 글자가 많이 포함됨\n\n## 계획\n- ~~ocr~~\n  - 멘토의 조언에 의한\n- data augmentation\n  - test 에만 noise 가 포함되어 있음\n    - train set 에 각종 noise 를 포함켜 양을 늘리는 augmentation 이 **필수적으로** 필요\n    - noise 를 여러 조합으로 랜덤하게 늘림\n  - train set 데이터 양이 더 적음\n  - 데이터 부족한 class 도 있음\n    - over sampling\n      - 추가 증강 의미\n- 팀원이 새로이 baseline 를 기반으로 데이터를 증강으로 시작\n- 모델 교체 + 하이퍼파라메터 튜닝을 해가면서 진행\n- f1 스코어가 높은 아이템을 모델 저장\n\n## 멘토링\n- ocr 까진 필요 없을 것 \n- 모델 선택의 근거는?\n  - 테스트의 영역\n  - 모델군들에서 라이트한 모델을 선택해서 테스트 진행\n    - 각 모델군은 경향성을 보이기 때문\n    - 대충 파라메터 모델 튜닝후 모델 선택\n- loss 는 데이터에 imbalance가 있으니 아래 것들을 고민해 봐라\n  - focal loss\n  - asymmetric loss\n  - weighted cross entropy loss\n\n## 진행\n- augmentation\n  - 훈련 이미지 1,500 개 -\u003e 팀원 마다 80,000 ~ 180,000 개 수준으로 증강\n- model\n  - 후보선정\n    - 멘토링때 언급된 모델\n    - sota\n    - 팀원과 겹치지 않는 것도 앙상블을 위해 의미있을 것\n  - 선택\n    - *efficientnet-b5* 를 선택\n      - 이유 \n        - 팀원과 겹치지 않는 모델\n        - 이미지가 눈으로 식별이 어려워서 resnet34 등이 학습한 `224`x`224` 해상도로는 식별이 안되 분류가 어려울 것으로 예상\n        - 문서의 복잡도를 감안하여 test dataset 에 가까운 이미지 크기로 학습된 모델을 사용하고자 함\n          - 24gb 의 rtx3090 으로는 `b7`, `b6` 에 대한 학습 진행이 불가하여 `b5` 를 차선으로 선택\n          - `batchsize=16` 에서 훈련 가능한 것 확인\n- modeling\n  - 초반에는 팀원이 baseline 코드로 제공한 *convnext* 모델로 데이터만 증강하여 진행\n  - *efficientnet-b5* 선택 이후 성능을 더 올리기 위해 추가 데이터를 증강\n  - 이 과정에서 데이터도 versioning 이 필요하다는 것을 직감\n    - 이미 팀원은 그렇게 하시는 분이 존재\n    - 데이터 증강후 눈으로 샘플 확인, 분포 그래프 화를 위해 [[jupyter-notebook]] 로 진행\n      - jupyter-notebook 특성상 버전관리([[git]])가 어려워 파일명에 버저닝을 붙여 복사 진행\n      - 생성되는 데이터도 버전 디렉토리를 만들어서 생성\n  - 모델링 진행\n    - 1 epoch 기준 40분 정도 소요\n  - loss 는 모델마다 cross entropy 부터 focal loss, assymmetric loss 등이 다양하게 적용되었다\n  - cosine annealing lr 적용\n  - efficientdet 같은 모델은 BiFPN 레이어를 장착하여 학습\n  - stratified k-fold 가 기본이 될줄알았으나 데이터 증강을 통해 양이 늘어났기 때문인지 모두가 random split을 사용\n- 사고\n  - 서버가 갑자기 접속이 되지 않고 메시지 웹을 보니\n    ```\n    The server was shut down due to excessive use of disk or memory. Due to the nature of the system, data recovery is not possible, so please create a new server and use it.\n    ```\n  - 문의 결과 데이터 복구 불가, 상시 백업하라는 피드백\n  - 마지막 날이라 복구가 불가능해서 모델 뽑지 못함\n- 이후\n  - 난 서버가 터져서 작업본이 날아갔기 때문에\n    - 팀원들이 제출한 csv 파일에서 서로 틀리게 예측한 것들을 diff\n    - 이를 시각화하여 어떤 것을 예측못하나 확인\n  - 마지막날이니만큼 팀원들이 각자의 데이터에서 훈련한 각자의 모델 가중치를 가지고 앙상블\n    - 앙상블 할때마다 연금술 마냥 public f1 score가 상승\n    - 팀원들이 생성한 모델, 전부다 앙상블에 참여한 것은 아님\n      - *convnext_tiny*\n      - *densenet121*\n      - *efficientnet_b0*\n      - *mobilenet_v2*\n      - *mobilenet_v3*\n      - *resnet18*\n      - *resnet50*\n      - *shufflenet*\n      - *squeezenet*\n\n## 최종 결과\n- 1등\n  - leader board\n    - public 2등\n    - private 1등\n\n## 결과 피드백\n- 앙상블은 다양성이 중요\n  - 학습 데이터 차이\n  - 특히 모델 차이, 모델마다 잘뽑는 피쳐에 강점이 다르다\n- 타 팀들은 잘못 레이블된 train set을 잡고 시작함\n- TTA 를 적용한 팀들이 좀 있음, 적용하면 좋을 것 같다\n  - denoise 를 할건지 학습한 noise 를 할건지는 선택일까?\n- online augmentation\n  - 적용시 gpu가 놀지 않도록 해야하며 상황에 맞춰서 cpu 자원을 활용해야한다\n- 결과를 보고 다시 피드백하는 과정이 중요, 모델이 무엇을 못하는가\n  - 가설과 실험 수정의 루프\n- wandb\n  - sweep\n    - 하이퍼파라메터 시각화\n  - eda\n    - [ ] 예측결과 시각화가 가능, 찾아볼 것 [[@todo]]\n- 실제 대회에서, 롤 관련해서 나누게되면 나중에 앙상블 재료가 없는 단점이 있다.\n\n## wrap up\n- 대회의 목표\n  - cv 모델 학습부터 평가까지의 프로세스에 대한 경험\n  - 모델의 점진적 개선 프로세스 경험\n- 메인 루트\n  - eda 전 눈으로 데이터 확인 -\u003e 어떤 실험할지 결정\n  - 일단 제출해서 점수가 어디서 시작하는지 체크\n  - epoch, lr, backbone 들 확인하면서 리더보드 감 잡기\n  - validation set 디자인\n    - public score 와 correlation 이 있어야한다\n      - test set 면밀히 검토\n  - eda 시작\n    - imbalance, mislable\n  - 예측 결과를 가지고 무엇을 못하는지 판단해야한단하고 피드백\n  - 앙상블해서 제출좀해본다\n- 제작자의 의도\n  - 현업에서 풀고자 하는 문제 \n  - 대회가 운에의해서 좌우되지 않도록\n    - 적용한 augmentation 을 적용하면 점수가 오르도록\n    - 기본적인 efficientnet, resnet 등으로 테스트\n    - 앙상블시 점수 오르는 것 확인됨\n- 중요한 경험, 생각의 관점\n  - 대회의 목적이 뭘까, 문제가 풀고자하는 것의 이해\n  - ml/dl 로만 풀어 풀어야하는 문제인가?\n  - 대회의 평가 지표가 해당문제를 잘 풀었다고 할 수 있는건가?\n  - 풀고자하는 문제, 평가 지표 지표에 맞춰 eda -\u003e 가설\n  - 가설 노트 정리\n  - 대회 종류 이후\n    - one-page 정리\n    - 내재화, 타팀의 솔루션 포함\n    - 읽었던 논문등 깊게 이해\n- 대회의 의미\n \n## 회고 :retrospective:\n- ssh 개발 환경\n  - [[pycharm]] 은 유료 버전인데도 [[ssh]] 개발환경에서는 [[jupyter-notebook]] 파일에서 [[markdown]] cell 을 표시 못함\n    - [[vscode]] 로 진행\n  - 기본적인 것은 서버에 몇개 바로 설치하고 가는게 빠르다\n    - [[tmux]] \n    - [[vim]]\n    - [[lazygit]]\n  - 데이터 셋도 서버에 있다보니 사실 눈으로 확인만 하면되는데 [[jupyter-notebook]] 을 통해 불편하게 확인해서 시간이 소모\n    - local 에서 서버 디렉토리를 [[mount]] 해버렸어도 되었을 것 같고\n    - [[jupyter-notebook]] 에서 코드로 시각화 하느니\n      - target class 로 분류된 이미지들을 각각의 target class 디렉토리에 나눠서 이미지 뷰어로 확인하는게 나은것 같다\n        - [[scp]] 로 로컬 전송후 확인\n- eda\n  - 내가 어떤 데이터를 분류하려고하는지, 어떤 노이즈가 있는지를 시각적으로 확인\n  - class 분포를 가지고 loss 함수에 대한 선택 인사이트 제공\n    - 따라가기 급급해서 나는 그냥 cross entropy 씀\n    - 다음에는 제대로된 loss 도 적용해보자\n  - 데이터 해상도를 시각화하여 어떤 모델(규모)을 선택할지에 대한 인사이트\n    - [ ] 이건 이론적으로 의미있는지 검증되지 않은 내 생각\n      - [[chatgpt]] 는 긍정적으로 답변\n- 서버 터짐 사고\n  - 서버에 [[git]] 을 설치해서 버전관리를 하고 있었는데 서버가 깨질것을 상상하지 못해 push를 하지 않아 결과를 만들지 못함\n  - remote 에 주기적으로 [[git-push]] 하자\n- 일정 관리\n  - 대회 기간전 학습 마지막주에 서버가 열리는데 이때 학습이 아닌 대회에 집중을 해야한다\n    - gpu 사용과 submission 이 시간에 비례하기 때문\n    - 어차피 수업이 논문 설명이 갑자기 시작되는 구조기 때문에 사전지식이 없다면 시간낭비일 가능성이 높다\n      - 먼저 손으로 해봐야 이론에 대한 니즈가 생길 것\n    - 프로토타입은 먼저 만들어서 구동하고 모델 돌리면서 수업을 듣던가 하자\n- 코드 익숙도\n  - `albumentations` 라는 라이브러리를 썼는데\n    - `mix-up` noise 생성을 지원하지 않아 해당 noise 는 코드로 구현해야 하는 부분에서 시간이 다소 소요되었다\n    - 이 부분은 코드를 적극적으로 쓰면서 늘어갈 것 기대\n- 모델링\n  - 모델 선택에 대한 근거가 부족했는데 멘토링때 질문을 통해 다소 해소되었다\n  - 모델보다는 데이터에 대한 중요성이 우선\n  - 지금 까지의 경험으로는 모델링은 틀이 있어서 이에 대해 익숙해지고 프로토타입 코드를 빠르게 뽑도록 익숙해져야 유리\n- 툴\n  - 강의나 특강에서도 계속적으로 언급되는 wandb 를 이번에 맛보기로 사용\n    - wandb 는 파라메터 튜닝을 지원\n      - 그럼 optuna 는?\n  - 이전 강의 때 배운 [[mlflow]] 가 이쁘진 않지만 이런 실험에서 많은 고민을 덜어줄 수 있을 것 같다고 생각\n  - wandb vs [[mlflow]]\n    - [[mlflow]] 는\n      - 좀 찾아보니 linux foundation 재단에서 운영\n      - [[github]] star 가 가장 많음\n      - ui 이가 상대적으로 구려서 선택에 고민이 있는 사람들이 많은 것 같음\n      - 추가적으로 model registry 를 지원하는 점이 wandb 와 구분되는 특징으로 선택의 기준이 되기도 했었던듯\n        - 그러나 지금은 wandb 도 artifact 저장을 지원\n          - cloud 5gb 무료\n  - 필요한 기능은?\n    - 파라메터 튜닝에 대한 시각화 기록\n    - 모델 가중치 저장\n  - 필요한 기능은 어차피 지원하는 거 같고 하나를 정해서 쓰면 될텐데\n    - 가중치는 여러개 저장하기에 5gb는 힘들 수 있으니 [[mlflow]] 를 환경으로 가져가는게 좋겠음\n- 결과에서\n  - 이번에는 computer-vision 석사 전공자 분이 계서 리드를 받으면서 캐리해주심\n  - 딥러닝이나 머신러닝 모두 데이터처리, loss, 하이퍼파라메터 튜닝, 앙상블등 큰흐름이 같음\n    - 좀 더 능력자를 빨리 만나는게 이 프로세스를 빨리 경험하고 이해하는게 상황을 많이 바꿧을 것이란 생각하니 안타까움이 반\n\n## link\n- [[upstage-ai-lab]]\n- [[fastapi]]\n- [[docker]]\n- [[docker-compose]]\n- [[upstage-ai-lab-project-03]]\n- [[upstage-ai-lab-project-05]]\n- [[wn.private:upstage-ai-lab-project-04]]\n"])</script><script>self.__next_f.push([1,"16:T339f,"])</script><script>self.__next_f.push([1,"\n## 대회\n### 개요\n- 3500개 정도의 이미지를 17개 클래스로 이미지 분류 후 csv 제출\n- f1 macro score 가 평가 기준\n\n### 분석\n- csv 하나 제출인데 score 는 public, private 이 존재\n  - public 은 아마도 제출된 csv 에서 특정 분포에 대한 점수 일 것으로 생각\n    - f1 macro 기 때문에 특정 클래스에 가중을 줄 순 없다 판단\n      - macro 는 클래스별 동일 가중치\n    - 그렇다며 좀 더 augmentation 이 덜 적용되어 train 데이터가 효과적으로 예측할 수 있는 분포일까?\n  - private 은 모델 성능을 평가해야하므로 전체 데이터 혹은 좀더 예측이 어려운 데이터를 포함한 분포일 것으로 생각\n\n### 제공 환경\n- [[vpn]]\n- [[ssh]]\n- AMD Ryzen Threadripper 3970X 32-Core Processor\n- RTX 3090, 24Gb\n\n## 개인적인 목표\n- [X] wandb 사용\n- [X] model 생성 끝까지\n  - 이제 까지 프로젝트에서 모델링쪽 롤을 하지 않았으니 이번엔 모델링을 따라가 보자\n\n## 팀\n### 운영\n- 각자 모델링 -\u003e 앙상블\n  - 각자의 augmentation 데이터로 모델링 -\u003e 앙상블\n  - 개인 산출물\n    - model weight\n    - class 예측에 대한 confusion matrix\n    - f1 macro score\n- 공유는 지속적으로\n\n## EDA\n- 제공된 이미지들의 크기 분포를 확인\n- 훈련 데이터 셋의 이미지들의 클래스 분포를 확인\n  - 14 클래스는 각 100개\n  - 1  클래스가 50개 정도\n  - 2  클래스가 75개 정도\n- 14 개 클래스는 문서, 나머지는 자동차 번호판, 자동차 대시보드등\n- 눈으로 데이터 셋 차이 확인\n  - 데이터 셋 별 특징\n    - train set\n      - 1500 장 정도\n      - 정방향\n    - test dataset\n      - 3000 장 정도, `train datset x 2`\n      - 각종 noise 가 중첩으로 적용되어 있음\n        - 회전, filp 포함\n        - 가우시안 노이즈\n        - 색상 변경\n      - 눈으로 글자식별이 어려운 경우도 꽤 있음\n      - 노이즈가 너무 심한 경우 선도 식별이 어려울 정도\n  - 문서이기 때문에 각종 글자가 많이 포함됨\n\n## 계획\n- ~~ocr~~\n  - 멘토의 조언에 의한\n- data augmentation\n  - test 에만 noise 가 포함되어 있음\n    - train set 에 각종 noise 를 포함켜 양을 늘리는 augmentation 이 **필수적으로** 필요\n    - noise 를 여러 조합으로 랜덤하게 늘림\n  - train set 데이터 양이 더 적음\n  - 데이터 부족한 class 도 있음\n    - over sampling\n      - 추가 증강 의미\n- 팀원이 새로이 baseline 를 기반으로 데이터를 증강으로 시작\n- 모델 교체 + 하이퍼파라메터 튜닝을 해가면서 진행\n- f1 스코어가 높은 아이템을 모델 저장\n\n## 멘토링\n- ocr 까진 필요 없을 것 \n- 모델 선택의 근거는?\n  - 테스트의 영역\n  - 모델군들에서 라이트한 모델을 선택해서 테스트 진행\n    - 각 모델군은 경향성을 보이기 때문\n    - 대충 파라메터 모델 튜닝후 모델 선택\n- loss 는 데이터에 imbalance가 있으니 아래 것들을 고민해 봐라\n  - focal loss\n  - asymmetric loss\n  - weighted cross entropy loss\n\n## 진행\n- augmentation\n  - 훈련 이미지 1,500 개 -\u003e 팀원 마다 80,000 ~ 180,000 개 수준으로 증강\n- model\n  - 후보선정\n    - 멘토링때 언급된 모델\n    - sota\n    - 팀원과 겹치지 않는 것도 앙상블을 위해 의미있을 것\n  - 선택\n    - *efficientnet-b5* 를 선택\n      - 이유 \n        - 팀원과 겹치지 않는 모델\n        - 이미지가 눈으로 식별이 어려워서 resnet34 등이 학습한 `224`x`224` 해상도로는 식별이 안되 분류가 어려울 것으로 예상\n        - 문서의 복잡도를 감안하여 test dataset 에 가까운 이미지 크기로 학습된 모델을 사용하고자 함\n          - 24gb 의 rtx3090 으로는 `b7`, `b6` 에 대한 학습 진행이 불가하여 `b5` 를 차선으로 선택\n          - `batchsize=16` 에서 훈련 가능한 것 확인\n- modeling\n  - 초반에는 팀원이 baseline 코드로 제공한 *convnext* 모델로 데이터만 증강하여 진행\n  - *efficientnet-b5* 선택 이후 성능을 더 올리기 위해 추가 데이터를 증강\n  - 이 과정에서 데이터도 versioning 이 필요하다는 것을 직감\n    - 이미 팀원은 그렇게 하시는 분이 존재\n    - 데이터 증강후 눈으로 샘플 확인, 분포 그래프 화를 위해 [[jupyter-notebook]] 로 진행\n      - jupyter-notebook 특성상 버전관리([[git]])가 어려워 파일명에 버저닝을 붙여 복사 진행\n      - 생성되는 데이터도 버전 디렉토리를 만들어서 생성\n  - 모델링 진행\n    - 1 epoch 기준 40분 정도 소요\n  - loss 는 모델마다 cross entropy 부터 focal loss, assymmetric loss 등이 다양하게 적용되었다\n  - cosine annealing lr 적용\n  - efficientdet 같은 모델은 BiFPN 레이어를 장착하여 학습\n  - stratified k-fold 가 기본이 될줄알았으나 데이터 증강을 통해 양이 늘어났기 때문인지 모두가 random split을 사용\n- 사고\n  - 서버가 갑자기 접속이 되지 않고 메시지 웹을 보니\n    ```\n    The server was shut down due to excessive use of disk or memory. Due to the nature of the system, data recovery is not possible, so please create a new server and use it.\n    ```\n  - 문의 결과 데이터 복구 불가, 상시 백업하라는 피드백\n  - 마지막 날이라 복구가 불가능해서 모델 뽑지 못함\n- 이후\n  - 난 서버가 터져서 작업본이 날아갔기 때문에\n    - 팀원들이 제출한 csv 파일에서 서로 틀리게 예측한 것들을 diff\n    - 이를 시각화하여 어떤 것을 예측못하나 확인\n  - 마지막날이니만큼 팀원들이 각자의 데이터에서 훈련한 각자의 모델 가중치를 가지고 앙상블\n    - 앙상블 할때마다 연금술 마냥 public f1 score가 상승\n    - 팀원들이 생성한 모델, 전부다 앙상블에 참여한 것은 아님\n      - *convnext_tiny*\n      - *densenet121*\n      - *efficientnet_b0*\n      - *mobilenet_v2*\n      - *mobilenet_v3*\n      - *resnet18*\n      - *resnet50*\n      - *shufflenet*\n      - *squeezenet*\n\n## 최종 결과\n- 1등\n  - leader board\n    - public 2등\n    - private 1등\n\n## 결과 피드백\n- 앙상블은 다양성이 중요\n  - 학습 데이터 차이\n  - 특히 모델 차이, 모델마다 잘뽑는 피쳐에 강점이 다르다\n- 타 팀들은 잘못 레이블된 train set을 잡고 시작함\n- TTA 를 적용한 팀들이 좀 있음, 적용하면 좋을 것 같다\n  - denoise 를 할건지 학습한 noise 를 할건지는 선택일까?\n- online augmentation\n  - 적용시 gpu가 놀지 않도록 해야하며 상황에 맞춰서 cpu 자원을 활용해야한다\n- 결과를 보고 다시 피드백하는 과정이 중요, 모델이 무엇을 못하는가\n  - 가설과 실험 수정의 루프\n- wandb\n  - sweep\n    - 하이퍼파라메터 시각화\n  - eda\n    - [ ] 예측결과 시각화가 가능, 찾아볼 것 [[@todo]]\n- 실제 대회에서, 롤 관련해서 나누게되면 나중에 앙상블 재료가 없는 단점이 있다.\n\n## wrap up\n- 대회의 목표\n  - cv 모델 학습부터 평가까지의 프로세스에 대한 경험\n  - 모델의 점진적 개선 프로세스 경험\n- 메인 루트\n  - eda 전 눈으로 데이터 확인 -\u003e 어떤 실험할지 결정\n  - 일단 제출해서 점수가 어디서 시작하는지 체크\n  - epoch, lr, backbone 들 확인하면서 리더보드 감 잡기\n  - validation set 디자인\n    - public score 와 correlation 이 있어야한다\n      - test set 면밀히 검토\n  - eda 시작\n    - imbalance, mislable\n  - 예측 결과를 가지고 무엇을 못하는지 판단해야한단하고 피드백\n  - 앙상블해서 제출좀해본다\n- 제작자의 의도\n  - 현업에서 풀고자 하는 문제 \n  - 대회가 운에의해서 좌우되지 않도록\n    - 적용한 augmentation 을 적용하면 점수가 오르도록\n    - 기본적인 efficientnet, resnet 등으로 테스트\n    - 앙상블시 점수 오르는 것 확인됨\n- 중요한 경험, 생각의 관점\n  - 대회의 목적이 뭘까, 문제가 풀고자하는 것의 이해\n  - ml/dl 로만 풀어 풀어야하는 문제인가?\n  - 대회의 평가 지표가 해당문제를 잘 풀었다고 할 수 있는건가?\n  - 풀고자하는 문제, 평가 지표 지표에 맞춰 eda -\u003e 가설\n  - 가설 노트 정리\n  - 대회 종류 이후\n    - one-page 정리\n    - 내재화, 타팀의 솔루션 포함\n    - 읽었던 논문등 깊게 이해\n- 대회의 의미\n \n## 회고 :retrospective:\n- ssh 개발 환경\n  - [[pycharm]] 은 유료 버전인데도 [[ssh]] 개발환경에서는 [[jupyter-notebook]] 파일에서 [[markdown]] cell 을 표시 못함\n    - [[vscode]] 로 진행\n  - 기본적인 것은 서버에 몇개 바로 설치하고 가는게 빠르다\n    - [[tmux]] \n    - [[vim]]\n    - [[lazygit]]\n  - 데이터 셋도 서버에 있다보니 사실 눈으로 확인만 하면되는데 [[jupyter-notebook]] 을 통해 불편하게 확인해서 시간이 소모\n    - local 에서 서버 디렉토리를 [[mount]] 해버렸어도 되었을 것 같고\n    - [[jupyter-notebook]] 에서 코드로 시각화 하느니\n      - target class 로 분류된 이미지들을 각각의 target class 디렉토리에 나눠서 이미지 뷰어로 확인하는게 나은것 같다\n        - [[scp]] 로 로컬 전송후 확인\n- eda\n  - 내가 어떤 데이터를 분류하려고하는지, 어떤 노이즈가 있는지를 시각적으로 확인\n  - class 분포를 가지고 loss 함수에 대한 선택 인사이트 제공\n    - 따라가기 급급해서 나는 그냥 cross entropy 씀\n    - 다음에는 제대로된 loss 도 적용해보자\n  - 데이터 해상도를 시각화하여 어떤 모델(규모)을 선택할지에 대한 인사이트\n    - [ ] 이건 이론적으로 의미있는지 검증되지 않은 내 생각\n      - [[chatgpt]] 는 긍정적으로 답변\n- 서버 터짐 사고\n  - 서버에 [[git]] 을 설치해서 버전관리를 하고 있었는데 서버가 깨질것을 상상하지 못해 push를 하지 않아 결과를 만들지 못함\n  - remote 에 주기적으로 [[git-push]] 하자\n- 일정 관리\n  - 대회 기간전 학습 마지막주에 서버가 열리는데 이때 학습이 아닌 대회에 집중을 해야한다\n    - gpu 사용과 submission 이 시간에 비례하기 때문\n    - 어차피 수업이 논문 설명이 갑자기 시작되는 구조기 때문에 사전지식이 없다면 시간낭비일 가능성이 높다\n      - 먼저 손으로 해봐야 이론에 대한 니즈가 생길 것\n    - 프로토타입은 먼저 만들어서 구동하고 모델 돌리면서 수업을 듣던가 하자\n- 코드 익숙도\n  - `albumentations` 라는 라이브러리를 썼는데\n    - `mix-up` noise 생성을 지원하지 않아 해당 noise 는 코드로 구현해야 하는 부분에서 시간이 다소 소요되었다\n    - 이 부분은 코드를 적극적으로 쓰면서 늘어갈 것 기대\n- 모델링\n  - 모델 선택에 대한 근거가 부족했는데 멘토링때 질문을 통해 다소 해소되었다\n  - 모델보다는 데이터에 대한 중요성이 우선\n  - 지금 까지의 경험으로는 모델링은 틀이 있어서 이에 대해 익숙해지고 프로토타입 코드를 빠르게 뽑도록 익숙해져야 유리\n- 툴\n  - 강의나 특강에서도 계속적으로 언급되는 wandb 를 이번에 맛보기로 사용\n    - wandb 는 파라메터 튜닝을 지원\n      - 그럼 optuna 는?\n  - 이전 강의 때 배운 [[mlflow]] 가 이쁘진 않지만 이런 실험에서 많은 고민을 덜어줄 수 있을 것 같다고 생각\n  - wandb vs [[mlflow]]\n    - [[mlflow]] 는\n      - 좀 찾아보니 linux foundation 재단에서 운영\n      - [[github]] star 가 가장 많음\n      - ui 이가 상대적으로 구려서 선택에 고민이 있는 사람들이 많은 것 같음\n      - 추가적으로 model registry 를 지원하는 점이 wandb 와 구분되는 특징으로 선택의 기준이 되기도 했었던듯\n        - 그러나 지금은 wandb 도 artifact 저장을 지원\n          - cloud 5gb 무료\n  - 필요한 기능은?\n    - 파라메터 튜닝에 대한 시각화 기록\n    - 모델 가중치 저장\n  - 필요한 기능은 어차피 지원하는 거 같고 하나를 정해서 쓰면 될텐데\n    - 가중치는 여러개 저장하기에 5gb는 힘들 수 있으니 [[mlflow]] 를 환경으로 가져가는게 좋겠음\n- 결과에서\n  - 이번에는 computer-vision 석사 전공자 분이 계서 리드를 받으면서 캐리해주심\n  - 딥러닝이나 머신러닝 모두 데이터처리, loss, 하이퍼파라메터 튜닝, 앙상블등 큰흐름이 같음\n    - 좀 더 능력자를 빨리 만나는게 이 프로세스를 빨리 경험하고 이해하는게 상황을 많이 바꿧을 것이란 생각하니 안타까움이 반\n\n## link\n- [[upstage-ai-lab]]\n- [[fastapi]]\n- [[docker]]\n- [[docker-compose]]\n- [[upstage-ai-lab-project-03]]\n- [[upstage-ai-lab-project-05]]\n- [[wn.private:upstage-ai-lab-project-04]]\n"])</script><script>self.__next_f.push([1,"17:T339f,"])</script><script>self.__next_f.push([1,"\n## 대회\n### 개요\n- 3500개 정도의 이미지를 17개 클래스로 이미지 분류 후 csv 제출\n- f1 macro score 가 평가 기준\n\n### 분석\n- csv 하나 제출인데 score 는 public, private 이 존재\n  - public 은 아마도 제출된 csv 에서 특정 분포에 대한 점수 일 것으로 생각\n    - f1 macro 기 때문에 특정 클래스에 가중을 줄 순 없다 판단\n      - macro 는 클래스별 동일 가중치\n    - 그렇다며 좀 더 augmentation 이 덜 적용되어 train 데이터가 효과적으로 예측할 수 있는 분포일까?\n  - private 은 모델 성능을 평가해야하므로 전체 데이터 혹은 좀더 예측이 어려운 데이터를 포함한 분포일 것으로 생각\n\n### 제공 환경\n- [[vpn]]\n- [[ssh]]\n- AMD Ryzen Threadripper 3970X 32-Core Processor\n- RTX 3090, 24Gb\n\n## 개인적인 목표\n- [X] wandb 사용\n- [X] model 생성 끝까지\n  - 이제 까지 프로젝트에서 모델링쪽 롤을 하지 않았으니 이번엔 모델링을 따라가 보자\n\n## 팀\n### 운영\n- 각자 모델링 -\u003e 앙상블\n  - 각자의 augmentation 데이터로 모델링 -\u003e 앙상블\n  - 개인 산출물\n    - model weight\n    - class 예측에 대한 confusion matrix\n    - f1 macro score\n- 공유는 지속적으로\n\n## EDA\n- 제공된 이미지들의 크기 분포를 확인\n- 훈련 데이터 셋의 이미지들의 클래스 분포를 확인\n  - 14 클래스는 각 100개\n  - 1  클래스가 50개 정도\n  - 2  클래스가 75개 정도\n- 14 개 클래스는 문서, 나머지는 자동차 번호판, 자동차 대시보드등\n- 눈으로 데이터 셋 차이 확인\n  - 데이터 셋 별 특징\n    - train set\n      - 1500 장 정도\n      - 정방향\n    - test dataset\n      - 3000 장 정도, `train datset x 2`\n      - 각종 noise 가 중첩으로 적용되어 있음\n        - 회전, filp 포함\n        - 가우시안 노이즈\n        - 색상 변경\n      - 눈으로 글자식별이 어려운 경우도 꽤 있음\n      - 노이즈가 너무 심한 경우 선도 식별이 어려울 정도\n  - 문서이기 때문에 각종 글자가 많이 포함됨\n\n## 계획\n- ~~ocr~~\n  - 멘토의 조언에 의한\n- data augmentation\n  - test 에만 noise 가 포함되어 있음\n    - train set 에 각종 noise 를 포함켜 양을 늘리는 augmentation 이 **필수적으로** 필요\n    - noise 를 여러 조합으로 랜덤하게 늘림\n  - train set 데이터 양이 더 적음\n  - 데이터 부족한 class 도 있음\n    - over sampling\n      - 추가 증강 의미\n- 팀원이 새로이 baseline 를 기반으로 데이터를 증강으로 시작\n- 모델 교체 + 하이퍼파라메터 튜닝을 해가면서 진행\n- f1 스코어가 높은 아이템을 모델 저장\n\n## 멘토링\n- ocr 까진 필요 없을 것 \n- 모델 선택의 근거는?\n  - 테스트의 영역\n  - 모델군들에서 라이트한 모델을 선택해서 테스트 진행\n    - 각 모델군은 경향성을 보이기 때문\n    - 대충 파라메터 모델 튜닝후 모델 선택\n- loss 는 데이터에 imbalance가 있으니 아래 것들을 고민해 봐라\n  - focal loss\n  - asymmetric loss\n  - weighted cross entropy loss\n\n## 진행\n- augmentation\n  - 훈련 이미지 1,500 개 -\u003e 팀원 마다 80,000 ~ 180,000 개 수준으로 증강\n- model\n  - 후보선정\n    - 멘토링때 언급된 모델\n    - sota\n    - 팀원과 겹치지 않는 것도 앙상블을 위해 의미있을 것\n  - 선택\n    - *efficientnet-b5* 를 선택\n      - 이유 \n        - 팀원과 겹치지 않는 모델\n        - 이미지가 눈으로 식별이 어려워서 resnet34 등이 학습한 `224`x`224` 해상도로는 식별이 안되 분류가 어려울 것으로 예상\n        - 문서의 복잡도를 감안하여 test dataset 에 가까운 이미지 크기로 학습된 모델을 사용하고자 함\n          - 24gb 의 rtx3090 으로는 `b7`, `b6` 에 대한 학습 진행이 불가하여 `b5` 를 차선으로 선택\n          - `batchsize=16` 에서 훈련 가능한 것 확인\n- modeling\n  - 초반에는 팀원이 baseline 코드로 제공한 *convnext* 모델로 데이터만 증강하여 진행\n  - *efficientnet-b5* 선택 이후 성능을 더 올리기 위해 추가 데이터를 증강\n  - 이 과정에서 데이터도 versioning 이 필요하다는 것을 직감\n    - 이미 팀원은 그렇게 하시는 분이 존재\n    - 데이터 증강후 눈으로 샘플 확인, 분포 그래프 화를 위해 [[jupyter-notebook]] 로 진행\n      - jupyter-notebook 특성상 버전관리([[git]])가 어려워 파일명에 버저닝을 붙여 복사 진행\n      - 생성되는 데이터도 버전 디렉토리를 만들어서 생성\n  - 모델링 진행\n    - 1 epoch 기준 40분 정도 소요\n  - loss 는 모델마다 cross entropy 부터 focal loss, assymmetric loss 등이 다양하게 적용되었다\n  - cosine annealing lr 적용\n  - efficientdet 같은 모델은 BiFPN 레이어를 장착하여 학습\n  - stratified k-fold 가 기본이 될줄알았으나 데이터 증강을 통해 양이 늘어났기 때문인지 모두가 random split을 사용\n- 사고\n  - 서버가 갑자기 접속이 되지 않고 메시지 웹을 보니\n    ```\n    The server was shut down due to excessive use of disk or memory. Due to the nature of the system, data recovery is not possible, so please create a new server and use it.\n    ```\n  - 문의 결과 데이터 복구 불가, 상시 백업하라는 피드백\n  - 마지막 날이라 복구가 불가능해서 모델 뽑지 못함\n- 이후\n  - 난 서버가 터져서 작업본이 날아갔기 때문에\n    - 팀원들이 제출한 csv 파일에서 서로 틀리게 예측한 것들을 diff\n    - 이를 시각화하여 어떤 것을 예측못하나 확인\n  - 마지막날이니만큼 팀원들이 각자의 데이터에서 훈련한 각자의 모델 가중치를 가지고 앙상블\n    - 앙상블 할때마다 연금술 마냥 public f1 score가 상승\n    - 팀원들이 생성한 모델, 전부다 앙상블에 참여한 것은 아님\n      - *convnext_tiny*\n      - *densenet121*\n      - *efficientnet_b0*\n      - *mobilenet_v2*\n      - *mobilenet_v3*\n      - *resnet18*\n      - *resnet50*\n      - *shufflenet*\n      - *squeezenet*\n\n## 최종 결과\n- 1등\n  - leader board\n    - public 2등\n    - private 1등\n\n## 결과 피드백\n- 앙상블은 다양성이 중요\n  - 학습 데이터 차이\n  - 특히 모델 차이, 모델마다 잘뽑는 피쳐에 강점이 다르다\n- 타 팀들은 잘못 레이블된 train set을 잡고 시작함\n- TTA 를 적용한 팀들이 좀 있음, 적용하면 좋을 것 같다\n  - denoise 를 할건지 학습한 noise 를 할건지는 선택일까?\n- online augmentation\n  - 적용시 gpu가 놀지 않도록 해야하며 상황에 맞춰서 cpu 자원을 활용해야한다\n- 결과를 보고 다시 피드백하는 과정이 중요, 모델이 무엇을 못하는가\n  - 가설과 실험 수정의 루프\n- wandb\n  - sweep\n    - 하이퍼파라메터 시각화\n  - eda\n    - [ ] 예측결과 시각화가 가능, 찾아볼 것 [[@todo]]\n- 실제 대회에서, 롤 관련해서 나누게되면 나중에 앙상블 재료가 없는 단점이 있다.\n\n## wrap up\n- 대회의 목표\n  - cv 모델 학습부터 평가까지의 프로세스에 대한 경험\n  - 모델의 점진적 개선 프로세스 경험\n- 메인 루트\n  - eda 전 눈으로 데이터 확인 -\u003e 어떤 실험할지 결정\n  - 일단 제출해서 점수가 어디서 시작하는지 체크\n  - epoch, lr, backbone 들 확인하면서 리더보드 감 잡기\n  - validation set 디자인\n    - public score 와 correlation 이 있어야한다\n      - test set 면밀히 검토\n  - eda 시작\n    - imbalance, mislable\n  - 예측 결과를 가지고 무엇을 못하는지 판단해야한단하고 피드백\n  - 앙상블해서 제출좀해본다\n- 제작자의 의도\n  - 현업에서 풀고자 하는 문제 \n  - 대회가 운에의해서 좌우되지 않도록\n    - 적용한 augmentation 을 적용하면 점수가 오르도록\n    - 기본적인 efficientnet, resnet 등으로 테스트\n    - 앙상블시 점수 오르는 것 확인됨\n- 중요한 경험, 생각의 관점\n  - 대회의 목적이 뭘까, 문제가 풀고자하는 것의 이해\n  - ml/dl 로만 풀어 풀어야하는 문제인가?\n  - 대회의 평가 지표가 해당문제를 잘 풀었다고 할 수 있는건가?\n  - 풀고자하는 문제, 평가 지표 지표에 맞춰 eda -\u003e 가설\n  - 가설 노트 정리\n  - 대회 종류 이후\n    - one-page 정리\n    - 내재화, 타팀의 솔루션 포함\n    - 읽었던 논문등 깊게 이해\n- 대회의 의미\n \n## 회고 :retrospective:\n- ssh 개발 환경\n  - [[pycharm]] 은 유료 버전인데도 [[ssh]] 개발환경에서는 [[jupyter-notebook]] 파일에서 [[markdown]] cell 을 표시 못함\n    - [[vscode]] 로 진행\n  - 기본적인 것은 서버에 몇개 바로 설치하고 가는게 빠르다\n    - [[tmux]] \n    - [[vim]]\n    - [[lazygit]]\n  - 데이터 셋도 서버에 있다보니 사실 눈으로 확인만 하면되는데 [[jupyter-notebook]] 을 통해 불편하게 확인해서 시간이 소모\n    - local 에서 서버 디렉토리를 [[mount]] 해버렸어도 되었을 것 같고\n    - [[jupyter-notebook]] 에서 코드로 시각화 하느니\n      - target class 로 분류된 이미지들을 각각의 target class 디렉토리에 나눠서 이미지 뷰어로 확인하는게 나은것 같다\n        - [[scp]] 로 로컬 전송후 확인\n- eda\n  - 내가 어떤 데이터를 분류하려고하는지, 어떤 노이즈가 있는지를 시각적으로 확인\n  - class 분포를 가지고 loss 함수에 대한 선택 인사이트 제공\n    - 따라가기 급급해서 나는 그냥 cross entropy 씀\n    - 다음에는 제대로된 loss 도 적용해보자\n  - 데이터 해상도를 시각화하여 어떤 모델(규모)을 선택할지에 대한 인사이트\n    - [ ] 이건 이론적으로 의미있는지 검증되지 않은 내 생각\n      - [[chatgpt]] 는 긍정적으로 답변\n- 서버 터짐 사고\n  - 서버에 [[git]] 을 설치해서 버전관리를 하고 있었는데 서버가 깨질것을 상상하지 못해 push를 하지 않아 결과를 만들지 못함\n  - remote 에 주기적으로 [[git-push]] 하자\n- 일정 관리\n  - 대회 기간전 학습 마지막주에 서버가 열리는데 이때 학습이 아닌 대회에 집중을 해야한다\n    - gpu 사용과 submission 이 시간에 비례하기 때문\n    - 어차피 수업이 논문 설명이 갑자기 시작되는 구조기 때문에 사전지식이 없다면 시간낭비일 가능성이 높다\n      - 먼저 손으로 해봐야 이론에 대한 니즈가 생길 것\n    - 프로토타입은 먼저 만들어서 구동하고 모델 돌리면서 수업을 듣던가 하자\n- 코드 익숙도\n  - `albumentations` 라는 라이브러리를 썼는데\n    - `mix-up` noise 생성을 지원하지 않아 해당 noise 는 코드로 구현해야 하는 부분에서 시간이 다소 소요되었다\n    - 이 부분은 코드를 적극적으로 쓰면서 늘어갈 것 기대\n- 모델링\n  - 모델 선택에 대한 근거가 부족했는데 멘토링때 질문을 통해 다소 해소되었다\n  - 모델보다는 데이터에 대한 중요성이 우선\n  - 지금 까지의 경험으로는 모델링은 틀이 있어서 이에 대해 익숙해지고 프로토타입 코드를 빠르게 뽑도록 익숙해져야 유리\n- 툴\n  - 강의나 특강에서도 계속적으로 언급되는 wandb 를 이번에 맛보기로 사용\n    - wandb 는 파라메터 튜닝을 지원\n      - 그럼 optuna 는?\n  - 이전 강의 때 배운 [[mlflow]] 가 이쁘진 않지만 이런 실험에서 많은 고민을 덜어줄 수 있을 것 같다고 생각\n  - wandb vs [[mlflow]]\n    - [[mlflow]] 는\n      - 좀 찾아보니 linux foundation 재단에서 운영\n      - [[github]] star 가 가장 많음\n      - ui 이가 상대적으로 구려서 선택에 고민이 있는 사람들이 많은 것 같음\n      - 추가적으로 model registry 를 지원하는 점이 wandb 와 구분되는 특징으로 선택의 기준이 되기도 했었던듯\n        - 그러나 지금은 wandb 도 artifact 저장을 지원\n          - cloud 5gb 무료\n  - 필요한 기능은?\n    - 파라메터 튜닝에 대한 시각화 기록\n    - 모델 가중치 저장\n  - 필요한 기능은 어차피 지원하는 거 같고 하나를 정해서 쓰면 될텐데\n    - 가중치는 여러개 저장하기에 5gb는 힘들 수 있으니 [[mlflow]] 를 환경으로 가져가는게 좋겠음\n- 결과에서\n  - 이번에는 computer-vision 석사 전공자 분이 계서 리드를 받으면서 캐리해주심\n  - 딥러닝이나 머신러닝 모두 데이터처리, loss, 하이퍼파라메터 튜닝, 앙상블등 큰흐름이 같음\n    - 좀 더 능력자를 빨리 만나는게 이 프로세스를 빨리 경험하고 이해하는게 상황을 많이 바꿧을 것이란 생각하니 안타까움이 반\n\n## link\n- [[upstage-ai-lab]]\n- [[fastapi]]\n- [[docker]]\n- [[docker-compose]]\n- [[upstage-ai-lab-project-03]]\n- [[upstage-ai-lab-project-05]]\n- [[wn.private:upstage-ai-lab-project-04]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# Image Classification 대회\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# Image Classification 대회\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/upstage-ai-lab-project-04\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# Image Classification 대회\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
