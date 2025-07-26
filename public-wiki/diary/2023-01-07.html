@@ -1,0 +1,409 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-12f772d3c5c658cf.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-396a4c1cd7d4b41c.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-50964ab9a5cac455.js" async=""></script><script src="/_next/static/chunks/app/error-0cbc5f9ddb24b3eb.js" async=""></script><script src="/_next/static/chunks/app/not-found-c35a854c58adf9fe.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title>About Networking</title><meta name="description" content="  - 동일 서브넷 내(L2)에서는 원 홉에 도달이 가능하다
+  - 이걸 넘어서라면 L3 라우터가 필요하게된다.
+    - `10.48.0.128/26 via 10.0.0.12 dev eth0`
+    - 일반적인 라우팅 프로토콜은 BGP
+  - overlay network &lt;-&gt; underlay network
+    - 둘은 상대적인 개념이다, 언더레이는 일반 네트워크
+    - 오버레이 네트워크는 언더레이 네트워크 위에서 이루어지진다
+    - 오버레이 네트워크 패킷 안에 언더레이 네트워크 패킷이 존재하는 개념
+    - 오버레이 네트워크의 워크로는 언더레이 네트워크와의 통신을 위해 NAT, LB 등을 필요로한다
+    - 다소 오버헤드가 존재한다
+  - NAT(Network Addreess Translation)
+    - SNAT(Source ..)
+      - 소스 어드레스를 보더에 있는 라우터의 자체 IP로 교체
+      - 돌아올때 라우터가 받아서 매핑 시켜놓은 원래의 프라이빗 IP 로 교체
+    - DNAT(Destination...)
+  - MTU(Maximum Transmission Unit)
+    - 네트워크 링크간 한방에 보낼 수 있는 패킷 사이즈
+    - 일반 적으로 같게 설정된다(1500 bytes)
+    - TCP는 MTU를 학습한다
+    - TCP는 MTU 보다 큰 패킷을 쪼갠다
+    - 프래그먼트를 쪼개는 작업은 오버헤드가 크다
+    - MTU가 크면 CPU 사용율은 적어진다
+    
+About Kubernetes Networking    
+  - Goal
+    - [ ] The fundamental network behaviors the Kubernetes network model defines.
+    - [ ] How Kubernetes works with a variety of different network implementations.
+    - [ ] What Kubernetes Services are.
+    - [ ] How DNS works within Kubernetes.
+    - [ ] What “NAT outgoing” is and when you would want to use it.
+    - [ ] What “dual stack” is.
+  - 쿠버네티스 파드간 통신에는 NAT이 존재하지 않음
+  - isolation 은 policy 로 구현하여 네트워크의 단순성을 가져간다 -&gt; **flat network** isolation 이 없다는 의미
+  - 쿠버네티스는 거의안쓰이긴하지만 host port -&gt; pod port 매핑 또는 host ip 를 이용한 네트워크를 지원
+  - kubenet 이라는 first party 가 있지만 안쓰고 cni 를 사용
+  - cni 의 두가지 책임
+    - ipam 을 통해 pod 에 ip 할당
+    - 파드간 통신
+  - Kubernetes DNS &lt;-&gt; virtual ip(cluster ip?)
+  - kube-proxy 가 vip 를 로드밸런싱
+  - nodeport 서비스는 every node
+  - [ ] Note that when using Calico in on-prem deployments you can also advertise service IP addresses, allowing services to be conveniently accessed without going via a node port or load balancer.
+  - Kubernetes dns 는 일반적으로 coreDNS를 통해서비스로 구현(일반 파드)
+  - 일반적으로 오버레이 네트워크의 클러스터간 통신에서 SNAT 이 node 에서 이루어진다 pod -&gt; node
+  
+  
+Determine best networking option
+  - flat netowrk 이므로 network segmentation 은 policy 를 통해 구현된다
+  - cni plugins
+    - network
+      - adding/deleting from pod network
+      - creating/deleting pod&#x27;s network interface
+      - connecting/disconnecting
+    - ipam
+      - allocating/releasing ip addresses for pods when they are created or deleted
+      - 플러그인혹은 cloud 벤더에 따라 하나의 노드에 여러 cidr 가 할당될 수 있음
+  - kubenet 
+    - 기본이지만 node 간 통신을 구현 안해놓았다
+  - overlay network
+    - underlay network 위에 올라가서 패킷을 인캡슐레이션
+    - 인캡슐레이션 프로토콜로는 vxlan, ip in ip 가 유명하다
+    - underlay network 에 대한 변경 없이 사용이 가능한게 장점
+    - 단점
+      - pod ip 가 클러스터 밖에서 라우팅 되지 않음
+      - 오버헤드가 발생, 패킷 감싸고 풀고 해야해서
+    - 싱글 서브넷에서는 인캡슐레이션이 되지 않아 퍼포먼스 영향이 없다고 함
+    - 서브넷 마다 다른 인캡슐레이션을 선택할 수 있음
+  - IP routablility outside of cluster, cni 구현에 따른
+    - not routable
+      - inside -&gt; outside
+        - pod ip -&gt; host ip SNAT이 호스트에 일어남
+      - outside -&gt; inside
+        - kubernetes service or ingress 를 통해서만 접근되며 pod ip 로는 접근이 불가
+    - routable
+      - SNAT 이 불필요하며 service, ingress 없이 direct 로 pod 에 접근 가능
+      - 단점은 broader network 에서 ip가 unique
+  - [X] overlay network 를 사용하는 경우 일반적으로 외부라우팅이 불가능
+  - [ ] overlay network 를 사용하지 않는 경우 + 외부라우팅이 가능 한 경우
+  - BGP Border Gateway Protocol
+  - Host local ipam
+    - 호스트마다 ipam (a/24) 를 가지고 있어서 이해하기 편하다
+    - ip 할당이 비효율적이다 (노드별 a/24 이기 때문)
+  - vxlan 은 BGP를 이용하지 않는다, ipinip보다 패킷 사이즈가 조금 더 크다, ipip가 지원되지 않느 곳에서 사용된다
+  - ipinip ipv4 만지원
+  - encapsulation mode 는 cross subnet 이 퍼포먼스상 좋다
+
+
+- host 가 l3 라우팅 (veth)
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="About Networking"/><meta property="og:description" content="  - 동일 서브넷 내(L2)에서는 원 홉에 도달이 가능하다
+  - 이걸 넘어서라면 L3 라우터가 필요하게된다.
+    - `10.48.0.128/26 via 10.0.0.12 dev eth0`
+    - 일반적인 라우팅 프로토콜은 BGP
+  - overlay network &lt;-&gt; underlay network
+    - 둘은 상대적인 개념이다, 언더레이는 일반 네트워크
+    - 오버레이 네트워크는 언더레이 네트워크 위에서 이루어지진다
+    - 오버레이 네트워크 패킷 안에 언더레이 네트워크 패킷이 존재하는 개념
+    - 오버레이 네트워크의 워크로는 언더레이 네트워크와의 통신을 위해 NAT, LB 등을 필요로한다
+    - 다소 오버헤드가 존재한다
+  - NAT(Network Addreess Translation)
+    - SNAT(Source ..)
+      - 소스 어드레스를 보더에 있는 라우터의 자체 IP로 교체
+      - 돌아올때 라우터가 받아서 매핑 시켜놓은 원래의 프라이빗 IP 로 교체
+    - DNAT(Destination...)
+  - MTU(Maximum Transmission Unit)
+    - 네트워크 링크간 한방에 보낼 수 있는 패킷 사이즈
+    - 일반 적으로 같게 설정된다(1500 bytes)
+    - TCP는 MTU를 학습한다
+    - TCP는 MTU 보다 큰 패킷을 쪼갠다
+    - 프래그먼트를 쪼개는 작업은 오버헤드가 크다
+    - MTU가 크면 CPU 사용율은 적어진다
+    
+About Kubernetes Networking    
+  - Goal
+    - [ ] The fundamental network behaviors the Kubernetes network model defines.
+    - [ ] How Kubernetes works with a variety of different network implementations.
+    - [ ] What Kubernetes Services are.
+    - [ ] How DNS works within Kubernetes.
+    - [ ] What “NAT outgoing” is and when you would want to use it.
+    - [ ] What “dual stack” is.
+  - 쿠버네티스 파드간 통신에는 NAT이 존재하지 않음
+  - isolation 은 policy 로 구현하여 네트워크의 단순성을 가져간다 -&gt; **flat network** isolation 이 없다는 의미
+  - 쿠버네티스는 거의안쓰이긴하지만 host port -&gt; pod port 매핑 또는 host ip 를 이용한 네트워크를 지원
+  - kubenet 이라는 first party 가 있지만 안쓰고 cni 를 사용
+  - cni 의 두가지 책임
+    - ipam 을 통해 pod 에 ip 할당
+    - 파드간 통신
+  - Kubernetes DNS &lt;-&gt; virtual ip(cluster ip?)
+  - kube-proxy 가 vip 를 로드밸런싱
+  - nodeport 서비스는 every node
+  - [ ] Note that when using Calico in on-prem deployments you can also advertise service IP addresses, allowing services to be conveniently accessed without going via a node port or load balancer.
+  - Kubernetes dns 는 일반적으로 coreDNS를 통해서비스로 구현(일반 파드)
+  - 일반적으로 오버레이 네트워크의 클러스터간 통신에서 SNAT 이 node 에서 이루어진다 pod -&gt; node
+  
+  
+Determine best networking option
+  - flat netowrk 이므로 network segmentation 은 policy 를 통해 구현된다
+  - cni plugins
+    - network
+      - adding/deleting from pod network
+      - creating/deleting pod&#x27;s network interface
+      - connecting/disconnecting
+    - ipam
+      - allocating/releasing ip addresses for pods when they are created or deleted
+      - 플러그인혹은 cloud 벤더에 따라 하나의 노드에 여러 cidr 가 할당될 수 있음
+  - kubenet 
+    - 기본이지만 node 간 통신을 구현 안해놓았다
+  - overlay network
+    - underlay network 위에 올라가서 패킷을 인캡슐레이션
+    - 인캡슐레이션 프로토콜로는 vxlan, ip in ip 가 유명하다
+    - underlay network 에 대한 변경 없이 사용이 가능한게 장점
+    - 단점
+      - pod ip 가 클러스터 밖에서 라우팅 되지 않음
+      - 오버헤드가 발생, 패킷 감싸고 풀고 해야해서
+    - 싱글 서브넷에서는 인캡슐레이션이 되지 않아 퍼포먼스 영향이 없다고 함
+    - 서브넷 마다 다른 인캡슐레이션을 선택할 수 있음
+  - IP routablility outside of cluster, cni 구현에 따른
+    - not routable
+      - inside -&gt; outside
+        - pod ip -&gt; host ip SNAT이 호스트에 일어남
+      - outside -&gt; inside
+        - kubernetes service or ingress 를 통해서만 접근되며 pod ip 로는 접근이 불가
+    - routable
+      - SNAT 이 불필요하며 service, ingress 없이 direct 로 pod 에 접근 가능
+      - 단점은 broader network 에서 ip가 unique
+  - [X] overlay network 를 사용하는 경우 일반적으로 외부라우팅이 불가능
+  - [ ] overlay network 를 사용하지 않는 경우 + 외부라우팅이 가능 한 경우
+  - BGP Border Gateway Protocol
+  - Host local ipam
+    - 호스트마다 ipam (a/24) 를 가지고 있어서 이해하기 편하다
+    - ip 할당이 비효율적이다 (노드별 a/24 이기 때문)
+  - vxlan 은 BGP를 이용하지 않는다, ipinip보다 패킷 사이즈가 조금 더 크다, ipip가 지원되지 않느 곳에서 사용된다
+  - ipinip ipv4 만지원
+  - encapsulation mode 는 cross subnet 이 퍼포먼스상 좋다
+
+
+- host 가 l3 라우팅 (veth)
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/diary/2023-01-07"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="About Networking"/><meta name="twitter:description" content="  - 동일 서브넷 내(L2)에서는 원 홉에 도달이 가능하다
+  - 이걸 넘어서라면 L3 라우터가 필요하게된다.
+    - `10.48.0.128/26 via 10.0.0.12 dev eth0`
+    - 일반적인 라우팅 프로토콜은 BGP
+  - overlay network &lt;-&gt; underlay network
+    - 둘은 상대적인 개념이다, 언더레이는 일반 네트워크
+    - 오버레이 네트워크는 언더레이 네트워크 위에서 이루어지진다
+    - 오버레이 네트워크 패킷 안에 언더레이 네트워크 패킷이 존재하는 개념
+    - 오버레이 네트워크의 워크로는 언더레이 네트워크와의 통신을 위해 NAT, LB 등을 필요로한다
+    - 다소 오버헤드가 존재한다
+  - NAT(Network Addreess Translation)
+    - SNAT(Source ..)
+      - 소스 어드레스를 보더에 있는 라우터의 자체 IP로 교체
+      - 돌아올때 라우터가 받아서 매핑 시켜놓은 원래의 프라이빗 IP 로 교체
+    - DNAT(Destination...)
+  - MTU(Maximum Transmission Unit)
+    - 네트워크 링크간 한방에 보낼 수 있는 패킷 사이즈
+    - 일반 적으로 같게 설정된다(1500 bytes)
+    - TCP는 MTU를 학습한다
+    - TCP는 MTU 보다 큰 패킷을 쪼갠다
+    - 프래그먼트를 쪼개는 작업은 오버헤드가 크다
+    - MTU가 크면 CPU 사용율은 적어진다
+    
+About Kubernetes Networking    
+  - Goal
+    - [ ] The fundamental network behaviors the Kubernetes network model defines.
+    - [ ] How Kubernetes works with a variety of different network implementations.
+    - [ ] What Kubernetes Services are.
+    - [ ] How DNS works within Kubernetes.
+    - [ ] What “NAT outgoing” is and when you would want to use it.
+    - [ ] What “dual stack” is.
+  - 쿠버네티스 파드간 통신에는 NAT이 존재하지 않음
+  - isolation 은 policy 로 구현하여 네트워크의 단순성을 가져간다 -&gt; **flat network** isolation 이 없다는 의미
+  - 쿠버네티스는 거의안쓰이긴하지만 host port -&gt; pod port 매핑 또는 host ip 를 이용한 네트워크를 지원
+  - kubenet 이라는 first party 가 있지만 안쓰고 cni 를 사용
+  - cni 의 두가지 책임
+    - ipam 을 통해 pod 에 ip 할당
+    - 파드간 통신
+  - Kubernetes DNS &lt;-&gt; virtual ip(cluster ip?)
+  - kube-proxy 가 vip 를 로드밸런싱
+  - nodeport 서비스는 every node
+  - [ ] Note that when using Calico in on-prem deployments you can also advertise service IP addresses, allowing services to be conveniently accessed without going via a node port or load balancer.
+  - Kubernetes dns 는 일반적으로 coreDNS를 통해서비스로 구현(일반 파드)
+  - 일반적으로 오버레이 네트워크의 클러스터간 통신에서 SNAT 이 node 에서 이루어진다 pod -&gt; node
+  
+  
+Determine best networking option
+  - flat netowrk 이므로 network segmentation 은 policy 를 통해 구현된다
+  - cni plugins
+    - network
+      - adding/deleting from pod network
+      - creating/deleting pod&#x27;s network interface
+      - connecting/disconnecting
+    - ipam
+      - allocating/releasing ip addresses for pods when they are created or deleted
+      - 플러그인혹은 cloud 벤더에 따라 하나의 노드에 여러 cidr 가 할당될 수 있음
+  - kubenet 
+    - 기본이지만 node 간 통신을 구현 안해놓았다
+  - overlay network
+    - underlay network 위에 올라가서 패킷을 인캡슐레이션
+    - 인캡슐레이션 프로토콜로는 vxlan, ip in ip 가 유명하다
+    - underlay network 에 대한 변경 없이 사용이 가능한게 장점
+    - 단점
+      - pod ip 가 클러스터 밖에서 라우팅 되지 않음
+      - 오버헤드가 발생, 패킷 감싸고 풀고 해야해서
+    - 싱글 서브넷에서는 인캡슐레이션이 되지 않아 퍼포먼스 영향이 없다고 함
+    - 서브넷 마다 다른 인캡슐레이션을 선택할 수 있음
+  - IP routablility outside of cluster, cni 구현에 따른
+    - not routable
+      - inside -&gt; outside
+        - pod ip -&gt; host ip SNAT이 호스트에 일어남
+      - outside -&gt; inside
+        - kubernetes service or ingress 를 통해서만 접근되며 pod ip 로는 접근이 불가
+    - routable
+      - SNAT 이 불필요하며 service, ingress 없이 direct 로 pod 에 접근 가능
+      - 단점은 broader network 에서 ip가 unique
+  - [X] overlay network 를 사용하는 경우 일반적으로 외부라우팅이 불가능
+  - [ ] overlay network 를 사용하지 않는 경우 + 외부라우팅이 가능 한 경우
+  - BGP Border Gateway Protocol
+  - Host local ipam
+    - 호스트마다 ipam (a/24) 를 가지고 있어서 이해하기 편하다
+    - ip 할당이 비효율적이다 (노드별 a/24 이기 때문)
+  - vxlan 은 BGP를 이용하지 않는다, ipinip보다 패킷 사이즈가 조금 더 크다, ipip가 지원되지 않느 곳에서 사용된다
+  - ipinip ipv4 만지원
+  - encapsulation mode 는 cross subnet 이 퍼포먼스상 좋다
+
+
+- host 가 l3 라우팅 (veth)
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/68668df
+" class="bg-white text-black">68668df</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki/diary">diary<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/diary/2023-01-07.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/diary/2023-01-07.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/diary/2023-01-07.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/diary/2023-01-07"><span class="underline">diary/2023-01-07</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/index"><span class="underline">diary/index</span><sup>480</sup></a></span></div><hr/><div class="toc"></div><div class="flex flex-wrap gap-2 pb-2 m-0 leading-tight ml-auto"><a class="text-blue-600 underline" href="/public-wiki/diary/2023-01-05">이전(<!-- -->2023-01-05<!-- -->)</a><a class="text-blue-600 underline" href="/public-wiki/diary/2023-01-08">다음(<!-- -->2023-01-08<!-- -->)</a></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><p>About Networking</p>
+<ul>
+<li>동일 서브넷 내(L2)에서는 원 홉에 도달이 가능하다</li>
+<li>이걸 넘어서라면 L3 라우터가 필요하게된다.<ul>
+<li><code class="span">10.48.0.128/26 via 10.0.0.12 dev eth0</code></li>
+<li>일반적인 라우팅 프로토콜은 BGP</li>
+</ul>
+</li>
+<li>overlay network &lt;-&gt; underlay network<ul>
+<li>둘은 상대적인 개념이다, 언더레이는 일반 네트워크</li>
+<li>오버레이 네트워크는 언더레이 네트워크 위에서 이루어지진다</li>
+<li>오버레이 네트워크 패킷 안에 언더레이 네트워크 패킷이 존재하는 개념</li>
+<li>오버레이 네트워크의 워크로는 언더레이 네트워크와의 통신을 위해 NAT, LB 등을 필요로한다</li>
+<li>다소 오버헤드가 존재한다</li>
+</ul>
+</li>
+<li>NAT(Network Addreess Translation)<ul>
+<li>SNAT(Source ..)<ul>
+<li>소스 어드레스를 보더에 있는 라우터의 자체 IP로 교체</li>
+<li>돌아올때 라우터가 받아서 매핑 시켜놓은 원래의 프라이빗 IP 로 교체</li>
+</ul>
+</li>
+<li>DNAT(Destination...)</li>
+</ul>
+</li>
+<li>MTU(Maximum Transmission Unit)<ul>
+<li>네트워크 링크간 한방에 보낼 수 있는 패킷 사이즈</li>
+<li>일반 적으로 같게 설정된다(1500 bytes)</li>
+<li>TCP는 MTU를 학습한다</li>
+<li>TCP는 MTU 보다 큰 패킷을 쪼갠다</li>
+<li>프래그먼트를 쪼개는 작업은 오버헤드가 크다</li>
+<li>MTU가 크면 CPU 사용율은 적어진다</li>
+</ul>
+</li>
+</ul>
+<p>About Kubernetes Networking    </p>
+<ul>
+<li>Goal<ul>
+<li><input disabled="" type="checkbox"> The fundamental network behaviors the Kubernetes network model defines.</li>
+<li><input disabled="" type="checkbox"> How Kubernetes works with a variety of different network implementations.</li>
+<li><input disabled="" type="checkbox"> What Kubernetes Services are.</li>
+<li><input disabled="" type="checkbox"> How DNS works within Kubernetes.</li>
+<li><input disabled="" type="checkbox"> What “NAT outgoing” is and when you would want to use it.</li>
+<li><input disabled="" type="checkbox"> What “dual stack” is.</li>
+</ul>
+</li>
+<li>쿠버네티스 파드간 통신에는 NAT이 존재하지 않음</li>
+<li>isolation 은 policy 로 구현하여 네트워크의 단순성을 가져간다 -&gt; <strong>flat network</strong> isolation 이 없다는 의미</li>
+<li>쿠버네티스는 거의안쓰이긴하지만 host port -&gt; pod port 매핑 또는 host ip 를 이용한 네트워크를 지원</li>
+<li>kubenet 이라는 first party 가 있지만 안쓰고 cni 를 사용</li>
+<li>cni 의 두가지 책임<ul>
+<li>ipam 을 통해 pod 에 ip 할당</li>
+<li>파드간 통신</li>
+</ul>
+</li>
+<li>Kubernetes DNS &lt;-&gt; virtual ip(cluster ip?)</li>
+<li>kube-proxy 가 vip 를 로드밸런싱</li>
+<li>nodeport 서비스는 every node</li>
+<li><input disabled="" type="checkbox"> Note that when using Calico in on-prem deployments you can also advertise service IP addresses, allowing services to be conveniently accessed without going via a node port or load balancer.</li>
+<li>Kubernetes dns 는 일반적으로 coreDNS를 통해서비스로 구현(일반 파드)</li>
+<li>일반적으로 오버레이 네트워크의 클러스터간 통신에서 SNAT 이 node 에서 이루어진다 pod -&gt; node</li>
+</ul>
+<p>Determine best networking option</p>
+<ul>
+<li><p>flat netowrk 이므로 network segmentation 은 policy 를 통해 구현된다</p>
+</li>
+<li><p>cni plugins</p>
+<ul>
+<li>network<ul>
+<li>adding/deleting from pod network</li>
+<li>creating/deleting pod&#39;s network interface</li>
+<li>connecting/disconnecting</li>
+</ul>
+</li>
+<li>ipam<ul>
+<li>allocating/releasing ip addresses for pods when they are created or deleted</li>
+<li>플러그인혹은 cloud 벤더에 따라 하나의 노드에 여러 cidr 가 할당될 수 있음</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>kubenet </p>
+<ul>
+<li>기본이지만 node 간 통신을 구현 안해놓았다</li>
+</ul>
+</li>
+<li><p>overlay network</p>
+<ul>
+<li>underlay network 위에 올라가서 패킷을 인캡슐레이션</li>
+<li>인캡슐레이션 프로토콜로는 vxlan, ip in ip 가 유명하다</li>
+<li>underlay network 에 대한 변경 없이 사용이 가능한게 장점</li>
+<li>단점<ul>
+<li>pod ip 가 클러스터 밖에서 라우팅 되지 않음</li>
+<li>오버헤드가 발생, 패킷 감싸고 풀고 해야해서</li>
+</ul>
+</li>
+<li>싱글 서브넷에서는 인캡슐레이션이 되지 않아 퍼포먼스 영향이 없다고 함</li>
+<li>서브넷 마다 다른 인캡슐레이션을 선택할 수 있음</li>
+</ul>
+</li>
+<li><p>IP routablility outside of cluster, cni 구현에 따른</p>
+<ul>
+<li>not routable<ul>
+<li>inside -&gt; outside<ul>
+<li>pod ip -&gt; host ip SNAT이 호스트에 일어남</li>
+</ul>
+</li>
+<li>outside -&gt; inside<ul>
+<li>kubernetes service or ingress 를 통해서만 접근되며 pod ip 로는 접근이 불가</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>routable<ul>
+<li>SNAT 이 불필요하며 service, ingress 없이 direct 로 pod 에 접근 가능</li>
+<li>단점은 broader network 에서 ip가 unique</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+overlay network 를 사용하는 경우 일반적으로 외부라우팅이 불가능</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+overlay network 를 사용하지 않는 경우 + 외부라우팅이 가능 한 경우</p>
+</li>
+<li><p>BGP Border Gateway Protocol</p>
+</li>
+<li><p>Host local ipam</p>
+<ul>
+<li>호스트마다 ipam (a/24) 를 가지고 있어서 이해하기 편하다</li>
+<li>ip 할당이 비효율적이다 (노드별 a/24 이기 때문)</li>
+</ul>
+</li>
+<li><p>vxlan 은 BGP를 이용하지 않는다, ipinip보다 패킷 사이즈가 조금 더 크다, ipip가 지원되지 않느 곳에서 사용된다</p>
+</li>
+<li><p>ipinip ipv4 만지원</p>
+</li>
+<li><p>encapsulation mode 는 cross subnet 이 퍼포먼스상 좋다</p>
+</li>
+<li><p>host 가 l3 라우팅 (veth)</p>
+</li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-12f772d3c5c658cf.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-50964ab9a5cac455.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-0cbc5f9ddb24b3eb.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-c35a854c58adf9fe.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"diary/2023-01-07\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"wHDeaGTwO8J0Wbcjq2GnQ\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/diary/2023-01-07\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"diary/2023-01-07\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"diary\\\",\\\"2023-01-07\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"diary/2023-01-07\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-873fa21ef81e129f.js\"],\"\"]\n14:T179d,"])</script><script>self.__next_f.push([1,"\u003cp\u003eAbout Networking\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e동일 서브넷 내(L2)에서는 원 홉에 도달이 가능하다\u003c/li\u003e\n\u003cli\u003e이걸 넘어서라면 L3 라우터가 필요하게된다.\u003cul\u003e\n\u003cli\u003e\u003ccode class=\"span\"\u003e10.48.0.128/26 via 10.0.0.12 dev eth0\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e일반적인 라우팅 프로토콜은 BGP\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eoverlay network \u0026lt;-\u0026gt; underlay network\u003cul\u003e\n\u003cli\u003e둘은 상대적인 개념이다, 언더레이는 일반 네트워크\u003c/li\u003e\n\u003cli\u003e오버레이 네트워크는 언더레이 네트워크 위에서 이루어지진다\u003c/li\u003e\n\u003cli\u003e오버레이 네트워크 패킷 안에 언더레이 네트워크 패킷이 존재하는 개념\u003c/li\u003e\n\u003cli\u003e오버레이 네트워크의 워크로는 언더레이 네트워크와의 통신을 위해 NAT, LB 등을 필요로한다\u003c/li\u003e\n\u003cli\u003e다소 오버헤드가 존재한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eNAT(Network Addreess Translation)\u003cul\u003e\n\u003cli\u003eSNAT(Source ..)\u003cul\u003e\n\u003cli\u003e소스 어드레스를 보더에 있는 라우터의 자체 IP로 교체\u003c/li\u003e\n\u003cli\u003e돌아올때 라우터가 받아서 매핑 시켜놓은 원래의 프라이빗 IP 로 교체\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eDNAT(Destination...)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eMTU(Maximum Transmission Unit)\u003cul\u003e\n\u003cli\u003e네트워크 링크간 한방에 보낼 수 있는 패킷 사이즈\u003c/li\u003e\n\u003cli\u003e일반 적으로 같게 설정된다(1500 bytes)\u003c/li\u003e\n\u003cli\u003eTCP는 MTU를 학습한다\u003c/li\u003e\n\u003cli\u003eTCP는 MTU 보다 큰 패킷을 쪼갠다\u003c/li\u003e\n\u003cli\u003e프래그먼트를 쪼개는 작업은 오버헤드가 크다\u003c/li\u003e\n\u003cli\u003eMTU가 크면 CPU 사용율은 적어진다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eAbout Kubernetes Networking    \u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eGoal\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e The fundamental network behaviors the Kubernetes network model defines.\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e How Kubernetes works with a variety of different network implementations.\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e What Kubernetes Services are.\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e How DNS works within Kubernetes.\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e What “NAT outgoing” is and when you would want to use it.\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e What “dual stack” is.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e쿠버네티스 파드간 통신에는 NAT이 존재하지 않음\u003c/li\u003e\n\u003cli\u003eisolation 은 policy 로 구현하여 네트워크의 단순성을 가져간다 -\u0026gt; \u003cstrong\u003eflat network\u003c/strong\u003e isolation 이 없다는 의미\u003c/li\u003e\n\u003cli\u003e쿠버네티스는 거의안쓰이긴하지만 host port -\u0026gt; pod port 매핑 또는 host ip 를 이용한 네트워크를 지원\u003c/li\u003e\n\u003cli\u003ekubenet 이라는 first party 가 있지만 안쓰고 cni 를 사용\u003c/li\u003e\n\u003cli\u003ecni 의 두가지 책임\u003cul\u003e\n\u003cli\u003eipam 을 통해 pod 에 ip 할당\u003c/li\u003e\n\u003cli\u003e파드간 통신\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eKubernetes DNS \u0026lt;-\u0026gt; virtual ip(cluster ip?)\u003c/li\u003e\n\u003cli\u003ekube-proxy 가 vip 를 로드밸런싱\u003c/li\u003e\n\u003cli\u003enodeport 서비스는 every node\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e Note that when using Calico in on-prem deployments you can also advertise service IP addresses, allowing services to be conveniently accessed without going via a node port or load balancer.\u003c/li\u003e\n\u003cli\u003eKubernetes dns 는 일반적으로 coreDNS를 통해서비스로 구현(일반 파드)\u003c/li\u003e\n\u003cli\u003e일반적으로 오버레이 네트워크의 클러스터간 통신에서 SNAT 이 node 에서 이루어진다 pod -\u0026gt; node\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eDetermine best networking option\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cp\u003eflat netowrk 이므로 network segmentation 은 policy 를 통해 구현된다\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003ecni plugins\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003enetwork\u003cul\u003e\n\u003cli\u003eadding/deleting from pod network\u003c/li\u003e\n\u003cli\u003ecreating/deleting pod\u0026#39;s network interface\u003c/li\u003e\n\u003cli\u003econnecting/disconnecting\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eipam\u003cul\u003e\n\u003cli\u003eallocating/releasing ip addresses for pods when they are created or deleted\u003c/li\u003e\n\u003cli\u003e플러그인혹은 cloud 벤더에 따라 하나의 노드에 여러 cidr 가 할당될 수 있음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003ekubenet \u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e기본이지만 node 간 통신을 구현 안해놓았다\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eoverlay network\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eunderlay network 위에 올라가서 패킷을 인캡슐레이션\u003c/li\u003e\n\u003cli\u003e인캡슐레이션 프로토콜로는 vxlan, ip in ip 가 유명하다\u003c/li\u003e\n\u003cli\u003eunderlay network 에 대한 변경 없이 사용이 가능한게 장점\u003c/li\u003e\n\u003cli\u003e단점\u003cul\u003e\n\u003cli\u003epod ip 가 클러스터 밖에서 라우팅 되지 않음\u003c/li\u003e\n\u003cli\u003e오버헤드가 발생, 패킷 감싸고 풀고 해야해서\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e싱글 서브넷에서는 인캡슐레이션이 되지 않아 퍼포먼스 영향이 없다고 함\u003c/li\u003e\n\u003cli\u003e서브넷 마다 다른 인캡슐레이션을 선택할 수 있음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eIP routablility outside of cluster, cni 구현에 따른\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003enot routable\u003cul\u003e\n\u003cli\u003einside -\u0026gt; outside\u003cul\u003e\n\u003cli\u003epod ip -\u0026gt; host ip SNAT이 호스트에 일어남\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eoutside -\u0026gt; inside\u003cul\u003e\n\u003cli\u003ekubernetes service or ingress 를 통해서만 접근되며 pod ip 로는 접근이 불가\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eroutable\u003cul\u003e\n\u003cli\u003eSNAT 이 불필요하며 service, ingress 없이 direct 로 pod 에 접근 가능\u003c/li\u003e\n\u003cli\u003e단점은 broader network 에서 ip가 unique\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \noverlay network 를 사용하는 경우 일반적으로 외부라우팅이 불가능\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \noverlay network 를 사용하지 않는 경우 + 외부라우팅이 가능 한 경우\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eBGP Border Gateway Protocol\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eHost local ipam\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e호스트마다 ipam (a/24) 를 가지고 있어서 이해하기 편하다\u003c/li\u003e\n\u003cli\u003eip 할당이 비효율적이다 (노드별 a/24 이기 때문)\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003evxlan 은 BGP를 이용하지 않는다, ipinip보다 패킷 사이즈가 조금 더 크다, ipip가 지원되지 않느 곳에서 사용된다\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eipinip ipv4 만지원\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003eencapsulation mode 는 cross subnet 이 퍼포먼스상 좋다\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003ehost 가 l3 라우팅 (veth)\u003c/p\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/68668df\\n\",\"className\":\"bg-white text-black\",\"children\":\"68668df\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/diary/2023-01-07.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/diary/2023-01-07.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/diary/2023-01-07.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"diary/2023-01-07\",\"name\":\"diary/2023-01-07\",\"val\":\"$undefined\"},{\"id\":\"diary/index\",\"name\":\"diary/index\",\"val\":480}],\"links\":[{\"source\":\"diary/index\",\"target\":\"diary/2023-01-07\"},{\"source\":\"diary/index\",\"target\":\"diary/2023-01-07\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"diary/2023-01-07\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-01-07\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-01-07\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"diary/index\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/index\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/index\"}],[\"$\",\"sup\",null,{\"children\":480}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[]}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 pb-2 m-0 leading-tight ml-auto\",\"children\":[[\"$\",\"$L13\",null,{\"className\":\"text-blue-600 underline\",\"href\":\"/public-wiki/diary/2023-01-05\",\"children\":[\"이전(\",\"2023-01-05\",\")\"]}],[\"$\",\"$L13\",null,{\"className\":\"text-blue-600 underline\",\"href\":\"/public-wiki/diary/2023-01-08\",\"children\":[\"다음(\",\"2023-01-08\",\")\"]}]]}]]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T13a7,"])</script><script>self.__next_f.push([1,"  - 동일 서브넷 내(L2)에서는 원 홉에 도달이 가능하다\n  - 이걸 넘어서라면 L3 라우터가 필요하게된다.\n    - `10.48.0.128/26 via 10.0.0.12 dev eth0`\n    - 일반적인 라우팅 프로토콜은 BGP\n  - overlay network \u003c-\u003e underlay network\n    - 둘은 상대적인 개념이다, 언더레이는 일반 네트워크\n    - 오버레이 네트워크는 언더레이 네트워크 위에서 이루어지진다\n    - 오버레이 네트워크 패킷 안에 언더레이 네트워크 패킷이 존재하는 개념\n    - 오버레이 네트워크의 워크로는 언더레이 네트워크와의 통신을 위해 NAT, LB 등을 필요로한다\n    - 다소 오버헤드가 존재한다\n  - NAT(Network Addreess Translation)\n    - SNAT(Source ..)\n      - 소스 어드레스를 보더에 있는 라우터의 자체 IP로 교체\n      - 돌아올때 라우터가 받아서 매핑 시켜놓은 원래의 프라이빗 IP 로 교체\n    - DNAT(Destination...)\n  - MTU(Maximum Transmission Unit)\n    - 네트워크 링크간 한방에 보낼 수 있는 패킷 사이즈\n    - 일반 적으로 같게 설정된다(1500 bytes)\n    - TCP는 MTU를 학습한다\n    - TCP는 MTU 보다 큰 패킷을 쪼갠다\n    - 프래그먼트를 쪼개는 작업은 오버헤드가 크다\n    - MTU가 크면 CPU 사용율은 적어진다\n    \nAbout Kubernetes Networking    \n  - Goal\n    - [ ] The fundamental network behaviors the Kubernetes network model defines.\n    - [ ] How Kubernetes works with a variety of different network implementations.\n    - [ ] What Kubernetes Services are.\n    - [ ] How DNS works within Kubernetes.\n    - [ ] What “NAT outgoing” is and when you would want to use it.\n    - [ ] What “dual stack” is.\n  - 쿠버네티스 파드간 통신에는 NAT이 존재하지 않음\n  - isolation 은 policy 로 구현하여 네트워크의 단순성을 가져간다 -\u003e **flat network** isolation 이 없다는 의미\n  - 쿠버네티스는 거의안쓰이긴하지만 host port -\u003e pod port 매핑 또는 host ip 를 이용한 네트워크를 지원\n  - kubenet 이라는 first party 가 있지만 안쓰고 cni 를 사용\n  - cni 의 두가지 책임\n    - ipam 을 통해 pod 에 ip 할당\n    - 파드간 통신\n  - Kubernetes DNS \u003c-\u003e virtual ip(cluster ip?)\n  - kube-proxy 가 vip 를 로드밸런싱\n  - nodeport 서비스는 every node\n  - [ ] Note that when using Calico in on-prem deployments you can also advertise service IP addresses, allowing services to be conveniently accessed without going via a node port or load balancer.\n  - Kubernetes dns 는 일반적으로 coreDNS를 통해서비스로 구현(일반 파드)\n  - 일반적으로 오버레이 네트워크의 클러스터간 통신에서 SNAT 이 node 에서 이루어진다 pod -\u003e node\n  \n  \nDetermine best networking option\n  - flat netowrk 이므로 network segmentation 은 policy 를 통해 구현된다\n  - cni plugins\n    - network\n      - adding/deleting from pod network\n      - creating/deleting pod's network interface\n      - connecting/disconnecting\n    - ipam\n      - allocating/releasing ip addresses for pods when they are created or deleted\n      - 플러그인혹은 cloud 벤더에 따라 하나의 노드에 여러 cidr 가 할당될 수 있음\n  - kubenet \n    - 기본이지만 node 간 통신을 구현 안해놓았다\n  - overlay network\n    - underlay network 위에 올라가서 패킷을 인캡슐레이션\n    - 인캡슐레이션 프로토콜로는 vxlan, ip in ip 가 유명하다\n    - underlay network 에 대한 변경 없이 사용이 가능한게 장점\n    - 단점\n      - pod ip 가 클러스터 밖에서 라우팅 되지 않음\n      - 오버헤드가 발생, 패킷 감싸고 풀고 해야해서\n    - 싱글 서브넷에서는 인캡슐레이션이 되지 않아 퍼포먼스 영향이 없다고 함\n    - 서브넷 마다 다른 인캡슐레이션을 선택할 수 있음\n  - IP routablility outside of cluster, cni 구현에 따른\n    - not routable\n      - inside -\u003e outside\n        - pod ip -\u003e host ip SNAT이 호스트에 일어남\n      - outside -\u003e inside\n        - kubernetes service or ingress 를 통해서만 접근되며 pod ip 로는 접근이 불가\n    - routable\n      - SNAT 이 불필요하며 service, ingress 없이 direct 로 pod 에 접근 가능\n      - 단점은 broader network 에서 ip가 unique\n  - [X] overlay network 를 사용하는 경우 일반적으로 외부라우팅이 불가능\n  - [ ] overlay network 를 사용하지 않는 경우 + 외부라우팅이 가능 한 경우\n  - BGP Border Gateway Protocol\n  - Host local ipam\n    - 호스트마다 ipam (a/24) 를 가지고 있어서 이해하기 편하다\n    - ip 할당이 비효율적이다 (노드별 a/24 이기 때문)\n  - vxlan 은 BGP를 이용하지 않는다, ipinip보다 패킷 사이즈가 조금 더 크다, ipip가 지원되지 않느 곳에서 사용된다\n  - ipinip ipv4 만지원\n  - encapsulation mode 는 cross subnet 이 퍼포먼스상 좋다\n\n\n- host 가 l3 라우팅 (veth)\n"])</script><script>self.__next_f.push([1,"16:T13a7,"])</script><script>self.__next_f.push([1,"  - 동일 서브넷 내(L2)에서는 원 홉에 도달이 가능하다\n  - 이걸 넘어서라면 L3 라우터가 필요하게된다.\n    - `10.48.0.128/26 via 10.0.0.12 dev eth0`\n    - 일반적인 라우팅 프로토콜은 BGP\n  - overlay network \u003c-\u003e underlay network\n    - 둘은 상대적인 개념이다, 언더레이는 일반 네트워크\n    - 오버레이 네트워크는 언더레이 네트워크 위에서 이루어지진다\n    - 오버레이 네트워크 패킷 안에 언더레이 네트워크 패킷이 존재하는 개념\n    - 오버레이 네트워크의 워크로는 언더레이 네트워크와의 통신을 위해 NAT, LB 등을 필요로한다\n    - 다소 오버헤드가 존재한다\n  - NAT(Network Addreess Translation)\n    - SNAT(Source ..)\n      - 소스 어드레스를 보더에 있는 라우터의 자체 IP로 교체\n      - 돌아올때 라우터가 받아서 매핑 시켜놓은 원래의 프라이빗 IP 로 교체\n    - DNAT(Destination...)\n  - MTU(Maximum Transmission Unit)\n    - 네트워크 링크간 한방에 보낼 수 있는 패킷 사이즈\n    - 일반 적으로 같게 설정된다(1500 bytes)\n    - TCP는 MTU를 학습한다\n    - TCP는 MTU 보다 큰 패킷을 쪼갠다\n    - 프래그먼트를 쪼개는 작업은 오버헤드가 크다\n    - MTU가 크면 CPU 사용율은 적어진다\n    \nAbout Kubernetes Networking    \n  - Goal\n    - [ ] The fundamental network behaviors the Kubernetes network model defines.\n    - [ ] How Kubernetes works with a variety of different network implementations.\n    - [ ] What Kubernetes Services are.\n    - [ ] How DNS works within Kubernetes.\n    - [ ] What “NAT outgoing” is and when you would want to use it.\n    - [ ] What “dual stack” is.\n  - 쿠버네티스 파드간 통신에는 NAT이 존재하지 않음\n  - isolation 은 policy 로 구현하여 네트워크의 단순성을 가져간다 -\u003e **flat network** isolation 이 없다는 의미\n  - 쿠버네티스는 거의안쓰이긴하지만 host port -\u003e pod port 매핑 또는 host ip 를 이용한 네트워크를 지원\n  - kubenet 이라는 first party 가 있지만 안쓰고 cni 를 사용\n  - cni 의 두가지 책임\n    - ipam 을 통해 pod 에 ip 할당\n    - 파드간 통신\n  - Kubernetes DNS \u003c-\u003e virtual ip(cluster ip?)\n  - kube-proxy 가 vip 를 로드밸런싱\n  - nodeport 서비스는 every node\n  - [ ] Note that when using Calico in on-prem deployments you can also advertise service IP addresses, allowing services to be conveniently accessed without going via a node port or load balancer.\n  - Kubernetes dns 는 일반적으로 coreDNS를 통해서비스로 구현(일반 파드)\n  - 일반적으로 오버레이 네트워크의 클러스터간 통신에서 SNAT 이 node 에서 이루어진다 pod -\u003e node\n  \n  \nDetermine best networking option\n  - flat netowrk 이므로 network segmentation 은 policy 를 통해 구현된다\n  - cni plugins\n    - network\n      - adding/deleting from pod network\n      - creating/deleting pod's network interface\n      - connecting/disconnecting\n    - ipam\n      - allocating/releasing ip addresses for pods when they are created or deleted\n      - 플러그인혹은 cloud 벤더에 따라 하나의 노드에 여러 cidr 가 할당될 수 있음\n  - kubenet \n    - 기본이지만 node 간 통신을 구현 안해놓았다\n  - overlay network\n    - underlay network 위에 올라가서 패킷을 인캡슐레이션\n    - 인캡슐레이션 프로토콜로는 vxlan, ip in ip 가 유명하다\n    - underlay network 에 대한 변경 없이 사용이 가능한게 장점\n    - 단점\n      - pod ip 가 클러스터 밖에서 라우팅 되지 않음\n      - 오버헤드가 발생, 패킷 감싸고 풀고 해야해서\n    - 싱글 서브넷에서는 인캡슐레이션이 되지 않아 퍼포먼스 영향이 없다고 함\n    - 서브넷 마다 다른 인캡슐레이션을 선택할 수 있음\n  - IP routablility outside of cluster, cni 구현에 따른\n    - not routable\n      - inside -\u003e outside\n        - pod ip -\u003e host ip SNAT이 호스트에 일어남\n      - outside -\u003e inside\n        - kubernetes service or ingress 를 통해서만 접근되며 pod ip 로는 접근이 불가\n    - routable\n      - SNAT 이 불필요하며 service, ingress 없이 direct 로 pod 에 접근 가능\n      - 단점은 broader network 에서 ip가 unique\n  - [X] overlay network 를 사용하는 경우 일반적으로 외부라우팅이 불가능\n  - [ ] overlay network 를 사용하지 않는 경우 + 외부라우팅이 가능 한 경우\n  - BGP Border Gateway Protocol\n  - Host local ipam\n    - 호스트마다 ipam (a/24) 를 가지고 있어서 이해하기 편하다\n    - ip 할당이 비효율적이다 (노드별 a/24 이기 때문)\n  - vxlan 은 BGP를 이용하지 않는다, ipinip보다 패킷 사이즈가 조금 더 크다, ipip가 지원되지 않느 곳에서 사용된다\n  - ipinip ipv4 만지원\n  - encapsulation mode 는 cross subnet 이 퍼포먼스상 좋다\n\n\n- host 가 l3 라우팅 (veth)\n"])</script><script>self.__next_f.push([1,"17:T13a7,"])</script><script>self.__next_f.push([1,"  - 동일 서브넷 내(L2)에서는 원 홉에 도달이 가능하다\n  - 이걸 넘어서라면 L3 라우터가 필요하게된다.\n    - `10.48.0.128/26 via 10.0.0.12 dev eth0`\n    - 일반적인 라우팅 프로토콜은 BGP\n  - overlay network \u003c-\u003e underlay network\n    - 둘은 상대적인 개념이다, 언더레이는 일반 네트워크\n    - 오버레이 네트워크는 언더레이 네트워크 위에서 이루어지진다\n    - 오버레이 네트워크 패킷 안에 언더레이 네트워크 패킷이 존재하는 개념\n    - 오버레이 네트워크의 워크로는 언더레이 네트워크와의 통신을 위해 NAT, LB 등을 필요로한다\n    - 다소 오버헤드가 존재한다\n  - NAT(Network Addreess Translation)\n    - SNAT(Source ..)\n      - 소스 어드레스를 보더에 있는 라우터의 자체 IP로 교체\n      - 돌아올때 라우터가 받아서 매핑 시켜놓은 원래의 프라이빗 IP 로 교체\n    - DNAT(Destination...)\n  - MTU(Maximum Transmission Unit)\n    - 네트워크 링크간 한방에 보낼 수 있는 패킷 사이즈\n    - 일반 적으로 같게 설정된다(1500 bytes)\n    - TCP는 MTU를 학습한다\n    - TCP는 MTU 보다 큰 패킷을 쪼갠다\n    - 프래그먼트를 쪼개는 작업은 오버헤드가 크다\n    - MTU가 크면 CPU 사용율은 적어진다\n    \nAbout Kubernetes Networking    \n  - Goal\n    - [ ] The fundamental network behaviors the Kubernetes network model defines.\n    - [ ] How Kubernetes works with a variety of different network implementations.\n    - [ ] What Kubernetes Services are.\n    - [ ] How DNS works within Kubernetes.\n    - [ ] What “NAT outgoing” is and when you would want to use it.\n    - [ ] What “dual stack” is.\n  - 쿠버네티스 파드간 통신에는 NAT이 존재하지 않음\n  - isolation 은 policy 로 구현하여 네트워크의 단순성을 가져간다 -\u003e **flat network** isolation 이 없다는 의미\n  - 쿠버네티스는 거의안쓰이긴하지만 host port -\u003e pod port 매핑 또는 host ip 를 이용한 네트워크를 지원\n  - kubenet 이라는 first party 가 있지만 안쓰고 cni 를 사용\n  - cni 의 두가지 책임\n    - ipam 을 통해 pod 에 ip 할당\n    - 파드간 통신\n  - Kubernetes DNS \u003c-\u003e virtual ip(cluster ip?)\n  - kube-proxy 가 vip 를 로드밸런싱\n  - nodeport 서비스는 every node\n  - [ ] Note that when using Calico in on-prem deployments you can also advertise service IP addresses, allowing services to be conveniently accessed without going via a node port or load balancer.\n  - Kubernetes dns 는 일반적으로 coreDNS를 통해서비스로 구현(일반 파드)\n  - 일반적으로 오버레이 네트워크의 클러스터간 통신에서 SNAT 이 node 에서 이루어진다 pod -\u003e node\n  \n  \nDetermine best networking option\n  - flat netowrk 이므로 network segmentation 은 policy 를 통해 구현된다\n  - cni plugins\n    - network\n      - adding/deleting from pod network\n      - creating/deleting pod's network interface\n      - connecting/disconnecting\n    - ipam\n      - allocating/releasing ip addresses for pods when they are created or deleted\n      - 플러그인혹은 cloud 벤더에 따라 하나의 노드에 여러 cidr 가 할당될 수 있음\n  - kubenet \n    - 기본이지만 node 간 통신을 구현 안해놓았다\n  - overlay network\n    - underlay network 위에 올라가서 패킷을 인캡슐레이션\n    - 인캡슐레이션 프로토콜로는 vxlan, ip in ip 가 유명하다\n    - underlay network 에 대한 변경 없이 사용이 가능한게 장점\n    - 단점\n      - pod ip 가 클러스터 밖에서 라우팅 되지 않음\n      - 오버헤드가 발생, 패킷 감싸고 풀고 해야해서\n    - 싱글 서브넷에서는 인캡슐레이션이 되지 않아 퍼포먼스 영향이 없다고 함\n    - 서브넷 마다 다른 인캡슐레이션을 선택할 수 있음\n  - IP routablility outside of cluster, cni 구현에 따른\n    - not routable\n      - inside -\u003e outside\n        - pod ip -\u003e host ip SNAT이 호스트에 일어남\n      - outside -\u003e inside\n        - kubernetes service or ingress 를 통해서만 접근되며 pod ip 로는 접근이 불가\n    - routable\n      - SNAT 이 불필요하며 service, ingress 없이 direct 로 pod 에 접근 가능\n      - 단점은 broader network 에서 ip가 unique\n  - [X] overlay network 를 사용하는 경우 일반적으로 외부라우팅이 불가능\n  - [ ] overlay network 를 사용하지 않는 경우 + 외부라우팅이 가능 한 경우\n  - BGP Border Gateway Protocol\n  - Host local ipam\n    - 호스트마다 ipam (a/24) 를 가지고 있어서 이해하기 편하다\n    - ip 할당이 비효율적이다 (노드별 a/24 이기 때문)\n  - vxlan 은 BGP를 이용하지 않는다, ipinip보다 패킷 사이즈가 조금 더 크다, ipip가 지원되지 않느 곳에서 사용된다\n  - ipinip ipv4 만지원\n  - encapsulation mode 는 cross subnet 이 퍼포먼스상 좋다\n\n\n- host 가 l3 라우팅 (veth)\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"About Networking\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"About Networking\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/diary/2023-01-07\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"About Networking\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>
