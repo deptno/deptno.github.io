@@ -1,0 +1,358 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-8d83df55f024a06e.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-5be22889a4b4f28d.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-3f8f17edabe7c539.js" async=""></script><script src="/_next/static/chunks/app/error-71963c526facdbf7.js" async=""></script><script src="/_next/static/chunks/app/not-found-b37065e097e62895.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># raspberry pi</title><meta name="description" content="
+## [[kubernetes]] setup
+[[kubespray]] 로 시간 많이 날림
+[[kubeadm]] 으로 성공 ha 를 구성하려고 k3s 대신 k8s 를 선택했으나 api-server 자체가 load balancer 를 필요로 하기 때문에 그냥 단독으로 사용
+
+### kubeadm
+
+os: Ubuntu Server 22.04.1 LTS (64-bit) - Server OS with long-term support for RPi
+
+- 공통
+```sh
+cgroup=&quot;$(head -n1 /boot/firmware/cmdline.txt) cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1&quot;
+echo $cgroup | sudo tee /boot/firmware/cmdline.txt
+
+sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+echo &quot;deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main&quot; | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt update
+sudo apt install -y apt-transport-https ca-certificates curl
+sudo apt install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+# off swap
+sudo sed -i &#x27;/ swap / s/^\(.*\)$/#\1/g&#x27; /etc/fstab
+sudo swapoff -a
+
+# containerd
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository &quot;deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&quot;
+
+sudo apt update
+sudo apt install -y containerd.io
+
+sudo mkdir -p /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml
+sudo sed -i &#x27;s/SystemdCgroup \= false/SystemdCgroup \= true/g&#x27; /etc/containerd/config.toml
+
+# 안되는 경우
+sudo rm /etc/containerd/config.toml
+sudo systemctl restart containerd
+
+sudo sysctl --system
+sudo systemctl restart containerd
+
+cat &lt;&lt;EOF | sudo tee /etc/modules-load.d/containerd.conf
+overlay
+br_netfilter
+EOF
+
+# lsmod 경우가 없는 경우 modprobe
+lsmod | grep overlay
+lsmod | grep br_netfilter
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
+cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+
+sudo sysctl --system
+sudo systemctl restart containerd
+```
+- master node (control plane)
+```sh
+sudo kubeadm config images pull
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 
+```
+`init` 의 결과로 나오는 스크립트 실행해서 ~/.kube/config 를 생성하면 [[kubectl]] 사용가능
+- worker node
+`init` 의 결과로 아래 형식의 스크립트를 복붙하여 실행
+```sh 
+sudo kubeadm join 192.168.0.74:6443 --token [token] [--node-name name_default:hostname]
+```
+- x86 의 경우 containerd 가 설치되지 않으므로 # containerd 부분을 아래로 대신한다
+
+```sh 
+# x86
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable&quot; | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+```
+
+#### error
+[[kubeadm]] 참조
+
+## link
+- [[kubeadm]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# raspberry pi"/><meta property="og:description" content="
+## [[kubernetes]] setup
+[[kubespray]] 로 시간 많이 날림
+[[kubeadm]] 으로 성공 ha 를 구성하려고 k3s 대신 k8s 를 선택했으나 api-server 자체가 load balancer 를 필요로 하기 때문에 그냥 단독으로 사용
+
+### kubeadm
+
+os: Ubuntu Server 22.04.1 LTS (64-bit) - Server OS with long-term support for RPi
+
+- 공통
+```sh
+cgroup=&quot;$(head -n1 /boot/firmware/cmdline.txt) cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1&quot;
+echo $cgroup | sudo tee /boot/firmware/cmdline.txt
+
+sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+echo &quot;deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main&quot; | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt update
+sudo apt install -y apt-transport-https ca-certificates curl
+sudo apt install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+# off swap
+sudo sed -i &#x27;/ swap / s/^\(.*\)$/#\1/g&#x27; /etc/fstab
+sudo swapoff -a
+
+# containerd
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository &quot;deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&quot;
+
+sudo apt update
+sudo apt install -y containerd.io
+
+sudo mkdir -p /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml
+sudo sed -i &#x27;s/SystemdCgroup \= false/SystemdCgroup \= true/g&#x27; /etc/containerd/config.toml
+
+# 안되는 경우
+sudo rm /etc/containerd/config.toml
+sudo systemctl restart containerd
+
+sudo sysctl --system
+sudo systemctl restart containerd
+
+cat &lt;&lt;EOF | sudo tee /etc/modules-load.d/containerd.conf
+overlay
+br_netfilter
+EOF
+
+# lsmod 경우가 없는 경우 modprobe
+lsmod | grep overlay
+lsmod | grep br_netfilter
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
+cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+
+sudo sysctl --system
+sudo systemctl restart containerd
+```
+- master node (control plane)
+```sh
+sudo kubeadm config images pull
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 
+```
+`init` 의 결과로 나오는 스크립트 실행해서 ~/.kube/config 를 생성하면 [[kubectl]] 사용가능
+- worker node
+`init` 의 결과로 아래 형식의 스크립트를 복붙하여 실행
+```sh 
+sudo kubeadm join 192.168.0.74:6443 --token [token] [--node-name name_default:hostname]
+```
+- x86 의 경우 containerd 가 설치되지 않으므로 # containerd 부분을 아래로 대신한다
+
+```sh 
+# x86
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable&quot; | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+```
+
+#### error
+[[kubeadm]] 참조
+
+## link
+- [[kubeadm]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/raspberry-pi"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# raspberry pi"/><meta name="twitter:description" content="
+## [[kubernetes]] setup
+[[kubespray]] 로 시간 많이 날림
+[[kubeadm]] 으로 성공 ha 를 구성하려고 k3s 대신 k8s 를 선택했으나 api-server 자체가 load balancer 를 필요로 하기 때문에 그냥 단독으로 사용
+
+### kubeadm
+
+os: Ubuntu Server 22.04.1 LTS (64-bit) - Server OS with long-term support for RPi
+
+- 공통
+```sh
+cgroup=&quot;$(head -n1 /boot/firmware/cmdline.txt) cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1&quot;
+echo $cgroup | sudo tee /boot/firmware/cmdline.txt
+
+sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+echo &quot;deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main&quot; | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt update
+sudo apt install -y apt-transport-https ca-certificates curl
+sudo apt install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+# off swap
+sudo sed -i &#x27;/ swap / s/^\(.*\)$/#\1/g&#x27; /etc/fstab
+sudo swapoff -a
+
+# containerd
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository &quot;deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&quot;
+
+sudo apt update
+sudo apt install -y containerd.io
+
+sudo mkdir -p /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml
+sudo sed -i &#x27;s/SystemdCgroup \= false/SystemdCgroup \= true/g&#x27; /etc/containerd/config.toml
+
+# 안되는 경우
+sudo rm /etc/containerd/config.toml
+sudo systemctl restart containerd
+
+sudo sysctl --system
+sudo systemctl restart containerd
+
+cat &lt;&lt;EOF | sudo tee /etc/modules-load.d/containerd.conf
+overlay
+br_netfilter
+EOF
+
+# lsmod 경우가 없는 경우 modprobe
+lsmod | grep overlay
+lsmod | grep br_netfilter
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
+cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+
+sudo sysctl --system
+sudo systemctl restart containerd
+```
+- master node (control plane)
+```sh
+sudo kubeadm config images pull
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 
+```
+`init` 의 결과로 나오는 스크립트 실행해서 ~/.kube/config 를 생성하면 [[kubectl]] 사용가능
+- worker node
+`init` 의 결과로 아래 형식의 스크립트를 복붙하여 실행
+```sh 
+sudo kubeadm join 192.168.0.74:6443 --token [token] [--node-name name_default:hostname]
+```
+- x86 의 경우 containerd 가 설치되지 않으므로 # containerd 부분을 아래로 대신한다
+
+```sh 
+# x86
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable&quot; | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+```
+
+#### error
+[[kubeadm]] 참조
+
+## link
+- [[kubeadm]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/440709c
+" class="bg-white text-black">440709c</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/raspberry-pi.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/raspberry-pi.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/raspberry-pi.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/raspberry-pi"><span class="underline">raspberry-pi</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/kubernetes"><span class="underline">kubernetes</span><sup>44</sup></a></span><span><a class="text-blue-600" href="/public-wiki/kubespray"><span class="underline">kubespray</span><sup>9</sup></a></span><span><a class="text-blue-600" href="/public-wiki/kubeadm"><span class="underline">kubeadm</span><sup>16</sup></a></span><span><a class="text-blue-600" href="/public-wiki/kubectl"><span class="underline">kubectl</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-12-31"><span class="underline">diary/2023-12-31</span><sup>93</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#raspberry-pi">raspberry pi</a></div><div class="pl-2"><a href="#kubernetes-setup">kubernetes setup</a></div><div class="pl-4"><a href="#kubeadm">kubeadm</a></div><div class="pl-6"><a href="#error">error</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="raspberry-pi">raspberry pi</h1>
+<h2 id="kubernetes-setup"><a href="kubernetes">kubernetes</a> setup</h2>
+<p><a href="kubespray">kubespray</a> 로 시간 많이 날림
+<a href="kubeadm">kubeadm</a> 으로 성공 ha 를 구성하려고 k3s 대신 k8s 를 선택했으나 api-server 자체가 load balancer 를 필요로 하기 때문에 그냥 단독으로 사용</p>
+<h3 id="kubeadm">kubeadm</h3>
+<p>os: Ubuntu Server 22.04.1 LTS (64-bit) - Server OS with long-term support for RPi</p>
+<ul>
+<li>공통</li>
+</ul>
+<pre><code class="hljs language-sh">cgroup=<span class="hljs-string">&quot;<span class="hljs-subst">$(head -n1 /boot/firmware/cmdline.txt)</span> cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1&quot;</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-variable">$cgroup</span> | sudo <span class="hljs-built_in">tee</span> /boot/firmware/cmdline.txt
+
+sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main&quot;</span> | sudo <span class="hljs-built_in">tee</span> /etc/apt/sources.list.d/kubernetes.list
+sudo apt update
+sudo apt install -y apt-transport-https ca-certificates curl
+sudo apt install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+<span class="hljs-comment"># off swap</span>
+sudo sed -i <span class="hljs-string">&#x27;/ swap / s/^\(.*\)$/#\1/g&#x27;</span> /etc/fstab
+sudo swapoff -a
+
+<span class="hljs-comment"># containerd</span>
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository <span class="hljs-string">&quot;deb [arch=arm64] https://download.docker.com/linux/ubuntu <span class="hljs-subst">$(lsb_release -cs)</span> stable&quot;</span>
+
+sudo apt update
+sudo apt install -y containerd.io
+
+sudo <span class="hljs-built_in">mkdir</span> -p /etc/containerd
+containerd config default | sudo <span class="hljs-built_in">tee</span> /etc/containerd/config.toml
+sudo sed -i <span class="hljs-string">&#x27;s/SystemdCgroup \= false/SystemdCgroup \= true/g&#x27;</span> /etc/containerd/config.toml
+
+<span class="hljs-comment"># 안되는 경우</span>
+sudo <span class="hljs-built_in">rm</span> /etc/containerd/config.toml
+sudo systemctl restart containerd
+
+sudo sysctl --system
+sudo systemctl restart containerd
+
+<span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF | sudo tee /etc/modules-load.d/containerd.conf
+overlay
+br_netfilter
+EOF</span>
+
+<span class="hljs-comment"># lsmod 경우가 없는 경우 modprobe</span>
+lsmod | grep overlay
+lsmod | grep br_netfilter
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
+<span class="hljs-built_in">cat</span> &lt;&lt;<span class="hljs-string">EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF</span>
+
+sudo sysctl --system
+sudo systemctl restart containerd
+</code></pre><ul>
+<li>master node (control plane)</li>
+</ul>
+<pre><code class="hljs language-sh">sudo kubeadm config images pull
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 
+</code></pre><p><code class="span">init</code> 의 결과로 나오는 스크립트 실행해서 ~/.kube/config 를 생성하면 <a href="kubectl">kubectl</a> 사용가능</p>
+<ul>
+<li>worker node
+<code class="span">init</code> 의 결과로 아래 형식의 스크립트를 복붙하여 실행</li>
+</ul>
+<pre><code class="hljs language-sh">sudo kubeadm <span class="hljs-built_in">join</span> 192.168.0.74:6443 --token [token] [--node-name name_default:hostname]
+</code></pre><ul>
+<li>x86 의 경우 containerd 가 설치되지 않으므로 # containerd 부분을 아래로 대신한다</li>
+</ul>
+<pre><code class="hljs language-sh"><span class="hljs-comment"># x86</span>
+sudo <span class="hljs-built_in">mkdir</span> -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+<span class="hljs-built_in">echo</span> \
+  <span class="hljs-string">&quot;deb [arch=<span class="hljs-subst">$(dpkg --print-architecture)</span> signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  <span class="hljs-subst">$(lsb_release -cs)</span> stable&quot;</span> | sudo <span class="hljs-built_in">tee</span> /etc/apt/sources.list.d/docker.list &gt; /dev/null
+</code></pre><h4 id="error">error</h4>
+<p><a href="kubeadm">kubeadm</a> 참조</p>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="kubeadm">kubeadm</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-8d83df55f024a06e.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-3f8f17edabe7c539.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-71963c526facdbf7.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-b37065e097e62895.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"raspberry-pi\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"OGWDQWYCR1M8j8Rn524lH\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/raspberry-pi\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"raspberry-pi\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"raspberry-pi\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"raspberry-pi\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"\"]\n14:T128a,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"raspberry-pi\"\u003eraspberry pi\u003c/h1\u003e\n\u003ch2 id=\"kubernetes-setup\"\u003e\u003ca href=\"kubernetes\"\u003ekubernetes\u003c/a\u003e setup\u003c/h2\u003e\n\u003cp\u003e\u003ca href=\"kubespray\"\u003ekubespray\u003c/a\u003e 로 시간 많이 날림\n\u003ca href=\"kubeadm\"\u003ekubeadm\u003c/a\u003e 으로 성공 ha 를 구성하려고 k3s 대신 k8s 를 선택했으나 api-server 자체가 load balancer 를 필요로 하기 때문에 그냥 단독으로 사용\u003c/p\u003e\n\u003ch3 id=\"kubeadm\"\u003ekubeadm\u003c/h3\u003e\n\u003cp\u003eos: Ubuntu Server 22.04.1 LTS (64-bit) - Server OS with long-term support for RPi\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e공통\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003ecgroup=\u003cspan class=\"hljs-string\"\u003e\u0026quot;\u003cspan class=\"hljs-subst\"\u003e$(head -n1 /boot/firmware/cmdline.txt)\u003c/span\u003e cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1\u0026quot;\u003c/span\u003e\n\u003cspan class=\"hljs-built_in\"\u003eecho\u003c/span\u003e \u003cspan class=\"hljs-variable\"\u003e$cgroup\u003c/span\u003e | sudo \u003cspan class=\"hljs-built_in\"\u003etee\u003c/span\u003e /boot/firmware/cmdline.txt\n\nsudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg\n\u003cspan class=\"hljs-built_in\"\u003eecho\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e\u0026quot;deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main\u0026quot;\u003c/span\u003e | sudo \u003cspan class=\"hljs-built_in\"\u003etee\u003c/span\u003e /etc/apt/sources.list.d/kubernetes.list\nsudo apt update\nsudo apt install -y apt-transport-https ca-certificates curl\nsudo apt install -y kubelet kubeadm kubectl\nsudo apt-mark hold kubelet kubeadm kubectl\n\n\u003cspan class=\"hljs-comment\"\u003e# off swap\u003c/span\u003e\nsudo sed -i \u003cspan class=\"hljs-string\"\u003e\u0026#x27;/ swap / s/^\\(.*\\)$/#\\1/g\u0026#x27;\u003c/span\u003e /etc/fstab\nsudo swapoff -a\n\n\u003cspan class=\"hljs-comment\"\u003e# containerd\u003c/span\u003e\ncurl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -\nsudo add-apt-repository \u003cspan class=\"hljs-string\"\u003e\u0026quot;deb [arch=arm64] https://download.docker.com/linux/ubuntu \u003cspan class=\"hljs-subst\"\u003e$(lsb_release -cs)\u003c/span\u003e stable\u0026quot;\u003c/span\u003e\n\nsudo apt update\nsudo apt install -y containerd.io\n\nsudo \u003cspan class=\"hljs-built_in\"\u003emkdir\u003c/span\u003e -p /etc/containerd\ncontainerd config default | sudo \u003cspan class=\"hljs-built_in\"\u003etee\u003c/span\u003e /etc/containerd/config.toml\nsudo sed -i \u003cspan class=\"hljs-string\"\u003e\u0026#x27;s/SystemdCgroup \\= false/SystemdCgroup \\= true/g\u0026#x27;\u003c/span\u003e /etc/containerd/config.toml\n\n\u003cspan class=\"hljs-comment\"\u003e# 안되는 경우\u003c/span\u003e\nsudo \u003cspan class=\"hljs-built_in\"\u003erm\u003c/span\u003e /etc/containerd/config.toml\nsudo systemctl restart containerd\n\nsudo sysctl --system\nsudo systemctl restart containerd\n\n\u003cspan class=\"hljs-built_in\"\u003ecat\u003c/span\u003e \u0026lt;\u0026lt;\u003cspan class=\"hljs-string\"\u003eEOF | sudo tee /etc/modules-load.d/containerd.conf\noverlay\nbr_netfilter\nEOF\u003c/span\u003e\n\n\u003cspan class=\"hljs-comment\"\u003e# lsmod 경우가 없는 경우 modprobe\u003c/span\u003e\nlsmod | grep overlay\nlsmod | grep br_netfilter\nsudo modprobe overlay\nsudo modprobe br_netfilter\n\n\u003cspan class=\"hljs-built_in\"\u003ecat\u003c/span\u003e \u0026lt;\u0026lt;\u003cspan class=\"hljs-string\"\u003eEOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf\nnet.bridge.bridge-nf-call-iptables  = 1\nnet.ipv4.ip_forward                 = 1\nnet.bridge.bridge-nf-call-ip6tables = 1\nEOF\u003c/span\u003e\n\nsudo sysctl --system\nsudo systemctl restart containerd\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003emaster node (control plane)\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003esudo kubeadm config images pull\nsudo kubeadm init --pod-network-cidr=10.244.0.0/16 \n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003e\u003ccode class=\"span\"\u003einit\u003c/code\u003e 의 결과로 나오는 스크립트 실행해서 ~/.kube/config 를 생성하면 \u003ca href=\"kubectl\"\u003ekubectl\u003c/a\u003e 사용가능\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eworker node\n\u003ccode class=\"span\"\u003einit\u003c/code\u003e 의 결과로 아래 형식의 스크립트를 복붙하여 실행\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003esudo kubeadm \u003cspan class=\"hljs-built_in\"\u003ejoin\u003c/span\u003e 192.168.0.74:6443 --token [token] [--node-name name_default:hostname]\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003ex86 의 경우 containerd 가 설치되지 않으므로 # containerd 부분을 아래로 대신한다\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e\u003cspan class=\"hljs-comment\"\u003e# x86\u003c/span\u003e\nsudo \u003cspan class=\"hljs-built_in\"\u003emkdir\u003c/span\u003e -p /etc/apt/keyrings\ncurl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg\n\u003cspan class=\"hljs-built_in\"\u003eecho\u003c/span\u003e \\\n  \u003cspan class=\"hljs-string\"\u003e\u0026quot;deb [arch=\u003cspan class=\"hljs-subst\"\u003e$(dpkg --print-architecture)\u003c/span\u003e signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \\\n  \u003cspan class=\"hljs-subst\"\u003e$(lsb_release -cs)\u003c/span\u003e stable\u0026quot;\u003c/span\u003e | sudo \u003cspan class=\"hljs-built_in\"\u003etee\u003c/span\u003e /etc/apt/sources.list.d/docker.list \u0026gt; /dev/null\n\u003c/code\u003e\u003c/pre\u003e\u003ch4 id=\"error\"\u003eerror\u003c/h4\u003e\n\u003cp\u003e\u003ca href=\"kubeadm\"\u003ekubeadm\u003c/a\u003e 참조\u003c/p\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"kubeadm\"\u003ekubeadm\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/440709c\\n\",\"className\":\"bg-white text-black\",\"children\":\"440709c\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/raspberry-pi.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/raspberry-pi.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/raspberry-pi.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"raspberry-pi\",\"name\":\"raspberry-pi\",\"val\":6},{\"id\":\"kubernetes\",\"name\":\"kubernetes\",\"val\":44},{\"id\":\"kubespray\",\"name\":\"kubespray\",\"val\":9},{\"id\":\"kubeadm\",\"name\":\"kubeadm\",\"val\":16},{\"id\":\"kubectl\",\"name\":\"kubectl\",\"val\":7},{\"id\":\"diary/2023-12-31\",\"name\":\"diary/2023-12-31\",\"val\":93}],\"links\":[{\"source\":\"raspberry-pi\",\"target\":\"kubernetes\"},{\"source\":\"raspberry-pi\",\"target\":\"kubespray\"},{\"source\":\"raspberry-pi\",\"target\":\"kubeadm\"},{\"source\":\"raspberry-pi\",\"target\":\"kubectl\"},{\"source\":\"raspberry-pi\",\"target\":\"kubeadm\"},{\"source\":\"raspberry-pi\",\"target\":\"kubeadm\"},{\"source\":\"kubeadm\",\"target\":\"raspberry-pi\"},{\"source\":\"kubeadm\",\"target\":\"raspberry-pi\"},{\"source\":\"diary/2023-12-31\",\"target\":\"raspberry-pi\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"raspberry-pi\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/raspberry-pi\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"raspberry-pi\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"kubernetes\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/kubernetes\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"kubernetes\"}],[\"$\",\"sup\",null,{\"children\":44}]]}]}],[\"$\",\"span\",\"kubespray\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/kubespray\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"kubespray\"}],[\"$\",\"sup\",null,{\"children\":9}]]}]}],[\"$\",\"span\",\"kubeadm\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/kubeadm\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"kubeadm\"}],[\"$\",\"sup\",null,{\"children\":16}]]}]}],[\"$\",\"span\",\"kubectl\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/kubectl\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"kubectl\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"diary/2023-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-12-31\"}],[\"$\",\"sup\",null,{\"children\":93}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"raspberry-pi\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#raspberry-pi\",\"children\":\"raspberry pi\"}]}],[\"$\",\"div\",\"kubernetes-setup\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#kubernetes-setup\",\"children\":\"kubernetes setup\"}]}],[\"$\",\"div\",\"kubeadm\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#kubeadm\",\"children\":\"kubeadm\"}]}],[\"$\",\"div\",\"error\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error\",\"children\":\"error\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:Tc04,"])</script><script>self.__next_f.push([1,"\n## [[kubernetes]] setup\n[[kubespray]] 로 시간 많이 날림\n[[kubeadm]] 으로 성공 ha 를 구성하려고 k3s 대신 k8s 를 선택했으나 api-server 자체가 load balancer 를 필요로 하기 때문에 그냥 단독으로 사용\n\n### kubeadm\n\nos: Ubuntu Server 22.04.1 LTS (64-bit) - Server OS with long-term support for RPi\n\n- 공통\n```sh\ncgroup=\"$(head -n1 /boot/firmware/cmdline.txt) cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1\"\necho $cgroup | sudo tee /boot/firmware/cmdline.txt\n\nsudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg\necho \"deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main\" | sudo tee /etc/apt/sources.list.d/kubernetes.list\nsudo apt update\nsudo apt install -y apt-transport-https ca-certificates curl\nsudo apt install -y kubelet kubeadm kubectl\nsudo apt-mark hold kubelet kubeadm kubectl\n\n# off swap\nsudo sed -i '/ swap / s/^\\(.*\\)$/#\\1/g' /etc/fstab\nsudo swapoff -a\n\n# containerd\ncurl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -\nsudo add-apt-repository \"deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"\n\nsudo apt update\nsudo apt install -y containerd.io\n\nsudo mkdir -p /etc/containerd\ncontainerd config default | sudo tee /etc/containerd/config.toml\nsudo sed -i 's/SystemdCgroup \\= false/SystemdCgroup \\= true/g' /etc/containerd/config.toml\n\n# 안되는 경우\nsudo rm /etc/containerd/config.toml\nsudo systemctl restart containerd\n\nsudo sysctl --system\nsudo systemctl restart containerd\n\ncat \u003c\u003cEOF | sudo tee /etc/modules-load.d/containerd.conf\noverlay\nbr_netfilter\nEOF\n\n# lsmod 경우가 없는 경우 modprobe\nlsmod | grep overlay\nlsmod | grep br_netfilter\nsudo modprobe overlay\nsudo modprobe br_netfilter\n\ncat \u003c\u003cEOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf\nnet.bridge.bridge-nf-call-iptables  = 1\nnet.ipv4.ip_forward                 = 1\nnet.bridge.bridge-nf-call-ip6tables = 1\nEOF\n\nsudo sysctl --system\nsudo systemctl restart containerd\n```\n- master node (control plane)\n```sh\nsudo kubeadm config images pull\nsudo kubeadm init --pod-network-cidr=10.244.0.0/16 \n```\n`init` 의 결과로 나오는 스크립트 실행해서 ~/.kube/config 를 생성하면 [[kubectl]] 사용가능\n- worker node\n`init` 의 결과로 아래 형식의 스크립트를 복붙하여 실행\n```sh \nsudo kubeadm join 192.168.0.74:6443 --token [token] [--node-name name_default:hostname]\n```\n- x86 의 경우 containerd 가 설치되지 않으므로 # containerd 부분을 아래로 대신한다\n\n```sh \n# x86\nsudo mkdir -p /etc/apt/keyrings\ncurl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg\necho \\\n  \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \\\n  $(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list \u003e /dev/null\n```\n\n#### error\n[[kubeadm]] 참조\n\n## link\n- [[kubeadm]]\n"])</script><script>self.__next_f.push([1,"16:Tc04,"])</script><script>self.__next_f.push([1,"\n## [[kubernetes]] setup\n[[kubespray]] 로 시간 많이 날림\n[[kubeadm]] 으로 성공 ha 를 구성하려고 k3s 대신 k8s 를 선택했으나 api-server 자체가 load balancer 를 필요로 하기 때문에 그냥 단독으로 사용\n\n### kubeadm\n\nos: Ubuntu Server 22.04.1 LTS (64-bit) - Server OS with long-term support for RPi\n\n- 공통\n```sh\ncgroup=\"$(head -n1 /boot/firmware/cmdline.txt) cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1\"\necho $cgroup | sudo tee /boot/firmware/cmdline.txt\n\nsudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg\necho \"deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main\" | sudo tee /etc/apt/sources.list.d/kubernetes.list\nsudo apt update\nsudo apt install -y apt-transport-https ca-certificates curl\nsudo apt install -y kubelet kubeadm kubectl\nsudo apt-mark hold kubelet kubeadm kubectl\n\n# off swap\nsudo sed -i '/ swap / s/^\\(.*\\)$/#\\1/g' /etc/fstab\nsudo swapoff -a\n\n# containerd\ncurl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -\nsudo add-apt-repository \"deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"\n\nsudo apt update\nsudo apt install -y containerd.io\n\nsudo mkdir -p /etc/containerd\ncontainerd config default | sudo tee /etc/containerd/config.toml\nsudo sed -i 's/SystemdCgroup \\= false/SystemdCgroup \\= true/g' /etc/containerd/config.toml\n\n# 안되는 경우\nsudo rm /etc/containerd/config.toml\nsudo systemctl restart containerd\n\nsudo sysctl --system\nsudo systemctl restart containerd\n\ncat \u003c\u003cEOF | sudo tee /etc/modules-load.d/containerd.conf\noverlay\nbr_netfilter\nEOF\n\n# lsmod 경우가 없는 경우 modprobe\nlsmod | grep overlay\nlsmod | grep br_netfilter\nsudo modprobe overlay\nsudo modprobe br_netfilter\n\ncat \u003c\u003cEOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf\nnet.bridge.bridge-nf-call-iptables  = 1\nnet.ipv4.ip_forward                 = 1\nnet.bridge.bridge-nf-call-ip6tables = 1\nEOF\n\nsudo sysctl --system\nsudo systemctl restart containerd\n```\n- master node (control plane)\n```sh\nsudo kubeadm config images pull\nsudo kubeadm init --pod-network-cidr=10.244.0.0/16 \n```\n`init` 의 결과로 나오는 스크립트 실행해서 ~/.kube/config 를 생성하면 [[kubectl]] 사용가능\n- worker node\n`init` 의 결과로 아래 형식의 스크립트를 복붙하여 실행\n```sh \nsudo kubeadm join 192.168.0.74:6443 --token [token] [--node-name name_default:hostname]\n```\n- x86 의 경우 containerd 가 설치되지 않으므로 # containerd 부분을 아래로 대신한다\n\n```sh \n# x86\nsudo mkdir -p /etc/apt/keyrings\ncurl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg\necho \\\n  \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \\\n  $(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list \u003e /dev/null\n```\n\n#### error\n[[kubeadm]] 참조\n\n## link\n- [[kubeadm]]\n"])</script><script>self.__next_f.push([1,"17:Tc04,"])</script><script>self.__next_f.push([1,"\n## [[kubernetes]] setup\n[[kubespray]] 로 시간 많이 날림\n[[kubeadm]] 으로 성공 ha 를 구성하려고 k3s 대신 k8s 를 선택했으나 api-server 자체가 load balancer 를 필요로 하기 때문에 그냥 단독으로 사용\n\n### kubeadm\n\nos: Ubuntu Server 22.04.1 LTS (64-bit) - Server OS with long-term support for RPi\n\n- 공통\n```sh\ncgroup=\"$(head -n1 /boot/firmware/cmdline.txt) cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1\"\necho $cgroup | sudo tee /boot/firmware/cmdline.txt\n\nsudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg\necho \"deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main\" | sudo tee /etc/apt/sources.list.d/kubernetes.list\nsudo apt update\nsudo apt install -y apt-transport-https ca-certificates curl\nsudo apt install -y kubelet kubeadm kubectl\nsudo apt-mark hold kubelet kubeadm kubectl\n\n# off swap\nsudo sed -i '/ swap / s/^\\(.*\\)$/#\\1/g' /etc/fstab\nsudo swapoff -a\n\n# containerd\ncurl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -\nsudo add-apt-repository \"deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\"\n\nsudo apt update\nsudo apt install -y containerd.io\n\nsudo mkdir -p /etc/containerd\ncontainerd config default | sudo tee /etc/containerd/config.toml\nsudo sed -i 's/SystemdCgroup \\= false/SystemdCgroup \\= true/g' /etc/containerd/config.toml\n\n# 안되는 경우\nsudo rm /etc/containerd/config.toml\nsudo systemctl restart containerd\n\nsudo sysctl --system\nsudo systemctl restart containerd\n\ncat \u003c\u003cEOF | sudo tee /etc/modules-load.d/containerd.conf\noverlay\nbr_netfilter\nEOF\n\n# lsmod 경우가 없는 경우 modprobe\nlsmod | grep overlay\nlsmod | grep br_netfilter\nsudo modprobe overlay\nsudo modprobe br_netfilter\n\ncat \u003c\u003cEOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf\nnet.bridge.bridge-nf-call-iptables  = 1\nnet.ipv4.ip_forward                 = 1\nnet.bridge.bridge-nf-call-ip6tables = 1\nEOF\n\nsudo sysctl --system\nsudo systemctl restart containerd\n```\n- master node (control plane)\n```sh\nsudo kubeadm config images pull\nsudo kubeadm init --pod-network-cidr=10.244.0.0/16 \n```\n`init` 의 결과로 나오는 스크립트 실행해서 ~/.kube/config 를 생성하면 [[kubectl]] 사용가능\n- worker node\n`init` 의 결과로 아래 형식의 스크립트를 복붙하여 실행\n```sh \nsudo kubeadm join 192.168.0.74:6443 --token [token] [--node-name name_default:hostname]\n```\n- x86 의 경우 containerd 가 설치되지 않으므로 # containerd 부분을 아래로 대신한다\n\n```sh \n# x86\nsudo mkdir -p /etc/apt/keyrings\ncurl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg\necho \\\n  \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \\\n  $(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list \u003e /dev/null\n```\n\n#### error\n[[kubeadm]] 참조\n\n## link\n- [[kubeadm]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# raspberry pi\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# raspberry pi\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/raspberry-pi\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# raspberry pi\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

@@ -1,0 +1,548 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-3f8f17edabe7c539.js"],""]
+8:I[6172,["601","static/chunks/app/error-71963c526facdbf7.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-b37065e097e62895.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","neovim","c"]
+0:["OGWDQWYCR1M8j8Rn524lH",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","neovim","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"neovim\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","neovim","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],""]
+10:T2399,<h1 id="neovim">neovim</h1>
+<h2 id="list">list</h2>
+<ul>
+<li>buflist <code class="span">:buffers</code></li>
+<li>arglist <code class="span">:args</code><ul>
+<li>buffer list 의 subset 으로 argument 로 열린 리스트가 보여진다</li>
+<li>argadd 명령을 통해서 확장 가능하다</li>
+</ul>
+</li>
+</ul>
+<h2 id="ex">ex</h2>
+<ul>
+<li><code class="span">@:</code> 최근 명령어 실행</li>
+<li><code class="span">ctrl+f</code> ex 명령어 프롬프트 상태에서 누르면 ex history 검색이 가능해진다</li>
+</ul>
+<h2 id="nvimrc">.nvimrc</h2>
+<ul>
+<li><code class="span">.nvimrc</code> 를 둬서 해당 디렉토리에서 vim 을 실행시 특정 스크립트 등을 실행할 수있다.</li>
+<li><code class="span">.nvimrc</code> 설정<pre><code class="hljs language-vim"><span class="hljs-keyword">vim</span>.<span class="hljs-keyword">opt</span>.exrc = true
+<span class="hljs-keyword">vim</span>.<span class="hljs-keyword">opt</span>.secure = true
+</code></pre></li>
+<li><code class="span">.nvimrc</code> 파일 내용 예<pre><code class="hljs language-text">lua &lt;&lt; EOF
+vim.loop.os_setenv(&#x27;VIRTUAL_ENV&#x27;, &#x27;~/.local/data/virtualenvs/kaggle-1Dzpi2UB&#x27;)
+EOF
+</code></pre></li>
+</ul>
+<h2 id="python"><a href="python">python</a></h2>
+<pre><code class="hljs language-sh"><span class="hljs-comment"># python 지원 확인</span>
+nvim +checkhealth
+<span class="hljs-comment"># python 지원 업그레이드</span>
+python3 -m pip install --upgrade pynvim
+</code></pre><h2 id="usage">usage</h2>
+<h3 id="특정-파일을-특정-파일-타입으로-매핑">특정 파일을 특정 파일 타입으로 매핑</h3>
+<ul>
+<li><a href="https://github.com/deptno/nvim/commit/a4c7a44e3eb4c74b2b0196623c3eada387e17adb" target="_blank">[URL] https://github.com/deptno/nvim/commit/a4c7a44e3eb4c74b2b0196623c3eada387e17adb</a></li>
+</ul>
+<h2 id="error"><a href="error">error</a></h2>
+<p>emoji 등 유니코드 캐릭터가 존재한 이후에는 yy 등 카피가 clipboard(reg *) 에 복사되지 않는 이슈</p>
+<ul>
+<li><a href="https://github.com/neovim/neovim/issues/11432#issuecomment-557868656" target="_blank">[URL] https://github.com/neovim/neovim/issues/11432#issuecomment-557868656</a></li>
+</ul>
+<pre><code class="hljs language-lua">vim.cmd <span class="hljs-string">&quot;:let $LANG=&#x27;en_US.UTF-8&#x27;&quot;</span>
+</code></pre><h3 id="localsharenvimruntimeluavimlspsemantic_tokenslua98-attempt-to-index-field-semantictokensprovider-a-nil-value">.local/share/nvim/runtime/lua/vim/lsp/semantic_tokens.lua:98: attempt to index field &#39;semanticTokensProvider&#39; (a nil value)</h3>
+<ul>
+<li><a href="https://github.com/neovim/nvim-lspconfig/issues/2542#issuecomment-1547019213" target="_blank">[URL] https://github.com/neovim/nvim-lspconfig/issues/2542#issuecomment-1547019213</a></li>
+</ul>
+<ul>
+<li>다소 다르게 처리하긴 했는데 <code class="span">lsp-config</code> 에서 <code class="span">semanticTokensProvider</code> 관련 설정을 <code class="span">on_init</code> 으로 타이밍 변경후 나지 않는다<ul>
+<li><a href="https://github.com/deptno/nvim/commit/bc8273d6600f3f1964b1abb0136dc8c577f6000c" target="_blank">[URL] https://github.com/deptno/nvim/commit/bc8273d6600f3f1964b1abb0136dc8c577f6000c</a></li>
+</ul>
+<ul>
+<li>무엇이 안되는지 봐야겟으나 <code class="span">dynamic symbols</code> 은 동작하는 것으로 보인다<ul>
+<li><code class="span">rename</code> 이 안되는 것으로 보임</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs language-vim">Error <span class="hljs-keyword">on</span> prepareRename: Request textDocument/prepareRename failed with message:  You cannot <span class="hljs-built_in">rename</span> this element. 
+</code></pre><h3 id="afterftpluginlua-에서-설정한-키맵이-전역으로-번지는-문제">[after/]ftplugin/*.lua 에서 설정한 키맵이 전역으로 번지는 문제</h3>
+<blockquote><p>예를 들어 <code class="span">markdown</code> filetype 에 특정키 <code class="span">q</code> 를 매핑해서 <code class="span">bdelete</code> 를 하게되면 <code class="span">markdown</code> 이후의 모든 파일들에대해서 해당 키맵이 동작하는 문제</p></blockquote><ul>
+<li>filetype 을 통해서는 해결이 안되는 것으로 보인다. 권장하지 않는 방법이라는 글들이 있다.</li>
+<li>그냥 글로벌 키매핑으로 빼버렸다<ul>
+<li><a href="https://github.com/deptno/nvim/commit/ef0ffc616b0a7971936e32c83d5d6b42934261e7" target="_blank">[URL] https://github.com/deptno/nvim/commit/ef0ffc616b0a7971936e32c83d5d6b42934261e7</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="plugin">plugin</h2>
+<ul>
+<li><a href="taskwiki">taskwiki</a></li>
+<li><a href="defx">defx</a></li>
+<li><a href="nvim-web-devicons">nvim-web-devicons</a></li>
+<li><a href="nvim-treesitter">nvim-treesitter</a></li>
+<li><a href="telescope">telescope.nvim</a></li>
+<li><a href="gitsigns">gitsings.nvim</a></li>
+<li><a href="bufferline">bufferline.nvim</a></li>
+<li><a href="null-ls">null-ls.nvim</a></li>
+<li><a href="nlspsettings">nlspsettings.nvim</a></li>
+</ul>
+<h3 id="북마크">북마크</h3>
+<ul>
+<li>bookmarks.nvim<ul>
+<li><a href="https://github.com/deptno/nvim/commit/ed11001b34706b8f079c0e19df21545c59d813c4" target="_blank">[URL] https://github.com/deptno/nvim/commit/ed11001b34706b8f079c0e19df21545c59d813c4</a></li>
+</ul>
+<ul>
+<li><a href="git">git</a> 프로젝트 기반으로 영구적인 북마크를 생성한다, 리스팅과 태그 프리뷰가 지원</li>
+</ul>
+</li>
+<li>marks.nvim<ul>
+<li><a href="https://github.com/deptno/nvim/blob/ed11001b34706b8f079c0e19df21545c59d813c4/lua/custom/configs/marks.lua" target="_blank">[URL] https://github.com/deptno/nvim/blob/ed11001b34706b8f079c0e19df21545c59d813c4/lua/custom/configs/marks.lua</a></li>
+</ul>
+<ul>
+<li>custom mark 를 지원하며 동일 북마크키로 여러군대를 지정하고 네비게이션이 가능하다</li>
+<li>영구적이지않아 이슈 분석등을 일시적으로 할때 편리하다</li>
+</ul>
+</li>
+</ul>
+<h3 id="neovim-lua-기반-플러그인-환경-설정">neovim lua 기반 플러그인 환경 설정</h3>
+<ul>
+<li><a href="neovim-lua-plugins">neovim-lua-plugins</a></li>
+</ul>
+<hr>
+<h2 id="neovim-api">neovim-api</h2>
+<ul>
+<li>global events<ul>
+<li>client async request -&gt; error occur </li>
+<li>server -..-&gt; notify error event later</li>
+</ul>
+</li>
+</ul>
+<h3 id="buf---stdin---stdout">buf -&gt; stdin -&gt; stdout</h3>
+<pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> buf = vim.fn.getbufline(<span class="hljs-string">&#x27;%&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;$&#x27;</span>)
+<span class="hljs-keyword">local</span> <span class="hljs-built_in">stdin</span> = buf.fn.getbufline(<span class="hljs-string">&#x27;%&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;$&#x27;</span>)
+vim.fn.system(<span class="hljs-string">&#x27;grep content&#x27;</span>, <span class="hljs-built_in">stdin</span>)
+</code></pre><p><code class="span">vim.fn.system</code> 의 두번째 인자가 <code class="span">stdin</code> 의 역할을 한다</p>
+<hr>
+<h2 id="tabpage--window--buffer-todo">tabpage &gt; window &gt; buffer <a href="todo">todo</a></h2>
+<ul>
+<li><a href="nvchad">nvchad</a> 는 <a href="tabufline">tabufline</a> 을 사용</li>
+<li>창 분할마다를 window</li>
+<li>buffer 는 window 아래로 귀속되지 않는 것으로 보인다</li>
+</ul>
+<h3 id="tabpage">tabpage</h3>
+<ul>
+<li><code class="span">vim.api.nvim_tabpage_get_number(0)</code> -&gt; 현재 tabpage number (우상단 표시)</li>
+<li><code class="span">vim.api.nvim_tabpage_get_win(0)</code> -&gt; 현재 tabpage number (우상단 표시)<ul>
+<li><a href="question">question</a> <code class="span">nvim_tabpage_get_number(0)</code> 을 통해 넣은 경우(현재윈도우)와 <code class="span">0</code> 을 넣은 경우가 다름</li>
+</ul>
+</li>
+</ul>
+<h4 id="window">window</h4>
+<ul>
+<li><code class="span">vim.api.nvim_win_get_tabpage(0)</code> -&gt; 현재 window 의 tab nubmer</li>
+<li><code class="span">vim.api.nvim_win_get_buf(0)</code> -&gt; 현재 window의 buf number</li>
+</ul>
+<h2 id="설정">설정</h2>
+<h3 id="lazigit">lazigit</h3>
+<ul>
+<li><a href="/public-wiki/diary/2023-12-24">[diary] diary:2023-12-24</a></li>
+</ul>
+<ul>
+<li>nvim-tree 와 콜라보<ul>
+<li><a href="https://github.com/deptno/nvim/commit/e2cb2cc137801365bb9d5ebcbd96adc5a69e7a4e" target="_blank">[URL] https://github.com/deptno/nvim/commit/e2cb2cc137801365bb9d5ebcbd96adc5a69e7a4e</a></li>
+</ul>
+</li>
+<li>현재파일,  현재파일의 디렉토리<ul>
+<li><a href="https://github.com/deptno/nvim/commit/1ec4ebde7ada21812f2123c91d9f53bed2784151" target="_blank">[URL] https://github.com/deptno/nvim/commit/1ec4ebde7ada21812f2123c91d9f53bed2784151</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="vim">vim</a></li>
+<li><a href="python">python</a></li>
+<li><a href="neovim-lua-plugins">neovim-lua-plugins</a></li>
+<li><a href="neovim-setup">neovim-setup</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/440709c\n","className":"bg-white text-black","children":"440709c"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/neovim.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/neovim.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/neovim.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"neovim","name":"neovim","val":22},{"id":"python","name":"python","val":12},{"id":"error","name":"error","val":4},{"id":"taskwiki","name":"taskwiki","val":5},{"id":"defx","name":"defx","val":4},{"id":"nvim-web-devicons","name":"nvim-web-devicons","val":2},{"id":"nvim-treesitter","name":"nvim-treesitter","val":18},{"id":"telescope","name":"telescope","val":1},{"id":"gitsigns","name":"gitsigns","val":2},{"id":"bufferline","name":"bufferline","val":"$undefined"},{"id":"null-ls","name":"null-ls","val":"$undefined"},{"id":"nlspsettings","name":"nlspsettings","val":1},{"id":"git","name":"git","val":44},{"id":"neovim-lua-plugins","name":"neovim-lua-plugins","val":8},{"id":"todo","name":"todo","val":7},{"id":"nvchad","name":"nvchad","val":"$undefined"},{"id":"tabufline","name":"tabufline","val":"$undefined"},{"id":"question","name":"question","val":"$undefined"},{"id":"diary/2023-12-24","name":"diary/2023-12-24","val":7},{"id":"vim","name":"vim","val":20},{"id":"neovim-setup","name":"neovim-setup","val":37},{"id":"about-me","name":"about-me","val":60},{"id":"comparison:intellij-vs-neovim","name":"comparison:intellij-vs-neovim","val":7},{"id":"dap","name":"dap","val":4},{"id":"develop-neovim-lua-plugin","name":"develop-neovim-lua-plugin","val":3},{"id":"gh","name":"gh","val":11},{"id":"gx","name":"gx","val":2},{"id":"intellij","name":"intellij","val":5},{"id":"lua","name":"lua","val":4},{"id":"me","name":"me","val":16},{"id":"neotest","name":"neotest","val":8},{"id":"orgmode","name":"orgmode","val":2},{"id":"plenary","name":"plenary","val":2},{"id":"setup-terminal","name":"setup-terminal","val":16},{"id":"terminal","name":"terminal","val":88},{"id":"tmux","name":"tmux","val":7},{"id":"tree-sitter","name":"tree-sitter","val":7},{"id":"vim-session","name":"vim-session","val":2},{"id":"vimscript","name":"vimscript","val":3},{"id":"wip","name":"wip","val":2},{"id":"diary/2023-10-08","name":"diary/2023-10-08","val":5},{"id":"diary/2023-10-30","name":"diary/2023-10-30","val":2},{"id":"diary/2023-11-05","name":"diary/2023-11-05","val":6},{"id":"diary/2023-11-06","name":"diary/2023-11-06","val":1},{"id":"diary/2023-12-06","name":"diary/2023-12-06","val":5},{"id":"diary/2023-12-07","name":"diary/2023-12-07","val":1},{"id":"diary/2023-12-14","name":"diary/2023-12-14","val":1},{"id":"diary/2023-12-16","name":"diary/2023-12-16","val":2},{"id":"diary/2023-12-17","name":"diary/2023-12-17","val":3},{"id":"diary/2023-12-31","name":"diary/2023-12-31","val":93},{"id":"diary/2024-09-07","name":"diary/2024-09-07","val":2},{"id":"diary/2024-10-14","name":"diary/2024-10-14","val":2},{"id":"diary/2024-11-12","name":"diary/2024-11-12","val":1},{"id":"diary/2024-11-14","name":"diary/2024-11-14","val":1},{"id":"diary/2024-12-07","name":"diary/2024-12-07","val":2},{"id":"diary/2024-12-20","name":"diary/2024-12-20","val":7},{"id":"diary/2024-12-31","name":"diary/2024-12-31","val":441}],"links":[{"source":"neovim","target":"python"},{"source":"neovim","target":"error"},{"source":"neovim","target":"taskwiki"},{"source":"neovim","target":"defx"},{"source":"neovim","target":"nvim-web-devicons"},{"source":"neovim","target":"nvim-treesitter"},{"source":"neovim","target":"telescope"},{"source":"neovim","target":"gitsigns"},{"source":"neovim","target":"bufferline"},{"source":"neovim","target":"null-ls"},{"source":"neovim","target":"nlspsettings"},{"source":"neovim","target":"git"},{"source":"neovim","target":"neovim-lua-plugins"},{"source":"neovim","target":"todo"},{"source":"neovim","target":"nvchad"},{"source":"neovim","target":"tabufline"},{"source":"neovim","target":"question"},{"source":"neovim","target":"diary/2023-12-24"},{"source":"neovim","target":"vim"},{"source":"neovim","target":"python"},{"source":"neovim","target":"neovim-lua-plugins"},{"source":"neovim","target":"neovim-setup"},{"source":"about-me","target":"neovim"},{"source":"about-me","target":"neovim"},{"source":"comparison:intellij-vs-neovim","target":"neovim"},{"source":"comparison:intellij-vs-neovim","target":"neovim"},{"source":"dap","target":"neovim"},{"source":"dap","target":"neovim"},{"source":"defx","target":"neovim"},{"source":"develop-neovim-lua-plugin","target":"neovim"},{"source":"error","target":"neovim"},{"source":"gh","target":"neovim"},{"source":"gh","target":"neovim"},{"source":"gitsigns","target":"neovim"},{"source":"gx","target":"neovim"},{"source":"intellij","target":"neovim"},{"source":"lua","target":"neovim"},{"source":"me","target":"neovim"},{"source":"neotest","target":"neovim"},{"source":"neovim-lua-plugins","target":"neovim"},{"source":"neovim-setup","target":"neovim"},{"source":"nlspsettings","target":"neovim"},{"source":"nvim-treesitter","target":"neovim"},{"source":"nvim-treesitter","target":"neovim"},{"source":"orgmode","target":"neovim"},{"source":"plenary","target":"neovim"},{"source":"setup-terminal","target":"neovim"},{"source":"setup-terminal","target":"neovim"},{"source":"telescope","target":"neovim"},{"source":"terminal","target":"neovim"},{"source":"tmux","target":"neovim"},{"source":"tmux","target":"neovim"},{"source":"tree-sitter","target":"neovim"},{"source":"vim-session","target":"neovim"},{"source":"vim","target":"neovim"},{"source":"vim","target":"neovim"},{"source":"vim","target":"neovim"},{"source":"vimscript","target":"neovim"},{"source":"wip","target":"neovim"},{"source":"diary/2023-10-08","target":"neovim"},{"source":"diary/2023-10-08","target":"neovim"},{"source":"diary/2023-10-08","target":"neovim"},{"source":"diary/2023-10-30","target":"neovim"},{"source":"diary/2023-11-05","target":"neovim"},{"source":"diary/2023-11-06","target":"neovim"},{"source":"diary/2023-12-06","target":"neovim"},{"source":"diary/2023-12-07","target":"neovim"},{"source":"diary/2023-12-14","target":"neovim"},{"source":"diary/2023-12-16","target":"neovim"},{"source":"diary/2023-12-17","target":"neovim"},{"source":"diary/2023-12-24","target":"neovim"},{"source":"diary/2023-12-31","target":"neovim"},{"source":"diary/2023-12-31","target":"neovim"},{"source":"diary/2023-12-31","target":"neovim"},{"source":"diary/2023-12-31","target":"neovim"},{"source":"diary/2023-12-31","target":"neovim"},{"source":"diary/2023-12-31","target":"neovim"},{"source":"diary/2023-12-31","target":"neovim"},{"source":"diary/2023-12-31","target":"neovim"},{"source":"diary/2024-09-07","target":"neovim"},{"source":"diary/2024-10-14","target":"neovim"},{"source":"diary/2024-11-12","target":"neovim"},{"source":"diary/2024-11-14","target":"neovim"},{"source":"diary/2024-12-07","target":"neovim"},{"source":"diary/2024-12-20","target":"neovim"},{"source":"diary/2024-12-31","target":"neovim"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","neovim",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim","children":[["$","span",null,{"className":"underline","children":"neovim"}],["$","sup",null,{"children":22}]]}]}],["$","span","python",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/python","children":[["$","span",null,{"className":"underline","children":"python"}],["$","sup",null,{"children":12}]]}]}],["$","span","error",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/error","children":[["$","span",null,{"className":"underline","children":"error"}],["$","sup",null,{"children":4}]]}]}],["$","span","taskwiki",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/taskwiki","children":[["$","span",null,{"className":"underline","children":"taskwiki"}],["$","sup",null,{"children":5}]]}]}],["$","span","defx",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/defx","children":[["$","span",null,{"className":"underline","children":"defx"}],["$","sup",null,{"children":4}]]}]}],["$","span","nvim-web-devicons",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/nvim-web-devicons","children":[["$","span",null,{"className":"underline","children":"nvim-web-devicons"}],["$","sup",null,{"children":2}]]}]}],["$","span","nvim-treesitter",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/nvim-treesitter","children":[["$","span",null,{"className":"underline","children":"nvim-treesitter"}],["$","sup",null,{"children":18}]]}]}],["$","span","telescope",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/telescope","children":[["$","span",null,{"className":"underline","children":"telescope"}],["$","sup",null,{"children":1}]]}]}],["$","span","gitsigns",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/gitsigns","children":[["$","span",null,{"className":"underline","children":"gitsigns"}],["$","sup",null,{"children":2}]]}]}],["$","span","bufferline",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/bufferline","children":[["$","span",null,{"className":"underline","children":"bufferline"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","null-ls",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/null-ls","children":[["$","span",null,{"className":"underline","children":"null-ls"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","nlspsettings",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/nlspsettings","children":[["$","span",null,{"className":"underline","children":"nlspsettings"}],["$","sup",null,{"children":1}]]}]}],["$","span","git",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/git","children":[["$","span",null,{"className":"underline","children":"git"}],["$","sup",null,{"children":44}]]}]}],["$","span","neovim-lua-plugins",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim-lua-plugins","children":[["$","span",null,{"className":"underline","children":"neovim-lua-plugins"}],["$","sup",null,{"children":8}]]}]}],["$","span","todo",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/todo","children":[["$","span",null,{"className":"underline","children":"todo"}],["$","sup",null,{"children":7}]]}]}],["$","span","nvchad",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/nvchad","children":[["$","span",null,{"className":"underline","children":"nvchad"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","tabufline",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/tabufline","children":[["$","span",null,{"className":"underline","children":"tabufline"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","question",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/question","children":[["$","span",null,{"className":"underline","children":"question"}],["$","sup",null,{"children":"$undefined"}]]}]}],["$","span","diary/2023-12-24",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-12-24","children":[["$","span",null,{"className":"underline","children":"diary/2023-12-24"}],["$","sup",null,{"children":7}]]}]}],["$","span","vim",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/vim","children":[["$","span",null,{"className":"underline","children":"vim"}],["$","sup",null,{"children":20}]]}]}],["$","span","neovim-setup",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim-setup","children":[["$","span",null,{"className":"underline","children":"neovim-setup"}],["$","sup",null,{"children":37}]]}]}],["$","span","about-me",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/about-me","children":[["$","span",null,{"className":"underline","children":"about-me"}],["$","sup",null,{"children":60}]]}]}],["$","span","comparison:intellij-vs-neovim",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/comparison:intellij-vs-neovim","children":[["$","span",null,{"className":"underline","children":"comparison:intellij-vs-neovim"}],["$","sup",null,{"children":7}]]}]}],["$","span","dap",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/dap","children":[["$","span",null,{"className":"underline","children":"dap"}],["$","sup",null,{"children":4}]]}]}],["$","span","develop-neovim-lua-plugin",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/develop-neovim-lua-plugin","children":[["$","span",null,{"className":"underline","children":"develop-neovim-lua-plugin"}],["$","sup",null,{"children":3}]]}]}],["$","span","gh",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/gh","children":[["$","span",null,{"className":"underline","children":"gh"}],["$","sup",null,{"children":11}]]}]}],["$","span","gx",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/gx","children":[["$","span",null,{"className":"underline","children":"gx"}],["$","sup",null,{"children":2}]]}]}],["$","span","intellij",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/intellij","children":[["$","span",null,{"className":"underline","children":"intellij"}],["$","sup",null,{"children":5}]]}]}],["$","span","lua",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/lua","children":[["$","span",null,{"className":"underline","children":"lua"}],["$","sup",null,{"children":4}]]}]}],["$","span","me",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/me","children":[["$","span",null,{"className":"underline","children":"me"}],["$","sup",null,{"children":16}]]}]}],["$","span","neotest",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neotest","children":[["$","span",null,{"className":"underline","children":"neotest"}],["$","sup",null,{"children":8}]]}]}],["$","span","orgmode",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/orgmode","children":[["$","span",null,{"className":"underline","children":"orgmode"}],["$","sup",null,{"children":2}]]}]}],["$","span","plenary",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/plenary","children":[["$","span",null,{"className":"underline","children":"plenary"}],["$","sup",null,{"children":2}]]}]}],["$","span","setup-terminal",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/setup-terminal","children":[["$","span",null,{"className":"underline","children":"setup-terminal"}],["$","sup",null,{"children":16}]]}]}],["$","span","terminal",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/terminal","children":[["$","span",null,{"className":"underline","children":"terminal"}],["$","sup",null,{"children":88}]]}]}],["$","span","tmux",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/tmux","children":[["$","span",null,{"className":"underline","children":"tmux"}],["$","sup",null,{"children":7}]]}]}],["$","span","tree-sitter",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/tree-sitter","children":[["$","span",null,{"className":"underline","children":"tree-sitter"}],["$","sup",null,{"children":7}]]}]}],["$","span","vim-session",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/vim-session","children":[["$","span",null,{"className":"underline","children":"vim-session"}],["$","sup",null,{"children":2}]]}]}],["$","span","vimscript",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/vimscript","children":[["$","span",null,{"className":"underline","children":"vimscript"}],["$","sup",null,{"children":3}]]}]}],["$","span","wip",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/wip","children":[["$","span",null,{"className":"underline","children":"wip"}],["$","sup",null,{"children":2}]]}]}],["$","span","diary/2023-10-08",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-10-08","children":[["$","span",null,{"className":"underline","children":"diary/2023-10-08"}],["$","sup",null,{"children":5}]]}]}],["$","span","diary/2023-10-30",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-10-30","children":[["$","span",null,{"className":"underline","children":"diary/2023-10-30"}],["$","sup",null,{"children":2}]]}]}],["$","span","diary/2023-11-05",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-11-05","children":[["$","span",null,{"className":"underline","children":"diary/2023-11-05"}],["$","sup",null,{"children":6}]]}]}],["$","span","diary/2023-11-06",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-11-06","children":[["$","span",null,{"className":"underline","children":"diary/2023-11-06"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2023-12-06",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-12-06","children":[["$","span",null,{"className":"underline","children":"diary/2023-12-06"}],["$","sup",null,{"children":5}]]}]}],["$","span","diary/2023-12-07",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-12-07","children":[["$","span",null,{"className":"underline","children":"diary/2023-12-07"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2023-12-14",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-12-14","children":[["$","span",null,{"className":"underline","children":"diary/2023-12-14"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2023-12-16",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-12-16","children":[["$","span",null,{"className":"underline","children":"diary/2023-12-16"}],["$","sup",null,{"children":2}]]}]}],["$","span","diary/2023-12-17",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-12-17","children":[["$","span",null,{"className":"underline","children":"diary/2023-12-17"}],["$","sup",null,{"children":3}]]}]}],["$","span","diary/2023-12-31",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2023-12-31","children":[["$","span",null,{"className":"underline","children":"diary/2023-12-31"}],["$","sup",null,{"children":93}]]}]}],["$","span","diary/2024-09-07",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-09-07","children":[["$","span",null,{"className":"underline","children":"diary/2024-09-07"}],["$","sup",null,{"children":2}]]}]}],["$","span","diary/2024-10-14",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-10-14","children":[["$","span",null,{"className":"underline","children":"diary/2024-10-14"}],["$","sup",null,{"children":2}]]}]}],["$","span","diary/2024-11-12",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-11-12","children":[["$","span",null,{"className":"underline","children":"diary/2024-11-12"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2024-11-14",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-11-14","children":[["$","span",null,{"className":"underline","children":"diary/2024-11-14"}],["$","sup",null,{"children":1}]]}]}],["$","span","diary/2024-12-07",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-12-07","children":[["$","span",null,{"className":"underline","children":"diary/2024-12-07"}],["$","sup",null,{"children":2}]]}]}],["$","span","diary/2024-12-20",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-12-20","children":[["$","span",null,{"className":"underline","children":"diary/2024-12-20"}],["$","sup",null,{"children":7}]]}]}],["$","span","diary/2024-12-31",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-12-31","children":[["$","span",null,{"className":"underline","children":"diary/2024-12-31"}],["$","sup",null,{"children":441}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","neovim",{"className":"pl-0","children":["$","a",null,{"href":"#neovim","children":"neovim"}]}],["$","div","list",{"className":"pl-2","children":["$","a",null,{"href":"#list","children":"list"}]}],["$","div","ex",{"className":"pl-2","children":["$","a",null,{"href":"#ex","children":"ex"}]}],["$","div","nvimrc",{"className":"pl-2","children":["$","a",null,{"href":"#nvimrc","children":".nvimrc"}]}],["$","div","python",{"className":"pl-2","children":["$","a",null,{"href":"#python","children":"python"}]}],["$","div","usage",{"className":"pl-2","children":["$","a",null,{"href":"#usage","children":"usage"}]}],["$","div","특정-파일을-특정-파일-타입으로-매핑",{"className":"pl-4","children":["$","a",null,{"href":"#특정-파일을-특정-파일-타입으로-매핑","children":"특정 파일을 특정 파일 타입으로 매핑"}]}],["$","div","error",{"className":"pl-2","children":["$","a",null,{"href":"#error","children":"error"}]}],["$","div","localsharenvimruntimeluavimlspsemantic_tokenslua98-attempt-to-index-field-semantictokensprovider-a-nil-value",{"className":"pl-4","children":["$","a",null,{"href":"#localsharenvimruntimeluavimlspsemantic_tokenslua98-attempt-to-index-field-semantictokensprovider-a-nil-value","children":".local/share/nvim/runtime/lua/vim/lsp/semantic_tokens.lua:98: attempt to index field 'semanticTokensProvider' (a nil value)"}]}],["$","div","afterftpluginlua-에서-설정한-키맵이-전역으로-번지는-문제",{"className":"pl-4","children":["$","a",null,{"href":"#afterftpluginlua-에서-설정한-키맵이-전역으로-번지는-문제","children":"[after/]ftplugin/*.lua 에서 설정한 키맵이 전역으로 번지는 문제"}]}],["$","div","plugin",{"className":"pl-2","children":["$","a",null,{"href":"#plugin","children":"plugin"}]}],["$","div","북마크",{"className":"pl-4","children":["$","a",null,{"href":"#북마크","children":"북마크"}]}],["$","div","neovim-lua-기반-플러그인-환경-설정",{"className":"pl-4","children":["$","a",null,{"href":"#neovim-lua-기반-플러그인-환경-설정","children":"neovim lua 기반 플러그인 환경 설정"}]}],["$","div","neovim-api",{"className":"pl-2","children":["$","a",null,{"href":"#neovim-api","children":"neovim-api"}]}],["$","div","buf---stdin---stdout",{"className":"pl-4","children":["$","a",null,{"href":"#buf---stdin---stdout","children":"buf -> stdin -> stdout"}]}],["$","div","tabpage--window--buffer-todo",{"className":"pl-2","children":["$","a",null,{"href":"#tabpage--window--buffer-todo","children":"tabpage > window > buffer todo"}]}],["$","div","tabpage",{"className":"pl-4","children":["$","a",null,{"href":"#tabpage","children":"tabpage"}]}],["$","div","window",{"className":"pl-6","children":["$","a",null,{"href":"#window","children":"window"}]}],["$","div","설정",{"className":"pl-2","children":["$","a",null,{"href":"#설정","children":"설정"}]}],["$","div","lazigit",{"className":"pl-4","children":["$","a",null,{"href":"#lazigit","children":"lazigit"}]}],["$","div","link",{"className":"pl-2","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:T1231,
+## list
+- buflist `:buffers`
+- arglist `:args`
+  - buffer list 의 subset 으로 argument 로 열린 리스트가 보여진다
+  - argadd 명령을 통해서 확장 가능하다
+
+## ex
+- `@:` 최근 명령어 실행
+- `ctrl+f` ex 명령어 프롬프트 상태에서 누르면 ex history 검색이 가능해진다
+
+## .nvimrc
+- `.nvimrc` 를 둬서 해당 디렉토리에서 vim 을 실행시 특정 스크립트 등을 실행할 수있다.
+- `.nvimrc` 설정
+  ```vim
+  vim.opt.exrc = true
+  vim.opt.secure = true
+  ```
+- `.nvimrc` 파일 내용 예
+  ```text
+  lua << EOF
+  vim.loop.os_setenv('VIRTUAL_ENV', '~/.local/data/virtualenvs/kaggle-1Dzpi2UB')
+  EOF
+  ```
+
+## [[python]]
+```sh
+# python 지원 확인
+nvim +checkhealth
+# python 지원 업그레이드
+python3 -m pip install --upgrade pynvim
+```
+
+## usage
+### 특정 파일을 특정 파일 타입으로 매핑
++ https://github.com/deptno/nvim/commit/a4c7a44e3eb4c74b2b0196623c3eada387e17adb
+
+## [[error]]
+emoji 등 유니코드 캐릭터가 존재한 이후에는 yy 등 카피가 clipboard(reg *) 에 복사되지 않는 이슈
+
+- https://github.com/neovim/neovim/issues/11432#issuecomment-557868656
+```lua
+vim.cmd ":let $LANG='en_US.UTF-8'"
+```
+
+### .local/share/nvim/runtime/lua/vim/lsp/semantic_tokens.lua:98: attempt to index field 'semanticTokensProvider' (a nil value)
++ https://github.com/neovim/nvim-lspconfig/issues/2542#issuecomment-1547019213
+- 다소 다르게 처리하긴 했는데 `lsp-config` 에서 `semanticTokensProvider` 관련 설정을 `on_init` 으로 타이밍 변경후 나지 않는다
+  + https://github.com/deptno/nvim/commit/bc8273d6600f3f1964b1abb0136dc8c577f6000c
+  - 무엇이 안되는지 봐야겟으나 `dynamic symbols` 은 동작하는 것으로 보인다
+    - `rename` 이 안되는 것으로 보임
+```vim 
+Error on prepareRename: Request textDocument/prepareRename failed with message:  You cannot rename this element. 
+```
+
+### [after/]ftplugin/*.lua 에서 설정한 키맵이 전역으로 번지는 문제
+> 예를 들어 `markdown` filetype 에 특정키 `q` 를 매핑해서 `bdelete` 를 하게되면 `markdown` 이후의 모든 파일들에대해서 해당 키맵이 동작하는 문제
+- filetype 을 통해서는 해결이 안되는 것으로 보인다. 권장하지 않는 방법이라는 글들이 있다.
+- 그냥 글로벌 키매핑으로 빼버렸다
+  + https://github.com/deptno/nvim/commit/ef0ffc616b0a7971936e32c83d5d6b42934261e7
+
+## plugin
+- [[taskwiki]]
+- [[defx]]
+- [[nvim-web-devicons]]
+- [[nvim-treesitter]]
+- [[telescope|telescope.nvim]]
+- [[gitsigns|gitsings.nvim]]
+- [[bufferline|bufferline.nvim]]
+- [[null-ls|null-ls.nvim]]
+- [[nlspsettings|nlspsettings.nvim]]
+
+### 북마크
+- bookmarks.nvim
+  + https://github.com/deptno/nvim/commit/ed11001b34706b8f079c0e19df21545c59d813c4
+  - [[git]] 프로젝트 기반으로 영구적인 북마크를 생성한다, 리스팅과 태그 프리뷰가 지원
+- marks.nvim
+  + https://github.com/deptno/nvim/blob/ed11001b34706b8f079c0e19df21545c59d813c4/lua/custom/configs/marks.lua
+  - custom mark 를 지원하며 동일 북마크키로 여러군대를 지정하고 네비게이션이 가능하다
+  - 영구적이지않아 이슈 분석등을 일시적으로 할때 편리하다
+
+### neovim lua 기반 플러그인 환경 설정
+- [[neovim-lua-plugins]]
+
+---
+
+## neovim-api
+- global events
+  - client async request -> error occur 
+  - server -..-> notify error event later
+
+### buf -> stdin -> stdout
+```lua
+local buf = vim.fn.getbufline('%', 1, '$')
+local stdin = buf.fn.getbufline('%', 1, '$')
+vim.fn.system('grep content', stdin)
+```
+`vim.fn.system` 의 두번째 인자가 `stdin` 의 역할을 한다
+
+---
+## tabpage > window > buffer [[todo]]
+- [[nvchad]] 는 [[tabufline]] 을 사용
+- 창 분할마다를 window
+- buffer 는 window 아래로 귀속되지 않는 것으로 보인다
+### tabpage
+- `vim.api.nvim_tabpage_get_number(0)` -> 현재 tabpage number (우상단 표시)
+- `vim.api.nvim_tabpage_get_win(0)` -> 현재 tabpage number (우상단 표시)
+  - [[question]] `nvim_tabpage_get_number(0)` 을 통해 넣은 경우(현재윈도우)와 `0` 을 넣은 경우가 다름
+#### window
+- `vim.api.nvim_win_get_tabpage(0)` -> 현재 window 의 tab nubmer
+- `vim.api.nvim_win_get_buf(0)` -> 현재 window의 buf number
+
+## 설정
+### lazigit
++ [[diary:2023-12-24]]
+- nvim-tree 와 콜라보
+  + https://github.com/deptno/nvim/commit/e2cb2cc137801365bb9d5ebcbd96adc5a69e7a4e
+- 현재파일,  현재파일의 디렉토리
+  + https://github.com/deptno/nvim/commit/1ec4ebde7ada21812f2123c91d9f53bed2784151
+
+## link
+- [[vim]]
+- [[python]]
+- [[neovim-lua-plugins]]
+- [[neovim-setup]]
+12:T1231,
+## list
+- buflist `:buffers`
+- arglist `:args`
+  - buffer list 의 subset 으로 argument 로 열린 리스트가 보여진다
+  - argadd 명령을 통해서 확장 가능하다
+
+## ex
+- `@:` 최근 명령어 실행
+- `ctrl+f` ex 명령어 프롬프트 상태에서 누르면 ex history 검색이 가능해진다
+
+## .nvimrc
+- `.nvimrc` 를 둬서 해당 디렉토리에서 vim 을 실행시 특정 스크립트 등을 실행할 수있다.
+- `.nvimrc` 설정
+  ```vim
+  vim.opt.exrc = true
+  vim.opt.secure = true
+  ```
+- `.nvimrc` 파일 내용 예
+  ```text
+  lua << EOF
+  vim.loop.os_setenv('VIRTUAL_ENV', '~/.local/data/virtualenvs/kaggle-1Dzpi2UB')
+  EOF
+  ```
+
+## [[python]]
+```sh
+# python 지원 확인
+nvim +checkhealth
+# python 지원 업그레이드
+python3 -m pip install --upgrade pynvim
+```
+
+## usage
+### 특정 파일을 특정 파일 타입으로 매핑
++ https://github.com/deptno/nvim/commit/a4c7a44e3eb4c74b2b0196623c3eada387e17adb
+
+## [[error]]
+emoji 등 유니코드 캐릭터가 존재한 이후에는 yy 등 카피가 clipboard(reg *) 에 복사되지 않는 이슈
+
+- https://github.com/neovim/neovim/issues/11432#issuecomment-557868656
+```lua
+vim.cmd ":let $LANG='en_US.UTF-8'"
+```
+
+### .local/share/nvim/runtime/lua/vim/lsp/semantic_tokens.lua:98: attempt to index field 'semanticTokensProvider' (a nil value)
++ https://github.com/neovim/nvim-lspconfig/issues/2542#issuecomment-1547019213
+- 다소 다르게 처리하긴 했는데 `lsp-config` 에서 `semanticTokensProvider` 관련 설정을 `on_init` 으로 타이밍 변경후 나지 않는다
+  + https://github.com/deptno/nvim/commit/bc8273d6600f3f1964b1abb0136dc8c577f6000c
+  - 무엇이 안되는지 봐야겟으나 `dynamic symbols` 은 동작하는 것으로 보인다
+    - `rename` 이 안되는 것으로 보임
+```vim 
+Error on prepareRename: Request textDocument/prepareRename failed with message:  You cannot rename this element. 
+```
+
+### [after/]ftplugin/*.lua 에서 설정한 키맵이 전역으로 번지는 문제
+> 예를 들어 `markdown` filetype 에 특정키 `q` 를 매핑해서 `bdelete` 를 하게되면 `markdown` 이후의 모든 파일들에대해서 해당 키맵이 동작하는 문제
+- filetype 을 통해서는 해결이 안되는 것으로 보인다. 권장하지 않는 방법이라는 글들이 있다.
+- 그냥 글로벌 키매핑으로 빼버렸다
+  + https://github.com/deptno/nvim/commit/ef0ffc616b0a7971936e32c83d5d6b42934261e7
+
+## plugin
+- [[taskwiki]]
+- [[defx]]
+- [[nvim-web-devicons]]
+- [[nvim-treesitter]]
+- [[telescope|telescope.nvim]]
+- [[gitsigns|gitsings.nvim]]
+- [[bufferline|bufferline.nvim]]
+- [[null-ls|null-ls.nvim]]
+- [[nlspsettings|nlspsettings.nvim]]
+
+### 북마크
+- bookmarks.nvim
+  + https://github.com/deptno/nvim/commit/ed11001b34706b8f079c0e19df21545c59d813c4
+  - [[git]] 프로젝트 기반으로 영구적인 북마크를 생성한다, 리스팅과 태그 프리뷰가 지원
+- marks.nvim
+  + https://github.com/deptno/nvim/blob/ed11001b34706b8f079c0e19df21545c59d813c4/lua/custom/configs/marks.lua
+  - custom mark 를 지원하며 동일 북마크키로 여러군대를 지정하고 네비게이션이 가능하다
+  - 영구적이지않아 이슈 분석등을 일시적으로 할때 편리하다
+
+### neovim lua 기반 플러그인 환경 설정
+- [[neovim-lua-plugins]]
+
+---
+
+## neovim-api
+- global events
+  - client async request -> error occur 
+  - server -..-> notify error event later
+
+### buf -> stdin -> stdout
+```lua
+local buf = vim.fn.getbufline('%', 1, '$')
+local stdin = buf.fn.getbufline('%', 1, '$')
+vim.fn.system('grep content', stdin)
+```
+`vim.fn.system` 의 두번째 인자가 `stdin` 의 역할을 한다
+
+---
+## tabpage > window > buffer [[todo]]
+- [[nvchad]] 는 [[tabufline]] 을 사용
+- 창 분할마다를 window
+- buffer 는 window 아래로 귀속되지 않는 것으로 보인다
+### tabpage
+- `vim.api.nvim_tabpage_get_number(0)` -> 현재 tabpage number (우상단 표시)
+- `vim.api.nvim_tabpage_get_win(0)` -> 현재 tabpage number (우상단 표시)
+  - [[question]] `nvim_tabpage_get_number(0)` 을 통해 넣은 경우(현재윈도우)와 `0` 을 넣은 경우가 다름
+#### window
+- `vim.api.nvim_win_get_tabpage(0)` -> 현재 window 의 tab nubmer
+- `vim.api.nvim_win_get_buf(0)` -> 현재 window의 buf number
+
+## 설정
+### lazigit
++ [[diary:2023-12-24]]
+- nvim-tree 와 콜라보
+  + https://github.com/deptno/nvim/commit/e2cb2cc137801365bb9d5ebcbd96adc5a69e7a4e
+- 현재파일,  현재파일의 디렉토리
+  + https://github.com/deptno/nvim/commit/1ec4ebde7ada21812f2123c91d9f53bed2784151
+
+## link
+- [[vim]]
+- [[python]]
+- [[neovim-lua-plugins]]
+- [[neovim-setup]]
+13:T1231,
+## list
+- buflist `:buffers`
+- arglist `:args`
+  - buffer list 의 subset 으로 argument 로 열린 리스트가 보여진다
+  - argadd 명령을 통해서 확장 가능하다
+
+## ex
+- `@:` 최근 명령어 실행
+- `ctrl+f` ex 명령어 프롬프트 상태에서 누르면 ex history 검색이 가능해진다
+
+## .nvimrc
+- `.nvimrc` 를 둬서 해당 디렉토리에서 vim 을 실행시 특정 스크립트 등을 실행할 수있다.
+- `.nvimrc` 설정
+  ```vim
+  vim.opt.exrc = true
+  vim.opt.secure = true
+  ```
+- `.nvimrc` 파일 내용 예
+  ```text
+  lua << EOF
+  vim.loop.os_setenv('VIRTUAL_ENV', '~/.local/data/virtualenvs/kaggle-1Dzpi2UB')
+  EOF
+  ```
+
+## [[python]]
+```sh
+# python 지원 확인
+nvim +checkhealth
+# python 지원 업그레이드
+python3 -m pip install --upgrade pynvim
+```
+
+## usage
+### 특정 파일을 특정 파일 타입으로 매핑
++ https://github.com/deptno/nvim/commit/a4c7a44e3eb4c74b2b0196623c3eada387e17adb
+
+## [[error]]
+emoji 등 유니코드 캐릭터가 존재한 이후에는 yy 등 카피가 clipboard(reg *) 에 복사되지 않는 이슈
+
+- https://github.com/neovim/neovim/issues/11432#issuecomment-557868656
+```lua
+vim.cmd ":let $LANG='en_US.UTF-8'"
+```
+
+### .local/share/nvim/runtime/lua/vim/lsp/semantic_tokens.lua:98: attempt to index field 'semanticTokensProvider' (a nil value)
++ https://github.com/neovim/nvim-lspconfig/issues/2542#issuecomment-1547019213
+- 다소 다르게 처리하긴 했는데 `lsp-config` 에서 `semanticTokensProvider` 관련 설정을 `on_init` 으로 타이밍 변경후 나지 않는다
+  + https://github.com/deptno/nvim/commit/bc8273d6600f3f1964b1abb0136dc8c577f6000c
+  - 무엇이 안되는지 봐야겟으나 `dynamic symbols` 은 동작하는 것으로 보인다
+    - `rename` 이 안되는 것으로 보임
+```vim 
+Error on prepareRename: Request textDocument/prepareRename failed with message:  You cannot rename this element. 
+```
+
+### [after/]ftplugin/*.lua 에서 설정한 키맵이 전역으로 번지는 문제
+> 예를 들어 `markdown` filetype 에 특정키 `q` 를 매핑해서 `bdelete` 를 하게되면 `markdown` 이후의 모든 파일들에대해서 해당 키맵이 동작하는 문제
+- filetype 을 통해서는 해결이 안되는 것으로 보인다. 권장하지 않는 방법이라는 글들이 있다.
+- 그냥 글로벌 키매핑으로 빼버렸다
+  + https://github.com/deptno/nvim/commit/ef0ffc616b0a7971936e32c83d5d6b42934261e7
+
+## plugin
+- [[taskwiki]]
+- [[defx]]
+- [[nvim-web-devicons]]
+- [[nvim-treesitter]]
+- [[telescope|telescope.nvim]]
+- [[gitsigns|gitsings.nvim]]
+- [[bufferline|bufferline.nvim]]
+- [[null-ls|null-ls.nvim]]
+- [[nlspsettings|nlspsettings.nvim]]
+
+### 북마크
+- bookmarks.nvim
+  + https://github.com/deptno/nvim/commit/ed11001b34706b8f079c0e19df21545c59d813c4
+  - [[git]] 프로젝트 기반으로 영구적인 북마크를 생성한다, 리스팅과 태그 프리뷰가 지원
+- marks.nvim
+  + https://github.com/deptno/nvim/blob/ed11001b34706b8f079c0e19df21545c59d813c4/lua/custom/configs/marks.lua
+  - custom mark 를 지원하며 동일 북마크키로 여러군대를 지정하고 네비게이션이 가능하다
+  - 영구적이지않아 이슈 분석등을 일시적으로 할때 편리하다
+
+### neovim lua 기반 플러그인 환경 설정
+- [[neovim-lua-plugins]]
+
+---
+
+## neovim-api
+- global events
+  - client async request -> error occur 
+  - server -..-> notify error event later
+
+### buf -> stdin -> stdout
+```lua
+local buf = vim.fn.getbufline('%', 1, '$')
+local stdin = buf.fn.getbufline('%', 1, '$')
+vim.fn.system('grep content', stdin)
+```
+`vim.fn.system` 의 두번째 인자가 `stdin` 의 역할을 한다
+
+---
+## tabpage > window > buffer [[todo]]
+- [[nvchad]] 는 [[tabufline]] 을 사용
+- 창 분할마다를 window
+- buffer 는 window 아래로 귀속되지 않는 것으로 보인다
+### tabpage
+- `vim.api.nvim_tabpage_get_number(0)` -> 현재 tabpage number (우상단 표시)
+- `vim.api.nvim_tabpage_get_win(0)` -> 현재 tabpage number (우상단 표시)
+  - [[question]] `nvim_tabpage_get_number(0)` 을 통해 넣은 경우(현재윈도우)와 `0` 을 넣은 경우가 다름
+#### window
+- `vim.api.nvim_win_get_tabpage(0)` -> 현재 window 의 tab nubmer
+- `vim.api.nvim_win_get_buf(0)` -> 현재 window의 buf number
+
+## 설정
+### lazigit
++ [[diary:2023-12-24]]
+- nvim-tree 와 콜라보
+  + https://github.com/deptno/nvim/commit/e2cb2cc137801365bb9d5ebcbd96adc5a69e7a4e
+- 현재파일,  현재파일의 디렉토리
+  + https://github.com/deptno/nvim/commit/1ec4ebde7ada21812f2123c91d9f53bed2784151
+
+## link
+- [[vim]]
+- [[python]]
+- [[neovim-lua-plugins]]
+- [[neovim-setup]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# neovim"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# neovim"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/neovim"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# neovim"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null

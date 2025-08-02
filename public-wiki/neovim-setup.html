@@ -1,0 +1,874 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-8d83df55f024a06e.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-5be22889a4b4f28d.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-3f8f17edabe7c539.js" async=""></script><script src="/_next/static/chunks/app/error-71963c526facdbf7.js" async=""></script><script src="/_next/static/chunks/app/not-found-b37065e097e62895.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># neovim-setup</title><meta name="description" content=" 
+## nvchad
+- 시작 설정으로 nvchad 선택
+- custom config
+  + https://github.com/deptno/neovim-config-for-nvchad
+    - lspconfig 포함
+
+## tree-sitter 모든 언어 설치
+```vim
+:TSInstall all
+```
+
+## issue
+- which-key 에 [[vimscript]] 를 통해서 등록한 매핑은 보여지지 않는 것으로 보임.
+
+## 개선사항 [[todo]]
+&gt; [[todo]] 에서 이관
+
+- [ ] 신규 탭 생성할때 해당 파일의 라인까지 따라가주자
+- [X] [[wip]] rmd(runnable markdown) filetype 작성 jira 테스트중
+- [ ] [[wip]] [[develop-neovim-lua-plugin]]
+- [X] [[octo]] 초기 설정 `:Octo`
+- [ ] copilot
+- [X] *bug* gx url 에서 `?` 가 존재하면 열리지 않음 + https://github.com/deptno/nvim/commit/f4e09cfbf9abf1ad52bb952c63727d34c4941cfc
+- [ ] [[bun]] 을 사용해서 [[typescript]] 테스트 환경 구축
+- [X] session 이동시 열린 버퍼를 가지고 이동하는 문제+ https://github.com/deptno/nvim/commit/04d8e15209b2052892a164db47a174fa2a06e51a
+  - [X] 후행으로 닫도록 수정, 속도관련해서도 이슈가 있음
+- [ ] jira ticket 발행
+- [X] harpoon + https://github.com/deptno/nvim/commit/9ab9f786253b76069f1ad7d53ba9a3bb39aa5808
+- [X] *bug* ;db 를 통한 quickfix 류의 창이 열린 이후로 q 누르면 버퍼 닫힘
+  + 이벤트 호출을 막는 법은 찾지 못해서 이벤트를 한번만 처리하도록 처리 + https://github.com/deptno/nvim/commit/66836ec2098f5268b2d8c838f99400070293f995
+- [ ] leetcode.nvim
+- [o] lsp
+  - [X] 포매팅 guard.nvim
+  - [X] 파일명 변경, nvim-lsp-file-operations -&gt; 동작 안함
+  - [ ] lsp 를 통한 영어단어 hover + gpt
+- [X] git ~~furgitive~~ blame 때문, blame + git-blame 추가 + https://github.com/deptno/nvim/commit/62c6da867e8e2b5846afbe6c3461da633396102a
+- [ ] tmux-popup command 생성 input: shell command i.g.) tig blame
+- [ ] 마크다운 블럭 내에서의 언어 실행 + [[nvim-treesitter]] 
+  - [ ] 블럭에 대해서 repl 플러그인 검색
+- [X] [[vimwiki]] syntax highlight 는 markdown 을 filetype 은 vimwiki 를 유지 + https://github.com/deptno/nvim/commit/2c6d5605ffc2339f10164877573e1fe05053d797
++ https://github.com/ecosse3/nvim
+  - [X] nvim-dap + https://github.com/deptno/nvim/commit/abff6147f65b87c9ee4deaa5782b04d15d1969e2
+  - [X] react-native 디버깅 가능한지 파악 + https://github.com/deptno/nvim/commit/01478edf8a3863cdb933e7a1e518c582e20f619f
+    - mason 을 통해서도 인스톨이 가능할 수 있을것 같음
+  - [ ] [[jest]]
+  - [ ] [[rust]]
+- [X] *wip* react-native 같은 특수 파일 suffix 지원 `.native.tsx` -&gt; `.tsx` 인식 + https://github.com/deptno/nvim/commit/dda74cfcada336b0eb80cb84e84baf8e441dacf5
+  + https://github.com/neovim/neovim/issues/20784#issuecomment-1722288456
+- [X] lspsaga
+  - [X] keymap
+    - [X] `[e` diagnostic error
+      - [X] *fail* `[d` diagnostic -&gt; 메소드 없음 
+    - [X] `K` hover
+    - [X] `&lt;leader&gt;rA` rename ++project 
+    - [X] `&lt;leader&gt;2` outline &gt; symbols-outline
+    - [X] `gd` definition
+    - [X] `gD` peek
+      - [X] *drop* `gtd` type
+      - [X] *drop* `gtD` peek
+      - [X] *drop* `gi` peek
+    - [X] `&lt;leader&gt;ic` incoming_calls
+      - [X] *drop* `&lt;leader&gt;oc` outgoing_calls, 이건 중요하지 않음
+- [X] vim-rest-console 연동 + https://github.com/deptno/nvim/commit/059745591ce6f5e521ebbd07e676fd1c64de8680
+- [X] [[lazygit]] 연동 + https://github.com/deptno/nvim/commit/1dd2dc48067d9bf01f4484ae15fcfc1d62df7a5c
+  - [X] https://github.com/gioele/vim-autoswap 설정과 함께 봐볼 것 + https://github.com/deptno/nvim/commit/9f3be8f546d191a459f3728ea7e06448681e050e
+  - [X] 현재 파일의 디렉토리 기반으로 열기 + https://github.com/deptno/nvim/commit/32243e9516fc5e46f98212283a643bc91b52e387
+- [X] fx 연동 + https://github.com/deptno/nvim/commit/3f125cae051fab1147dbc494cbfc3fae59773279
+- [X] session
+  - [X] auto-session -&gt; persisted, mksession 은 간혹 세션의 이전 버퍼가 딸려오는 문제는 있는 것 같다 -&gt; 세션 목록에서 저장하도록 해서 일단 사용
+  - [X] *option* ~~session 은 버리고 directory 기반 이동 + telescope oldfiles 가 낫겠음, 프로젝트 이동간에 cwd 가 변경되는 경우가 너무 많음~~
+  - [X] *option* persisted 를 기준으로 세션 이동 전에 세션을 자동 저장하도록 한다 + https://github.com/deptno/nvim/commit/a2bd474c5706bccd253bab88634acedfb844fa6a
+- [X] quickfix vs loclist 차이 알아보기, quickfix:project, location:local 레벨, 파일단위인지 프로젝트 단위인지
+- [o] plugin 추가
+  - [o] nvim-ufo
+    - [X] 설정 + https://github.com/deptno/nvim/commit/38f6c19
+    - [ ] 폴드가 원하는대로는 안풀려서 좀더 찾아보자
+  - [X] tabscope + https://github.com/deptno/nvim/commit/2341b5c
+- [X] blankline 설정 + https://github.com/deptno/nvim/commit/94f9410d
+- [X] gitsign
+  - [X] ~~Change-base telescope 로 전환~~ -&gt; [[lazygit]] 으로 인해 니즈 죽음
+  - [X] diff 에 관련한 설정이 가능한지 -&gt; 가능하지 않음 delta 적용불가 + https://github.com/lewis6991/gitsigns.nvim/issues/723
+- [X] telescope layout 변경 + https://github.com/deptno/nvim/commit/60ed157
+- [X] telescope oldfiles 에서 cwd 기준으로만 리스팅 + https://github.com/deptno/nvim/commit/8536cd6dfdf0113de078eb4beccd0cc1711ce7c9
+- [ ] nvchad pull
+- [X] bookmark: 이슈별 그룹지정, 이슈리스트 J 로 테스트해보자
+- [X] symbol, 찾기 단축키 + `&lt;leader&gt;ds`
+- [X] bookmark 문자 컬럼 노출 - marks.nvim + https://github.com/deptno/nvim/commit/e2c36dd
+- [X] navigate window ctrl+w + {h,j,k,l} -&gt; 원래 됨 ctrl+{h,j,k,l}
+- [X] resize window ctrl+{H,J,K,L} -&gt; 생각보다 메커님이 복잡 윈도우 사용
+- [X] emoji 관련 nvim-cmp 플러그인도 찾자 + https://github.com/deptno/nvim/commit/6b24994
+- [X] [[html]] 작성하는데 [[zen-coding]] 안먹는다 플러그인 찾자, lsp 로 와 기본적으로 제공되는 snippet 으로 대충 가능할 것으로 보임
+  - [X] emmet-language-server, tailwindcss-language-server 적용 + https://github.com/deptno/nvim/commit/fa5bbca972efe2c8b6e98e03e7b2cabb626046ed
+- [X] luaJIT 참조하도록 설정 + https://github.com/deptno/nvim/commit/85619c9
+- [X] vim 에서 cwd 혹은 현재 파일의 위치를 가지고 [[tmux]] {pane,window} 를 생성할 수 있도록 지원 - https://github.com/deptno/NvChad/commit/8e6dfa1
+- [X] vim cd.. 이 ~~cwd 기준이라 recursive 하게 동작하지 않는 문제~~ 수정
+  - [X] vim cd.. cwd 기준이 아니라 현재 파일 기준이라 동작하지 않는 것으로 cwd 기준으로 수정 필요
+- [O] [[vim-startify]] 설정
+  - [ ] startify-session 문제점
+    - sesion 이동시에 tag stack 이나 이동 스택은 살아있음
+      - ctrl+t, ctrl-o 등으로 해당 스택을 이동하는 경우 이전 session 의 파일들을 불러오게되면서 session 영역이 혼탁해짐
+      - [[comparison:tagstack-vs-jump]]
+      - [[vimwiki]] 에서 링크 이동에 tag stack 이 사용되지 않는 문제
+        - [X] ctrl+i 가 `VimwikiNextLink` 로 동작하지 않도록 제거 -&gt; `ctrl+i` 는 `tab` 과 같은 역할을 하며 이건 vim 잘못이 아님
+  - [X] startify session 에서 cwd 지정이 가능한지 확인
+    - [X] startify_change_to_dir  옵션을 사용해 봤으나 사용성이 떨어지고 git root 로 가야함 -&gt; 범용적으로 cdp 구현 프로젝트로 루트 이동이 가능
+      + https://github.com/deptno/nvim/commit/a869b4a4
+  - [X] tmux window -&gt; session
+  - [X] head text 제거
+  - [X] git modified 와 untracked 를 합칠 것
+  - [X] 나갈때 임시 세션(`_latest`)으로 저장
+  - [X] vim-startify 설정에 대한 기록 작성
+  - [O] 옵션 검토
+    - [X] g:startify_update_oldfiles - vim 시작시점이 아니라 계속적인 업데이트로 이해
+    - [X] g:startify_session_persistence - 이렇게 되면 세션이 최종 상태를 기억하게됨, _latest 가 번잡하면 이걸 테스트
+    - [X] 마지막 session 간의 전환 지원이 필요 https://github.com/deptno/nvim/commit/1996f7c
+    - [X] ~~임시 세션 저장 슬롯 여러개 지원~~ - 의미 없을 것 같음
+    - [X] g:startify_session_before_save - ~~nvim-tree~~, ~~symbol-outline~~ 등 제거, 둘다 문제가 있어서 제거 못함
+      - https://github.com/deptno/nvim/commit/cf9c4a9
+    - [X] cmd 지정이 가능함 - 마지막 세션간 전환 구현
+    - [X] ~~session 에 속한 파일이 열리는 순간 해당 session 을 여는 기능 검토(이걸 쓰면 `_latest` 는 드랍)~~
+    - [X] 나갈때 neogit 관련 파일이 열려있으면 닫고 이동하도록, NeogitStatus
+      + https://github.com/deptno/nvim/commit/1499958
+    - [X] ~~session 변경시 저장~~ 위험할 수 있을 것 같음, 저장을 습관화
+    - [ ] repo 의 경우 branch 별 세션 저장 및 변경 방법 고민
+  - [ ] session bookmark 가 필요한것
+- [ ] cd?
+  - [X] 현재 브랜치 + origin 까지 확인 필요 + https://github.com/deptno/nvim/commit/7fbcc6e
+  - [ ] 현재 파일의 정보고 같이 보는게 좋겠음
+- [X] @cite 자동완성 dictionary 생성 
+  + https://github.com/deptno/nvim/commit/de370b0ad52e9121f30067069ecd27be13a6253c
+  - .github/CODEOWNERS 로 시작 slack, github 
+  - slack 은 api 보니 힘들거 같고 git 관련해서는 cmp_git 이 잘되어 있어서 요걸 쓰기로 함
+- [X] [[nvchad]] default theme 변경
+- [ ] 파일 네비게이션
+  - [ ] 파일 이동간에 git_root 를 lcd 혹 cwd 설정
+  - [ ] 혹은 git_root 가 다른 파일 이동에는 tabpage 전환, tabpage 마다 root
+- [o] [[vimwiki]]
+  - [ ] diary 간 이동할때 buffer 가 계속 늘어나지 않도록 조치
+  - [X] diary 를 폴더구조거아니라 prefix 형태로 평탄화 가능한 옵션이 있는지 검토
+    - [X] `diary:` prefix 를 통해 상대경로가 아니어도 링크가능하므로 이걸 이용
+    - [X] 경로에 depth 가 들어간 경우, `/` prefix 를 통해서 wiki 루트로 부터 계산되니 이걸 사용
+      - [X] [[wiki.deptno.dev]] 에서 해당 컨셉이 지원되고 있는지 확인이 필요 -&gt; 안되면 구현
+  - [X] 회사와 private wiki 를 분리
+    - [X] 마이그레이션 - diary 를 통째로 복사하고([[git-subtree]]) 수동으로 필터([[git-rebase]])링해서 필터링할 것 -&gt; [[git-filter-repo]] 를 통해 처리
+  - [ ] *bug* 특정 케이스에 vimwiki가 꺼지는 상황이 있음 현재 파일 기준 24라인 이후에 뎁스가 더 들어간 todo를 생성하며 꺼짐
+  - [X] timestamp, 혹은 다이어키를 삽입하는 키맵 추가 - 이미 snippet 자동완성으로 지원되고 있었음 `diso`
+  - [ ] code block 을 실행할때 shell 구문인 경우 tmux 의 다른 panel에서 실행할 수 있도록 지원 [[gx]]
+  - [X] ~~다른 wiki 로 이동할 때 session 전환~~ [[vim-startify]] -&gt; 어려울 것
+  - [ ] calendar 를 이용해서 시각화
+    - [ ] wiki
+      - [ ] diary
+      - [ ] 날짜 태그 혹은 다이어리 링크 태그
+      - [ ] git stat since until 을 통해서 파일기록
+    - [ ] 슬랙 해당날 태그등
+    - [ ] apple reminder
+    - [ ] api,구글 등 cloud provider 연동, filter + 휴가 이모지등
+- [ ] [[octo]] 도입 검토
+- [X] [[neogit]] 제거 https://github.com/deptno/nvim/commit/cc0fcebc0ef9cc282ad7dc1c49b4eb63148c77d6
+  - [X] *remove* git checkout 대신 git switch 를 이용할 방법
+  - [X] *remove* diffview 가 활성화되면 theme 자체를 변경해버리는 것도 고려
+  - [X] *remove* change base 쉽게
+- [.] window
+  - [X] buffer 최대 가로사이즈로 window width 설정 https://github.com/deptno/nvim/commit/3008b87d
+- [o] code chunk 실행, [[repl]]
+  - [X] [[lua]] 에서 해당 라인을 실행할 수 있도록 처리 -&gt; vim.notify https://github.com/deptno/nvim/commit/bd102e6
+  - [ ] 언어별 핸들러 제공필요, ts bun
+- [O] lab/gx [[gx]]
+  - [X] github wiki 를 사용하고 있는데 이 부분 github link 따기 -&gt; wiki repo 를 일반레포로 전환하고 wiki 는 drop, needs 없음
+  - [X] ssh 기반으로 코드가 작성되어있는데 https 같이 지원 -&gt; 테스트 해보니 이미 됨
+  - [X] *bug* [n] repository 이름에 `.` 들어간경우 유지 필요 i.e. deptno.dev -&gt; https://github.com/deptno/nvim/commit/6833181
+  - [X] *feat* url 인데 일반 커밋으로 인식 + https://github.com/deptno/nvim/commit/c366ead
+  - [X] *bug* cd 정보에 `]` 마지막 괄호가 빠짐 + https://github.com/deptno/nvim/commit/10c043d0
+  - [X] *bug* url 에 `.` 들어간경우 제거됨 i.e. + https://github.com/deptno/nvim/commit/c27ad96
+  - [X] [vV] current file 기준으로 gx 를 열어줘야하는데 cwd 기준으로 열어주고있음 + https://github.com/deptno/nvim/commit/93c4c13
+  - [X] custom handler 지원하는지 확인 + https://github.com/deptno/nvim/blob/7fbcc6e28c113612d5d29dd7ca7057e87b3caeab/lua/lab/gx/init.lua#L21-L32
+  - [X] *bug* visual selection 모드에 gx github 를 할 경우에 정체 경로가 전송됨 https://github.com/deptno/nvim/commit/e9cb8368620e2561a4ac5d5826b8bfb9f3de68b2
+  - [ ] *feat* image open
+  - [X] *feat* vV 번역 + https://github.com/deptno/nvim/commit/8f847e6
+  - [X] *feat* vV search + https://github.com/deptno/nvim/commit/d55c9c2
+  - [X] *feat* n search + https://github.com/deptno/nvim/commit/a25066f
+  - [X] *feat* n find files + https://github.com/deptno/nvim/commit/aeae45c
+  - [X] *bug* vV github permalink 에서 Line 을 못 얻어 옴, 어느 순간 부터 인지 + https://github.com/deptno/nvim/commit/b253387
+    - multiple gx 에서 선택하는 수간 mode가 normal 로 인식되면서 생기는 문제
+  - [ ] *feat* vV github permalink 를 가져올대 현재 커밋이 아닌 해당 영역 log들의 순서상 최신으로 하는 것이 좋아보임
+  - [X] *bug* vV papago 깨짐
+  - [ ] *feat* filetype 별 gx enable 여부
+  - [X] *feat* node_modules 내에서 하면 해당 라이브러리 기준으로 처리가 필요, pnp
+    - pnp 까지 처리하려고했으나 .git 정보가 없어서 커밋정보에 접근하지 못하기 때문에 의미가 약함  레포지터리까지만 여는 것으로 멈춤 + https://github.com/deptno/nvim/commit/b5395499a00a0e4e1dab68bd50032d469f3381b5
+
+## link
+- [[neovim]]
+- [[neovim-lua-plugins]]
+- [[vim-session]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# neovim-setup"/><meta property="og:description" content=" 
+## nvchad
+- 시작 설정으로 nvchad 선택
+- custom config
+  + https://github.com/deptno/neovim-config-for-nvchad
+    - lspconfig 포함
+
+## tree-sitter 모든 언어 설치
+```vim
+:TSInstall all
+```
+
+## issue
+- which-key 에 [[vimscript]] 를 통해서 등록한 매핑은 보여지지 않는 것으로 보임.
+
+## 개선사항 [[todo]]
+&gt; [[todo]] 에서 이관
+
+- [ ] 신규 탭 생성할때 해당 파일의 라인까지 따라가주자
+- [X] [[wip]] rmd(runnable markdown) filetype 작성 jira 테스트중
+- [ ] [[wip]] [[develop-neovim-lua-plugin]]
+- [X] [[octo]] 초기 설정 `:Octo`
+- [ ] copilot
+- [X] *bug* gx url 에서 `?` 가 존재하면 열리지 않음 + https://github.com/deptno/nvim/commit/f4e09cfbf9abf1ad52bb952c63727d34c4941cfc
+- [ ] [[bun]] 을 사용해서 [[typescript]] 테스트 환경 구축
+- [X] session 이동시 열린 버퍼를 가지고 이동하는 문제+ https://github.com/deptno/nvim/commit/04d8e15209b2052892a164db47a174fa2a06e51a
+  - [X] 후행으로 닫도록 수정, 속도관련해서도 이슈가 있음
+- [ ] jira ticket 발행
+- [X] harpoon + https://github.com/deptno/nvim/commit/9ab9f786253b76069f1ad7d53ba9a3bb39aa5808
+- [X] *bug* ;db 를 통한 quickfix 류의 창이 열린 이후로 q 누르면 버퍼 닫힘
+  + 이벤트 호출을 막는 법은 찾지 못해서 이벤트를 한번만 처리하도록 처리 + https://github.com/deptno/nvim/commit/66836ec2098f5268b2d8c838f99400070293f995
+- [ ] leetcode.nvim
+- [o] lsp
+  - [X] 포매팅 guard.nvim
+  - [X] 파일명 변경, nvim-lsp-file-operations -&gt; 동작 안함
+  - [ ] lsp 를 통한 영어단어 hover + gpt
+- [X] git ~~furgitive~~ blame 때문, blame + git-blame 추가 + https://github.com/deptno/nvim/commit/62c6da867e8e2b5846afbe6c3461da633396102a
+- [ ] tmux-popup command 생성 input: shell command i.g.) tig blame
+- [ ] 마크다운 블럭 내에서의 언어 실행 + [[nvim-treesitter]] 
+  - [ ] 블럭에 대해서 repl 플러그인 검색
+- [X] [[vimwiki]] syntax highlight 는 markdown 을 filetype 은 vimwiki 를 유지 + https://github.com/deptno/nvim/commit/2c6d5605ffc2339f10164877573e1fe05053d797
++ https://github.com/ecosse3/nvim
+  - [X] nvim-dap + https://github.com/deptno/nvim/commit/abff6147f65b87c9ee4deaa5782b04d15d1969e2
+  - [X] react-native 디버깅 가능한지 파악 + https://github.com/deptno/nvim/commit/01478edf8a3863cdb933e7a1e518c582e20f619f
+    - mason 을 통해서도 인스톨이 가능할 수 있을것 같음
+  - [ ] [[jest]]
+  - [ ] [[rust]]
+- [X] *wip* react-native 같은 특수 파일 suffix 지원 `.native.tsx` -&gt; `.tsx` 인식 + https://github.com/deptno/nvim/commit/dda74cfcada336b0eb80cb84e84baf8e441dacf5
+  + https://github.com/neovim/neovim/issues/20784#issuecomment-1722288456
+- [X] lspsaga
+  - [X] keymap
+    - [X] `[e` diagnostic error
+      - [X] *fail* `[d` diagnostic -&gt; 메소드 없음 
+    - [X] `K` hover
+    - [X] `&lt;leader&gt;rA` rename ++project 
+    - [X] `&lt;leader&gt;2` outline &gt; symbols-outline
+    - [X] `gd` definition
+    - [X] `gD` peek
+      - [X] *drop* `gtd` type
+      - [X] *drop* `gtD` peek
+      - [X] *drop* `gi` peek
+    - [X] `&lt;leader&gt;ic` incoming_calls
+      - [X] *drop* `&lt;leader&gt;oc` outgoing_calls, 이건 중요하지 않음
+- [X] vim-rest-console 연동 + https://github.com/deptno/nvim/commit/059745591ce6f5e521ebbd07e676fd1c64de8680
+- [X] [[lazygit]] 연동 + https://github.com/deptno/nvim/commit/1dd2dc48067d9bf01f4484ae15fcfc1d62df7a5c
+  - [X] https://github.com/gioele/vim-autoswap 설정과 함께 봐볼 것 + https://github.com/deptno/nvim/commit/9f3be8f546d191a459f3728ea7e06448681e050e
+  - [X] 현재 파일의 디렉토리 기반으로 열기 + https://github.com/deptno/nvim/commit/32243e9516fc5e46f98212283a643bc91b52e387
+- [X] fx 연동 + https://github.com/deptno/nvim/commit/3f125cae051fab1147dbc494cbfc3fae59773279
+- [X] session
+  - [X] auto-session -&gt; persisted, mksession 은 간혹 세션의 이전 버퍼가 딸려오는 문제는 있는 것 같다 -&gt; 세션 목록에서 저장하도록 해서 일단 사용
+  - [X] *option* ~~session 은 버리고 directory 기반 이동 + telescope oldfiles 가 낫겠음, 프로젝트 이동간에 cwd 가 변경되는 경우가 너무 많음~~
+  - [X] *option* persisted 를 기준으로 세션 이동 전에 세션을 자동 저장하도록 한다 + https://github.com/deptno/nvim/commit/a2bd474c5706bccd253bab88634acedfb844fa6a
+- [X] quickfix vs loclist 차이 알아보기, quickfix:project, location:local 레벨, 파일단위인지 프로젝트 단위인지
+- [o] plugin 추가
+  - [o] nvim-ufo
+    - [X] 설정 + https://github.com/deptno/nvim/commit/38f6c19
+    - [ ] 폴드가 원하는대로는 안풀려서 좀더 찾아보자
+  - [X] tabscope + https://github.com/deptno/nvim/commit/2341b5c
+- [X] blankline 설정 + https://github.com/deptno/nvim/commit/94f9410d
+- [X] gitsign
+  - [X] ~~Change-base telescope 로 전환~~ -&gt; [[lazygit]] 으로 인해 니즈 죽음
+  - [X] diff 에 관련한 설정이 가능한지 -&gt; 가능하지 않음 delta 적용불가 + https://github.com/lewis6991/gitsigns.nvim/issues/723
+- [X] telescope layout 변경 + https://github.com/deptno/nvim/commit/60ed157
+- [X] telescope oldfiles 에서 cwd 기준으로만 리스팅 + https://github.com/deptno/nvim/commit/8536cd6dfdf0113de078eb4beccd0cc1711ce7c9
+- [ ] nvchad pull
+- [X] bookmark: 이슈별 그룹지정, 이슈리스트 J 로 테스트해보자
+- [X] symbol, 찾기 단축키 + `&lt;leader&gt;ds`
+- [X] bookmark 문자 컬럼 노출 - marks.nvim + https://github.com/deptno/nvim/commit/e2c36dd
+- [X] navigate window ctrl+w + {h,j,k,l} -&gt; 원래 됨 ctrl+{h,j,k,l}
+- [X] resize window ctrl+{H,J,K,L} -&gt; 생각보다 메커님이 복잡 윈도우 사용
+- [X] emoji 관련 nvim-cmp 플러그인도 찾자 + https://github.com/deptno/nvim/commit/6b24994
+- [X] [[html]] 작성하는데 [[zen-coding]] 안먹는다 플러그인 찾자, lsp 로 와 기본적으로 제공되는 snippet 으로 대충 가능할 것으로 보임
+  - [X] emmet-language-server, tailwindcss-language-server 적용 + https://github.com/deptno/nvim/commit/fa5bbca972efe2c8b6e98e03e7b2cabb626046ed
+- [X] luaJIT 참조하도록 설정 + https://github.com/deptno/nvim/commit/85619c9
+- [X] vim 에서 cwd 혹은 현재 파일의 위치를 가지고 [[tmux]] {pane,window} 를 생성할 수 있도록 지원 - https://github.com/deptno/NvChad/commit/8e6dfa1
+- [X] vim cd.. 이 ~~cwd 기준이라 recursive 하게 동작하지 않는 문제~~ 수정
+  - [X] vim cd.. cwd 기준이 아니라 현재 파일 기준이라 동작하지 않는 것으로 cwd 기준으로 수정 필요
+- [O] [[vim-startify]] 설정
+  - [ ] startify-session 문제점
+    - sesion 이동시에 tag stack 이나 이동 스택은 살아있음
+      - ctrl+t, ctrl-o 등으로 해당 스택을 이동하는 경우 이전 session 의 파일들을 불러오게되면서 session 영역이 혼탁해짐
+      - [[comparison:tagstack-vs-jump]]
+      - [[vimwiki]] 에서 링크 이동에 tag stack 이 사용되지 않는 문제
+        - [X] ctrl+i 가 `VimwikiNextLink` 로 동작하지 않도록 제거 -&gt; `ctrl+i` 는 `tab` 과 같은 역할을 하며 이건 vim 잘못이 아님
+  - [X] startify session 에서 cwd 지정이 가능한지 확인
+    - [X] startify_change_to_dir  옵션을 사용해 봤으나 사용성이 떨어지고 git root 로 가야함 -&gt; 범용적으로 cdp 구현 프로젝트로 루트 이동이 가능
+      + https://github.com/deptno/nvim/commit/a869b4a4
+  - [X] tmux window -&gt; session
+  - [X] head text 제거
+  - [X] git modified 와 untracked 를 합칠 것
+  - [X] 나갈때 임시 세션(`_latest`)으로 저장
+  - [X] vim-startify 설정에 대한 기록 작성
+  - [O] 옵션 검토
+    - [X] g:startify_update_oldfiles - vim 시작시점이 아니라 계속적인 업데이트로 이해
+    - [X] g:startify_session_persistence - 이렇게 되면 세션이 최종 상태를 기억하게됨, _latest 가 번잡하면 이걸 테스트
+    - [X] 마지막 session 간의 전환 지원이 필요 https://github.com/deptno/nvim/commit/1996f7c
+    - [X] ~~임시 세션 저장 슬롯 여러개 지원~~ - 의미 없을 것 같음
+    - [X] g:startify_session_before_save - ~~nvim-tree~~, ~~symbol-outline~~ 등 제거, 둘다 문제가 있어서 제거 못함
+      - https://github.com/deptno/nvim/commit/cf9c4a9
+    - [X] cmd 지정이 가능함 - 마지막 세션간 전환 구현
+    - [X] ~~session 에 속한 파일이 열리는 순간 해당 session 을 여는 기능 검토(이걸 쓰면 `_latest` 는 드랍)~~
+    - [X] 나갈때 neogit 관련 파일이 열려있으면 닫고 이동하도록, NeogitStatus
+      + https://github.com/deptno/nvim/commit/1499958
+    - [X] ~~session 변경시 저장~~ 위험할 수 있을 것 같음, 저장을 습관화
+    - [ ] repo 의 경우 branch 별 세션 저장 및 변경 방법 고민
+  - [ ] session bookmark 가 필요한것
+- [ ] cd?
+  - [X] 현재 브랜치 + origin 까지 확인 필요 + https://github.com/deptno/nvim/commit/7fbcc6e
+  - [ ] 현재 파일의 정보고 같이 보는게 좋겠음
+- [X] @cite 자동완성 dictionary 생성 
+  + https://github.com/deptno/nvim/commit/de370b0ad52e9121f30067069ecd27be13a6253c
+  - .github/CODEOWNERS 로 시작 slack, github 
+  - slack 은 api 보니 힘들거 같고 git 관련해서는 cmp_git 이 잘되어 있어서 요걸 쓰기로 함
+- [X] [[nvchad]] default theme 변경
+- [ ] 파일 네비게이션
+  - [ ] 파일 이동간에 git_root 를 lcd 혹 cwd 설정
+  - [ ] 혹은 git_root 가 다른 파일 이동에는 tabpage 전환, tabpage 마다 root
+- [o] [[vimwiki]]
+  - [ ] diary 간 이동할때 buffer 가 계속 늘어나지 않도록 조치
+  - [X] diary 를 폴더구조거아니라 prefix 형태로 평탄화 가능한 옵션이 있는지 검토
+    - [X] `diary:` prefix 를 통해 상대경로가 아니어도 링크가능하므로 이걸 이용
+    - [X] 경로에 depth 가 들어간 경우, `/` prefix 를 통해서 wiki 루트로 부터 계산되니 이걸 사용
+      - [X] [[wiki.deptno.dev]] 에서 해당 컨셉이 지원되고 있는지 확인이 필요 -&gt; 안되면 구현
+  - [X] 회사와 private wiki 를 분리
+    - [X] 마이그레이션 - diary 를 통째로 복사하고([[git-subtree]]) 수동으로 필터([[git-rebase]])링해서 필터링할 것 -&gt; [[git-filter-repo]] 를 통해 처리
+  - [ ] *bug* 특정 케이스에 vimwiki가 꺼지는 상황이 있음 현재 파일 기준 24라인 이후에 뎁스가 더 들어간 todo를 생성하며 꺼짐
+  - [X] timestamp, 혹은 다이어키를 삽입하는 키맵 추가 - 이미 snippet 자동완성으로 지원되고 있었음 `diso`
+  - [ ] code block 을 실행할때 shell 구문인 경우 tmux 의 다른 panel에서 실행할 수 있도록 지원 [[gx]]
+  - [X] ~~다른 wiki 로 이동할 때 session 전환~~ [[vim-startify]] -&gt; 어려울 것
+  - [ ] calendar 를 이용해서 시각화
+    - [ ] wiki
+      - [ ] diary
+      - [ ] 날짜 태그 혹은 다이어리 링크 태그
+      - [ ] git stat since until 을 통해서 파일기록
+    - [ ] 슬랙 해당날 태그등
+    - [ ] apple reminder
+    - [ ] api,구글 등 cloud provider 연동, filter + 휴가 이모지등
+- [ ] [[octo]] 도입 검토
+- [X] [[neogit]] 제거 https://github.com/deptno/nvim/commit/cc0fcebc0ef9cc282ad7dc1c49b4eb63148c77d6
+  - [X] *remove* git checkout 대신 git switch 를 이용할 방법
+  - [X] *remove* diffview 가 활성화되면 theme 자체를 변경해버리는 것도 고려
+  - [X] *remove* change base 쉽게
+- [.] window
+  - [X] buffer 최대 가로사이즈로 window width 설정 https://github.com/deptno/nvim/commit/3008b87d
+- [o] code chunk 실행, [[repl]]
+  - [X] [[lua]] 에서 해당 라인을 실행할 수 있도록 처리 -&gt; vim.notify https://github.com/deptno/nvim/commit/bd102e6
+  - [ ] 언어별 핸들러 제공필요, ts bun
+- [O] lab/gx [[gx]]
+  - [X] github wiki 를 사용하고 있는데 이 부분 github link 따기 -&gt; wiki repo 를 일반레포로 전환하고 wiki 는 drop, needs 없음
+  - [X] ssh 기반으로 코드가 작성되어있는데 https 같이 지원 -&gt; 테스트 해보니 이미 됨
+  - [X] *bug* [n] repository 이름에 `.` 들어간경우 유지 필요 i.e. deptno.dev -&gt; https://github.com/deptno/nvim/commit/6833181
+  - [X] *feat* url 인데 일반 커밋으로 인식 + https://github.com/deptno/nvim/commit/c366ead
+  - [X] *bug* cd 정보에 `]` 마지막 괄호가 빠짐 + https://github.com/deptno/nvim/commit/10c043d0
+  - [X] *bug* url 에 `.` 들어간경우 제거됨 i.e. + https://github.com/deptno/nvim/commit/c27ad96
+  - [X] [vV] current file 기준으로 gx 를 열어줘야하는데 cwd 기준으로 열어주고있음 + https://github.com/deptno/nvim/commit/93c4c13
+  - [X] custom handler 지원하는지 확인 + https://github.com/deptno/nvim/blob/7fbcc6e28c113612d5d29dd7ca7057e87b3caeab/lua/lab/gx/init.lua#L21-L32
+  - [X] *bug* visual selection 모드에 gx github 를 할 경우에 정체 경로가 전송됨 https://github.com/deptno/nvim/commit/e9cb8368620e2561a4ac5d5826b8bfb9f3de68b2
+  - [ ] *feat* image open
+  - [X] *feat* vV 번역 + https://github.com/deptno/nvim/commit/8f847e6
+  - [X] *feat* vV search + https://github.com/deptno/nvim/commit/d55c9c2
+  - [X] *feat* n search + https://github.com/deptno/nvim/commit/a25066f
+  - [X] *feat* n find files + https://github.com/deptno/nvim/commit/aeae45c
+  - [X] *bug* vV github permalink 에서 Line 을 못 얻어 옴, 어느 순간 부터 인지 + https://github.com/deptno/nvim/commit/b253387
+    - multiple gx 에서 선택하는 수간 mode가 normal 로 인식되면서 생기는 문제
+  - [ ] *feat* vV github permalink 를 가져올대 현재 커밋이 아닌 해당 영역 log들의 순서상 최신으로 하는 것이 좋아보임
+  - [X] *bug* vV papago 깨짐
+  - [ ] *feat* filetype 별 gx enable 여부
+  - [X] *feat* node_modules 내에서 하면 해당 라이브러리 기준으로 처리가 필요, pnp
+    - pnp 까지 처리하려고했으나 .git 정보가 없어서 커밋정보에 접근하지 못하기 때문에 의미가 약함  레포지터리까지만 여는 것으로 멈춤 + https://github.com/deptno/nvim/commit/b5395499a00a0e4e1dab68bd50032d469f3381b5
+
+## link
+- [[neovim]]
+- [[neovim-lua-plugins]]
+- [[vim-session]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/neovim-setup"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# neovim-setup"/><meta name="twitter:description" content=" 
+## nvchad
+- 시작 설정으로 nvchad 선택
+- custom config
+  + https://github.com/deptno/neovim-config-for-nvchad
+    - lspconfig 포함
+
+## tree-sitter 모든 언어 설치
+```vim
+:TSInstall all
+```
+
+## issue
+- which-key 에 [[vimscript]] 를 통해서 등록한 매핑은 보여지지 않는 것으로 보임.
+
+## 개선사항 [[todo]]
+&gt; [[todo]] 에서 이관
+
+- [ ] 신규 탭 생성할때 해당 파일의 라인까지 따라가주자
+- [X] [[wip]] rmd(runnable markdown) filetype 작성 jira 테스트중
+- [ ] [[wip]] [[develop-neovim-lua-plugin]]
+- [X] [[octo]] 초기 설정 `:Octo`
+- [ ] copilot
+- [X] *bug* gx url 에서 `?` 가 존재하면 열리지 않음 + https://github.com/deptno/nvim/commit/f4e09cfbf9abf1ad52bb952c63727d34c4941cfc
+- [ ] [[bun]] 을 사용해서 [[typescript]] 테스트 환경 구축
+- [X] session 이동시 열린 버퍼를 가지고 이동하는 문제+ https://github.com/deptno/nvim/commit/04d8e15209b2052892a164db47a174fa2a06e51a
+  - [X] 후행으로 닫도록 수정, 속도관련해서도 이슈가 있음
+- [ ] jira ticket 발행
+- [X] harpoon + https://github.com/deptno/nvim/commit/9ab9f786253b76069f1ad7d53ba9a3bb39aa5808
+- [X] *bug* ;db 를 통한 quickfix 류의 창이 열린 이후로 q 누르면 버퍼 닫힘
+  + 이벤트 호출을 막는 법은 찾지 못해서 이벤트를 한번만 처리하도록 처리 + https://github.com/deptno/nvim/commit/66836ec2098f5268b2d8c838f99400070293f995
+- [ ] leetcode.nvim
+- [o] lsp
+  - [X] 포매팅 guard.nvim
+  - [X] 파일명 변경, nvim-lsp-file-operations -&gt; 동작 안함
+  - [ ] lsp 를 통한 영어단어 hover + gpt
+- [X] git ~~furgitive~~ blame 때문, blame + git-blame 추가 + https://github.com/deptno/nvim/commit/62c6da867e8e2b5846afbe6c3461da633396102a
+- [ ] tmux-popup command 생성 input: shell command i.g.) tig blame
+- [ ] 마크다운 블럭 내에서의 언어 실행 + [[nvim-treesitter]] 
+  - [ ] 블럭에 대해서 repl 플러그인 검색
+- [X] [[vimwiki]] syntax highlight 는 markdown 을 filetype 은 vimwiki 를 유지 + https://github.com/deptno/nvim/commit/2c6d5605ffc2339f10164877573e1fe05053d797
++ https://github.com/ecosse3/nvim
+  - [X] nvim-dap + https://github.com/deptno/nvim/commit/abff6147f65b87c9ee4deaa5782b04d15d1969e2
+  - [X] react-native 디버깅 가능한지 파악 + https://github.com/deptno/nvim/commit/01478edf8a3863cdb933e7a1e518c582e20f619f
+    - mason 을 통해서도 인스톨이 가능할 수 있을것 같음
+  - [ ] [[jest]]
+  - [ ] [[rust]]
+- [X] *wip* react-native 같은 특수 파일 suffix 지원 `.native.tsx` -&gt; `.tsx` 인식 + https://github.com/deptno/nvim/commit/dda74cfcada336b0eb80cb84e84baf8e441dacf5
+  + https://github.com/neovim/neovim/issues/20784#issuecomment-1722288456
+- [X] lspsaga
+  - [X] keymap
+    - [X] `[e` diagnostic error
+      - [X] *fail* `[d` diagnostic -&gt; 메소드 없음 
+    - [X] `K` hover
+    - [X] `&lt;leader&gt;rA` rename ++project 
+    - [X] `&lt;leader&gt;2` outline &gt; symbols-outline
+    - [X] `gd` definition
+    - [X] `gD` peek
+      - [X] *drop* `gtd` type
+      - [X] *drop* `gtD` peek
+      - [X] *drop* `gi` peek
+    - [X] `&lt;leader&gt;ic` incoming_calls
+      - [X] *drop* `&lt;leader&gt;oc` outgoing_calls, 이건 중요하지 않음
+- [X] vim-rest-console 연동 + https://github.com/deptno/nvim/commit/059745591ce6f5e521ebbd07e676fd1c64de8680
+- [X] [[lazygit]] 연동 + https://github.com/deptno/nvim/commit/1dd2dc48067d9bf01f4484ae15fcfc1d62df7a5c
+  - [X] https://github.com/gioele/vim-autoswap 설정과 함께 봐볼 것 + https://github.com/deptno/nvim/commit/9f3be8f546d191a459f3728ea7e06448681e050e
+  - [X] 현재 파일의 디렉토리 기반으로 열기 + https://github.com/deptno/nvim/commit/32243e9516fc5e46f98212283a643bc91b52e387
+- [X] fx 연동 + https://github.com/deptno/nvim/commit/3f125cae051fab1147dbc494cbfc3fae59773279
+- [X] session
+  - [X] auto-session -&gt; persisted, mksession 은 간혹 세션의 이전 버퍼가 딸려오는 문제는 있는 것 같다 -&gt; 세션 목록에서 저장하도록 해서 일단 사용
+  - [X] *option* ~~session 은 버리고 directory 기반 이동 + telescope oldfiles 가 낫겠음, 프로젝트 이동간에 cwd 가 변경되는 경우가 너무 많음~~
+  - [X] *option* persisted 를 기준으로 세션 이동 전에 세션을 자동 저장하도록 한다 + https://github.com/deptno/nvim/commit/a2bd474c5706bccd253bab88634acedfb844fa6a
+- [X] quickfix vs loclist 차이 알아보기, quickfix:project, location:local 레벨, 파일단위인지 프로젝트 단위인지
+- [o] plugin 추가
+  - [o] nvim-ufo
+    - [X] 설정 + https://github.com/deptno/nvim/commit/38f6c19
+    - [ ] 폴드가 원하는대로는 안풀려서 좀더 찾아보자
+  - [X] tabscope + https://github.com/deptno/nvim/commit/2341b5c
+- [X] blankline 설정 + https://github.com/deptno/nvim/commit/94f9410d
+- [X] gitsign
+  - [X] ~~Change-base telescope 로 전환~~ -&gt; [[lazygit]] 으로 인해 니즈 죽음
+  - [X] diff 에 관련한 설정이 가능한지 -&gt; 가능하지 않음 delta 적용불가 + https://github.com/lewis6991/gitsigns.nvim/issues/723
+- [X] telescope layout 변경 + https://github.com/deptno/nvim/commit/60ed157
+- [X] telescope oldfiles 에서 cwd 기준으로만 리스팅 + https://github.com/deptno/nvim/commit/8536cd6dfdf0113de078eb4beccd0cc1711ce7c9
+- [ ] nvchad pull
+- [X] bookmark: 이슈별 그룹지정, 이슈리스트 J 로 테스트해보자
+- [X] symbol, 찾기 단축키 + `&lt;leader&gt;ds`
+- [X] bookmark 문자 컬럼 노출 - marks.nvim + https://github.com/deptno/nvim/commit/e2c36dd
+- [X] navigate window ctrl+w + {h,j,k,l} -&gt; 원래 됨 ctrl+{h,j,k,l}
+- [X] resize window ctrl+{H,J,K,L} -&gt; 생각보다 메커님이 복잡 윈도우 사용
+- [X] emoji 관련 nvim-cmp 플러그인도 찾자 + https://github.com/deptno/nvim/commit/6b24994
+- [X] [[html]] 작성하는데 [[zen-coding]] 안먹는다 플러그인 찾자, lsp 로 와 기본적으로 제공되는 snippet 으로 대충 가능할 것으로 보임
+  - [X] emmet-language-server, tailwindcss-language-server 적용 + https://github.com/deptno/nvim/commit/fa5bbca972efe2c8b6e98e03e7b2cabb626046ed
+- [X] luaJIT 참조하도록 설정 + https://github.com/deptno/nvim/commit/85619c9
+- [X] vim 에서 cwd 혹은 현재 파일의 위치를 가지고 [[tmux]] {pane,window} 를 생성할 수 있도록 지원 - https://github.com/deptno/NvChad/commit/8e6dfa1
+- [X] vim cd.. 이 ~~cwd 기준이라 recursive 하게 동작하지 않는 문제~~ 수정
+  - [X] vim cd.. cwd 기준이 아니라 현재 파일 기준이라 동작하지 않는 것으로 cwd 기준으로 수정 필요
+- [O] [[vim-startify]] 설정
+  - [ ] startify-session 문제점
+    - sesion 이동시에 tag stack 이나 이동 스택은 살아있음
+      - ctrl+t, ctrl-o 등으로 해당 스택을 이동하는 경우 이전 session 의 파일들을 불러오게되면서 session 영역이 혼탁해짐
+      - [[comparison:tagstack-vs-jump]]
+      - [[vimwiki]] 에서 링크 이동에 tag stack 이 사용되지 않는 문제
+        - [X] ctrl+i 가 `VimwikiNextLink` 로 동작하지 않도록 제거 -&gt; `ctrl+i` 는 `tab` 과 같은 역할을 하며 이건 vim 잘못이 아님
+  - [X] startify session 에서 cwd 지정이 가능한지 확인
+    - [X] startify_change_to_dir  옵션을 사용해 봤으나 사용성이 떨어지고 git root 로 가야함 -&gt; 범용적으로 cdp 구현 프로젝트로 루트 이동이 가능
+      + https://github.com/deptno/nvim/commit/a869b4a4
+  - [X] tmux window -&gt; session
+  - [X] head text 제거
+  - [X] git modified 와 untracked 를 합칠 것
+  - [X] 나갈때 임시 세션(`_latest`)으로 저장
+  - [X] vim-startify 설정에 대한 기록 작성
+  - [O] 옵션 검토
+    - [X] g:startify_update_oldfiles - vim 시작시점이 아니라 계속적인 업데이트로 이해
+    - [X] g:startify_session_persistence - 이렇게 되면 세션이 최종 상태를 기억하게됨, _latest 가 번잡하면 이걸 테스트
+    - [X] 마지막 session 간의 전환 지원이 필요 https://github.com/deptno/nvim/commit/1996f7c
+    - [X] ~~임시 세션 저장 슬롯 여러개 지원~~ - 의미 없을 것 같음
+    - [X] g:startify_session_before_save - ~~nvim-tree~~, ~~symbol-outline~~ 등 제거, 둘다 문제가 있어서 제거 못함
+      - https://github.com/deptno/nvim/commit/cf9c4a9
+    - [X] cmd 지정이 가능함 - 마지막 세션간 전환 구현
+    - [X] ~~session 에 속한 파일이 열리는 순간 해당 session 을 여는 기능 검토(이걸 쓰면 `_latest` 는 드랍)~~
+    - [X] 나갈때 neogit 관련 파일이 열려있으면 닫고 이동하도록, NeogitStatus
+      + https://github.com/deptno/nvim/commit/1499958
+    - [X] ~~session 변경시 저장~~ 위험할 수 있을 것 같음, 저장을 습관화
+    - [ ] repo 의 경우 branch 별 세션 저장 및 변경 방법 고민
+  - [ ] session bookmark 가 필요한것
+- [ ] cd?
+  - [X] 현재 브랜치 + origin 까지 확인 필요 + https://github.com/deptno/nvim/commit/7fbcc6e
+  - [ ] 현재 파일의 정보고 같이 보는게 좋겠음
+- [X] @cite 자동완성 dictionary 생성 
+  + https://github.com/deptno/nvim/commit/de370b0ad52e9121f30067069ecd27be13a6253c
+  - .github/CODEOWNERS 로 시작 slack, github 
+  - slack 은 api 보니 힘들거 같고 git 관련해서는 cmp_git 이 잘되어 있어서 요걸 쓰기로 함
+- [X] [[nvchad]] default theme 변경
+- [ ] 파일 네비게이션
+  - [ ] 파일 이동간에 git_root 를 lcd 혹 cwd 설정
+  - [ ] 혹은 git_root 가 다른 파일 이동에는 tabpage 전환, tabpage 마다 root
+- [o] [[vimwiki]]
+  - [ ] diary 간 이동할때 buffer 가 계속 늘어나지 않도록 조치
+  - [X] diary 를 폴더구조거아니라 prefix 형태로 평탄화 가능한 옵션이 있는지 검토
+    - [X] `diary:` prefix 를 통해 상대경로가 아니어도 링크가능하므로 이걸 이용
+    - [X] 경로에 depth 가 들어간 경우, `/` prefix 를 통해서 wiki 루트로 부터 계산되니 이걸 사용
+      - [X] [[wiki.deptno.dev]] 에서 해당 컨셉이 지원되고 있는지 확인이 필요 -&gt; 안되면 구현
+  - [X] 회사와 private wiki 를 분리
+    - [X] 마이그레이션 - diary 를 통째로 복사하고([[git-subtree]]) 수동으로 필터([[git-rebase]])링해서 필터링할 것 -&gt; [[git-filter-repo]] 를 통해 처리
+  - [ ] *bug* 특정 케이스에 vimwiki가 꺼지는 상황이 있음 현재 파일 기준 24라인 이후에 뎁스가 더 들어간 todo를 생성하며 꺼짐
+  - [X] timestamp, 혹은 다이어키를 삽입하는 키맵 추가 - 이미 snippet 자동완성으로 지원되고 있었음 `diso`
+  - [ ] code block 을 실행할때 shell 구문인 경우 tmux 의 다른 panel에서 실행할 수 있도록 지원 [[gx]]
+  - [X] ~~다른 wiki 로 이동할 때 session 전환~~ [[vim-startify]] -&gt; 어려울 것
+  - [ ] calendar 를 이용해서 시각화
+    - [ ] wiki
+      - [ ] diary
+      - [ ] 날짜 태그 혹은 다이어리 링크 태그
+      - [ ] git stat since until 을 통해서 파일기록
+    - [ ] 슬랙 해당날 태그등
+    - [ ] apple reminder
+    - [ ] api,구글 등 cloud provider 연동, filter + 휴가 이모지등
+- [ ] [[octo]] 도입 검토
+- [X] [[neogit]] 제거 https://github.com/deptno/nvim/commit/cc0fcebc0ef9cc282ad7dc1c49b4eb63148c77d6
+  - [X] *remove* git checkout 대신 git switch 를 이용할 방법
+  - [X] *remove* diffview 가 활성화되면 theme 자체를 변경해버리는 것도 고려
+  - [X] *remove* change base 쉽게
+- [.] window
+  - [X] buffer 최대 가로사이즈로 window width 설정 https://github.com/deptno/nvim/commit/3008b87d
+- [o] code chunk 실행, [[repl]]
+  - [X] [[lua]] 에서 해당 라인을 실행할 수 있도록 처리 -&gt; vim.notify https://github.com/deptno/nvim/commit/bd102e6
+  - [ ] 언어별 핸들러 제공필요, ts bun
+- [O] lab/gx [[gx]]
+  - [X] github wiki 를 사용하고 있는데 이 부분 github link 따기 -&gt; wiki repo 를 일반레포로 전환하고 wiki 는 drop, needs 없음
+  - [X] ssh 기반으로 코드가 작성되어있는데 https 같이 지원 -&gt; 테스트 해보니 이미 됨
+  - [X] *bug* [n] repository 이름에 `.` 들어간경우 유지 필요 i.e. deptno.dev -&gt; https://github.com/deptno/nvim/commit/6833181
+  - [X] *feat* url 인데 일반 커밋으로 인식 + https://github.com/deptno/nvim/commit/c366ead
+  - [X] *bug* cd 정보에 `]` 마지막 괄호가 빠짐 + https://github.com/deptno/nvim/commit/10c043d0
+  - [X] *bug* url 에 `.` 들어간경우 제거됨 i.e. + https://github.com/deptno/nvim/commit/c27ad96
+  - [X] [vV] current file 기준으로 gx 를 열어줘야하는데 cwd 기준으로 열어주고있음 + https://github.com/deptno/nvim/commit/93c4c13
+  - [X] custom handler 지원하는지 확인 + https://github.com/deptno/nvim/blob/7fbcc6e28c113612d5d29dd7ca7057e87b3caeab/lua/lab/gx/init.lua#L21-L32
+  - [X] *bug* visual selection 모드에 gx github 를 할 경우에 정체 경로가 전송됨 https://github.com/deptno/nvim/commit/e9cb8368620e2561a4ac5d5826b8bfb9f3de68b2
+  - [ ] *feat* image open
+  - [X] *feat* vV 번역 + https://github.com/deptno/nvim/commit/8f847e6
+  - [X] *feat* vV search + https://github.com/deptno/nvim/commit/d55c9c2
+  - [X] *feat* n search + https://github.com/deptno/nvim/commit/a25066f
+  - [X] *feat* n find files + https://github.com/deptno/nvim/commit/aeae45c
+  - [X] *bug* vV github permalink 에서 Line 을 못 얻어 옴, 어느 순간 부터 인지 + https://github.com/deptno/nvim/commit/b253387
+    - multiple gx 에서 선택하는 수간 mode가 normal 로 인식되면서 생기는 문제
+  - [ ] *feat* vV github permalink 를 가져올대 현재 커밋이 아닌 해당 영역 log들의 순서상 최신으로 하는 것이 좋아보임
+  - [X] *bug* vV papago 깨짐
+  - [ ] *feat* filetype 별 gx enable 여부
+  - [X] *feat* node_modules 내에서 하면 해당 라이브러리 기준으로 처리가 필요, pnp
+    - pnp 까지 처리하려고했으나 .git 정보가 없어서 커밋정보에 접근하지 못하기 때문에 의미가 약함  레포지터리까지만 여는 것으로 멈춤 + https://github.com/deptno/nvim/commit/b5395499a00a0e4e1dab68bd50032d469f3381b5
+
+## link
+- [[neovim]]
+- [[neovim-lua-plugins]]
+- [[vim-session]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/440709c
+" class="bg-white text-black">440709c</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/neovim-setup.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/neovim-setup.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/neovim-setup.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/neovim-setup"><span class="underline">neovim-setup</span><sup>37</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vimscript"><span class="underline">vimscript</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/todo"><span class="underline">todo</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/wip"><span class="underline">wip</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/develop-neovim-lua-plugin"><span class="underline">develop-neovim-lua-plugin</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/octo"><span class="underline">octo</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/bun"><span class="underline">bun</span><sup>10</sup></a></span><span><a class="text-blue-600" href="/public-wiki/typescript"><span class="underline">typescript</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/nvim-treesitter"><span class="underline">nvim-treesitter</span><sup>18</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vimwiki"><span class="underline">vimwiki</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/jest"><span class="underline">jest</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/rust"><span class="underline">rust</span><sup>13</sup></a></span><span><a class="text-blue-600" href="/public-wiki/lazygit"><span class="underline">lazygit</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/html"><span class="underline">html</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/zen-coding"><span class="underline">zen-coding</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/tmux"><span class="underline">tmux</span><sup>7</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vim-startify"><span class="underline">vim-startify</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/comparison:tagstack-vs-jump"><span class="underline">comparison:tagstack-vs-jump</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/nvchad"><span class="underline">nvchad</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/wiki.deptno.dev"><span class="underline">wiki.deptno.dev</span><sup>17</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-subtree"><span class="underline">git-subtree</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-rebase"><span class="underline">git-rebase</span><sup>1</sup></a></span><span><a class="text-blue-600" href="/public-wiki/git-filter-repo"><span class="underline">git-filter-repo</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/gx"><span class="underline">gx</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/neogit"><span class="underline">neogit</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/repl"><span class="underline">repl</span><sup></sup></a></span><span><a class="text-blue-600" href="/public-wiki/lua"><span class="underline">lua</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/neovim"><span class="underline">neovim</span><sup>22</sup></a></span><span><a class="text-blue-600" href="/public-wiki/neovim-lua-plugins"><span class="underline">neovim-lua-plugins</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/vim-session"><span class="underline">vim-session</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/neotest"><span class="underline">neotest</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-10-19"><span class="underline">diary/2023-10-19</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-11-05"><span class="underline">diary/2023-11-05</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-12-31"><span class="underline">diary/2024-12-31</span><sup>441</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#neovim-setup">neovim-setup</a></div><div class="pl-2"><a href="#nvchad">nvchad</a></div><div class="pl-2"><a href="#tree-sitter-모든-언어-설치">tree-sitter 모든 언어 설치</a></div><div class="pl-2"><a href="#issue">issue</a></div><div class="pl-2"><a href="#개선사항-todo">개선사항 todo</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="neovim-setup">neovim-setup</h1>
+<h2 id="nvchad">nvchad</h2>
+<ul>
+<li>시작 설정으로 nvchad 선택</li>
+<li>custom config<ul>
+<li><a href="https://github.com/deptno/neovim-config-for-nvchad" target="_blank">[URL] https://github.com/deptno/neovim-config-for-nvchad</a><ul>
+<li>lspconfig 포함</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="tree-sitter-모든-언어-설치">tree-sitter 모든 언어 설치</h2>
+<pre><code class="hljs language-vim">:TSInstall <span class="hljs-keyword">all</span>
+</code></pre><h2 id="issue">issue</h2>
+<ul>
+<li>which-key 에 <a href="vimscript">vimscript</a> 를 통해서 등록한 매핑은 보여지지 않는 것으로 보임.</li>
+</ul>
+<h2 id="개선사항-todo">개선사항 <a href="todo">todo</a></h2>
+<blockquote><p><a href="todo">todo</a> 에서 이관</p></blockquote><ul>
+<li><input disabled="" type="checkbox"> 신규 탭 생성할때 해당 파일의 라인까지 따라가주자</li>
+<li><input checked="" disabled="" type="checkbox"> <a href="wip">wip</a> rmd(runnable markdown) filetype 작성 jira 테스트중</li>
+<li><input disabled="" type="checkbox"> <a href="wip">wip</a> <a href="develop-neovim-lua-plugin">develop-neovim-lua-plugin</a></li>
+<li><input checked="" disabled="" type="checkbox"> <a href="octo">octo</a> 초기 설정 <code class="span">:Octo</code></li>
+<li><input disabled="" type="checkbox"> copilot</li>
+<li><input checked="" disabled="" type="checkbox"> <em>bug</em> gx url 에서 <code class="span">?</code> 가 존재하면 열리지 않음 + <a href="https://github.com/deptno/nvim/commit/f4e09cfbf9abf1ad52bb952c63727d34c4941cfc" target="_blank">[URL] https://github.com/deptno/nvim/commit/f4e09cfbf9abf1ad52bb952c63727d34c4941cfc</a></li>
+<li><input disabled="" type="checkbox"> <a href="bun">bun</a> 을 사용해서 <a href="typescript">typescript</a> 테스트 환경 구축</li>
+<li><input checked="" disabled="" type="checkbox"> session 이동시 열린 버퍼를 가지고 이동하는 문제+ <a href="https://github.com/deptno/nvim/commit/04d8e15209b2052892a164db47a174fa2a06e51a" target="_blank">[URL] https://github.com/deptno/nvim/commit/04d8e15209b2052892a164db47a174fa2a06e51a</a><ul>
+<li><input checked="" disabled="" type="checkbox"> 후행으로 닫도록 수정, 속도관련해서도 이슈가 있음</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> jira ticket 발행</li>
+<li><input checked="" disabled="" type="checkbox"> harpoon + <a href="https://github.com/deptno/nvim/commit/9ab9f786253b76069f1ad7d53ba9a3bb39aa5808" target="_blank">[URL] https://github.com/deptno/nvim/commit/9ab9f786253b76069f1ad7d53ba9a3bb39aa5808</a></li>
+<li><input checked="" disabled="" type="checkbox"> <em>bug</em> ;db 를 통한 quickfix 류의 창이 열린 이후로 q 누르면 버퍼 닫힘<ul>
+<li>이벤트 호출을 막는 법은 찾지 못해서 이벤트를 한번만 처리하도록 처리 + <a href="https://github.com/deptno/nvim/commit/66836ec2098f5268b2d8c838f99400070293f995" target="_blank">[URL] https://github.com/deptno/nvim/commit/66836ec2098f5268b2d8c838f99400070293f995</a></li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> leetcode.nvim</li>
+<li>[o] lsp<ul>
+<li><input checked="" disabled="" type="checkbox"> 포매팅 guard.nvim</li>
+<li><input checked="" disabled="" type="checkbox"> 파일명 변경, nvim-lsp-file-operations -&gt; 동작 안함</li>
+<li><input disabled="" type="checkbox"> lsp 를 통한 영어단어 hover + gpt</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> git <del>furgitive</del> blame 때문, blame + git-blame 추가 + <a href="https://github.com/deptno/nvim/commit/62c6da867e8e2b5846afbe6c3461da633396102a" target="_blank">[URL] https://github.com/deptno/nvim/commit/62c6da867e8e2b5846afbe6c3461da633396102a</a></li>
+<li><input disabled="" type="checkbox"> tmux-popup command 생성 input: shell command i.g.) tig blame</li>
+<li><input disabled="" type="checkbox"> 마크다운 블럭 내에서의 언어 실행 + <a href="nvim-treesitter">nvim-treesitter</a> <ul>
+<li><input disabled="" type="checkbox"> 블럭에 대해서 repl 플러그인 검색</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> <a href="vimwiki">vimwiki</a> syntax highlight 는 markdown 을 filetype 은 vimwiki 를 유지 + <a href="https://github.com/deptno/nvim/commit/2c6d5605ffc2339f10164877573e1fe05053d797" target="_blank">[URL] https://github.com/deptno/nvim/commit/2c6d5605ffc2339f10164877573e1fe05053d797</a></li>
+</ul>
+<ul>
+<li><a href="https://github.com/ecosse3/nvim" target="_blank">[URL] https://github.com/ecosse3/nvim</a><ul>
+<li><input checked="" disabled="" type="checkbox"> nvim-dap + <a href="https://github.com/deptno/nvim/commit/abff6147f65b87c9ee4deaa5782b04d15d1969e2" target="_blank">[URL] https://github.com/deptno/nvim/commit/abff6147f65b87c9ee4deaa5782b04d15d1969e2</a></li>
+<li><input checked="" disabled="" type="checkbox"> react-native 디버깅 가능한지 파악 + <a href="https://github.com/deptno/nvim/commit/01478edf8a3863cdb933e7a1e518c582e20f619f" target="_blank">[URL] https://github.com/deptno/nvim/commit/01478edf8a3863cdb933e7a1e518c582e20f619f</a><ul>
+<li>mason 을 통해서도 인스톨이 가능할 수 있을것 같음</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> <a href="jest">jest</a></li>
+<li><input disabled="" type="checkbox"> <a href="rust">rust</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> <em>wip</em> react-native 같은 특수 파일 suffix 지원 <code class="span">.native.tsx</code> -&gt; <code class="span">.tsx</code> 인식 + <a href="https://github.com/deptno/nvim/commit/dda74cfcada336b0eb80cb84e84baf8e441dacf5" target="_blank">[URL] https://github.com/deptno/nvim/commit/dda74cfcada336b0eb80cb84e84baf8e441dacf5</a><ul>
+<li><a href="https://github.com/neovim/neovim/issues/20784#issuecomment-1722288456" target="_blank">[URL] https://github.com/neovim/neovim/issues/20784#issuecomment-1722288456</a></li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> lspsaga<ul>
+<li><input checked="" disabled="" type="checkbox"> keymap<ul>
+<li><input checked="" disabled="" type="checkbox"> <code class="span">[e</code> diagnostic error<ul>
+<li><input checked="" disabled="" type="checkbox"> <em>fail</em> <code class="span">[d</code> diagnostic -&gt; 메소드 없음</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> <code class="span">K</code> hover</li>
+<li><input checked="" disabled="" type="checkbox"> <code class="span">&lt;leader&gt;rA</code> rename ++project </li>
+<li><input checked="" disabled="" type="checkbox"> <code class="span">&lt;leader&gt;2</code> outline &gt; symbols-outline</li>
+<li><input checked="" disabled="" type="checkbox"> <code class="span">gd</code> definition</li>
+<li><input checked="" disabled="" type="checkbox"> <code class="span">gD</code> peek<ul>
+<li><input checked="" disabled="" type="checkbox"> <em>drop</em> <code class="span">gtd</code> type</li>
+<li><input checked="" disabled="" type="checkbox"> <em>drop</em> <code class="span">gtD</code> peek</li>
+<li><input checked="" disabled="" type="checkbox"> <em>drop</em> <code class="span">gi</code> peek</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> <code class="span">&lt;leader&gt;ic</code> incoming_calls<ul>
+<li><input checked="" disabled="" type="checkbox"> <em>drop</em> <code class="span">&lt;leader&gt;oc</code> outgoing_calls, 이건 중요하지 않음</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> vim-rest-console 연동 + <a href="https://github.com/deptno/nvim/commit/059745591ce6f5e521ebbd07e676fd1c64de8680" target="_blank">[URL] https://github.com/deptno/nvim/commit/059745591ce6f5e521ebbd07e676fd1c64de8680</a></li>
+<li><input checked="" disabled="" type="checkbox"> <a href="lazygit">lazygit</a> 연동 + <a href="https://github.com/deptno/nvim/commit/1dd2dc48067d9bf01f4484ae15fcfc1d62df7a5c" target="_blank">[URL] https://github.com/deptno/nvim/commit/1dd2dc48067d9bf01f4484ae15fcfc1d62df7a5c</a><ul>
+<li><input checked="" disabled="" type="checkbox"> <a href="https://github.com/gioele/vim-autoswap" target="_blank">[URL] https://github.com/gioele/vim-autoswap</a> 설정과 함께 봐볼 것 + <a href="https://github.com/deptno/nvim/commit/9f3be8f546d191a459f3728ea7e06448681e050e" target="_blank">[URL] https://github.com/deptno/nvim/commit/9f3be8f546d191a459f3728ea7e06448681e050e</a></li>
+<li><input checked="" disabled="" type="checkbox"> 현재 파일의 디렉토리 기반으로 열기 + <a href="https://github.com/deptno/nvim/commit/32243e9516fc5e46f98212283a643bc91b52e387" target="_blank">[URL] https://github.com/deptno/nvim/commit/32243e9516fc5e46f98212283a643bc91b52e387</a></li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> fx 연동 + <a href="https://github.com/deptno/nvim/commit/3f125cae051fab1147dbc494cbfc3fae59773279" target="_blank">[URL] https://github.com/deptno/nvim/commit/3f125cae051fab1147dbc494cbfc3fae59773279</a></li>
+<li><input checked="" disabled="" type="checkbox"> session<ul>
+<li><input checked="" disabled="" type="checkbox"> auto-session -&gt; persisted, mksession 은 간혹 세션의 이전 버퍼가 딸려오는 문제는 있는 것 같다 -&gt; 세션 목록에서 저장하도록 해서 일단 사용</li>
+<li><input checked="" disabled="" type="checkbox"> <em>option</em> <del>session 은 버리고 directory 기반 이동 + telescope oldfiles 가 낫겠음, 프로젝트 이동간에 cwd 가 변경되는 경우가 너무 많음</del></li>
+<li><input checked="" disabled="" type="checkbox"> <em>option</em> persisted 를 기준으로 세션 이동 전에 세션을 자동 저장하도록 한다 + <a href="https://github.com/deptno/nvim/commit/a2bd474c5706bccd253bab88634acedfb844fa6a" target="_blank">[URL] https://github.com/deptno/nvim/commit/a2bd474c5706bccd253bab88634acedfb844fa6a</a></li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> quickfix vs loclist 차이 알아보기, quickfix:project, location:local 레벨, 파일단위인지 프로젝트 단위인지</li>
+<li>[o] plugin 추가<ul>
+<li>[o] nvim-ufo<ul>
+<li><input checked="" disabled="" type="checkbox"> 설정 + <a href="https://github.com/deptno/nvim/commit/38f6c19" target="_blank">[URL] https://github.com/deptno/nvim/commit/38f6c19</a></li>
+<li><input disabled="" type="checkbox"> 폴드가 원하는대로는 안풀려서 좀더 찾아보자</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> tabscope + <a href="https://github.com/deptno/nvim/commit/2341b5c" target="_blank">[URL] https://github.com/deptno/nvim/commit/2341b5c</a></li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> blankline 설정 + <a href="https://github.com/deptno/nvim/commit/94f9410d" target="_blank">[URL] https://github.com/deptno/nvim/commit/94f9410d</a></li>
+<li><input checked="" disabled="" type="checkbox"> gitsign<ul>
+<li><input checked="" disabled="" type="checkbox"> <del>Change-base telescope 로 전환</del> -&gt; <a href="lazygit">lazygit</a> 으로 인해 니즈 죽음</li>
+<li><input checked="" disabled="" type="checkbox"> diff 에 관련한 설정이 가능한지 -&gt; 가능하지 않음 delta 적용불가 + <a href="https://github.com/lewis6991/gitsigns.nvim/issues/723" target="_blank">[URL] https://github.com/lewis6991/gitsigns.nvim/issues/723</a></li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> telescope layout 변경 + <a href="https://github.com/deptno/nvim/commit/60ed157" target="_blank">[URL] https://github.com/deptno/nvim/commit/60ed157</a></li>
+<li><input checked="" disabled="" type="checkbox"> telescope oldfiles 에서 cwd 기준으로만 리스팅 + <a href="https://github.com/deptno/nvim/commit/8536cd6dfdf0113de078eb4beccd0cc1711ce7c9" target="_blank">[URL] https://github.com/deptno/nvim/commit/8536cd6dfdf0113de078eb4beccd0cc1711ce7c9</a></li>
+<li><input disabled="" type="checkbox"> nvchad pull</li>
+<li><input checked="" disabled="" type="checkbox"> bookmark: 이슈별 그룹지정, 이슈리스트 J 로 테스트해보자</li>
+<li><input checked="" disabled="" type="checkbox"> symbol, 찾기 단축키 + <code class="span">&lt;leader&gt;ds</code></li>
+<li><input checked="" disabled="" type="checkbox"> bookmark 문자 컬럼 노출 - marks.nvim + <a href="https://github.com/deptno/nvim/commit/e2c36dd" target="_blank">[URL] https://github.com/deptno/nvim/commit/e2c36dd</a></li>
+<li><input checked="" disabled="" type="checkbox"> navigate window ctrl+w + {h,j,k,l} -&gt; 원래 됨 ctrl+{h,j,k,l}</li>
+<li><input checked="" disabled="" type="checkbox"> resize window ctrl+{H,J,K,L} -&gt; 생각보다 메커님이 복잡 윈도우 사용</li>
+<li><input checked="" disabled="" type="checkbox"> emoji 관련 nvim-cmp 플러그인도 찾자 + <a href="https://github.com/deptno/nvim/commit/6b24994" target="_blank">[URL] https://github.com/deptno/nvim/commit/6b24994</a></li>
+<li><input checked="" disabled="" type="checkbox"> <a href="html">html</a> 작성하는데 <a href="zen-coding">zen-coding</a> 안먹는다 플러그인 찾자, lsp 로 와 기본적으로 제공되는 snippet 으로 대충 가능할 것으로 보임<ul>
+<li><input checked="" disabled="" type="checkbox"> emmet-language-server, tailwindcss-language-server 적용 + <a href="https://github.com/deptno/nvim/commit/fa5bbca972efe2c8b6e98e03e7b2cabb626046ed" target="_blank">[URL] https://github.com/deptno/nvim/commit/fa5bbca972efe2c8b6e98e03e7b2cabb626046ed</a></li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> luaJIT 참조하도록 설정 + <a href="https://github.com/deptno/nvim/commit/85619c9" target="_blank">[URL] https://github.com/deptno/nvim/commit/85619c9</a></li>
+<li><input checked="" disabled="" type="checkbox"> vim 에서 cwd 혹은 현재 파일의 위치를 가지고 <a href="tmux">tmux</a> {pane,window} 를 생성할 수 있도록 지원 - <a href="https://github.com/deptno/NvChad/commit/8e6dfa1" target="_blank">[URL] https://github.com/deptno/NvChad/commit/8e6dfa1</a></li>
+<li><input checked="" disabled="" type="checkbox"> vim cd.. 이 <del>cwd 기준이라 recursive 하게 동작하지 않는 문제</del> 수정<ul>
+<li><input checked="" disabled="" type="checkbox"> vim cd.. cwd 기준이 아니라 현재 파일 기준이라 동작하지 않는 것으로 cwd 기준으로 수정 필요</li>
+</ul>
+</li>
+<li>[O] <a href="vim-startify">vim-startify</a> 설정<ul>
+<li><input disabled="" type="checkbox"> startify-session 문제점<ul>
+<li>sesion 이동시에 tag stack 이나 이동 스택은 살아있음<ul>
+<li>ctrl+t, ctrl-o 등으로 해당 스택을 이동하는 경우 이전 session 의 파일들을 불러오게되면서 session 영역이 혼탁해짐</li>
+<li><a href="comparison:tagstack-vs-jump">comparison:tagstack-vs-jump</a></li>
+<li><a href="vimwiki">vimwiki</a> 에서 링크 이동에 tag stack 이 사용되지 않는 문제<ul>
+<li><input checked="" disabled="" type="checkbox"> ctrl+i 가 <code class="span">VimwikiNextLink</code> 로 동작하지 않도록 제거 -&gt; <code class="span">ctrl+i</code> 는 <code class="span">tab</code> 과 같은 역할을 하며 이건 vim 잘못이 아님</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> startify session 에서 cwd 지정이 가능한지 확인<ul>
+<li><input checked="" disabled="" type="checkbox"> startify_change_to_dir  옵션을 사용해 봤으나 사용성이 떨어지고 git root 로 가야함 -&gt; 범용적으로 cdp 구현 프로젝트로 루트 이동이 가능<ul>
+<li><a href="https://github.com/deptno/nvim/commit/a869b4a4" target="_blank">[URL] https://github.com/deptno/nvim/commit/a869b4a4</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> tmux window -&gt; session</li>
+<li><input checked="" disabled="" type="checkbox"> head text 제거</li>
+<li><input checked="" disabled="" type="checkbox"> git modified 와 untracked 를 합칠 것</li>
+<li><input checked="" disabled="" type="checkbox"> 나갈때 임시 세션(<code class="span">_latest</code>)으로 저장</li>
+<li><input checked="" disabled="" type="checkbox"> vim-startify 설정에 대한 기록 작성</li>
+<li>[O] 옵션 검토<ul>
+<li><input checked="" disabled="" type="checkbox"> g:startify_update_oldfiles - vim 시작시점이 아니라 계속적인 업데이트로 이해</li>
+<li><input checked="" disabled="" type="checkbox"> g:startify_session_persistence - 이렇게 되면 세션이 최종 상태를 기억하게됨, _latest 가 번잡하면 이걸 테스트</li>
+<li><input checked="" disabled="" type="checkbox"> 마지막 session 간의 전환 지원이 필요 <a href="https://github.com/deptno/nvim/commit/1996f7c" target="_blank">[URL] https://github.com/deptno/nvim/commit/1996f7c</a></li>
+<li><input checked="" disabled="" type="checkbox"> <del>임시 세션 저장 슬롯 여러개 지원</del> - 의미 없을 것 같음</li>
+<li><input checked="" disabled="" type="checkbox"> g:startify_session_before_save - <del>nvim-tree</del>, <del>symbol-outline</del> 등 제거, 둘다 문제가 있어서 제거 못함<ul>
+<li><a href="https://github.com/deptno/nvim/commit/cf9c4a9" target="_blank">[URL] https://github.com/deptno/nvim/commit/cf9c4a9</a></li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> cmd 지정이 가능함 - 마지막 세션간 전환 구현</li>
+<li><input checked="" disabled="" type="checkbox"> <del>session 에 속한 파일이 열리는 순간 해당 session 을 여는 기능 검토(이걸 쓰면 <code class="span">_latest</code> 는 드랍)</del></li>
+<li><input checked="" disabled="" type="checkbox"> 나갈때 neogit 관련 파일이 열려있으면 닫고 이동하도록, NeogitStatus<ul>
+<li><a href="https://github.com/deptno/nvim/commit/1499958" target="_blank">[URL] https://github.com/deptno/nvim/commit/1499958</a></li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> <del>session 변경시 저장</del> 위험할 수 있을 것 같음, 저장을 습관화</li>
+<li><input disabled="" type="checkbox"> repo 의 경우 branch 별 세션 저장 및 변경 방법 고민</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> session bookmark 가 필요한것</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> cd?<ul>
+<li><input checked="" disabled="" type="checkbox"> 현재 브랜치 + origin 까지 확인 필요 + <a href="https://github.com/deptno/nvim/commit/7fbcc6e" target="_blank">[URL] https://github.com/deptno/nvim/commit/7fbcc6e</a></li>
+<li><input disabled="" type="checkbox"> 현재 파일의 정보고 같이 보는게 좋겠음</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> @cite 자동완성 dictionary 생성 <ul>
+<li><a href="https://github.com/deptno/nvim/commit/de370b0ad52e9121f30067069ecd27be13a6253c" target="_blank">[URL] https://github.com/deptno/nvim/commit/de370b0ad52e9121f30067069ecd27be13a6253c</a></li>
+</ul>
+<ul>
+<li>.github/CODEOWNERS 로 시작 slack, github </li>
+<li>slack 은 api 보니 힘들거 같고 git 관련해서는 cmp_git 이 잘되어 있어서 요걸 쓰기로 함</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> <a href="nvchad">nvchad</a> default theme 변경</li>
+<li><input disabled="" type="checkbox"> 파일 네비게이션<ul>
+<li><input disabled="" type="checkbox"> 파일 이동간에 git_root 를 lcd 혹 cwd 설정</li>
+<li><input disabled="" type="checkbox"> 혹은 git_root 가 다른 파일 이동에는 tabpage 전환, tabpage 마다 root</li>
+</ul>
+</li>
+<li>[o] <a href="vimwiki">vimwiki</a><ul>
+<li><input disabled="" type="checkbox"> diary 간 이동할때 buffer 가 계속 늘어나지 않도록 조치</li>
+<li><input checked="" disabled="" type="checkbox"> diary 를 폴더구조거아니라 prefix 형태로 평탄화 가능한 옵션이 있는지 검토<ul>
+<li><input checked="" disabled="" type="checkbox"> <code class="span">diary:</code> prefix 를 통해 상대경로가 아니어도 링크가능하므로 이걸 이용</li>
+<li><input checked="" disabled="" type="checkbox"> 경로에 depth 가 들어간 경우, <code class="span">/</code> prefix 를 통해서 wiki 루트로 부터 계산되니 이걸 사용<ul>
+<li><input checked="" disabled="" type="checkbox"> <a href="wiki.deptno.dev">wiki.deptno.dev</a> 에서 해당 컨셉이 지원되고 있는지 확인이 필요 -&gt; 안되면 구현</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><input checked="" disabled="" type="checkbox"> 회사와 private wiki 를 분리<ul>
+<li><input checked="" disabled="" type="checkbox"> 마이그레이션 - diary 를 통째로 복사하고(<a href="git-subtree">git-subtree</a>) 수동으로 필터(<a href="git-rebase">git-rebase</a>)링해서 필터링할 것 -&gt; <a href="git-filter-repo">git-filter-repo</a> 를 통해 처리</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> <em>bug</em> 특정 케이스에 vimwiki가 꺼지는 상황이 있음 현재 파일 기준 24라인 이후에 뎁스가 더 들어간 todo를 생성하며 꺼짐</li>
+<li><input checked="" disabled="" type="checkbox"> timestamp, 혹은 다이어키를 삽입하는 키맵 추가 - 이미 snippet 자동완성으로 지원되고 있었음 <code class="span">diso</code></li>
+<li><input disabled="" type="checkbox"> code block 을 실행할때 shell 구문인 경우 tmux 의 다른 panel에서 실행할 수 있도록 지원 <a href="gx">gx</a></li>
+<li><input checked="" disabled="" type="checkbox"> <del>다른 wiki 로 이동할 때 session 전환</del> <a href="vim-startify">vim-startify</a> -&gt; 어려울 것</li>
+<li><input disabled="" type="checkbox"> calendar 를 이용해서 시각화<ul>
+<li><input disabled="" type="checkbox"> wiki<ul>
+<li><input disabled="" type="checkbox"> diary</li>
+<li><input disabled="" type="checkbox"> 날짜 태그 혹은 다이어리 링크 태그</li>
+<li><input disabled="" type="checkbox"> git stat since until 을 통해서 파일기록</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> 슬랙 해당날 태그등</li>
+<li><input disabled="" type="checkbox"> apple reminder</li>
+<li><input disabled="" type="checkbox"> api,구글 등 cloud provider 연동, filter + 휴가 이모지등</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> <a href="octo">octo</a> 도입 검토</li>
+<li><input checked="" disabled="" type="checkbox"> <a href="neogit">neogit</a> 제거 <a href="https://github.com/deptno/nvim/commit/cc0fcebc0ef9cc282ad7dc1c49b4eb63148c77d6" target="_blank">[URL] https://github.com/deptno/nvim/commit/cc0fcebc0ef9cc282ad7dc1c49b4eb63148c77d6</a><ul>
+<li><input checked="" disabled="" type="checkbox"> <em>remove</em> git checkout 대신 git switch 를 이용할 방법</li>
+<li><input checked="" disabled="" type="checkbox"> <em>remove</em> diffview 가 활성화되면 theme 자체를 변경해버리는 것도 고려</li>
+<li><input checked="" disabled="" type="checkbox"> <em>remove</em> change base 쉽게</li>
+</ul>
+</li>
+<li>[.] window<ul>
+<li><input checked="" disabled="" type="checkbox"> buffer 최대 가로사이즈로 window width 설정 <a href="https://github.com/deptno/nvim/commit/3008b87d" target="_blank">[URL] https://github.com/deptno/nvim/commit/3008b87d</a></li>
+</ul>
+</li>
+<li>[o] code chunk 실행, <a href="repl">repl</a><ul>
+<li><input checked="" disabled="" type="checkbox"> <a href="lua">lua</a> 에서 해당 라인을 실행할 수 있도록 처리 -&gt; vim.notify <a href="https://github.com/deptno/nvim/commit/bd102e6" target="_blank">[URL] https://github.com/deptno/nvim/commit/bd102e6</a></li>
+<li><input disabled="" type="checkbox"> 언어별 핸들러 제공필요, ts bun</li>
+</ul>
+</li>
+<li>[O] lab/gx <a href="gx">gx</a><ul>
+<li><input checked="" disabled="" type="checkbox"> github wiki 를 사용하고 있는데 이 부분 github link 따기 -&gt; wiki repo 를 일반레포로 전환하고 wiki 는 drop, needs 없음</li>
+<li><input checked="" disabled="" type="checkbox"> ssh 기반으로 코드가 작성되어있는데 https 같이 지원 -&gt; 테스트 해보니 이미 됨</li>
+<li><input checked="" disabled="" type="checkbox"> <em>bug</em> [n] repository 이름에 <code class="span">.</code> 들어간경우 유지 필요 i.e. deptno.dev -&gt; <a href="https://github.com/deptno/nvim/commit/6833181" target="_blank">[URL] https://github.com/deptno/nvim/commit/6833181</a></li>
+<li><input checked="" disabled="" type="checkbox"> <em>feat</em> url 인데 일반 커밋으로 인식 + <a href="https://github.com/deptno/nvim/commit/c366ead" target="_blank">[URL] https://github.com/deptno/nvim/commit/c366ead</a></li>
+<li><input checked="" disabled="" type="checkbox"> <em>bug</em> cd 정보에 <code class="span">]</code> 마지막 괄호가 빠짐 + <a href="https://github.com/deptno/nvim/commit/10c043d0" target="_blank">[URL] https://github.com/deptno/nvim/commit/10c043d0</a></li>
+<li><input checked="" disabled="" type="checkbox"> <em>bug</em> url 에 <code class="span">.</code> 들어간경우 제거됨 i.e. + <a href="https://github.com/deptno/nvim/commit/c27ad96" target="_blank">[URL] https://github.com/deptno/nvim/commit/c27ad96</a></li>
+<li><input checked="" disabled="" type="checkbox"> [vV] current file 기준으로 gx 를 열어줘야하는데 cwd 기준으로 열어주고있음 + <a href="https://github.com/deptno/nvim/commit/93c4c13" target="_blank">[URL] https://github.com/deptno/nvim/commit/93c4c13</a></li>
+<li><input checked="" disabled="" type="checkbox"> custom handler 지원하는지 확인 + <a href="https://github.com/deptno/nvim/blob/7fbcc6e28c113612d5d29dd7ca7057e87b3caeab/lua/lab/gx/init.lua#L21-L32" target="_blank">[URL] https://github.com/deptno/nvim/blob/7fbcc6e28c113612d5d29dd7ca7057e87b3caeab/lua/lab/gx/init.lua#L21-L32</a></li>
+<li><input checked="" disabled="" type="checkbox"> <em>bug</em> visual selection 모드에 gx github 를 할 경우에 정체 경로가 전송됨 <a href="https://github.com/deptno/nvim/commit/e9cb8368620e2561a4ac5d5826b8bfb9f3de68b2" target="_blank">[URL] https://github.com/deptno/nvim/commit/e9cb8368620e2561a4ac5d5826b8bfb9f3de68b2</a></li>
+<li><input disabled="" type="checkbox"> <em>feat</em> image open</li>
+<li><input checked="" disabled="" type="checkbox"> <em>feat</em> vV 번역 + <a href="https://github.com/deptno/nvim/commit/8f847e6" target="_blank">[URL] https://github.com/deptno/nvim/commit/8f847e6</a></li>
+<li><input checked="" disabled="" type="checkbox"> <em>feat</em> vV search + <a href="https://github.com/deptno/nvim/commit/d55c9c2" target="_blank">[URL] https://github.com/deptno/nvim/commit/d55c9c2</a></li>
+<li><input checked="" disabled="" type="checkbox"> <em>feat</em> n search + <a href="https://github.com/deptno/nvim/commit/a25066f" target="_blank">[URL] https://github.com/deptno/nvim/commit/a25066f</a></li>
+<li><input checked="" disabled="" type="checkbox"> <em>feat</em> n find files + <a href="https://github.com/deptno/nvim/commit/aeae45c" target="_blank">[URL] https://github.com/deptno/nvim/commit/aeae45c</a></li>
+<li><input checked="" disabled="" type="checkbox"> <em>bug</em> vV github permalink 에서 Line 을 못 얻어 옴, 어느 순간 부터 인지 + <a href="https://github.com/deptno/nvim/commit/b253387" target="_blank">[URL] https://github.com/deptno/nvim/commit/b253387</a><ul>
+<li>multiple gx 에서 선택하는 수간 mode가 normal 로 인식되면서 생기는 문제</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> <em>feat</em> vV github permalink 를 가져올대 현재 커밋이 아닌 해당 영역 log들의 순서상 최신으로 하는 것이 좋아보임</li>
+<li><input checked="" disabled="" type="checkbox"> <em>bug</em> vV papago 깨짐</li>
+<li><input disabled="" type="checkbox"> <em>feat</em> filetype 별 gx enable 여부</li>
+<li><input checked="" disabled="" type="checkbox"> <em>feat</em> node_modules 내에서 하면 해당 라이브러리 기준으로 처리가 필요, pnp<ul>
+<li>pnp 까지 처리하려고했으나 .git 정보가 없어서 커밋정보에 접근하지 못하기 때문에 의미가 약함  레포지터리까지만 여는 것으로 멈춤 + <a href="https://github.com/deptno/nvim/commit/b5395499a00a0e4e1dab68bd50032d469f3381b5" target="_blank">[URL] https://github.com/deptno/nvim/commit/b5395499a00a0e4e1dab68bd50032d469f3381b5</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="neovim">neovim</a></li>
+<li><a href="neovim-lua-plugins">neovim-lua-plugins</a></li>
+<li><a href="vim-session">vim-session</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-8d83df55f024a06e.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-3f8f17edabe7c539.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-71963c526facdbf7.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-b37065e097e62895.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"neovim-setup\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"OGWDQWYCR1M8j8Rn524lH\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/neovim-setup\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"neovim-setup\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"neovim-setup\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"neovim-setup\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"\"]\n14:T6ff6,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"neovim-setup\"\u003eneovim-setup\u003c/h1\u003e\n\u003ch2 id=\"nvchad\"\u003envchad\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e시작 설정으로 nvchad 선택\u003c/li\u003e\n\u003cli\u003ecustom config\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/deptno/neovim-config-for-nvchad\" target=\"_blank\"\u003e[URL] https://github.com/deptno/neovim-config-for-nvchad\u003c/a\u003e\u003cul\u003e\n\u003cli\u003elspconfig 포함\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"tree-sitter-모든-언어-설치\"\u003etree-sitter 모든 언어 설치\u003c/h2\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-vim\"\u003e:TSInstall \u003cspan class=\"hljs-keyword\"\u003eall\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"issue\"\u003eissue\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003ewhich-key 에 \u003ca href=\"vimscript\"\u003evimscript\u003c/a\u003e 를 통해서 등록한 매핑은 보여지지 않는 것으로 보임.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"개선사항-todo\"\u003e개선사항 \u003ca href=\"todo\"\u003etodo\u003c/a\u003e\u003c/h2\u003e\n\u003cblockquote\u003e\u003cp\u003e\u003ca href=\"todo\"\u003etodo\u003c/a\u003e 에서 이관\u003c/p\u003e\u003c/blockquote\u003e\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 신규 탭 생성할때 해당 파일의 라인까지 따라가주자\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"wip\"\u003ewip\u003c/a\u003e rmd(runnable markdown) filetype 작성 jira 테스트중\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"wip\"\u003ewip\u003c/a\u003e \u003ca href=\"develop-neovim-lua-plugin\"\u003edevelop-neovim-lua-plugin\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"octo\"\u003eocto\u003c/a\u003e 초기 설정 \u003ccode class=\"span\"\u003e:Octo\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e copilot\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003ebug\u003c/em\u003e gx url 에서 \u003ccode class=\"span\"\u003e?\u003c/code\u003e 가 존재하면 열리지 않음 + \u003ca href=\"https://github.com/deptno/nvim/commit/f4e09cfbf9abf1ad52bb952c63727d34c4941cfc\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/f4e09cfbf9abf1ad52bb952c63727d34c4941cfc\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"bun\"\u003ebun\u003c/a\u003e 을 사용해서 \u003ca href=\"typescript\"\u003etypescript\u003c/a\u003e 테스트 환경 구축\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e session 이동시 열린 버퍼를 가지고 이동하는 문제+ \u003ca href=\"https://github.com/deptno/nvim/commit/04d8e15209b2052892a164db47a174fa2a06e51a\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/04d8e15209b2052892a164db47a174fa2a06e51a\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 후행으로 닫도록 수정, 속도관련해서도 이슈가 있음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e jira ticket 발행\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e harpoon + \u003ca href=\"https://github.com/deptno/nvim/commit/9ab9f786253b76069f1ad7d53ba9a3bb39aa5808\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/9ab9f786253b76069f1ad7d53ba9a3bb39aa5808\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003ebug\u003c/em\u003e ;db 를 통한 quickfix 류의 창이 열린 이후로 q 누르면 버퍼 닫힘\u003cul\u003e\n\u003cli\u003e이벤트 호출을 막는 법은 찾지 못해서 이벤트를 한번만 처리하도록 처리 + \u003ca href=\"https://github.com/deptno/nvim/commit/66836ec2098f5268b2d8c838f99400070293f995\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/66836ec2098f5268b2d8c838f99400070293f995\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e leetcode.nvim\u003c/li\u003e\n\u003cli\u003e[o] lsp\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 포매팅 guard.nvim\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 파일명 변경, nvim-lsp-file-operations -\u0026gt; 동작 안함\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e lsp 를 통한 영어단어 hover + gpt\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e git \u003cdel\u003efurgitive\u003c/del\u003e blame 때문, blame + git-blame 추가 + \u003ca href=\"https://github.com/deptno/nvim/commit/62c6da867e8e2b5846afbe6c3461da633396102a\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/62c6da867e8e2b5846afbe6c3461da633396102a\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e tmux-popup command 생성 input: shell command i.g.) tig blame\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 마크다운 블럭 내에서의 언어 실행 + \u003ca href=\"nvim-treesitter\"\u003envim-treesitter\u003c/a\u003e \u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 블럭에 대해서 repl 플러그인 검색\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"vimwiki\"\u003evimwiki\u003c/a\u003e syntax highlight 는 markdown 을 filetype 은 vimwiki 를 유지 + \u003ca href=\"https://github.com/deptno/nvim/commit/2c6d5605ffc2339f10164877573e1fe05053d797\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/2c6d5605ffc2339f10164877573e1fe05053d797\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/ecosse3/nvim\" target=\"_blank\"\u003e[URL] https://github.com/ecosse3/nvim\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e nvim-dap + \u003ca href=\"https://github.com/deptno/nvim/commit/abff6147f65b87c9ee4deaa5782b04d15d1969e2\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/abff6147f65b87c9ee4deaa5782b04d15d1969e2\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e react-native 디버깅 가능한지 파악 + \u003ca href=\"https://github.com/deptno/nvim/commit/01478edf8a3863cdb933e7a1e518c582e20f619f\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/01478edf8a3863cdb933e7a1e518c582e20f619f\u003c/a\u003e\u003cul\u003e\n\u003cli\u003emason 을 통해서도 인스톨이 가능할 수 있을것 같음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"jest\"\u003ejest\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"rust\"\u003erust\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003ewip\u003c/em\u003e react-native 같은 특수 파일 suffix 지원 \u003ccode class=\"span\"\u003e.native.tsx\u003c/code\u003e -\u0026gt; \u003ccode class=\"span\"\u003e.tsx\u003c/code\u003e 인식 + \u003ca href=\"https://github.com/deptno/nvim/commit/dda74cfcada336b0eb80cb84e84baf8e441dacf5\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/dda74cfcada336b0eb80cb84e84baf8e441dacf5\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/neovim/neovim/issues/20784#issuecomment-1722288456\" target=\"_blank\"\u003e[URL] https://github.com/neovim/neovim/issues/20784#issuecomment-1722288456\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e lspsaga\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e keymap\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ccode class=\"span\"\u003e[e\u003c/code\u003e diagnostic error\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003efail\u003c/em\u003e \u003ccode class=\"span\"\u003e[d\u003c/code\u003e diagnostic -\u0026gt; 메소드 없음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ccode class=\"span\"\u003eK\u003c/code\u003e hover\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ccode class=\"span\"\u003e\u0026lt;leader\u0026gt;rA\u003c/code\u003e rename ++project \u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ccode class=\"span\"\u003e\u0026lt;leader\u0026gt;2\u003c/code\u003e outline \u0026gt; symbols-outline\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ccode class=\"span\"\u003egd\u003c/code\u003e definition\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ccode class=\"span\"\u003egD\u003c/code\u003e peek\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003edrop\u003c/em\u003e \u003ccode class=\"span\"\u003egtd\u003c/code\u003e type\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003edrop\u003c/em\u003e \u003ccode class=\"span\"\u003egtD\u003c/code\u003e peek\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003edrop\u003c/em\u003e \u003ccode class=\"span\"\u003egi\u003c/code\u003e peek\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ccode class=\"span\"\u003e\u0026lt;leader\u0026gt;ic\u003c/code\u003e incoming_calls\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003edrop\u003c/em\u003e \u003ccode class=\"span\"\u003e\u0026lt;leader\u0026gt;oc\u003c/code\u003e outgoing_calls, 이건 중요하지 않음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e vim-rest-console 연동 + \u003ca href=\"https://github.com/deptno/nvim/commit/059745591ce6f5e521ebbd07e676fd1c64de8680\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/059745591ce6f5e521ebbd07e676fd1c64de8680\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"lazygit\"\u003elazygit\u003c/a\u003e 연동 + \u003ca href=\"https://github.com/deptno/nvim/commit/1dd2dc48067d9bf01f4484ae15fcfc1d62df7a5c\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/1dd2dc48067d9bf01f4484ae15fcfc1d62df7a5c\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"https://github.com/gioele/vim-autoswap\" target=\"_blank\"\u003e[URL] https://github.com/gioele/vim-autoswap\u003c/a\u003e 설정과 함께 봐볼 것 + \u003ca href=\"https://github.com/deptno/nvim/commit/9f3be8f546d191a459f3728ea7e06448681e050e\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/9f3be8f546d191a459f3728ea7e06448681e050e\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 현재 파일의 디렉토리 기반으로 열기 + \u003ca href=\"https://github.com/deptno/nvim/commit/32243e9516fc5e46f98212283a643bc91b52e387\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/32243e9516fc5e46f98212283a643bc91b52e387\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e fx 연동 + \u003ca href=\"https://github.com/deptno/nvim/commit/3f125cae051fab1147dbc494cbfc3fae59773279\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/3f125cae051fab1147dbc494cbfc3fae59773279\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e session\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e auto-session -\u0026gt; persisted, mksession 은 간혹 세션의 이전 버퍼가 딸려오는 문제는 있는 것 같다 -\u0026gt; 세션 목록에서 저장하도록 해서 일단 사용\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003eoption\u003c/em\u003e \u003cdel\u003esession 은 버리고 directory 기반 이동 + telescope oldfiles 가 낫겠음, 프로젝트 이동간에 cwd 가 변경되는 경우가 너무 많음\u003c/del\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003eoption\u003c/em\u003e persisted 를 기준으로 세션 이동 전에 세션을 자동 저장하도록 한다 + \u003ca href=\"https://github.com/deptno/nvim/commit/a2bd474c5706bccd253bab88634acedfb844fa6a\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/a2bd474c5706bccd253bab88634acedfb844fa6a\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e quickfix vs loclist 차이 알아보기, quickfix:project, location:local 레벨, 파일단위인지 프로젝트 단위인지\u003c/li\u003e\n\u003cli\u003e[o] plugin 추가\u003cul\u003e\n\u003cli\u003e[o] nvim-ufo\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 설정 + \u003ca href=\"https://github.com/deptno/nvim/commit/38f6c19\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/38f6c19\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 폴드가 원하는대로는 안풀려서 좀더 찾아보자\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e tabscope + \u003ca href=\"https://github.com/deptno/nvim/commit/2341b5c\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/2341b5c\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e blankline 설정 + \u003ca href=\"https://github.com/deptno/nvim/commit/94f9410d\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/94f9410d\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e gitsign\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cdel\u003eChange-base telescope 로 전환\u003c/del\u003e -\u0026gt; \u003ca href=\"lazygit\"\u003elazygit\u003c/a\u003e 으로 인해 니즈 죽음\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e diff 에 관련한 설정이 가능한지 -\u0026gt; 가능하지 않음 delta 적용불가 + \u003ca href=\"https://github.com/lewis6991/gitsigns.nvim/issues/723\" target=\"_blank\"\u003e[URL] https://github.com/lewis6991/gitsigns.nvim/issues/723\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e telescope layout 변경 + \u003ca href=\"https://github.com/deptno/nvim/commit/60ed157\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/60ed157\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e telescope oldfiles 에서 cwd 기준으로만 리스팅 + \u003ca href=\"https://github.com/deptno/nvim/commit/8536cd6dfdf0113de078eb4beccd0cc1711ce7c9\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/8536cd6dfdf0113de078eb4beccd0cc1711ce7c9\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e nvchad pull\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e bookmark: 이슈별 그룹지정, 이슈리스트 J 로 테스트해보자\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e symbol, 찾기 단축키 + \u003ccode class=\"span\"\u003e\u0026lt;leader\u0026gt;ds\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e bookmark 문자 컬럼 노출 - marks.nvim + \u003ca href=\"https://github.com/deptno/nvim/commit/e2c36dd\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/e2c36dd\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e navigate window ctrl+w + {h,j,k,l} -\u0026gt; 원래 됨 ctrl+{h,j,k,l}\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e resize window ctrl+{H,J,K,L} -\u0026gt; 생각보다 메커님이 복잡 윈도우 사용\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e emoji 관련 nvim-cmp 플러그인도 찾자 + \u003ca href=\"https://github.com/deptno/nvim/commit/6b24994\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/6b24994\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"html\"\u003ehtml\u003c/a\u003e 작성하는데 \u003ca href=\"zen-coding\"\u003ezen-coding\u003c/a\u003e 안먹는다 플러그인 찾자, lsp 로 와 기본적으로 제공되는 snippet 으로 대충 가능할 것으로 보임\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e emmet-language-server, tailwindcss-language-server 적용 + \u003ca href=\"https://github.com/deptno/nvim/commit/fa5bbca972efe2c8b6e98e03e7b2cabb626046ed\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/fa5bbca972efe2c8b6e98e03e7b2cabb626046ed\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e luaJIT 참조하도록 설정 + \u003ca href=\"https://github.com/deptno/nvim/commit/85619c9\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/85619c9\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e vim 에서 cwd 혹은 현재 파일의 위치를 가지고 \u003ca href=\"tmux\"\u003etmux\u003c/a\u003e {pane,window} 를 생성할 수 있도록 지원 - \u003ca href=\"https://github.com/deptno/NvChad/commit/8e6dfa1\" target=\"_blank\"\u003e[URL] https://github.com/deptno/NvChad/commit/8e6dfa1\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e vim cd.. 이 \u003cdel\u003ecwd 기준이라 recursive 하게 동작하지 않는 문제\u003c/del\u003e 수정\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e vim cd.. cwd 기준이 아니라 현재 파일 기준이라 동작하지 않는 것으로 cwd 기준으로 수정 필요\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e[O] \u003ca href=\"vim-startify\"\u003evim-startify\u003c/a\u003e 설정\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e startify-session 문제점\u003cul\u003e\n\u003cli\u003esesion 이동시에 tag stack 이나 이동 스택은 살아있음\u003cul\u003e\n\u003cli\u003ectrl+t, ctrl-o 등으로 해당 스택을 이동하는 경우 이전 session 의 파일들을 불러오게되면서 session 영역이 혼탁해짐\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"comparison:tagstack-vs-jump\"\u003ecomparison:tagstack-vs-jump\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"vimwiki\"\u003evimwiki\u003c/a\u003e 에서 링크 이동에 tag stack 이 사용되지 않는 문제\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e ctrl+i 가 \u003ccode class=\"span\"\u003eVimwikiNextLink\u003c/code\u003e 로 동작하지 않도록 제거 -\u0026gt; \u003ccode class=\"span\"\u003ectrl+i\u003c/code\u003e 는 \u003ccode class=\"span\"\u003etab\u003c/code\u003e 과 같은 역할을 하며 이건 vim 잘못이 아님\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e startify session 에서 cwd 지정이 가능한지 확인\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e startify_change_to_dir  옵션을 사용해 봤으나 사용성이 떨어지고 git root 로 가야함 -\u0026gt; 범용적으로 cdp 구현 프로젝트로 루트 이동이 가능\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/deptno/nvim/commit/a869b4a4\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/a869b4a4\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e tmux window -\u0026gt; session\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e head text 제거\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e git modified 와 untracked 를 합칠 것\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 나갈때 임시 세션(\u003ccode class=\"span\"\u003e_latest\u003c/code\u003e)으로 저장\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e vim-startify 설정에 대한 기록 작성\u003c/li\u003e\n\u003cli\u003e[O] 옵션 검토\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e g:startify_update_oldfiles - vim 시작시점이 아니라 계속적인 업데이트로 이해\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e g:startify_session_persistence - 이렇게 되면 세션이 최종 상태를 기억하게됨, _latest 가 번잡하면 이걸 테스트\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 마지막 session 간의 전환 지원이 필요 \u003ca href=\"https://github.com/deptno/nvim/commit/1996f7c\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/1996f7c\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cdel\u003e임시 세션 저장 슬롯 여러개 지원\u003c/del\u003e - 의미 없을 것 같음\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e g:startify_session_before_save - \u003cdel\u003envim-tree\u003c/del\u003e, \u003cdel\u003esymbol-outline\u003c/del\u003e 등 제거, 둘다 문제가 있어서 제거 못함\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/deptno/nvim/commit/cf9c4a9\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/cf9c4a9\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e cmd 지정이 가능함 - 마지막 세션간 전환 구현\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cdel\u003esession 에 속한 파일이 열리는 순간 해당 session 을 여는 기능 검토(이걸 쓰면 \u003ccode class=\"span\"\u003e_latest\u003c/code\u003e 는 드랍)\u003c/del\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 나갈때 neogit 관련 파일이 열려있으면 닫고 이동하도록, NeogitStatus\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/deptno/nvim/commit/1499958\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/1499958\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cdel\u003esession 변경시 저장\u003c/del\u003e 위험할 수 있을 것 같음, 저장을 습관화\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e repo 의 경우 branch 별 세션 저장 및 변경 방법 고민\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e session bookmark 가 필요한것\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e cd?\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 현재 브랜치 + origin 까지 확인 필요 + \u003ca href=\"https://github.com/deptno/nvim/commit/7fbcc6e\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/7fbcc6e\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 현재 파일의 정보고 같이 보는게 좋겠음\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e @cite 자동완성 dictionary 생성 \u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/deptno/nvim/commit/de370b0ad52e9121f30067069ecd27be13a6253c\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/de370b0ad52e9121f30067069ecd27be13a6253c\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003e.github/CODEOWNERS 로 시작 slack, github \u003c/li\u003e\n\u003cli\u003eslack 은 api 보니 힘들거 같고 git 관련해서는 cmp_git 이 잘되어 있어서 요걸 쓰기로 함\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"nvchad\"\u003envchad\u003c/a\u003e default theme 변경\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 파일 네비게이션\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 파일 이동간에 git_root 를 lcd 혹 cwd 설정\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 혹은 git_root 가 다른 파일 이동에는 tabpage 전환, tabpage 마다 root\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e[o] \u003ca href=\"vimwiki\"\u003evimwiki\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e diary 간 이동할때 buffer 가 계속 늘어나지 않도록 조치\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e diary 를 폴더구조거아니라 prefix 형태로 평탄화 가능한 옵션이 있는지 검토\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ccode class=\"span\"\u003ediary:\u003c/code\u003e prefix 를 통해 상대경로가 아니어도 링크가능하므로 이걸 이용\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 경로에 depth 가 들어간 경우, \u003ccode class=\"span\"\u003e/\u003c/code\u003e prefix 를 통해서 wiki 루트로 부터 계산되니 이걸 사용\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"wiki.deptno.dev\"\u003ewiki.deptno.dev\u003c/a\u003e 에서 해당 컨셉이 지원되고 있는지 확인이 필요 -\u0026gt; 안되면 구현\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 회사와 private wiki 를 분리\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e 마이그레이션 - diary 를 통째로 복사하고(\u003ca href=\"git-subtree\"\u003egit-subtree\u003c/a\u003e) 수동으로 필터(\u003ca href=\"git-rebase\"\u003egit-rebase\u003c/a\u003e)링해서 필터링할 것 -\u0026gt; \u003ca href=\"git-filter-repo\"\u003egit-filter-repo\u003c/a\u003e 를 통해 처리\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003ebug\u003c/em\u003e 특정 케이스에 vimwiki가 꺼지는 상황이 있음 현재 파일 기준 24라인 이후에 뎁스가 더 들어간 todo를 생성하며 꺼짐\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e timestamp, 혹은 다이어키를 삽입하는 키맵 추가 - 이미 snippet 자동완성으로 지원되고 있었음 \u003ccode class=\"span\"\u003ediso\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e code block 을 실행할때 shell 구문인 경우 tmux 의 다른 panel에서 실행할 수 있도록 지원 \u003ca href=\"gx\"\u003egx\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cdel\u003e다른 wiki 로 이동할 때 session 전환\u003c/del\u003e \u003ca href=\"vim-startify\"\u003evim-startify\u003c/a\u003e -\u0026gt; 어려울 것\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e calendar 를 이용해서 시각화\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e wiki\u003cul\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e diary\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 날짜 태그 혹은 다이어리 링크 태그\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e git stat since until 을 통해서 파일기록\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 슬랙 해당날 태그등\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e apple reminder\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e api,구글 등 cloud provider 연동, filter + 휴가 이모지등\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"octo\"\u003eocto\u003c/a\u003e 도입 검토\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"neogit\"\u003eneogit\u003c/a\u003e 제거 \u003ca href=\"https://github.com/deptno/nvim/commit/cc0fcebc0ef9cc282ad7dc1c49b4eb63148c77d6\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/cc0fcebc0ef9cc282ad7dc1c49b4eb63148c77d6\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003eremove\u003c/em\u003e git checkout 대신 git switch 를 이용할 방법\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003eremove\u003c/em\u003e diffview 가 활성화되면 theme 자체를 변경해버리는 것도 고려\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003eremove\u003c/em\u003e change base 쉽게\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e[.] window\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e buffer 최대 가로사이즈로 window width 설정 \u003ca href=\"https://github.com/deptno/nvim/commit/3008b87d\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/3008b87d\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e[o] code chunk 실행, \u003ca href=\"repl\"\u003erepl\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003ca href=\"lua\"\u003elua\u003c/a\u003e 에서 해당 라인을 실행할 수 있도록 처리 -\u0026gt; vim.notify \u003ca href=\"https://github.com/deptno/nvim/commit/bd102e6\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/bd102e6\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e 언어별 핸들러 제공필요, ts bun\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e[O] lab/gx \u003ca href=\"gx\"\u003egx\u003c/a\u003e\u003cul\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e github wiki 를 사용하고 있는데 이 부분 github link 따기 -\u0026gt; wiki repo 를 일반레포로 전환하고 wiki 는 drop, needs 없음\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e ssh 기반으로 코드가 작성되어있는데 https 같이 지원 -\u0026gt; 테스트 해보니 이미 됨\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003ebug\u003c/em\u003e [n] repository 이름에 \u003ccode class=\"span\"\u003e.\u003c/code\u003e 들어간경우 유지 필요 i.e. deptno.dev -\u0026gt; \u003ca href=\"https://github.com/deptno/nvim/commit/6833181\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/6833181\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003efeat\u003c/em\u003e url 인데 일반 커밋으로 인식 + \u003ca href=\"https://github.com/deptno/nvim/commit/c366ead\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/c366ead\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003ebug\u003c/em\u003e cd 정보에 \u003ccode class=\"span\"\u003e]\u003c/code\u003e 마지막 괄호가 빠짐 + \u003ca href=\"https://github.com/deptno/nvim/commit/10c043d0\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/10c043d0\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003ebug\u003c/em\u003e url 에 \u003ccode class=\"span\"\u003e.\u003c/code\u003e 들어간경우 제거됨 i.e. + \u003ca href=\"https://github.com/deptno/nvim/commit/c27ad96\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/c27ad96\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e [vV] current file 기준으로 gx 를 열어줘야하는데 cwd 기준으로 열어주고있음 + \u003ca href=\"https://github.com/deptno/nvim/commit/93c4c13\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/93c4c13\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e custom handler 지원하는지 확인 + \u003ca href=\"https://github.com/deptno/nvim/blob/7fbcc6e28c113612d5d29dd7ca7057e87b3caeab/lua/lab/gx/init.lua#L21-L32\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/blob/7fbcc6e28c113612d5d29dd7ca7057e87b3caeab/lua/lab/gx/init.lua#L21-L32\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003ebug\u003c/em\u003e visual selection 모드에 gx github 를 할 경우에 정체 경로가 전송됨 \u003ca href=\"https://github.com/deptno/nvim/commit/e9cb8368620e2561a4ac5d5826b8bfb9f3de68b2\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/e9cb8368620e2561a4ac5d5826b8bfb9f3de68b2\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003efeat\u003c/em\u003e image open\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003efeat\u003c/em\u003e vV 번역 + \u003ca href=\"https://github.com/deptno/nvim/commit/8f847e6\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/8f847e6\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003efeat\u003c/em\u003e vV search + \u003ca href=\"https://github.com/deptno/nvim/commit/d55c9c2\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/d55c9c2\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003efeat\u003c/em\u003e n search + \u003ca href=\"https://github.com/deptno/nvim/commit/a25066f\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/a25066f\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003efeat\u003c/em\u003e n find files + \u003ca href=\"https://github.com/deptno/nvim/commit/aeae45c\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/aeae45c\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003ebug\u003c/em\u003e vV github permalink 에서 Line 을 못 얻어 옴, 어느 순간 부터 인지 + \u003ca href=\"https://github.com/deptno/nvim/commit/b253387\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/b253387\u003c/a\u003e\u003cul\u003e\n\u003cli\u003emultiple gx 에서 선택하는 수간 mode가 normal 로 인식되면서 생기는 문제\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003efeat\u003c/em\u003e vV github permalink 를 가져올대 현재 커밋이 아닌 해당 영역 log들의 순서상 최신으로 하는 것이 좋아보임\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003ebug\u003c/em\u003e vV papago 깨짐\u003c/li\u003e\n\u003cli\u003e\u003cinput disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003efeat\u003c/em\u003e filetype 별 gx enable 여부\u003c/li\u003e\n\u003cli\u003e\u003cinput checked=\"\" disabled=\"\" type=\"checkbox\"\u003e \u003cem\u003efeat\u003c/em\u003e node_modules 내에서 하면 해당 라이브러리 기준으로 처리가 필요, pnp\u003cul\u003e\n\u003cli\u003epnp 까지 처리하려고했으나 .git 정보가 없어서 커밋정보에 접근하지 못하기 때문에 의미가 약함  레포지터리까지만 여는 것으로 멈춤 + \u003ca href=\"https://github.com/deptno/nvim/commit/b5395499a00a0e4e1dab68bd50032d469f3381b5\" target=\"_blank\"\u003e[URL] https://github.com/deptno/nvim/commit/b5395499a00a0e4e1dab68bd50032d469f3381b5\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"neovim\"\u003eneovim\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"neovim-lua-plugins\"\u003eneovim-lua-plugins\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"vim-session\"\u003evim-session\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/440709c\\n\",\"className\":\"bg-white text-black\",\"children\":\"440709c\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/neovim-setup.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/neovim-setup.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/neovim-setup.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"neovim-setup\",\"name\":\"neovim-setup\",\"val\":37},{\"id\":\"vimscript\",\"name\":\"vimscript\",\"val\":3},{\"id\":\"todo\",\"name\":\"todo\",\"val\":7},{\"id\":\"wip\",\"name\":\"wip\",\"val\":2},{\"id\":\"develop-neovim-lua-plugin\",\"name\":\"develop-neovim-lua-plugin\",\"val\":3},{\"id\":\"octo\",\"name\":\"octo\",\"val\":\"$undefined\"},{\"id\":\"bun\",\"name\":\"bun\",\"val\":10},{\"id\":\"typescript\",\"name\":\"typescript\",\"val\":5},{\"id\":\"nvim-treesitter\",\"name\":\"nvim-treesitter\",\"val\":18},{\"id\":\"vimwiki\",\"name\":\"vimwiki\",\"val\":8},{\"id\":\"jest\",\"name\":\"jest\",\"val\":3},{\"id\":\"rust\",\"name\":\"rust\",\"val\":13},{\"id\":\"lazygit\",\"name\":\"lazygit\",\"val\":7},{\"id\":\"html\",\"name\":\"html\",\"val\":1},{\"id\":\"zen-coding\",\"name\":\"zen-coding\",\"val\":1},{\"id\":\"tmux\",\"name\":\"tmux\",\"val\":7},{\"id\":\"vim-startify\",\"name\":\"vim-startify\",\"val\":5},{\"id\":\"comparison:tagstack-vs-jump\",\"name\":\"comparison:tagstack-vs-jump\",\"val\":4},{\"id\":\"nvchad\",\"name\":\"nvchad\",\"val\":\"$undefined\"},{\"id\":\"wiki.deptno.dev\",\"name\":\"wiki.deptno.dev\",\"val\":17},{\"id\":\"git-subtree\",\"name\":\"git-subtree\",\"val\":3},{\"id\":\"git-rebase\",\"name\":\"git-rebase\",\"val\":1},{\"id\":\"git-filter-repo\",\"name\":\"git-filter-repo\",\"val\":2},{\"id\":\"gx\",\"name\":\"gx\",\"val\":2},{\"id\":\"neogit\",\"name\":\"neogit\",\"val\":\"$undefined\"},{\"id\":\"repl\",\"name\":\"repl\",\"val\":\"$undefined\"},{\"id\":\"lua\",\"name\":\"lua\",\"val\":4},{\"id\":\"neovim\",\"name\":\"neovim\",\"val\":22},{\"id\":\"neovim-lua-plugins\",\"name\":\"neovim-lua-plugins\",\"val\":8},{\"id\":\"vim-session\",\"name\":\"vim-session\",\"val\":2},{\"id\":\"neotest\",\"name\":\"neotest\",\"val\":8},{\"id\":\"diary/2023-10-19\",\"name\":\"diary/2023-10-19\",\"val\":2},{\"id\":\"diary/2023-11-05\",\"name\":\"diary/2023-11-05\",\"val\":6},{\"id\":\"diary/2024-12-31\",\"name\":\"diary/2024-12-31\",\"val\":441}],\"links\":[{\"source\":\"neovim-setup\",\"target\":\"vimscript\"},{\"source\":\"neovim-setup\",\"target\":\"todo\"},{\"source\":\"neovim-setup\",\"target\":\"todo\"},{\"source\":\"neovim-setup\",\"target\":\"wip\"},{\"source\":\"neovim-setup\",\"target\":\"wip\"},{\"source\":\"neovim-setup\",\"target\":\"develop-neovim-lua-plugin\"},{\"source\":\"neovim-setup\",\"target\":\"octo\"},{\"source\":\"neovim-setup\",\"target\":\"bun\"},{\"source\":\"neovim-setup\",\"target\":\"typescript\"},{\"source\":\"neovim-setup\",\"target\":\"nvim-treesitter\"},{\"source\":\"neovim-setup\",\"target\":\"vimwiki\"},{\"source\":\"neovim-setup\",\"target\":\"jest\"},{\"source\":\"neovim-setup\",\"target\":\"rust\"},{\"source\":\"neovim-setup\",\"target\":\"lazygit\"},{\"source\":\"neovim-setup\",\"target\":\"lazygit\"},{\"source\":\"neovim-setup\",\"target\":\"html\"},{\"source\":\"neovim-setup\",\"target\":\"zen-coding\"},{\"source\":\"neovim-setup\",\"target\":\"tmux\"},{\"source\":\"neovim-setup\",\"target\":\"vim-startify\"},{\"source\":\"neovim-setup\",\"target\":\"comparison:tagstack-vs-jump\"},{\"source\":\"neovim-setup\",\"target\":\"vimwiki\"},{\"source\":\"neovim-setup\",\"target\":\"nvchad\"},{\"source\":\"neovim-setup\",\"target\":\"vimwiki\"},{\"source\":\"neovim-setup\",\"target\":\"wiki.deptno.dev\"},{\"source\":\"neovim-setup\",\"target\":\"git-subtree\"},{\"source\":\"neovim-setup\",\"target\":\"git-rebase\"},{\"source\":\"neovim-setup\",\"target\":\"git-filter-repo\"},{\"source\":\"neovim-setup\",\"target\":\"gx\"},{\"source\":\"neovim-setup\",\"target\":\"vim-startify\"},{\"source\":\"neovim-setup\",\"target\":\"octo\"},{\"source\":\"neovim-setup\",\"target\":\"neogit\"},{\"source\":\"neovim-setup\",\"target\":\"repl\"},{\"source\":\"neovim-setup\",\"target\":\"lua\"},{\"source\":\"neovim-setup\",\"target\":\"gx\"},{\"source\":\"neovim-setup\",\"target\":\"neovim\"},{\"source\":\"neovim-setup\",\"target\":\"neovim-lua-plugins\"},{\"source\":\"neovim-setup\",\"target\":\"vim-session\"},{\"source\":\"neotest\",\"target\":\"neovim-setup\"},{\"source\":\"neovim\",\"target\":\"neovim-setup\"},{\"source\":\"vim-startify\",\"target\":\"neovim-setup\"},{\"source\":\"diary/2023-10-19\",\"target\":\"neovim-setup\"},{\"source\":\"diary/2023-11-05\",\"target\":\"neovim-setup\"},{\"source\":\"diary/2024-12-31\",\"target\":\"neovim-setup\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"neovim-setup\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/neovim-setup\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"neovim-setup\"}],[\"$\",\"sup\",null,{\"children\":37}]]}]}],[\"$\",\"span\",\"vimscript\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vimscript\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vimscript\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"todo\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/todo\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"todo\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"wip\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/wip\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"wip\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"develop-neovim-lua-plugin\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/develop-neovim-lua-plugin\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"develop-neovim-lua-plugin\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"octo\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/octo\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"octo\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"bun\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/bun\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"bun\"}],[\"$\",\"sup\",null,{\"children\":10}]]}]}],[\"$\",\"span\",\"typescript\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/typescript\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"typescript\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"nvim-treesitter\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/nvim-treesitter\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"nvim-treesitter\"}],[\"$\",\"sup\",null,{\"children\":18}]]}]}],[\"$\",\"span\",\"vimwiki\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vimwiki\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vimwiki\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"jest\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/jest\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"jest\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"rust\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/rust\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"rust\"}],[\"$\",\"sup\",null,{\"children\":13}]]}]}],[\"$\",\"span\",\"lazygit\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/lazygit\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"lazygit\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"html\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/html\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"html\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"zen-coding\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/zen-coding\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"zen-coding\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"tmux\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/tmux\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"tmux\"}],[\"$\",\"sup\",null,{\"children\":7}]]}]}],[\"$\",\"span\",\"vim-startify\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vim-startify\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vim-startify\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"comparison:tagstack-vs-jump\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/comparison:tagstack-vs-jump\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"comparison:tagstack-vs-jump\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"nvchad\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/nvchad\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"nvchad\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"wiki.deptno.dev\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/wiki.deptno.dev\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"wiki.deptno.dev\"}],[\"$\",\"sup\",null,{\"children\":17}]]}]}],[\"$\",\"span\",\"git-subtree\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-subtree\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-subtree\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"git-rebase\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-rebase\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-rebase\"}],[\"$\",\"sup\",null,{\"children\":1}]]}]}],[\"$\",\"span\",\"git-filter-repo\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/git-filter-repo\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"git-filter-repo\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"gx\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/gx\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"gx\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"neogit\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/neogit\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"neogit\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"repl\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/repl\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"repl\"}],[\"$\",\"sup\",null,{\"children\":\"$undefined\"}]]}]}],[\"$\",\"span\",\"lua\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/lua\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"lua\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"neovim\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/neovim\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"neovim\"}],[\"$\",\"sup\",null,{\"children\":22}]]}]}],[\"$\",\"span\",\"neovim-lua-plugins\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/neovim-lua-plugins\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"neovim-lua-plugins\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"vim-session\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/vim-session\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"vim-session\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"neotest\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/neotest\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"neotest\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"diary/2023-10-19\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-10-19\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-10-19\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2023-11-05\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-11-05\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-11-05\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"diary/2024-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-12-31\"}],[\"$\",\"sup\",null,{\"children\":441}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"neovim-setup\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#neovim-setup\",\"children\":\"neovim-setup\"}]}],[\"$\",\"div\",\"nvchad\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#nvchad\",\"children\":\"nvchad\"}]}],[\"$\",\"div\",\"tree-sitter-모든-언어-설치\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#tree-sitter-모든-언어-설치\",\"children\":\"tree-sitter 모든 언어 설치\"}]}],[\"$\",\"div\",\"issue\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#issue\",\"children\":\"issue\"}]}],[\"$\",\"div\",\"개선사항-todo\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#개선사항-todo\",\"children\":\"개선사항 todo\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T37e2,"])</script><script>self.__next_f.push([1," \n## nvchad\n- 시작 설정으로 nvchad 선택\n- custom config\n  + https://github.com/deptno/neovim-config-for-nvchad\n    - lspconfig 포함\n\n## tree-sitter 모든 언어 설치\n```vim\n:TSInstall all\n```\n\n## issue\n- which-key 에 [[vimscript]] 를 통해서 등록한 매핑은 보여지지 않는 것으로 보임.\n\n## 개선사항 [[todo]]\n\u003e [[todo]] 에서 이관\n\n- [ ] 신규 탭 생성할때 해당 파일의 라인까지 따라가주자\n- [X] [[wip]] rmd(runnable markdown) filetype 작성 jira 테스트중\n- [ ] [[wip]] [[develop-neovim-lua-plugin]]\n- [X] [[octo]] 초기 설정 `:Octo`\n- [ ] copilot\n- [X] *bug* gx url 에서 `?` 가 존재하면 열리지 않음 + https://github.com/deptno/nvim/commit/f4e09cfbf9abf1ad52bb952c63727d34c4941cfc\n- [ ] [[bun]] 을 사용해서 [[typescript]] 테스트 환경 구축\n- [X] session 이동시 열린 버퍼를 가지고 이동하는 문제+ https://github.com/deptno/nvim/commit/04d8e15209b2052892a164db47a174fa2a06e51a\n  - [X] 후행으로 닫도록 수정, 속도관련해서도 이슈가 있음\n- [ ] jira ticket 발행\n- [X] harpoon + https://github.com/deptno/nvim/commit/9ab9f786253b76069f1ad7d53ba9a3bb39aa5808\n- [X] *bug* ;db 를 통한 quickfix 류의 창이 열린 이후로 q 누르면 버퍼 닫힘\n  + 이벤트 호출을 막는 법은 찾지 못해서 이벤트를 한번만 처리하도록 처리 + https://github.com/deptno/nvim/commit/66836ec2098f5268b2d8c838f99400070293f995\n- [ ] leetcode.nvim\n- [o] lsp\n  - [X] 포매팅 guard.nvim\n  - [X] 파일명 변경, nvim-lsp-file-operations -\u003e 동작 안함\n  - [ ] lsp 를 통한 영어단어 hover + gpt\n- [X] git ~~furgitive~~ blame 때문, blame + git-blame 추가 + https://github.com/deptno/nvim/commit/62c6da867e8e2b5846afbe6c3461da633396102a\n- [ ] tmux-popup command 생성 input: shell command i.g.) tig blame\n- [ ] 마크다운 블럭 내에서의 언어 실행 + [[nvim-treesitter]] \n  - [ ] 블럭에 대해서 repl 플러그인 검색\n- [X] [[vimwiki]] syntax highlight 는 markdown 을 filetype 은 vimwiki 를 유지 + https://github.com/deptno/nvim/commit/2c6d5605ffc2339f10164877573e1fe05053d797\n+ https://github.com/ecosse3/nvim\n  - [X] nvim-dap + https://github.com/deptno/nvim/commit/abff6147f65b87c9ee4deaa5782b04d15d1969e2\n  - [X] react-native 디버깅 가능한지 파악 + https://github.com/deptno/nvim/commit/01478edf8a3863cdb933e7a1e518c582e20f619f\n    - mason 을 통해서도 인스톨이 가능할 수 있을것 같음\n  - [ ] [[jest]]\n  - [ ] [[rust]]\n- [X] *wip* react-native 같은 특수 파일 suffix 지원 `.native.tsx` -\u003e `.tsx` 인식 + https://github.com/deptno/nvim/commit/dda74cfcada336b0eb80cb84e84baf8e441dacf5\n  + https://github.com/neovim/neovim/issues/20784#issuecomment-1722288456\n- [X] lspsaga\n  - [X] keymap\n    - [X] `[e` diagnostic error\n      - [X] *fail* `[d` diagnostic -\u003e 메소드 없음 \n    - [X] `K` hover\n    - [X] `\u003cleader\u003erA` rename ++project \n    - [X] `\u003cleader\u003e2` outline \u003e symbols-outline\n    - [X] `gd` definition\n    - [X] `gD` peek\n      - [X] *drop* `gtd` type\n      - [X] *drop* `gtD` peek\n      - [X] *drop* `gi` peek\n    - [X] `\u003cleader\u003eic` incoming_calls\n      - [X] *drop* `\u003cleader\u003eoc` outgoing_calls, 이건 중요하지 않음\n- [X] vim-rest-console 연동 + https://github.com/deptno/nvim/commit/059745591ce6f5e521ebbd07e676fd1c64de8680\n- [X] [[lazygit]] 연동 + https://github.com/deptno/nvim/commit/1dd2dc48067d9bf01f4484ae15fcfc1d62df7a5c\n  - [X] https://github.com/gioele/vim-autoswap 설정과 함께 봐볼 것 + https://github.com/deptno/nvim/commit/9f3be8f546d191a459f3728ea7e06448681e050e\n  - [X] 현재 파일의 디렉토리 기반으로 열기 + https://github.com/deptno/nvim/commit/32243e9516fc5e46f98212283a643bc91b52e387\n- [X] fx 연동 + https://github.com/deptno/nvim/commit/3f125cae051fab1147dbc494cbfc3fae59773279\n- [X] session\n  - [X] auto-session -\u003e persisted, mksession 은 간혹 세션의 이전 버퍼가 딸려오는 문제는 있는 것 같다 -\u003e 세션 목록에서 저장하도록 해서 일단 사용\n  - [X] *option* ~~session 은 버리고 directory 기반 이동 + telescope oldfiles 가 낫겠음, 프로젝트 이동간에 cwd 가 변경되는 경우가 너무 많음~~\n  - [X] *option* persisted 를 기준으로 세션 이동 전에 세션을 자동 저장하도록 한다 + https://github.com/deptno/nvim/commit/a2bd474c5706bccd253bab88634acedfb844fa6a\n- [X] quickfix vs loclist 차이 알아보기, quickfix:project, location:local 레벨, 파일단위인지 프로젝트 단위인지\n- [o] plugin 추가\n  - [o] nvim-ufo\n    - [X] 설정 + https://github.com/deptno/nvim/commit/38f6c19\n    - [ ] 폴드가 원하는대로는 안풀려서 좀더 찾아보자\n  - [X] tabscope + https://github.com/deptno/nvim/commit/2341b5c\n- [X] blankline 설정 + https://github.com/deptno/nvim/commit/94f9410d\n- [X] gitsign\n  - [X] ~~Change-base telescope 로 전환~~ -\u003e [[lazygit]] 으로 인해 니즈 죽음\n  - [X] diff 에 관련한 설정이 가능한지 -\u003e 가능하지 않음 delta 적용불가 + https://github.com/lewis6991/gitsigns.nvim/issues/723\n- [X] telescope layout 변경 + https://github.com/deptno/nvim/commit/60ed157\n- [X] telescope oldfiles 에서 cwd 기준으로만 리스팅 + https://github.com/deptno/nvim/commit/8536cd6dfdf0113de078eb4beccd0cc1711ce7c9\n- [ ] nvchad pull\n- [X] bookmark: 이슈별 그룹지정, 이슈리스트 J 로 테스트해보자\n- [X] symbol, 찾기 단축키 + `\u003cleader\u003eds`\n- [X] bookmark 문자 컬럼 노출 - marks.nvim + https://github.com/deptno/nvim/commit/e2c36dd\n- [X] navigate window ctrl+w + {h,j,k,l} -\u003e 원래 됨 ctrl+{h,j,k,l}\n- [X] resize window ctrl+{H,J,K,L} -\u003e 생각보다 메커님이 복잡 윈도우 사용\n- [X] emoji 관련 nvim-cmp 플러그인도 찾자 + https://github.com/deptno/nvim/commit/6b24994\n- [X] [[html]] 작성하는데 [[zen-coding]] 안먹는다 플러그인 찾자, lsp 로 와 기본적으로 제공되는 snippet 으로 대충 가능할 것으로 보임\n  - [X] emmet-language-server, tailwindcss-language-server 적용 + https://github.com/deptno/nvim/commit/fa5bbca972efe2c8b6e98e03e7b2cabb626046ed\n- [X] luaJIT 참조하도록 설정 + https://github.com/deptno/nvim/commit/85619c9\n- [X] vim 에서 cwd 혹은 현재 파일의 위치를 가지고 [[tmux]] {pane,window} 를 생성할 수 있도록 지원 - https://github.com/deptno/NvChad/commit/8e6dfa1\n- [X] vim cd.. 이 ~~cwd 기준이라 recursive 하게 동작하지 않는 문제~~ 수정\n  - [X] vim cd.. cwd 기준이 아니라 현재 파일 기준이라 동작하지 않는 것으로 cwd 기준으로 수정 필요\n- [O] [[vim-startify]] 설정\n  - [ ] startify-session 문제점\n    - sesion 이동시에 tag stack 이나 이동 스택은 살아있음\n      - ctrl+t, ctrl-o 등으로 해당 스택을 이동하는 경우 이전 session 의 파일들을 불러오게되면서 session 영역이 혼탁해짐\n      - [[comparison:tagstack-vs-jump]]\n      - [[vimwiki]] 에서 링크 이동에 tag stack 이 사용되지 않는 문제\n        - [X] ctrl+i 가 `VimwikiNextLink` 로 동작하지 않도록 제거 -\u003e `ctrl+i` 는 `tab` 과 같은 역할을 하며 이건 vim 잘못이 아님\n  - [X] startify session 에서 cwd 지정이 가능한지 확인\n    - [X] startify_change_to_dir  옵션을 사용해 봤으나 사용성이 떨어지고 git root 로 가야함 -\u003e 범용적으로 cdp 구현 프로젝트로 루트 이동이 가능\n      + https://github.com/deptno/nvim/commit/a869b4a4\n  - [X] tmux window -\u003e session\n  - [X] head text 제거\n  - [X] git modified 와 untracked 를 합칠 것\n  - [X] 나갈때 임시 세션(`_latest`)으로 저장\n  - [X] vim-startify 설정에 대한 기록 작성\n  - [O] 옵션 검토\n    - [X] g:startify_update_oldfiles - vim 시작시점이 아니라 계속적인 업데이트로 이해\n    - [X] g:startify_session_persistence - 이렇게 되면 세션이 최종 상태를 기억하게됨, _latest 가 번잡하면 이걸 테스트\n    - [X] 마지막 session 간의 전환 지원이 필요 https://github.com/deptno/nvim/commit/1996f7c\n    - [X] ~~임시 세션 저장 슬롯 여러개 지원~~ - 의미 없을 것 같음\n    - [X] g:startify_session_before_save - ~~nvim-tree~~, ~~symbol-outline~~ 등 제거, 둘다 문제가 있어서 제거 못함\n      - https://github.com/deptno/nvim/commit/cf9c4a9\n    - [X] cmd 지정이 가능함 - 마지막 세션간 전환 구현\n    - [X] ~~session 에 속한 파일이 열리는 순간 해당 session 을 여는 기능 검토(이걸 쓰면 `_latest` 는 드랍)~~\n    - [X] 나갈때 neogit 관련 파일이 열려있으면 닫고 이동하도록, NeogitStatus\n      + https://github.com/deptno/nvim/commit/1499958\n    - [X] ~~session 변경시 저장~~ 위험할 수 있을 것 같음, 저장을 습관화\n    - [ ] repo 의 경우 branch 별 세션 저장 및 변경 방법 고민\n  - [ ] session bookmark 가 필요한것\n- [ ] cd?\n  - [X] 현재 브랜치 + origin 까지 확인 필요 + https://github.com/deptno/nvim/commit/7fbcc6e\n  - [ ] 현재 파일의 정보고 같이 보는게 좋겠음\n- [X] @cite 자동완성 dictionary 생성 \n  + https://github.com/deptno/nvim/commit/de370b0ad52e9121f30067069ecd27be13a6253c\n  - .github/CODEOWNERS 로 시작 slack, github \n  - slack 은 api 보니 힘들거 같고 git 관련해서는 cmp_git 이 잘되어 있어서 요걸 쓰기로 함\n- [X] [[nvchad]] default theme 변경\n- [ ] 파일 네비게이션\n  - [ ] 파일 이동간에 git_root 를 lcd 혹 cwd 설정\n  - [ ] 혹은 git_root 가 다른 파일 이동에는 tabpage 전환, tabpage 마다 root\n- [o] [[vimwiki]]\n  - [ ] diary 간 이동할때 buffer 가 계속 늘어나지 않도록 조치\n  - [X] diary 를 폴더구조거아니라 prefix 형태로 평탄화 가능한 옵션이 있는지 검토\n    - [X] `diary:` prefix 를 통해 상대경로가 아니어도 링크가능하므로 이걸 이용\n    - [X] 경로에 depth 가 들어간 경우, `/` prefix 를 통해서 wiki 루트로 부터 계산되니 이걸 사용\n      - [X] [[wiki.deptno.dev]] 에서 해당 컨셉이 지원되고 있는지 확인이 필요 -\u003e 안되면 구현\n  - [X] 회사와 private wiki 를 분리\n    - [X] 마이그레이션 - diary 를 통째로 복사하고([[git-subtree]]) 수동으로 필터([[git-rebase]])링해서 필터링할 것 -\u003e [[git-filter-repo]] 를 통해 처리\n  - [ ] *bug* 특정 케이스에 vimwiki가 꺼지는 상황이 있음 현재 파일 기준 24라인 이후에 뎁스가 더 들어간 todo를 생성하며 꺼짐\n  - [X] timestamp, 혹은 다이어키를 삽입하는 키맵 추가 - 이미 snippet 자동완성으로 지원되고 있었음 `diso`\n  - [ ] code block 을 실행할때 shell 구문인 경우 tmux 의 다른 panel에서 실행할 수 있도록 지원 [[gx]]\n  - [X] ~~다른 wiki 로 이동할 때 session 전환~~ [[vim-startify]] -\u003e 어려울 것\n  - [ ] calendar 를 이용해서 시각화\n    - [ ] wiki\n      - [ ] diary\n      - [ ] 날짜 태그 혹은 다이어리 링크 태그\n      - [ ] git stat since until 을 통해서 파일기록\n    - [ ] 슬랙 해당날 태그등\n    - [ ] apple reminder\n    - [ ] api,구글 등 cloud provider 연동, filter + 휴가 이모지등\n- [ ] [[octo]] 도입 검토\n- [X] [[neogit]] 제거 https://github.com/deptno/nvim/commit/cc0fcebc0ef9cc282ad7dc1c49b4eb63148c77d6\n  - [X] *remove* git checkout 대신 git switch 를 이용할 방법\n  - [X] *remove* diffview 가 활성화되면 theme 자체를 변경해버리는 것도 고려\n  - [X] *remove* change base 쉽게\n- [.] window\n  - [X] buffer 최대 가로사이즈로 window width 설정 https://github.com/deptno/nvim/commit/3008b87d\n- [o] code chunk 실행, [[repl]]\n  - [X] [[lua]] 에서 해당 라인을 실행할 수 있도록 처리 -\u003e vim.notify https://github.com/deptno/nvim/commit/bd102e6\n  - [ ] 언어별 핸들러 제공필요, ts bun\n- [O] lab/gx [[gx]]\n  - [X] github wiki 를 사용하고 있는데 이 부분 github link 따기 -\u003e wiki repo 를 일반레포로 전환하고 wiki 는 drop, needs 없음\n  - [X] ssh 기반으로 코드가 작성되어있는데 https 같이 지원 -\u003e 테스트 해보니 이미 됨\n  - [X] *bug* [n] repository 이름에 `.` 들어간경우 유지 필요 i.e. deptno.dev -\u003e https://github.com/deptno/nvim/commit/6833181\n  - [X] *feat* url 인데 일반 커밋으로 인식 + https://github.com/deptno/nvim/commit/c366ead\n  - [X] *bug* cd 정보에 `]` 마지막 괄호가 빠짐 + https://github.com/deptno/nvim/commit/10c043d0\n  - [X] *bug* url 에 `.` 들어간경우 제거됨 i.e. + https://github.com/deptno/nvim/commit/c27ad96\n  - [X] [vV] current file 기준으로 gx 를 열어줘야하는데 cwd 기준으로 열어주고있음 + https://github.com/deptno/nvim/commit/93c4c13\n  - [X] custom handler 지원하는지 확인 + https://github.com/deptno/nvim/blob/7fbcc6e28c113612d5d29dd7ca7057e87b3caeab/lua/lab/gx/init.lua#L21-L32\n  - [X] *bug* visual selection 모드에 gx github 를 할 경우에 정체 경로가 전송됨 https://github.com/deptno/nvim/commit/e9cb8368620e2561a4ac5d5826b8bfb9f3de68b2\n  - [ ] *feat* image open\n  - [X] *feat* vV 번역 + https://github.com/deptno/nvim/commit/8f847e6\n  - [X] *feat* vV search + https://github.com/deptno/nvim/commit/d55c9c2\n  - [X] *feat* n search + https://github.com/deptno/nvim/commit/a25066f\n  - [X] *feat* n find files + https://github.com/deptno/nvim/commit/aeae45c\n  - [X] *bug* vV github permalink 에서 Line 을 못 얻어 옴, 어느 순간 부터 인지 + https://github.com/deptno/nvim/commit/b253387\n    - multiple gx 에서 선택하는 수간 mode가 normal 로 인식되면서 생기는 문제\n  - [ ] *feat* vV github permalink 를 가져올대 현재 커밋이 아닌 해당 영역 log들의 순서상 최신으로 하는 것이 좋아보임\n  - [X] *bug* vV papago 깨짐\n  - [ ] *feat* filetype 별 gx enable 여부\n  - [X] *feat* node_modules 내에서 하면 해당 라이브러리 기준으로 처리가 필요, pnp\n    - pnp 까지 처리하려고했으나 .git 정보가 없어서 커밋정보에 접근하지 못하기 때문에 의미가 약함  레포지터리까지만 여는 것으로 멈춤 + https://github.com/deptno/nvim/commit/b5395499a00a0e4e1dab68bd50032d469f3381b5\n\n## link\n- [[neovim]]\n- [[neovim-lua-plugins]]\n- [[vim-session]]\n"])</script><script>self.__next_f.push([1,"16:T37e2,"])</script><script>self.__next_f.push([1," \n## nvchad\n- 시작 설정으로 nvchad 선택\n- custom config\n  + https://github.com/deptno/neovim-config-for-nvchad\n    - lspconfig 포함\n\n## tree-sitter 모든 언어 설치\n```vim\n:TSInstall all\n```\n\n## issue\n- which-key 에 [[vimscript]] 를 통해서 등록한 매핑은 보여지지 않는 것으로 보임.\n\n## 개선사항 [[todo]]\n\u003e [[todo]] 에서 이관\n\n- [ ] 신규 탭 생성할때 해당 파일의 라인까지 따라가주자\n- [X] [[wip]] rmd(runnable markdown) filetype 작성 jira 테스트중\n- [ ] [[wip]] [[develop-neovim-lua-plugin]]\n- [X] [[octo]] 초기 설정 `:Octo`\n- [ ] copilot\n- [X] *bug* gx url 에서 `?` 가 존재하면 열리지 않음 + https://github.com/deptno/nvim/commit/f4e09cfbf9abf1ad52bb952c63727d34c4941cfc\n- [ ] [[bun]] 을 사용해서 [[typescript]] 테스트 환경 구축\n- [X] session 이동시 열린 버퍼를 가지고 이동하는 문제+ https://github.com/deptno/nvim/commit/04d8e15209b2052892a164db47a174fa2a06e51a\n  - [X] 후행으로 닫도록 수정, 속도관련해서도 이슈가 있음\n- [ ] jira ticket 발행\n- [X] harpoon + https://github.com/deptno/nvim/commit/9ab9f786253b76069f1ad7d53ba9a3bb39aa5808\n- [X] *bug* ;db 를 통한 quickfix 류의 창이 열린 이후로 q 누르면 버퍼 닫힘\n  + 이벤트 호출을 막는 법은 찾지 못해서 이벤트를 한번만 처리하도록 처리 + https://github.com/deptno/nvim/commit/66836ec2098f5268b2d8c838f99400070293f995\n- [ ] leetcode.nvim\n- [o] lsp\n  - [X] 포매팅 guard.nvim\n  - [X] 파일명 변경, nvim-lsp-file-operations -\u003e 동작 안함\n  - [ ] lsp 를 통한 영어단어 hover + gpt\n- [X] git ~~furgitive~~ blame 때문, blame + git-blame 추가 + https://github.com/deptno/nvim/commit/62c6da867e8e2b5846afbe6c3461da633396102a\n- [ ] tmux-popup command 생성 input: shell command i.g.) tig blame\n- [ ] 마크다운 블럭 내에서의 언어 실행 + [[nvim-treesitter]] \n  - [ ] 블럭에 대해서 repl 플러그인 검색\n- [X] [[vimwiki]] syntax highlight 는 markdown 을 filetype 은 vimwiki 를 유지 + https://github.com/deptno/nvim/commit/2c6d5605ffc2339f10164877573e1fe05053d797\n+ https://github.com/ecosse3/nvim\n  - [X] nvim-dap + https://github.com/deptno/nvim/commit/abff6147f65b87c9ee4deaa5782b04d15d1969e2\n  - [X] react-native 디버깅 가능한지 파악 + https://github.com/deptno/nvim/commit/01478edf8a3863cdb933e7a1e518c582e20f619f\n    - mason 을 통해서도 인스톨이 가능할 수 있을것 같음\n  - [ ] [[jest]]\n  - [ ] [[rust]]\n- [X] *wip* react-native 같은 특수 파일 suffix 지원 `.native.tsx` -\u003e `.tsx` 인식 + https://github.com/deptno/nvim/commit/dda74cfcada336b0eb80cb84e84baf8e441dacf5\n  + https://github.com/neovim/neovim/issues/20784#issuecomment-1722288456\n- [X] lspsaga\n  - [X] keymap\n    - [X] `[e` diagnostic error\n      - [X] *fail* `[d` diagnostic -\u003e 메소드 없음 \n    - [X] `K` hover\n    - [X] `\u003cleader\u003erA` rename ++project \n    - [X] `\u003cleader\u003e2` outline \u003e symbols-outline\n    - [X] `gd` definition\n    - [X] `gD` peek\n      - [X] *drop* `gtd` type\n      - [X] *drop* `gtD` peek\n      - [X] *drop* `gi` peek\n    - [X] `\u003cleader\u003eic` incoming_calls\n      - [X] *drop* `\u003cleader\u003eoc` outgoing_calls, 이건 중요하지 않음\n- [X] vim-rest-console 연동 + https://github.com/deptno/nvim/commit/059745591ce6f5e521ebbd07e676fd1c64de8680\n- [X] [[lazygit]] 연동 + https://github.com/deptno/nvim/commit/1dd2dc48067d9bf01f4484ae15fcfc1d62df7a5c\n  - [X] https://github.com/gioele/vim-autoswap 설정과 함께 봐볼 것 + https://github.com/deptno/nvim/commit/9f3be8f546d191a459f3728ea7e06448681e050e\n  - [X] 현재 파일의 디렉토리 기반으로 열기 + https://github.com/deptno/nvim/commit/32243e9516fc5e46f98212283a643bc91b52e387\n- [X] fx 연동 + https://github.com/deptno/nvim/commit/3f125cae051fab1147dbc494cbfc3fae59773279\n- [X] session\n  - [X] auto-session -\u003e persisted, mksession 은 간혹 세션의 이전 버퍼가 딸려오는 문제는 있는 것 같다 -\u003e 세션 목록에서 저장하도록 해서 일단 사용\n  - [X] *option* ~~session 은 버리고 directory 기반 이동 + telescope oldfiles 가 낫겠음, 프로젝트 이동간에 cwd 가 변경되는 경우가 너무 많음~~\n  - [X] *option* persisted 를 기준으로 세션 이동 전에 세션을 자동 저장하도록 한다 + https://github.com/deptno/nvim/commit/a2bd474c5706bccd253bab88634acedfb844fa6a\n- [X] quickfix vs loclist 차이 알아보기, quickfix:project, location:local 레벨, 파일단위인지 프로젝트 단위인지\n- [o] plugin 추가\n  - [o] nvim-ufo\n    - [X] 설정 + https://github.com/deptno/nvim/commit/38f6c19\n    - [ ] 폴드가 원하는대로는 안풀려서 좀더 찾아보자\n  - [X] tabscope + https://github.com/deptno/nvim/commit/2341b5c\n- [X] blankline 설정 + https://github.com/deptno/nvim/commit/94f9410d\n- [X] gitsign\n  - [X] ~~Change-base telescope 로 전환~~ -\u003e [[lazygit]] 으로 인해 니즈 죽음\n  - [X] diff 에 관련한 설정이 가능한지 -\u003e 가능하지 않음 delta 적용불가 + https://github.com/lewis6991/gitsigns.nvim/issues/723\n- [X] telescope layout 변경 + https://github.com/deptno/nvim/commit/60ed157\n- [X] telescope oldfiles 에서 cwd 기준으로만 리스팅 + https://github.com/deptno/nvim/commit/8536cd6dfdf0113de078eb4beccd0cc1711ce7c9\n- [ ] nvchad pull\n- [X] bookmark: 이슈별 그룹지정, 이슈리스트 J 로 테스트해보자\n- [X] symbol, 찾기 단축키 + `\u003cleader\u003eds`\n- [X] bookmark 문자 컬럼 노출 - marks.nvim + https://github.com/deptno/nvim/commit/e2c36dd\n- [X] navigate window ctrl+w + {h,j,k,l} -\u003e 원래 됨 ctrl+{h,j,k,l}\n- [X] resize window ctrl+{H,J,K,L} -\u003e 생각보다 메커님이 복잡 윈도우 사용\n- [X] emoji 관련 nvim-cmp 플러그인도 찾자 + https://github.com/deptno/nvim/commit/6b24994\n- [X] [[html]] 작성하는데 [[zen-coding]] 안먹는다 플러그인 찾자, lsp 로 와 기본적으로 제공되는 snippet 으로 대충 가능할 것으로 보임\n  - [X] emmet-language-server, tailwindcss-language-server 적용 + https://github.com/deptno/nvim/commit/fa5bbca972efe2c8b6e98e03e7b2cabb626046ed\n- [X] luaJIT 참조하도록 설정 + https://github.com/deptno/nvim/commit/85619c9\n- [X] vim 에서 cwd 혹은 현재 파일의 위치를 가지고 [[tmux]] {pane,window} 를 생성할 수 있도록 지원 - https://github.com/deptno/NvChad/commit/8e6dfa1\n- [X] vim cd.. 이 ~~cwd 기준이라 recursive 하게 동작하지 않는 문제~~ 수정\n  - [X] vim cd.. cwd 기준이 아니라 현재 파일 기준이라 동작하지 않는 것으로 cwd 기준으로 수정 필요\n- [O] [[vim-startify]] 설정\n  - [ ] startify-session 문제점\n    - sesion 이동시에 tag stack 이나 이동 스택은 살아있음\n      - ctrl+t, ctrl-o 등으로 해당 스택을 이동하는 경우 이전 session 의 파일들을 불러오게되면서 session 영역이 혼탁해짐\n      - [[comparison:tagstack-vs-jump]]\n      - [[vimwiki]] 에서 링크 이동에 tag stack 이 사용되지 않는 문제\n        - [X] ctrl+i 가 `VimwikiNextLink` 로 동작하지 않도록 제거 -\u003e `ctrl+i` 는 `tab` 과 같은 역할을 하며 이건 vim 잘못이 아님\n  - [X] startify session 에서 cwd 지정이 가능한지 확인\n    - [X] startify_change_to_dir  옵션을 사용해 봤으나 사용성이 떨어지고 git root 로 가야함 -\u003e 범용적으로 cdp 구현 프로젝트로 루트 이동이 가능\n      + https://github.com/deptno/nvim/commit/a869b4a4\n  - [X] tmux window -\u003e session\n  - [X] head text 제거\n  - [X] git modified 와 untracked 를 합칠 것\n  - [X] 나갈때 임시 세션(`_latest`)으로 저장\n  - [X] vim-startify 설정에 대한 기록 작성\n  - [O] 옵션 검토\n    - [X] g:startify_update_oldfiles - vim 시작시점이 아니라 계속적인 업데이트로 이해\n    - [X] g:startify_session_persistence - 이렇게 되면 세션이 최종 상태를 기억하게됨, _latest 가 번잡하면 이걸 테스트\n    - [X] 마지막 session 간의 전환 지원이 필요 https://github.com/deptno/nvim/commit/1996f7c\n    - [X] ~~임시 세션 저장 슬롯 여러개 지원~~ - 의미 없을 것 같음\n    - [X] g:startify_session_before_save - ~~nvim-tree~~, ~~symbol-outline~~ 등 제거, 둘다 문제가 있어서 제거 못함\n      - https://github.com/deptno/nvim/commit/cf9c4a9\n    - [X] cmd 지정이 가능함 - 마지막 세션간 전환 구현\n    - [X] ~~session 에 속한 파일이 열리는 순간 해당 session 을 여는 기능 검토(이걸 쓰면 `_latest` 는 드랍)~~\n    - [X] 나갈때 neogit 관련 파일이 열려있으면 닫고 이동하도록, NeogitStatus\n      + https://github.com/deptno/nvim/commit/1499958\n    - [X] ~~session 변경시 저장~~ 위험할 수 있을 것 같음, 저장을 습관화\n    - [ ] repo 의 경우 branch 별 세션 저장 및 변경 방법 고민\n  - [ ] session bookmark 가 필요한것\n- [ ] cd?\n  - [X] 현재 브랜치 + origin 까지 확인 필요 + https://github.com/deptno/nvim/commit/7fbcc6e\n  - [ ] 현재 파일의 정보고 같이 보는게 좋겠음\n- [X] @cite 자동완성 dictionary 생성 \n  + https://github.com/deptno/nvim/commit/de370b0ad52e9121f30067069ecd27be13a6253c\n  - .github/CODEOWNERS 로 시작 slack, github \n  - slack 은 api 보니 힘들거 같고 git 관련해서는 cmp_git 이 잘되어 있어서 요걸 쓰기로 함\n- [X] [[nvchad]] default theme 변경\n- [ ] 파일 네비게이션\n  - [ ] 파일 이동간에 git_root 를 lcd 혹 cwd 설정\n  - [ ] 혹은 git_root 가 다른 파일 이동에는 tabpage 전환, tabpage 마다 root\n- [o] [[vimwiki]]\n  - [ ] diary 간 이동할때 buffer 가 계속 늘어나지 않도록 조치\n  - [X] diary 를 폴더구조거아니라 prefix 형태로 평탄화 가능한 옵션이 있는지 검토\n    - [X] `diary:` prefix 를 통해 상대경로가 아니어도 링크가능하므로 이걸 이용\n    - [X] 경로에 depth 가 들어간 경우, `/` prefix 를 통해서 wiki 루트로 부터 계산되니 이걸 사용\n      - [X] [[wiki.deptno.dev]] 에서 해당 컨셉이 지원되고 있는지 확인이 필요 -\u003e 안되면 구현\n  - [X] 회사와 private wiki 를 분리\n    - [X] 마이그레이션 - diary 를 통째로 복사하고([[git-subtree]]) 수동으로 필터([[git-rebase]])링해서 필터링할 것 -\u003e [[git-filter-repo]] 를 통해 처리\n  - [ ] *bug* 특정 케이스에 vimwiki가 꺼지는 상황이 있음 현재 파일 기준 24라인 이후에 뎁스가 더 들어간 todo를 생성하며 꺼짐\n  - [X] timestamp, 혹은 다이어키를 삽입하는 키맵 추가 - 이미 snippet 자동완성으로 지원되고 있었음 `diso`\n  - [ ] code block 을 실행할때 shell 구문인 경우 tmux 의 다른 panel에서 실행할 수 있도록 지원 [[gx]]\n  - [X] ~~다른 wiki 로 이동할 때 session 전환~~ [[vim-startify]] -\u003e 어려울 것\n  - [ ] calendar 를 이용해서 시각화\n    - [ ] wiki\n      - [ ] diary\n      - [ ] 날짜 태그 혹은 다이어리 링크 태그\n      - [ ] git stat since until 을 통해서 파일기록\n    - [ ] 슬랙 해당날 태그등\n    - [ ] apple reminder\n    - [ ] api,구글 등 cloud provider 연동, filter + 휴가 이모지등\n- [ ] [[octo]] 도입 검토\n- [X] [[neogit]] 제거 https://github.com/deptno/nvim/commit/cc0fcebc0ef9cc282ad7dc1c49b4eb63148c77d6\n  - [X] *remove* git checkout 대신 git switch 를 이용할 방법\n  - [X] *remove* diffview 가 활성화되면 theme 자체를 변경해버리는 것도 고려\n  - [X] *remove* change base 쉽게\n- [.] window\n  - [X] buffer 최대 가로사이즈로 window width 설정 https://github.com/deptno/nvim/commit/3008b87d\n- [o] code chunk 실행, [[repl]]\n  - [X] [[lua]] 에서 해당 라인을 실행할 수 있도록 처리 -\u003e vim.notify https://github.com/deptno/nvim/commit/bd102e6\n  - [ ] 언어별 핸들러 제공필요, ts bun\n- [O] lab/gx [[gx]]\n  - [X] github wiki 를 사용하고 있는데 이 부분 github link 따기 -\u003e wiki repo 를 일반레포로 전환하고 wiki 는 drop, needs 없음\n  - [X] ssh 기반으로 코드가 작성되어있는데 https 같이 지원 -\u003e 테스트 해보니 이미 됨\n  - [X] *bug* [n] repository 이름에 `.` 들어간경우 유지 필요 i.e. deptno.dev -\u003e https://github.com/deptno/nvim/commit/6833181\n  - [X] *feat* url 인데 일반 커밋으로 인식 + https://github.com/deptno/nvim/commit/c366ead\n  - [X] *bug* cd 정보에 `]` 마지막 괄호가 빠짐 + https://github.com/deptno/nvim/commit/10c043d0\n  - [X] *bug* url 에 `.` 들어간경우 제거됨 i.e. + https://github.com/deptno/nvim/commit/c27ad96\n  - [X] [vV] current file 기준으로 gx 를 열어줘야하는데 cwd 기준으로 열어주고있음 + https://github.com/deptno/nvim/commit/93c4c13\n  - [X] custom handler 지원하는지 확인 + https://github.com/deptno/nvim/blob/7fbcc6e28c113612d5d29dd7ca7057e87b3caeab/lua/lab/gx/init.lua#L21-L32\n  - [X] *bug* visual selection 모드에 gx github 를 할 경우에 정체 경로가 전송됨 https://github.com/deptno/nvim/commit/e9cb8368620e2561a4ac5d5826b8bfb9f3de68b2\n  - [ ] *feat* image open\n  - [X] *feat* vV 번역 + https://github.com/deptno/nvim/commit/8f847e6\n  - [X] *feat* vV search + https://github.com/deptno/nvim/commit/d55c9c2\n  - [X] *feat* n search + https://github.com/deptno/nvim/commit/a25066f\n  - [X] *feat* n find files + https://github.com/deptno/nvim/commit/aeae45c\n  - [X] *bug* vV github permalink 에서 Line 을 못 얻어 옴, 어느 순간 부터 인지 + https://github.com/deptno/nvim/commit/b253387\n    - multiple gx 에서 선택하는 수간 mode가 normal 로 인식되면서 생기는 문제\n  - [ ] *feat* vV github permalink 를 가져올대 현재 커밋이 아닌 해당 영역 log들의 순서상 최신으로 하는 것이 좋아보임\n  - [X] *bug* vV papago 깨짐\n  - [ ] *feat* filetype 별 gx enable 여부\n  - [X] *feat* node_modules 내에서 하면 해당 라이브러리 기준으로 처리가 필요, pnp\n    - pnp 까지 처리하려고했으나 .git 정보가 없어서 커밋정보에 접근하지 못하기 때문에 의미가 약함  레포지터리까지만 여는 것으로 멈춤 + https://github.com/deptno/nvim/commit/b5395499a00a0e4e1dab68bd50032d469f3381b5\n\n## link\n- [[neovim]]\n- [[neovim-lua-plugins]]\n- [[vim-session]]\n"])</script><script>self.__next_f.push([1,"17:T37e2,"])</script><script>self.__next_f.push([1," \n## nvchad\n- 시작 설정으로 nvchad 선택\n- custom config\n  + https://github.com/deptno/neovim-config-for-nvchad\n    - lspconfig 포함\n\n## tree-sitter 모든 언어 설치\n```vim\n:TSInstall all\n```\n\n## issue\n- which-key 에 [[vimscript]] 를 통해서 등록한 매핑은 보여지지 않는 것으로 보임.\n\n## 개선사항 [[todo]]\n\u003e [[todo]] 에서 이관\n\n- [ ] 신규 탭 생성할때 해당 파일의 라인까지 따라가주자\n- [X] [[wip]] rmd(runnable markdown) filetype 작성 jira 테스트중\n- [ ] [[wip]] [[develop-neovim-lua-plugin]]\n- [X] [[octo]] 초기 설정 `:Octo`\n- [ ] copilot\n- [X] *bug* gx url 에서 `?` 가 존재하면 열리지 않음 + https://github.com/deptno/nvim/commit/f4e09cfbf9abf1ad52bb952c63727d34c4941cfc\n- [ ] [[bun]] 을 사용해서 [[typescript]] 테스트 환경 구축\n- [X] session 이동시 열린 버퍼를 가지고 이동하는 문제+ https://github.com/deptno/nvim/commit/04d8e15209b2052892a164db47a174fa2a06e51a\n  - [X] 후행으로 닫도록 수정, 속도관련해서도 이슈가 있음\n- [ ] jira ticket 발행\n- [X] harpoon + https://github.com/deptno/nvim/commit/9ab9f786253b76069f1ad7d53ba9a3bb39aa5808\n- [X] *bug* ;db 를 통한 quickfix 류의 창이 열린 이후로 q 누르면 버퍼 닫힘\n  + 이벤트 호출을 막는 법은 찾지 못해서 이벤트를 한번만 처리하도록 처리 + https://github.com/deptno/nvim/commit/66836ec2098f5268b2d8c838f99400070293f995\n- [ ] leetcode.nvim\n- [o] lsp\n  - [X] 포매팅 guard.nvim\n  - [X] 파일명 변경, nvim-lsp-file-operations -\u003e 동작 안함\n  - [ ] lsp 를 통한 영어단어 hover + gpt\n- [X] git ~~furgitive~~ blame 때문, blame + git-blame 추가 + https://github.com/deptno/nvim/commit/62c6da867e8e2b5846afbe6c3461da633396102a\n- [ ] tmux-popup command 생성 input: shell command i.g.) tig blame\n- [ ] 마크다운 블럭 내에서의 언어 실행 + [[nvim-treesitter]] \n  - [ ] 블럭에 대해서 repl 플러그인 검색\n- [X] [[vimwiki]] syntax highlight 는 markdown 을 filetype 은 vimwiki 를 유지 + https://github.com/deptno/nvim/commit/2c6d5605ffc2339f10164877573e1fe05053d797\n+ https://github.com/ecosse3/nvim\n  - [X] nvim-dap + https://github.com/deptno/nvim/commit/abff6147f65b87c9ee4deaa5782b04d15d1969e2\n  - [X] react-native 디버깅 가능한지 파악 + https://github.com/deptno/nvim/commit/01478edf8a3863cdb933e7a1e518c582e20f619f\n    - mason 을 통해서도 인스톨이 가능할 수 있을것 같음\n  - [ ] [[jest]]\n  - [ ] [[rust]]\n- [X] *wip* react-native 같은 특수 파일 suffix 지원 `.native.tsx` -\u003e `.tsx` 인식 + https://github.com/deptno/nvim/commit/dda74cfcada336b0eb80cb84e84baf8e441dacf5\n  + https://github.com/neovim/neovim/issues/20784#issuecomment-1722288456\n- [X] lspsaga\n  - [X] keymap\n    - [X] `[e` diagnostic error\n      - [X] *fail* `[d` diagnostic -\u003e 메소드 없음 \n    - [X] `K` hover\n    - [X] `\u003cleader\u003erA` rename ++project \n    - [X] `\u003cleader\u003e2` outline \u003e symbols-outline\n    - [X] `gd` definition\n    - [X] `gD` peek\n      - [X] *drop* `gtd` type\n      - [X] *drop* `gtD` peek\n      - [X] *drop* `gi` peek\n    - [X] `\u003cleader\u003eic` incoming_calls\n      - [X] *drop* `\u003cleader\u003eoc` outgoing_calls, 이건 중요하지 않음\n- [X] vim-rest-console 연동 + https://github.com/deptno/nvim/commit/059745591ce6f5e521ebbd07e676fd1c64de8680\n- [X] [[lazygit]] 연동 + https://github.com/deptno/nvim/commit/1dd2dc48067d9bf01f4484ae15fcfc1d62df7a5c\n  - [X] https://github.com/gioele/vim-autoswap 설정과 함께 봐볼 것 + https://github.com/deptno/nvim/commit/9f3be8f546d191a459f3728ea7e06448681e050e\n  - [X] 현재 파일의 디렉토리 기반으로 열기 + https://github.com/deptno/nvim/commit/32243e9516fc5e46f98212283a643bc91b52e387\n- [X] fx 연동 + https://github.com/deptno/nvim/commit/3f125cae051fab1147dbc494cbfc3fae59773279\n- [X] session\n  - [X] auto-session -\u003e persisted, mksession 은 간혹 세션의 이전 버퍼가 딸려오는 문제는 있는 것 같다 -\u003e 세션 목록에서 저장하도록 해서 일단 사용\n  - [X] *option* ~~session 은 버리고 directory 기반 이동 + telescope oldfiles 가 낫겠음, 프로젝트 이동간에 cwd 가 변경되는 경우가 너무 많음~~\n  - [X] *option* persisted 를 기준으로 세션 이동 전에 세션을 자동 저장하도록 한다 + https://github.com/deptno/nvim/commit/a2bd474c5706bccd253bab88634acedfb844fa6a\n- [X] quickfix vs loclist 차이 알아보기, quickfix:project, location:local 레벨, 파일단위인지 프로젝트 단위인지\n- [o] plugin 추가\n  - [o] nvim-ufo\n    - [X] 설정 + https://github.com/deptno/nvim/commit/38f6c19\n    - [ ] 폴드가 원하는대로는 안풀려서 좀더 찾아보자\n  - [X] tabscope + https://github.com/deptno/nvim/commit/2341b5c\n- [X] blankline 설정 + https://github.com/deptno/nvim/commit/94f9410d\n- [X] gitsign\n  - [X] ~~Change-base telescope 로 전환~~ -\u003e [[lazygit]] 으로 인해 니즈 죽음\n  - [X] diff 에 관련한 설정이 가능한지 -\u003e 가능하지 않음 delta 적용불가 + https://github.com/lewis6991/gitsigns.nvim/issues/723\n- [X] telescope layout 변경 + https://github.com/deptno/nvim/commit/60ed157\n- [X] telescope oldfiles 에서 cwd 기준으로만 리스팅 + https://github.com/deptno/nvim/commit/8536cd6dfdf0113de078eb4beccd0cc1711ce7c9\n- [ ] nvchad pull\n- [X] bookmark: 이슈별 그룹지정, 이슈리스트 J 로 테스트해보자\n- [X] symbol, 찾기 단축키 + `\u003cleader\u003eds`\n- [X] bookmark 문자 컬럼 노출 - marks.nvim + https://github.com/deptno/nvim/commit/e2c36dd\n- [X] navigate window ctrl+w + {h,j,k,l} -\u003e 원래 됨 ctrl+{h,j,k,l}\n- [X] resize window ctrl+{H,J,K,L} -\u003e 생각보다 메커님이 복잡 윈도우 사용\n- [X] emoji 관련 nvim-cmp 플러그인도 찾자 + https://github.com/deptno/nvim/commit/6b24994\n- [X] [[html]] 작성하는데 [[zen-coding]] 안먹는다 플러그인 찾자, lsp 로 와 기본적으로 제공되는 snippet 으로 대충 가능할 것으로 보임\n  - [X] emmet-language-server, tailwindcss-language-server 적용 + https://github.com/deptno/nvim/commit/fa5bbca972efe2c8b6e98e03e7b2cabb626046ed\n- [X] luaJIT 참조하도록 설정 + https://github.com/deptno/nvim/commit/85619c9\n- [X] vim 에서 cwd 혹은 현재 파일의 위치를 가지고 [[tmux]] {pane,window} 를 생성할 수 있도록 지원 - https://github.com/deptno/NvChad/commit/8e6dfa1\n- [X] vim cd.. 이 ~~cwd 기준이라 recursive 하게 동작하지 않는 문제~~ 수정\n  - [X] vim cd.. cwd 기준이 아니라 현재 파일 기준이라 동작하지 않는 것으로 cwd 기준으로 수정 필요\n- [O] [[vim-startify]] 설정\n  - [ ] startify-session 문제점\n    - sesion 이동시에 tag stack 이나 이동 스택은 살아있음\n      - ctrl+t, ctrl-o 등으로 해당 스택을 이동하는 경우 이전 session 의 파일들을 불러오게되면서 session 영역이 혼탁해짐\n      - [[comparison:tagstack-vs-jump]]\n      - [[vimwiki]] 에서 링크 이동에 tag stack 이 사용되지 않는 문제\n        - [X] ctrl+i 가 `VimwikiNextLink` 로 동작하지 않도록 제거 -\u003e `ctrl+i` 는 `tab` 과 같은 역할을 하며 이건 vim 잘못이 아님\n  - [X] startify session 에서 cwd 지정이 가능한지 확인\n    - [X] startify_change_to_dir  옵션을 사용해 봤으나 사용성이 떨어지고 git root 로 가야함 -\u003e 범용적으로 cdp 구현 프로젝트로 루트 이동이 가능\n      + https://github.com/deptno/nvim/commit/a869b4a4\n  - [X] tmux window -\u003e session\n  - [X] head text 제거\n  - [X] git modified 와 untracked 를 합칠 것\n  - [X] 나갈때 임시 세션(`_latest`)으로 저장\n  - [X] vim-startify 설정에 대한 기록 작성\n  - [O] 옵션 검토\n    - [X] g:startify_update_oldfiles - vim 시작시점이 아니라 계속적인 업데이트로 이해\n    - [X] g:startify_session_persistence - 이렇게 되면 세션이 최종 상태를 기억하게됨, _latest 가 번잡하면 이걸 테스트\n    - [X] 마지막 session 간의 전환 지원이 필요 https://github.com/deptno/nvim/commit/1996f7c\n    - [X] ~~임시 세션 저장 슬롯 여러개 지원~~ - 의미 없을 것 같음\n    - [X] g:startify_session_before_save - ~~nvim-tree~~, ~~symbol-outline~~ 등 제거, 둘다 문제가 있어서 제거 못함\n      - https://github.com/deptno/nvim/commit/cf9c4a9\n    - [X] cmd 지정이 가능함 - 마지막 세션간 전환 구현\n    - [X] ~~session 에 속한 파일이 열리는 순간 해당 session 을 여는 기능 검토(이걸 쓰면 `_latest` 는 드랍)~~\n    - [X] 나갈때 neogit 관련 파일이 열려있으면 닫고 이동하도록, NeogitStatus\n      + https://github.com/deptno/nvim/commit/1499958\n    - [X] ~~session 변경시 저장~~ 위험할 수 있을 것 같음, 저장을 습관화\n    - [ ] repo 의 경우 branch 별 세션 저장 및 변경 방법 고민\n  - [ ] session bookmark 가 필요한것\n- [ ] cd?\n  - [X] 현재 브랜치 + origin 까지 확인 필요 + https://github.com/deptno/nvim/commit/7fbcc6e\n  - [ ] 현재 파일의 정보고 같이 보는게 좋겠음\n- [X] @cite 자동완성 dictionary 생성 \n  + https://github.com/deptno/nvim/commit/de370b0ad52e9121f30067069ecd27be13a6253c\n  - .github/CODEOWNERS 로 시작 slack, github \n  - slack 은 api 보니 힘들거 같고 git 관련해서는 cmp_git 이 잘되어 있어서 요걸 쓰기로 함\n- [X] [[nvchad]] default theme 변경\n- [ ] 파일 네비게이션\n  - [ ] 파일 이동간에 git_root 를 lcd 혹 cwd 설정\n  - [ ] 혹은 git_root 가 다른 파일 이동에는 tabpage 전환, tabpage 마다 root\n- [o] [[vimwiki]]\n  - [ ] diary 간 이동할때 buffer 가 계속 늘어나지 않도록 조치\n  - [X] diary 를 폴더구조거아니라 prefix 형태로 평탄화 가능한 옵션이 있는지 검토\n    - [X] `diary:` prefix 를 통해 상대경로가 아니어도 링크가능하므로 이걸 이용\n    - [X] 경로에 depth 가 들어간 경우, `/` prefix 를 통해서 wiki 루트로 부터 계산되니 이걸 사용\n      - [X] [[wiki.deptno.dev]] 에서 해당 컨셉이 지원되고 있는지 확인이 필요 -\u003e 안되면 구현\n  - [X] 회사와 private wiki 를 분리\n    - [X] 마이그레이션 - diary 를 통째로 복사하고([[git-subtree]]) 수동으로 필터([[git-rebase]])링해서 필터링할 것 -\u003e [[git-filter-repo]] 를 통해 처리\n  - [ ] *bug* 특정 케이스에 vimwiki가 꺼지는 상황이 있음 현재 파일 기준 24라인 이후에 뎁스가 더 들어간 todo를 생성하며 꺼짐\n  - [X] timestamp, 혹은 다이어키를 삽입하는 키맵 추가 - 이미 snippet 자동완성으로 지원되고 있었음 `diso`\n  - [ ] code block 을 실행할때 shell 구문인 경우 tmux 의 다른 panel에서 실행할 수 있도록 지원 [[gx]]\n  - [X] ~~다른 wiki 로 이동할 때 session 전환~~ [[vim-startify]] -\u003e 어려울 것\n  - [ ] calendar 를 이용해서 시각화\n    - [ ] wiki\n      - [ ] diary\n      - [ ] 날짜 태그 혹은 다이어리 링크 태그\n      - [ ] git stat since until 을 통해서 파일기록\n    - [ ] 슬랙 해당날 태그등\n    - [ ] apple reminder\n    - [ ] api,구글 등 cloud provider 연동, filter + 휴가 이모지등\n- [ ] [[octo]] 도입 검토\n- [X] [[neogit]] 제거 https://github.com/deptno/nvim/commit/cc0fcebc0ef9cc282ad7dc1c49b4eb63148c77d6\n  - [X] *remove* git checkout 대신 git switch 를 이용할 방법\n  - [X] *remove* diffview 가 활성화되면 theme 자체를 변경해버리는 것도 고려\n  - [X] *remove* change base 쉽게\n- [.] window\n  - [X] buffer 최대 가로사이즈로 window width 설정 https://github.com/deptno/nvim/commit/3008b87d\n- [o] code chunk 실행, [[repl]]\n  - [X] [[lua]] 에서 해당 라인을 실행할 수 있도록 처리 -\u003e vim.notify https://github.com/deptno/nvim/commit/bd102e6\n  - [ ] 언어별 핸들러 제공필요, ts bun\n- [O] lab/gx [[gx]]\n  - [X] github wiki 를 사용하고 있는데 이 부분 github link 따기 -\u003e wiki repo 를 일반레포로 전환하고 wiki 는 drop, needs 없음\n  - [X] ssh 기반으로 코드가 작성되어있는데 https 같이 지원 -\u003e 테스트 해보니 이미 됨\n  - [X] *bug* [n] repository 이름에 `.` 들어간경우 유지 필요 i.e. deptno.dev -\u003e https://github.com/deptno/nvim/commit/6833181\n  - [X] *feat* url 인데 일반 커밋으로 인식 + https://github.com/deptno/nvim/commit/c366ead\n  - [X] *bug* cd 정보에 `]` 마지막 괄호가 빠짐 + https://github.com/deptno/nvim/commit/10c043d0\n  - [X] *bug* url 에 `.` 들어간경우 제거됨 i.e. + https://github.com/deptno/nvim/commit/c27ad96\n  - [X] [vV] current file 기준으로 gx 를 열어줘야하는데 cwd 기준으로 열어주고있음 + https://github.com/deptno/nvim/commit/93c4c13\n  - [X] custom handler 지원하는지 확인 + https://github.com/deptno/nvim/blob/7fbcc6e28c113612d5d29dd7ca7057e87b3caeab/lua/lab/gx/init.lua#L21-L32\n  - [X] *bug* visual selection 모드에 gx github 를 할 경우에 정체 경로가 전송됨 https://github.com/deptno/nvim/commit/e9cb8368620e2561a4ac5d5826b8bfb9f3de68b2\n  - [ ] *feat* image open\n  - [X] *feat* vV 번역 + https://github.com/deptno/nvim/commit/8f847e6\n  - [X] *feat* vV search + https://github.com/deptno/nvim/commit/d55c9c2\n  - [X] *feat* n search + https://github.com/deptno/nvim/commit/a25066f\n  - [X] *feat* n find files + https://github.com/deptno/nvim/commit/aeae45c\n  - [X] *bug* vV github permalink 에서 Line 을 못 얻어 옴, 어느 순간 부터 인지 + https://github.com/deptno/nvim/commit/b253387\n    - multiple gx 에서 선택하는 수간 mode가 normal 로 인식되면서 생기는 문제\n  - [ ] *feat* vV github permalink 를 가져올대 현재 커밋이 아닌 해당 영역 log들의 순서상 최신으로 하는 것이 좋아보임\n  - [X] *bug* vV papago 깨짐\n  - [ ] *feat* filetype 별 gx enable 여부\n  - [X] *feat* node_modules 내에서 하면 해당 라이브러리 기준으로 처리가 필요, pnp\n    - pnp 까지 처리하려고했으나 .git 정보가 없어서 커밋정보에 접근하지 못하기 때문에 의미가 약함  레포지터리까지만 여는 것으로 멈춤 + https://github.com/deptno/nvim/commit/b5395499a00a0e4e1dab68bd50032d469f3381b5\n\n## link\n- [[neovim]]\n- [[neovim-lua-plugins]]\n- [[vim-session]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# neovim-setup\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# neovim-setup\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/neovim-setup\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# neovim-setup\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

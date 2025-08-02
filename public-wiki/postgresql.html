@@ -1,0 +1,645 @@
+<!DOCTYPE html><html lang="ko"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/css/7974a366526c0bac.css" crossorigin="" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-8d83df55f024a06e.js" crossorigin=""/><script src="/_next/static/chunks/0d9284fb-118c71d765e9923f.js" async="" crossorigin=""></script><script src="/_next/static/chunks/275-06b0ebcdd6224ad7.js" async="" crossorigin=""></script><script src="/_next/static/chunks/main-app-5be22889a4b4f28d.js" async="" crossorigin=""></script><script src="/_next/static/chunks/app/layout-3f8f17edabe7c539.js" async=""></script><script src="/_next/static/chunks/app/error-71963c526facdbf7.js" async=""></script><script src="/_next/static/chunks/app/not-found-b37065e097e62895.js" async=""></script><script src="/_next/static/chunks/c6c50db0-730a8fdbd0bb38f0.js" async=""></script><script src="/_next/static/chunks/fd503499-f344ff1ccbf2f791.js" async=""></script><script src="/_next/static/chunks/254-e656a4c93afc504e.js" async=""></script><script src="/_next/static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js" async=""></script><link rel="preload" href="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" as="script"/><link rel="preload" href="https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW" as="script"/><title># postgresql</title><meta name="description" content="
+- create role
+  user 와 함께 권한 생성
+  + https://www.postgresql.org/docs/current/sql-createrole.html
+## helm chart
++ https://github.com/bitnami/charts/tree/main/bitnami/postgresql/
+- create database owner [ ROLE NAME ]
+
+## 함수
+- to_char - timestamp -&gt; char
+- date_trunc - timestamp 값을 유지하되 추출하는 방식으로 하여 원하는 값만 추출(시간단위 절삭등)
+
+
+## trigger &amp; event
+function 을 정의한다 정의한다 정의에 사용할 수 있는 언어는 아래와 같다
+- c 
+- pl/plsql
+- pl/python
+node 에서 사용을 해야하는데 해당 언어를 지원하지 않으니 pl/plsql 을 통해서 event 를 발생키고 이를 listen 하는 방식의 구현이 가능하다
+```mermaid
+sequenceDiagram
+  participant be as backend/node
+  participant db as postgresql
+  
+  db -&gt;&gt; db: function F 정의
+  note over db: `event 발송`
+  db -&gt;&gt; db: trigger T 정의
+  note over db: insert, update, delete 시 function F 실행
+  be -&gt;&gt; db: LISTEN event
+  be -&gt;&gt; db: add event listener on &#x27;notification&#x27; 
+  activate be
+  db --&gt;&gt; db: insert evnet 발생
+  db --&gt;&gt; db: trigger T 실행
+  db --&gt;&gt; db: function F 실행
+  db -&gt;&gt; be: send notification: event &#x27;user_define_channel&#x27;
+  deactivate be
+  be -&gt;&gt; be: handle event
+```
+
+## error
+- permission denied for database 
+  + https://bobcares.com/blog/permission-denied-for-database-postgres/
+- duplicate key value violates unique constraint 
+  - ON CONFLICT (id) DO NOTHING
+  - ON CONFLICT (id) SET UPDATE ...
+### helm
+#### upgrade 2023-04-18 
+- 헬름 차트를 upgrade 했을때 에러가 출력되지 않았고 DEPLOYED 된 것으로 로그가 출력되어 그런가보다 했다. `values.yaml` 또한 적용되지 않았다.
+```sh
+$ helm history postgresql
+
+REVISION        UPDATED                         STATUS          CHART                   APP VERSION     DESCRIPTION
+3               Tue Apr 18 05:41:30 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+4               Tue Apr 18 05:51:28 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+5               Tue Apr 18 11:14:45 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+6               Tue Apr 18 12:11:03 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+7               Tue Apr 18 12:13:16 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+8               Tue Apr 18 12:14:51 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+9               Tue Apr 18 12:15:18 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+10              Tue Apr 18 12:15:25 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+11              Tue Apr 18 12:15:33 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+12              Tue Apr 18 12:28:38 2023        deployed        postgresql-12.1.9       15.1.0          Upgrade complete
+```
+  - 히스토리도 잘 출력되는 것을 확인할 수 있었으나 실제로는 적용이 되지 않았다
+  - **중요** debugging 을 위해 `--debug --dry-run` 을 옵션을 추가하니 에러를 확인할 수 있었다.
+  - &#x27;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD&#x27; 를 추가하고 ENV 변수를 쉘 시작부분에 넣어서 주입하였으나 실패했다.
+```sh
+$ POSTGRES_PASSWORD=$(kubectl get secret --namespace &quot;postgresql&quot; postgresql -o jsonpath=&quot;{.data.postgres-password}&quot; | base64 -d) helm upgrade -i postgresql chart/postgresql -n postgresql --debug --set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD --dry-run
+
+history.go:56: [debug] getting history for release postgresql
+upgrade.go:142: [debug] preparing upgrade for postgresql
+Error: UPGRADE FAILED: execution error at (postgresql/templates/secrets.yaml:17:24):
+PASSWORDS ERROR: You must provide your current passwords when upgrading the release.
+                 Note that even after reinstallation, old credentials may be needed as they may be kept in persistent volume claims.
+                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases
+
+    &#x27;global.postgresql.auth.postgresPassword&#x27; must not be empty, please add &#x27;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD&#x27; to the command. To get the current value:
+
+        export POSTGRES_PASSWORD=$(kubectl get secret --namespace &quot;postgresql&quot; postgresql -o jsonpath=&quot;{.data.postgres-password}&quot; | base64 -d)
+
+helm.go:84: [debug] execution error at (postgresql/templates/secrets.yaml:17:24):
+PASSWORDS ERROR: You must provide your current passwords when upgrading the release.
+                 Note that even after reinstallation, old credentials may be needed as they may be kept in persistent volume claims.
+                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases
+
+    &#x27;global.postgresql.auth.postgresPassword&#x27; must not be empty, please add &#x27;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD&#x27; to the command. To get the current value:
+
+        export POSTGRES_PASSWORD=$(kubectl get secret --namespace &quot;postgresql&quot; postgresql -o jsonpath=&quot;{.data.postgres-password}&quot; | base64 -d)
+
+UPGRADE FAILED
+main.newUpgradeCmd.func2
+        helm.sh/helm/v3/cmd/helm/upgrade.go:202
+github.com/spf13/cobra.(*Command).execute
+        github.com/spf13/cobra@v1.6.1/command.go:916
+github.com/spf13/cobra.(*Command).ExecuteC
+        github.com/spf13/cobra@v1.6.1/command.go:1044
+github.com/spf13/cobra.(*Command).Execute
+        github.com/spf13/cobra@v1.6.1/command.go:968
+main.main
+        helm.sh/helm/v3/cmd/helm/helm.go:83
+runtime.main
+        runtime/proc.go:250
+runtime.goexit
+        runtime/asm_arm64.s:1172
+```
+  - 분리된 라인으로 `export POSTGRES_PASSWORD=$(...)` 를 shell 자체에 주입을 하고 나서야 명령어가 성공하는 것을 확인할 수 있다.
+```sh
+$ export POSTGRES_PASSWORD=$(kubectl get secret --namespace &quot;postgresql&quot; postgresql -o jsonpath=&quot;{.data.postgres-password}&quot; | base64 -d)
+$ helm upgrade -i postgresql chart/postgresql -n postgresql --debug --set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD --dry-run
+
+history.go:56: [debug] getting history for release postgresql
+upgrade.go:142: [debug] preparing upgrade for postgresql
+upgrade.go:150: [debug] performing update for postgresql
+upgrade.go:313: [debug] dry run for postgresql
+Release &quot;postgresql&quot; has been upgraded. Happy Helming!
+NAME: postgresql
+LAST DEPLOYED: Tue Apr 18 12:27:39 2023
+```
+  - 그리고 포트포워딩(localhost 를 위해)도 확인하자
+### lock
+```shell
+SELECT pid, *
+FROM pg_locks l
+         JOIN pg_class t ON l.relation = t.oid AND t.relkind = &#x27;r&#x27;
+where relname =&#x27;[TABLE_NAME]&#x27;
+```
+pid 확인해서 컨테이너 접속후
+```shell
+kill [PID]
+```
+
+### ON CONFLICT DO UPDATE command cannot affect row a second time
+```sh 
+[2024-01-28 19:54:38] [21000] ERROR: ON CONFLICT DO UPDATE command cannot affect row a second time
+[2024-01-28 19:54:38] Hint: Ensure that no rows proposed for insertion within the same command have duplicate constrained values.
+```
+- conflict 키 중복, 한 쿼리에 여러 아이템에대한 컨플릭트처리를 하는데 키 중복이 있었다.
+
+### WARNING:  database &quot;DATABASE_NAME&quot; has a collation version mismatch
+- 마이너 버전 업그레이드 후 발생
+- 에러는 아니지만 계속 찍힘 로그가
+  ```sh
+  2025-07-19 17:10:17.550 GMT [1121637] WARNING:  database &quot;DATABASE_NAME&quot; has a collation version mismatch
+  2025-07-19 17:10:17.550 GMT [1121637] DETAIL:  The database was created using collation version 2.31, but the operating system provides version 2.36.
+  2025-07-19 17:10:17.550 GMT [1121637] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+  ```
+- 해결, 에러가 나는 데이터베이스 별로 모두 진행
+  ```sql 
+  ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION;
+  REINDEX DATABASE DATABASE_NAME;
+  ```
+
+## link
+- [[kubernetes]]
+- [[psql]]
+- [[helm]]
+- [[sql]]
+- [[pgdump]]
+- [[pgdumpall]]
+"/><link rel="author" href="https://deptno.github.io"/><meta name="author" content="deptno"/><meta name="keywords" content="typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"/><meta name="referrer" content="origin-when-cross-origin"/><meta name="creator" content="deptno@gmail.com"/><meta name="publisher" content="deptno@gmail.com"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-title" content="deptno"/><link href="/icon.jpg" rel="apple-touch-startup-image"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta property="og:title" content="# postgresql"/><meta property="og:description" content="
+- create role
+  user 와 함께 권한 생성
+  + https://www.postgresql.org/docs/current/sql-createrole.html
+## helm chart
++ https://github.com/bitnami/charts/tree/main/bitnami/postgresql/
+- create database owner [ ROLE NAME ]
+
+## 함수
+- to_char - timestamp -&gt; char
+- date_trunc - timestamp 값을 유지하되 추출하는 방식으로 하여 원하는 값만 추출(시간단위 절삭등)
+
+
+## trigger &amp; event
+function 을 정의한다 정의한다 정의에 사용할 수 있는 언어는 아래와 같다
+- c 
+- pl/plsql
+- pl/python
+node 에서 사용을 해야하는데 해당 언어를 지원하지 않으니 pl/plsql 을 통해서 event 를 발생키고 이를 listen 하는 방식의 구현이 가능하다
+```mermaid
+sequenceDiagram
+  participant be as backend/node
+  participant db as postgresql
+  
+  db -&gt;&gt; db: function F 정의
+  note over db: `event 발송`
+  db -&gt;&gt; db: trigger T 정의
+  note over db: insert, update, delete 시 function F 실행
+  be -&gt;&gt; db: LISTEN event
+  be -&gt;&gt; db: add event listener on &#x27;notification&#x27; 
+  activate be
+  db --&gt;&gt; db: insert evnet 발생
+  db --&gt;&gt; db: trigger T 실행
+  db --&gt;&gt; db: function F 실행
+  db -&gt;&gt; be: send notification: event &#x27;user_define_channel&#x27;
+  deactivate be
+  be -&gt;&gt; be: handle event
+```
+
+## error
+- permission denied for database 
+  + https://bobcares.com/blog/permission-denied-for-database-postgres/
+- duplicate key value violates unique constraint 
+  - ON CONFLICT (id) DO NOTHING
+  - ON CONFLICT (id) SET UPDATE ...
+### helm
+#### upgrade 2023-04-18 
+- 헬름 차트를 upgrade 했을때 에러가 출력되지 않았고 DEPLOYED 된 것으로 로그가 출력되어 그런가보다 했다. `values.yaml` 또한 적용되지 않았다.
+```sh
+$ helm history postgresql
+
+REVISION        UPDATED                         STATUS          CHART                   APP VERSION     DESCRIPTION
+3               Tue Apr 18 05:41:30 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+4               Tue Apr 18 05:51:28 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+5               Tue Apr 18 11:14:45 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+6               Tue Apr 18 12:11:03 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+7               Tue Apr 18 12:13:16 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+8               Tue Apr 18 12:14:51 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+9               Tue Apr 18 12:15:18 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+10              Tue Apr 18 12:15:25 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+11              Tue Apr 18 12:15:33 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+12              Tue Apr 18 12:28:38 2023        deployed        postgresql-12.1.9       15.1.0          Upgrade complete
+```
+  - 히스토리도 잘 출력되는 것을 확인할 수 있었으나 실제로는 적용이 되지 않았다
+  - **중요** debugging 을 위해 `--debug --dry-run` 을 옵션을 추가하니 에러를 확인할 수 있었다.
+  - &#x27;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD&#x27; 를 추가하고 ENV 변수를 쉘 시작부분에 넣어서 주입하였으나 실패했다.
+```sh
+$ POSTGRES_PASSWORD=$(kubectl get secret --namespace &quot;postgresql&quot; postgresql -o jsonpath=&quot;{.data.postgres-password}&quot; | base64 -d) helm upgrade -i postgresql chart/postgresql -n postgresql --debug --set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD --dry-run
+
+history.go:56: [debug] getting history for release postgresql
+upgrade.go:142: [debug] preparing upgrade for postgresql
+Error: UPGRADE FAILED: execution error at (postgresql/templates/secrets.yaml:17:24):
+PASSWORDS ERROR: You must provide your current passwords when upgrading the release.
+                 Note that even after reinstallation, old credentials may be needed as they may be kept in persistent volume claims.
+                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases
+
+    &#x27;global.postgresql.auth.postgresPassword&#x27; must not be empty, please add &#x27;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD&#x27; to the command. To get the current value:
+
+        export POSTGRES_PASSWORD=$(kubectl get secret --namespace &quot;postgresql&quot; postgresql -o jsonpath=&quot;{.data.postgres-password}&quot; | base64 -d)
+
+helm.go:84: [debug] execution error at (postgresql/templates/secrets.yaml:17:24):
+PASSWORDS ERROR: You must provide your current passwords when upgrading the release.
+                 Note that even after reinstallation, old credentials may be needed as they may be kept in persistent volume claims.
+                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases
+
+    &#x27;global.postgresql.auth.postgresPassword&#x27; must not be empty, please add &#x27;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD&#x27; to the command. To get the current value:
+
+        export POSTGRES_PASSWORD=$(kubectl get secret --namespace &quot;postgresql&quot; postgresql -o jsonpath=&quot;{.data.postgres-password}&quot; | base64 -d)
+
+UPGRADE FAILED
+main.newUpgradeCmd.func2
+        helm.sh/helm/v3/cmd/helm/upgrade.go:202
+github.com/spf13/cobra.(*Command).execute
+        github.com/spf13/cobra@v1.6.1/command.go:916
+github.com/spf13/cobra.(*Command).ExecuteC
+        github.com/spf13/cobra@v1.6.1/command.go:1044
+github.com/spf13/cobra.(*Command).Execute
+        github.com/spf13/cobra@v1.6.1/command.go:968
+main.main
+        helm.sh/helm/v3/cmd/helm/helm.go:83
+runtime.main
+        runtime/proc.go:250
+runtime.goexit
+        runtime/asm_arm64.s:1172
+```
+  - 분리된 라인으로 `export POSTGRES_PASSWORD=$(...)` 를 shell 자체에 주입을 하고 나서야 명령어가 성공하는 것을 확인할 수 있다.
+```sh
+$ export POSTGRES_PASSWORD=$(kubectl get secret --namespace &quot;postgresql&quot; postgresql -o jsonpath=&quot;{.data.postgres-password}&quot; | base64 -d)
+$ helm upgrade -i postgresql chart/postgresql -n postgresql --debug --set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD --dry-run
+
+history.go:56: [debug] getting history for release postgresql
+upgrade.go:142: [debug] preparing upgrade for postgresql
+upgrade.go:150: [debug] performing update for postgresql
+upgrade.go:313: [debug] dry run for postgresql
+Release &quot;postgresql&quot; has been upgraded. Happy Helming!
+NAME: postgresql
+LAST DEPLOYED: Tue Apr 18 12:27:39 2023
+```
+  - 그리고 포트포워딩(localhost 를 위해)도 확인하자
+### lock
+```shell
+SELECT pid, *
+FROM pg_locks l
+         JOIN pg_class t ON l.relation = t.oid AND t.relkind = &#x27;r&#x27;
+where relname =&#x27;[TABLE_NAME]&#x27;
+```
+pid 확인해서 컨테이너 접속후
+```shell
+kill [PID]
+```
+
+### ON CONFLICT DO UPDATE command cannot affect row a second time
+```sh 
+[2024-01-28 19:54:38] [21000] ERROR: ON CONFLICT DO UPDATE command cannot affect row a second time
+[2024-01-28 19:54:38] Hint: Ensure that no rows proposed for insertion within the same command have duplicate constrained values.
+```
+- conflict 키 중복, 한 쿼리에 여러 아이템에대한 컨플릭트처리를 하는데 키 중복이 있었다.
+
+### WARNING:  database &quot;DATABASE_NAME&quot; has a collation version mismatch
+- 마이너 버전 업그레이드 후 발생
+- 에러는 아니지만 계속 찍힘 로그가
+  ```sh
+  2025-07-19 17:10:17.550 GMT [1121637] WARNING:  database &quot;DATABASE_NAME&quot; has a collation version mismatch
+  2025-07-19 17:10:17.550 GMT [1121637] DETAIL:  The database was created using collation version 2.31, but the operating system provides version 2.36.
+  2025-07-19 17:10:17.550 GMT [1121637] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+  ```
+- 해결, 에러가 나는 데이터베이스 별로 모두 진행
+  ```sql 
+  ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION;
+  REINDEX DATABASE DATABASE_NAME;
+  ```
+
+## link
+- [[kubernetes]]
+- [[psql]]
+- [[helm]]
+- [[sql]]
+- [[pgdump]]
+- [[pgdumpall]]
+"/><meta property="og:url" content="https://deptno.github.io/public-wiki/postgresql"/><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="# postgresql"/><meta name="twitter:description" content="
+- create role
+  user 와 함께 권한 생성
+  + https://www.postgresql.org/docs/current/sql-createrole.html
+## helm chart
++ https://github.com/bitnami/charts/tree/main/bitnami/postgresql/
+- create database owner [ ROLE NAME ]
+
+## 함수
+- to_char - timestamp -&gt; char
+- date_trunc - timestamp 값을 유지하되 추출하는 방식으로 하여 원하는 값만 추출(시간단위 절삭등)
+
+
+## trigger &amp; event
+function 을 정의한다 정의한다 정의에 사용할 수 있는 언어는 아래와 같다
+- c 
+- pl/plsql
+- pl/python
+node 에서 사용을 해야하는데 해당 언어를 지원하지 않으니 pl/plsql 을 통해서 event 를 발생키고 이를 listen 하는 방식의 구현이 가능하다
+```mermaid
+sequenceDiagram
+  participant be as backend/node
+  participant db as postgresql
+  
+  db -&gt;&gt; db: function F 정의
+  note over db: `event 발송`
+  db -&gt;&gt; db: trigger T 정의
+  note over db: insert, update, delete 시 function F 실행
+  be -&gt;&gt; db: LISTEN event
+  be -&gt;&gt; db: add event listener on &#x27;notification&#x27; 
+  activate be
+  db --&gt;&gt; db: insert evnet 발생
+  db --&gt;&gt; db: trigger T 실행
+  db --&gt;&gt; db: function F 실행
+  db -&gt;&gt; be: send notification: event &#x27;user_define_channel&#x27;
+  deactivate be
+  be -&gt;&gt; be: handle event
+```
+
+## error
+- permission denied for database 
+  + https://bobcares.com/blog/permission-denied-for-database-postgres/
+- duplicate key value violates unique constraint 
+  - ON CONFLICT (id) DO NOTHING
+  - ON CONFLICT (id) SET UPDATE ...
+### helm
+#### upgrade 2023-04-18 
+- 헬름 차트를 upgrade 했을때 에러가 출력되지 않았고 DEPLOYED 된 것으로 로그가 출력되어 그런가보다 했다. `values.yaml` 또한 적용되지 않았다.
+```sh
+$ helm history postgresql
+
+REVISION        UPDATED                         STATUS          CHART                   APP VERSION     DESCRIPTION
+3               Tue Apr 18 05:41:30 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+4               Tue Apr 18 05:51:28 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+5               Tue Apr 18 11:14:45 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+6               Tue Apr 18 12:11:03 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+7               Tue Apr 18 12:13:16 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+8               Tue Apr 18 12:14:51 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+9               Tue Apr 18 12:15:18 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+10              Tue Apr 18 12:15:25 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+11              Tue Apr 18 12:15:33 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+12              Tue Apr 18 12:28:38 2023        deployed        postgresql-12.1.9       15.1.0          Upgrade complete
+```
+  - 히스토리도 잘 출력되는 것을 확인할 수 있었으나 실제로는 적용이 되지 않았다
+  - **중요** debugging 을 위해 `--debug --dry-run` 을 옵션을 추가하니 에러를 확인할 수 있었다.
+  - &#x27;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD&#x27; 를 추가하고 ENV 변수를 쉘 시작부분에 넣어서 주입하였으나 실패했다.
+```sh
+$ POSTGRES_PASSWORD=$(kubectl get secret --namespace &quot;postgresql&quot; postgresql -o jsonpath=&quot;{.data.postgres-password}&quot; | base64 -d) helm upgrade -i postgresql chart/postgresql -n postgresql --debug --set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD --dry-run
+
+history.go:56: [debug] getting history for release postgresql
+upgrade.go:142: [debug] preparing upgrade for postgresql
+Error: UPGRADE FAILED: execution error at (postgresql/templates/secrets.yaml:17:24):
+PASSWORDS ERROR: You must provide your current passwords when upgrading the release.
+                 Note that even after reinstallation, old credentials may be needed as they may be kept in persistent volume claims.
+                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases
+
+    &#x27;global.postgresql.auth.postgresPassword&#x27; must not be empty, please add &#x27;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD&#x27; to the command. To get the current value:
+
+        export POSTGRES_PASSWORD=$(kubectl get secret --namespace &quot;postgresql&quot; postgresql -o jsonpath=&quot;{.data.postgres-password}&quot; | base64 -d)
+
+helm.go:84: [debug] execution error at (postgresql/templates/secrets.yaml:17:24):
+PASSWORDS ERROR: You must provide your current passwords when upgrading the release.
+                 Note that even after reinstallation, old credentials may be needed as they may be kept in persistent volume claims.
+                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases
+
+    &#x27;global.postgresql.auth.postgresPassword&#x27; must not be empty, please add &#x27;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD&#x27; to the command. To get the current value:
+
+        export POSTGRES_PASSWORD=$(kubectl get secret --namespace &quot;postgresql&quot; postgresql -o jsonpath=&quot;{.data.postgres-password}&quot; | base64 -d)
+
+UPGRADE FAILED
+main.newUpgradeCmd.func2
+        helm.sh/helm/v3/cmd/helm/upgrade.go:202
+github.com/spf13/cobra.(*Command).execute
+        github.com/spf13/cobra@v1.6.1/command.go:916
+github.com/spf13/cobra.(*Command).ExecuteC
+        github.com/spf13/cobra@v1.6.1/command.go:1044
+github.com/spf13/cobra.(*Command).Execute
+        github.com/spf13/cobra@v1.6.1/command.go:968
+main.main
+        helm.sh/helm/v3/cmd/helm/helm.go:83
+runtime.main
+        runtime/proc.go:250
+runtime.goexit
+        runtime/asm_arm64.s:1172
+```
+  - 분리된 라인으로 `export POSTGRES_PASSWORD=$(...)` 를 shell 자체에 주입을 하고 나서야 명령어가 성공하는 것을 확인할 수 있다.
+```sh
+$ export POSTGRES_PASSWORD=$(kubectl get secret --namespace &quot;postgresql&quot; postgresql -o jsonpath=&quot;{.data.postgres-password}&quot; | base64 -d)
+$ helm upgrade -i postgresql chart/postgresql -n postgresql --debug --set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD --dry-run
+
+history.go:56: [debug] getting history for release postgresql
+upgrade.go:142: [debug] preparing upgrade for postgresql
+upgrade.go:150: [debug] performing update for postgresql
+upgrade.go:313: [debug] dry run for postgresql
+Release &quot;postgresql&quot; has been upgraded. Happy Helming!
+NAME: postgresql
+LAST DEPLOYED: Tue Apr 18 12:27:39 2023
+```
+  - 그리고 포트포워딩(localhost 를 위해)도 확인하자
+### lock
+```shell
+SELECT pid, *
+FROM pg_locks l
+         JOIN pg_class t ON l.relation = t.oid AND t.relkind = &#x27;r&#x27;
+where relname =&#x27;[TABLE_NAME]&#x27;
+```
+pid 확인해서 컨테이너 접속후
+```shell
+kill [PID]
+```
+
+### ON CONFLICT DO UPDATE command cannot affect row a second time
+```sh 
+[2024-01-28 19:54:38] [21000] ERROR: ON CONFLICT DO UPDATE command cannot affect row a second time
+[2024-01-28 19:54:38] Hint: Ensure that no rows proposed for insertion within the same command have duplicate constrained values.
+```
+- conflict 키 중복, 한 쿼리에 여러 아이템에대한 컨플릭트처리를 하는데 키 중복이 있었다.
+
+### WARNING:  database &quot;DATABASE_NAME&quot; has a collation version mismatch
+- 마이너 버전 업그레이드 후 발생
+- 에러는 아니지만 계속 찍힘 로그가
+  ```sh
+  2025-07-19 17:10:17.550 GMT [1121637] WARNING:  database &quot;DATABASE_NAME&quot; has a collation version mismatch
+  2025-07-19 17:10:17.550 GMT [1121637] DETAIL:  The database was created using collation version 2.31, but the operating system provides version 2.36.
+  2025-07-19 17:10:17.550 GMT [1121637] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+  ```
+- 해결, 에러가 나는 데이터베이스 별로 모두 진행
+  ```sql 
+  ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION;
+  REINDEX DATABASE DATABASE_NAME;
+  ```
+
+## link
+- [[kubernetes]]
+- [[psql]]
+- [[helm]]
+- [[sql]]
+- [[pgdump]]
+- [[pgdumpall]]
+"/><link rel="icon" href="/icon.jpg?19eda66f7295e18c" type="image/jpeg" sizes="400x400"/><script src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js" crossorigin="" noModule=""></script></head><body class="md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100"><main class="w-full max-w-screen-lg lg:border border-gray-800 min-h-screen"><header class="flex flex-col p-3 bg-gray-800 gap-2 w-full"><div>로딩...</div><div class="flex justify-between text-white gap-2"><div><a target="_blank" href="https://github.com/deptno/deptno.dev" class="bg-white text-black">FE</a></div><div><a target="_blank" href="https://github.com/deptno/public-wiki/tree/440709c
+" class="bg-white text-black">440709c</a></div><a class="underline underline-offset-4" href="/public-wiki/diary/index">저널</a><a class="underline underline-offset-4" href="/public-wiki/about-me">about-me</a><div class="ml-auto"></div><div class="breadcrumbs"><ul class="flex"><li class="bg-white text-gray-800"><a class="underline px-1 underline-offset-4" href="/">/</a></li><li class=""><a class="underline px-1 underline-offset-4" href="/public-wiki">public-wiki<!-- -->/</a></li></ul></div></div></header><div class="w-full overflow-x-hidden"><div class="p-2"><aside id="sidebar" class="top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2"><div id="search-result"></div><div class="flex justify-end gap-2 border-b-2 3xl:py-2"><a class="underline border-l-blue-400" href="https://github.com/deptno/public-wiki/edit/main/postgresql.md" target="_blank">수정</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/commits/main/postgresql.md" target="_blank">기록</a><a class="underline border-l-blue-800" href="https://github.com/deptno/public-wiki/blame/main/postgresql.md" target="_blank">추적</a></div><div class="w-full h-fit 3xl:w-96 3xl:h-96 min-h-24 relative"><div></div></div><hr/><div class="flex flex-wrap gap-2 p-0 m-0 leading-tight"><span><a class="text-blue-600" href="/public-wiki/postgresql"><span class="underline">postgresql</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/kubernetes"><span class="underline">kubernetes</span><sup>44</sup></a></span><span><a class="text-blue-600" href="/public-wiki/psql"><span class="underline">psql</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/helm"><span class="underline">helm</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/sql"><span class="underline">sql</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/pgdump"><span class="underline">pgdump</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/pgdumpall"><span class="underline">pgdumpall</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/about-me"><span class="underline">about-me</span><sup>60</sup></a></span><span><a class="text-blue-600" href="/public-wiki/db"><span class="underline">db</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/index"><span class="underline">index</span><sup>109</sup></a></span><span><a class="text-blue-600" href="/public-wiki/label-studio"><span class="underline">label-studio</span><sup>6</sup></a></span><span><a class="text-blue-600" href="/public-wiki/me"><span class="underline">me</span><sup>16</sup></a></span><span><a class="text-blue-600" href="/public-wiki/mlflow"><span class="underline">mlflow</span><sup>21</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2023-02-05"><span class="underline">diary/2023-02-05</span><sup>2</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-28"><span class="underline">diary/2024-01-28</span><sup>8</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-01-30"><span class="underline">diary/2024-01-30</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-03-12"><span class="underline">diary/2024-03-12</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-11-20"><span class="underline">diary/2024-11-20</span><sup>3</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2024-12-31"><span class="underline">diary/2024-12-31</span><sup>441</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2025-07-14"><span class="underline">diary/2025-07-14</span><sup>5</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2025-07-15"><span class="underline">diary/2025-07-15</span><sup>4</sup></a></span><span><a class="text-blue-600" href="/public-wiki/diary/2025-07-20"><span class="underline">diary/2025-07-20</span><sup>2</sup></a></span></div><hr/><div class="toc"><div class="pl-0"><a href="#postgresql">postgresql</a></div><div class="pl-2"><a href="#helm-chart">helm chart</a></div><div class="pl-2"><a href="#함수">함수</a></div><div class="pl-2"><a href="#trigger--event">trigger &amp; event</a></div><div class="pl-2"><a href="#error">error</a></div><div class="pl-4"><a href="#helm">helm</a></div><div class="pl-6"><a href="#upgrade-2023-04-18">upgrade 2023-04-18</a></div><div class="pl-4"><a href="#lock">lock</a></div><div class="pl-4"><a href="#on-conflict-do-update-command-cannot-affect-row-a-second-time">ON CONFLICT DO UPDATE command cannot affect row a second time</a></div><div class="pl-4"><a href="#warning--database-database_name-has-a-collation-version-mismatch">WARNING:  database &quot;DATABASE_NAME&quot; has a collation version mismatch</a></div><div class="pl-2"><a href="#link">link</a></div></div></aside></div><pre class="bg-gray-100 markdown p-2 whitespace-pre-wrap"><h1 id="postgresql">postgresql</h1>
+<ul>
+<li>create role
+user 와 함께 권한 생성<ul>
+<li><a href="https://www.postgresql.org/docs/current/sql-createrole.html" target="_blank">[URL] https://www.postgresql.org/docs/current/sql-createrole.html</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="helm-chart">helm chart</h2>
+<ul>
+<li><a href="https://github.com/bitnami/charts/tree/main/bitnami/postgresql/" target="_blank">[URL] https://github.com/bitnami/charts/tree/main/bitnami/postgresql/</a></li>
+</ul>
+<ul>
+<li>create database owner [ ROLE NAME ]</li>
+</ul>
+<h2 id="함수">함수</h2>
+<ul>
+<li>to_char - timestamp -&gt; char</li>
+<li>date_trunc - timestamp 값을 유지하되 추출하는 방식으로 하여 원하는 값만 추출(시간단위 절삭등)</li>
+</ul>
+<h2 id="trigger--event">trigger &amp; event</h2>
+<p>function 을 정의한다 정의한다 정의에 사용할 수 있는 언어는 아래와 같다</p>
+<ul>
+<li>c </li>
+<li>pl/plsql</li>
+<li>pl/python
+node 에서 사용을 해야하는데 해당 언어를 지원하지 않으니 pl/plsql 을 통해서 event 를 발생키고 이를 listen 하는 방식의 구현이 가능하다</li>
+</ul>
+<pre><code class="hljs language-mermaid">sequenceDiagram
+  participant be as backend/node
+  participant db as postgresql
+  
+  db -&gt;&gt; db: function F 정의
+  note over db: `event 발송`
+  db -&gt;&gt; db: trigger T 정의
+  note over db: insert, update, delete 시 function F 실행
+  be -&gt;&gt; db: LISTEN event
+  be -&gt;&gt; db: add event listener on &#x27;notification&#x27; 
+  activate be
+  db --&gt;&gt; db: insert evnet 발생
+  db --&gt;&gt; db: trigger T 실행
+  db --&gt;&gt; db: function F 실행
+  db -&gt;&gt; be: send notification: event &#x27;user_define_channel&#x27;
+  deactivate be
+  be -&gt;&gt; be: handle event
+</code></pre><h2 id="error">error</h2>
+<ul>
+<li>permission denied for database <ul>
+<li><a href="https://bobcares.com/blog/permission-denied-for-database-postgres/" target="_blank">[URL] https://bobcares.com/blog/permission-denied-for-database-postgres/</a></li>
+</ul>
+</li>
+<li>duplicate key value violates unique constraint <ul>
+<li>ON CONFLICT (id) DO NOTHING</li>
+<li>ON CONFLICT (id) SET UPDATE ...</li>
+</ul>
+</li>
+</ul>
+<h3 id="helm">helm</h3>
+<h4 id="upgrade-2023-04-18">upgrade 2023-04-18</h4>
+<ul>
+<li>헬름 차트를 upgrade 했을때 에러가 출력되지 않았고 DEPLOYED 된 것으로 로그가 출력되어 그런가보다 했다. <code class="span">values.yaml</code> 또한 적용되지 않았다.</li>
+</ul>
+<pre><code class="hljs language-sh">$ helm <span class="hljs-built_in">history</span> postgresql
+
+REVISION        UPDATED                         STATUS          CHART                   APP VERSION     DESCRIPTION
+3               Tue Apr 18 05:41:30 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+4               Tue Apr 18 05:51:28 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+5               Tue Apr 18 11:14:45 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+6               Tue Apr 18 12:11:03 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+7               Tue Apr 18 12:13:16 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+8               Tue Apr 18 12:14:51 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+9               Tue Apr 18 12:15:18 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+10              Tue Apr 18 12:15:25 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+11              Tue Apr 18 12:15:33 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete
+12              Tue Apr 18 12:28:38 2023        deployed        postgresql-12.1.9       15.1.0          Upgrade complete
+</code></pre><ul>
+<li>히스토리도 잘 출력되는 것을 확인할 수 있었으나 실제로는 적용이 되지 않았다</li>
+<li><strong>중요</strong> debugging 을 위해 <code class="span">--debug --dry-run</code> 을 옵션을 추가하니 에러를 확인할 수 있었다.</li>
+<li>&#39;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD&#39; 를 추가하고 ENV 변수를 쉘 시작부분에 넣어서 주입하였으나 실패했다.</li>
+</ul>
+<pre><code class="hljs language-sh">$ POSTGRES_PASSWORD=$(kubectl get secret --namespace <span class="hljs-string">&quot;postgresql&quot;</span> postgresql -o jsonpath=<span class="hljs-string">&quot;{.data.postgres-password}&quot;</span> | <span class="hljs-built_in">base64</span> -d) helm upgrade -i postgresql chart/postgresql -n postgresql --debug --<span class="hljs-built_in">set</span> global.postgresql.auth.postgresPassword=<span class="hljs-variable">$POSTGRES_PASSWORD</span> --dry-run
+
+history.go:56: [debug] getting <span class="hljs-built_in">history</span> <span class="hljs-keyword">for</span> release postgresql
+upgrade.go:142: [debug] preparing upgrade <span class="hljs-keyword">for</span> postgresql
+Error: UPGRADE FAILED: execution error at (postgresql/templates/secrets.yaml:17:24):
+PASSWORDS ERROR: You must provide your current passwords when upgrading the release.
+                 Note that even after reinstallation, old credentials may be needed as they may be kept <span class="hljs-keyword">in</span> persistent volume claims.
+                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/<span class="hljs-comment">#credential-errors-while-upgrading-chart-releases</span>
+
+    <span class="hljs-string">&#x27;global.postgresql.auth.postgresPassword&#x27;</span> must not be empty, please add <span class="hljs-string">&#x27;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD&#x27;</span> to the <span class="hljs-built_in">command</span>. To get the current value:
+
+        <span class="hljs-built_in">export</span> POSTGRES_PASSWORD=$(kubectl get secret --namespace <span class="hljs-string">&quot;postgresql&quot;</span> postgresql -o jsonpath=<span class="hljs-string">&quot;{.data.postgres-password}&quot;</span> | <span class="hljs-built_in">base64</span> -d)
+
+helm.go:84: [debug] execution error at (postgresql/templates/secrets.yaml:17:24):
+PASSWORDS ERROR: You must provide your current passwords when upgrading the release.
+                 Note that even after reinstallation, old credentials may be needed as they may be kept <span class="hljs-keyword">in</span> persistent volume claims.
+                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/<span class="hljs-comment">#credential-errors-while-upgrading-chart-releases</span>
+
+    <span class="hljs-string">&#x27;global.postgresql.auth.postgresPassword&#x27;</span> must not be empty, please add <span class="hljs-string">&#x27;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD&#x27;</span> to the <span class="hljs-built_in">command</span>. To get the current value:
+
+        <span class="hljs-built_in">export</span> POSTGRES_PASSWORD=$(kubectl get secret --namespace <span class="hljs-string">&quot;postgresql&quot;</span> postgresql -o jsonpath=<span class="hljs-string">&quot;{.data.postgres-password}&quot;</span> | <span class="hljs-built_in">base64</span> -d)
+
+UPGRADE FAILED
+main.newUpgradeCmd.func2
+        helm.sh/helm/v3/cmd/helm/upgrade.go:202
+github.com/spf13/cobra.(*Command).execute
+        github.com/spf13/cobra@v1.6.1/command.go:916
+github.com/spf13/cobra.(*Command).ExecuteC
+        github.com/spf13/cobra@v1.6.1/command.go:1044
+github.com/spf13/cobra.(*Command).Execute
+        github.com/spf13/cobra@v1.6.1/command.go:968
+main.main
+        helm.sh/helm/v3/cmd/helm/helm.go:83
+runtime.main
+        runtime/proc.go:250
+runtime.goexit
+        runtime/asm_arm64.s:1172
+</code></pre><ul>
+<li>분리된 라인으로 <code class="span">export POSTGRES_PASSWORD=$(...)</code> 를 shell 자체에 주입을 하고 나서야 명령어가 성공하는 것을 확인할 수 있다.</li>
+</ul>
+<pre><code class="hljs language-sh">$ <span class="hljs-built_in">export</span> POSTGRES_PASSWORD=$(kubectl get secret --namespace <span class="hljs-string">&quot;postgresql&quot;</span> postgresql -o jsonpath=<span class="hljs-string">&quot;{.data.postgres-password}&quot;</span> | <span class="hljs-built_in">base64</span> -d)
+$ helm upgrade -i postgresql chart/postgresql -n postgresql --debug --<span class="hljs-built_in">set</span> global.postgresql.auth.postgresPassword=<span class="hljs-variable">$POSTGRES_PASSWORD</span> --dry-run
+
+history.go:56: [debug] getting <span class="hljs-built_in">history</span> <span class="hljs-keyword">for</span> release postgresql
+upgrade.go:142: [debug] preparing upgrade <span class="hljs-keyword">for</span> postgresql
+upgrade.go:150: [debug] performing update <span class="hljs-keyword">for</span> postgresql
+upgrade.go:313: [debug] dry run <span class="hljs-keyword">for</span> postgresql
+Release <span class="hljs-string">&quot;postgresql&quot;</span> has been upgraded. Happy Helming!
+NAME: postgresql
+LAST DEPLOYED: Tue Apr 18 12:27:39 2023
+</code></pre><ul>
+<li>그리고 포트포워딩(localhost 를 위해)도 확인하자</li>
+</ul>
+<h3 id="lock">lock</h3>
+<pre><code class="hljs language-shell">SELECT pid, *
+FROM pg_locks l
+         JOIN pg_class t ON l.relation = t.oid AND t.relkind = &#x27;r&#x27;
+where relname =&#x27;[TABLE_NAME]&#x27;
+</code></pre><p>pid 확인해서 컨테이너 접속후</p>
+<pre><code class="hljs language-shell">kill [PID]
+</code></pre><h3 id="on-conflict-do-update-command-cannot-affect-row-a-second-time">ON CONFLICT DO UPDATE command cannot affect row a second time</h3>
+<pre><code class="hljs language-sh">[2024-01-28 19:54:38] [21000] ERROR: ON CONFLICT DO UPDATE <span class="hljs-built_in">command</span> cannot affect row a second time
+[2024-01-28 19:54:38] Hint: Ensure that no rows proposed <span class="hljs-keyword">for</span> insertion within the same <span class="hljs-built_in">command</span> have duplicate constrained values.
+</code></pre><ul>
+<li>conflict 키 중복, 한 쿼리에 여러 아이템에대한 컨플릭트처리를 하는데 키 중복이 있었다.</li>
+</ul>
+<h3 id="warning--database-database_name-has-a-collation-version-mismatch">WARNING:  database &quot;DATABASE_NAME&quot; has a collation version mismatch</h3>
+<ul>
+<li>마이너 버전 업그레이드 후 발생</li>
+<li>에러는 아니지만 계속 찍힘 로그가<pre><code class="hljs language-sh">2025-07-19 17:10:17.550 GMT [1121637] WARNING:  database <span class="hljs-string">&quot;DATABASE_NAME&quot;</span> has a collation version mismatch
+2025-07-19 17:10:17.550 GMT [1121637] DETAIL:  The database was created using collation version 2.31, but the operating system provides version 2.36.
+2025-07-19 17:10:17.550 GMT [1121637] HINT:  Rebuild all objects <span class="hljs-keyword">in</span> this database that use the default collation and run ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.
+</code></pre></li>
+<li>해결, 에러가 나는 데이터베이스 별로 모두 진행<pre><code class="hljs language-sql"><span class="hljs-keyword">ALTER</span> DATABASE DATABASE_NAME REFRESH <span class="hljs-keyword">COLLATION</span> VERSION;
+REINDEX DATABASE DATABASE_NAME;
+</code></pre></li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="kubernetes">kubernetes</a></li>
+<li><a href="psql">psql</a></li>
+<li><a href="helm">helm</a></li>
+<li><a href="sql">sql</a></li>
+<li><a href="pgdump">pgdump</a></li>
+<li><a href="pgdumpall">pgdumpall</a></li>
+</ul>
+</pre></div></main><script src="/_next/static/chunks/webpack-8d83df55f024a06e.js" crossorigin="" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.push([2,null])</script><script>self.__next_f.push([1,"1:HL[\"/_next/static/css/7974a366526c0bac.css\",\"style\",{\"crossOrigin\":\"\"}]\n0:\"$L2\"\n"])</script><script>self.__next_f.push([1,"3:I[9243,[],\"\"]\n6:I[7420,[],\"\"]\n9:I[2708,[],\"\"]\na:I[9231,[\"185\",\"static/chunks/app/layout-3f8f17edabe7c539.js\"],\"\"]\nb:I[6172,[\"601\",\"static/chunks/app/error-71963c526facdbf7.js\"],\"\"]\nc:I[2154,[\"160\",\"static/chunks/app/not-found-b37065e097e62895.js\"],\"Back\"]\ne:I[6730,[],\"\"]\n7:[\"wiki\",\"public-wiki\",\"d\"]\n8:[\"md\",\"postgresql\",\"c\"]\n"])</script><script>self.__next_f.push([1,"2:[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/7974a366526c0bac.css\",\"precedence\":\"next\",\"crossOrigin\":\"\"}]],[\"$\",\"$L3\",null,{\"buildId\":\"OGWDQWYCR1M8j8Rn524lH\",\"assetPrefix\":\"\",\"initialCanonicalUrl\":\"/public-wiki/postgresql\",\"initialTree\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"postgresql\",\"c\"],{\"children\":[\"__PAGE__?{\\\"wiki\\\":\\\"public-wiki\\\",\\\"md\\\":[\\\"postgresql\\\"]}\",{}]}]}]},\"$undefined\",\"$undefined\",true],\"initialSeedData\":[\"\",{\"children\":[[\"wiki\",\"public-wiki\",\"d\"],{\"children\":[[\"md\",\"postgresql\",\"c\"],{\"children\":[\"__PAGE__\",{},[\"$L4\",\"$L5\",null]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\",\"$8\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\",\"$7\",\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"notFoundStyles\":\"$undefined\",\"styles\":null}]]},[null,[\"$\",\"html\",null,{\"lang\":\"ko\",\"children\":[[\"$\",\"$La\",null,{\"async\":true,\"src\":\"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"$La\",null,{\"strategy\":\"afterInteractive\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW\",\"async\":true}],[\"$\",\"$La\",null,{\"id\":\"gtag-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"window.dataLayer = window.dataLayer || [];\\n  function gtag(){dataLayer.push(arguments);}\\n  gtag('js', new Date());\\n  gtag('config', 'G-QKL40848FW');\"}}],[\"$\",\"$La\",null,{\"id\":\"ms-clarify-init\",\"strategy\":\"afterInteractive\",\"dangerouslySetInnerHTML\":{\"__html\":\"(function(c,l,a,r,i,t,y){\\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\\n  t=l.createElement(r);t.async=1;t.src=\\\"https://www.clarity.ms/tag/\\\"+i;\\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\\n  })(window, document, \\\"clarity\\\", \\\"script\\\", \\\"l1919qdcrc\\\");\\n  \"}}],[\"$\",\"body\",null,{\"className\":\"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100\",\"children\":[\"$\",\"main\",null,{\"className\":\"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen\",\"children\":[\"$\",\"$L6\",null,{\"parallelRouterKey\":\"children\",\"segmentPath\":[\"children\"],\"loading\":\"$undefined\",\"loadingStyles\":\"$undefined\",\"loadingScripts\":\"$undefined\",\"hasLoading\":false,\"error\":\"$b\",\"errorStyles\":[],\"errorScripts\":[],\"template\":[\"$\",\"$L9\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[\"$\",\"div\",null,{\"className\":\"flex flex-col justify-center items-center h-screen gap-8\",\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-8xl text-center\",\"children\":\"404\"}],[\"$\",\"$Lc\",null,{\"children\":\"뒤로 가기\"}]]}],\"notFoundStyles\":[],\"styles\":null}]}]}]]}],null]],\"initialHead\":[false,\"$Ld\"],\"globalErrorComponent\":\"$e\"}]]\n"])</script><script>self.__next_f.push([1,"f:I[7285,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"SearchBar\"]\n10:I[9474,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"Breadcrumbs\"]\n11:I[4276,[\"457\","])</script><script>self.__next_f.push([1,"\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"MermaidRenderer\"]\n12:I[18,[\"457\",\"static/chunks/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"LinkGraph\"]\n13:I[1018,[\"457\",\"static/chunks"])</script><script>self.__next_f.push([1,"/c6c50db0-730a8fdbd0bb38f0.js\",\"401\",\"static/chunks/fd503499-f344ff1ccbf2f791.js\",\"254\",\"static/chunks/254-e656a4c93afc504e.js\",\"629\",\"static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js\"],\"\"]\n14:T2e13,"])</script><script>self.__next_f.push([1,"\u003ch1 id=\"postgresql\"\u003epostgresql\u003c/h1\u003e\n\u003cul\u003e\n\u003cli\u003ecreate role\nuser 와 함께 권한 생성\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://www.postgresql.org/docs/current/sql-createrole.html\" target=\"_blank\"\u003e[URL] https://www.postgresql.org/docs/current/sql-createrole.html\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"helm-chart\"\u003ehelm chart\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://github.com/bitnami/charts/tree/main/bitnami/postgresql/\" target=\"_blank\"\u003e[URL] https://github.com/bitnami/charts/tree/main/bitnami/postgresql/\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cul\u003e\n\u003cli\u003ecreate database owner [ ROLE NAME ]\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"함수\"\u003e함수\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eto_char - timestamp -\u0026gt; char\u003c/li\u003e\n\u003cli\u003edate_trunc - timestamp 값을 유지하되 추출하는 방식으로 하여 원하는 값만 추출(시간단위 절삭등)\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"trigger--event\"\u003etrigger \u0026amp; event\u003c/h2\u003e\n\u003cp\u003efunction 을 정의한다 정의한다 정의에 사용할 수 있는 언어는 아래와 같다\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ec \u003c/li\u003e\n\u003cli\u003epl/plsql\u003c/li\u003e\n\u003cli\u003epl/python\nnode 에서 사용을 해야하는데 해당 언어를 지원하지 않으니 pl/plsql 을 통해서 event 를 발생키고 이를 listen 하는 방식의 구현이 가능하다\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-mermaid\"\u003esequenceDiagram\n  participant be as backend/node\n  participant db as postgresql\n  \n  db -\u0026gt;\u0026gt; db: function F 정의\n  note over db: `event 발송`\n  db -\u0026gt;\u0026gt; db: trigger T 정의\n  note over db: insert, update, delete 시 function F 실행\n  be -\u0026gt;\u0026gt; db: LISTEN event\n  be -\u0026gt;\u0026gt; db: add event listener on \u0026#x27;notification\u0026#x27; \n  activate be\n  db --\u0026gt;\u0026gt; db: insert evnet 발생\n  db --\u0026gt;\u0026gt; db: trigger T 실행\n  db --\u0026gt;\u0026gt; db: function F 실행\n  db -\u0026gt;\u0026gt; be: send notification: event \u0026#x27;user_define_channel\u0026#x27;\n  deactivate be\n  be -\u0026gt;\u0026gt; be: handle event\n\u003c/code\u003e\u003c/pre\u003e\u003ch2 id=\"error\"\u003eerror\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003epermission denied for database \u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://bobcares.com/blog/permission-denied-for-database-postgres/\" target=\"_blank\"\u003e[URL] https://bobcares.com/blog/permission-denied-for-database-postgres/\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003eduplicate key value violates unique constraint \u003cul\u003e\n\u003cli\u003eON CONFLICT (id) DO NOTHING\u003c/li\u003e\n\u003cli\u003eON CONFLICT (id) SET UPDATE ...\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"helm\"\u003ehelm\u003c/h3\u003e\n\u003ch4 id=\"upgrade-2023-04-18\"\u003eupgrade 2023-04-18\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e헬름 차트를 upgrade 했을때 에러가 출력되지 않았고 DEPLOYED 된 것으로 로그가 출력되어 그런가보다 했다. \u003ccode class=\"span\"\u003evalues.yaml\u003c/code\u003e 또한 적용되지 않았다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ helm \u003cspan class=\"hljs-built_in\"\u003ehistory\u003c/span\u003e postgresql\n\nREVISION        UPDATED                         STATUS          CHART                   APP VERSION     DESCRIPTION\n3               Tue Apr 18 05:41:30 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n4               Tue Apr 18 05:51:28 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n5               Tue Apr 18 11:14:45 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n6               Tue Apr 18 12:11:03 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n7               Tue Apr 18 12:13:16 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n8               Tue Apr 18 12:14:51 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n9               Tue Apr 18 12:15:18 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n10              Tue Apr 18 12:15:25 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n11              Tue Apr 18 12:15:33 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n12              Tue Apr 18 12:28:38 2023        deployed        postgresql-12.1.9       15.1.0          Upgrade complete\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e히스토리도 잘 출력되는 것을 확인할 수 있었으나 실제로는 적용이 되지 않았다\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003e중요\u003c/strong\u003e debugging 을 위해 \u003ccode class=\"span\"\u003e--debug --dry-run\u003c/code\u003e 을 옵션을 추가하니 에러를 확인할 수 있었다.\u003c/li\u003e\n\u003cli\u003e\u0026#39;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD\u0026#39; 를 추가하고 ENV 변수를 쉘 시작부분에 넣어서 주입하였으나 실패했다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ POSTGRES_PASSWORD=$(kubectl get secret --namespace \u003cspan class=\"hljs-string\"\u003e\u0026quot;postgresql\u0026quot;\u003c/span\u003e postgresql -o jsonpath=\u003cspan class=\"hljs-string\"\u003e\u0026quot;{.data.postgres-password}\u0026quot;\u003c/span\u003e | \u003cspan class=\"hljs-built_in\"\u003ebase64\u003c/span\u003e -d) helm upgrade -i postgresql chart/postgresql -n postgresql --debug --\u003cspan class=\"hljs-built_in\"\u003eset\u003c/span\u003e global.postgresql.auth.postgresPassword=\u003cspan class=\"hljs-variable\"\u003e$POSTGRES_PASSWORD\u003c/span\u003e --dry-run\n\nhistory.go:56: [debug] getting \u003cspan class=\"hljs-built_in\"\u003ehistory\u003c/span\u003e \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e release postgresql\nupgrade.go:142: [debug] preparing upgrade \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e postgresql\nError: UPGRADE FAILED: execution error at (postgresql/templates/secrets.yaml:17:24):\nPASSWORDS ERROR: You must provide your current passwords when upgrading the release.\n                 Note that even after reinstallation, old credentials may be needed as they may be kept \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e persistent volume claims.\n                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/\u003cspan class=\"hljs-comment\"\u003e#credential-errors-while-upgrading-chart-releases\u003c/span\u003e\n\n    \u003cspan class=\"hljs-string\"\u003e\u0026#x27;global.postgresql.auth.postgresPassword\u0026#x27;\u003c/span\u003e must not be empty, please add \u003cspan class=\"hljs-string\"\u003e\u0026#x27;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD\u0026#x27;\u003c/span\u003e to the \u003cspan class=\"hljs-built_in\"\u003ecommand\u003c/span\u003e. To get the current value:\n\n        \u003cspan class=\"hljs-built_in\"\u003eexport\u003c/span\u003e POSTGRES_PASSWORD=$(kubectl get secret --namespace \u003cspan class=\"hljs-string\"\u003e\u0026quot;postgresql\u0026quot;\u003c/span\u003e postgresql -o jsonpath=\u003cspan class=\"hljs-string\"\u003e\u0026quot;{.data.postgres-password}\u0026quot;\u003c/span\u003e | \u003cspan class=\"hljs-built_in\"\u003ebase64\u003c/span\u003e -d)\n\nhelm.go:84: [debug] execution error at (postgresql/templates/secrets.yaml:17:24):\nPASSWORDS ERROR: You must provide your current passwords when upgrading the release.\n                 Note that even after reinstallation, old credentials may be needed as they may be kept \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e persistent volume claims.\n                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/\u003cspan class=\"hljs-comment\"\u003e#credential-errors-while-upgrading-chart-releases\u003c/span\u003e\n\n    \u003cspan class=\"hljs-string\"\u003e\u0026#x27;global.postgresql.auth.postgresPassword\u0026#x27;\u003c/span\u003e must not be empty, please add \u003cspan class=\"hljs-string\"\u003e\u0026#x27;--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD\u0026#x27;\u003c/span\u003e to the \u003cspan class=\"hljs-built_in\"\u003ecommand\u003c/span\u003e. To get the current value:\n\n        \u003cspan class=\"hljs-built_in\"\u003eexport\u003c/span\u003e POSTGRES_PASSWORD=$(kubectl get secret --namespace \u003cspan class=\"hljs-string\"\u003e\u0026quot;postgresql\u0026quot;\u003c/span\u003e postgresql -o jsonpath=\u003cspan class=\"hljs-string\"\u003e\u0026quot;{.data.postgres-password}\u0026quot;\u003c/span\u003e | \u003cspan class=\"hljs-built_in\"\u003ebase64\u003c/span\u003e -d)\n\nUPGRADE FAILED\nmain.newUpgradeCmd.func2\n        helm.sh/helm/v3/cmd/helm/upgrade.go:202\ngithub.com/spf13/cobra.(*Command).execute\n        github.com/spf13/cobra@v1.6.1/command.go:916\ngithub.com/spf13/cobra.(*Command).ExecuteC\n        github.com/spf13/cobra@v1.6.1/command.go:1044\ngithub.com/spf13/cobra.(*Command).Execute\n        github.com/spf13/cobra@v1.6.1/command.go:968\nmain.main\n        helm.sh/helm/v3/cmd/helm/helm.go:83\nruntime.main\n        runtime/proc.go:250\nruntime.goexit\n        runtime/asm_arm64.s:1172\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e분리된 라인으로 \u003ccode class=\"span\"\u003eexport POSTGRES_PASSWORD=$(...)\u003c/code\u003e 를 shell 자체에 주입을 하고 나서야 명령어가 성공하는 것을 확인할 수 있다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e$ \u003cspan class=\"hljs-built_in\"\u003eexport\u003c/span\u003e POSTGRES_PASSWORD=$(kubectl get secret --namespace \u003cspan class=\"hljs-string\"\u003e\u0026quot;postgresql\u0026quot;\u003c/span\u003e postgresql -o jsonpath=\u003cspan class=\"hljs-string\"\u003e\u0026quot;{.data.postgres-password}\u0026quot;\u003c/span\u003e | \u003cspan class=\"hljs-built_in\"\u003ebase64\u003c/span\u003e -d)\n$ helm upgrade -i postgresql chart/postgresql -n postgresql --debug --\u003cspan class=\"hljs-built_in\"\u003eset\u003c/span\u003e global.postgresql.auth.postgresPassword=\u003cspan class=\"hljs-variable\"\u003e$POSTGRES_PASSWORD\u003c/span\u003e --dry-run\n\nhistory.go:56: [debug] getting \u003cspan class=\"hljs-built_in\"\u003ehistory\u003c/span\u003e \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e release postgresql\nupgrade.go:142: [debug] preparing upgrade \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e postgresql\nupgrade.go:150: [debug] performing update \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e postgresql\nupgrade.go:313: [debug] dry run \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e postgresql\nRelease \u003cspan class=\"hljs-string\"\u003e\u0026quot;postgresql\u0026quot;\u003c/span\u003e has been upgraded. Happy Helming!\nNAME: postgresql\nLAST DEPLOYED: Tue Apr 18 12:27:39 2023\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003e그리고 포트포워딩(localhost 를 위해)도 확인하자\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"lock\"\u003elock\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-shell\"\u003eSELECT pid, *\nFROM pg_locks l\n         JOIN pg_class t ON l.relation = t.oid AND t.relkind = \u0026#x27;r\u0026#x27;\nwhere relname =\u0026#x27;[TABLE_NAME]\u0026#x27;\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003epid 확인해서 컨테이너 접속후\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-shell\"\u003ekill [PID]\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"on-conflict-do-update-command-cannot-affect-row-a-second-time\"\u003eON CONFLICT DO UPDATE command cannot affect row a second time\u003c/h3\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e[2024-01-28 19:54:38] [21000] ERROR: ON CONFLICT DO UPDATE \u003cspan class=\"hljs-built_in\"\u003ecommand\u003c/span\u003e cannot affect row a second time\n[2024-01-28 19:54:38] Hint: Ensure that no rows proposed \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e insertion within the same \u003cspan class=\"hljs-built_in\"\u003ecommand\u003c/span\u003e have duplicate constrained values.\n\u003c/code\u003e\u003c/pre\u003e\u003cul\u003e\n\u003cli\u003econflict 키 중복, 한 쿼리에 여러 아이템에대한 컨플릭트처리를 하는데 키 중복이 있었다.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3 id=\"warning--database-database_name-has-a-collation-version-mismatch\"\u003eWARNING:  database \u0026quot;DATABASE_NAME\u0026quot; has a collation version mismatch\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e마이너 버전 업그레이드 후 발생\u003c/li\u003e\n\u003cli\u003e에러는 아니지만 계속 찍힘 로그가\u003cpre\u003e\u003ccode class=\"hljs language-sh\"\u003e2025-07-19 17:10:17.550 GMT [1121637] WARNING:  database \u003cspan class=\"hljs-string\"\u003e\u0026quot;DATABASE_NAME\u0026quot;\u003c/span\u003e has a collation version mismatch\n2025-07-19 17:10:17.550 GMT [1121637] DETAIL:  The database was created using collation version 2.31, but the operating system provides version 2.36.\n2025-07-19 17:10:17.550 GMT [1121637] HINT:  Rebuild all objects \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e this database that use the default collation and run ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003cli\u003e해결, 에러가 나는 데이터베이스 별로 모두 진행\u003cpre\u003e\u003ccode class=\"hljs language-sql\"\u003e\u003cspan class=\"hljs-keyword\"\u003eALTER\u003c/span\u003e DATABASE DATABASE_NAME REFRESH \u003cspan class=\"hljs-keyword\"\u003eCOLLATION\u003c/span\u003e VERSION;\nREINDEX DATABASE DATABASE_NAME;\n\u003c/code\u003e\u003c/pre\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2 id=\"link\"\u003elink\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"kubernetes\"\u003ekubernetes\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"psql\"\u003epsql\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"helm\"\u003ehelm\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"sql\"\u003esql\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"pgdump\"\u003epgdump\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"pgdumpall\"\u003epgdumpall\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"])</script><script>self.__next_f.push([1,"5:[[\"$\",\"header\",null,{\"className\":\"flex flex-col p-3 bg-gray-800 gap-2 w-full\",\"children\":[[\"$\",\"$Lf\",null,{\"placeholder\":\"$undefined\"}],[\"$\",\"div\",null,{\"className\":\"flex justify-between text-white gap-2\",\"children\":[[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/deptno.dev\",\"className\":\"bg-white text-black\",\"children\":\"FE\"}]}],[\"$\",\"div\",null,{\"children\":[\"$\",\"a\",null,{\"target\":\"_blank\",\"href\":\"https://github.com/deptno/public-wiki/tree/440709c\\n\",\"className\":\"bg-white text-black\",\"children\":\"440709c\"}]}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/diary/index\",\"children\":\"저널\"}],[\"$\",\"a\",null,{\"className\":\"underline underline-offset-4\",\"href\":\"/public-wiki/about-me\",\"children\":\"about-me\"}],[\"$\",\"div\",null,{\"className\":\"ml-auto\"}],[\"$\",\"$L10\",null,{}]]}]]}],[\"$\",\"div\",null,{\"className\":\"w-full overflow-x-hidden\",\"children\":[[\"$\",\"$L11\",null,{}],[\"$\",\"div\",null,{\"className\":\"p-2\",\"children\":[\"$\",\"aside\",null,{\"id\":\"sidebar\",\"className\":\"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2\",\"children\":[[\"$\",\"div\",null,{\"id\":\"search-result\"}],[[\"$\",\"div\",null,{\"className\":\"flex justify-end gap-2 border-b-2 3xl:py-2\",\"children\":[[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-400\",\"href\":\"https://github.com/deptno/public-wiki/edit/main/postgresql.md\",\"target\":\"_blank\",\"children\":\"수정\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/commits/main/postgresql.md\",\"target\":\"_blank\",\"children\":\"기록\"}],[\"$\",\"a\",null,{\"className\":\"underline border-l-blue-800\",\"href\":\"https://github.com/deptno/public-wiki/blame/main/postgresql.md\",\"target\":\"_blank\",\"children\":\"추적\"}]]}],[\"$\",\"$L12\",null,{\"wiki\":\"public-wiki\",\"graphData\":{\"nodes\":[{\"id\":\"postgresql\",\"name\":\"postgresql\",\"val\":6},{\"id\":\"kubernetes\",\"name\":\"kubernetes\",\"val\":44},{\"id\":\"psql\",\"name\":\"psql\",\"val\":2},{\"id\":\"helm\",\"name\":\"helm\",\"val\":3},{\"id\":\"sql\",\"name\":\"sql\",\"val\":3},{\"id\":\"pgdump\",\"name\":\"pgdump\",\"val\":2},{\"id\":\"pgdumpall\",\"name\":\"pgdumpall\",\"val\":2},{\"id\":\"about-me\",\"name\":\"about-me\",\"val\":60},{\"id\":\"db\",\"name\":\"db\",\"val\":3},{\"id\":\"index\",\"name\":\"index\",\"val\":109},{\"id\":\"label-studio\",\"name\":\"label-studio\",\"val\":6},{\"id\":\"me\",\"name\":\"me\",\"val\":16},{\"id\":\"mlflow\",\"name\":\"mlflow\",\"val\":21},{\"id\":\"diary/2023-02-05\",\"name\":\"diary/2023-02-05\",\"val\":2},{\"id\":\"diary/2024-01-28\",\"name\":\"diary/2024-01-28\",\"val\":8},{\"id\":\"diary/2024-01-30\",\"name\":\"diary/2024-01-30\",\"val\":3},{\"id\":\"diary/2024-03-12\",\"name\":\"diary/2024-03-12\",\"val\":3},{\"id\":\"diary/2024-11-20\",\"name\":\"diary/2024-11-20\",\"val\":3},{\"id\":\"diary/2024-12-31\",\"name\":\"diary/2024-12-31\",\"val\":441},{\"id\":\"diary/2025-07-14\",\"name\":\"diary/2025-07-14\",\"val\":5},{\"id\":\"diary/2025-07-15\",\"name\":\"diary/2025-07-15\",\"val\":4},{\"id\":\"diary/2025-07-20\",\"name\":\"diary/2025-07-20\",\"val\":2}],\"links\":[{\"source\":\"postgresql\",\"target\":\"kubernetes\"},{\"source\":\"postgresql\",\"target\":\"psql\"},{\"source\":\"postgresql\",\"target\":\"helm\"},{\"source\":\"postgresql\",\"target\":\"sql\"},{\"source\":\"postgresql\",\"target\":\"pgdump\"},{\"source\":\"postgresql\",\"target\":\"pgdumpall\"},{\"source\":\"about-me\",\"target\":\"postgresql\"},{\"source\":\"db\",\"target\":\"postgresql\"},{\"source\":\"helm\",\"target\":\"postgresql\"},{\"source\":\"helm\",\"target\":\"postgresql\"},{\"source\":\"index\",\"target\":\"postgresql\"},{\"source\":\"label-studio\",\"target\":\"postgresql\"},{\"source\":\"me\",\"target\":\"postgresql\"},{\"source\":\"mlflow\",\"target\":\"postgresql\"},{\"source\":\"pgdump\",\"target\":\"postgresql\"},{\"source\":\"pgdumpall\",\"target\":\"postgresql\"},{\"source\":\"psql\",\"target\":\"postgresql\"},{\"source\":\"sql\",\"target\":\"postgresql\"},{\"source\":\"sql\",\"target\":\"postgresql\"},{\"source\":\"diary/2023-02-05\",\"target\":\"postgresql\"},{\"source\":\"diary/2024-01-28\",\"target\":\"postgresql\"},{\"source\":\"diary/2024-01-30\",\"target\":\"postgresql\"},{\"source\":\"diary/2024-03-12\",\"target\":\"postgresql\"},{\"source\":\"diary/2024-11-20\",\"target\":\"postgresql\"},{\"source\":\"diary/2024-12-31\",\"target\":\"postgresql\"},{\"source\":\"diary/2025-07-14\",\"target\":\"postgresql\"},{\"source\":\"diary/2025-07-15\",\"target\":\"postgresql\"},{\"source\":\"diary/2025-07-20\",\"target\":\"postgresql\"}]}}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 p-0 m-0 leading-tight\",\"children\":[[\"$\",\"span\",\"postgresql\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/postgresql\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"postgresql\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"kubernetes\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/kubernetes\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"kubernetes\"}],[\"$\",\"sup\",null,{\"children\":44}]]}]}],[\"$\",\"span\",\"psql\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/psql\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"psql\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"helm\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/helm\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"helm\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"sql\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/sql\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"sql\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"pgdump\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/pgdump\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"pgdump\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"pgdumpall\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/pgdumpall\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"pgdumpall\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"about-me\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/about-me\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"about-me\"}],[\"$\",\"sup\",null,{\"children\":60}]]}]}],[\"$\",\"span\",\"db\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/db\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"db\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"index\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/index\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"index\"}],[\"$\",\"sup\",null,{\"children\":109}]]}]}],[\"$\",\"span\",\"label-studio\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/label-studio\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"label-studio\"}],[\"$\",\"sup\",null,{\"children\":6}]]}]}],[\"$\",\"span\",\"me\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/me\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"me\"}],[\"$\",\"sup\",null,{\"children\":16}]]}]}],[\"$\",\"span\",\"mlflow\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/mlflow\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"mlflow\"}],[\"$\",\"sup\",null,{\"children\":21}]]}]}],[\"$\",\"span\",\"diary/2023-02-05\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2023-02-05\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2023-02-05\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}],[\"$\",\"span\",\"diary/2024-01-28\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-28\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-28\"}],[\"$\",\"sup\",null,{\"children\":8}]]}]}],[\"$\",\"span\",\"diary/2024-01-30\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-01-30\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-01-30\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2024-03-12\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-03-12\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-03-12\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2024-11-20\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-11-20\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-11-20\"}],[\"$\",\"sup\",null,{\"children\":3}]]}]}],[\"$\",\"span\",\"diary/2024-12-31\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2024-12-31\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2024-12-31\"}],[\"$\",\"sup\",null,{\"children\":441}]]}]}],[\"$\",\"span\",\"diary/2025-07-14\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2025-07-14\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2025-07-14\"}],[\"$\",\"sup\",null,{\"children\":5}]]}]}],[\"$\",\"span\",\"diary/2025-07-15\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2025-07-15\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2025-07-15\"}],[\"$\",\"sup\",null,{\"children\":4}]]}]}],[\"$\",\"span\",\"diary/2025-07-20\",{\"children\":[\"$\",\"$L13\",null,{\"className\":\"text-blue-600\",\"href\":\"/public-wiki/diary/2025-07-20\",\"children\":[[\"$\",\"span\",null,{\"className\":\"underline\",\"children\":\"diary/2025-07-20\"}],[\"$\",\"sup\",null,{\"children\":2}]]}]}]]}],[\"$\",\"hr\",null,{}],[\"$\",\"div\",null,{\"className\":\"toc\",\"children\":[[\"$\",\"div\",\"postgresql\",{\"className\":\"pl-0\",\"children\":[\"$\",\"a\",null,{\"href\":\"#postgresql\",\"children\":\"postgresql\"}]}],[\"$\",\"div\",\"helm-chart\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#helm-chart\",\"children\":\"helm chart\"}]}],[\"$\",\"div\",\"함수\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#함수\",\"children\":\"함수\"}]}],[\"$\",\"div\",\"trigger--event\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#trigger--event\",\"children\":\"trigger \u0026 event\"}]}],[\"$\",\"div\",\"error\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#error\",\"children\":\"error\"}]}],[\"$\",\"div\",\"helm\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#helm\",\"children\":\"helm\"}]}],[\"$\",\"div\",\"upgrade-2023-04-18\",{\"className\":\"pl-6\",\"children\":[\"$\",\"a\",null,{\"href\":\"#upgrade-2023-04-18\",\"children\":\"upgrade 2023-04-18\"}]}],[\"$\",\"div\",\"lock\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#lock\",\"children\":\"lock\"}]}],[\"$\",\"div\",\"on-conflict-do-update-command-cannot-affect-row-a-second-time\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#on-conflict-do-update-command-cannot-affect-row-a-second-time\",\"children\":\"ON CONFLICT DO UPDATE command cannot affect row a second time\"}]}],[\"$\",\"div\",\"warning--database-database_name-has-a-collation-version-mismatch\",{\"className\":\"pl-4\",\"children\":[\"$\",\"a\",null,{\"href\":\"#warning--database-database_name-has-a-collation-version-mismatch\",\"children\":\"WARNING:  database \\\"DATABASE_NAME\\\" has a collation version mismatch\"}]}],[\"$\",\"div\",\"link\",{\"className\":\"pl-2\",\"children\":[\"$\",\"a\",null,{\"href\":\"#link\",\"children\":\"link\"}]}]]}],null]]}]}],[\"$\",\"pre\",null,{\"className\":\"bg-gray-100 markdown p-2 whitespace-pre-wrap\",\"dangerouslySetInnerHTML\":{\"__html\":\"$14\"}}]]}]]\n"])</script><script>self.__next_f.push([1,"15:T20f8,"])</script><script>self.__next_f.push([1,"\n- create role\n  user 와 함께 권한 생성\n  + https://www.postgresql.org/docs/current/sql-createrole.html\n## helm chart\n+ https://github.com/bitnami/charts/tree/main/bitnami/postgresql/\n- create database owner [ ROLE NAME ]\n\n## 함수\n- to_char - timestamp -\u003e char\n- date_trunc - timestamp 값을 유지하되 추출하는 방식으로 하여 원하는 값만 추출(시간단위 절삭등)\n\n\n## trigger \u0026 event\nfunction 을 정의한다 정의한다 정의에 사용할 수 있는 언어는 아래와 같다\n- c \n- pl/plsql\n- pl/python\nnode 에서 사용을 해야하는데 해당 언어를 지원하지 않으니 pl/plsql 을 통해서 event 를 발생키고 이를 listen 하는 방식의 구현이 가능하다\n```mermaid\nsequenceDiagram\n  participant be as backend/node\n  participant db as postgresql\n  \n  db -\u003e\u003e db: function F 정의\n  note over db: `event 발송`\n  db -\u003e\u003e db: trigger T 정의\n  note over db: insert, update, delete 시 function F 실행\n  be -\u003e\u003e db: LISTEN event\n  be -\u003e\u003e db: add event listener on 'notification' \n  activate be\n  db --\u003e\u003e db: insert evnet 발생\n  db --\u003e\u003e db: trigger T 실행\n  db --\u003e\u003e db: function F 실행\n  db -\u003e\u003e be: send notification: event 'user_define_channel'\n  deactivate be\n  be -\u003e\u003e be: handle event\n```\n\n## error\n- permission denied for database \n  + https://bobcares.com/blog/permission-denied-for-database-postgres/\n- duplicate key value violates unique constraint \n  - ON CONFLICT (id) DO NOTHING\n  - ON CONFLICT (id) SET UPDATE ...\n### helm\n#### upgrade 2023-04-18 \n- 헬름 차트를 upgrade 했을때 에러가 출력되지 않았고 DEPLOYED 된 것으로 로그가 출력되어 그런가보다 했다. `values.yaml` 또한 적용되지 않았다.\n```sh\n$ helm history postgresql\n\nREVISION        UPDATED                         STATUS          CHART                   APP VERSION     DESCRIPTION\n3               Tue Apr 18 05:41:30 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n4               Tue Apr 18 05:51:28 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n5               Tue Apr 18 11:14:45 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n6               Tue Apr 18 12:11:03 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n7               Tue Apr 18 12:13:16 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n8               Tue Apr 18 12:14:51 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n9               Tue Apr 18 12:15:18 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n10              Tue Apr 18 12:15:25 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n11              Tue Apr 18 12:15:33 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n12              Tue Apr 18 12:28:38 2023        deployed        postgresql-12.1.9       15.1.0          Upgrade complete\n```\n  - 히스토리도 잘 출력되는 것을 확인할 수 있었으나 실제로는 적용이 되지 않았다\n  - **중요** debugging 을 위해 `--debug --dry-run` 을 옵션을 추가하니 에러를 확인할 수 있었다.\n  - '--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD' 를 추가하고 ENV 변수를 쉘 시작부분에 넣어서 주입하였으나 실패했다.\n```sh\n$ POSTGRES_PASSWORD=$(kubectl get secret --namespace \"postgresql\" postgresql -o jsonpath=\"{.data.postgres-password}\" | base64 -d) helm upgrade -i postgresql chart/postgresql -n postgresql --debug --set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD --dry-run\n\nhistory.go:56: [debug] getting history for release postgresql\nupgrade.go:142: [debug] preparing upgrade for postgresql\nError: UPGRADE FAILED: execution error at (postgresql/templates/secrets.yaml:17:24):\nPASSWORDS ERROR: You must provide your current passwords when upgrading the release.\n                 Note that even after reinstallation, old credentials may be needed as they may be kept in persistent volume claims.\n                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases\n\n    'global.postgresql.auth.postgresPassword' must not be empty, please add '--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD' to the command. To get the current value:\n\n        export POSTGRES_PASSWORD=$(kubectl get secret --namespace \"postgresql\" postgresql -o jsonpath=\"{.data.postgres-password}\" | base64 -d)\n\nhelm.go:84: [debug] execution error at (postgresql/templates/secrets.yaml:17:24):\nPASSWORDS ERROR: You must provide your current passwords when upgrading the release.\n                 Note that even after reinstallation, old credentials may be needed as they may be kept in persistent volume claims.\n                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases\n\n    'global.postgresql.auth.postgresPassword' must not be empty, please add '--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD' to the command. To get the current value:\n\n        export POSTGRES_PASSWORD=$(kubectl get secret --namespace \"postgresql\" postgresql -o jsonpath=\"{.data.postgres-password}\" | base64 -d)\n\nUPGRADE FAILED\nmain.newUpgradeCmd.func2\n        helm.sh/helm/v3/cmd/helm/upgrade.go:202\ngithub.com/spf13/cobra.(*Command).execute\n        github.com/spf13/cobra@v1.6.1/command.go:916\ngithub.com/spf13/cobra.(*Command).ExecuteC\n        github.com/spf13/cobra@v1.6.1/command.go:1044\ngithub.com/spf13/cobra.(*Command).Execute\n        github.com/spf13/cobra@v1.6.1/command.go:968\nmain.main\n        helm.sh/helm/v3/cmd/helm/helm.go:83\nruntime.main\n        runtime/proc.go:250\nruntime.goexit\n        runtime/asm_arm64.s:1172\n```\n  - 분리된 라인으로 `export POSTGRES_PASSWORD=$(...)` 를 shell 자체에 주입을 하고 나서야 명령어가 성공하는 것을 확인할 수 있다.\n```sh\n$ export POSTGRES_PASSWORD=$(kubectl get secret --namespace \"postgresql\" postgresql -o jsonpath=\"{.data.postgres-password}\" | base64 -d)\n$ helm upgrade -i postgresql chart/postgresql -n postgresql --debug --set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD --dry-run\n\nhistory.go:56: [debug] getting history for release postgresql\nupgrade.go:142: [debug] preparing upgrade for postgresql\nupgrade.go:150: [debug] performing update for postgresql\nupgrade.go:313: [debug] dry run for postgresql\nRelease \"postgresql\" has been upgraded. Happy Helming!\nNAME: postgresql\nLAST DEPLOYED: Tue Apr 18 12:27:39 2023\n```\n  - 그리고 포트포워딩(localhost 를 위해)도 확인하자\n### lock\n```shell\nSELECT pid, *\nFROM pg_locks l\n         JOIN pg_class t ON l.relation = t.oid AND t.relkind = 'r'\nwhere relname ='[TABLE_NAME]'\n```\npid 확인해서 컨테이너 접속후\n```shell\nkill [PID]\n```\n\n### ON CONFLICT DO UPDATE command cannot affect row a second time\n```sh \n[2024-01-28 19:54:38] [21000] ERROR: ON CONFLICT DO UPDATE command cannot affect row a second time\n[2024-01-28 19:54:38] Hint: Ensure that no rows proposed for insertion within the same command have duplicate constrained values.\n```\n- conflict 키 중복, 한 쿼리에 여러 아이템에대한 컨플릭트처리를 하는데 키 중복이 있었다.\n\n### WARNING:  database \"DATABASE_NAME\" has a collation version mismatch\n- 마이너 버전 업그레이드 후 발생\n- 에러는 아니지만 계속 찍힘 로그가\n  ```sh\n  2025-07-19 17:10:17.550 GMT [1121637] WARNING:  database \"DATABASE_NAME\" has a collation version mismatch\n  2025-07-19 17:10:17.550 GMT [1121637] DETAIL:  The database was created using collation version 2.31, but the operating system provides version 2.36.\n  2025-07-19 17:10:17.550 GMT [1121637] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.\n  ```\n- 해결, 에러가 나는 데이터베이스 별로 모두 진행\n  ```sql \n  ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION;\n  REINDEX DATABASE DATABASE_NAME;\n  ```\n\n## link\n- [[kubernetes]]\n- [[psql]]\n- [[helm]]\n- [[sql]]\n- [[pgdump]]\n- [[pgdumpall]]\n"])</script><script>self.__next_f.push([1,"16:T20f8,"])</script><script>self.__next_f.push([1,"\n- create role\n  user 와 함께 권한 생성\n  + https://www.postgresql.org/docs/current/sql-createrole.html\n## helm chart\n+ https://github.com/bitnami/charts/tree/main/bitnami/postgresql/\n- create database owner [ ROLE NAME ]\n\n## 함수\n- to_char - timestamp -\u003e char\n- date_trunc - timestamp 값을 유지하되 추출하는 방식으로 하여 원하는 값만 추출(시간단위 절삭등)\n\n\n## trigger \u0026 event\nfunction 을 정의한다 정의한다 정의에 사용할 수 있는 언어는 아래와 같다\n- c \n- pl/plsql\n- pl/python\nnode 에서 사용을 해야하는데 해당 언어를 지원하지 않으니 pl/plsql 을 통해서 event 를 발생키고 이를 listen 하는 방식의 구현이 가능하다\n```mermaid\nsequenceDiagram\n  participant be as backend/node\n  participant db as postgresql\n  \n  db -\u003e\u003e db: function F 정의\n  note over db: `event 발송`\n  db -\u003e\u003e db: trigger T 정의\n  note over db: insert, update, delete 시 function F 실행\n  be -\u003e\u003e db: LISTEN event\n  be -\u003e\u003e db: add event listener on 'notification' \n  activate be\n  db --\u003e\u003e db: insert evnet 발생\n  db --\u003e\u003e db: trigger T 실행\n  db --\u003e\u003e db: function F 실행\n  db -\u003e\u003e be: send notification: event 'user_define_channel'\n  deactivate be\n  be -\u003e\u003e be: handle event\n```\n\n## error\n- permission denied for database \n  + https://bobcares.com/blog/permission-denied-for-database-postgres/\n- duplicate key value violates unique constraint \n  - ON CONFLICT (id) DO NOTHING\n  - ON CONFLICT (id) SET UPDATE ...\n### helm\n#### upgrade 2023-04-18 \n- 헬름 차트를 upgrade 했을때 에러가 출력되지 않았고 DEPLOYED 된 것으로 로그가 출력되어 그런가보다 했다. `values.yaml` 또한 적용되지 않았다.\n```sh\n$ helm history postgresql\n\nREVISION        UPDATED                         STATUS          CHART                   APP VERSION     DESCRIPTION\n3               Tue Apr 18 05:41:30 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n4               Tue Apr 18 05:51:28 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n5               Tue Apr 18 11:14:45 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n6               Tue Apr 18 12:11:03 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n7               Tue Apr 18 12:13:16 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n8               Tue Apr 18 12:14:51 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n9               Tue Apr 18 12:15:18 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n10              Tue Apr 18 12:15:25 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n11              Tue Apr 18 12:15:33 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n12              Tue Apr 18 12:28:38 2023        deployed        postgresql-12.1.9       15.1.0          Upgrade complete\n```\n  - 히스토리도 잘 출력되는 것을 확인할 수 있었으나 실제로는 적용이 되지 않았다\n  - **중요** debugging 을 위해 `--debug --dry-run` 을 옵션을 추가하니 에러를 확인할 수 있었다.\n  - '--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD' 를 추가하고 ENV 변수를 쉘 시작부분에 넣어서 주입하였으나 실패했다.\n```sh\n$ POSTGRES_PASSWORD=$(kubectl get secret --namespace \"postgresql\" postgresql -o jsonpath=\"{.data.postgres-password}\" | base64 -d) helm upgrade -i postgresql chart/postgresql -n postgresql --debug --set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD --dry-run\n\nhistory.go:56: [debug] getting history for release postgresql\nupgrade.go:142: [debug] preparing upgrade for postgresql\nError: UPGRADE FAILED: execution error at (postgresql/templates/secrets.yaml:17:24):\nPASSWORDS ERROR: You must provide your current passwords when upgrading the release.\n                 Note that even after reinstallation, old credentials may be needed as they may be kept in persistent volume claims.\n                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases\n\n    'global.postgresql.auth.postgresPassword' must not be empty, please add '--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD' to the command. To get the current value:\n\n        export POSTGRES_PASSWORD=$(kubectl get secret --namespace \"postgresql\" postgresql -o jsonpath=\"{.data.postgres-password}\" | base64 -d)\n\nhelm.go:84: [debug] execution error at (postgresql/templates/secrets.yaml:17:24):\nPASSWORDS ERROR: You must provide your current passwords when upgrading the release.\n                 Note that even after reinstallation, old credentials may be needed as they may be kept in persistent volume claims.\n                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases\n\n    'global.postgresql.auth.postgresPassword' must not be empty, please add '--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD' to the command. To get the current value:\n\n        export POSTGRES_PASSWORD=$(kubectl get secret --namespace \"postgresql\" postgresql -o jsonpath=\"{.data.postgres-password}\" | base64 -d)\n\nUPGRADE FAILED\nmain.newUpgradeCmd.func2\n        helm.sh/helm/v3/cmd/helm/upgrade.go:202\ngithub.com/spf13/cobra.(*Command).execute\n        github.com/spf13/cobra@v1.6.1/command.go:916\ngithub.com/spf13/cobra.(*Command).ExecuteC\n        github.com/spf13/cobra@v1.6.1/command.go:1044\ngithub.com/spf13/cobra.(*Command).Execute\n        github.com/spf13/cobra@v1.6.1/command.go:968\nmain.main\n        helm.sh/helm/v3/cmd/helm/helm.go:83\nruntime.main\n        runtime/proc.go:250\nruntime.goexit\n        runtime/asm_arm64.s:1172\n```\n  - 분리된 라인으로 `export POSTGRES_PASSWORD=$(...)` 를 shell 자체에 주입을 하고 나서야 명령어가 성공하는 것을 확인할 수 있다.\n```sh\n$ export POSTGRES_PASSWORD=$(kubectl get secret --namespace \"postgresql\" postgresql -o jsonpath=\"{.data.postgres-password}\" | base64 -d)\n$ helm upgrade -i postgresql chart/postgresql -n postgresql --debug --set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD --dry-run\n\nhistory.go:56: [debug] getting history for release postgresql\nupgrade.go:142: [debug] preparing upgrade for postgresql\nupgrade.go:150: [debug] performing update for postgresql\nupgrade.go:313: [debug] dry run for postgresql\nRelease \"postgresql\" has been upgraded. Happy Helming!\nNAME: postgresql\nLAST DEPLOYED: Tue Apr 18 12:27:39 2023\n```\n  - 그리고 포트포워딩(localhost 를 위해)도 확인하자\n### lock\n```shell\nSELECT pid, *\nFROM pg_locks l\n         JOIN pg_class t ON l.relation = t.oid AND t.relkind = 'r'\nwhere relname ='[TABLE_NAME]'\n```\npid 확인해서 컨테이너 접속후\n```shell\nkill [PID]\n```\n\n### ON CONFLICT DO UPDATE command cannot affect row a second time\n```sh \n[2024-01-28 19:54:38] [21000] ERROR: ON CONFLICT DO UPDATE command cannot affect row a second time\n[2024-01-28 19:54:38] Hint: Ensure that no rows proposed for insertion within the same command have duplicate constrained values.\n```\n- conflict 키 중복, 한 쿼리에 여러 아이템에대한 컨플릭트처리를 하는데 키 중복이 있었다.\n\n### WARNING:  database \"DATABASE_NAME\" has a collation version mismatch\n- 마이너 버전 업그레이드 후 발생\n- 에러는 아니지만 계속 찍힘 로그가\n  ```sh\n  2025-07-19 17:10:17.550 GMT [1121637] WARNING:  database \"DATABASE_NAME\" has a collation version mismatch\n  2025-07-19 17:10:17.550 GMT [1121637] DETAIL:  The database was created using collation version 2.31, but the operating system provides version 2.36.\n  2025-07-19 17:10:17.550 GMT [1121637] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.\n  ```\n- 해결, 에러가 나는 데이터베이스 별로 모두 진행\n  ```sql \n  ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION;\n  REINDEX DATABASE DATABASE_NAME;\n  ```\n\n## link\n- [[kubernetes]]\n- [[psql]]\n- [[helm]]\n- [[sql]]\n- [[pgdump]]\n- [[pgdumpall]]\n"])</script><script>self.__next_f.push([1,"17:T20f8,"])</script><script>self.__next_f.push([1,"\n- create role\n  user 와 함께 권한 생성\n  + https://www.postgresql.org/docs/current/sql-createrole.html\n## helm chart\n+ https://github.com/bitnami/charts/tree/main/bitnami/postgresql/\n- create database owner [ ROLE NAME ]\n\n## 함수\n- to_char - timestamp -\u003e char\n- date_trunc - timestamp 값을 유지하되 추출하는 방식으로 하여 원하는 값만 추출(시간단위 절삭등)\n\n\n## trigger \u0026 event\nfunction 을 정의한다 정의한다 정의에 사용할 수 있는 언어는 아래와 같다\n- c \n- pl/plsql\n- pl/python\nnode 에서 사용을 해야하는데 해당 언어를 지원하지 않으니 pl/plsql 을 통해서 event 를 발생키고 이를 listen 하는 방식의 구현이 가능하다\n```mermaid\nsequenceDiagram\n  participant be as backend/node\n  participant db as postgresql\n  \n  db -\u003e\u003e db: function F 정의\n  note over db: `event 발송`\n  db -\u003e\u003e db: trigger T 정의\n  note over db: insert, update, delete 시 function F 실행\n  be -\u003e\u003e db: LISTEN event\n  be -\u003e\u003e db: add event listener on 'notification' \n  activate be\n  db --\u003e\u003e db: insert evnet 발생\n  db --\u003e\u003e db: trigger T 실행\n  db --\u003e\u003e db: function F 실행\n  db -\u003e\u003e be: send notification: event 'user_define_channel'\n  deactivate be\n  be -\u003e\u003e be: handle event\n```\n\n## error\n- permission denied for database \n  + https://bobcares.com/blog/permission-denied-for-database-postgres/\n- duplicate key value violates unique constraint \n  - ON CONFLICT (id) DO NOTHING\n  - ON CONFLICT (id) SET UPDATE ...\n### helm\n#### upgrade 2023-04-18 \n- 헬름 차트를 upgrade 했을때 에러가 출력되지 않았고 DEPLOYED 된 것으로 로그가 출력되어 그런가보다 했다. `values.yaml` 또한 적용되지 않았다.\n```sh\n$ helm history postgresql\n\nREVISION        UPDATED                         STATUS          CHART                   APP VERSION     DESCRIPTION\n3               Tue Apr 18 05:41:30 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n4               Tue Apr 18 05:51:28 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n5               Tue Apr 18 11:14:45 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n6               Tue Apr 18 12:11:03 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n7               Tue Apr 18 12:13:16 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n8               Tue Apr 18 12:14:51 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n9               Tue Apr 18 12:15:18 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n10              Tue Apr 18 12:15:25 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n11              Tue Apr 18 12:15:33 2023        superseded      postgresql-12.1.9       15.1.0          Upgrade complete\n12              Tue Apr 18 12:28:38 2023        deployed        postgresql-12.1.9       15.1.0          Upgrade complete\n```\n  - 히스토리도 잘 출력되는 것을 확인할 수 있었으나 실제로는 적용이 되지 않았다\n  - **중요** debugging 을 위해 `--debug --dry-run` 을 옵션을 추가하니 에러를 확인할 수 있었다.\n  - '--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD' 를 추가하고 ENV 변수를 쉘 시작부분에 넣어서 주입하였으나 실패했다.\n```sh\n$ POSTGRES_PASSWORD=$(kubectl get secret --namespace \"postgresql\" postgresql -o jsonpath=\"{.data.postgres-password}\" | base64 -d) helm upgrade -i postgresql chart/postgresql -n postgresql --debug --set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD --dry-run\n\nhistory.go:56: [debug] getting history for release postgresql\nupgrade.go:142: [debug] preparing upgrade for postgresql\nError: UPGRADE FAILED: execution error at (postgresql/templates/secrets.yaml:17:24):\nPASSWORDS ERROR: You must provide your current passwords when upgrading the release.\n                 Note that even after reinstallation, old credentials may be needed as they may be kept in persistent volume claims.\n                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases\n\n    'global.postgresql.auth.postgresPassword' must not be empty, please add '--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD' to the command. To get the current value:\n\n        export POSTGRES_PASSWORD=$(kubectl get secret --namespace \"postgresql\" postgresql -o jsonpath=\"{.data.postgres-password}\" | base64 -d)\n\nhelm.go:84: [debug] execution error at (postgresql/templates/secrets.yaml:17:24):\nPASSWORDS ERROR: You must provide your current passwords when upgrading the release.\n                 Note that even after reinstallation, old credentials may be needed as they may be kept in persistent volume claims.\n                 Further information can be obtained at https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues/#credential-errors-while-upgrading-chart-releases\n\n    'global.postgresql.auth.postgresPassword' must not be empty, please add '--set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD' to the command. To get the current value:\n\n        export POSTGRES_PASSWORD=$(kubectl get secret --namespace \"postgresql\" postgresql -o jsonpath=\"{.data.postgres-password}\" | base64 -d)\n\nUPGRADE FAILED\nmain.newUpgradeCmd.func2\n        helm.sh/helm/v3/cmd/helm/upgrade.go:202\ngithub.com/spf13/cobra.(*Command).execute\n        github.com/spf13/cobra@v1.6.1/command.go:916\ngithub.com/spf13/cobra.(*Command).ExecuteC\n        github.com/spf13/cobra@v1.6.1/command.go:1044\ngithub.com/spf13/cobra.(*Command).Execute\n        github.com/spf13/cobra@v1.6.1/command.go:968\nmain.main\n        helm.sh/helm/v3/cmd/helm/helm.go:83\nruntime.main\n        runtime/proc.go:250\nruntime.goexit\n        runtime/asm_arm64.s:1172\n```\n  - 분리된 라인으로 `export POSTGRES_PASSWORD=$(...)` 를 shell 자체에 주입을 하고 나서야 명령어가 성공하는 것을 확인할 수 있다.\n```sh\n$ export POSTGRES_PASSWORD=$(kubectl get secret --namespace \"postgresql\" postgresql -o jsonpath=\"{.data.postgres-password}\" | base64 -d)\n$ helm upgrade -i postgresql chart/postgresql -n postgresql --debug --set global.postgresql.auth.postgresPassword=$POSTGRES_PASSWORD --dry-run\n\nhistory.go:56: [debug] getting history for release postgresql\nupgrade.go:142: [debug] preparing upgrade for postgresql\nupgrade.go:150: [debug] performing update for postgresql\nupgrade.go:313: [debug] dry run for postgresql\nRelease \"postgresql\" has been upgraded. Happy Helming!\nNAME: postgresql\nLAST DEPLOYED: Tue Apr 18 12:27:39 2023\n```\n  - 그리고 포트포워딩(localhost 를 위해)도 확인하자\n### lock\n```shell\nSELECT pid, *\nFROM pg_locks l\n         JOIN pg_class t ON l.relation = t.oid AND t.relkind = 'r'\nwhere relname ='[TABLE_NAME]'\n```\npid 확인해서 컨테이너 접속후\n```shell\nkill [PID]\n```\n\n### ON CONFLICT DO UPDATE command cannot affect row a second time\n```sh \n[2024-01-28 19:54:38] [21000] ERROR: ON CONFLICT DO UPDATE command cannot affect row a second time\n[2024-01-28 19:54:38] Hint: Ensure that no rows proposed for insertion within the same command have duplicate constrained values.\n```\n- conflict 키 중복, 한 쿼리에 여러 아이템에대한 컨플릭트처리를 하는데 키 중복이 있었다.\n\n### WARNING:  database \"DATABASE_NAME\" has a collation version mismatch\n- 마이너 버전 업그레이드 후 발생\n- 에러는 아니지만 계속 찍힘 로그가\n  ```sh\n  2025-07-19 17:10:17.550 GMT [1121637] WARNING:  database \"DATABASE_NAME\" has a collation version mismatch\n  2025-07-19 17:10:17.550 GMT [1121637] DETAIL:  The database was created using collation version 2.31, but the operating system provides version 2.36.\n  2025-07-19 17:10:17.550 GMT [1121637] HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION, or build PostgreSQL with the right library version.\n  ```\n- 해결, 에러가 나는 데이터베이스 별로 모두 진행\n  ```sql \n  ALTER DATABASE DATABASE_NAME REFRESH COLLATION VERSION;\n  REINDEX DATABASE DATABASE_NAME;\n  ```\n\n## link\n- [[kubernetes]]\n- [[psql]]\n- [[helm]]\n- [[sql]]\n- [[pgdump]]\n- [[pgdumpall]]\n"])</script><script>self.__next_f.push([1,"d:[[\"$\",\"meta\",\"0\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}],[\"$\",\"meta\",\"1\",{\"charSet\":\"utf-8\"}],[\"$\",\"title\",\"2\",{\"children\":\"# postgresql\"}],[\"$\",\"meta\",\"3\",{\"name\":\"description\",\"content\":\"$15\"}],[\"$\",\"link\",\"4\",{\"rel\":\"author\",\"href\":\"https://deptno.github.io\"}],[\"$\",\"meta\",\"5\",{\"name\":\"author\",\"content\":\"deptno\"}],[\"$\",\"meta\",\"6\",{\"name\":\"keywords\",\"content\":\"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s\"}],[\"$\",\"meta\",\"7\",{\"name\":\"referrer\",\"content\":\"origin-when-cross-origin\"}],[\"$\",\"meta\",\"8\",{\"name\":\"creator\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"9\",{\"name\":\"publisher\",\"content\":\"deptno@gmail.com\"}],[\"$\",\"meta\",\"10\",{\"name\":\"apple-mobile-web-app-capable\",\"content\":\"yes\"}],[\"$\",\"meta\",\"11\",{\"name\":\"apple-mobile-web-app-title\",\"content\":\"deptno\"}],[\"$\",\"link\",\"12\",{\"href\":\"/icon.jpg\",\"media\":\"$undefined\",\"rel\":\"apple-touch-startup-image\"}],[\"$\",\"meta\",\"13\",{\"name\":\"apple-mobile-web-app-status-bar-style\",\"content\":\"black-translucent\"}],[\"$\",\"meta\",\"14\",{\"property\":\"og:title\",\"content\":\"# postgresql\"}],[\"$\",\"meta\",\"15\",{\"property\":\"og:description\",\"content\":\"$16\"}],[\"$\",\"meta\",\"16\",{\"property\":\"og:url\",\"content\":\"https://deptno.github.io/public-wiki/postgresql\"}],[\"$\",\"meta\",\"17\",{\"name\":\"twitter:card\",\"content\":\"summary\"}],[\"$\",\"meta\",\"18\",{\"name\":\"twitter:title\",\"content\":\"# postgresql\"}],[\"$\",\"meta\",\"19\",{\"name\":\"twitter:description\",\"content\":\"$17\"}],[\"$\",\"link\",\"20\",{\"rel\":\"icon\",\"href\":\"/icon.jpg?19eda66f7295e18c\",\"type\":\"image/jpeg\",\"sizes\":\"400x400\"}]]\n"])</script><script>self.__next_f.push([1,"4:null\n"])</script><script>self.__next_f.push([1,""])</script></body></html>

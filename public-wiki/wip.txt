@@ -1,0 +1,337 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-3f8f17edabe7c539.js"],""]
+8:I[6172,["601","static/chunks/app/error-71963c526facdbf7.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-b37065e097e62895.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","wip","c"]
+0:["OGWDQWYCR1M8j8Rn524lH",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","wip","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"wip\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","wip","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],""]
+10:T173d,<h1 id="wip">wip</h1>
+<p>;b</p>
+<h2 id="neovim-config-이전-diary2024-10-14"><a href="neovim">neovim</a> config 이전 <a href="/public-wiki/diary/2024-10-14">[diary] diary:2024-10-14</a></h2>
+<ul>
+<li><input disabled="" type="checkbox">  bookmarks.nvim 46.99ms  VeryLazy</li>
+<li><input disabled="" type="checkbox"> cmp<ul>
+<li><input disabled="" type="checkbox">  cmp-buffer 0.72ms  nvim-cmp</li>
+<li><input disabled="" type="checkbox">  cmp-emoji 0.6ms  nvim-cmp</li>
+<li><input disabled="" type="checkbox">  cmp-git 0.04ms  nvim-cmp</li>
+<li><input disabled="" type="checkbox">  cmp-nvim-lsp 0.52ms  nvim-cmp</li>
+<li><input disabled="" type="checkbox">  cmp-nvim-lua 0.56ms  nvim-cmp</li>
+<li><input disabled="" type="checkbox">  cmp-path 0.45ms  nvim-cmp</li>
+<li><input disabled="" type="checkbox">  cmp_luasnip 1.68ms  nvim-cmp</li>
+<li><input disabled="" type="checkbox">  nvim-cmp 46.31ms  VeryLazy</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox">  diffview.nvim 4.93ms  VeryLazy</li>
+<li><input disabled="" type="checkbox">  friendly-snippets 0.13ms  LuaSnip</li>
+<li><input disabled="" type="checkbox"> git<ul>
+<li><input disabled="" type="checkbox">  blame.nvim 1.42ms  VeryLazy</li>
+<li><input disabled="" type="checkbox">  git-blame.nvim 1.77ms  VeryLazy</li>
+<li><input disabled="" type="checkbox">  gitsigns.nvim 4.64ms  VeryLazy</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox">  gx.nvim 0.56ms  VeryLazy</li>
+<li><input disabled="" type="checkbox">  hover.nvim 0.52ms  VeryLazy</li>
+<li><input disabled="" type="checkbox">  image.nvim 189.54ms  VeryLazy</li>
+<li><input disabled="" type="checkbox">  lazy.nvim 8.36ms  init.lua</li>
+<li><input disabled="" type="checkbox"> lua<ul>
+<li><input disabled="" type="checkbox">  luarocks.nvim 165.22ms  image.nvim</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox">  LuaSnip 28.71ms  nvim-cmp</li>
+<li><input disabled="" type="checkbox">  marks.nvim 1.97ms  VeryLazy</li>
+<li><input disabled="" type="checkbox">  nvim-autopairs 6.88ms  nvim-cmp</li>
+<li><input disabled="" type="checkbox"> lsp<ul>
+<li><input disabled="" type="checkbox">  indent-blankline.nvim </li>
+<li><input disabled="" type="checkbox">  nvim-lspconfig 10.62ms  yaml-companion.nvim</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> ui<ul>
+<li><input disabled="" type="checkbox">  nvim-notify 0.03ms 󰢱 notify  custom.plugins</li>
+<li><input disabled="" type="checkbox">  nvim-web-devicons 16.8ms  bookmarks.nvim</li>
+<li><input disabled="" type="checkbox">  trouble.nvim 0.05ms 󰢱 trouble.sources.telescope  telescope.nvim</li>
+<li><input disabled="" type="checkbox">  ui 1.36ms  start</li>
+<li><input disabled="" type="checkbox">  dressing.nvim </li>
+<li><input disabled="" type="checkbox">  plenary.nvim 0.46ms 󰢱 plenary.job  nvim-cmp</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox">  peek.nvim 1.29ms  VeryLazy</li>
+<li><input disabled="" type="checkbox">  persisted.nvim 0.95ms 󰢱 telescope._extensions.persisted  telescope.nvim</li>
+<li><input disabled="" type="checkbox"> telescope<ul>
+<li><input disabled="" type="checkbox">  telescope-fzf-native.nvim 0.06ms  telescope.nvim</li>
+<li><input disabled="" type="checkbox">  telescope-ui-select.nvim 0.23ms  telescope.nvim</li>
+<li><input disabled="" type="checkbox">  telescope.nvim 27.54ms 󰢱 telescope  bookmarks.nvim</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox"> vim<ul>
+<li><input disabled="" type="checkbox">  vim-autoswap 0.4ms  start</li>
+<li><input disabled="" type="checkbox">  vim-rzip 0.25ms  start</li>
+<li><input disabled="" type="checkbox">  vim-startify 0.35ms  start</li>
+<li><input disabled="" type="checkbox">  nvim-treesitter 8.2ms  telescope.nvim</li>
+<li><input disabled="" type="checkbox">  nvim-surround 1.47ms  VeryLazy</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox">  yaml-companion.nvim 10.96ms  VeryLazy</li>
+<li><input disabled="" type="checkbox">  harpoon </li>
+<li><input disabled="" type="checkbox">  mason.nvim  MasonInstall  MasonInstallAll  MasonUpdate  Mason </li>
+<li><input disabled="" type="checkbox">  nvim-colorizer.lua <ul>
+<li>대체</li>
+</ul>
+<ul>
+<li><a href="https://github.com/brenoprata10/nvim-highlight-colors" target="_blank">[URL] https://github.com/brenoprata10/nvim-highlight-colors</a></li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox">  nvim-tree.lua  NvimTreeFocus  NvimTreeToggle </li>
+<li><input disabled="" type="checkbox">  tabscope.nvim </li>
+<li><input disabled="" type="checkbox">  vim-rest-console  rest </li>
+<li><input disabled="" type="checkbox">  vimwiki  markdown  <leader>w<leader>w  <leader>ww </li>
+<li><input disabled="" type="checkbox"> 후순위</li>
+<li><input disabled="" type="checkbox"> 여기서 부터는 삭제<ul>
+<li><input disabled="" type="checkbox">  nvterm </li>
+<li><input disabled="" type="checkbox">  base46 </li>
+<li><input disabled="" type="checkbox">  neodev.nvim 0.2ms  nvim-lspconfig</li>
+<li><input disabled="" type="checkbox">  octo.nvim 11.41ms  VeryLazy</li>
+<li><input disabled="" type="checkbox">  lspsaga.nvim  LspAttach </li>
+<li><input disabled="" type="checkbox">  Comment.nvim  gb (x)  gbc  gc (x)  gb  gcc  gc (o)  gc  gb (o) <ul>
+<li>빌트인으로 대체된것인지</li>
+</ul>
+</li>
+<li><input disabled="" type="checkbox">  playground 3.67ms  nvim-treesitter</li>
+<li><input disabled="" type="checkbox">  jupynium.nvim 3.13ms  VeryLazy</li>
+<li><input disabled="" type="checkbox">  conform.nvim  ConformInfo  LspAttach <ul>
+<li>lazyvim 기본 black으로 사용가능한 것인지</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/440709c\n","className":"bg-white text-black","children":"440709c"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/wip.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/wip.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/wip.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"wip","name":"wip","val":2},{"id":"neovim","name":"neovim","val":22},{"id":"diary/2024-10-14","name":"diary/2024-10-14","val":2},{"id":"about-me","name":"about-me","val":60},{"id":"comparison:tagstack-vs-jump","name":"comparison:tagstack-vs-jump","val":4},{"id":"firebase","name":"firebase","val":14},{"id":"huggingface-nlp","name":"huggingface-nlp","val":6},{"id":"infinity-scroll","name":"infinity-scroll","val":3},{"id":"neotest","name":"neotest","val":8},{"id":"neovim-setup","name":"neovim-setup","val":37},{"id":"next-auth","name":"next-auth","val":8},{"id":"react-native","name":"react-native","val":91},{"id":"redis","name":"redis","val":5},{"id":"diary/2024-12-31","name":"diary/2024-12-31","val":441}],"links":[{"source":"wip","target":"neovim"},{"source":"wip","target":"diary/2024-10-14"},{"source":"about-me","target":"wip"},{"source":"comparison:tagstack-vs-jump","target":"wip"},{"source":"firebase","target":"wip"},{"source":"huggingface-nlp","target":"wip"},{"source":"infinity-scroll","target":"wip"},{"source":"neotest","target":"wip"},{"source":"neovim-setup","target":"wip"},{"source":"neovim-setup","target":"wip"},{"source":"next-auth","target":"wip"},{"source":"react-native","target":"wip"},{"source":"redis","target":"wip"},{"source":"diary/2024-10-14","target":"wip"},{"source":"diary/2024-12-31","target":"wip"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","wip",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/wip","children":[["$","span",null,{"className":"underline","children":"wip"}],["$","sup",null,{"children":2}]]}]}],["$","span","neovim",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim","children":[["$","span",null,{"className":"underline","children":"neovim"}],["$","sup",null,{"children":22}]]}]}],["$","span","diary/2024-10-14",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-10-14","children":[["$","span",null,{"className":"underline","children":"diary/2024-10-14"}],["$","sup",null,{"children":2}]]}]}],["$","span","about-me",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/about-me","children":[["$","span",null,{"className":"underline","children":"about-me"}],["$","sup",null,{"children":60}]]}]}],["$","span","comparison:tagstack-vs-jump",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/comparison:tagstack-vs-jump","children":[["$","span",null,{"className":"underline","children":"comparison:tagstack-vs-jump"}],["$","sup",null,{"children":4}]]}]}],["$","span","firebase",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/firebase","children":[["$","span",null,{"className":"underline","children":"firebase"}],["$","sup",null,{"children":14}]]}]}],["$","span","huggingface-nlp",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/huggingface-nlp","children":[["$","span",null,{"className":"underline","children":"huggingface-nlp"}],["$","sup",null,{"children":6}]]}]}],["$","span","infinity-scroll",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/infinity-scroll","children":[["$","span",null,{"className":"underline","children":"infinity-scroll"}],["$","sup",null,{"children":3}]]}]}],["$","span","neotest",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neotest","children":[["$","span",null,{"className":"underline","children":"neotest"}],["$","sup",null,{"children":8}]]}]}],["$","span","neovim-setup",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/neovim-setup","children":[["$","span",null,{"className":"underline","children":"neovim-setup"}],["$","sup",null,{"children":37}]]}]}],["$","span","next-auth",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/next-auth","children":[["$","span",null,{"className":"underline","children":"next-auth"}],["$","sup",null,{"children":8}]]}]}],["$","span","react-native",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/react-native","children":[["$","span",null,{"className":"underline","children":"react-native"}],["$","sup",null,{"children":91}]]}]}],["$","span","redis",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/redis","children":[["$","span",null,{"className":"underline","children":"redis"}],["$","sup",null,{"children":5}]]}]}],["$","span","diary/2024-12-31",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/diary/2024-12-31","children":[["$","span",null,{"className":"underline","children":"diary/2024-12-31"}],["$","sup",null,{"children":441}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","wip",{"className":"pl-0","children":["$","a",null,{"href":"#wip","children":"wip"}]}],["$","div","neovim-config-이전-diary-diary2024-10-14",{"className":"pl-2","children":["$","a",null,{"href":"#neovim-config-이전-diary-diary2024-10-14","children":"neovim config 이전 [diary] diary:2024-10-14"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:Tbf4,
+;b
+
+## [[neovim]] config 이전 [[diary:2024-10-14]]
+- [ ]  bookmarks.nvim 46.99ms  VeryLazy
+- [ ] cmp
+  - [ ]  cmp-buffer 0.72ms  nvim-cmp
+  - [ ]  cmp-emoji 0.6ms  nvim-cmp
+  - [ ]  cmp-git 0.04ms  nvim-cmp
+  - [ ]  cmp-nvim-lsp 0.52ms  nvim-cmp
+  - [ ]  cmp-nvim-lua 0.56ms  nvim-cmp
+  - [ ]  cmp-path 0.45ms  nvim-cmp
+  - [ ]  cmp_luasnip 1.68ms  nvim-cmp
+  - [ ]  nvim-cmp 46.31ms  VeryLazy
+- [ ]  diffview.nvim 4.93ms  VeryLazy
+- [ ]  friendly-snippets 0.13ms  LuaSnip
+- [ ] git
+  - [ ]  blame.nvim 1.42ms  VeryLazy
+  - [ ]  git-blame.nvim 1.77ms  VeryLazy
+  - [ ]  gitsigns.nvim 4.64ms  VeryLazy
+- [ ]  gx.nvim 0.56ms  VeryLazy
+- [ ]  hover.nvim 0.52ms  VeryLazy
+- [ ]  image.nvim 189.54ms  VeryLazy
+- [ ]  lazy.nvim 8.36ms  init.lua
+- [ ] lua
+  - [ ]  luarocks.nvim 165.22ms  image.nvim
+- [ ]  LuaSnip 28.71ms  nvim-cmp
+- [ ]  marks.nvim 1.97ms  VeryLazy
+- [ ]  nvim-autopairs 6.88ms  nvim-cmp
+- [ ] lsp
+  - [ ]  indent-blankline.nvim 
+  - [ ]  nvim-lspconfig 10.62ms  yaml-companion.nvim
+- [ ] ui
+  - [ ]  nvim-notify 0.03ms 󰢱 notify  custom.plugins
+  - [ ]  nvim-web-devicons 16.8ms  bookmarks.nvim
+  - [ ]  trouble.nvim 0.05ms 󰢱 trouble.sources.telescope  telescope.nvim
+  - [ ]  ui 1.36ms  start
+  - [ ]  dressing.nvim 
+  - [ ]  plenary.nvim 0.46ms 󰢱 plenary.job  nvim-cmp
+- [ ]  peek.nvim 1.29ms  VeryLazy
+- [ ]  persisted.nvim 0.95ms 󰢱 telescope._extensions.persisted  telescope.nvim
+- [ ] telescope
+  - [ ]  telescope-fzf-native.nvim 0.06ms  telescope.nvim
+  - [ ]  telescope-ui-select.nvim 0.23ms  telescope.nvim
+  - [ ]  telescope.nvim 27.54ms 󰢱 telescope  bookmarks.nvim
+- [ ] vim
+  - [ ]  vim-autoswap 0.4ms  start
+  - [ ]  vim-rzip 0.25ms  start
+  - [ ]  vim-startify 0.35ms  start
+  - [ ]  nvim-treesitter 8.2ms  telescope.nvim
+  - [ ]  nvim-surround 1.47ms  VeryLazy
+- [ ]  yaml-companion.nvim 10.96ms  VeryLazy
+- [ ]  harpoon 
+- [ ]  mason.nvim  MasonInstall  MasonInstallAll  MasonUpdate  Mason 
+- [ ]  nvim-colorizer.lua 
+  - 대체
+  + https://github.com/brenoprata10/nvim-highlight-colors
+- [ ]  nvim-tree.lua  NvimTreeFocus  NvimTreeToggle 
+- [ ]  tabscope.nvim 
+- [ ]  vim-rest-console  rest 
+- [ ]  vimwiki  markdown  <leader>w<leader>w  <leader>ww 
+- [ ] 후순위
+- [ ] 여기서 부터는 삭제
+  - [ ]  nvterm 
+  - [ ]  base46 
+  - [ ]  neodev.nvim 0.2ms  nvim-lspconfig
+  - [ ]  octo.nvim 11.41ms  VeryLazy
+  - [ ]  lspsaga.nvim  LspAttach 
+  - [ ]  Comment.nvim  gb (x)  gbc  gc (x)  gb  gcc  gc (o)  gc  gb (o) 
+    - 빌트인으로 대체된것인지
+  - [ ]  playground 3.67ms  nvim-treesitter
+  - [ ]  jupynium.nvim 3.13ms  VeryLazy
+  - [ ]  conform.nvim  ConformInfo  LspAttach 
+    - lazyvim 기본 black으로 사용가능한 것인지
+12:Tbf4,
+;b
+
+## [[neovim]] config 이전 [[diary:2024-10-14]]
+- [ ]  bookmarks.nvim 46.99ms  VeryLazy
+- [ ] cmp
+  - [ ]  cmp-buffer 0.72ms  nvim-cmp
+  - [ ]  cmp-emoji 0.6ms  nvim-cmp
+  - [ ]  cmp-git 0.04ms  nvim-cmp
+  - [ ]  cmp-nvim-lsp 0.52ms  nvim-cmp
+  - [ ]  cmp-nvim-lua 0.56ms  nvim-cmp
+  - [ ]  cmp-path 0.45ms  nvim-cmp
+  - [ ]  cmp_luasnip 1.68ms  nvim-cmp
+  - [ ]  nvim-cmp 46.31ms  VeryLazy
+- [ ]  diffview.nvim 4.93ms  VeryLazy
+- [ ]  friendly-snippets 0.13ms  LuaSnip
+- [ ] git
+  - [ ]  blame.nvim 1.42ms  VeryLazy
+  - [ ]  git-blame.nvim 1.77ms  VeryLazy
+  - [ ]  gitsigns.nvim 4.64ms  VeryLazy
+- [ ]  gx.nvim 0.56ms  VeryLazy
+- [ ]  hover.nvim 0.52ms  VeryLazy
+- [ ]  image.nvim 189.54ms  VeryLazy
+- [ ]  lazy.nvim 8.36ms  init.lua
+- [ ] lua
+  - [ ]  luarocks.nvim 165.22ms  image.nvim
+- [ ]  LuaSnip 28.71ms  nvim-cmp
+- [ ]  marks.nvim 1.97ms  VeryLazy
+- [ ]  nvim-autopairs 6.88ms  nvim-cmp
+- [ ] lsp
+  - [ ]  indent-blankline.nvim 
+  - [ ]  nvim-lspconfig 10.62ms  yaml-companion.nvim
+- [ ] ui
+  - [ ]  nvim-notify 0.03ms 󰢱 notify  custom.plugins
+  - [ ]  nvim-web-devicons 16.8ms  bookmarks.nvim
+  - [ ]  trouble.nvim 0.05ms 󰢱 trouble.sources.telescope  telescope.nvim
+  - [ ]  ui 1.36ms  start
+  - [ ]  dressing.nvim 
+  - [ ]  plenary.nvim 0.46ms 󰢱 plenary.job  nvim-cmp
+- [ ]  peek.nvim 1.29ms  VeryLazy
+- [ ]  persisted.nvim 0.95ms 󰢱 telescope._extensions.persisted  telescope.nvim
+- [ ] telescope
+  - [ ]  telescope-fzf-native.nvim 0.06ms  telescope.nvim
+  - [ ]  telescope-ui-select.nvim 0.23ms  telescope.nvim
+  - [ ]  telescope.nvim 27.54ms 󰢱 telescope  bookmarks.nvim
+- [ ] vim
+  - [ ]  vim-autoswap 0.4ms  start
+  - [ ]  vim-rzip 0.25ms  start
+  - [ ]  vim-startify 0.35ms  start
+  - [ ]  nvim-treesitter 8.2ms  telescope.nvim
+  - [ ]  nvim-surround 1.47ms  VeryLazy
+- [ ]  yaml-companion.nvim 10.96ms  VeryLazy
+- [ ]  harpoon 
+- [ ]  mason.nvim  MasonInstall  MasonInstallAll  MasonUpdate  Mason 
+- [ ]  nvim-colorizer.lua 
+  - 대체
+  + https://github.com/brenoprata10/nvim-highlight-colors
+- [ ]  nvim-tree.lua  NvimTreeFocus  NvimTreeToggle 
+- [ ]  tabscope.nvim 
+- [ ]  vim-rest-console  rest 
+- [ ]  vimwiki  markdown  <leader>w<leader>w  <leader>ww 
+- [ ] 후순위
+- [ ] 여기서 부터는 삭제
+  - [ ]  nvterm 
+  - [ ]  base46 
+  - [ ]  neodev.nvim 0.2ms  nvim-lspconfig
+  - [ ]  octo.nvim 11.41ms  VeryLazy
+  - [ ]  lspsaga.nvim  LspAttach 
+  - [ ]  Comment.nvim  gb (x)  gbc  gc (x)  gb  gcc  gc (o)  gc  gb (o) 
+    - 빌트인으로 대체된것인지
+  - [ ]  playground 3.67ms  nvim-treesitter
+  - [ ]  jupynium.nvim 3.13ms  VeryLazy
+  - [ ]  conform.nvim  ConformInfo  LspAttach 
+    - lazyvim 기본 black으로 사용가능한 것인지
+13:Tbf4,
+;b
+
+## [[neovim]] config 이전 [[diary:2024-10-14]]
+- [ ]  bookmarks.nvim 46.99ms  VeryLazy
+- [ ] cmp
+  - [ ]  cmp-buffer 0.72ms  nvim-cmp
+  - [ ]  cmp-emoji 0.6ms  nvim-cmp
+  - [ ]  cmp-git 0.04ms  nvim-cmp
+  - [ ]  cmp-nvim-lsp 0.52ms  nvim-cmp
+  - [ ]  cmp-nvim-lua 0.56ms  nvim-cmp
+  - [ ]  cmp-path 0.45ms  nvim-cmp
+  - [ ]  cmp_luasnip 1.68ms  nvim-cmp
+  - [ ]  nvim-cmp 46.31ms  VeryLazy
+- [ ]  diffview.nvim 4.93ms  VeryLazy
+- [ ]  friendly-snippets 0.13ms  LuaSnip
+- [ ] git
+  - [ ]  blame.nvim 1.42ms  VeryLazy
+  - [ ]  git-blame.nvim 1.77ms  VeryLazy
+  - [ ]  gitsigns.nvim 4.64ms  VeryLazy
+- [ ]  gx.nvim 0.56ms  VeryLazy
+- [ ]  hover.nvim 0.52ms  VeryLazy
+- [ ]  image.nvim 189.54ms  VeryLazy
+- [ ]  lazy.nvim 8.36ms  init.lua
+- [ ] lua
+  - [ ]  luarocks.nvim 165.22ms  image.nvim
+- [ ]  LuaSnip 28.71ms  nvim-cmp
+- [ ]  marks.nvim 1.97ms  VeryLazy
+- [ ]  nvim-autopairs 6.88ms  nvim-cmp
+- [ ] lsp
+  - [ ]  indent-blankline.nvim 
+  - [ ]  nvim-lspconfig 10.62ms  yaml-companion.nvim
+- [ ] ui
+  - [ ]  nvim-notify 0.03ms 󰢱 notify  custom.plugins
+  - [ ]  nvim-web-devicons 16.8ms  bookmarks.nvim
+  - [ ]  trouble.nvim 0.05ms 󰢱 trouble.sources.telescope  telescope.nvim
+  - [ ]  ui 1.36ms  start
+  - [ ]  dressing.nvim 
+  - [ ]  plenary.nvim 0.46ms 󰢱 plenary.job  nvim-cmp
+- [ ]  peek.nvim 1.29ms  VeryLazy
+- [ ]  persisted.nvim 0.95ms 󰢱 telescope._extensions.persisted  telescope.nvim
+- [ ] telescope
+  - [ ]  telescope-fzf-native.nvim 0.06ms  telescope.nvim
+  - [ ]  telescope-ui-select.nvim 0.23ms  telescope.nvim
+  - [ ]  telescope.nvim 27.54ms 󰢱 telescope  bookmarks.nvim
+- [ ] vim
+  - [ ]  vim-autoswap 0.4ms  start
+  - [ ]  vim-rzip 0.25ms  start
+  - [ ]  vim-startify 0.35ms  start
+  - [ ]  nvim-treesitter 8.2ms  telescope.nvim
+  - [ ]  nvim-surround 1.47ms  VeryLazy
+- [ ]  yaml-companion.nvim 10.96ms  VeryLazy
+- [ ]  harpoon 
+- [ ]  mason.nvim  MasonInstall  MasonInstallAll  MasonUpdate  Mason 
+- [ ]  nvim-colorizer.lua 
+  - 대체
+  + https://github.com/brenoprata10/nvim-highlight-colors
+- [ ]  nvim-tree.lua  NvimTreeFocus  NvimTreeToggle 
+- [ ]  tabscope.nvim 
+- [ ]  vim-rest-console  rest 
+- [ ]  vimwiki  markdown  <leader>w<leader>w  <leader>ww 
+- [ ] 후순위
+- [ ] 여기서 부터는 삭제
+  - [ ]  nvterm 
+  - [ ]  base46 
+  - [ ]  neodev.nvim 0.2ms  nvim-lspconfig
+  - [ ]  octo.nvim 11.41ms  VeryLazy
+  - [ ]  lspsaga.nvim  LspAttach 
+  - [ ]  Comment.nvim  gb (x)  gbc  gc (x)  gb  gcc  gc (o)  gc  gb (o) 
+    - 빌트인으로 대체된것인지
+  - [ ]  playground 3.67ms  nvim-treesitter
+  - [ ]  jupynium.nvim 3.13ms  VeryLazy
+  - [ ]  conform.nvim  ConformInfo  LspAttach 
+    - lazyvim 기본 black으로 사용가능한 것인지
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# wip"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# wip"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/wip"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# wip"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null

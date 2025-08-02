@@ -1,0 +1,374 @@
+3:I[7420,[],""]
+6:I[2708,[],""]
+7:I[9231,["185","static/chunks/app/layout-3f8f17edabe7c539.js"],""]
+8:I[6172,["601","static/chunks/app/error-71963c526facdbf7.js"],""]
+9:I[2154,["160","static/chunks/app/not-found-b37065e097e62895.js"],"Back"]
+4:["wiki","public-wiki","d"]
+5:["md","the-roottrees-are-dead","c"]
+0:["OGWDQWYCR1M8j8Rn524lH",[[["",{"children":[["wiki","public-wiki","d"],{"children":[["md","the-roottrees-are-dead","c"],{"children":["__PAGE__?{\"wiki\":\"public-wiki\",\"md\":[\"the-roottrees-are-dead\"]}",{}]}]}]},"$undefined","$undefined",true],["",{"children":[["wiki","public-wiki","d"],{"children":[["md","the-roottrees-are-dead","c"],{"children":["__PAGE__",{},["$L1","$L2",null]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children","$5","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","$4","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","styles":null}]]},[null,["$","html",null,{"lang":"ko","children":[["$","$L7",null,{"async":true,"src":"//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js","crossOrigin":"anonymous"}],["$","$L7",null,{"strategy":"afterInteractive","src":"https://www.googletagmanager.com/gtag/js?id=G-QKL40848FW","async":true}],["$","$L7",null,{"id":"gtag-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-QKL40848FW');"}}],["$","$L7",null,{"id":"ms-clarify-init","strategy":"afterInteractive","dangerouslySetInnerHTML":{"__html":"(function(c,l,a,r,i,t,y){\n  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n  t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n  })(window, document, \"clarity\", \"script\", \"l1919qdcrc\");\n  "}}],["$","body",null,{"className":"md:text-lg lg:flex justify-center m-0 md:min-w-lg bg-gray-100","children":["$","main",null,{"className":"w-full max-w-screen-lg lg:border border-gray-800 min-h-screen","children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$8","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","div",null,{"className":"flex flex-col justify-center items-center h-screen gap-8","children":[["$","h1",null,{"className":"text-8xl text-center","children":"404"}],["$","$L9",null,{"children":"뒤로 가기"}]]}],"notFoundStyles":[],"styles":null}]}]}]]}],null]],[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7974a366526c0bac.css","precedence":"next","crossOrigin":""}]],"$La"]]]]
+b:I[7285,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],"SearchBar"]
+c:I[9474,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],"Breadcrumbs"]
+d:I[4276,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],"MermaidRenderer"]
+e:I[18,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],"LinkGraph"]
+f:I[1018,["457","static/chunks/c6c50db0-730a8fdbd0bb38f0.js","401","static/chunks/fd503499-f344ff1ccbf2f791.js","254","static/chunks/254-e656a4c93afc504e.js","629","static/chunks/app/%5Bwiki%5D/%5B...md%5D/page-a953599c4731cdeb.js"],""]
+10:Tb8a,<h1 id="the-roottrees-are-dead">The Roottrees are Dead</h1>
+<pre><code class="hljs language-mermaid">flowchart
+subgraph 보스턴
+  steve_garland &lt;---&gt; mother_?
+  christine_pharoah_비서 &lt;--&gt; steve_garland
+  steve_garland --소송--&gt; mark_zimmer
+  steve_garland --child--&gt; james_쉐프
+  steve_garland --child--&gt; robert_쉐프
+  Sisely_Sanchez
+  guy_hudson &lt;--&gt; lang_xinyu_중국
+  guy_hudson &lt;--&gt; robyn_martin_호주_여름
+  guy_hudson &lt;--&gt; Susan_Ford__suzy_출장_
+  guy_hudson &lt;--&gt; 브라질_겨울(크리스마스)
+  
+  Edson_Soares &lt;--&gt; Sonia_Soares 
+  Sonia_Soares --아들--&gt; Flavio_Soares 
+  Flavio_Soares &lt;--연인--&gt; Ashleigh_York
+end
+    
+    rochelle &lt;--&gt; mar_zimmer
+</code></pre><pre><code class="hljs language-mermaid">flowchart
+subgraph 보스턴
+  guy_hudson &lt;--&gt; lang_xinyu
+  jerry_han &lt;---&gt; linda_han
+  linda_han --아들--&gt; mark_han
+  lang_xinyu &lt;--자매--&gt; linda_han
+  lang_xinyu &lt;--딸--&gt; lang_lucy
+end
+    
+    rochelle &lt;--&gt; mar_zimmer
+</code></pre><ul>
+<li><p>WRTD</p>
+<ul>
+<li>열쇠를 가진 누군가가 사진을 가져감,</li>
+</ul>
+</li>
+<li><p>죽은사람</p>
+<ul>
+<li>carl, brenda + 딸 셋</li>
+<li>사장 3/5 죽음<ul>
+<li>Guy</li>
+<li>Ernie Madsen Jr. - carl 과 4촌, 4대 회장</li>
+<li>Carl</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a href="mailto:ChrisRaff75@prodigee.us" target="_blank">ChrisRaff75@prodigee.us</a> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ChrisRaff75@prodigee.us&body=from deptno.dev" target="_blank">[지메일로 보내기]</a> 사이트 내리라함</p>
+</li>
+<li><p>Thomas Overwood 사이트 운영자인듯</p>
+</li>
+<li><p>lulu 약혼자 Chris Rafferty, 대학교 학년때 그림 1997</p>
+</li>
+<li><p>8촌의(죽은 딸명이랑 같은 레벨) 사진 3명</p>
+<ul>
+<li>Davey kellogg 4th 수영선수<ul>
+<li>Bethany 졸업앨범 - 여동생, Kellogg?</li>
+</ul>
+</li>
+<li>Stephani, landon, <del>cattrall</del></li>
+</ul>
+</li>
+<li><p>하나는 madson &lt;-&gt; ernie, 하는 kellogg</p>
+</li>
+<li><p>Stephani 엄마는 캐롤라인, 몰덴: 마크와 결혼, 언니가 그윈돌린, 아빠가 자크, 매형이 윌슨, 사촌이 보니</p>
+</li>
+<li><p>Ron(친적임) &lt;-&gt; Panelope</p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+clancy jr</p>
+</li>
+<li><p>edward</p>
+</li>
+<li><p>elias c</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+jack - 마지막세대</p>
+</li>
+<li><p>wolf</p>
+</li>
+<li><p>samantha</p>
+</li>
+<li><p>tessa</p>
+</li>
+<li><p>november</p>
+</li>
+<li><p>kirstina</p>
+</li>
+<li><p>candy</p>
+</li>
+<li></li>
+<li><p>hudson + patrisia</p>
+</li>
+<li><p>elias jr 도 + patsy</p>
+</li>
+<li><p>morden gwyndoline + DR. wilson</p>
+</li>
+<li><p>debbie + ernie(jr), 딸 nicole</p>
+</li>
+</ul>
+<h2 id="2">2</h2>
+<ul>
+<li>elias - beth</li>
+<li>beth - elizabeth</li>
+</ul>
+<h2 id="link">link</h2>
+<ul>
+<li><a href="game">game</a></li>
+</ul>
+2:[["$","header",null,{"className":"flex flex-col p-3 bg-gray-800 gap-2 w-full","children":[["$","$Lb",null,{"placeholder":"$undefined"}],["$","div",null,{"className":"flex justify-between text-white gap-2","children":[["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/deptno.dev","className":"bg-white text-black","children":"FE"}]}],["$","div",null,{"children":["$","a",null,{"target":"_blank","href":"https://github.com/deptno/public-wiki/tree/440709c\n","className":"bg-white text-black","children":"440709c"}]}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/diary/index","children":"저널"}],["$","a",null,{"className":"underline underline-offset-4","href":"/public-wiki/about-me","children":"about-me"}],["$","div",null,{"className":"ml-auto"}],["$","$Lc",null,{}]]}]]}],["$","div",null,{"className":"w-full overflow-x-hidden","children":[["$","$Ld",null,{}],["$","div",null,{"className":"p-2","children":["$","aside",null,{"id":"sidebar","className":"top-0 px-2 break-words border border-gray-800 3xl:text-md 3xl:border-hidden relataive flex flex-col gap-2","children":[["$","div",null,{"id":"search-result"}],[["$","div",null,{"className":"flex justify-end gap-2 border-b-2 3xl:py-2","children":[["$","a",null,{"className":"underline border-l-blue-400","href":"https://github.com/deptno/public-wiki/edit/main/the-roottrees-are-dead.md","target":"_blank","children":"수정"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/commits/main/the-roottrees-are-dead.md","target":"_blank","children":"기록"}],["$","a",null,{"className":"underline border-l-blue-800","href":"https://github.com/deptno/public-wiki/blame/main/the-roottrees-are-dead.md","target":"_blank","children":"추적"}]]}],["$","$Le",null,{"wiki":"public-wiki","graphData":{"nodes":[{"id":"the-roottrees-are-dead","name":"the-roottrees-are-dead","val":1},{"id":"game","name":"game","val":12},{"id":"index","name":"index","val":109}],"links":[{"source":"the-roottrees-are-dead","target":"game"},{"source":"game","target":"the-roottrees-are-dead"},{"source":"index","target":"the-roottrees-are-dead"}]}}],["$","hr",null,{}],["$","div",null,{"className":"flex flex-wrap gap-2 p-0 m-0 leading-tight","children":[["$","span","the-roottrees-are-dead",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/the-roottrees-are-dead","children":[["$","span",null,{"className":"underline","children":"the-roottrees-are-dead"}],["$","sup",null,{"children":1}]]}]}],["$","span","game",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/game","children":[["$","span",null,{"className":"underline","children":"game"}],["$","sup",null,{"children":12}]]}]}],["$","span","index",{"children":["$","$Lf",null,{"className":"text-blue-600","href":"/public-wiki/index","children":[["$","span",null,{"className":"underline","children":"index"}],["$","sup",null,{"children":109}]]}]}]]}],["$","hr",null,{}],["$","div",null,{"className":"toc","children":[["$","div","the-roottrees-are-dead",{"className":"pl-0","children":["$","a",null,{"href":"#the-roottrees-are-dead","children":"The Roottrees are Dead"}]}],["$","div","2",{"className":"pl-2","children":["$","a",null,{"href":"#2","children":"2"}]}],["$","div","link",{"className":"pl-2","children":["$","a",null,{"href":"#link","children":"link"}]}]]}],null]]}]}],["$","pre",null,{"className":"bg-gray-100 markdown p-2 whitespace-pre-wrap","dangerouslySetInnerHTML":{"__html":"$10"}}]]}]]
+11:T75b,```mermaid
+flowchart
+subgraph 보스턴
+  steve_garland <---> mother_?
+  christine_pharoah_비서 <--> steve_garland
+  steve_garland --소송--> mark_zimmer
+  steve_garland --child--> james_쉐프
+  steve_garland --child--> robert_쉐프
+  Sisely_Sanchez
+  guy_hudson <--> lang_xinyu_중국
+  guy_hudson <--> robyn_martin_호주_여름
+  guy_hudson <--> Susan_Ford__suzy_출장_
+  guy_hudson <--> 브라질_겨울(크리스마스)
+  
+  Edson_Soares <--> Sonia_Soares 
+  Sonia_Soares --아들--> Flavio_Soares 
+  Flavio_Soares <--연인--> Ashleigh_York
+end
+    
+    rochelle <--> mar_zimmer
+```
+```mermaid
+flowchart
+subgraph 보스턴
+  guy_hudson <--> lang_xinyu
+  jerry_han <---> linda_han
+  linda_han --아들--> mark_han
+  lang_xinyu <--자매--> linda_han
+  lang_xinyu <--딸--> lang_lucy
+end
+    
+    rochelle <--> mar_zimmer
+```
+
+- WRTD
+  - 열쇠를 가진 누군가가 사진을 가져감,
+
+- 죽은사람
+  - carl, brenda + 딸 셋
+  - 사장 3/5 죽음
+    - Guy
+    - Ernie Madsen Jr. - carl 과 4촌, 4대 회장
+    - Carl
+
+- ChrisRaff75@prodigee.us 사이트 내리라함
+- Thomas Overwood 사이트 운영자인듯
+
+- lulu 약혼자 Chris Rafferty, 대학교 학년때 그림 1997
+- 8촌의(죽은 딸명이랑 같은 레벨) 사진 3명
+  - Davey kellogg 4th 수영선수
+    - Bethany 졸업앨범 - 여동생, Kellogg?
+  - Stephani, landon, ~~cattrall~~
+- 하나는 madson <-> ernie, 하는 kellogg
+
+
+- Stephani 엄마는 캐롤라인, 몰덴: 마크와 결혼, 언니가 그윈돌린, 아빠가 자크, 매형이 윌슨, 사촌이 보니
+
+- Ron(친적임) <-> Panelope
+
+- [X] clancy jr
+- edward
+- elias c
+- [ ] jack - 마지막세대
+- wolf
+
+- samantha
+- tessa
+- november
+- kirstina
+- candy
+-
+
+- hudson + patrisia
+- elias jr 도 + patsy
+- morden gwyndoline + DR. wilson
+- debbie + ernie(jr), 딸 nicole
+
+## 2
+- elias - beth
+- beth - elizabeth
+
+## link
+- [[game]]
+12:T75b,```mermaid
+flowchart
+subgraph 보스턴
+  steve_garland <---> mother_?
+  christine_pharoah_비서 <--> steve_garland
+  steve_garland --소송--> mark_zimmer
+  steve_garland --child--> james_쉐프
+  steve_garland --child--> robert_쉐프
+  Sisely_Sanchez
+  guy_hudson <--> lang_xinyu_중국
+  guy_hudson <--> robyn_martin_호주_여름
+  guy_hudson <--> Susan_Ford__suzy_출장_
+  guy_hudson <--> 브라질_겨울(크리스마스)
+  
+  Edson_Soares <--> Sonia_Soares 
+  Sonia_Soares --아들--> Flavio_Soares 
+  Flavio_Soares <--연인--> Ashleigh_York
+end
+    
+    rochelle <--> mar_zimmer
+```
+```mermaid
+flowchart
+subgraph 보스턴
+  guy_hudson <--> lang_xinyu
+  jerry_han <---> linda_han
+  linda_han --아들--> mark_han
+  lang_xinyu <--자매--> linda_han
+  lang_xinyu <--딸--> lang_lucy
+end
+    
+    rochelle <--> mar_zimmer
+```
+
+- WRTD
+  - 열쇠를 가진 누군가가 사진을 가져감,
+
+- 죽은사람
+  - carl, brenda + 딸 셋
+  - 사장 3/5 죽음
+    - Guy
+    - Ernie Madsen Jr. - carl 과 4촌, 4대 회장
+    - Carl
+
+- ChrisRaff75@prodigee.us 사이트 내리라함
+- Thomas Overwood 사이트 운영자인듯
+
+- lulu 약혼자 Chris Rafferty, 대학교 학년때 그림 1997
+- 8촌의(죽은 딸명이랑 같은 레벨) 사진 3명
+  - Davey kellogg 4th 수영선수
+    - Bethany 졸업앨범 - 여동생, Kellogg?
+  - Stephani, landon, ~~cattrall~~
+- 하나는 madson <-> ernie, 하는 kellogg
+
+
+- Stephani 엄마는 캐롤라인, 몰덴: 마크와 결혼, 언니가 그윈돌린, 아빠가 자크, 매형이 윌슨, 사촌이 보니
+
+- Ron(친적임) <-> Panelope
+
+- [X] clancy jr
+- edward
+- elias c
+- [ ] jack - 마지막세대
+- wolf
+
+- samantha
+- tessa
+- november
+- kirstina
+- candy
+-
+
+- hudson + patrisia
+- elias jr 도 + patsy
+- morden gwyndoline + DR. wilson
+- debbie + ernie(jr), 딸 nicole
+
+## 2
+- elias - beth
+- beth - elizabeth
+
+## link
+- [[game]]
+13:T75b,```mermaid
+flowchart
+subgraph 보스턴
+  steve_garland <---> mother_?
+  christine_pharoah_비서 <--> steve_garland
+  steve_garland --소송--> mark_zimmer
+  steve_garland --child--> james_쉐프
+  steve_garland --child--> robert_쉐프
+  Sisely_Sanchez
+  guy_hudson <--> lang_xinyu_중국
+  guy_hudson <--> robyn_martin_호주_여름
+  guy_hudson <--> Susan_Ford__suzy_출장_
+  guy_hudson <--> 브라질_겨울(크리스마스)
+  
+  Edson_Soares <--> Sonia_Soares 
+  Sonia_Soares --아들--> Flavio_Soares 
+  Flavio_Soares <--연인--> Ashleigh_York
+end
+    
+    rochelle <--> mar_zimmer
+```
+```mermaid
+flowchart
+subgraph 보스턴
+  guy_hudson <--> lang_xinyu
+  jerry_han <---> linda_han
+  linda_han --아들--> mark_han
+  lang_xinyu <--자매--> linda_han
+  lang_xinyu <--딸--> lang_lucy
+end
+    
+    rochelle <--> mar_zimmer
+```
+
+- WRTD
+  - 열쇠를 가진 누군가가 사진을 가져감,
+
+- 죽은사람
+  - carl, brenda + 딸 셋
+  - 사장 3/5 죽음
+    - Guy
+    - Ernie Madsen Jr. - carl 과 4촌, 4대 회장
+    - Carl
+
+- ChrisRaff75@prodigee.us 사이트 내리라함
+- Thomas Overwood 사이트 운영자인듯
+
+- lulu 약혼자 Chris Rafferty, 대학교 학년때 그림 1997
+- 8촌의(죽은 딸명이랑 같은 레벨) 사진 3명
+  - Davey kellogg 4th 수영선수
+    - Bethany 졸업앨범 - 여동생, Kellogg?
+  - Stephani, landon, ~~cattrall~~
+- 하나는 madson <-> ernie, 하는 kellogg
+
+
+- Stephani 엄마는 캐롤라인, 몰덴: 마크와 결혼, 언니가 그윈돌린, 아빠가 자크, 매형이 윌슨, 사촌이 보니
+
+- Ron(친적임) <-> Panelope
+
+- [X] clancy jr
+- edward
+- elias c
+- [ ] jack - 마지막세대
+- wolf
+
+- samantha
+- tessa
+- november
+- kirstina
+- candy
+-
+
+- hudson + patrisia
+- elias jr 도 + patsy
+- morden gwyndoline + DR. wilson
+- debbie + ernie(jr), 딸 nicole
+
+## 2
+- elias - beth
+- beth - elizabeth
+
+## link
+- [[game]]
+a:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"# The Roottrees are Dead"}],["$","meta","3",{"name":"description","content":"$11"}],["$","link","4",{"rel":"author","href":"https://deptno.github.io"}],["$","meta","5",{"name":"author","content":"deptno"}],["$","meta","6",{"name":"keywords","content":"typescript,kubernetes,react,react native,terminal,neovim,vim,lua,frontend,seo,k9s"}],["$","meta","7",{"name":"referrer","content":"origin-when-cross-origin"}],["$","meta","8",{"name":"creator","content":"deptno@gmail.com"}],["$","meta","9",{"name":"publisher","content":"deptno@gmail.com"}],["$","meta","10",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","11",{"name":"apple-mobile-web-app-title","content":"deptno"}],["$","link","12",{"href":"/icon.jpg","media":"$undefined","rel":"apple-touch-startup-image"}],["$","meta","13",{"name":"apple-mobile-web-app-status-bar-style","content":"black-translucent"}],["$","meta","14",{"property":"og:title","content":"# The Roottrees are Dead"}],["$","meta","15",{"property":"og:description","content":"$12"}],["$","meta","16",{"property":"og:url","content":"https://deptno.github.io/public-wiki/the-roottrees-are-dead"}],["$","meta","17",{"name":"twitter:card","content":"summary"}],["$","meta","18",{"name":"twitter:title","content":"# The Roottrees are Dead"}],["$","meta","19",{"name":"twitter:description","content":"$13"}],["$","link","20",{"rel":"icon","href":"/icon.jpg?19eda66f7295e18c","type":"image/jpeg","sizes":"400x400"}]]
+1:null
